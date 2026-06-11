@@ -1,22 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+   <meta name="google-site-verification" content="Nu4dgdg7ZoLzYKrhOL0UbRmrjxaXVEm47raDJnEYeFQ">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Chishti Library Official</title>
-
-    <meta name="description"
-        content="Chishti Library Official - Islamic Books and PDFs">
-
-    <meta name="google-site-verification"
-        content="Nu4dgdg7ZoLzYKrhOL0UbRmrjxaXVEm47raDJnEYeFQ" />
 
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
             background: #f4f4f4;
         }
 
@@ -24,45 +18,61 @@
             background: #0f5132;
             color: white;
             text-align: center;
-            padding: 20px;
+            padding: 30px;
+        }
+
+        header h1 {
+            margin: 0;
         }
 
         .search {
             text-align: center;
-            padding: 15px;
+            margin: 20px;
         }
 
         .search input {
             width: 80%;
+            max-width: 800px;
             padding: 10px;
-            border-radius: 5px;
             border: 1px solid #ccc;
+            border-radius: 5px;
         }
 
         .container {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
             padding: 20px;
         }
 
         .book {
             background: white;
-            width: 250px;
+            width: 280px;
             padding: 15px;
             border-radius: 10px;
             text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .book-cover {
+            width: 180px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         .btn {
             display: inline-block;
-            margin-top: 8px;
-            padding: 6px 10px;
+            margin-top: 10px;
+            padding: 10px 15px;
             background: #0f5132;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #146c43;
         }
 
         footer {
@@ -89,11 +99,13 @@
     <div class="container">
 
         <div class="book">
-            <h3>Shahdaye Karbala</h3>
-        <a href="shahdaye-karbala-4.html" class="btn">
-    Read Book
-</a>
+            <img src="image.png" alt="Shahdaye Karbala" class="book-cover">
 
+            <h3>Shahdaye Karbala</h3>
+
+            <a href="shahdaye-karbala-4.html" class="btn">
+                Read Book
+            </a>
         </div>
 
     </div>
@@ -103,5 +115,4 @@
     </footer>
 
 </body>
-
 </html>
