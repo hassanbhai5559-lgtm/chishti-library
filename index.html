@@ -1,152 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Saim Chishti Library</title>
-<style>
-body{font-family:Arial;background:#0b1220;color:white;margin:0}
-header{padding:20px;text-align:center;background:#111a2e;color:#00e5ff}
-.container{padding:20px;max-width:800px;margin:auto}
+    <meta charset="UTF-8">
 
-input,textarea{
-width:100%;padding:10px;margin:10px 0;border:none;border-radius:5px;
-}
+    <meta name="google-site-verification" content="Nu4dgdg7ZoLzYKrhOL0UbRmrjxaXVEm47raDJnEYeFQ">
 
-button{
-padding:10px 15px;background:#00e5ff;border:none;cursor:pointer;font-weight:bold
-}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-.book-box{
-margin-top:20px;padding:10px;background:#111a2e;border-radius:10px
-}
-a{color:#00e5ff;text-decoration:none}
-</style>
+    <title>Chishti Library - Islamic Books & Reading Center</title>
+
+    <meta name="description" content="Chishti Library - Free Islamic Books & Reading Center. Read and download Islamic books online.">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            background: #0f5132;
+            color: white;
+            padding: 40px 20px;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid white;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        /* SEARCH */
+        .search-container {
+            text-align: center;
+            margin: 25px;
+        }
+
+        .search-container input {
+            width: 80%;
+            max-width: 600px;
+            padding: 12px;
+            border-radius: 25px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        /* BOOKS */
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .book {
+            background: white;
+            width: 280px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .book img {
+            width: 180px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #0f5132;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .btn:hover {
+            background: #146c43;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #0f5132;
+            color: white;
+            margin-top: auto;
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
-<h1>📚 Saim Chishti Library</h1>
-<p>World Class Digital Library</p>
+<!-- HEADER -->
+<header class="header">
+
+    <!-- LOGO -->
+    <img src="logo.png" alt="Chishti Library Logo" class="logo">
+
+    <h1>Chishti Library</h1>
+    <p>Islamic Books & Reading Center</p>
+
 </header>
 
+<!-- SEARCH -->
+<div class="search-container">
+    <input type="text" placeholder="Search books...">
+</div>
+
+<!-- BOOKS -->
 <div class="container">
 
-<h2>📤 Upload Book (Owner Panel)</h2>
-
-<input id="title" placeholder="Book Title">
-<textarea id="content" placeholder="Paste Book Content Here"></textarea>
-
-<button onclick="saveBook()">Save Book</button>
-
-<div class="book-box">
-<h3>📖 View Books</h3>
-<a href="books.html">Go to Library →</a>
-</div>
+    <div class="book">
+        <img src="image.png" alt="Shahdaye Karbala">
+        <h3>Shahdaye Karbala</h3>
+        <a href="./shahdaye-karbala-4.html" class="btn">Read Book</a>
+    </div>
 
 </div>
 
-<script>
-function saveBook(){
-let title = document.getElementById("title").value;
-let content = document.getElementById("content").value;
-
-if(!title || !content){
-alert("Fill both fields");
-return;
-}
-
-let books = JSON.parse(localStorage.getItem("books") || "[]");
-
-books.push({title, content});
-
-localStorage.setItem("books", JSON.stringify(books));
-
-alert("Book Saved!");
-document.getElementById("title").value="";
-document.getElementById("content").value="";
-}
-</script>
+<!-- FOOTER -->
+<footer>
+    © 2026 Chishti Library. All Rights Reserved.
+</footer>
 
 </body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-<title>Library Books</title>
-<style>
-body{font-family:Arial;background:#0b1220;color:white;margin:0}
-header{padding:15px;text-align:center;background:#111a2e;color:#00e5ff}
-
-.container{padding:20px;max-width:900px;margin:auto}
-
-.book{
-background:#111a2e;
-padding:15px;
-margin:10px 0;
-border-radius:10px;
-cursor:pointer;
-}
-
-.reader{
-margin-top:20px;
-background:#1a2a6c;
-padding:20px;
-border-radius:10px;
-white-space:pre-line;
-}
-
-button{
-padding:10px;
-background:#00e5ff;
-border:none;
-cursor:pointer;
-margin-top:10px;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-<h1>📚 Library Books</h1>
-</header>
-
-<div class="container">
-
-<h2>Available Books</h2>
-<div id="list"></div>
-
-<div id="reader" class="reader" style="display:none;"></div>
-
-<button onclick="goBack()">⬅ Back Home</button>
-
-</div>
-
-<script>
-
-let books = JSON.parse(localStorage.getItem("books") || "[]");
-
-let list = document.getElementById("list");
-
-books.forEach((b,i)=>{
-let div = document.createElement("div");
-div.className="book";
-div.innerHTML="📖 "+b.title;
-div.onclick=()=>openBook(i);
-list.appendChild(div);
-});
-
-function openBook(i){
-document.getElementById("reader").style.display="block";
-document.getElementById("reader").innerHTML=
-"<h2>"+books[i].title+"</h2><p>"+books[i].content+"</p>";
-}
-
-function goBack(){
-window.location.href="index.html";
-}
-
-</script>
-
-</body>
-</html>
+</html> 
