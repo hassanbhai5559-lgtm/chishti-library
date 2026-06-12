@@ -3,28 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shahdaye Karbala - Read Online</title>
+
+<title>Shahdaye Karbala | Online Reader</title>
 
 <style>
-body{
-    margin:0;
-    padding:0;
-    background:#f5f7fa;
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-iframe{
-    width:100%;
-    height:100vh;
-    border:none;
+body{
+font-family:Arial,sans-serif;
+background:#f4f8fc;
 }
+
+.header{
+background:linear-gradient(135deg,#00c853,#2196f3);
+color:white;
+padding:15px;
+text-align:center;
+box-shadow:0 2px 10px rgba(0,0,0,.15);
+}
+
+.header h1{
+font-size:24px;
+}
+
+.reader{
+width:100%;
+height:calc(100vh - 70px);
+}
+
+.reader iframe{
+width:100%;
+height:100%;
+border:none;
+background:white;
+}
+
 </style>
 
 </head>
 <body>
 
+<div class="header">
+<h1>📖 Shahdaye Karbala</h1>
+</div>
+
+<div class="reader">
+
 <iframe
 src="https://docs.google.com/gview?embedded=true&url=https://hassanbhai5559-lgtm.github.io/chishti-library/shahdaye-karbala.pdf.pdf">
 </iframe>
+
+</div>
 
 </body>
 </html>
