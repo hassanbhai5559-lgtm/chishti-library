@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Chishti Library | Islamic Digital Library</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 
@@ -14,171 +16,479 @@ padding:0;
 box-sizing:border-box;
 }
 
-body{
-font-family:Arial,sans-serif;
-background:#f4f8fc;
-color:#333;
+html{
+scroll-behavior:smooth;
 }
+
+:root{
+--primary:#16a34a;
+--secondary:#0f172a;
+--gold:#d4af37;
+--white:#ffffff;
+--text:#475569;
+--light:#f8fafc;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+background:#f8fafc;
+color:#333;
+overflow-x:hidden;
+}
+
+/* NAVBAR */
+
+.navbar{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+width:90%;
+max-width:1200px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 30px;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(15px);
+border:1px solid rgba(255,255,255,.2);
+border-radius:60px;
+z-index:999;
+}
+
+.logo-text{
+font-family:'Cinzel',serif;
+font-size:24px;
+font-weight:700;
+color:white;
+}
+
+.nav-links{
+display:flex;
+gap:25px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:white;
+font-weight:600;
+transition:.3s;
+}
+
+.nav-links a:hover{
+color:var(--gold);
+}
+
+/* HERO */
 
 .hero{
-background:linear-gradient(135deg,#00c853,#2196f3);
-color:white;
-text-align:center;
-padding:100px 20px;
-}
-
-.hero h1{
-font-size:60px;
-margin-bottom:15px;
-}
-
-.hero p{
-font-size:22px;
-margin-bottom:25px;
-}
-
-.btn{
-display:inline-block;
-padding:14px 30px;
-background:white;
-color:#2196f3;
-text-decoration:none;
-font-weight:bold;
-border-radius:8px;
-}
-
-.btn:hover{
-background:#f0f0f0;
-}
-
-.section{
-max-width:1200px;
-margin:auto;
-padding:60px 20px;
-}
-
-.section-title{
-text-align:center;
-font-size:36px;
-margin-bottom:40px;
-color:#2196f3;
-}
-
-.stats{
+height:100vh;
+background:
+linear-gradient(rgba(15,23,42,.75),
+rgba(15,23,42,.75)),
+url("https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=1600");
+background-size:cover;
+background-position:center;
 display:flex;
 justify-content:center;
-gap:25px;
-flex-wrap:wrap;
-}
-
-.stat-box{
-background:white;
-width:250px;
-padding:30px;
-border-radius:10px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
-
-.stat-box h3{
-font-size:40px;
-color:#00c853;
-}
-
-.stat-box p{
-margin-top:10px;
-font-weight:bold;
-}
-
-.about{
-background:white;
-padding:35px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
-line-height:1.8;
-}
-
-footer{
-background:linear-gradient(135deg,#00c853,#2196f3);
-color:white;
+align-items:center;
 text-align:center;
 padding:20px;
 }
 
-@media(max-width:768px){
+.hero-content{
+max-width:900px;
+color:white;
+animation:fadeUp 1.5s ease;
+}
 
 .hero h1{
-font-size:40px;
+font-size:70px;
+font-family:'Cinzel',serif;
+margin-bottom:20px;
 }
 
 .hero p{
-font-size:18px;
+font-size:20px;
+line-height:1.8;
+opacity:.95;
+margin-bottom:30px;
+}
+
+.hero-btn{
+display:inline-block;
+padding:15px 35px;
+background:var(--gold);
+color:#111;
+font-weight:700;
+text-decoration:none;
+border-radius:50px;
+transition:.3s;
+}
+
+.hero-btn:hover{
+transform:translateY(-5px);
+}
+
+/* SECTION */
+
+section{
+padding:100px 20px;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.section-title{
+text-align:center;
+font-size:40px;
+margin-bottom:20px;
+color:var(--secondary);
+}
+
+.section-sub{
+text-align:center;
+color:var(--text);
+max-width:700px;
+margin:auto auto 50px;
+}
+
+/* STATS */
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.stat{
+background:white;
+padding:35px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+transition:.4s;
+}
+
+.stat:hover{
+transform:translateY(-10px);
+}
+
+.stat h2{
+font-size:40px;
+color:var(--primary);
+}
+
+/* FEATURED */
+
+.featured{
+background:white;
+border-radius:25px;
+padding:40px;
+display:grid;
+grid-template-columns:350px 1fr;
+gap:40px;
+align-items:center;
+box-shadow:0 15px 35px rgba(0,0,0,.08);
+}
+
+.featured img{
+width:100%;
+border-radius:20px;
+}
+
+.featured h3{
+font-size:35px;
+margin-bottom:15px;
+color:var(--secondary);
+}
+
+.featured p{
+line-height:1.9;
+color:var(--text);
+}
+
+.btn{
+display:inline-block;
+padding:14px 28px;
+margin-top:20px;
+background:var(--primary);
+color:white;
+text-decoration:none;
+border-radius:10px;
+font-weight:600;
+}
+
+/* BOOKS */
+
+.books-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:30px;
+}
+
+.book-card{
+background:white;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+transition:.4s;
+}
+
+.book-card:hover{
+transform:translateY(-12px);
+box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+.book-image{
+height:400px;
+overflow:hidden;
+}
+
+.book-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:1s;
+}
+
+.book-card:hover img{
+transform:scale(1.1);
+}
+
+.book-content{
+padding:20px;
+}
+
+.book-content h3{
+color:#0f172a;
+margin-bottom:10px;
+}
+
+.book-content p{
+color:#64748b;
+line-height:1.8;
+}
+
+/* ABOUT */
+
+.about{
+background:linear-gradient(135deg,#16a34a,#0f172a);
+color:white;
+border-radius:30px;
+padding:60px;
+text-align:center;
+}
+
+.about h2{
+margin-bottom:20px;
+font-size:40px;
+}
+
+/* FOOTER */
+
+footer{
+background:#0f172a;
+color:white;
+text-align:center;
+padding:35px;
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.hero h1{
+font-size:45px;
+}
+
+.featured{
+grid-template-columns:1fr;
+}
+
+.nav-links{
+display:none;
 }
 
 }
 
 </style>
-
 </head>
 
 <body>
 
-<section class="hero">
+<nav class="navbar">
+<div class="logo-text">Chishti Library</div>
 
-<h1>📚 Chishti Library</h1>
+<div class="nav-links">
+<a href="#">Home</a>
+<a href="#books">Books</a>
+<a href="#about">About</a>
+</div>
+</nav>
 
-<p>Islamic Digital Library</p>
+<header class="hero">
 
-<a href="books.html" class="btn">
-📖 Browse Books
+<div class="hero-content">
+
+<h1>Chishti Library</h1>
+
+<p>
+Discover Islamic knowledge, read books online,
+and preserve the legacy of faith, wisdom,
+and history through a modern digital library.
+</p>
+
+<a href="#books" class="hero-btn">
+Explore Collection
 </a>
 
-</section>
+</div>
 
-<section class="section">
+</header>
 
-<h2 class="section-title">
-Library Statistics
-</h2>
+<section>
+
+<div class="container">
+
+<h2 class="section-title">Library Statistics</h2>
+
+<p class="section-sub">
+Growing every day with valuable Islamic content.
+</p>
 
 <div class="stats">
 
-<div class="stat-box">
-<h3>2</h3>
-<p>Total Books</p>
+<div class="stat">
+<h2>1+</h2>
+<p>Books Available</p>
 </div>
 
-<div class="stat-box">
-<h3>1</h3>
-<p>Total Author</p>
+<div class="stat">
+<h2>24/7</h2>
+<p>Online Access</p>
 </div>
 
-<div class="stat-box">
-<h3>500+</h3>
-<p>Total Downloads</p>
+<div class="stat">
+<h2>Global</h2>
+<p>Readers</p>
+</div>
+
 </div>
 
 </div>
 
 </section>
 
-<section class="section">
+<section>
+
+<div class="container">
 
 <h2 class="section-title">
-About Library
+Featured Book
 </h2>
+
+<div class="featured">
+
+<img src="image.png" alt="Book">
+
+<div>
+
+<h3>Shahdaye Karbala</h3>
+
+<p>
+
+A beautiful collection dedicated to the martyrs
+of Karbala, the love of Ahl al-Bayt, and the
+everlasting message of sacrifice, truth,
+and devotion.
+
+</p>
+
+<a href="shahdaye-karbala-4.html" class="btn">
+Read Online
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="books">
+
+<div class="container">
+
+<h2 class="section-title">Book Collection</h2>
+
+<div class="books-grid">
+
+<div class="book-card">
+
+<div class="book-image">
+<img src="image.png">
+</div>
+
+<div class="book-content">
+
+<h3>Shahdaye Karbala</h3>
+
+<p>
+Islamic History • Urdu Language
+</p>
+
+<a href="shahdaye-karbala-4.html" class="btn">
+Read Book
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="about">
+
+<div class="container">
 
 <div class="about">
 
-<p>
-Chishti Library is an Islamic Digital Library dedicated to providing free access to Islamic books, naat collections, manqabat collections and Islamic literature.
-</p>
-
-<br>
+<h2>About Chishti Library</h2>
 
 <p>
-Readers can read books online or download PDF versions directly from the library.
+
+Chishti Library is a modern Islamic digital
+library dedicated to preserving authentic
+Islamic books and making knowledge accessible
+to readers around the world.
+
 </p>
+
+</div>
 
 </div>
 
@@ -188,7 +498,7 @@ Readers can read books online or download PDF versions directly from the library
 
 <p>© 2026 Chishti Library</p>
 
-<p>Founder: Saim Chishti</p>
+<p>Founder & Author: Saim Chishti</p>
 
 </footer>
 
