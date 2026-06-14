@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chishti Library | Islamic Digital Library</title>
+<title>Chishti Library Books</title>
 
 <style>
 
@@ -17,105 +17,63 @@ box-sizing:border-box;
 body{
 font-family:Arial,sans-serif;
 background:#f4f8fc;
-color:#333;
 }
 
-.hero{
+header{
 background:linear-gradient(135deg,#00c853,#2196f3);
 color:white;
 text-align:center;
-padding:100px 20px;
+padding:30px;
 }
 
-.hero h1{
-font-size:60px;
-margin-bottom:15px;
-}
-
-.hero p{
-font-size:20px;
-max-width:700px;
-margin:auto;
-}
-
-.btn{
-display:inline-block;
-margin-top:25px;
-padding:14px 30px;
-background:white;
-color:#2196f3;
-text-decoration:none;
-font-weight:bold;
-border-radius:8px;
-}
-
-.stats{
-display:flex;
-justify-content:center;
-gap:30px;
-flex-wrap:wrap;
-padding:60px 20px;
-}
-
-.stat{
-background:white;
-padding:25px;
-width:220px;
-text-align:center;
-border-radius:10px;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
-
-.stat h2{
-color:#2196f3;
+header h1{
 font-size:40px;
 }
 
-.books{
-padding:60px 20px;
-text-align:center;
-}
-
-.books h2{
-margin-bottom:30px;
-font-size:40px;
-color:#2196f3;
-}
-
-.book-grid{
-display:flex;
-justify-content:center;
-gap:30px;
-flex-wrap:wrap;
+#bookshelf{
+width:1200px;
+max-width:100%;
+height:700px;
+margin:20px auto;
+background:url('bookshelf.png') center center no-repeat;
+background-size:100% 100%;
+position:relative;
 }
 
 .book{
-background:white;
-width:300px;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
+position:absolute;
+width:120px;
+text-align:center;
 }
 
 .book img{
 width:100%;
-height:420px;
-object-fit:cover;
+border-radius:6px;
+box-shadow:0 5px 15px rgba(0,0,0,.3);
+transition:.4s;
 }
 
-.book h3{
-padding:15px;
+.book img:hover{
+transform:translateY(-10px);
 }
 
-.about{
-padding:60px 20px;
-text-align:center;
-background:white;
+.book-title{
+margin-top:8px;
+font-size:14px;
+font-weight:bold;
+color:#333;
 }
 
-.about h2{
-margin-bottom:20px;
-color:#2196f3;
+.read-btn{
+display:block;
+margin-top:6px;
+padding:8px;
+background:#00c853;
+color:white;
+text-decoration:none;
+border-radius:6px;
+font-size:13px;
+font-weight:bold;
 }
 
 footer{
@@ -130,88 +88,62 @@ padding:20px;
 </head>
 <body>
 
-<section class="hero">
+<header>
+<h1>📚 Chishti Library Books</h1>
+<p>Select a book to read online</p>
+</header>
 
-<h1>📚 Chishti Library</h1>
-
-<p>
-Islamic Digital Library — Read Online & Download Authentic Islamic Books
-</p>
-
-<a href="books.html" class="btn">
-📖 Open Library
-</a>
-
-</section>
-
-<section class="stats">
-
-<div class="stat">
-<h2>2</h2>
-<p>Total Books</p>
-</div>
-
-<div class="stat">
-<h2>1</h2>
-<p>Authors</p>
-</div>
-
-<div class="stat">
-<h2>500+</h2>
-<p>Downloads</p>
-</div>
-
-</section>
-
-<section class="books">
-
-<h2>Featured Books</h2>
-
-<div class="book-grid">
-
-<div class="book">
-
-<img src="husn-e-kainat-cover.png" alt="Husn e Kainat">
-
-<h3>Husn e Kainat</h3>
-
-<a href="husn-e-kainat.html" class="btn">
-Read Online
-</a>
-
-</div>
-
-<div class="book">
-
-<img src="image.png" alt="Shahdaye Karbala">
-
-<h3>Shahdaye Karbala</h3>
-
-<a href="shahdaye-karbala-4.html" class="btn">
-Read Online
-</a>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="about">
-
-<h2>About Chishti Library</h2>
-
-<p>
-Chishti Library is an Islamic Digital Library dedicated to preserving and sharing Islamic knowledge through books, articles, and downloadable PDF resources.
-</p>
-
-</section>
+<div id="bookshelf"></div>
 
 <footer>
-
 <p>© 2026 Chishti Library</p>
-
 </footer>
+
+<script>
+
+fetch("books.json")
+.then(res => res.json())
+.then(data => {
+
+const shelf = document.getElementById("bookshelf");
+
+const positions = [
+{left:"28%", top:"42%"},
+{left:"43%", top:"42%"},
+{left:"58%", top:"42%"},
+{left:"73%", top:"42%"},
+{left:"20%", top:"68%"},
+{left:"35%", top:"68%"},
+{left:"50%", top:"68%"},
+{left:"65%", top:"68%"}
+];
+
+data.forEach((book,index)=>{
+
+const div=document.createElement("div");
+div.className="book";
+
+if(positions[index]){
+div.style.left=positions[index].left;
+div.style.top=positions[index].top;
+}
+
+div.innerHTML=`
+<img src="${book.cover}" alt="${book.title}">
+<div class="book-title">${book.title}</div>
+<a href="${book.reader}" class="read-btn">📖 Read Online</a>
+`;
+
+shelf.appendChild(div);
+
+});
+
+})
+.catch(error=>{
+console.log(error);
+});
+
+</script>
 
 </body>
 </html>
