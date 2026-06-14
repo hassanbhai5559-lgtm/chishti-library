@@ -111,55 +111,28 @@ margin-top:20px;
 
 <script>
 
-fetch("books.json")
-.then(res => res.json())
-.then(data => {
-
-const shelf = document.getElementById("bookshelf");
-
-data.forEach((book,index)=>{
-
-const div = document.createElement("div");
-div.className = "book";
-
-/* BOOK POSITIONS */
-if(index==0){
-div.style.left="250px";
-div.style.top="260px";
-}
-else if(index==1){
-div.style.left="430px";
-div.style.top="260px";
-}
-else{
-div.style.left=(250 + index*180)+"px";
-div.style.top="260px";
+#bookshelf{
+    width:1200px;
+    height:700px;
+    margin:20px auto;
+    background:url('bookshelf.png') center center no-repeat;
+    background-size:100% 100%;
+    position:relative;
 }
 
-div.innerHTML = `
-<img src="${book.cover}" alt="${book.title}">
-<div class="book-title">${book.title}</div>
-<button class="read-btn">📖 Read Online</button>
-`;
+.book{
+    position:absolute;
+    width:100px;
+    transition:1s;
+    cursor:pointer;
+}
 
-div.querySelector(".read-btn").onclick = function(e){
-
-e.stopPropagation();
-
-div.classList.add("open");
-
-setTimeout(()=>{
-window.location.href = book.reader;
-},1200);
-
-};
-
-shelf.appendChild(div);
-
-});
-
-})
-.catch(err=>console.log(err));
+.book img{
+    width:100%;
+    display:block;
+    border-radius:4px;
+    box-shadow:0 5px 15px rgba(0,0,0,.3);
+}
 
 </script>
 
