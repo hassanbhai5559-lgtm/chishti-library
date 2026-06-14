@@ -4,12 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Chishti Library | Islamic Digital Library</title>
-
-<meta name="description" content="Read Islamic books online and download PDFs from Chishti Library.">
-
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Chishti Library Books</title>
 
 <style>
 
@@ -17,265 +12,84 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
-scroll-behavior:smooth;
-}
-
-:root{
---gold:#d4af37;
---green:#0f6b50;
---dark:#07131f;
---white:#ffffff;
---glass:rgba(255,255,255,.08);
 }
 
 body{
-font-family:'Poppins',sans-serif;
-background:var(--dark);
+font-family:Arial,sans-serif;
+background:#f4f8fc;
+}
+
+header{
+background:linear-gradient(135deg,#00c853,#2196f3);
 color:white;
-overflow-x:hidden;
-}
-
-/* NAVBAR */
-
-nav{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 8%;
-background:rgba(0,0,0,.3);
-backdrop-filter:blur(15px);
-z-index:1000;
-}
-
-.logo{
-font-family:'Cinzel',serif;
-font-size:28px;
-font-weight:bold;
-color:var(--gold);
-}
-
-nav ul{
-display:flex;
-gap:25px;
-list-style:none;
-}
-
-nav a{
-color:white;
-text-decoration:none;
-font-weight:500;
-transition:.3s;
-}
-
-nav a:hover{
-color:var(--gold);
-}
-
-/* HERO */
-
-.hero{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
 text-align:center;
-padding:100px 20px;
-background:
-linear-gradient(rgba(7,19,31,.85),rgba(7,19,31,.9)),
-url('https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=1600&auto=format&fit=crop');
-background-size:cover;
-background-position:center;
-}
-
-.hero-content{
-max-width:850px;
-}
-
-.hero h1{
-font-size:65px;
-font-family:'Cinzel',serif;
-margin-bottom:20px;
-color:var(--gold);
-}
-
-.hero p{
-font-size:20px;
-line-height:1.8;
-margin-bottom:35px;
-color:#ddd;
-}
-
-.btn{
-display:inline-block;
-padding:15px 35px;
-border-radius:50px;
-text-decoration:none;
-font-weight:bold;
-margin:10px;
-transition:.3s;
-}
-
-.btn-primary{
-background:var(--gold);
-color:black;
-}
-
-.btn-secondary{
-border:2px solid var(--gold);
-color:var(--gold);
-}
-
-.btn:hover{
-transform:translateY(-5px);
-}
-
-/* STATS */
-
-.stats{
-padding:80px 8%;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:25px;
-background:#081923;
-}
-
-.stat{
-background:var(--glass);
-backdrop-filter:blur(20px);
 padding:30px;
-border-radius:20px;
-text-align:center;
-border:1px solid rgba(255,255,255,.08);
 }
 
-.stat h2{
-font-size:45px;
-color:var(--gold);
-margin-bottom:10px;
-}
-
-/* SECTION */
-
-.section-title{
-text-align:center;
+header h1{
 font-size:40px;
-font-family:'Cinzel',serif;
-color:var(--gold);
-margin-bottom:50px;
 }
 
-/* BOOKS */
-
-.books{
-padding:90px 8%;
+#bookshelf{
+width:100%;
+height:700px;
+background:url('bookshelf.png') center center no-repeat;
+background-size:contain;
+position:relative;
+margin-top:20px;
 }
 
-.book-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:30px;
+.book{
+position:absolute;
+width:120px;
+transition:1s;
+cursor:pointer;
 }
 
-.book-card{
-background:var(--glass);
-backdrop-filter:blur(15px);
-border-radius:20px;
-overflow:hidden;
-transition:.4s;
-border:1px solid rgba(255,255,255,.08);
+.book img{
+width:100%;
+display:block;
+border-radius:6px;
+box-shadow:0 5px 15px rgba(0,0,0,.3);
 }
 
-.book-card:hover{
+.book:hover{
 transform:translateY(-10px);
 }
 
-.book-card img{
-width:100%;
-height:420px;
-object-fit:cover;
-}
-
-.book-content{
-padding:20px;
-}
-
-.book-content h3{
-margin-bottom:10px;
-color:var(--gold);
-}
-
-.book-content p{
-color:#ddd;
+.book-title{
+text-align:center;
+font-weight:bold;
+margin-top:8px;
 font-size:14px;
-line-height:1.7;
+color:#333;
 }
 
 .read-btn{
-display:block;
-margin-top:15px;
-background:var(--green);
+width:100%;
+padding:8px;
+margin-top:6px;
+border:none;
+border-radius:6px;
+background:#00c853;
 color:white;
-text-align:center;
-padding:12px;
-border-radius:10px;
-text-decoration:none;
+font-weight:bold;
+cursor:pointer;
 }
 
-/* ABOUT */
-
-.about{
-padding:90px 8%;
-text-align:center;
-background:#081923;
+.book.open{
+left:50%!important;
+top:220px!important;
+transform:translateX(-50%) scale(1.8);
+z-index:999;
 }
-
-.about p{
-max-width:900px;
-margin:auto;
-line-height:2;
-font-size:18px;
-color:#ddd;
-}
-
-/* CTA */
-
-.cta{
-padding:90px 20px;
-text-align:center;
-}
-
-.cta h2{
-font-size:45px;
-color:var(--gold);
-margin-bottom:20px;
-}
-
-/* FOOTER */
 
 footer{
-background:black;
+background:linear-gradient(135deg,#00c853,#2196f3);
+color:white;
 text-align:center;
-padding:35px;
-}
-
-footer p{
-color:#bbb;
-}
-
-@media(max-width:768px){
-
-.hero h1{
-font-size:42px;
-}
-
-nav ul{
-display:none;
-}
-
+padding:20px;
+margin-top:20px;
 }
 
 </style>
@@ -284,170 +98,68 @@ display:none;
 
 <body>
 
-<nav>
-<div class="logo">📚 Chishti Library</div>
+<header>
+<h1>📚 Chishti Library Books</h1>
+<p>Select a book to read online</p>
+</header>
 
-<ul>
-<li><a href="#">Home</a></li>
-<li><a href="books.html">Books</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="downloads.html">Downloads</a></li>
-</ul>
-</nav>
-
-<section class="hero">
-
-<div class="hero-content">
-
-<h1>Islamic Digital Library</h1>
-
-<p>
-Explore authentic Islamic books, read online,
-download PDFs, and preserve knowledge for future generations.
-</p>
-
-<a href="books.html" class="btn btn-primary">
-Browse Books
-</a>
-
-<a href="#about" class="btn btn-secondary">
-Learn More
-</a>
-
-</div>
-
-</section>
-
-<section class="stats">
-
-<div class="stat">
-<h2 id="booksCount">0</h2>
-<p>Total Books</p>
-</div>
-
-<div class="stat">
-<h2 id="authorsCount">0</h2>
-<p>Total Authors</p>
-</div>
-
-<div class="stat">
-<h2 id="downloadsCount">0</h2>
-<p>Total Downloads</p>
-</div>
-
-</section>
-
-<section class="books">
-
-<h2 class="section-title">Featured Books</h2>
-
-<div class="book-grid">
-
-<div class="book-card">
-
-<img src="husn-e-kainat-cover.png" alt="Husn e Kainat">
-
-<div class="book-content">
-
-<h3>Husn e Kainat</h3>
-
-<p>
-A beautiful collection of Naat, Salam and Manqabat
-in praise of the Holy Prophet ﷺ.
-</p>
-
-<a href="husn-e-kainat.html" class="read-btn">
-📖 Read Online
-</a>
-
-</div>
-</div>
-
-<div class="book-card">
-
-<img src="image.png" alt="Shahdaye Karbala">
-
-<div class="book-content">
-
-<h3>Shahdaye Karbala</h3>
-
-<p>
-A manqabati collection dedicated to Imam Hussain (RA)
-and the martyrs of Karbala.
-</p>
-
-<a href="shahdaye-karbala-4.html" class="read-btn">
-📖 Read Online
-</a>
-
-</div>
-</div>
-
-</div>
-
-</section>
-
-<section class="about" id="about">
-
-<h2 class="section-title">About Chishti Library</h2>
-
-<p>
-Chishti Library is an Islamic Digital Library dedicated
-to preserving and sharing Islamic knowledge through books,
-articles, and downloadable PDF resources.
-Our mission is to make authentic Islamic literature accessible worldwide.
-</p>
-
-</section>
-
-<section class="cta">
-
-<h2>Start Reading Today</h2>
-
-<a href="books.html" class="btn btn-primary">
-Open Digital Library
-</a>
-
-</section>
+<div id="bookshelf"></div>
 
 <footer>
-
-<p>
-© 2026 Chishti Library — Islamic Digital Library
-</p>
-
+<p>© 2026 Chishti Library</p>
 </footer>
 
 <script>
 
-function animateValue(id,start,end,duration){
+fetch("books.json")
+.then(res => res.json())
+.then(data => {
 
-let obj=document.getElementById(id);
-let range=end-start;
-let current=start;
-let increment=end>start?1:-1;
-let stepTime=Math.abs(Math.floor(duration/range));
+const shelf = document.getElementById("bookshelf");
 
-let timer=setInterval(function(){
+data.forEach((book,index)=>{
 
-current+=increment;
-obj.textContent=current;
+const div = document.createElement("div");
+div.className = "book";
 
-if(current==end){
-clearInterval(timer);
+/* BOOK POSITIONS */
+if(index==0){
+div.style.left="250px";
+div.style.top="260px";
+}
+else if(index==1){
+div.style.left="430px";
+div.style.top="260px";
+}
+else{
+div.style.left=(250 + index*180)+"px";
+div.style.top="260px";
 }
 
-},stepTime);
+div.innerHTML = `
+<img src="${book.cover}" alt="${book.title}">
+<div class="book-title">${book.title}</div>
+<button class="read-btn">📖 Read Online</button>
+`;
 
-}
+div.querySelector(".read-btn").onclick = function(e){
 
-window.onload=function(){
+e.stopPropagation();
 
-animateValue("booksCount",0,2,1500);
-animateValue("authorsCount",0,1,1500);
-animateValue("downloadsCount",0,500,2000);
+div.classList.add("open");
+
+setTimeout(()=>{
+window.location.href = book.reader;
+},1200);
 
 };
+
+shelf.appendChild(div);
+
+});
+
+})
+.catch(err=>console.log(err));
 
 </script>
 
