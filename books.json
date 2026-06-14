@@ -1,14 +1,14 @@
 [
-  {
-    "title": "Husn e Kainat",
-    "cover": "husn-e-kainat-cover.png",
-    "reader": "husn-e-kainat.html",
-    "pdf": "husn-e-kainat.pdf"
-  },
-  {
-    "title": "Shahdaye Karbala",
-    "cover": "image.png",
-    "reader": "shahdaye-karbala-4.html",
-    "pdf": "shahdaye-karbala.pdf.pdf"
-  }
+{
+"title": "Husn e Kainat",
+"cover": "husn-e-kainat-cover.png",
+"reader": "husn-e-kainat.html",
+"pdf": "husn-e-kainat.pdf"
+},
+{
+"title": "Shahdaye Karbala",
+"cover": "image.png",
+"reader": "shahdaye-karbala-4.html",
+"pdf": "shahdaye-karbala.pdf.pdf"
+}
 ]
