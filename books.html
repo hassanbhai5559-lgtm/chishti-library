@@ -50,10 +50,10 @@ padding:15px;
 border-radius:12px;
 box-shadow:0 4px 15px rgba(0,0,0,.08);
 cursor:pointer;
-transition:.3s;
+transition:1s;
+position:relative;
+transform-style:preserve-3d;
 }
-
-.book-card:hover{
 transform:translateY(-8px);
 }
 
@@ -67,8 +67,27 @@ border-radius:10px;
 width:100%;
 height:100%;
 object-fit:cover;
+transition:1s;
+transform-origin:left;
+}
+.book-card.open{
+transform:perspective(1200px) rotateY(-25deg) scale(1.05);
 }
 
+.book-card::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:12px;
+height:100%;
+background:#d4c4a8;
+border-radius:10px 0 0 10px;
+}
+
+.book-card.open .book-cover{
+transform:rotateY(-35deg);
+}
 .book-title{
 margin-top:15px;
 color:#2196f3;
@@ -248,22 +267,24 @@ Husn e Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein likhe ga
 
 <script>
 
-function openBook(){
-document.getElementById("bookModal").style.display="block";
-}
+document.querySelectorAll('.book-card').forEach(book=>{
 
-function closeBook(){
-document.getElementById("bookModal").style.display="none";
-}
+book.addEventListener('click',function(){
 
-window.onclick=function(event){
-let modal=document.getElementById("bookModal");
-if(event.target==modal){
-modal.style.display="none";
-}
-}
+this.classList.add('open');
+
+let link=this.querySelector('.read-btn');
+
+setTimeout(()=>{
+
+window.location.href=link.href;
+
+},1200);
+
+});
+
+});
 
 </script>
-
 </body>
 </html>
