@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chishti Library Books</title>
+<title>Chishti Library | Islamic Digital Library</title>
 
 <style>
 
@@ -17,71 +17,105 @@ box-sizing:border-box;
 body{
 font-family:Arial,sans-serif;
 background:#f4f8fc;
+color:#333;
 }
 
-header{
+.hero{
 background:linear-gradient(135deg,#00c853,#2196f3);
 color:white;
 text-align:center;
-padding:30px;
+padding:100px 20px;
 }
 
-header h1{
+.hero h1{
+font-size:60px;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:20px;
+max-width:700px;
+margin:auto;
+}
+
+.btn{
+display:inline-block;
+margin-top:25px;
+padding:14px 30px;
+background:white;
+color:#2196f3;
+text-decoration:none;
+font-weight:bold;
+border-radius:8px;
+}
+
+.stats{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+padding:60px 20px;
+}
+
+.stat{
+background:white;
+padding:25px;
+width:220px;
+text-align:center;
+border-radius:10px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.stat h2{
+color:#2196f3;
 font-size:40px;
 }
 
-#bookshelf{
-width:100%;
-height:700px;
-background:url('bookshelf.png') center center no-repeat;
-background-size:contain;
-position:relative;
-margin-top:20px;
+.books{
+padding:60px 20px;
+text-align:center;
+}
+
+.books h2{
+margin-bottom:30px;
+font-size:40px;
+color:#2196f3;
+}
+
+.book-grid{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
 }
 
 .book{
-position:absolute;
-width:120px;
-transition:1s;
-cursor:pointer;
+background:white;
+width:300px;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
 .book img{
 width:100%;
-display:block;
-border-radius:6px;
-box-shadow:0 5px 15px rgba(0,0,0,.3);
+height:420px;
+object-fit:cover;
 }
 
-.book:hover{
-transform:translateY(-10px);
+.book h3{
+padding:15px;
 }
 
-.book-title{
+.about{
+padding:60px 20px;
 text-align:center;
-font-weight:bold;
-margin-top:8px;
-font-size:14px;
-color:#333;
+background:white;
 }
 
-.read-btn{
-width:100%;
-padding:8px;
-margin-top:6px;
-border:none;
-border-radius:6px;
-background:#00c853;
-color:white;
-font-weight:bold;
-cursor:pointer;
-}
-
-.book.open{
-left:50%!important;
-top:220px!important;
-transform:translateX(-50%) scale(1.8);
-z-index:999;
+.about h2{
+margin-bottom:20px;
+color:#2196f3;
 }
 
 footer{
@@ -89,49 +123,95 @@ background:linear-gradient(135deg,#00c853,#2196f3);
 color:white;
 text-align:center;
 padding:20px;
-margin-top:20px;
 }
 
 </style>
 
 </head>
-
 <body>
 
-<header>
-<h1>📚 Chishti Library Books</h1>
-<p>Select a book to read online</p>
-</header>
+<section class="hero">
 
-<div id="bookshelf"></div>
+<h1>📚 Chishti Library</h1>
+
+<p>
+Islamic Digital Library — Read Online & Download Authentic Islamic Books
+</p>
+
+<a href="books.html" class="btn">
+📖 Open Library
+</a>
+
+</section>
+
+<section class="stats">
+
+<div class="stat">
+<h2>2</h2>
+<p>Total Books</p>
+</div>
+
+<div class="stat">
+<h2>1</h2>
+<p>Authors</p>
+</div>
+
+<div class="stat">
+<h2>500+</h2>
+<p>Downloads</p>
+</div>
+
+</section>
+
+<section class="books">
+
+<h2>Featured Books</h2>
+
+<div class="book-grid">
+
+<div class="book">
+
+<img src="husn-e-kainat-cover.png" alt="Husn e Kainat">
+
+<h3>Husn e Kainat</h3>
+
+<a href="husn-e-kainat.html" class="btn">
+Read Online
+</a>
+
+</div>
+
+<div class="book">
+
+<img src="image.png" alt="Shahdaye Karbala">
+
+<h3>Shahdaye Karbala</h3>
+
+<a href="shahdaye-karbala-4.html" class="btn">
+Read Online
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="about">
+
+<h2>About Chishti Library</h2>
+
+<p>
+Chishti Library is an Islamic Digital Library dedicated to preserving and sharing Islamic knowledge through books, articles, and downloadable PDF resources.
+</p>
+
+</section>
 
 <footer>
+
 <p>© 2026 Chishti Library</p>
+
 </footer>
-
-<script>
-
-#bookshelf{
-   if(index==0){
-    div.style.left="280px";
-    div.style.top="250px";
-}
-
-.book{
-    position:absolute;
-    width:100px;
-    transition:1s;
-    cursor:pointer;
-}
-
-.book img{
-    width:100%;
-    display:block;
-    border-radius:4px;
-    box-shadow:0 5px 15px rgba(0,0,0,.3);
-}
-
-</script>
 
 </body>
 </html>
