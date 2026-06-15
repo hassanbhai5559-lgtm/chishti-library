@@ -1,33 +1,22 @@
-<!DOCTYPE html>
-
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <meta name="google-site-verification" content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc" />
 <title>Chishti Library | Islamic Digital Library</title>
 
-<meta name="description" content="Chishti Library is a professional Islamic digital library providing Islamic books, Urdu literature, Islamic history, Karbala literature, and authentic knowledge online.">
-<meta name="keywords" content="Chishti Library, Islamic Books, Urdu Books, Karbala, Islamic History, Digital Library">
-<meta name="robots" content="index,follow">
-<link rel="canonical" href="https://hassanbhai5559-lgtm.github.io/chishti-library/">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+<meta name="description" content="Read Islamic Books Online and Download PDF Books from Chishti Library.">
+<meta name="keywords" content="Islamic Books, Urdu Books, Chishti Library, PDF Books">
+<meta name="author" content="Saim Chishti">
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-}
-
-:root{
---primary:#15803d;
---secondary:#0f172a;
---gold:#d4af37;
---light:#f8fafc;
---text:#64748b;
---white:#fff;
 }
 
 html{
@@ -35,443 +24,469 @@ scroll-behavior:smooth;
 }
 
 body{
-font-family:'Poppins',sans-serif;
-background:#f8fafc;
-overflow-x:hidden;
+font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
+background:#f4f8fc;
+color:#333;
 }
 
-.navbar{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-padding:18px 8%;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:rgba(15,23,42,.95);
-z-index:1000;
+/* Header */
+
+.header{
+background:linear-gradient(135deg,#00c853,#2196f3);
+color:white;
+text-align:center;
+padding:60px 20px;
 }
 
 .logo{
-font-family:'Cinzel',serif;
-font-size:28px;
-font-weight:700;
-color:#fff;
+width:120px;
+height:120px;
+border-radius:50%;
+background:white;
+padding:5px;
+border:4px solid white;
+object-fit:cover;
+box-shadow:0 5px 20px rgba(0,0,0,.25);
+margin-bottom:15px;
 }
 
-.nav-links{
-display:flex;
-gap:25px;
+.header h1{
+font-size:48px;
+margin-bottom:10px;
 }
 
-.nav-links a{
-color:#fff;
-text-decoration:none;
-font-weight:600;
-transition:.3s;
+.header p{
+font-size:18px;
 }
 
-.nav-links a:hover{
-color:var(--gold);
-}
+/* Navbar */
 
-.hero{
-height:100vh;
-background:
-linear-gradient(rgba(15,23,42,.75),rgba(15,23,42,.75)),
-url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1600');
-background-size:cover;
-background-position:center;
+.navbar{
+position:sticky;
+top:0;
+background:white;
 display:flex;
 justify-content:center;
-align-items:center;
+gap:20px;
+padding:15px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+z-index:999;
+}
+
+.navbar a{
+text-decoration:none;
+font-weight:bold;
+color:#2196f3;
+}
+
+.navbar a:hover{
+color:#00c853;
+}
+
+/* Main */
+
+.main-content{
+max-width:1200px;
+margin:auto;
+padding:30px 20px;
+}
+
+/* Search */
+
+.search-container{
 text-align:center;
-padding:20px;
-}
-
-.hero-content{
-max-width:900px;
-color:#fff;
-}
-
-.hero h1{
-font-size:70px;
-font-family:'Cinzel',serif;
-margin-bottom:20px;
-}
-
-.hero p{
-font-size:20px;
-line-height:1.8;
 margin-bottom:30px;
 }
 
-.search-box{
+.search-container input{
+width:100%;
+max-width:650px;
+padding:15px;
+border-radius:30px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+/* Welcome */
+
+.welcome{
+background:white;
+padding:30px;
+border-radius:15px;
+text-align:center;
+margin-bottom:30px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+/* Stats */
+
+.stats{
 display:flex;
 justify-content:center;
-gap:10px;
 flex-wrap:wrap;
+gap:20px;
+margin-bottom:40px;
 }
 
-.search-box input{
-width:450px;
-max-width:95%;
-padding:16px;
-border:none;
-border-radius:50px;
-outline:none;
-}
-
-.search-box button{
-padding:16px 30px;
-border:none;
-background:var(--gold);
-font-weight:700;
-border-radius:50px;
-cursor:pointer;
-}
-
-.btn{
-display:inline-block;
-padding:14px 28px;
-background:var(--primary);
-color:#fff;
-text-decoration:none;
-border-radius:10px;
-margin-top:20px;
-}
-
-section{
-padding:90px 20px;
-}
-
-.container{
-max-width:1200px;
-margin:auto;
+.stat-box{
+background:white;
+padding:20px;
+width:220px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
 .section-title{
 text-align:center;
-font-size:42px;
-margin-bottom:20px;
-color:var(--secondary);
+margin-bottom:30px;
+color:#00c853;
 }
 
-.section-sub{
-text-align:center;
-color:var(--text);
-margin-bottom:50px;
-}
+/* Books */
 
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-}
-
-.stat{
-background:#fff;
-padding:35px;
-border-radius:20px;
-text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.stat h2{
-color:var(--primary);
-font-size:42px;
-}
-
-.categories{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:20px;
-}
-
-.category{
-background:#fff;
-padding:30px;
-border-radius:20px;
-text-align:center;
-font-weight:700;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-transition:.3s;
-}
-
-.category:hover{
-background:var(--primary);
-color:#fff;
-transform:translateY(-8px);
-}
-
-.featured{
-background:#fff;
-padding:40px;
-border-radius:25px;
-display:grid;
-grid-template-columns:350px 1fr;
-gap:40px;
-align-items:center;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-
-.featured img{
-width:100%;
-border-radius:20px;
-}
-
-.featured h3{
-font-size:34px;
-margin-bottom:15px;
-}
-
-.featured p{
-color:var(--text);
-line-height:1.8;
-}
-
-.books{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+.grid-container{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
 gap:25px;
 }
 
 .book-card{
-background:#fff;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
+background:white;
+width:340px;
+padding:15px;
+border-radius:12px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+cursor:pointer;
+transition:.3s;
 }
 
-.book-card img{
+.book-card:hover{
+transform:translateY(-8px);
+}
+
+.book-cover-wrap{
+height:420px;
+overflow:hidden;
+border-radius:10px;
+}
+
+.book-cover{
 width:100%;
-height:350px;
+height:100%;
 object-fit:cover;
 }
 
-.book-content{
-padding:20px;
+.book-title{
+margin-top:15px;
+color:#2196f3;
 }
 
-.book-content h3{
-margin-bottom:10px;
+.book-info{
+margin-top:8px;
+font-size:14px;
 }
 
-.book-content p{
-color:var(--text);
+.book-desc{
+margin-top:10px;
+line-height:1.6;
+font-size:14px;
 }
 
-.about{
-background:linear-gradient(135deg,#15803d,#0f172a);
-padding:60px;
-border-radius:30px;
-color:#fff;
+/* Modal */
+
+.modal{
+display:none;
+position:fixed;
+z-index:2000;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.7);
+}
+
+.modal-content{
+background:white;
+width:90%;
+max-width:500px;
+margin:60px auto;
+padding:25px;
+border-radius:15px;
 text-align:center;
+position:relative;
 }
+
+.modal img{
+width:220px;
+max-width:100%;
+border-radius:10px;
+margin-bottom:15px;
+}
+
+.close{
+position:absolute;
+right:15px;
+top:10px;
+font-size:30px;
+cursor:pointer;
+}
+
+.btn{
+display:block;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
+color:white;
+}
+
+.read-btn{
+background:#00c853;
+}
+
+.download-btn{
+background:#2196f3;
+}
+
+/* About */
+
+.about-section{
+background:white;
+padding:30px;
+margin-top:50px;
+border-radius:12px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+/* Footer */
 
 footer{
-background:#0f172a;
-color:#fff;
+margin-top:50px;
+background:linear-gradient(135deg,#00c853,#2196f3);
+color:white;
 text-align:center;
-padding:40px 20px;
+padding:25px;
 }
 
-@media(max-width:900px){
-
-.hero h1{
-font-size:45px;
-}
-
-.featured{
-grid-template-columns:1fr;
-}
-
-.nav-links{
+.no-results{
 display:none;
+text-align:center;
+padding:30px;
+font-size:18px;
+}
+
+@media(max-width:768px){
+
+.header h1{
+font-size:34px;
+}
+
+.book-card{
+width:100%;
+}
+
+.stat-box{
+width:100%;
 }
 
 }
+
 </style>
-
 </head>
 
 <body>
 
-<nav class="navbar">
-<div class="logo">Chishti Library</div>
+<header class="header">
 
-<div class="nav-links">
-<a href="#">Home</a>
-<a href="#categories">Categories</a>
-<a href="#books">Books</a>
-<a href="#about">About</a>
-</div>
-</nav>
-
-<header class="hero">
-
-<div class="hero-content">
+<img src="logo.png.png" alt="Chishti Library Logo" class="logo">
 
 <h1>Chishti Library</h1>
 
-<p>
-A Professional Islamic Digital Library dedicated to preserving Islamic knowledge, history, literature, and authentic books for readers around the world.
-</p>
-
-<div class="search-box">
-<input type="text" placeholder="Search books...">
-<button>Search</button>
-</div>
-
-<a href="#books" class="btn">Explore Collection</a>
-
-</div>
+<p>Read Online • Download PDFs • Islamic Knowledge For Everyone</p>
 
 </header>
 
-<section>
-<div class="container">
+<nav class="navbar">
+<a href="#">🏠 Home</a>
+<a href="#books">📚 Books</a>
+<a href="#about">ℹ About</a>
+</nav>
 
-<h2 class="section-title">Library Statistics</h2>
-<p class="section-sub">Growing every day with valuable Islamic content.</p>
+<main class="main-content">
 
-<div class="stats">
+<div class="search-container">
+<input type="text" id="searchBox" placeholder="🔍 Search Books...">
+</div>
 
-<div class="stat">
-<h2>1+</h2>
+
+<section class="welcome">
+
+<h2>Welcome to Chishti Library</h2>
+
+<p>
+Explore Islamic books, read online and download PDFs from our growing digital collection.
+</p>
+
+<br>
+
+<a href="books.html" class="btn read-btn">
+📚 View All Books
+</a>
+
+</section>
+</section>
+
+<section class="stats">
+
+<div class="stat-box">
+<h3>📚 1+</h3>
 <p>Books Available</p>
 </div>
 
-<div class="stat">
-<h2>24/7</h2>
-<p>Online Access</p>
-</div>
-
-<div class="stat">
-<h2>Global</h2>
+<div class="stat-box">
+<h3>🌍 Global</h3>
 <p>Readers</p>
 </div>
 
+<div class="stat-box">
+<h3>⬇ PDF</h3>
+<p>Downloads</p>
 </div>
 
-</div>
 </section>
 
-<section id="categories">
-<div class="container">
+<h2 class="section-title" id="books">Featured Books</h2>
 
-<h2 class="section-title">Browse Categories</h2>
+<div class="grid-container" id="bookGrid">
 
-<div class="categories">
+<div class="book-card" onclick="openBook()">
 
-<div class="category">Quran & Tafseer</div>
-<div class="category">Hadith</div>
-<div class="category">Islamic History</div>
-<div class="category">Karbala</div>
-<div class="category">Tasawwuf</div>
-<div class="category">Urdu Books</div>
-
+<div class="book-cover-wrap">
+<img src="image.png" alt="Shahdaye Karbala" class="book-cover">
 </div>
 
-</div>
-</section>
+<h3 class="book-title">Shahdaye Karbala</h3>
 
-<section>
-<div class="container">
+<p class="book-info"><b>Author:</b> Saim Chishti</p>
 
-<h2 class="section-title">Featured Book</h2>
+<p class="book-info"><b>Language:</b> Urdu</p>
 
-<div class="featured">
+<p class="book-info"><b>Category:</b> Islamic History</p>
+<p class="book-desc">
+<b>About Book:</b><br><br>
 
-<img src="image.png" alt="Shahdaye Karbala">
-
-<div>
-
-<h3>Shahdaye Karbala</h3>
-
-<p>
-A beautiful work dedicated to the martyrs of Karbala and the timeless message of sacrifice, truth, and devotion.
+<em>Shahdaye Karbala</em> ek manqabati majmua hai jisme Karbala ke shahidon, Hazrat Imam Hussain (RA) aur Ahle Bait Athar ki shaan mein likhe gaye kalam aur manaqib shamil hain. Is kitab mein muhabbat-e-Ahle Bait, waqia-e-Karbala ki yaad aur shahidon ki qurbaniyon ko nazm o manqabat ke andaz mein pesh kiya gaya hai. Yeh kitab qari ke dil mein Ahle Bait ki muhabbat aur Karbala ke paigham ko taza karti hai.
 </p>
+<a href="shahdaye-karbala-4.html" class="btn read-btn" target="_blank">
+📖 Read Online
+</a>
 
-<a href="shahdaye-karbala-4.html" class="btn">
-Read Online
+<a href="shahdaye-karbala.pdf.pdf" class="btn download-btn" download>
+⬇ Download PDF
 </a>
 
 </div>
 
 </div>
 
-</div>
-</section>
-
-<section id="books">
-
-<div class="container">
-
-<h2 class="section-title">Book Collection</h2>
-
-<div class="books">
-
-<div class="book-card">
-
-<img src="image.png" alt="Book Cover">
-
-<div class="book-content">
-
-<h3>Shahdaye Karbala</h3>
-
-<p>Islamic History • Urdu Language</p>
-
-<a href="shahdaye-karbala-4.html" class="btn">
-Read Book
-</a>
-
+<div class="no-results" id="notFound">
+No books found.
 </div>
 
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section id="about">
-
-<div class="container">
-
-<div class="about">
+<section class="about-section" id="about">
 
 <h2>About Chishti Library</h2>
 
 <p>
-Chishti Library is a modern Islamic digital library dedicated to preserving authentic Islamic books and making knowledge accessible to readers across the globe.
+Chishti Library is an Islamic Digital Library dedicated to preserving and sharing authentic Islamic knowledge.
 </p>
-
-</div>
-
-</div>
 
 </section>
 
+</main>
+
 <footer>
-
-<h3>Chishti Library</h3>
-
-<br>
-
-<p>
-Preserving Islamic Knowledge For Future Generations
-</p>
-
-<br>
-
+<p>© 2026 Chishti Library. All Rights Reserved.</p>
 <p>Founder & Author: Saim Chishti</p>
-
-<p>© 2026 All Rights Reserved</p>
-
 </footer>
+
+<!-- Modal -->
+
+<div class="modal" id="bookModal">
+
+<div class="modal-content">
+
+<span class="close" onclick="closeBook()">&times;</span>
+
+<img src="image.png" alt="Book Cover">
+
+<h2>Shahdaye Karbala</h2>
+
+<p>Author: Saim Chishti</p>
+
+<a href="shahdaye-karbala-4.html" target="_blank" class="btn read-btn">
+📖 Read Online
+</a>
+
+</a>
+<a href="shahdaye-karbala.pdf.pdf" download class="btn download-btn">
+⬇ Download PDF
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+function openBook(){
+document.getElementById("bookModal").style.display="block";
+}
+
+function closeBook(){
+document.getElementById("bookModal").style.display="none";
+}
+
+window.onclick=function(event){
+let modal=document.getElementById("bookModal");
+if(event.target==modal){
+modal.style.display="none";
+}
+}
+
+function searchBooks(){
+
+let input=document.getElementById("searchBox").value.toLowerCase();
+
+let books=document.querySelectorAll(".book-card");
+
+let found=0;
+
+books.forEach(book=>{
+
+let title=book.querySelector(".book-title").innerText.toLowerCase();
+
+if(title.includes(input)){
+book.style.display="block";
+found++;
+}else{
+book.style.display="none";
+}
+
+});
+
+document.getElementById("notFound").style.display=
+(found===0 && input!=="") ? "block" : "none";
+
+}
+
+document.getElementById("searchBox")
+.addEventListener("input",searchBooks);
+
+</script>
 
 </body>
 </html>
