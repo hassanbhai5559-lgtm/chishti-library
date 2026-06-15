@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Husn e Kainat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Husn-e-Kainat | Chishti Library</title>
 
 <style>
+
 body{
 margin:0;
 font-family:Arial,sans-serif;
@@ -12,36 +15,49 @@ background:#f4f8fc;
 }
 
 .header{
-background:linear-gradient(135deg,#00c853,#2196f3);
-color:white;
-padding:15px;
+background:#0f172a;
+padding:20px;
 text-align:center;
 }
 
-.reader{
-height:calc(100vh - 70px);
+.header a{
+color:white;
+text-decoration:none;
+font-weight:bold;
 }
 
-.reader embed{
+.book{
+max-width:1200px;
+margin:20px auto;
+padding:20px;
+}
+
+h1{
+text-align:center;
+}
+
+iframe{
 width:100%;
-height:100%;
+height:90vh;
+border:none;
+background:white;
 }
-</style>
 
+</style>
 </head>
+
 <body>
 
 <div class="header">
-<h1>📖 Husn e Kainat</h1>
+<a href="index.html">← Back to Chishti Library</a>
 </div>
 
-<div class="reader">
-<iframe
-src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://hassanbhai5559-lgtm.github.io/chishti-library/husn-e-kainat.pdf"
-width="100%"
-height="100%"
-style="border:none;">
-</iframe>
+<div class="book">
+
+<h1>Husn-e-Kainat</h1>
+
+<iframe src="husn-e-kainat.pdf"></iframe>
+
 </div>
 
 </body>
