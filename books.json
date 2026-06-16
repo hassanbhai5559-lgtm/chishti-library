@@ -1,9 +1,13 @@
-[
 {
-"title": "Husn e Kainat",
-"cover": "husn-e-kainat-cover.png",
-"reader": "husn-e-kainat.html",
-"pdf": "husn-e-kainat.pdf"
+  "title": "Husn-e-Kainat",
+  "author": "Saim Chishti",
+  "language": "Urdu",
+  "category": "Naatia Kalam",
+  "cover": "husn-e-kainat-cover.png",
+  "reader": "husn-e-kainat.html",
+  "pdf": "husn-e-kainat.pdf",
+  "description": "Husn e Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain."
+}
 },
 {
 "title": "Shahdaye Karbala",
