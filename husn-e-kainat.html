@@ -17,12 +17,13 @@ html,body{
     height:100%;
     overflow:hidden;
     font-family:Arial,sans-serif;
+    background:#111;
 }
 
 .header{
     height:60px;
     background:linear-gradient(135deg,#00c853,#2196f3);
-    color:white;
+    color:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -31,10 +32,11 @@ html,body{
 }
 
 .reader{
+    width:100%;
     height:calc(100vh - 60px);
 }
 
-.reader iframe{
+.reader embed{
     width:100%;
     height:100%;
     border:none;
@@ -48,7 +50,9 @@ html,body{
 </div>
 
 <div class="reader">
-    <iframe src="./husn-e-kainat.pdf"></iframe>
+    <embed
+        src="husn-e-kainat.pdf#toolbar=0&navpanes=0&scrollbar=0"
+        type="application/pdf">
 </div>
 
 </body>
