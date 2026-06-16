@@ -1,24 +1,36 @@
-{
-  "title": "Husn-e-Kainat",
-  "author": "Saim Chishti",
-  "language": "Urdu",
-  "category": "Naatia Kalam",
-  "cover": "husn-e-kainat-cover.png",
-  "reader": "husn-e-kainat.html",
-  "pdf": "husn-e-kainat.pdf",
-  "description": "Husn e Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain."
-}
+```json
+[
+  {
+    "title": "Husn-e-Kainat",
+    "author": "Saim Chishti",
+    "language": "Urdu",
+    "category": "Naatia Kalam",
+    "cover": "husn-e-kainat-cover.png",
+    "reader": "husn-e-kainat.html",
+    "pdf": "husn-e-kainat.pdf",
+    "description": "Husn e Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain."
+  },
 
-{
-"title": "Shahdaye Karbala",
-"cover": "image.png",
-"reader": "shahdaye-karbala-4.html",
-"pdf": "shahdaye-karbala.pdf.pdf"
-}
+  {
+    "title": "Shahdaye Karbala",
+    "author": "Saim Chishti",
+    "language": "Urdu",
+    "category": "Islamic History",
+    "cover": "image.png",
+    "reader": "shahdaye-karbala-4.html",
+    "pdf": "shahdaye-karbala.pdf.pdf",
+    "description": "Shahdaye Karbala Karbala ke shahidon aur Ahle Bait ki muhabbat par mabni kitab hai."
+  },
 
-{
-  "title": "Shaheed-Ibn-e-Shaheed",
-  "cover": "shaheed-ibn-e-shaheed-cover.png",
-  "reader": "shaheed-ibn-e-shaheed.html",
-  "pdf": "shaheed-ibn-e-shaheed.pdf"
-}
+  {
+    "title": "Shaheed Ibn-e-Shaheed",
+    "author": "Saim Chishti",
+    "language": "Urdu",
+    "category": "Islamic History",
+    "cover": "shaheed-ibn-e-shaheed-cover.png",
+    "reader": "shaheed-ibn-e-shaheed.html",
+    "pdf": "shaheed-ibn-e-shaheed.pdf",
+    "description": "Shaheed Ibn-e-Shaheed ek Islami tareekhi kitab hai jo shahadat aur Ahle Bait ki muhabbat ko bayan karti hai."
+  }
+]
+```
