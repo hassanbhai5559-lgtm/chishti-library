@@ -1,25 +1,16 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shaheed Ibn-e-Shaheed | Online Reader</title>
+<title>Shaheed Ibn-e-Shaheed</title>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;}
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-html,body{
-width:100%;
-height:100%;
-overflow:hidden;
-font-family:Arial,sans-serif;
+body{
 background:#111;
+font-family:Arial,sans-serif;
 }
 
 .header{
@@ -27,25 +18,24 @@ height:60px;
 background:linear-gradient(135deg,#00c853,#2196f3);
 color:white;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 font-size:22px;
 font-weight:bold;
 }
 
 .reader{
-width:100%;
 height:calc(100vh - 60px);
 }
 
-.reader embed{
+.reader iframe{
 width:100%;
 height:100%;
 border:none;
 }
-
 </style>
 </head>
+
 <body>
 
 <div class="header">
@@ -53,11 +43,8 @@ border:none;
 </div>
 
 <div class="reader">
-<embed
-src="shaheed-ibn-e-shaheed.pdf#toolbar=0&navpanes=0"
-type="application/pdf">
+<iframe src="shaheed-ibn-e-shaheed.pdf"></iframe>
 </div>
 
 </body>
 </html>
-
