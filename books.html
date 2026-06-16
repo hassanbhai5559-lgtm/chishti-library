@@ -6,58 +6,292 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chishti Library Books</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
 body{
-font-family:Arial,sans-serif;
-background:#f4f8fc;
+background:#f5f7fa;
 }
 
+/* HEADER */
+
 header{
-background:linear-gradient(135deg,#00c853,#2196f3);
+background:linear-gradient(135deg,#0d5c3a,#16a34a);
 color:white;
 text-align:center;
-padding:30px;
+padding:60px 20px;
 }
 
 header h1{
+font-size:50px;
+margin-bottom:10px;
+}
+
+header p{
+font-size:18px;
+opacity:.9;
+}
+
+/* BOOK SECTION */
+
+.books-section{
+padding:70px 20px;
+max-width:1200px;
+margin:auto;
+}
+
+.section-title{
+text-align:center;
 font-size:40px;
+color:#0d5c3a;
+margin-bottom:50px;
+}
+
+.books-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:35px;
+}
+
+/* CARD */
+
+.book-card{
+background:white;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+transition:.4s;
+animation:fadeUp .8s ease forwards;
+}
+
+.book-card:hover{
+transform:translateY(-12px);
+box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+.book-image{
+height:420px;
+overflow:hidden;
+}
+
+.book-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:1s;
+}
+
+.book-card:hover .book-image img{
+transform:scale(1.08);
+}
+
+.book-content{
+padding:25px;
+}
+
+.book-content h3{
+font-size:26px;
+color:#0d5c3a;
+margin-bottom:10px;
+}
+
+.book-content p{
+color:#666;
+line-height:1.8;
+margin-bottom:20px;
+}
+
+.buttons{
+display:flex;
+gap:10px;
+}
+
+.btn{
+flex:1;
+text-align:center;
+padding:12px;
+border-radius:30px;
+text-decoration:none;
+font-weight:600;
+transition:.3s;
+}
+
+.read-btn{
+background:#32cd32;
+color:white;
+}
+
+.read-btn:hover{
+background:#28a428;
+transform:translateY(-3px);
+}
+
+.download-btn{
+background:white;
+color:#32cd32;
+border:2px solid #32cd32;
+}
+
+.download-btn:hover{
+background:#32cd32;
+color:white;
+}
+
+/* FOOTER */
+
+footer{
+margin-top:60px;
+background:#0d5c3a;
+color:white;
+text-align:center;
+padding:25px;
+}
+
+/* ANIMATION */
+
+@keyframes fadeUp{
+
+from{
+opacity:0;
+transform:translateY(40px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
 }
 
 }
 
-div.innerHTML = `
-<img src="${book.cover}" alt="${book.title}">
-<div class="book-title">${book.title}</div>
-<button class="read-btn">📖 Read Online</button>
-`;
+/* MOBILE */
 
-div.querySelector(".read-btn").onclick = function(e){
+@media(max-width:768px){
 
-e.stopPropagation();
+header h1{
+font-size:36px;
+}
 
-div.classList.add("open");
+.section-title{
+font-size:30px;
+}
 
-setTimeout(()=>{
-window.location.href = book.reader;
-},1200);
+.book-image{
+height:320px;
+}
 
-};
+.buttons{
+flex-direction:column;
+}
 
-shelf.appendChild(div);
+}
 
-});
+</style>
 
-})
-.catch(err=>console.log(err));
+</head>
 
-</script>
+<body>
+
+<header>
+
+<h1>📚 Chishti Library Books</h1>
+
+<p>
+Read Islamic Books Online & Download PDFs
+</p>
+
+</header>
+
+<section class="books-section">
+
+<h2 class="section-title">
+Featured Books
+</h2>
+
+<div class="books-grid">
+
+<!-- BOOK 1 -->
+
+<div class="book-card">
+
+<div class="book-image">
+<img src="husn-e-kainat-cover.png" alt="Husn e Kainat">
+</div>
+
+<div class="book-content">
+
+<h3>Husn-e-Kainat ﷺ</h3>
+
+<p>
+A beautiful collection of Naatia Kalam dedicated to the Holy Prophet Muhammad ﷺ.
+</p>
+
+<div class="buttons">
+
+<a href="husn-e-kainat.html" class="btn read-btn">
+📖 Read Online
+</a>
+
+<a href="husn-e-kainat.pdf" class="btn download-btn">
+⬇ Download
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- BOOK 2 -->
+
+<div class="book-card">
+
+<div class="book-image">
+<img src="image.png" alt="Shahdaye Karbala">
+</div>
+
+<div class="book-content">
+
+<h3>Shahdaye Karbala</h3>
+
+<p>
+A collection about Karbala, Ahle Bait and the everlasting message of sacrifice and truth.
+</p>
+
+<div class="buttons">
+
+<a href="shahdaye-karbala-4.html" class="btn read-btn">
+📖 Read Online
+</a>
+
+<a href="shahdaye-karbala.pdf.pdf" class="btn download-btn">
+⬇ Download
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<footer>
+
+<p>© 2026 Chishti Library</p>
+
+<p>Founder & Author: Saim Chishti</p>
+
+</footer>
 
 </body>
 </html>
