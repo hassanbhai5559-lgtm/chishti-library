@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -103,7 +103,6 @@ margin-top:30px;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -157,9 +156,14 @@ container.appendChild(div);
 });
 
 })
-.catch(err => console.log(err));
+.catch(error => {
+console.log(error);
+document.getElementById("booksContainer").innerHTML =
+"<h2 style='text-align:center'>No Books Found</h2>";
+});
 
 </script>
 
 </body>
 </html>
+```
