@@ -12,10 +12,10 @@
 margin:0;
 padding:0;
 box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-font-family:Arial,sans-serif;
 background:#f4f8fc;
 }
 
@@ -23,11 +23,12 @@ header{
 background:linear-gradient(135deg,#00c853,#2196f3);
 color:white;
 text-align:center;
-padding:30px;
+padding:40px 20px;
 }
 
 header h1{
-font-size:40px;
+font-size:42px;
+margin-bottom:10px;
 }
 
 .books-container{
@@ -56,22 +57,17 @@ width:100%;
 height:420px;
 object-fit:cover;
 border-radius:10px;
-margin-bottom:15px;
 }
 
 .book-card h2{
+margin-top:15px;
 margin-bottom:10px;
 color:#2196f3;
 }
 
 .book-card p{
+line-height:1.7;
 margin:5px 0;
-line-height:1.6;
-}
-
-.desc{
-margin-top:10px;
-color:#555;
 }
 
 .read-btn,
@@ -99,7 +95,7 @@ background:linear-gradient(135deg,#00c853,#2196f3);
 color:white;
 text-align:center;
 padding:20px;
-margin-top:30px;
+margin-top:40px;
 }
 
 </style>
@@ -112,57 +108,96 @@ margin-top:30px;
 <p>Select a book to read online or download PDF</p>
 </header>
 
-<div id="booksContainer" class="books-container"></div>
+<div class="books-container">
 
-<footer>
-<p>© 2026 Chishti Library</p>
-</footer>
+<!-- Husn-e-Kainat -->
 
-<script>
+<div class="book-card">
 
-fetch("books.json")
-.then(res => res.json())
-.then(data => {
+<img src="husn-e-kainat-cover.png" class="book-cover">
 
-const container = document.getElementById("booksContainer");
+<h2>Husn-e-Kainat</h2>
 
-data.forEach(book => {
+<p><b>Author:</b> Saim Chishti</p>
+<p><b>Language:</b> Urdu</p>
+<p><b>Category:</b> Naatia Kalam</p>
 
-const div = document.createElement("div");
-div.className = "book-card";
+<p>
+Husn e Kainat ek naatia majmua hai jisme
+Huzoor Akram ﷺ ki shaan mein naat,
+salam aur manqabat shamil hain.
+</p>
 
-div.innerHTML = `
-<img src="${book.cover}" alt="${book.title}" class="book-cover">
-
-<h2>${book.title}</h2>
-
-<p><b>Author:</b> ${book.author}</p>
-<p><b>Language:</b> ${book.language}</p>
-<p><b>Category:</b> ${book.category}</p>
-
-<p class="desc">${book.description}</p>
-
-<a href="${book.reader}" class="read-btn">
+<a href="husn-e-kainat.html" class="read-btn">
 📖 Read Online
 </a>
 
-<a href="${book.pdf}" class="download-btn" download>
+<a href="husn-e-kainat.pdf" class="download-btn" download>
 ⬇ Download PDF
 </a>
-`;
 
-container.appendChild(div);
+</div>
 
-});
+<!-- Shahdaye Karbala -->
 
-})
-.catch(error => {
-console.log(error);
-document.getElementById("booksContainer").innerHTML =
-"<h2 style='text-align:center'>No Books Found</h2>";
-});
+<div class="book-card">
 
-</script>
+<img src="image.png" class="book-cover">
+
+<h2>Shahdaye Karbala</h2>
+
+<p><b>Author:</b> Saim Chishti</p>
+<p><b>Language:</b> Urdu</p>
+<p><b>Category:</b> Islamic History</p>
+
+<p>
+Shahdaye Karbala Karbala ke shahidon aur
+Ahle Bait Athar ki muhabbat par mabni kitab hai.
+</p>
+
+<a href="shahdaye-karbala-4.html" class="read-btn">
+📖 Read Online
+</a>
+
+<a href="shahdaye-karbala.pdf.pdf" class="download-btn" download>
+⬇ Download PDF
+</a>
+
+</div>
+
+<!-- Shaheed Ibn-e-Shaheed -->
+
+<div class="book-card">
+
+<img src="shaheed-ibn-e-shaheed-cover.jpg" class="book-cover">
+
+<h2>Shaheed Ibn-e-Shaheed</h2>
+
+<p><b>Author:</b> Saim Chishti</p>
+<p><b>Language:</b> Urdu</p>
+<p><b>Category:</b> Islamic History</p>
+
+<p>
+Shaheed Ibn-e-Shaheed ek Islami tareekhi kitab hai
+jo shahadat aur Ahle Bait ki muhabbat ko bayan karti hai.
+</p>
+
+<a href="shaheed-ibn-e-shaheed.html" class="read-btn">
+📖 Read Online
+</a>
+
+<a href="shaheed-ibn-e-shaheed.pdf" class="download-btn" download>
+⬇ Download PDF
+</a>
+
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 Chishti Library</p>
+<p>Founder & Author: Saim Chishti</p>
+</footer>
 
 </body>
 </html>
