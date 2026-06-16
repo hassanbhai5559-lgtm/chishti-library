@@ -1,492 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ur">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chishti Book Center - Allama Saim Chishti Books</title>
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            direction: ltr;
+        }
 
-  <meta name="google-site-verification" content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc" />
-<title>Chishti Library | Islamic Digital Library</title>
+        /* Header Section */
+        header {
+            background-color: #0d5c3a; /* Islamic Green Theme */
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.3em;
+            color: #f0fdf4;
+            font-style: italic;
+        }
 
-<meta name="description" content="Read Islamic Books Online and Download PDF Books from Chishti Library.">
-<meta name="keywords" content="Islamic Books, Urdu Books, Chishti Library, PDF Books">
-<meta name="author" content="Saim Chishti">
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
 
-<style>
+        /* Welcome Card */
+        .welcome-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            text-align: center;
+            margin-bottom: 30px;
+            border-top: 5px solid #0d5c3a;
+        }
+        .welcome-card h2 {
+            color: #0d5c3a;
+            margin-top: 0;
+        }
+        .welcome-card p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+        /* Book Grid Section */
+        .section-title {
+            color: #0d5c3a;
+            border-bottom: 2px solid #0d5c3a;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+        }
+        
+        .book-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
 
-html{
-scroll-behavior:smooth;
-}
+        /* Single Book Item */
+        .book-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .book-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        .book-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .book-icon {
+            font-size: 2em;
+        }
+        .book-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #222;
+        }
+        .book-author {
+            font-size: 0.9em;
+            color: #666;
+            display: block;
+            margin-top: 4px;
+        }
 
-body{
-font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;
-background:#f4f8fc;
-color:#333;
-}
+        /* Action Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .btn-read {
+            background-color: #fff;
+            color: #0d5c3a;
+            border: 2px solid #0d5c3a;
+        }
+        .btn-read:hover {
+            background-color: #0d5c3a;
+            color: white;
+        }
+        .btn-download {
+            background-color: #0d5c3a;
+            color: white;
+            border: 2px solid #0d5c3a;
+        }
+        .btn-download:hover {
+            background-color: #094028;
+            border-color: #094028;
+        }
 
-/* Header */
-
-.header{
-background:linear-gradient(135deg,#00c853,#2196f3);
-color:white;
-text-align:center;
-padding:60px 20px;
-}
-
-.logo{
-width:120px;
-height:120px;
-border-radius:50%;
-background:white;
-padding:5px;
-border:4px solid white;
-object-fit:cover;
-box-shadow:0 5px 20px rgba(0,0,0,.25);
-margin-bottom:15px;
-}
-
-.header h1{
-font-size:48px;
-margin-bottom:10px;
-}
-
-.header p{
-font-size:18px;
-}
-
-/* Navbar */
-
-.navbar{
-position:sticky;
-top:0;
-background:white;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:15px;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-z-index:999;
-}
-
-.navbar a{
-text-decoration:none;
-font-weight:bold;
-color:#2196f3;
-}
-
-.navbar a:hover{
-color:#00c853;
-}
-
-/* Main */
-
-.main-content{
-max-width:1200px;
-margin:auto;
-padding:30px 20px;
-}
-
-/* Search */
-
-.search-container{
-text-align:center;
-margin-bottom:30px;
-}
-
-.search-container input{
-width:100%;
-max-width:650px;
-padding:15px;
-border-radius:30px;
-border:1px solid #ccc;
-font-size:16px;
-}
-
-/* Welcome */
-
-.welcome{
-background:white;
-padding:30px;
-border-radius:15px;
-text-align:center;
-margin-bottom:30px;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
-
-/* Stats */
-
-.stats{
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-gap:20px;
-margin-bottom:40px;
-}
-
-.stat-box{
-background:white;
-padding:20px;
-width:220px;
-border-radius:12px;
-text-align:center;
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-}
-
-.section-title{
-text-align:center;
-margin-bottom:30px;
-color:#00c853;
-}
-
-/* Books */
-
-.grid-container{
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-gap:25px;
-}
-
-.book-card{
-background:white;
-width:340px;
-padding:15px;
-border-radius:12px;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
-cursor:pointer;
-transition:.3s;
-}
-
-.book-card:hover{
-transform:translateY(-8px);
-}
-
-.book-cover-wrap{
-height:420px;
-overflow:hidden;
-border-radius:10px;
-}
-
-.book-cover{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.book-title{
-margin-top:15px;
-color:#2196f3;
-}
-
-.book-info{
-margin-top:8px;
-font-size:14px;
-}
-
-.book-desc{
-margin-top:10px;
-line-height:1.6;
-font-size:14px;
-}
-
-/* Modal */
-
-.modal{
-display:none;
-position:fixed;
-z-index:2000;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.7);
-}
-
-.modal-content{
-background:white;
-width:90%;
-max-width:500px;
-margin:60px auto;
-padding:25px;
-border-radius:15px;
-text-align:center;
-position:relative;
-}
-
-.modal img{
-width:220px;
-max-width:100%;
-border-radius:10px;
-margin-bottom:15px;
-}
-
-.close{
-position:absolute;
-right:15px;
-top:10px;
-font-size:30px;
-cursor:pointer;
-}
-
-.btn{
-display:block;
-padding:12px;
-margin-top:10px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-color:white;
-}
-
-.read-btn{
-background:#00c853;
-}
-
-.download-btn{
-background:#2196f3;
-}
-
-/* About */
-
-.about-section{
-background:white;
-padding:30px;
-margin-top:50px;
-border-radius:12px;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
-}
-
-/* Footer */
-
-footer{
-margin-top:50px;
-background:linear-gradient(135deg,#00c853,#2196f3);
-color:white;
-text-align:center;
-padding:25px;
-}
-
-.no-results{
-display:none;
-text-align:center;
-padding:30px;
-font-size:18px;
-}
-
-@media(max-width:768px){
-
-.header h1{
-font-size:34px;
-}
-
-.book-card{
-width:100%;
-}
-
-.stat-box{
-width:100%;
-}
-
-}
-
-</style>
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .book-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            .button-group {
+                width: 100%;
+            }
+            .btn {
+                flex: 1;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<header class="header">
-
-<img src="logo.png.png" alt="Chishti Library Logo" class="logo">
-
-<h1>Chishti Library</h1>
-
-<p>Read Online • Download PDFs • Islamic Knowledge For Everyone</p>
-
-</header>
-
-<nav class="navbar">
-<a href="#">🏠 Home</a>
-<a href="#books">📚 Books</a>
-<a href="#about">ℹ About</a>
-</nav>
-
-<main class="main-content">
-
-<div class="search-container">
-<input type="text" id="searchBox" placeholder="🔍 Search Books...">
-</div>
-
-
-<section class="welcome">
-
-<h2>Welcome to Chishti Library</h2>
-
-<p>
-Explore Islamic books, read online and download PDFs from our growing digital collection.
-</p>
-
-<br>
-
-<a href="books.html" class="btn read-btn">
-📚 View All Books
-</a>
-
-</section>
-</section>
-
-<section class="stats">
-
-<div class="stat-box">
-<h3>📚 1+</h3>
-<p>Books Available</p>
-</div>
-
-<div class="stat-box">
-<h3>🌍 Global</h3>
-<p>Readers</p>
-</div>
-
-<div class="stat-box">
-<h3>⬇ PDF</h3>
-<p>Downloads</p>
-</div>
-
-</section>
-
-<h2 class="section-title" id="books">Featured Books</h2>
-
-<div class="grid-container" id="bookGrid">
-
-<div class="book-card" onclick="openBook()">
-
-<div class="book-cover-wrap">
-<img src="image.png" alt="Shahdaye Karbala" class="book-cover">
-</div>
-
-<h3 class="book-title">Shahdaye Karbala</h3>
-
-<p class="book-info"><b>Author:</b> Saim Chishti</p>
-
-<p class="book-info"><b>Language:</b> Urdu</p>
-
-<p class="book-info"><b>Category:</b> Islamic History</p>
-<p class="book-desc">
-<b>About Book:</b><br><br>
-
-<em>Shahdaye Karbala</em> ek manqabati majmua hai jisme Karbala ke shahidon, Hazrat Imam Hussain (RA) aur Ahle Bait Athar ki shaan mein likhe gaye kalam aur manaqib shamil hain. Is kitab mein muhabbat-e-Ahle Bait, waqia-e-Karbala ki yaad aur shahidon ki qurbaniyon ko nazm o manqabat ke andaz mein pesh kiya gaya hai. Yeh kitab qari ke dil mein Ahle Bait ki muhabbat aur Karbala ke paigham ko taza karti hai.
-</p>
-<a href="shahdaye-karbala-4.html" class="btn read-btn" target="_blank">
-📖 Read Online
-</a>
-
-<a href="shahdaye-karbala.pdf.pdf" class="btn download-btn" download>
-⬇ Download PDF
-</a>
-
-</div>
-
-</div>
-
-<div class="no-results" id="notFound">
-No books found.
-</div>
-
-<section class="about-section" id="about">
-
-<h2>About Chishti Library</h2>
-
-<p>
-Chishti Library is an Islamic Digital Library dedicated to preserving and sharing authentic Islamic knowledge.
-</p>
-
-</section>
-
-</main>
-
-<footer>
-<p>© 2026 Chishti Library. All Rights Reserved.</p>
-<p>Founder & Author: Saim Chishti</p>
-</footer>
-
-<!-- Modal -->
-
-<div class="modal" id="bookModal">
-
-<div class="modal-content">
-
-<span class="close" onclick="closeBook()">&times;</span>
-
-<img src="image.png" alt="Book Cover">
-
-<h2>Shahdaye Karbala</h2>
-
-<p>Author: Saim Chishti</p>
-
-<a href="shahdaye-karbala-4.html" target="_blank" class="btn read-btn">
-📖 Read Online
-</a>
-
-</a>
-<a href="shahdaye-karbala.pdf.pdf" download class="btn download-btn">
-⬇ Download PDF
-</a>
-
-</div>
-
-</div>
-
-<script>
-
-function openBook(){
-document.getElementById("bookModal").style.display="block";
-}
-
-function closeBook(){
-document.getElementById("bookModal").style.display="none";
-}
-
-window.onclick=function(event){
-let modal=document.getElementById("bookModal");
-if(event.target==modal){
-modal.style.display="none";
-}
-}
-
-function searchBooks(){
-
-let input=document.getElementById("searchBox").value.toLowerCase();
-
-let books=document.querySelectorAll(".book-card");
-
-let found=0;
-
-books.forEach(book=>{
-
-let title=book.querySelector(".book-title").innerText.toLowerCase();
-
-if(title.includes(input)){
-book.style.display="block";
-found++;
-}else{
-book.style.display="none";
-}
-
-});
-
-document.getElementById("notFound").style.display=
-(found===0 && input!=="") ? "block" : "none";
-
-}
-
-document.getElementById("searchBox")
-.addEventListener("input",searchBooks);
-
-</script>
+    <!-- Header Section -->
+    <header>
+        <h1>Chishti Book Center</h1>
+        <p>Welcome to Chishti Books Digital Library</p>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        
+        <!-- Welcome Message -->
+        <div class="welcome-card">
+            <h2>Al-Shah Allama Saim Chishti (R.A.) Library</h2>
+            <p>
+                Assalam-o-Alaikum! Is website par Huzoor Saim Chishti ki tasaneef (books) upload ki ja rahi hain. 
+                Aap tamam kitabon ko ba-aasaani online parh bhi sakte hain aur PDF format mein free download bhi kar sakte hain.
+            </p>
+        </div>
+
+        <!-- Books List -->
+        <h2 class="section-title">📚 Available Books (Kitabein)</h2>
+        <div class="book-list">
+
+            <!-- Book 1 (Example) -->
+            <div class="book-item">
+                <div class="book-info">
+                    <span class="book-icon">📖</span>
+                    <div>
+                        <span class="book-title">Eman Ka Markaz</span>
+                        <span class="book-author">By Allama Saim Chishti</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <!-- Online Read Link -->
+                    <a href="books/eman-ka-markaz.pdf" target="_blank" class="btn btn-read">Read Online</a>
+                    <!-- Download Link -->
+                    <a href="books/eman-ka-markaz.pdf" download class="btn btn-download">Download</a>
+                </div>
+            </div>
+
+            <!-- Book 2 (Example) -->
+            <div class="book-item">
+                <div class="book-info">
+                    <span class="book-icon">📖</span>
+                    <div>
+                        <span class="book-title">Mushkil Kusha</span>
+                        <span class="book-author">By Allama Saim Chishti</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <a href="books/mushkil-kusha.pdf" target="_blank" class="btn btn-read">Read Online</a>
+                    <a href="books/mushkil-kusha.pdf" download class="btn btn-download">Download</a>
+                </div>
+            </div>
+
+            <!-- Aap mazeed kitabein bilkul isi tarah neeche add kar sakte hain -->
+
+        </div>
+    </div>
 
 </body>
 </html>
