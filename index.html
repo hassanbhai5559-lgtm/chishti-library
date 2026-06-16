@@ -1,15 +1,16 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="google-site-verification" content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc" />
+<meta name="google-site-verification" content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc">
 
 <title>Chishti Library | Islamic Digital Library</title>
 
 <meta name="description" content="Read Islamic Books Online and Download PDF Books from Chishti Library.">
+<meta name="keywords" content="Islamic Books, Urdu Books, Chishti Library, PDF Books">
+<meta name="author" content="Saim Chishti">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -27,30 +28,36 @@ background:#f5f7fb;
 color:#333;
 }
 
-header{
-background:linear-gradient(135deg,#0f172a,#16a34a);
+/* HERO */
+
+.hero{
+background:
+linear-gradient(rgba(15,23,42,.75),rgba(15,23,42,.75)),
+url('bookshelf.png');
+background-size:cover;
+background-position:center;
 color:white;
-padding:80px 20px;
 text-align:center;
+padding:120px 20px;
 }
 
 .logo{
 width:120px;
 height:120px;
 border-radius:50%;
-object-fit:cover;
 border:4px solid white;
+object-fit:cover;
 margin-bottom:20px;
 }
 
-header h1{
-font-size:52px;
+.hero h1{
+font-size:60px;
 margin-bottom:15px;
 }
 
-header p{
-font-size:18px;
-max-width:700px;
+.hero p{
+font-size:20px;
+max-width:800px;
 margin:auto;
 line-height:1.8;
 }
@@ -65,6 +72,8 @@ font-weight:bold;
 text-decoration:none;
 border-radius:40px;
 }
+
+/* NAVBAR */
 
 .navbar{
 background:white;
@@ -84,6 +93,8 @@ color:#16a34a;
 font-weight:bold;
 }
 
+/* SECTION */
+
 .section{
 padding:70px 20px;
 max-width:1200px;
@@ -96,6 +107,8 @@ margin-bottom:40px;
 font-size:38px;
 color:#0f172a;
 }
+
+/* STATS */
 
 .stats{
 display:grid;
@@ -115,6 +128,8 @@ box-shadow:0 5px 15px rgba(0,0,0,.08);
 font-size:35px;
 color:#16a34a;
 }
+
+/* BOOKS */
 
 .books{
 display:grid;
@@ -145,21 +160,27 @@ margin-bottom:10px;
 
 .btn{
 display:inline-block;
-margin-top:12px;
+margin-top:10px;
 padding:10px 18px;
 background:#16a34a;
 color:white;
 text-decoration:none;
 border-radius:8px;
+margin-right:8px;
 }
 
-.about{
+/* AUTHOR */
+
+.author{
 background:white;
 padding:35px;
 border-radius:15px;
 box-shadow:0 5px 20px rgba(0,0,0,.08);
+text-align:center;
 line-height:1.9;
 }
+
+/* FOOTER */
 
 footer{
 background:#0f172a;
@@ -169,30 +190,47 @@ padding:25px;
 margin-top:50px;
 }
 
+@media(max-width:768px){
+
+.hero h1{
+font-size:42px;
+}
+
+.hero p{
+font-size:16px;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
+<header class="hero">
 
-<img src="logo.png.png" class="logo" alt="Chishti Library">
+<img src="logo.png.png" alt="Chishti Library" class="logo">
 
-<h1>Chishti Library</h1>
+<h1>📚 Chishti Library</h1>
 
 <p>
-An Islamic Digital Library dedicated to preserving authentic Islamic books,
-Naatia Kalam, Islamic History and the legacy of Ahl al-Bayt.
+Preserving Islamic Knowledge for Future Generations
 </p>
 
-<a href="books.html" class="hero-btn">📚 Explore Library</a>
+<p>
+Read Online • Download PDFs • Islamic Digital Library
+</p>
+
+<a href="books.html" class="hero-btn">
+📚 Explore Library
+</a>
 
 </header>
 
 <nav class="navbar">
 <a href="#">Home</a>
 <a href="books.html">Books</a>
-<a href="#about">About</a>
+<a href="#author">Author</a>
 </nav>
 
 <section class="section">
@@ -203,17 +241,17 @@ Naatia Kalam, Islamic History and the legacy of Ahl al-Bayt.
 
 <div class="stat">
 <h3>3+</h3>
-<p>Total Books</p>
+<p>Published Books</p>
 </div>
 
 <div class="stat">
-<h3>1</h3>
-<p>Total Author</p>
+<h3>24/7</h3>
+<p>Online Access</p>
 </div>
 
 <div class="stat">
-<h3>100%</h3>
-<p>Free Access</p>
+<h3>Free</h3>
+<p>PDF Downloads</p>
 </div>
 
 </div>
@@ -227,29 +265,32 @@ Naatia Kalam, Islamic History and the legacy of Ahl al-Bayt.
 <div class="books">
 
 <div class="book">
-<img src="husn-e-kainat-cover.png">
+<img src="husn-e-kainat-cover.png" alt="Husn-e-Kainat">
 <div class="book-content">
 <h3>Husn-e-Kainat</h3>
 <p>Naatia Kalam</p>
-<a href="husn-e-kainat.html" class="btn">Read Online</a>
+<a href="husn-e-kainat.html" class="btn">📖 Read</a>
+<a href="husn-e-kainat.pdf" class="btn">⬇ PDF</a>
 </div>
 </div>
 
 <div class="book">
-<img src="image.png">
+<img src="image.png" alt="Shahdaye Karbala">
 <div class="book-content">
 <h3>Shahdaye Karbala</h3>
 <p>Islamic History</p>
-<a href="shahdaye-karbala-4.html" class="btn">Read Online</a>
+<a href="shahdaye-karbala-4.html" class="btn">📖 Read</a>
+<a href="shahdaye-karbala.pdf.pdf" class="btn">⬇ PDF</a>
 </div>
 </div>
 
 <div class="book">
-<img src="shaheed-ibn-e-shaheed-cover.jpg">
+<img src="shaheed-ibn-e-shaheed-cover.jpg" alt="Shaheed Ibn-e-Shaheed">
 <div class="book-content">
 <h3>Shaheed Ibn-e-Shaheed</h3>
 <p>Islamic History</p>
-<a href="shaheed-ibn-e-shaheed.html" class="btn">Read Online</a>
+<a href="shaheed-ibn-e-shaheed.html" class="btn">📖 Read</a>
+<a href="shaheed-ibn-e-shaheed.pdf" class="btn">⬇ PDF</a>
 </div>
 </div>
 
@@ -257,16 +298,19 @@ Naatia Kalam, Islamic History and the legacy of Ahl al-Bayt.
 
 </section>
 
-<section class="section" id="about">
+<section class="section" id="author">
 
-<h2>About Chishti Library</h2>
+<h2>Founder & Author</h2>
 
-<div class="about">
+<div class="author">
+
+<h3>Saim Chishti</h3>
 
 <p>
-Chishti Library is an Islamic Digital Library founded by Saim Chishti.
-Our mission is to make Islamic knowledge accessible to everyone through
-modern digital publishing and online reading experiences.
+Author of Husn-e-Kainat, Shahdaye Karbala,
+and Shaheed Ibn-e-Shaheed.
+Dedicated to preserving Islamic literature
+through digital publishing.
 </p>
 
 </div>
@@ -282,4 +326,4 @@ modern digital publishing and online reading experiences.
 
 </body>
 </html>
-```
+
