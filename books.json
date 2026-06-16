@@ -8,11 +8,17 @@
   "pdf": "husn-e-kainat.pdf",
   "description": "Husn e Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain."
 }
-},
+
 {
 "title": "Shahdaye Karbala",
 "cover": "image.png",
 "reader": "shahdaye-karbala-4.html",
 "pdf": "shahdaye-karbala.pdf.pdf"
 }
-]
+
+{
+  "title": "Shaheed-Ibn-e-Shaheed",
+  "cover": "shaheed-ibn-e-shaheed-cover.png",
+  "reader": "shaheed-ibn-e-shaheed.html",
+  "pdf": "shaheed-ibn-e-shaheed.pdf"
+}
