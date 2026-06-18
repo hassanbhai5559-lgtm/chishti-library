@@ -1,76 +1,52 @@
+```html
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chishti Library Books</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
 background:#f4f8fc;
+font-family:Arial,sans-serif;
+margin:0;
 }
 
 header{
-background:linear-gradient(135deg,#00c853,#2196f3);
+background:linear-gradient(135deg,#0F5132,#D4AF37);
 color:white;
+padding:30px;
 text-align:center;
-padding:40px 20px;
 }
 
-header h1{
-font-size:42px;
-margin-bottom:10px;
-}
-
-.books-container{
+.books{
 max-width:1200px;
-margin:40px auto;
-padding:20px;
+margin:30px auto;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:30px;
-}
-
-.book-card{
-background:white;
+gap:25px;
 padding:20px;
+}
+
+.card{
+background:white;
 border-radius:15px;
+overflow:hidden;
 box-shadow:0 5px 20px rgba(0,0,0,.1);
-transition:.3s;
 }
 
-.book-card:hover{
-transform:translateY(-8px);
-}
-
-.book-cover{
+.card img{
 width:100%;
 height:420px;
 object-fit:cover;
-border-radius:10px;
 }
 
-.book-card h2{
-margin-top:15px;
-margin-bottom:10px;
-color:#2196f3;
+.content{
+padding:20px;
 }
 
-.book-card p{
-line-height:1.7;
-margin:5px 0;
-}
-
-.read-btn,
-.download-btn{
+.btn{
 display:block;
 text-align:center;
 padding:12px;
@@ -81,123 +57,64 @@ font-weight:bold;
 color:white;
 }
 
-.read-btn{
-background:#00c853;
+.read{
+background:#0F5132;
 }
 
-.download-btn{
-background:#2196f3;
+.download{
+background:#D4AF37;
+color:black;
 }
-
-footer{
-background:linear-gradient(135deg,#00c853,#2196f3);
-color:white;
-text-align:center;
-padding:20px;
-margin-top:40px;
-}
-
 </style>
 </head>
-
 <body>
 
 <header>
-<h1>📚 Chishti Library Books</h1>
-<p>Select a book to read online or download PDF</p>
+<h1>📚 Chishti Library</h1>
+<p>Read Online & Download Free Islamic Books</p>
 </header>
 
-<div class="books-container">
+<div class="books" id="books"></div>
 
-<!-- Husn-e-Kainat -->
+<script>
+fetch("books.json")
+.then(response => response.json())
+.then(data => {
 
-<div class="book-card">
+const booksContainer = document.getElementById("books");
 
-<img src="husn-e-kainat-cover.png" class="book-cover">
+data.forEach(book => {
 
-<h2>Husn-e-Kainat</h2>
+booksContainer.innerHTML += `
+<div class="card">
 
-<p><b>Author:</b> Saim Chishti</p>
-<p><b>Language:</b> Urdu</p>
-<p><b>Category:</b> Naatia Kalam</p>
+<img src="${book.cover}" alt="${book.title}">
 
-<p>
-Husn e Kainat ek naatia majmua hai jisme
-Huzoor Akram ﷺ ki shaan mein naat,
-salam aur manqabat shamil hain.
-</p>
+<div class="content">
 
-<a href="husn-e-kainat.html" class="read-btn">
+<h2>${book.title}</h2>
+
+<p><b>Author:</b> ${book.author}</p>
+<p><b>Language:</b> ${book.language}</p>
+<p><b>Category:</b> ${book.category}</p>
+
+<a href="${book.reader}" class="btn read">
 📖 Read Online
 </a>
 
-<a href="husn-e-kainat.pdf" class="download-btn" download>
+<a href="${book.pdf}" class="btn download" download>
 ⬇ Download PDF
 </a>
 
 </div>
-
-<!-- Shahdaye Karbala -->
-
-<div class="book-card">
-
-<img src="image.png" class="book-cover">
-
-<h2>Shahdaye Karbala</h2>
-
-<p><b>Author:</b> Saim Chishti</p>
-<p><b>Language:</b> Urdu</p>
-<p><b>Category:</b> Islamic History</p>
-
-<p>
-Shahdaye Karbala Karbala ke shahidon aur
-Ahle Bait Athar ki muhabbat par mabni kitab hai.
-</p>
-
-<a href="shahdaye-karbala-4.html" class="read-btn">
-📖 Read Online
-</a>
-
-<a href="shahdaye-karbala.pdf.pdf" class="download-btn" download>
-⬇ Download PDF
-</a>
-
 </div>
+`;
 
-<!-- Shaheed Ibn-e-Shaheed -->
+});
 
-<div class="book-card">
-
-<img src="shaheed-ibn-e-shaheed-cover.png" class="book-cover">
-
-<h2>Shaheed Ibn-e-Shaheed</h2>
-
-<p><b>Author:</b> Saim Chishti</p>
-<p><b>Language:</b> Urdu</p>
-<p><b>Category:</b> Islamic History</p>
-
-<p>
-Shaheed Ibn-e-Shaheed ek Islami tareekhi kitab hai
-jo shahadat aur Ahle Bait ki muhabbat ko bayan karti hai.
-</p>
-
-<a href="shaheed-ibn-e-shaheed.html" class="read-btn">
-📖 Read Online
-</a>
-
-<a href="shaheed-ibn-e-shaheed.pdf" class="download-btn" download>
-⬇ Download PDF
-</a>
-
-</div>
-
-</div>
-
-<footer>
-<p>© 2026 Chishti Library</p>
-<p>Founder & Author: Saim Chishti</p>
-</footer>
+});
+</script>
 
 </body>
 </html>
-
+```
