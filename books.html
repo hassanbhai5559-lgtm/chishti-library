@@ -113,6 +113,45 @@ booksContainer.innerHTML += `
 
 });
 </script>
+<script>
+fetch("books.json")
+.then(response => response.json())
+.then(data => {
+
+const booksContainer = document.getElementById("books");
+
+data.forEach(book => {
+
+booksContainer.innerHTML += `
+<div class="card">
+<img src="${book.cover}" alt="${book.title}">
+<div class="content">
+<h2>${book.title}</h2>
+<p><b>Author:</b> ${book.author}</p>
+<p><b>Language:</b> ${book.language}</p>
+<p><b>Category:</b> ${book.category}</p>
+
+<a href="${book.reader}" class="btn read">
+📖 Read Online
+</a>
+
+<a href="${book.pdf}" class="btn download" download>
+⬇ Download PDF
+</a>
+
+</div>
+</div>
+`;
+
+});
+
+})
+.catch(error => {
+document.getElementById("books").innerHTML =
+"<h2 style='text-align:center'>Books could not be loaded.</h2>";
+console.error(error);
+});
+</script>
 
 </body>
 </html>
