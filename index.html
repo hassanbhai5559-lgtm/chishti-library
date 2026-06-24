@@ -3,327 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="google-site-verification" content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc">
-
-<title>Chishti Library | Islamic Digital Library</title>
-
-<meta name="description" content="Read Islamic Books Online and Download PDF Books from Chishti Library.">
-<meta name="keywords" content="Islamic Books, Urdu Books, Chishti Library, PDF Books">
-<meta name="author" content="Saim Chishti">
+<title>Chishti Library</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#f5f7fb;
-color:#333;
+    background:#f4f8fc;
 }
 
-/* HERO */
+/* HEADER */
 
 .hero{
-background:
-linear-gradient(rgba(15,23,42,.75),rgba(15,23,42,.75)),
-url('bookshelf.png');
-background-size:cover;
-background-position:center;
-color:white;
-text-align:center;
-padding:120px 20px;
+    background:linear-gradient(135deg,#00c853,#2196f3);
+    color:white;
+    text-align:center;
+    padding:60px 20px;
 }
 
 .logo{
-width:120px;
-height:120px;
-border-radius:50%;
-border:4px solid white;
-object-fit:cover;
-margin-bottom:20px;
+    width:120px;
+    height:120px;
+    object-fit:contain;
+    background:white;
+    border-radius:50%;
+    padding:10px;
+    margin-bottom:20px;
 }
 
 .hero h1{
-font-size:60px;
-margin-bottom:15px;
+    font-size:50px;
+    margin-bottom:10px;
+}
+
+.hero h3{
+    font-weight:500;
+    margin-bottom:20px;
 }
 
 .hero p{
-font-size:20px;
-max-width:800px;
-margin:auto;
-line-height:1.8;
-}
-
-.hero-btn{
-display:inline-block;
-margin-top:25px;
-padding:14px 30px;
-background:#d4af37;
-color:#000;
-font-weight:bold;
-text-decoration:none;
-border-radius:40px;
+    max-width:900px;
+    margin:auto;
+    line-height:1.8;
+    font-size:18px;
 }
 
 /* NAVBAR */
 
 .navbar{
-background:white;
-padding:15px;
-display:flex;
-justify-content:center;
-gap:25px;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-position:sticky;
-top:0;
-z-index:999;
+    background:white;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
 }
 
 .navbar a{
-text-decoration:none;
-color:#16a34a;
-font-weight:bold;
+    text-decoration:none;
+    margin:0 15px;
+    color:#2196f3;
+    font-weight:600;
 }
 
-/* SECTION */
+/* SEARCH */
 
-.section{
-padding:70px 20px;
-max-width:1200px;
-margin:auto;
+.search{
+    text-align:center;
+    padding:40px 20px;
 }
 
-.section h2{
-text-align:center;
-margin-bottom:40px;
-font-size:38px;
-color:#0f172a;
+.search input{
+    width:90%;
+    max-width:700px;
+    padding:16px 25px;
+    border:2px solid #ddd;
+    border-radius:50px;
+    font-size:17px;
 }
 
-/* STATS */
+/* MESSAGE CARD */
 
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
+.card{
+    max-width:1000px;
+    margin:20px auto 50px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    border-left:8px solid #00c853;
 }
 
-.stat{
-background:white;
-padding:25px;
-text-align:center;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+.card h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#2196f3;
 }
 
-.stat h3{
-font-size:35px;
-color:#16a34a;
+.card p{
+    line-height:1.9;
+    color:#444;
+    margin-bottom:15px;
 }
 
-/* BOOKS */
-
-.books{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:25px;
+.quote{
+    text-align:center;
+    color:#00c853;
+    font-size:20px;
+    font-weight:600;
+    margin-top:20px;
 }
 
-.book{
-background:white;
-border-radius:15px;
-overflow:hidden;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-.book img{
-width:100%;
-height:420px;
-object-fit:cover;
-}
-
-.book-content{
-padding:20px;
-}
-
-.book-content h3{
-margin-bottom:10px;
+.center{
+    text-align:center;
 }
 
 .btn{
-display:inline-block;
-margin-top:10px;
-padding:10px 18px;
-background:#16a34a;
-color:white;
-text-decoration:none;
-border-radius:8px;
-margin-right:8px;
-}
-
-/* AUTHOR */
-
-.author{
-background:white;
-padding:35px;
-border-radius:15px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-text-align:center;
-line-height:1.9;
+    display:inline-block;
+    margin-top:25px;
+    background:#00c853;
+    color:white;
+    text-decoration:none;
+    padding:14px 30px;
+    border-radius:40px;
+    font-weight:600;
 }
 
 /* FOOTER */
 
 footer{
-background:#0f172a;
-color:white;
-text-align:center;
-padding:25px;
-margin-top:50px;
-}
-
-@media(max-width:768px){
-
-.hero h1{
-font-size:42px;
-}
-
-.hero p{
-font-size:16px;
-}
-
+    background:linear-gradient(135deg,#00c853,#2196f3);
+    color:white;
+    text-align:center;
+    padding:25px;
 }
 
 </style>
 </head>
-
 <body>
 
-<header class="hero">
+<!-- HERO -->
 
-<img src="logo.png.png" alt="Chishti Library" class="logo">
+<section class="hero">
 
-<h1>📚 Chishti Library</h1>
+<img src="logo.png" alt="Chishti Library Logo" class="logo">
+
+<h1>CHISHTI LIBRARY</h1>
+
+<h3>Islamic Digital Library</h3>
 
 <p>
-Preserving Islamic Knowledge for Future Generations
+Hazrat Allama Saim Chishti ki deeni, adabi aur naatiya
+khidmaat hamare liye ek qeemati virsa hain.
 </p>
 
-<p>
-Read Online • Download PDFs • Islamic Digital Library
-</p>
+</section>
 
-<a href="books.html" class="hero-btn">
-📚 Explore Library
-</a>
+<!-- NAVIGATION -->
 
-</header>
-
-<nav class="navbar">
-<a href="#">Home</a>
+<div class="navbar">
+<a href="index.html">Home</a>
 <a href="books.html">Books</a>
-<a href="#author">Author</a>
-</nav>
-
-<section class="section">
-
-<h2>Library Statistics</h2>
-
-<div class="stats">
-
-<div class="stat">
-<h3>3+</h3>
-<p>Published Books</p>
+<a href="#">Author</a>
+<a href="#">About</a>
+<a href="#">Contact</a>
 </div>
 
-<div class="stat">
-<h3>24/7</h3>
-<p>Online Access</p>
+<!-- SEARCH -->
+
+<div class="search">
+<input type="text" placeholder="Search Books...">
 </div>
 
-<div class="stat">
-<h3>Free</h3>
-<p>PDF Downloads</p>
-</div>
+<!-- MESSAGE -->
 
-</div>
+<div class="card">
 
-</section>
-
-<section class="section">
-
-<h2>Featured Books</h2>
-
-<div class="books">
-
-<div class="book">
-<img src="husn-e-kainat-cover.png" alt="Husn-e-Kainat">
-<div class="book-content">
-<h3>Husn-e-Kainat</h3>
-<p>Naatia Kalam</p>
-<a href="husn-e-kainat.html" class="btn">📖 Read</a>
-<a href="husn-e-kainat.pdf" class="btn">⬇ PDF</a>
-</div>
-</div>
-
-<div class="book">
-<img src="image.png" alt="Shahdaye Karbala">
-<div class="book-content">
-<h3>Shahdaye Karbala</h3>
-<p>Islamic History</p>
-<a href="shahdaye-karbala-4.html" class="btn">📖 Read</a>
-<a href="shahdaye-karbala.pdf.pdf" class="btn">⬇ PDF</a>
-</div>
-</div>
-
-<div class="book">
-<img src="shaheed-ibn-e-shaheed-cover.jpg" alt="Shaheed Ibn-e-Shaheed">
-<div class="book-content">
-<h3>Shaheed Ibn-e-Shaheed</h3>
-<p>Islamic History</p>
-<a href="shaheed-ibn-e-shaheed.html" class="btn">📖 Read</a>
-<a href="shaheed-ibn-e-shaheed.pdf" class="btn">⬇ PDF</a>
-</div>
-</div>
-
-</div>
-
-</section>
-
-<section class="section" id="author">
-
-<h2>Founder & Author</h2>
-
-<div class="author">
-
-<h3>Saim Chishti</h3>
+<h2>Welcome to Chishti Library</h2>
 
 <p>
-Author of Husn-e-Kainat, Shahdaye Karbala,
-and Shaheed Ibn-e-Shaheed.
-Dedicated to preserving Islamic literature
-through digital publishing.
+Hazrat Allama Saim Chishti ki deeni, adabi aur naatiya
+khidmaat hamare liye ek qeemati virsa hain.
 </p>
+
+<p>
+<strong>Chishti Library</strong> ka maqsad Hazrat Allama
+Saim Chishti ki naatiya, manqabati, hamdiya aur deeni
+tasneefaat ko digital soorat mein mehfooz karna aur
+duniya bhar ke qariyeen tak pohanchana hai.
+</p>
+
+<p>
+Hum koshish kar rahe hain ke Hazrat Allama Saim Chishti
+ki kutub, kalam aur ilm-o-adab ke is be-misaal khazane
+ko aane wali naslon tak asaan aur muft rasai ke saath
+pohanchaya jaye.
+</p>
+
+<div class="quote">
+"Ilm, Ishq-e-Rasool ﷺ aur Muhabbat-e-Ahl-e-Baitؑ ko aam karna hamara maqsad hai."
+</div>
+
+<div class="center">
+<a href="books.html" class="btn">📚 Explore Books</a>
+</div>
 
 </div>
 
-</section>
+<!-- FOOTER -->
 
 <footer>
-
+<footer>
 <p>© 2026 Chishti Library</p>
-<p>Founder & Author: Saim Chishti</p>
+<p>Hazrat Allama Saim Chishti Digital Book Center</p>
 
+<p>
+🌐 Website:
+<a href="https://hassanbhai5559-lgtm.github.io/chishti-library/"
+style="color:white;">
+https://hassanbhai5559-lgtm.github.io/chishti-library/
+</a>
+</p>
+
+</footer>
 </footer>
 
 </body>
 </html>
-
