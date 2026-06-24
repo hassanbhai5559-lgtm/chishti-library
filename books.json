@@ -1,30 +1,34 @@
 [
-  {
-    "title": "Husn-e-Kainat",
-    "author": "Saim Chishti",
-    "language": "Urdu",
-    "category": "Naatia Kalam",
-    "cover": "husn-e-kainat-cover.png",
-    "reader": "husn-e-kainat.html",
-    "pdf": "husn-e-kainat.pdf",
-    "description": "Husn-e-Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain."
-  },
-  {
-    "title": "Shahdaye Karbala",
-    "author": "Saim Chishti",
-    "language": "Urdu",
-    "category": "Islamic History",
-    "cover": "image.png",
-    "reader": "shahdaye-karbala-4.html",
-    "pdf": "shahdaye-karbala.pdf.pdf",
-    "description": "Shahdaye Karbala ek manqabati majmua hai jo Karbala ke shahidon aur Ahle Bait Athar ki shaan mein likha gaya hai."
 {
-  "title": "Shaheed Ibn-e-Shaheed",
-  "author": "Allama Misbah Hussaini",
-  "language": "Urdu",
-  "category": "Islamic History",
-  "cover": "shaheed-ibn-e-shaheed-cover.png",
-  "reader": "shaheed-ibn-e-shaheed.html",
-  "pdf": "shaheed-ibn-e-shaheed.pdf",
-  "description": "Shaheed Ibn-e-Shaheed waqia-e-Karbala aur shahadat ke mauzu par mabni ek aham kitab hai."
+"title": "Husn-e-Kainat",
+"author": "Saim Chishti",
+"language": "Urdu",
+"category": "Naatia Kalam",
+"cover": "husn-e-kainat-cover.png",
+"reader": "husn-e-kainat.html",
+"pdf": "husn-e-kainat.pdf",
+"description": "Husn-e-Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain."
+},
+
+{
+"title": "Shahdaye Karbala",
+"author": "Saim Chishti",
+"language": "Urdu",
+"category": "Islamic History",
+"cover": "image.png",
+"reader": "shahdaye-karbala-4.html",
+"pdf": "shahdaye-karbala.pdf.pdf",
+"description": "Shahdaye Karbala ek manqabati majmua hai jo Karbala ke shahidon aur Ahle Bait Athar ki shaan mein likha gaya hai."
+},
+
+{
+"title": "Shaheed Ibn-e-Shaheed",
+"author": "Allama Misbah Hussaini",
+"language": "Urdu",
+"category": "Islamic History",
+"cover": "shaheed-ibn-e-shaheed-cover.png",
+"reader": "shaheed-ibn-e-shaheed.html",
+"pdf": "shaheed-ibn-e-shaheed.pdf",
+"description": "Shaheed Ibn-e-Shaheed waqia-e-Karbala aur shahadat ke mauzu par mabni ek aham kitab hai."
 }
+]
