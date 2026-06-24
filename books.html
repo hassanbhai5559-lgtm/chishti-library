@@ -1,71 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Chishti Library Books</title>
 
 <style>
+
 body{
-background:#f4f8fc;
-font-family:Arial,sans-serif;
-margin:0;
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f8fc;
 }
 
 header{
-background:linear-gradient(135deg,#0F5132,#D4AF37);
-color:white;
-padding:30px;
-text-align:center;
+    background:linear-gradient(135deg,#0F5132,#D4AF37);
+    color:white;
+    text-align:center;
+    padding:40px 20px;
+}
+
+header h1{
+    margin:0;
+    font-size:42px;
+}
+
+header p{
+    margin-top:10px;
+    font-size:18px;
 }
 
 .books{
-max-width:1200px;
-margin:30px auto;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:25px;
-padding:20px;
+    max-width:1200px;
+    margin:40px auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:25px;
+    padding:20px;
 }
 
 .card{
-background:white;
-border-radius:15px;
-overflow:hidden;
-box-shadow:0 5px 20px rgba(0,0,0,.1);
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(0,0,0,.12);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
 }
 
 .card img{
-width:100%;
-height:420px;
-object-fit:cover;
+    width:100%;
+    height:420px;
+    object-fit:cover;
 }
 
 .content{
-padding:20px;
+    padding:20px;
+}
+
+.content h2{
+    margin-top:0;
+    color:#111;
+}
+
+.content p{
+    margin:8px 0;
 }
 
 .btn{
-display:block;
-text-align:center;
-padding:12px;
-margin-top:10px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-color:white;
+    display:block;
+    text-align:center;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:bold;
 }
 
 .read{
-background:#0F5132;
+    background:#0F5132;
+    color:white;
 }
 
 .download{
-background:#D4AF37;
-color:black;
+    background:#D4AF37;
+    color:black;
 }
+
+.read:hover{
+    background:#0b3d25;
+}
+
+.download:hover{
+    background:#c49d1f;
+}
+
+.error{
+    text-align:center;
+    color:red;
+    font-size:22px;
+    margin-top:50px;
+}
+
 </style>
 </head>
+
 <body>
 
 <header>
@@ -76,15 +119,19 @@ color:black;
 <div class="books" id="books"></div>
 
 <script>
+
 fetch("books.json")
 .then(response => response.json())
 .then(data => {
 
 const booksContainer = document.getElementById("books");
 
+booksContainer.innerHTML = "";
+
 data.forEach(book => {
 
 booksContainer.innerHTML += `
+
 <div class="card">
 
 <img src="${book.cover}" alt="${book.title}">
@@ -94,8 +141,12 @@ booksContainer.innerHTML += `
 <h2>${book.title}</h2>
 
 <p><b>Author:</b> ${book.author}</p>
+
 <p><b>Language:</b> ${book.language}</p>
+
 <p><b>Category:</b> ${book.category}</p>
+
+<p>${book.description}</p>
 
 <a href="${book.reader}" class="btn read">
 📖 Read Online
@@ -106,51 +157,26 @@ booksContainer.innerHTML += `
 </a>
 
 </div>
-</div>
-`;
-
-});
-
-});
-</script>
-<script>
-fetch("books.json")
-.then(response => response.json())
-.then(data => {
-
-const booksContainer = document.getElementById("books");
-
-data.forEach(book => {
-
-booksContainer.innerHTML += `
-<div class="card">
-<img src="${book.cover}" alt="${book.title}">
-<div class="content">
-<h2>${book.title}</h2>
-<p><b>Author:</b> ${book.author}</p>
-<p><b>Language:</b> ${book.language}</p>
-<p><b>Category:</b> ${book.category}</p>
-
-<a href="${book.reader}" class="btn read">
-📖 Read Online
-</a>
-
-<a href="${book.pdf}" class="btn download" download>
-⬇ Download PDF
-</a>
 
 </div>
-</div>
+
 `;
 
 });
 
 })
 .catch(error => {
-document.getElementById("books").innerHTML =
-"<h2 style='text-align:center'>Books could not be loaded.</h2>";
+
+document.getElementById("books").innerHTML = `
+<div class="error">
+Books could not be loaded.
+</div>
+`;
+
 console.error(error);
+
 });
+
 </script>
 
 </body>
