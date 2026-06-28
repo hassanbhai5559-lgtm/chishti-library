@@ -3,122 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Chishti Library | Digital Islamic Library</title>
-<meta name="description" content="Digital Islamic Library preserving the works of Hazrat Allama Saim Chishti.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<meta name="description" content="Digital Islamic Library preserving works of Hazrat Allama Saim Chishti">
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
+<!-- ================= LOADER ================= -->
 <div id="loader">
-  <div class="loader-content">
-    <img src="images/logo.png" class="loader-logo" alt="Logo">
-    <h1>CHISHTI LIBRARY</h1>
-    <p>Digital Islamic Library</p>
-    <div class="loading-bar"><div class="loading"></div></div>
+  <img src="images/logo.png" class="loader-logo" alt="logo">
+  <h1>CHISHTI LIBRARY</h1>
+  <p>Digital Islamic Library</p>
+  <div class="loading-bar">
+    <div class="loading"></div>
   </div>
 </div>
 
+<!-- ================= WEBSITE WRAPPER (IMPORTANT FIX) ================= -->
+<div id="website">
+
+<!-- ================= NAVBAR ================= -->
 <header>
 <nav class="navbar">
+
 <a href="index.html" class="logo-area">
-<img src="images/logo.png" alt="Logo">
-<span>CHISHTI LIBRARY</span>
+  <img src="images/logo.png" width="40">
+  <span>CHISHTI LIBRARY</span>
 </a>
 
 <ul class="nav-links">
-<li><a href="index.html">Home</a></li>
-<li><a href="books.html">Books</a></li>
-<li><a href="author.html">Author</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="contact.html">Contact</a></li>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="books.html">Books</a></li>
+  <li><a href="author.html">Author</a></li>
+  <li><a href="about.html">About</a></li>
+  <li><a href="contact.html">Contact</a></li>
 </ul>
 
-<button id="themeBtn" aria-label="Toggle Theme">🌙</button>
+<button id="themeBtn">🌙</button>
+
 </nav>
 </header>
 
-<main>
-
+<!-- ================= HERO ================= -->
 <section class="hero">
-<div class="hero-content">
-<img src="images/logo.png" class="hero-logo" alt="Logo">
+
+<img src="images/logo.png" alt="logo">
+
 <h1>CHISHTI LIBRARY</h1>
 <h3>Digital Islamic Library</h3>
+
 <p>
-Preserving the literary, religious and poetic legacy of Hazrat Allama Saim Chishti
-through a modern digital library for readers around the world.
+A modern digital platform preserving the literary and spiritual works of Hazrat Allama Saim Chishti.
 </p>
 
 <div class="hero-buttons">
-<a href="books.html" class="btn">📚 Explore Library</a>
-<a href="about.html" class="btn2">About Library</a>
+  <a href="books.html" class="btn">📚 Explore Library</a>
+  <a href="about.html" class="btn2">About Library</a>
 </div>
-</div>
+
 </section>
 
+<!-- ================= SEARCH ================= -->
 <section class="search-section">
 <h2>Search Books</h2>
 <input id="searchInput" type="text" placeholder="Search by title, author or category">
 </section>
 
+<!-- ================= ABOUT ================= -->
 <section class="about">
 <h2>Welcome to Chishti Library</h2>
 <p>
-Chishti Library is dedicated to preserving and sharing authentic Islamic books,
-Naats, Manqabats and poetry in digital form for readers worldwide.
+This library is dedicated to Islamic books, poetry, Naats and historical works in digital form for global readers.
 </p>
-<a href="about.html" class="readmore">Read More →</a>
+
+<a class="readmore" href="about.html">Read More →</a>
 </section>
 
+<!-- ================= STATS ================= -->
 <section class="stats">
-<div class="box"><h2>120+</h2><p>Books</p></div>
-<div class="box"><h2>15K+</h2><p>Readers</p></div>
-<div class="box"><h2>100%</h2><p>Free</p></div>
-<div class="box"><h2>24/7</h2><p>Available</p></div>
+
+<div class="box">
+<h2>120+</h2>
+<p>Books</p>
+</div>
+
+<div class="box">
+<h2>15K+</h2>
+<p>Readers</p>
+</div>
+
+<div class="box">
+<h2>100%</h2>
+<p>Free</p>
+</div>
+
+<div class="box">
+<h2>24/7</h2>
+<p>Access</p>
+</div>
+
 </section>
 
+<!-- ================= FEATURED BOOKS ================= -->
 <section class="featured">
 <h2>Featured Books</h2>
 <div id="featuredBooks" class="book-grid"></div>
 </section>
 
+<!-- ================= CHATBOT ================= -->
 <div id="chatButton">🤖</div>
 
 <div id="chatBox">
+
 <div class="chat-header">Chishti AI</div>
+
 <div class="chat-body" id="aiReply">
-Hello 👋 Ask anything about this library.
+Hello 👋 Ask me anything about books.
 </div>
 
 <div class="chat-input">
 <input id="aiInput" type="text" placeholder="Ask something...">
 <button id="sendBtn">Send</button>
 </div>
+
 </div>
 
-</main>
-
+<!-- ================= FOOTER ================= -->
 <footer>
-<div class="footer-content">
-<img src="images/logo.png" alt="Logo">
-<h2>CHISHTI LIBRARY</h2>
+
+<img src="images/logo.png" width="60">
+
+<h3>CHISHTI LIBRARY</h3>
 <p>Digital Islamic Knowledge Center</p>
 
 <div class="footer-links">
-<a href="index.html">Home</a>
-<a href="books.html">Books</a>
-<a href="author.html">Author</a>
-<a href="about.html">About</a>
-<a href="contact.html">Contact</a>
+  <a href="index.html">Home</a>
+  <a href="books.html">Books</a>
+  <a href="author.html">Author</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
 </div>
 
 <p>© 2026 Chishti Library. All Rights Reserved.</p>
-</div>
+
 </footer>
 
-<script src="js/script.js"></script>
+</div>
+
+<!-- ================= JS ================= -->
+<script src="js/script.js"window.addEventListener("load") () => {
+    setTimeout(() => {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("website").style.display = "block";
+    }, 1500);
+});></script>
+
 </body>
 </html>
