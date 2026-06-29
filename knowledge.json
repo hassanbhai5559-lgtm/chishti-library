@@ -1,3 +1,22 @@
+// 1. Knowledge search
+let answer = searchKnowledge(text);
+
+if (answer) {
+    typeMessage(answer);
+    return;
+}
+
+// 2. Book search
+let result = smartBookSearch(text);
+
+if (result) {
+    // show book
+    return;
+}
+
+// 3. Default reply
+typeMessage("Sorry, I don't know this yet.");
+
 {
   "keywords": [
     "who is hazrat allama saim chishti",
