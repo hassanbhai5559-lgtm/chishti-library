@@ -1,3 +1,11 @@
+let knowledge = [];
+
+fetch("knowledge.json")
+.then(res => res.json())
+.then(data => {
+    knowledge = data;
+})
+.catch(err => console.log(err));
 // =========================
 // CHISHTI LIBRARY SCRIPT
 // PART 1
