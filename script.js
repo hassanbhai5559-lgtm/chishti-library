@@ -2,24 +2,26 @@ let knowledge = [];
 let libraryBooks = [];
 
 /* =========================
-   LOAD DATA SAFELY
+   LOAD DATA (SAFE + WAIT READY)
 ========================= */
 async function loadData() {
   try {
-    const k = await fetch("knowledge.json");
-    knowledge = await k.json();
+    const res1 = await fetch("knowledge.json");
+    knowledge = await res1.json();
 
-    const b = await fetch("books.json");
-    libraryBooks = await b.json();
+    const res2 = await fetch("books.json");
+    libraryBooks = await res2.json();
+
+    console.log("Data loaded successfully");
   } catch (error) {
-    console.log("Data load error:", error);
+    console.log("Error loading data:", error);
   }
 }
 
 loadData();
 
 /* =========================
-   SMART MATCH FUNCTION
+   SMART MATCH ENGINE
 ========================= */
 function matchScore(text, keyword) {
   if (!text || !keyword) return 0;
@@ -38,14 +40,15 @@ function matchScore(text, keyword) {
 }
 
 /* =========================
-   SEARCH KNOWLEDGE
+   KNOWLEDGE SEARCH
 ========================= */
 function searchKnowledge(text) {
   let best = null;
   let bestScore = 0;
 
   for (let item of knowledge || []) {
-    for (let key of item.keywords || []) {
+    for (let key of item?.keywords || []) {
+
       let score = matchScore(text, key);
 
       if (score > bestScore) {
@@ -59,14 +62,15 @@ function searchKnowledge(text) {
 }
 
 /* =========================
-   SEARCH BOOK
+   BOOK SEARCH
 ========================= */
 function searchBook(text) {
   let best = null;
   let bestScore = 0;
 
   for (let book of libraryBooks || []) {
-    let score = matchScore(text, book.title);
+
+    let score = matchScore(text, book?.title || "");
 
     if (score > bestScore) {
       bestScore = score;
@@ -78,81 +82,80 @@ function searchBook(text) {
 }
 
 /* =========================
-   TYPE WRITER EFFECT (AI STYLE)
+   TYPE ANIMATION (CHATGPT STYLE)
 ========================= */
-function typeWriter(element, text, speed = 20) {
-  let i = 0;
-  element.innerHTML = "";
-
-  function typing() {
-    if (i < text.length) {
-      element.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typing, speed);
-    }
-  }
-
-  typing();
-}
-
-/* =========================
-   BOT RESPONSE ENGINE
-========================= */
-function botReply(text) {
-  text = text.toLowerCase();
-
-  let chatBody = document.getElementById("chatBody");
+function typeMessage(msg) {
+  const chatBody = document.getElementById("chatBody");
 
   let div = document.createElement("div");
   div.className = "bot-message";
   chatBody.appendChild(div);
 
-  /* GREETING */
-  if (text.includes("hi") || text.includes("hello")) {
-    typeWriter(div, "👋 Assalam-o-Alaikum! Main Chishti Library AI hoon. Aap books, authors ya topics ke baare mein pooch sakte hain.");
-    return;
+  let i = 0;
+  div.innerHTML = "";
+
+  function typing() {
+    if (i < msg.length) {
+      div.innerHTML += msg.charAt(i);
+      i++;
+      setTimeout(typing, 10);
+    }
   }
 
-  /* KNOWLEDGE */
-  let k = searchKnowledge(text);
-  if (k) {
-    typeWriter(div, k);
-    return;
-  }
-
-  /* BOOK SEARCH */
-  let b = searchBook(text);
-  if (b) {
-    typeWriter(div,
-`📚 ${b.title}
-👤 Author: ${b.author}
-
-👉 Read Online: ${b.reader}
-⬇ Download PDF: ${b.pdf}`);
-    return;
-  }
-
-  /* FALLBACK */
-  typeWriter(div, "🤖 Mujhe samajh nahi aaya. Please book ka naam ya topic clearly likhein.");
+  typing();
+  chatBody.scrollTop = chatBody.scrollHeight;
 }
 
 /* =========================
-   CHAT CONTROLS
+   BOT ENGINE
+========================= */
+function botReply(text) {
+
+  text = text.toLowerCase();
+
+  // greeting
+  if (text.includes("hi") || text.includes("hello")) {
+    return typeMessage("👋 Assalam-o-Alaikum! Main Chishti Library AI hoon. Aap books ya authors ke baare mein pooch sakte hain.");
+  }
+
+  // knowledge
+  let k = searchKnowledge(text);
+  if (k) return typeMessage(k);
+
+  // book
+  let b = searchBook(text);
+  if (b) {
+    return typeMessage(
+`📚 ${b.title}
+👤 Author: ${b.author}
+
+📖 Read Online: ${b.reader}
+⬇ Download PDF: ${b.pdf}`
+    );
+  }
+
+  // fallback
+  return typeMessage("🤖 Mujhe samajh nahi aaya. Please book ka naam ya topic likhein.");
+}
+
+/* =========================
+   CHAT UI FIXED
 ========================= */
 const aiInput = document.getElementById("aiInput");
 const sendBtn = document.getElementById("sendBtn");
 
 function addUser(msg) {
-  let chatBody = document.getElementById("chatBody");
+  const chatBody = document.getElementById("chatBody");
 
   let div = document.createElement("div");
   div.className = "user-message";
   div.textContent = msg;
-  chatBody.appendChild(div);
 
+  chatBody.appendChild(div);
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
+/* SEND MESSAGE */
 function sendMessage() {
   let text = aiInput.value.trim();
   if (!text) return;
@@ -163,9 +166,7 @@ function sendMessage() {
   aiInput.value = "";
 }
 
-/* =========================
-   EVENTS
-========================= */
+/* EVENTS */
 sendBtn.addEventListener("click", sendMessage);
 
 aiInput.addEventListener("keypress", (e) => {
