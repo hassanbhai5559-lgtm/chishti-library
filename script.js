@@ -1,268 +1,126 @@
 let knowledge = [];
 let libraryBooks = [];
 
-/* =========================
-   LOAD KNOWLEDGE (CHAT DATA)
-========================= */
+/* LOAD DATA */
 fetch("knowledge.json")
   .then(res => res.json())
-  .then(data => {
-    knowledge = data;
-    console.log("Knowledge loaded");
-  })
-  .catch(err => console.log("Knowledge error:", err));
+  .then(data => knowledge = data);
 
-/* =========================
-   LOAD BOOKS
-========================= */
 fetch("books.json")
   .then(res => res.json())
-  .then(data => {
-    libraryBooks = data;
+  .then(data => libraryBooks = data);
 
-    loadFeaturedBooks(data);
-    loadLatestBooks(data);
-    loadOfflineBooks();
-  })
-  .catch(err => console.log("Books error:", err));
-
-/* =========================
-   SEARCH KNOWLEDGE
-========================= */
-function searchKnowledge(text) {
-  if (!knowledge.length) return null;
-
+/* SMART MATCH */
+function matchScore(text, keyword) {
   text = text.toLowerCase();
+  keyword = keyword.toLowerCase();
 
-  for (const item of knowledge) {
-    for (const key of item.keywords) {
-      if (text.includes(key.toLowerCase())) {
-        return item.answer_en;
+  let words = keyword.split(" ");
+  let score = 0;
+
+  for (let w of words) {
+    if (text.includes(w)) score++;
+  }
+
+  return score / words.length;
+}
+
+/* KNOWLEDGE SEARCH */
+function searchKnowledge(text) {
+  let best = null;
+  let bestScore = 0;
+
+  for (let item of knowledge) {
+    for (let key of item.keywords) {
+      let score = matchScore(text, key);
+
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
       }
     }
   }
 
-  return null;
+  return bestScore > 0.5 ? best.answer_en : null;
 }
 
-/* =========================
-   SMART BOOK SEARCH
-========================= */
-function smartBookSearch(text) {
-  text = text.toLowerCase();
+/* BOOK SEARCH */
+function searchBook(text) {
+  let best = null;
+  let bestScore = 0;
 
-  for (const book of libraryBooks) {
-    const title = book.title.toLowerCase();
+  for (let book of libraryBooks) {
+    let score = matchScore(text, book.title);
 
-    if (text.includes(title) || title.includes(text)) {
-      return book;
+    if (score > bestScore) {
+      bestScore = score;
+      best = book;
     }
   }
 
-  return null;
+  return bestScore > 0.5 ? best : null;
 }
 
-/* =========================
-   BOT REPLY (MAIN FIX)
-========================= */
+/* BOT RESPONSE */
 function botReply(text) {
 
-  // 1. knowledge check
-  let answer = searchKnowledge(text);
+  text = text.toLowerCase();
 
-  if (answer) {
-    typeMessage(answer);
-    return;
+  /* GREETING */
+  if (text.includes("hi") || text.includes("hello")) {
+    return typeMessage("👋 Assalam-o-Alaikum! Main Chishti Library AI hoon. Aap books ya author ke bare mein pooch sakte hain.");
   }
 
-  // 2. book search
-  const result = smartBookSearch(text);
+  /* KNOWLEDGE */
+  let k = searchKnowledge(text);
+  if (k) {
+    return typeMessage(k);
+  }
 
-  if (result) {
-    typeMessage(`
-<b>📚 ${result.title}</b><br>
-👤 ${result.author}<br><br>
-
-<a href="${result.reader}" target="_blank">📖 Read Online</a><br>
-<a href="${result.pdf}" target="_blank">⬇ Download PDF</a>
+  /* BOOK */
+  let b = searchBook(text);
+  if (b) {
+    return typeMessage(`
+📚 <b>${b.title}</b><br>
+👤 Author: ${b.author}<br>
+📖 <a href="${b.reader}" target="_blank">Read Online</a><br>
+⬇ <a href="${b.pdf}" target="_blank">Download PDF</a>
     `);
-    return;
   }
 
-  // 3. fallback replies
-  if (text.includes("book")) {
-    typeMessage("📚 Please type a book name.");
-  }
-  else if (text.includes("author")) {
-    typeMessage("👤 Hazrat Allama Saim Chishti.");
-  }
-  else if (text.includes("download")) {
-    typeMessage("⬇ Use download button under each book.");
-  }
-  else if (text.includes("offline")) {
-    typeMessage("📥 Offline books saved in local storage.");
-  }
-  else {
-    typeMessage("🤖 Please search using a book title.");
-  }
+  /* FALLBACK */
+  typeMessage("🤖 Main samajh nahi saka. Please book ka exact naam ya topic likhein.");
 }
 
-/* =========================
-   CHAT SEND SYSTEM
-========================= */
+/* CHAT SEND */
 const aiInput = document.getElementById("aiInput");
-const sendBtn = document.getElementById("sendBtn");
 const chatBody = document.getElementById("chatBody");
+const sendBtn = document.getElementById("sendBtn");
 
-function addMessage(msg, type) {
-  if (!chatBody) return;
-
-  const div = document.createElement("div");
-  div.className = type === "user" ? "user-message" : "bot-message";
-  div.textContent = msg;
-
-  chatBody.appendChild(div);
-  chatBody.scrollTop = chatBody.scrollHeight;
+function addUser(msg) {
+  chatBody.innerHTML += `<div class="user-message">${msg}</div>`;
 }
 
 function typeMessage(msg) {
-  if (!chatBody) return;
-
-  const div = document.createElement("div");
+  let div = document.createElement("div");
   div.className = "bot-message";
-  div.innerHTML = msg;
-
   chatBody.appendChild(div);
+
+  div.innerHTML = msg;
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-/* =========================
-   SEND MESSAGE
-========================= */
 function sendMessage() {
-  if (!aiInput) return;
-
-  const text = aiInput.value.trim();
+  let text = aiInput.value.trim();
   if (!text) return;
 
-  addMessage(text, "user");
+  addUser(text);
   botReply(text);
-
   aiInput.value = "";
 }
 
-if (sendBtn) {
-  sendBtn.addEventListener("click", sendMessage);
-}
+sendBtn.addEventListener("click", sendMessage);
 
-if (aiInput) {
-  aiInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") sendMessage();
-  });
-}
-
-/* =========================
-   OFFLINE BOOKS
-========================= */
-function saveOfflineBook(title, cover, pdf) {
-  let books = JSON.parse(localStorage.getItem("offlineBooks")) || [];
-
-  books.push({ title, cover, pdf });
-
-  localStorage.setItem("offlineBooks", JSON.stringify(books));
-}
-
-function loadOfflineBooks() {
-  const container = document.getElementById("offlineBooks");
-  if (!container) return;
-
-  let books = JSON.parse(localStorage.getItem("offlineBooks")) || [];
-
-  container.innerHTML = "";
-
-  books.forEach(book => {
-    container.innerHTML += `
-      <div class="book-card">
-        <img src="${book.cover}">
-        <h3>${book.title}</h3>
-        <a href="${book.pdf}" class="btn">📖 Open</a>
-      </div>
-    `;
-  });
-}
-
-/* =========================
-   FEATURED BOOKS
-========================= */
-function loadFeaturedBooks(books) {
-  const container = document.getElementById("featuredBooks");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  books.slice(0, 6).forEach(book => {
-    container.innerHTML += `
-      <div class="book-card">
-        <img src="${book.cover}">
-        <h3>${book.title}</h3>
-        <p>${book.author}</p>
-
-        <a href="${book.reader}" class="btn">📖 Read</a>
-
-        <a href="${book.pdf}" class="btn"
-           onclick="saveOfflineBook('${book.title}','${book.cover}','${book.pdf}')">
-           ⬇ Download
-        </a>
-      </div>
-    `;
-  });
-}
-
-/* =========================
-   LATEST BOOKS
-========================= */
-function loadLatestBooks(books) {
-  const container = document.getElementById("latestBooks");
-  if (!container) return;
-
-  container.innerHTML = "";
-
-  books.slice(-6).reverse().forEach(book => {
-    container.innerHTML += `
-      <div class="book-card">
-        <img src="${book.cover}">
-        <h3>${book.title}</h3>
-        <p>${book.author}</p>
-        <a href="${book.reader}" class="btn">📖 Read</a>
-      </div>
-    `;
-  });
-}
-
-/* =========================
-   LOADER FIX
-========================= */
-window.addEventListener("load", () => {
-  const loader = document.getElementById("loader");
-  const website = document.getElementById("website");
-
-  setTimeout(() => {
-    if (loader) loader.style.display = "none";
-    if (website) website.style.display = "block";
-  }, 1500);
-});
-
-console.log("✅ Chishti Library Fully Fixed");
-const chatButton = document.getElementById("chatButton");
-const chatBox = document.getElementById("chatBox");
-const closeChat = document.getElementById("closeChat");
-
-// chat open
-chatButton.addEventListener("click", () => {
-  chatBox.style.display = "block";
-});
-
-// chat close
-closeChat.addEventListener("click", () => {
-  chatBox.style.display = "none";
+aiInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") sendMessage();
 });
