@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chishti AI Chatbot</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0f172a;
+color:white;
+display:flex;
+flex-direction:column;
+height:100vh;
+}
+
+.header{
+background:#1e293b;
+padding:15px;
+text-align:center;
+font-size:20px;
+font-weight:bold;
+}
+
+.chat-box{
+flex:1;
+padding:10px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.msg{
+padding:10px 15px;
+border-radius:15px;
+max-width:75%;
+line-height:1.5;
+}
+
+.user{
+background:#2563eb;
+align-self:flex-end;
+}
+
+.bot{
+background:#334155;
+align-self:flex-start;
+}
+
+.input-box{
+display:flex;
+padding:10px;
+background:#1e293b;
+}
+
+input{
+flex:1;
+padding:12px;
+border:none;
+border-radius:10px;
+outline:none;
+}
+
+button{
+padding:12px 15px;
+margin-left:10px;
+border:none;
+background:#22c55e;
+color:white;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* typing animation */
+.typing{
+display:inline-block;
+}
+
+.dot{
+height:6px;
+width:6px;
+margin:0 2px;
+background:white;
+border-radius:50%;
+display:inline-block;
+animation:blink 1s infinite;
+}
+
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+
+@keyframes blink{
+0%,100%{opacity:0.2;}
+50%{opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">🤖 Chishti AI Chatbot</div>
+
+<div id="chat" class="chat-box"></div>
+
+<div class="input-box">
+<input id="input" placeholder="Ask something in Roman English...">
+<button onclick="send()">Send</button>
+</div>
+
+<script>
+const chat = document.getElementById("chat");
+
+function addMessage(text, type){
+const msg = document.createElement("div");
+msg.className = "msg " + type;
+msg.innerText = text;
+chat.appendChild(msg);
+chat.scrollTop = chat.scrollHeight;
+}
+
+function typingEffect(callback){
+const typing = document.createElement("div");
+typing.className = "msg bot";
+typing.innerHTML = `
+<div class="typing">
+<span class="dot"></span>
+<span class="dot"></span>
+<span class="dot"></span>
+</div>`;
+chat.appendChild(typing);
+chat.scrollTop = chat.scrollHeight;
+
+setTimeout(() => {
+typing.remove();
+callback();
+}, 1200);
+}
+
+function botReply(input){
+
+input = input.toLowerCase();
+
+if(input.includes("book")){
+return "📚 Chishti Library me books section available hai. Aap PDF read ya download kar sakte ho.";
+}
+else if(input.includes("saim chishti")){
+return "Hazrat Allama Saim Chishti ek mashhoor naat go shayar aur writer thay.";
+}
+else if(input.includes("hello")){
+return "Hello 👋! Main Chishti AI hoon. Aap mujh se books ya library ke bare me pooch sakte ho.";
+}
+else if(input.includes("help")){
+return "Aap pooch sakte ho: books, author, pdf, ya library info.";
+}
+else{
+return "Mujhe samajh nahi aaya 😅. Please simple sawal poochain.";
+}
+}
+
+function send(){
+const input = document.getElementById("input");
+const text = input.value;
+if(!text) return;
+
+addMessage(text, "user");
+input.value = "";
+
+typingEffect(() => {
+addMessage(botReply(text), "bot");
+});
+}
+</script>
+
+</body>
+</html>
