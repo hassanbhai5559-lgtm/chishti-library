@@ -256,3 +256,509 @@
   "answer_ur": "توصیف حیدر چشتی حضرت علامہ صائم چشتی کے صاحبزادوں میں سے ایک ہیں۔",
   "answer_hi": "तौसीफ़ हैदर चिश्ती हज़रत अल्लामा साइम चिश्ती के पुत्रों में से एक हैं।"
 },
+[
+  {
+    "keywords": ["what is chishti library", "chishti library"],
+    "answer_en": "Chishti Library is a digital Islamic library dedicated to preserving and sharing the books and literary works of Hazrat Allama Saim Chishti.",
+    "answer_ur": "چشتی لائبریری حضرت علامہ صائم چشتی کی کتب اور علمی ورثے کو محفوظ کرنے کے لیے قائم کی گئی ایک ڈیجیٹل اسلامی لائبریری ہے۔",
+    "answer_hi": "चिश्ती लाइब्रेरी हज़रत अल्लामा साइम चिश्ती की पुस्तकों और इस्लामी साहित्य को सुरक्षित रखने के लिए बनाई गई डिजिटल लाइब्रेरी है।"
+  },
+  {
+    "keywords": ["why was chishti library created"],
+    "answer_en": "Chishti Library was created to preserve and share Islamic books and the works of Hazrat Allama Saim Chishti.",
+    "answer_ur": "چشتی لائبریری اسلامی کتب اور حضرت علامہ صائم چشتی کے علمی کام کو محفوظ کرنے کے لیے بنائی گئی ہے۔",
+    "answer_hi": "चिश्ती लाइब्रेरी इस्लामी किताबों और हज़रत अल्लामा साइम चिश्ती के कार्यों को सुरक्षित रखने के लिए बनाई गई है।"
+  },
+  {
+    "keywords": ["how to read books"],
+    "answer_en": "Open the Books page and click the Read Online button.",
+    "answer_ur": "Books صفحہ کھولیں اور Read Online بٹن پر کلک کریں۔",
+    "answer_hi": "Books पेज खोलें और Read Online बटन पर क्लिक करें।"
+  },
+  {
+    "keywords": ["how to download pdf", "download book"],
+    "answer_en": "Click the Download button below the selected book to download its PDF.",
+    "answer_ur": "منتخب کتاب کے نیچے موجود Download بٹن پر کلک کریں۔",
+    "answer_hi": "चुनी हुई किताब के नीचे Download बटन पर क्लिक करें।"
+  },
+  {
+    "keywords": ["is chishti library free"],
+    "answer_en": "Yes, Chishti Library provides free access to available books.",
+    "answer_ur": "جی ہاں، چشتی لائبریری دستیاب کتب مفت فراہم کرتی ہے۔",
+    "answer_hi": "हाँ, चिश्ती लाइब्रेरी उपलब्ध किताबें निःशुल्क उपलब्ध कराती है।"
+  },
+  {
+    "keywords": ["can i read online"],
+    "answer_en": "Yes, many books can be read online without downloading.",
+    "answer_ur": "جی ہاں، کئی کتابیں بغیر ڈاؤن لوڈ کیے آن لائن پڑھی جا سکتی ہیں۔",
+    "answer_hi": "हाँ, कई किताबें बिना डाउनलोड किए ऑनलाइन पढ़ी जा सकती हैं।"
+  },
+  {
+    "keywords": ["offline books"],
+    "answer_en": "Downloaded books can be accessed from the Offline Library section if supported by your device.",
+    "answer_ur": "اگر آپ کا آلہ سپورٹ کرتا ہے تو ڈاؤن لوڈ کی گئی کتابیں Offline Library میں دستیاب ہوں گی۔",
+    "answer_hi": "यदि आपका डिवाइस सपोर्ट करता है, तो डाउनलोड की गई किताबें Offline Library में उपलब्ध होंगी।"
+  },
+  {
+    "keywords": ["how to search books"],
+    "answer_en": "Use the search box to find books by title or author.",
+    "answer_ur": "کتاب یا مصنف تلاش کرنے کے لیے سرچ باکس استعمال کریں۔",
+    "answer_hi": "किताब या लेखक खोजने के लिए सर्च बॉक्स का उपयोग करें।"
+  },
+  {
+    "keywords": ["contact library"],
+    "answer_en": "Open the Contact page to communicate with the Chishti Library team.",
+    "answer_ur": "چشتی لائبریری سے رابطے کے لیے Contact صفحہ کھولیں۔",
+    "answer_hi": "चिश्ती लाइब्रेरी टीम से संपर्क करने के लिए Contact पेज खोलें।"
+  },
+  {
+    "keywords": ["who owns chishti library"],
+    "answer_en": "Chishti Library is dedicated to preserving the literary legacy of Hazrat Allama Saim Chishti and is managed by his family and team.",
+    "answer_ur": "چشتی لائبریری حضرت علامہ صائم چشتی کے علمی ورثے کے تحفظ کے لیے قائم کی گئی ہے اور ان کے خاندان اور ٹیم کے زیر انتظام ہے۔",
+    "answer_hi": "चिश्ती लाइब्रेरी हज़रत अल्लामा साइम चिश्ती की साहित्यिक विरासत को सुरक्षित रखने के लिए उनके परिवार और टीम द्वारा संचालित की जाती है।"
+  },
+],
+,
+{
+  "keywords": ["how many books are available"],
+  "answer_en": "The library is regularly updated with new books and publications.",
+  "answer_ur": "لائبریری میں وقتاً فوقتاً نئی کتابیں شامل کی جاتی ہیں۔",
+  "answer_hi": "लाइब्रेरी में समय-समय पर नई किताबें जोड़ी जाती हैं।"
+},
+{
+  "keywords": ["new books"],
+  "answer_en": "Visit the Latest Books section to see newly added books.",
+  "answer_ur": "نئی کتابیں دیکھنے کے لیے Latest Books سیکشن کھولیں۔",
+  "answer_hi": "नई किताबें देखने के लिए Latest Books सेक्शन खोलें।"
+},
+{
+  "keywords": ["book categories"],
+  "answer_en": "Books are organized into categories such as Naat, Hamd, Manqabat, Tafseer, Seerat, and Islamic Literature.",
+  "answer_ur": "کتابیں نعت، حمد، منقبت، تفسیر، سیرت اور اسلامی ادب جیسی کیٹیگریز میں موجود ہیں۔",
+  "answer_hi": "किताबें नात, हम्द, मनक़बत, तफ़्सीर, सीरत और इस्लामी साहित्य जैसी श्रेणियों में उपलब्ध हैं।"
+},
+{
+  "keywords": ["ai chatbot"],
+  "answer_en": "The AI Assistant helps you find books and answer questions about the library and Hazrat Allama Saim Chishti.",
+  "answer_ur": "اے آئی اسسٹنٹ کتابیں تلاش کرنے اور لائبریری و حضرت علامہ صائم چشتی کے بارے میں سوالات کے جواب دینے میں مدد کرتا ہے۔",
+  "answer_hi": "AI सहायक किताबें खोजने और लाइब्रेरी तथा हज़रत अल्लामा साइम चिश्ती से जुड़े सवालों के जवाब देने में मदद करता है।"
+},
+{
+  "keywords": ["which languages are supported"],
+  "answer_en": "The AI Assistant supports English, Urdu, Hindi, and Roman Urdu.",
+  "answer_ur": "اے آئی اسسٹنٹ انگریزی، اردو، ہندی اور رومن اردو میں جواب دے سکتا ہے۔",
+  "answer_hi": "AI सहायक अंग्रेज़ी, उर्दू, हिंदी और रोमन उर्दू में उत्तर दे सकता है।"
+},
+{
+  "keywords": ["mobile support"],
+  "answer_en": "Yes, Chishti Library is designed to work on mobile phones, tablets, and computers.",
+  "answer_ur": "جی ہاں، چشتی لائبریری موبائل، ٹیبلیٹ اور کمپیوٹر پر استعمال کی جا سکتی ہے۔",
+  "answer_hi": "हाँ, चिश्ती लाइब्रेरी मोबाइल, टैबलेट और कंप्यूटर पर चलती है।"
+},
+{
+  "keywords": ["reader not opening"],
+  "answer_en": "Refresh the page and make sure the PDF file exists in the books folder.",
+  "answer_ur": "صفحہ ریفریش کریں اور یقینی بنائیں کہ PDF فائل books فولڈر میں موجود ہے۔",
+  "answer_hi": "पेज रीफ़्रेश करें और सुनिश्चित करें कि PDF फ़ाइल books फ़ोल्डर में मौजूद है।"
+},
+{
+  "keywords": ["can i share books"],
+  "answer_en": "Please respect copyright and share only according to the library's policy.",
+  "answer_ur": "براہ کرم کاپی رائٹ کا احترام کریں اور لائبریری کی پالیسی کے مطابق شیئر کریں۔",
+  "answer_hi": "कृपया कॉपीराइट का सम्मान करें और लाइब्रेरी की नीति के अनुसार ही साझा करें।"
+},
+{
+  "keywords": ["how to contact admin"],
+  "answer_en": "Use the Contact page or official contact details provided by the library.",
+  "answer_ur": "Contact صفحہ یا لائبریری کی آفیشل معلومات استعمال کریں۔",
+  "answer_hi": "Contact पेज या लाइब्रेरी की आधिकारिक संपर्क जानकारी का उपयोग करें।"
+},
+{
+  "keywords": ["who can use this library"],
+  "answer_en": "Anyone interested in Islamic knowledge and the works of Hazrat Allama Saim Chishti can use this library.",
+  "answer_ur": "اسلامی علم اور حضرت علامہ صائم چشتی کے کام میں دلچسپی رکھنے والا ہر شخص اس لائبریری سے فائدہ اٹھا سکتا ہے۔",
+  "answer_hi": "इस्लामी ज्ञान और हज़रत अल्लामा साइम चिश्ती के कार्यों में रुचि रखने वाला कोई भी व्यक्ति इस लाइब्रेरी का उपयोग कर सकता है।"
+},
+,
+{
+  "keywords": ["what can i find in chishti library"],
+  "answer_en": "You can find Islamic books, Naat collections, Hamd, Manqabat, Seerat, Tafseer, and other religious literature.",
+  "answer_ur": "آپ چشتی لائبریری میں اسلامی کتب، نعت، حمد، منقبت، سیرت، تفسیر اور دیگر دینی لٹریچر حاصل کر سکتے ہیں۔",
+  "answer_hi": "आप चिश्ती लाइब्रेरी में इस्लामी किताबें, नात, हम्द, मनक़बत, सीरत और अन्य धार्मिक साहित्य पा सकते हैं।"
+},
+{
+  "keywords": ["is registration required"],
+  "answer_en": "No, registration is not required to read available books.",
+  "answer_ur": "نہیں، دستیاب کتابیں پڑھنے کے لیے رجسٹریشن ضروری نہیں۔",
+  "answer_hi": "नहीं, उपलब्ध किताबें पढ़ने के लिए पंजीकरण आवश्यक नहीं है।"
+},
+{
+  "keywords": ["can i use library on mobile"],
+  "answer_en": "Yes, Chishti Library is fully accessible on mobile devices.",
+  "answer_ur": "جی ہاں، چشتی لائبریری موبائل پر بھی استعمال کی جا سکتی ہے۔",
+  "answer_hi": "हाँ, चिश्ती लाइब्रेरी मोबाइल पर भी उपलब्ध है।"
+},
+{
+  "keywords": ["how often are books updated"],
+  "answer_en": "New books and updates are added whenever available.",
+  "answer_ur": "جب بھی نئی کتابیں دستیاب ہوں، لائبریری کو اپ ڈیٹ کیا جاتا ہے۔",
+  "answer_hi": "जब भी नई किताबें उपलब्ध होती हैं, लाइब्रेरी अपडेट की जाती है।"
+},
+{
+  "keywords": ["can i request a book"],
+  "answer_en": "Yes, you can contact the library team to request a book.",
+  "answer_ur": "جی ہاں، آپ لائبریری ٹیم سے رابطہ کر کے کتاب کی درخواست کر سکتے ہیں۔",
+  "answer_hi": "हाँ, आप लाइब्रेरी टीम से संपर्क करके किसी किताब की मांग कर सकते हैं।"
+},
+{
+  "keywords": ["who manages library"],
+  "answer_en": "The library is managed by the family and team dedicated to preserving Hazrat Allama Saim Chishti's legacy.",
+  "answer_ur": "لائبریری حضرت علامہ صائم چشتی کے علمی ورثے کے تحفظ کے لیے ان کے خاندان اور ٹیم کے زیر انتظام ہے۔",
+  "answer_hi": "लाइब्रेरी हज़रत अल्लामा साइम चिश्ती की विरासत को सुरक्षित रखने के लिए उनके परिवार और टीम द्वारा संचालित की जाती है।"
+},
+{
+  "keywords": ["can i search by author"],
+  "answer_en": "Yes, you can search books by title or author name.",
+  "answer_ur": "جی ہاں، آپ کتاب کا عنوان یا مصنف کا نام لکھ کر تلاش کر سکتے ہیں۔",
+  "answer_hi": "हाँ, आप किताब का शीर्षक या लेखक का नाम लिखकर खोज सकते हैं।"
+},
+{
+  "keywords": ["does library have pdf books"],
+  "answer_en": "Yes, many books are available in PDF format.",
+  "answer_ur": "جی ہاں، بہت سی کتابیں PDF فارمیٹ میں دستیاب ہیں۔",
+  "answer_hi": "हाँ, कई किताबें PDF प्रारूप में उपलब्ध हैं।"
+},
+{
+  "keywords": ["how to use ai assistant"],
+  "answer_en": "Simply type your question in the chat box and the AI Assistant will reply.",
+  "answer_ur": "چیٹ باکس میں اپنا سوال لکھیں، اے آئی اسسٹنٹ جواب دے گا۔",
+  "answer_hi": "चैट बॉक्स में अपना सवाल लिखें, AI सहायक जवाब देगा।"
+},
+{
+  "keywords": ["what is the mission of chishti library"],
+  "answer_en": "The mission of Chishti Library is to preserve, digitize, and share authentic Islamic knowledge for everyone.",
+  "answer_ur": "چشتی لائبریری کا مقصد مستند اسلامی علم کو محفوظ کرنا، ڈیجیٹل بنانا اور سب تک پہنچانا ہے۔",
+  "answer_hi": "चिश्ती लाइब्रेरी का उद्देश्य प्रामाणिक इस्लामी ज्ञान को सुरक्षित रखना, डिजिटल बनाना और सभी तक पहुँचाना है।"
+},
+,
+{
+  "question": "can i search books",
+  "answer": {
+    "en": "Yes, use the search box to find books quickly.",
+    "ur": "جی ہاں، سرچ باکس کے ذریعے کتاب تلاش کریں۔",
+    "hi": "हाँ, सर्च बॉक्स से किताब खोज सकते हैं।"
+  }
+},
+{
+  "question": "does library have pdf books",
+  "answer": {
+    "en": "Yes, most books are available in PDF format.",
+    "ur": "جی ہاں، زیادہ تر کتابیں PDF میں موجود ہیں۔",
+    "hi": "हाँ, अधिकांश किताबें PDF में उपलब्ध हैं।"
+  }
+},
+{
+  "question": "can i read books on mobile",
+  "answer": {
+    "en": "Yes, Chishti Library works on mobile devices.",
+    "ur": "جی ہاں، چشتی لائبریری موبائل پر بھی کام کرتی ہے۔",
+    "hi": "हाँ, यह मोबाइल पर भी काम करती है।"
+  }
+},
+{
+  "question": "does library work offline",
+  "answer": {
+    "en": "Downloaded books can be read offline.",
+    "ur": "ڈاؤن لوڈ کی گئی کتابیں آف لائن پڑھی جا سکتی ہیں۔",
+    "hi": "डाउनलोड की गई किताबें ऑफलाइन पढ़ी जा सकती हैं।"
+  }
+},
+{
+  "question": "how can i save books",
+  "answer": {
+    "en": "Use the Download button to save books.",
+    "ur": "کتاب محفوظ کرنے کے لیے Download بٹن استعمال کریں۔",
+    "hi": "किताब सेव करने के लिए Download बटन दबाएँ।"
+  }
+},
+{
+  "question": "can i share books",
+  "answer": {
+    "en": "Please share books responsibly and respect copyright where applicable.",
+    "ur": "براہ کرم ذمہ داری کے ساتھ کتابیں شیئر کریں اور جہاں لاگو ہو حقوق کا احترام کریں۔",
+    "hi": "कृपया जिम्मेदारी से किताबें साझा करें और जहाँ लागू हो कॉपीराइट का सम्मान करें।"
+  }
+},
+{
+  "question": "who manages this library",
+  "answer": {
+    "en": "The Chishti family manages and develops this digital library.",
+    "ur": "چشتی خاندان اس ڈیجیٹل لائبریری کی نگرانی اور ترقی کرتا ہے۔",
+    "hi": "चिश्ती परिवार इस डिजिटल लाइब्रेरी का संचालन करता है।"
+  }
+},
+{
+  "question": "why was this library created",
+  "answer": {
+    "en": "To preserve and share the works of Hazrat Allama Saim Chishti.",
+    "ur": "حضرت علامہ صائم چشتی کی تصانیف کو محفوظ اور عام کرنے کے لیے۔",
+    "hi": "हज़रत अल्लामा साइम चिश्ती की पुस्तकों को सुरक्षित रखने और लोगों तक पहुँचाने के लिए।"
+  }
+},
+{
+  "question": "is registration required",
+  "answer": {
+    "en": "No, registration is not required to read books.",
+    "ur": "نہیں، کتابیں پڑھنے کے لیے رجسٹریشن ضروری نہیں۔",
+    "hi": "नहीं, किताब पढ़ने के लिए रजिस्ट्रेशन आवश्यक नहीं है।"
+  }
+},
+{
+  "question": "how many books are available",
+  "answer": {
+    "en": "The library is continuously growing with new books being added.",
+    "ur": "لائبریری میں مسلسل نئی کتابیں شامل کی جا رہی ہیں۔",
+    "hi": "लाइब्रेरी में लगातार नई किताबें जोड़ी जा रही हैं।"
+  }
+},
+{
+  "question": "can i request a book",
+  "answer": {
+    "en": "Yes, you can request books through the contact section.",
+    "ur": "جی ہاں، آپ رابطہ سیکشن کے ذریعے کتاب کی درخواست کر سکتے ہیں۔",
+    "hi": "हाँ, आप संपर्क अनुभाग के माध्यम से किताब की मांग कर सकते हैं।"
+  }
+},
+{
+  "question": "does library support urdu",
+  "answer": {
+    "en": "Yes, the library supports Urdu language.",
+    "ur": "جی ہاں، لائبریری اردو زبان کو سپورٹ کرتی ہے۔",
+    "hi": "हाँ, लाइब्रेरी उर्दू भाषा को सपोर्ट करती है।"
+  }
+},
+{
+  "question": "does library support english",
+  "answer": {
+    "en": "Yes, English content is also available.",
+    "ur": "جی ہاں، انگریزی مواد بھی دستیاب ہے۔",
+    "hi": "हाँ, अंग्रेज़ी सामग्री भी उपलब्ध है।"
+  }
+},
+{
+  "question": "can i contact library",
+  "answer": {
+    "en": "Yes, visit the Contact page for details.",
+    "ur": "جی ہاں، رابطہ کی معلومات کے لیے Contact صفحہ دیکھیں۔",
+    "hi": "हाँ, संपर्क जानकारी के लिए Contact पेज देखें।"
+  }
+},
+{
+  "question": "what makes chishti library special",
+  "answer": {
+    "en": "It is dedicated to preserving the literary and religious legacy of Hazrat Allama Saim Chishti.",
+    "ur": "یہ حضرت علامہ صائم چشتی کے علمی و ادبی ورثے کو محفوظ کرنے کے لیے وقف ہے۔",
+    "hi": "यह हज़रत अल्लामा साइम चिश्ती की साहित्यिक और धार्मिक विरासत को सुरक्षित रखने के लिए समर्पित है।"
+  }
+},
+{
+  "question": "can i read books free",
+  "answer": {
+    "en": "Yes, books can be read free of charge.",
+    "ur": "جی ہاں، کتابیں مفت پڑھی جا سکتی ہیں۔",
+    "hi": "हाँ, किताबें निःशुल्क पढ़ी जा सकती हैं।"
+  }
+},
+{
+  "question": "is chishti library online",
+  "answer": {
+    "en": "Yes, it is an online digital library.",
+    "ur": "جی ہاں، یہ ایک آن لائن ڈیجیٹل لائبریری ہے۔",
+    "hi": "हाँ, यह एक ऑनलाइन डिजिटल लाइब्रेरी है।"
+  }
+},
+{
+  "question": "can i bookmark books",
+  "answer": {
+    "en": "You can bookmark the page in your browser.",
+    "ur": "آپ اپنے براؤزر میں صفحہ بک مارک کر سکتے ہیں۔",
+    "hi": "आप अपने ब्राउज़र में पेज को बुकमार्क कर सकते हैं।"
+  }
+},
+{
+  "question": "does library update regularly",
+  "answer": {
+    "en": "Yes, new books and improvements are added regularly.",
+    "ur": "جی ہاں، نئی کتابیں اور بہتری باقاعدگی سے شامل کی جاتی ہے۔",
+    "hi": "हाँ, नई किताबें और सुधार नियमित रूप से जोड़े जाते हैं।"
+  }
+},
+{
+  "question": "thank you library",
+  "answer": {
+    "en": "You're welcome. May Allah bless you.",
+    "ur": "آپ کا شکریہ، اللہ آپ کو جزائے خیر دے۔",
+    "hi": "आपका स्वागत है। अल्लाह आपको बरकत दे।"
+  }
+},
+,
+{
+  "question":"what is the aim of chishti library",
+  "answer":{
+    "en":"The aim of Chishti Library is to preserve and share authentic Islamic books and the literary works of Hazrat Allama Saim Chishti.",
+    "ur":"چشتی لائبریری کا مقصد مستند اسلامی کتب اور حضرت علامہ صائم چشتی کے علمی ورثے کو محفوظ کرنا ہے۔",
+    "hi":"चिश्ती लाइब्रेरी का उद्देश्य प्रामाणिक इस्लामी पुस्तकों और हज़रत अल्लामा साइम चिश्ती की रचनाओं को सुरक्षित रखना है।"
+  }
+},
+{
+  "question":"is chishti library digital",
+  "answer":{
+    "en":"Yes, Chishti Library is a digital Islamic library.",
+    "ur":"جی ہاں، چشتی لائبریری ایک ڈیجیٹل اسلامی لائبریری ہے۔",
+    "hi":"हाँ, चिश्ती लाइब्रेरी एक डिजिटल इस्लामी लाइब्रेरी है।"
+  }
+},
+{
+  "question":"can i search by book title",
+  "answer":{
+    "en":"Yes, simply type the book title in the search box.",
+    "ur":"جی ہاں، سرچ باکس میں کتاب کا نام لکھیں۔",
+    "hi":"हाँ, सर्च बॉक्स में किताब का नाम लिखें।"
+  }
+},
+{
+  "question":"can i search by author",
+  "answer":{
+    "en":"Yes, you can search books by the author's name.",
+    "ur":"جی ہاں، آپ مصنف کے نام سے بھی تلاش کر سکتے ہیں۔",
+    "hi":"हाँ, लेखक के नाम से भी खोज सकते हैं।"
+  }
+},
+{
+  "question":"how do i open a pdf",
+  "answer":{
+    "en":"Click the Read Online button to open the PDF reader.",
+    "ur":"Read Online بٹن پر کلک کریں۔",
+    "hi":"Read Online बटन पर क्लिक करें।"
+  }
+},
+{
+  "question":"can i download all books",
+  "answer":{
+    "en":"Download is available for books where the download option is provided.",
+    "ur":"جہاں Download بٹن موجود ہو وہاں کتاب ڈاؤن لوڈ کی جا سکتی ہے۔",
+    "hi":"जहाँ Download विकल्प उपलब्ध है वहाँ किताब डाउनलोड की जा सकती है।"
+  }
+},
+{
+  "question":"is internet required",
+  "answer":{
+    "en":"Internet is required for online reading. Downloaded books can be read offline.",
+    "ur":"آن لائن مطالعے کے لیے انٹرنیٹ ضروری ہے، ڈاؤن لوڈ شدہ کتابیں آف لائن پڑھی جا سکتی ہیں۔",
+    "hi":"ऑनलाइन पढ़ने के लिए इंटरनेट आवश्यक है, डाउनलोड की गई किताबें ऑफलाइन पढ़ी जा सकती हैं।"
+  }
+},
+{
+  "question":"does the library contain islamic books",
+  "answer":{
+    "en":"Yes, Chishti Library contains Islamic books and literature.",
+    "ur":"جی ہاں، چشتی لائبریری میں اسلامی کتب موجود ہیں۔",
+    "hi":"हाँ, चिश्ती लाइब्रेरी में इस्लामी पुस्तकें उपलब्ध हैं।"
+  }
+},
+{
+  "question":"can i read books without downloading",
+  "answer":{
+    "en":"Yes, many books can be read online directly.",
+    "ur":"جی ہاں، کئی کتابیں براہ راست آن لائن پڑھی جا سکتی ہیں۔",
+    "hi":"हाँ, कई किताबें सीधे ऑनलाइन पढ़ी जा सकती हैं।"
+  }
+},
+{
+  "question":"what type of books are available",
+  "answer":{
+    "en":"Naat, Hamd, Manqabat, Seerat, Tafseer, Islamic Literature and more.",
+    "ur":"نعت، حمد، منقبت، سیرت، تفسیر، اسلامی ادب اور دیگر کتب۔",
+    "hi":"नात, हम्द, मनक़बत, सीरत, तफ़्सीर, इस्लामी साहित्य आदि।"
+  }
+},
+{
+  "question":"can i suggest improvements",
+  "answer":{
+    "en":"Yes, your suggestions are always welcome.",
+    "ur":"جی ہاں، آپ کی تجاویز خوش آمدید ہیں۔",
+    "hi":"हाँ, आपके सुझावों का स्वागत है।"
+  }
+},
+{
+  "question":"how often is the website updated",
+  "answer":{
+    "en":"The website is updated whenever new books or improvements are available.",
+    "ur":"جب بھی نئی کتابیں یا بہتری شامل کی جاتی ہے، ویب سائٹ اپ ڈیٹ ہوتی ہے۔",
+    "hi":"नई किताबें या सुधार आने पर वेबसाइट अपडेट की जाती है।"
+  }
+},
+{
+  "question":"is this an official library",
+  "answer":{
+    "en":"Yes, it is dedicated to preserving the authentic works of Hazrat Allama Saim Chishti.",
+    "ur":"جی ہاں، یہ حضرت علامہ صائم چشتی کے مستند علمی ورثے کے لیے وقف ہے۔",
+    "hi":"हाँ, यह हज़रत अल्लामा साइम चिश्ती की प्रामाणिक रचनाओं के लिए समर्पित है।"
+  }
+},
+{
+  "question":"how do i contact support",
+  "answer":{
+    "en":"Use the Contact page for support and inquiries.",
+    "ur":"مدد کے لیے Contact صفحہ استعمال کریں۔",
+    "hi":"सहायता के लिए Contact पेज का उपयोग करें।"
+  }
+},
+{
+  "question":"who can use this website",
+  "answer":{
+    "en":"Anyone interested in Islamic knowledge can use this website.",
+    "ur":"اسلامی علم میں دلچسپی رکھنے والا ہر شخص اس ویب سائٹ کو استعمال کر سکتا ہے۔",
+    "hi":"इस्लामी ज्ञान में रुचि रखने वाला कोई भी व्यक्ति इस वेबसाइट का उपयोग कर सकता है।"
+  }
+},
+{
+  "question":"is registration free",
+  "answer":{
+    "en":"Yes, all available services are free for users.",
+    "ur":"جی ہاں، دستیاب سہولیات مفت ہیں۔",
+    "hi":"हाँ, उपलब्ध सेवाएँ निःशुल्क हैं।"
+  }
+},
+{
+  "question":"does the library have ai assistant",
+  "answer":{
+    "en":"Yes, the AI Assistant helps answer questions about the library, books and author.",
+    "ur":"جی ہاں، اے آئی اسسٹنٹ لائبریری، کتابوں اور مصنف سے متعلق سوالات کے جواب دیتا ہے۔",
+    "hi":"हाँ, AI सहायक लाइब्रेरी, किताबों और लेखक से जुड़े प्रश्नों के उत्तर देता है।"
+  }
+},
+{
+  "question":"can i ask questions to ai",
+  "answer":{
+    "en":"Yes, you can ask questions in English, Urdu, Hindi or Roman Urdu.",
+    "ur":"جی ہاں، آپ انگریزی، اردو، ہندی یا رومن اردو میں سوال پوچھ سکتے ہیں۔",
+    "hi":"हाँ, आप अंग्रेज़ी, उर्दू, हिंदी या रोमन उर्दू में प्रश्न पूछ सकते हैं।"
+  }
+},
+{
+  "question":"what should i do if a pdf is missing",
+  "answer":{
+    "en":"Please report the missing PDF through the Contact page.",
+    "ur":"اگر PDF موجود نہ ہو تو Contact صفحہ کے ذریعے اطلاع دیں۔",
+    "hi":"यदि PDF उपलब्ध नहीं है तो Contact पेज के माध्यम से सूचित करें।"
+  }
+},
+{
+  "question":"welcome",
+  "answer":{
+    "en":"Welcome to Chishti Library. May Allah bless your search for knowledge.",
+    "ur":"چشتی لائبریری میں خوش آمدید۔ اللہ تعالیٰ آپ کے علم میں برکت عطا فرمائے۔",
+    "hi":"चिश्ती लाइब्रेरी में आपका स्वागत है। अल्लाह आपके ज्ञान में बरकत दे।"
+  }
+},
