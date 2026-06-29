@@ -392,9 +392,34 @@ function smartBookSearch(text) {
 // =========================
 // BOT REPLY
 // =========================
+function searchKnowledge(text) {
 
+    text = text.toLowerCase();
+
+    for (const item of knowledge) {
+
+        for (const key of item.keywords) {
+
+            if (text.includes(key.toLowerCase())) {
+
+                return item.answer_en;
+
+            }
+
+        }
+
+    }
+
+    return null;
+}
 function botReply(text) {
 
+    let answer = searchKnowledge(text);
+
+if (answer) {
+    typeMessage(answer);
+    return;
+}
     const result = smartBookSearch(text);
 
     if (result) {
