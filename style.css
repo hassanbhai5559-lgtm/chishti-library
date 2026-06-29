@@ -2012,225 +2012,69 @@ transition:.35s;
 img:hover{
 
 transform:scale(1.03);
-
+.book-card {
+    background: #fff;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    transform: translateY(0);
 }
 
-/* Card Hover */
-
-.book-card,
-.stat-card,
-.offline-empty{
-
-transition:.35s;
-
+.book-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
 }
 
-.book-card:hover,
-.stat-card:hover,
-.offline-empty:hover{
-
-transform:translateY(-8px);
-
-box-shadow:0 18px 45px rgba(0,0,0,.18);
-
+.book-card img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    transition: 0.3s;
 }
 
-/* Buttons */
-
-.btn,
-.btn2{
-
-transition:.3s;
-
+.book-card:hover img {
+    transform: scale(1.05);
 }
 
-.btn:hover,
-.btn2:hover{
-
-transform:translateY(-3px);
-
+.book-card h3 {
+    font-size: 18px;
+    margin: 10px 15px;
+    color: #222;
 }
 
-/* Input */
-
-input{
-
-transition:.3s;
-
+.book-card p {
+    margin: 0 15px;
+    font-size: 13px;
+    color: #777;
 }
 
-input:focus{
-
-outline:none;
-
-border-color:var(--primary);
-
-box-shadow:0 0 15px rgba(0,107,79,.25);
-
+.book-card .btn {
+    display: block;
+    margin: 10px 15px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
 }
 
-/* Loading Animation */
-
-.loading{
-
-animation:loadingMove 2s linear infinite;
-
+/* READ BUTTON */
+.book-card .btn:first-of-type {
+    background: linear-gradient(135deg,#00c853,#2196f3);
+    color: white;
 }
 
-@keyframes loadingMove{
-
-0%{
-
-width:0%;
-
+/* DOWNLOAD BUTTON */
+.book-card .btn:last-of-type {
+    background: linear-gradient(135deg,#f9a825,#ff6f00);
+    color: white;
 }
 
-100%{
-
-width:100%;
-
-}
-
-}
-
-/* Hero Floating Logo */
-
-.hero-logo{
-
-animation:floating 4s ease-in-out infinite;
-
-}
-
-@keyframes floating{
-
-0%{
-
-transform:translateY(0px);
-
-}
-
-50%{
-
-transform:translateY(-12px);
-
-}
-
-100%{
-
-transform:translateY(0px);
-
-}
-
-}
-
-/* Chat Button */
-
-#chatButton:hover{
-
-transform:scale(1.12);
-
-}
-
-/* Footer Links */
-
-.footer-links a{
-
-transition:.3s;
-
-}
-
-.footer-links a:hover{
-
-color:var(--gold);
-
-}
-
-/* Selection */
-
-::selection{
-
-background:var(--primary);
-
-color:#fff;
-
-}
-
-/* Scrollbar */
-
-::-webkit-scrollbar{
-
-width:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-background:#eaeaea;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-background:var(--primary);
-
-border-radius:20px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-background:#008b66;
-
-}
-
-/* Smooth */
-
-html{
-
-scroll-behavior:smooth;
-
-}
-
-body{
-
-overflow-x:hidden;
-
-}
-
-/* Responsive */
-
-@media(max-width:768px){
-
-.hero h1{
-
-font-size:36px;
-
-}
-
-.hero h3{
-
-font-size:22px;
-
-}
-
-.hero-buttons{
-
-flex-direction:column;
-
-gap:15px;
-
-}
-
-.nav-links{
-
-flex-direction:column;
-
-}
-
-.books-grid{
-
-grid-template-columns:1fr;
-
+.book-card .btn:hover {
+    opacity: 0.9;
+    transform: scale(1.03);
 }
 
 .stats-grid{
