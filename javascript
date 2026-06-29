@@ -4,19 +4,18 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // =====================
-    // LOADER
-    // =====================
-    window.addEventListener("load", () => {
-        setTimeout(() => {
-            const loader = document.getElementById("loader");
-            const website = document.getElementById("website");
-            if (loader && website) {
-                loader.style.display = "none";
-                website.style.display = "block";
-            }
-        }, 1500);
-    });
+  window.addEventListener("load", () => {
+
+    document.body.classList.add("loading");
+
+    setTimeout(() => {
+
+        document.body.classList.remove("loading");
+        document.body.classList.add("loaded");
+
+    }, 2000);
+
+});
 
     // =====================
     // THEME SYSTEM
