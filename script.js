@@ -253,3 +253,16 @@ window.addEventListener("load", () => {
 });
 
 console.log("✅ Chishti Library Fully Fixed");
+const chatButton = document.getElementById("chatButton");
+const chatBox = document.getElementById("chatBox");
+const closeChat = document.getElementById("closeChat");
+
+// chat open
+chatButton.addEventListener("click", () => {
+  chatBox.style.display = "block";
+});
+
+// chat close
+closeChat.addEventListener("click", () => {
+  chatBox.style.display = "none";
+});
