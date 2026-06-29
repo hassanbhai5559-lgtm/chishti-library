@@ -2,42 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Chishti AI Chatbot</title>
+<title>Chishti AI - Smart Chatbot</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:#0f172a;
+background:linear-gradient(135deg,#0f172a,#1e293b);
 color:white;
+height:100vh;
 display:flex;
 flex-direction:column;
-height:100vh;
 }
 
-.header{
-background:#1e293b;
+header{
 padding:15px;
 text-align:center;
+background:#111827;
 font-size:20px;
 font-weight:bold;
+letter-spacing:1px;
 }
 
-.chat-box{
+.chat{
 flex:1;
-padding:10px;
 overflow-y:auto;
+padding:15px;
 display:flex;
 flex-direction:column;
 gap:10px;
 }
 
 .msg{
-padding:10px 15px;
-border-radius:15px;
 max-width:75%;
+padding:12px 15px;
+border-radius:15px;
 line-height:1.5;
+animation:fade 0.3s ease-in;
 }
 
 .user{
@@ -46,14 +48,14 @@ align-self:flex-end;
 }
 
 .bot{
-background:#334155;
+background:#374151;
 align-self:flex-start;
 }
 
-.input-box{
+.inputBox{
 display:flex;
 padding:10px;
-background:#1e293b;
+background:#111827;
 }
 
 input{
@@ -65,8 +67,8 @@ outline:none;
 }
 
 button{
-padding:12px 15px;
 margin-left:10px;
+padding:12px 18px;
 border:none;
 background:#22c55e;
 color:white;
@@ -74,18 +76,21 @@ border-radius:10px;
 cursor:pointer;
 }
 
+button:hover{
+background:#16a34a;
+}
+
 /* typing animation */
 .typing{
-display:inline-block;
+display:flex;
+gap:4px;
 }
 
 .dot{
-height:6px;
 width:6px;
-margin:0 2px;
+height:6px;
 background:white;
 border-radius:50%;
-display:inline-block;
 animation:blink 1s infinite;
 }
 
@@ -96,80 +101,91 @@ animation:blink 1s infinite;
 0%,100%{opacity:0.2;}
 50%{opacity:1;}
 }
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">🤖 Chishti AI Chatbot</div>
+<header>🤖 Chishti AI Smart Chatbot</header>
 
-<div id="chat" class="chat-box"></div>
+<div id="chat" class="chat"></div>
 
-<div class="input-box">
-<input id="input" placeholder="Ask something in Roman English...">
+<div class="inputBox">
+<input id="text" placeholder="Type your message...">
 <button onclick="send()">Send</button>
 </div>
 
 <script>
 const chat = document.getElementById("chat");
 
-function addMessage(text, type){
-const msg = document.createElement("div");
-msg.className = "msg " + type;
-msg.innerText = text;
-chat.appendChild(msg);
+function addMsg(text, type){
+const div = document.createElement("div");
+div.className = "msg " + type;
+div.innerText = text;
+chat.appendChild(div);
 chat.scrollTop = chat.scrollHeight;
 }
 
-function typingEffect(callback){
-const typing = document.createElement("div");
-typing.className = "msg bot";
-typing.innerHTML = `
+function typing(callback){
+const t = document.createElement("div");
+t.className = "msg bot";
+t.innerHTML = `
 <div class="typing">
-<span class="dot"></span>
-<span class="dot"></span>
-<span class="dot"></span>
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
 </div>`;
-chat.appendChild(typing);
+chat.appendChild(t);
 chat.scrollTop = chat.scrollHeight;
 
-setTimeout(() => {
-typing.remove();
+setTimeout(()=>{
+t.remove();
 callback();
-}, 1200);
+},1000);
 }
 
-function botReply(input){
+/* 🧠 SMART AI BRAIN */
+function aiResponse(msg){
+msg = msg.toLowerCase();
 
-input = input.toLowerCase();
+if(msg.includes("hello") || msg.includes("hi")){
+return "👋 Hello! Main Chishti AI hoon. Aap books, library ya author ke bare me pooch sakte ho.";
+}
 
-if(input.includes("book")){
-return "📚 Chishti Library me books section available hai. Aap PDF read ya download kar sakte ho.";
+if(msg.includes("book")){
+return "📚 Library me Islamic books available hain. Aap read online ya download kar sakte ho.";
 }
-else if(input.includes("saim chishti")){
-return "Hazrat Allama Saim Chishti ek mashhoor naat go shayar aur writer thay.";
+
+if(msg.includes("saim chishti")){
+return "📖 Hazrat Allama Saim Chishti ek mashhoor Islamic naat go shayar aur writer hain.";
 }
-else if(input.includes("hello")){
-return "Hello 👋! Main Chishti AI hoon. Aap mujh se books ya library ke bare me pooch sakte ho.";
+
+if(msg.includes("pdf")){
+return "📄 Aap PDF section me books read ya download kar sakte ho.";
 }
-else if(input.includes("help")){
-return "Aap pooch sakte ho: books, author, pdf, ya library info.";
+
+if(msg.includes("help")){
+return "🆘 Aap mujh se pooch sakte ho: books, author, library, PDF, ya search.";
 }
-else{
-return "Mujhe samajh nahi aaya 😅. Please simple sawal poochain.";
-}
+
+return "⚠️ Mujhe samajh nahi aaya. Please simple sawal poochain.";
 }
 
 function send(){
-const input = document.getElementById("input");
-const text = input.value;
-if(!text) return;
+const input = document.getElementById("text");
+const value = input.value.trim();
+if(!value) return;
 
-addMessage(text, "user");
-input.value = "";
+addMsg(value,"user");
+input.value="";
 
-typingEffect(() => {
-addMessage(botReply(text), "bot");
+typing(()=>{
+addMsg(aiResponse(value),"bot");
 });
 }
 </script>
