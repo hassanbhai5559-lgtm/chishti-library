@@ -1,725 +1,255 @@
 let knowledge = [];
-
-fetch("knowledge.json")
-.then(res => res.json())
-.then(data => {
-    knowledge = data;
-})
-.catch(err => console.log(err));
-// =========================
-// CHISHTI LIBRARY SCRIPT
-// PART 1
-// =========================
-
 let libraryBooks = [];
 
-document.addEventListener("DOMContentLoaded", () => {
+/* =========================
+   LOAD KNOWLEDGE (CHAT DATA)
+========================= */
+fetch("knowledge.json")
+  .then(res => res.json())
+  .then(data => {
+    knowledge = data;
+    console.log("Knowledge loaded");
+  })
+  .catch(err => console.log("Knowledge error:", err));
 
-    // =====================
-    // LOADER
-    // =====================
-
-    window.addEventListener("load", () => {
-
-        document.body.classList.add("loading");
-
-        setTimeout(() => {
-
-            document.body.classList.remove("loading");
-            document.body.classList.add("loaded");
-
-            const loader = document.getElementById("loader");
-            const website = document.getElementById("website");
-
-            if (loader) loader.style.display = "none";
-            if (website) website.style.display = "block";
-
-        }, 2000);
-
-    });
-
-    // =====================
-    // THEME SYSTEM
-    // =====================
-
-    const themeBtn = document.getElementById("themeBtn");
-
-    if (localStorage.getItem("theme") === "dark") {
-
-        document.body.classList.add("dark");
-
-        if (themeBtn) {
-            themeBtn.textContent = "☀";
-        }
-    }
-
-    if (themeBtn) {
-
-        themeBtn.addEventListener("click", () => {
-
-            document.body.classList.toggle("dark");
-
-            if (document.body.classList.contains("dark")) {
-
-                localStorage.setItem("theme", "dark");
-                themeBtn.textContent = "☀";
-
-            } else {
-
-                localStorage.setItem("theme", "light");
-                themeBtn.textContent = "🌙";
-
-            }
-
-        });
-
-    }
-
-    // =====================
-    // CHAT OPEN / CLOSE
-    // =====================
-
-    const chatButton = document.getElementById("chatButton");
-    const chatBox = document.getElementById("chatBox");
-    const closeChat = document.getElementById("closeChat");
-
-    if (chatButton && chatBox) {
-        chatButton.addEventListener("click", () => {
-            chatBox.style.display = "block";
-        });
-    }
-
-    if (closeChat && chatBox) {
-        closeChat.addEventListener("click", () => {
-            chatBox.style.display = "none";
-        });
-    }
-
-    // =====================
-    // SEARCH BOOKS
-    // =====================
-
-    const searchInput = document.getElementById("searchInput");
-
-    if (searchInput) {
-
-        searchInput.addEventListener("keyup", () => {
-
-            const value = searchInput.value.toLowerCase();
-
-            document.querySelectorAll(".book-card").forEach(card => {
-
-                const text = card.innerText.toLowerCase();
-
-                card.style.display =
-                    text.includes(value) ? "block" : "none";
-
-            });
-
-        });
-
-    }
-
-    // =====================
-    // SCROLL ANIMATION
-    // =====================
-
-    const sections = document.querySelectorAll("section");
-
-    function revealSections() {
-
-        sections.forEach(section => {
-
-            const top = section.getBoundingClientRect().top;
-
-            if (top < window.innerHeight - 100) {
-                section.classList.add("show");
-            }
-
-        });
-
-    }
-
-    window.addEventListener("scroll", revealSections);
-    revealSections();
-
-});
-// =========================
-// BOOKS LOAD
-// =========================
-
+/* =========================
+   LOAD BOOKS
+========================= */
 fetch("books.json")
-    .then(response => response.json())
-    .then(data => {
+  .then(res => res.json())
+  .then(data => {
+    libraryBooks = data;
 
-        libraryBooks = data;
+    loadFeaturedBooks(data);
+    loadLatestBooks(data);
+    loadOfflineBooks();
+  })
+  .catch(err => console.log("Books error:", err));
 
-        loadFeaturedBooks(data);
-        loadLatestBooks(data);
-        loadOfflineBooks();
+/* =========================
+   SEARCH KNOWLEDGE
+========================= */
+function searchKnowledge(text) {
+  if (!knowledge.length) return null;
 
-    })
-    .catch(error => {
+  text = text.toLowerCase();
 
-        console.error("Books.json Error:", error);
+  for (const item of knowledge) {
+    for (const key of item.keywords) {
+      if (text.includes(key.toLowerCase())) {
+        return item.answer_en;
+      }
+    }
+  }
 
-    });
-
-// =========================
-// FEATURED BOOKS
-// =========================
-
-function loadFeaturedBooks(books) {
-
-    const container = document.getElementById("featuredBooks");
-
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    books.slice(0, 6).forEach(book => {
-
-        container.innerHTML += `
-
-        <div class="book-card">
-
-            <img src="${book.cover}" alt="${book.title}">
-
-            <h3>${book.title}</h3>
-
-            <p>${book.author}</p>
-
-            <a href="${book.reader}" class="btn">
-                📖 Read
-            </a>
-
-            <a href="${book.pdf}"
-               class="btn download-btn"
-               onclick="saveOfflineBook('${book.title}','${book.cover}','${book.pdf}')">
-
-                ⬇ Download
-
-            </a>
-
-        </div>
-
-        `;
-
-    });
-
+  return null;
 }
 
-// =========================
-// LATEST BOOKS
-// =========================
+/* =========================
+   SMART BOOK SEARCH
+========================= */
+function smartBookSearch(text) {
+  text = text.toLowerCase();
 
-function loadLatestBooks(books) {
+  for (const book of libraryBooks) {
+    const title = book.title.toLowerCase();
 
-    const container = document.getElementById("latestBooks");
+    if (text.includes(title) || title.includes(text)) {
+      return book;
+    }
+  }
 
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    books
-        .slice(-6)
-        .reverse()
-        .forEach(book => {
-
-            container.innerHTML += `
-
-            <div class="book-card">
-
-                <img src="${book.cover}" alt="${book.title}">
-
-                <h3>${book.title}</h3>
-
-                <p>${book.author}</p>
-
-                <a href="${book.reader}" class="btn">
-
-                    📖 Read
-
-                </a>
-
-            </div>
-
-            `;
-
-        });
-
+  return null;
 }
 
-// =========================
-// OFFLINE BOOKS
-// =========================
+/* =========================
+   BOT REPLY (MAIN FIX)
+========================= */
+function botReply(text) {
 
-function saveOfflineBook(title, cover, pdf) {
+  // 1. knowledge check
+  let answer = searchKnowledge(text);
 
-    let books =
-        JSON.parse(localStorage.getItem("offlineBooks")) || [];
+  if (answer) {
+    typeMessage(answer);
+    return;
+  }
 
-    books.push({
+  // 2. book search
+  const result = smartBookSearch(text);
 
-        title,
-        cover,
-        pdf
+  if (result) {
+    typeMessage(`
+<b>📚 ${result.title}</b><br>
+👤 ${result.author}<br><br>
 
-    });
+<a href="${result.reader}" target="_blank">📖 Read Online</a><br>
+<a href="${result.pdf}" target="_blank">⬇ Download PDF</a>
+    `);
+    return;
+  }
 
-    localStorage.setItem(
-        "offlineBooks",
-        JSON.stringify(books)
-    );
-
+  // 3. fallback replies
+  if (text.includes("book")) {
+    typeMessage("📚 Please type a book name.");
+  }
+  else if (text.includes("author")) {
+    typeMessage("👤 Hazrat Allama Saim Chishti.");
+  }
+  else if (text.includes("download")) {
+    typeMessage("⬇ Use download button under each book.");
+  }
+  else if (text.includes("offline")) {
+    typeMessage("📥 Offline books saved in local storage.");
+  }
+  else {
+    typeMessage("🤖 Please search using a book title.");
+  }
 }
 
-function loadOfflineBooks() {
-
-    const container =
-        document.getElementById("offlineBooks");
-
-    if (!container) return;
-
-    let books =
-        JSON.parse(localStorage.getItem("offlineBooks")) || [];
-
-    container.innerHTML = "";
-
-    books.forEach(book => {
-
-        container.innerHTML += `
-
-        <div class="book-card">
-
-            <img src="${book.cover}" alt="${book.title}">
-
-            <h3>${book.title}</h3>
-
-            <a href="${book.pdf}" class="btn">
-
-                📖 Open
-
-            </a>
-
-        </div>
-
-        `;
-
-    });
-
-}
-// =========================
-// CHAT SYSTEM
-// =========================
-
+/* =========================
+   CHAT SEND SYSTEM
+========================= */
 const aiInput = document.getElementById("aiInput");
 const sendBtn = document.getElementById("sendBtn");
 const chatBody = document.getElementById("chatBody");
 
-// =========================
-// ADD USER MESSAGE
-// =========================
+function addMessage(msg, type) {
+  if (!chatBody) return;
 
-function addMessage(message, type) {
+  const div = document.createElement("div");
+  div.className = type === "user" ? "user-message" : "bot-message";
+  div.textContent = msg;
 
-    if (!chatBody) return;
-
-    const div = document.createElement("div");
-
-    div.className =
-        type === "user"
-            ? "user-message"
-            : "bot-message";
-
-    div.textContent = message;
-
-    chatBody.appendChild(div);
-
-    chatBody.scrollTop = chatBody.scrollHeight;
-
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-// =========================
-// BOT MESSAGE
-// =========================
+function typeMessage(msg) {
+  if (!chatBody) return;
 
-function typeMessage(message) {
+  const div = document.createElement("div");
+  div.className = "bot-message";
+  div.innerHTML = msg;
 
-    if (!chatBody) return;
-
-    const div = document.createElement("div");
-
-    div.className = "bot-message";
-
-    div.innerHTML = message;
-
-    chatBody.appendChild(div);
-
-    chatBody.scrollTop = chatBody.scrollHeight;
-
-    saveChat();
-
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-// =========================
-// SMART BOOK SEARCH
-// =========================
-
-function smartBookSearch(text) {
-
-    text = text.toLowerCase();
-
-    for (const book of libraryBooks) {
-
-        const title = book.title.toLowerCase();
-
-        if (
-            text.includes(title) ||
-            title.includes(text)
-        ) {
-
-            return book;
-
-        }
-
-    }
-
-    return null;
-
-}
-
-// =========================
-// BOT REPLY
-// =========================
-function searchKnowledge(text) {
-
-    text = text.toLowerCase();
-
-    for (const item of knowledge) {
-
-        for (const key of item.keywords) {
-
-            if (text.includes(key.toLowerCase())) {
-
-                return item.answer_en;
-
-            }
-
-        }
-
-    }
-
-    return null;
-}
-function botReply(text) {
-
-    let answer = searchKnowledge(text);
-
-if (answer) {
-    typeMessage(answer);
-    return;
-}
-    const result = smartBookSearch(text);
-
-    if (result) {
-
-        typeMessage(`
-
-<b>📚 ${result.title}</b><br><br>
-
-👤 ${result.author}<br>
-
-🌍 ${result.language || ""}<br>
-
-📂 ${result.category || ""}<br><br>
-
-<a href="${result.reader}" target="_blank">
-
-📖 Read Online
-
-</a><br>
-
-<a href="${result.pdf}" target="_blank">
-
-⬇ Download PDF
-
-</a>
-
-`);
-
-        return;
-
-    }
-
-    let reply = "";
-
-    if (text.toLowerCase().includes("book")) {
-
-        reply = "📚 Please type a book name.";
-
-    }
-
-    else if (text.toLowerCase().includes("author")) {
-
-        reply = "👤 Hazrat Allama Saim Chishti.";
-
-    }
-
-    else if (text.toLowerCase().includes("download")) {
-
-        reply = "⬇ Click the Download button below every book.";
-
-    }
-
-    else if (text.toLowerCase().includes("offline")) {
-
-        reply = "📥 Downloaded books appear in Offline Library.";
-
-    }
-
-    else if (text.toLowerCase().includes("library")) {
-
-        reply = "📖 Welcome to Chishti Library.";
-
-    }
-
-    else if (text.toLowerCase().includes("assalam")) {
-
-        reply = "🤲 Wa Alaikum Assalam wa Rahmatullah.";
-
-    }
-
-    else if (text.toLowerCase().includes("thanks")) {
-
-        reply = "😊 You're Welcome.";
-
-    }
-
-    else {
-
-        reply = "🤖 Please search using a book title.";
-
-    }
-
-    typeMessage(reply);
-
-}
-// =========================
-// COMMANDS
-// =========================
-
-function commands(text) {
-
-    text = text.toLowerCase();
-
-    if (text === "clear") {
-
-        clearChat();
-        return true;
-
-    }
-
-    if (text === "offline") {
-
-        window.location.hash = "#offlineBooks";
-        return true;
-
-    }
-
-    return false;
-
-}
-
-// =========================
-// SEND MESSAGE
-// =========================
-
+/* =========================
+   SEND MESSAGE
+========================= */
 function sendMessage() {
+  if (!aiInput) return;
 
-    if (!aiInput) return;
+  const text = aiInput.value.trim();
+  if (!text) return;
 
-    const text = aiInput.value.trim();
+  addMessage(text, "user");
+  botReply(text);
 
-    if (text === "") return;
-
-    addMessage(text, "user");
-
-    if (!commands(text)) {
-
-        botReply(text);
-
-    }
-
-    aiInput.value = "";
-
+  aiInput.value = "";
 }
 
 if (sendBtn) {
-
-    sendBtn.addEventListener("click", sendMessage);
-
+  sendBtn.addEventListener("click", sendMessage);
 }
 
 if (aiInput) {
-
-    aiInput.addEventListener("keydown", function (e) {
-
-        if (e.key === "Enter") {
-
-            sendMessage();
-
-        }
-
-    });
-
+  aiInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
 }
 
-// =========================
-// CHAT STORAGE
-// =========================
+/* =========================
+   OFFLINE BOOKS
+========================= */
+function saveOfflineBook(title, cover, pdf) {
+  let books = JSON.parse(localStorage.getItem("offlineBooks")) || [];
 
-function saveChat() {
+  books.push({ title, cover, pdf });
 
-    if (!chatBody) return;
-
-    localStorage.setItem(
-        "chatHistory",
-        chatBody.innerHTML
-    );
-
+  localStorage.setItem("offlineBooks", JSON.stringify(books));
 }
 
-function clearChat() {
+function loadOfflineBooks() {
+  const container = document.getElementById("offlineBooks");
+  if (!container) return;
 
-    if (!chatBody) return;
+  let books = JSON.parse(localStorage.getItem("offlineBooks")) || [];
 
-    chatBody.innerHTML = "";
+  container.innerHTML = "";
 
-    localStorage.removeItem("chatHistory");
-
+  books.forEach(book => {
+    container.innerHTML += `
+      <div class="book-card">
+        <img src="${book.cover}">
+        <h3>${book.title}</h3>
+        <a href="${book.pdf}" class="btn">📖 Open</a>
+      </div>
+    `;
+  });
 }
 
-window.addEventListener("load", function () {
+/* =========================
+   FEATURED BOOKS
+========================= */
+function loadFeaturedBooks(books) {
+  const container = document.getElementById("featuredBooks");
+  if (!container) return;
 
-    if (!chatBody) return;
+  container.innerHTML = "";
 
-    const history = localStorage.getItem("chatHistory");
+  books.slice(0, 6).forEach(book => {
+    container.innerHTML += `
+      <div class="book-card">
+        <img src="${book.cover}">
+        <h3>${book.title}</h3>
+        <p>${book.author}</p>
 
-    if (history) {
+        <a href="${book.reader}" class="btn">📖 Read</a>
 
-        chatBody.innerHTML = history;
+        <a href="${book.pdf}" class="btn"
+           onclick="saveOfflineBook('${book.title}','${book.cover}','${book.pdf}')">
+           ⬇ Download
+        </a>
+      </div>
+    `;
+  });
+}
 
-    }
+/* =========================
+   LATEST BOOKS
+========================= */
+function loadLatestBooks(books) {
+  const container = document.getElementById("latestBooks");
+  if (!container) return;
 
+  container.innerHTML = "";
+
+  books.slice(-6).reverse().forEach(book => {
+    container.innerHTML += `
+      <div class="book-card">
+        <img src="${book.cover}">
+        <h3>${book.title}</h3>
+        <p>${book.author}</p>
+        <a href="${book.reader}" class="btn">📖 Read</a>
+      </div>
+    `;
+  });
+}
+
+/* =========================
+   LOADER FIX
+========================= */
+window.addEventListener("load", () => {
+  const loader = document.getElementById("loader");
+  const website = document.getElementById("website");
+
+  setTimeout(() => {
+    if (loader) loader.style.display = "none";
+    if (website) website.style.display = "block";
+  }, 1500);
 });
 
-// =========================
-// VOICE SEARCH
-// =========================
-
-if ("webkitSpeechRecognition" in window) {
-
-    const recognition = new webkitSpeechRecognition();
-
-    recognition.lang = "en-US";
-
-    recognition.continuous = false;
-
-    recognition.interimResults = false;
-
-    const voiceBtn = document.getElementById("voiceBtn");
-
-    if (voiceBtn) {
-
-        voiceBtn.onclick = () => recognition.start();
-
-    }
-
-    recognition.onresult = function (event) {
-
-        aiInput.value = event.results[0][0].transcript;
-
-        sendMessage();
-
-    };
-
-}
-
-// =========================
-// AUTO THEME
-// =========================
-
-if (
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches &&
-    !localStorage.getItem("theme")
-) {
-
-    document.body.classList.add("dark");
-
-}
-
-// =========================
-// SMOOTH SCROLL
-// =========================
-
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-
-    link.addEventListener("click", function (e) {
-
-        const target = document.querySelector(this.getAttribute("href"));
-
-        if (!target) return;
-
-        e.preventDefault();
-
-        target.scrollIntoView({
-
-            behavior: "smooth"
-
-        });
-
-    });
-
-});
-
-// =========================
-// REFRESH OFFLINE
-// =========================
-
-window.addEventListener("focus", loadOfflineBooks);
-
-// =========================
-// LOADER
-// =========================
-
-window.addEventListener("load", function () {
-
-    const loader = document.getElementById("loader");
-
-    const website = document.getElementById("website");
-
-    setTimeout(function () {
-
-        if (loader) {
-
-            loader.style.display = "none";
-
-        }
-
-        if (website) {
-
-            website.style.display = "block";
-
-        }
-
-    }, 2000);
-
-});
-
-// =========================
-// READY
-// =========================
-
-console.log("✅ Chishti Library Loaded Successfully");
+console.log("✅ Chishti Library Fully Fixed");
