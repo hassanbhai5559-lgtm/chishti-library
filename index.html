@@ -3,64 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chishti Library | Digital Islamic Library</title>
+    <title>Chishti Library | Premium Digital Library</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-    <div class="loader-box">
-        <img src="logo.png" class="loader-logo">
-        <h1>CHISHTI LIBRARY</h1>
-        <p>Digital Islamic Library</p>
-        <div class="loading-bar"><div class="loading"></div></div>
-    </div>
-</div>
+<!-- Loader -->
+<div id="loader"><div class="loader-box"><img src="logo.png" class="loader-logo"><h3>CHISHTI LIBRARY</h3></div></div>
 
-<div id="website">
-    <!-- HEADER -->
-    <header>
-        <nav class="navbar">
-            <a href="index.html" class="logo-area">
-                <img src="logo.png"> <span>CHISHTI LIBRARY</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="books.html">Books</a></li>
-                <li><a href="author.html">Author</a></li>
-            </ul>
-            <button id="themeBtn">🌙</button>
-        </nav>
-    </header>
+<div id="website" style="display:none;">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">CHISHTI LIBRARY</div>
+        <ul><li><a href="index.html">Home</a></li><li><a href="books.html">Books</a></li></ul>
+    </nav>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <img src="logo.png" class="hero-logo">
-            <h1>CHISHTI LIBRARY</h1>
-            <h3>Digital Islamic Library</h3>
-            <div class="hero-buttons">
-                <a href="books.html" class="btn">📚 Explore Books</a>
+    <!-- Premium Hero -->
+    <section class="hero-premium">
+        <div class="glass-overlay">
+            <h1>Chishti Library</h1>
+            <p>Ilm-e-Deen aur Ruhaniyat ka Markaz</p>
+            <div class="cta-group">
+                <a href="books.html" class="btn-primary">Explore Library</a>
             </div>
         </div>
     </section>
 
-    <!-- BOOKS SECTIONS -->
-    <section class="featured-section"><div class="container"><div id="featuredBooks" class="books-grid"></div></div></section>
-    <section class="latest-section"><div class="container"><div id="latestBooks" class="books-grid"></div></div></section>
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stat-item" data-count="120"><h1 id="count1">0+</h1><p>Books</p></div>
+        <div class="stat-item" data-count="15000"><h1 id="count2">0+</h1><p>Readers</p></div>
+        <div class="stat-item" data-count="100"><h1 id="count3">0%</h1><p>Free Access</p></div>
+    </section>
 
-    <!-- CHATBOT -->
+    <!-- Featured Books -->
+    <section class="container">
+        <h2>Featured Books</h2>
+        <div id="featuredBooks" class="books-grid"></div>
+    </section>
+
+    <!-- Chatbot -->
     <div id="chatButton">🤖</div>
     <div id="chatBox">
-        <div class="chat-header"><div>🤖 Chishti AI</div><span id="closeChat">✕</span></div>
+        <div class="chat-header">Chishti AI <span id="closeChat">✕</span></div>
         <div class="chat-body" id="chatBody"></div>
-        <div class="chat-input">
-            <input type="text" id="aiInput" placeholder="Ask anything...">
-            <button id="sendBtn">Send</button>
-        </div>
+        <div class="chat-input"><input type="text" id="aiInput" placeholder="Ask anything..."><button id="sendBtn">➤</button></div>
     </div>
 </div>
 
