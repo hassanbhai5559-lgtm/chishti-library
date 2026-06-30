@@ -1,6 +1,62 @@
-body { font-family: sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
-header { background: #333; color: white; padding: 1rem; }
-nav { display: flex; justify-content: space-between; align-items: center; }
-.hero { text-align: center; padding: 50px; background: white; }
-.btn { background: #00c853; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
-#booksContainer { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
+
+/* Animation Keyframes */
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+
+
+/* Chat Box Animation */
+
+#chatBox { 
+
+    transition: 0.3s; 
+
+    transform-origin: bottom right;
+
+}
+
+
+
+/* Book Card Hover Effect */
+
+.book-card { 
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+
+}
+
+.book-card:hover { 
+
+    transform: scale(1.05); 
+
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15); 
+
+}
+
+
+
+/* Chat Button Animation */
+
+#chatBtn {
+
+    animation: pulse 2s infinite;
+
+}
+
+@keyframes pulse {
+
+    0% { transform: scale(1); }
+
+    50% { transform: scale(1.1); }
+
+    100% { transform: scale(1); }
+
+}
+
+
+
+/* Stats Section Animation */
+
+.stat-box h3 { font-size: 1.2rem; }
+
+.stat-box p { font-size: 2rem; font-weight: bold; margin: 5px 0; }
