@@ -1,4 +1,24 @@
-[
+{
+  "version": "2.0",
+  "library": {
+    "name": "Chishti Library",
+    "tagline": "World Class Digital Islamic Library",
+    "theme": "Islamic Books, Naat, Hamd, Manqabat, Poetry",
+    "languages": [
+      "English",
+      "Urdu",
+      "Roman Urdu",
+      "Hindi"
+    ]
+  },
+  "author": {
+    "name": "Hazrat Allama Saim Chishti",
+    "bio": {
+      "english": "Hazrat Allama Saim Chishti was an Islamic scholar, poet and writer whose works focus on Naat, Hamd, Manqabat and Islamic history.",
+      "roman": "Hazrat Allama Saim Chishti aik Islami scholar, shair aur musannif thay. Un ki kutub Naat, Hamd, Manqabat aur Islami tareekh par mabni hain.",
+      "urdu": "حضرت علامہ صائم چشتی ایک اسلامی عالم، شاعر اور مصنف تھے۔"
+    }
+  },[
   {
     "keywords": [
       "who is hazrat allama saim chishti",
@@ -868,3 +888,86 @@
     }
   }
 ]
+  "categories": [
+    "Naat",
+    "Hamd",
+    "Manqabat",
+    "Islamic History",
+    "Tasawwuf",
+    "Poetry",
+    "Research"
+  ],
+  "intents": [
+    {
+      "keywords": [
+        "hi",
+        "hello",
+        "assalam",
+        "slam"
+      ],
+      "reply": "Assalamu Alaikum! Welcome to Chishti Library. How can I help you?"
+    },
+    {
+      "keywords": [
+        "book",
+        "kitab",
+        "books"
+      ],
+      "reply": "Open the Books section to read online or download PDFs."
+    },
+    {
+      "keywords": [
+        "download",
+        "pdf"
+      ],
+      "reply": "Click the Download PDF button below any book."
+    },
+    {
+      "keywords": [
+        "offline"
+      ],
+      "reply": "Downloaded books are available in the Offline Library."
+    },
+    {
+      "keywords": [
+        "author",
+        "saim chishti"
+      ],
+      "reply": "Visit the Author page to read the complete biography of Hazrat Allama Saim Chishti."
+    },
+    {
+      "keywords": [
+        "contact",
+        "phone",
+        "number"
+      ],
+      "reply": "03021790715, 03067813783, 03006674752"
+    },
+    {
+      "keywords": [
+        "about",
+        "library"
+      ],
+      "reply": "Chishti Library is a digital Islamic library dedicated to preserving authentic Islamic literature."
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I read a book?",
+      "a": "Open Books and press Read Online."
+    },
+    {
+      "q": "How do I download?",
+      "a": "Press the Download PDF button."
+    },
+    {
+      "q": "Is the website free?",
+      "a": "Yes, reading and downloading available books is free."
+    },
+    {
+      "q": "Which languages are supported?",
+      "a": "English, Urdu, Roman Urdu and Hindi."
+    }
+  ],
+  "fallback": "Sorry, I couldn't find an answer. Please try another question or visit the Contact page."
+}
