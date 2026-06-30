@@ -1,50 +1,52 @@
-// Load Data & Animations
-async function loadData() {
-    const booksRes = await fetch('books.json');
-    const books = await booksRes.json();
-    
-    // 1. Auto Counters Animation
-    animateCounter('totalBooks', books.length);
-    animateCounter('totalReaders', 1200);
-    animateCounter('totalDownloads', 850);
-    
-    // 2. Load Books
+// Loader
+window.addEventListener('load', () => {
+    document.getElementById('loader').style.display = 'none';
+});
+
+// Counter Animation Logic
+const counters = document.querySelectorAll('.counter');
+const animateCounters = () => {
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const inc = target / 100;
+            if(count < target) {
+                counter.innerText = Math.ceil(count + inc);
+                setTimeout(updateCount, 20);
+            }
+        };
+        updateCount();
+    });
+};
+
+// Fetch Books & Render
+async function fetchBooks() {
+    const res = await fetch('books.json');
+    const data = await res.json();
     const grid = document.getElementById('booksGrid');
-    books.forEach(b => {
+    
+    // Auto Counters
+    document.getElementById('totalBooks').setAttribute('data-target', data.length);
+    animateCounters();
+
+    data.forEach(book => {
         grid.innerHTML += `
             <div class="book-card">
-                <img src="${b.cover}" loading="lazy" alt="${b.title}">
-                <h3>${b.title}</h3>
-                <p>${b.author}</p>
-                <a href="${b.reader}" class="btn">Read</a>
+                <h3>${book.title}</h3>
+                <p>${book.author}</p>
+                <button class="btn" onclick="addToOffline(${book.id})">Download</button>
             </div>
         `;
     });
 }
 
-// Counter Function
-function animateCounter(id, target) {
-    let count = 0;
-    const speed = target / 50;
-    const update = () => {
-        count += speed;
-        if(count < target) {
-            document.getElementById(id).innerText = Math.ceil(count);
-            setTimeout(update, 30);
-        } else {
-            document.getElementById(id).innerText = target + "+";
-        }
-    };
-    update();
+// Simple Offline Storage
+function addToOffline(id) {
+    let offline = JSON.parse(localStorage.getItem('offline')) || [];
+    offline.push(id);
+    localStorage.setItem('offline', JSON.stringify(offline));
+    alert('Added to offline library!');
 }
 
-// Chatbot Animation
-const chatBtn = document.getElementById('chatBtn');
-const chatBox = document.getElementById('chatBox');
-
-chatBtn.onclick = () => {
-    chatBox.classList.toggle('hidden');
-    chatBox.style.animation = "fadeIn 0.5s";
-};
-
-loadData();
+fetchBooks();
