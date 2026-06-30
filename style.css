@@ -1,4 +1,36 @@
-:root {
+/* =========================================================
+   MOBILE OPTIMIZATION (Screens < 768px)
+   ========================================================= */
+@media (max-width: 768px) {
+    /* Navbar & Hero */
+    .navbar { padding: 0 5%; }
+    .hero h1 { font-size: 38px; }
+    .hero h3 { font-size: 20px; }
+    .hero-logo { width: 100px; }
+    
+    /* Books Grid: 2 Cards per row as requested */
+    .books-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+        padding: 20px 10px; 
+    }
+    .book-card { padding: 10px; border-radius: 12px; }
+    .book-card img { height: 180px; }
+    .book-card h3 { font-size: 14px; margin-top: 8px; }
+    .btn { padding: 10px; font-size: 12px; }
+
+    /* Chat: Full-width Mobile Fix */
+    #chatBox { 
+        width: 95vw; 
+        height: 70vh; 
+        right: 2.5vw; 
+        left: 2.5vw; 
+        bottom: 80px; 
+    }
+    
+    /* Footer */
+    .footer-links { gap: 10px; flex-wrap: wrap; justify-content: center; }
+}:root {
     --primary: #00c853;
     --gold: #d4af37;
     --bg: #f5f8fc;
