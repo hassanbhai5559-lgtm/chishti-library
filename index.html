@@ -6,71 +6,75 @@
 
 <title>Chishti Library</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="light">
 
 <!-- LOADER -->
 <div id="loader">
-    <div class="logo-loader">
-        📚 CHISHTI LIBRARY
-    </div>
+  <div class="loader-logo">📚 CHISHTI LIBRARY</div>
 </div>
 
-<!-- WEBSITE -->
+<!-- MAIN WEBSITE -->
 <div id="website">
 
-<!-- NAV -->
+<!-- NAVBAR -->
 <header class="navbar">
-    <div class="logo">📚 Chishti Library</div>
+  <div class="logo">📚 Chishti Library</div>
 
-    <div class="nav-right">
-        <button onclick="setTheme('light')">☀</button>
-        <button onclick="setTheme('dark')">🌙</button>
-        <button onclick="setTheme('auto')">⚡</button>
-    </div>
+  <div class="nav-buttons">
+    <button onclick="setTheme('light')">☀</button>
+    <button onclick="setTheme('dark')">🌙</button>
+    <button onclick="setTheme('auto')">⚡</button>
+  </div>
 </header>
 
 <!-- HERO -->
 <section class="hero">
-    <div class="hero-content">
-        <div class="center-logo">📚</div>
-
-        <h1>Digital Islamic Library</h1>
-        <p>Books • Knowledge • PDF • AI Chatbot</p>
-
-        <a href="#books" class="btn">Explore Books</a>
-    </div>
+  <div class="hero-content">
+    <div class="center-logo">📚</div>
+    <h1>Digital Islamic Library</h1>
+    <p>Books • Knowledge • PDF • AI Chatbot</p>
+    <a href="#books" class="btn">Explore Books</a>
+  </div>
 </section>
 
-<!-- BOOK SECTION -->
+<!-- BOOKS -->
 <section id="books" class="books-section">
+  <h2>📚 Featured Books</h2>
 
-<h2 class="section-title">📚 Premium Books</h2>
-
-<div id="booksGrid" class="books-grid">
+  <div class="books-grid">
 
     <div class="book-card">
-        <img src="https://via.placeholder.com/300x400">
-        <h3>Islamic History</h3>
+      <img src="https://via.placeholder.com/300x400">
+      <h3>Islamic History</h3>
     </div>
 
     <div class="book-card">
-        <img src="https://via.placeholder.com/300x400">
-        <h3>Quran Study</h3>
+      <img src="https://via.placeholder.com/300x400">
+      <h3>Quran Studies</h3>
     </div>
 
     <div class="book-card">
-        <img src="https://via.placeholder.com/300x400">
-        <h3>Hadith Collection</h3>
+      <img src="https://via.placeholder.com/300x400">
+      <h3>Hadith Collection</h3>
     </div>
 
-</div>
-
+  </div>
 </section>
+
+<!-- CHATBOT -->
+<div id="chatButton" onclick="toggleChat()">🤖</div>
+
+<div id="chatBox">
+  <div id="chatBody"></div>
+
+  <div class="chat-input">
+    <input id="aiInput" placeholder="Ask anything...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
 
 </div>
 
