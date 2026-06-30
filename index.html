@@ -2,8 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Chishti Library</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chishti Library</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="style.css">
 </head>
@@ -12,37 +15,65 @@
 
 <!-- LOADER -->
 <div id="loader">
-  <h2>CHISHTI LIBRARY</h2>
-  <p>Loading...</p>
+    <div class="logo-loader">
+        📚 CHISHTI LIBRARY
+    </div>
 </div>
 
 <!-- WEBSITE -->
 <div id="website">
 
+<!-- NAV -->
 <header class="navbar">
-  <h2>📚 Chishti Library</h2>
+    <div class="logo">📚 Chishti Library</div>
+
+    <div class="nav-right">
+        <button onclick="setTheme('light')">☀</button>
+        <button onclick="setTheme('dark')">🌙</button>
+        <button onclick="setTheme('auto')">⚡</button>
+    </div>
 </header>
 
+<!-- HERO -->
 <section class="hero">
-  <h1>Digital Islamic Library</h1>
-  <p>Books • PDF • Knowledge • AI Chatbot</p>
+    <div class="hero-content">
+        <div class="center-logo">📚</div>
+
+        <h1>Digital Islamic Library</h1>
+        <p>Books • Knowledge • PDF • AI Chatbot</p>
+
+        <a href="#books" class="btn">Explore Books</a>
+    </div>
 </section>
 
-<!-- CHATBOT -->
-<div id="chatButton">🤖</div>
+<!-- BOOK SECTION -->
+<section id="books" class="books-section">
 
-<div id="chatBox">
-  <div id="chatBody"></div>
+<h2 class="section-title">📚 Premium Books</h2>
 
-  <div class="inputBox">
-    <input id="aiInput" placeholder="Ask anything...">
-    <button id="sendBtn">Send</button>
-  </div>
+<div id="booksGrid" class="books-grid">
+
+    <div class="book-card">
+        <img src="https://via.placeholder.com/300x400">
+        <h3>Islamic History</h3>
+    </div>
+
+    <div class="book-card">
+        <img src="https://via.placeholder.com/300x400">
+        <h3>Quran Study</h3>
+    </div>
+
+    <div class="book-card">
+        <img src="https://via.placeholder.com/300x400">
+        <h3>Hadith Collection</h3>
+    </div>
+
 </div>
+
+</section>
 
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
