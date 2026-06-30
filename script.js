@@ -185,14 +185,65 @@ function autoTheme() {
 /* =========================
    FIX LOADER (NO STUCK)
 ========================= */
+// SHOW SITE AFTER LOAD
 window.addEventListener("load", () => {
-  autoTheme();
-
   setTimeout(() => {
-    let loader = document.getElementById("loader");
-    let website = document.getElementById("website");
-
-    if (loader) loader.style.display = "none";
-    if (website) website.style.display = "block";
-  }, 900);
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("website").style.display = "block";
+    applyAutoTheme();
+  }, 1000);
 });
+
+// THEME SYSTEM
+function setTheme(mode) {
+  if (mode === "dark") document.body.className = "dark";
+  else if (mode === "light") document.body.className = "light";
+  else applyAutoTheme();
+}
+
+// AUTO DAY/NIGHT
+function applyAutoTheme() {
+  let h = new Date().getHours();
+
+  if (h >= 6 && h < 18) document.body.className = "light";
+  else document.body.className = "dark";
+}
+
+// CHAT TOGGLE
+function toggleChat() {
+  let box = document.getElementById("chatBox");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+// CHAT MESSAGE
+function addMessage(text, cls) {
+  let div = document.createElement("div");
+  div.className = cls;
+  div.textContent = text;
+  document.getElementById("chatBody").appendChild(div);
+}
+
+// BOT RESPONSE
+function botReply(msg) {
+  msg = msg.toLowerCase();
+
+  if (msg.includes("hi") || msg.includes("hello"))
+    return "👋 Assalam-o-Alaikum! Welcome to Chishti Library";
+
+  if (msg.includes("book"))
+    return "📚 We have Islamic books available in PDF format.";
+
+  return "🤖 Sorry, I didn't understand.";
+}
+
+// SEND MESSAGE
+function sendMessage() {
+  let input = document.getElementById("aiInput");
+  let text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
+  addMessage(botReply(text), "bot");
+
+  input.value = "";
+}
