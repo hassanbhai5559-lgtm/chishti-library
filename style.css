@@ -1,31 +1,1450 @@
-:root {
-    --primary-red: #7a0000;
-    --bg-black: #0b0b0b;
-    --card-black: #161616;
-    --text-white: #ffffff;
-    --gold: #ffd700;
+/* ==========================================
+   CHISHTI LIBRARY V1.0
+   STYLE.CSS - PART 1
+========================================== */
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* Variables */
+:root{
+
+    --primary:#7a0000;
+    --primary-dark:#530000;
+
+    --black:#0b0b0b;
+    --card:#161616;
+
+    --white:#ffffff;
+    --gray:#bcbcbc;
+
+    --border:#2a2a2a;
+
+    --radius:18px;
+
+    --shadow:0 10px 40px rgba(0,0,0,.45);
+
 }
 
-body { background: var(--bg-black); color: var(--text-white); font-family: 'Segoe UI', sans-serif; margin: 0; }
+/* Reset */
 
-/* Loader */
-#loader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.rotate-logo { width: 80px; animation: spin 2s linear infinite; }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+*{
 
-/* Navbar */
-nav { position: fixed; width: 100%; padding: 20px; transition: 0.4s; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
-nav.scrolled { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--primary-red); }
+margin:0;
+padding:0;
+box-sizing:border-box;
 
-/* Premium Hero */
-.hero { height: 100vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), var(--primary-red); display: flex; align-items: center; justify-content: center; text-align: center; }
-.btn { background: var(--text-white); color: var(--bg-black); padding: 15px 30px; border: none; cursor: pointer; transition: 0.3s; font-weight: bold; }
-.btn:hover { background: var(--primary-red); color: white; transform: scale(1.05); }
+}
 
-/* Book Cards */
-.books-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 50px; }
-.book-card { background: var(--card-black); padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.3s; }
-.book-card:hover { border-color: var(--primary-red); box-shadow: 0 10px 20px rgba(122,0,0,0.2); }
+html{
 
-/* Chatbot */
-#chatBtn { position: fixed; bottom: 30px; right: 30px; background: var(--primary-red); padding: 15px 25px; border-radius: 30px; cursor: pointer; z-index: 999; }
+scroll-behavior:smooth;
+
+}
+
+body{
+
+font-family:'Poppins',sans-serif;
+background:var(--black);
+color:var(--white);
+overflow-x:hidden;
+
+}
+
+img{
+
+max-width:100%;
+display:block;
+
+}
+
+a{
+
+text-decoration:none;
+color:white;
+
+}
+
+ul{
+
+list-style:none;
+
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+
+width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:var(--primary);
+border-radius:20px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#111;
+
+}
+
+/* ==========================================
+LOADER
+========================================== */
+
+#loader{
+
+position:fixed;
+inset:0;
+
+background:#000;
+
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+
+z-index:99999;
+
+transition:.7s;
+
+}
+
+.hide-loader{
+
+opacity:0;
+visibility:hidden;
+
+}
+
+.loader-logo{
+
+width:90px;
+height:90px;
+
+animation:spin 2s linear infinite;
+
+margin-bottom:20px;
+
+filter:drop-shadow(0 0 20px #7a0000);
+
+}
+
+@keyframes spin{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+#loadingText{
+
+font-size:20px;
+font-weight:600;
+
+margin-top:10px;
+
+}
+
+.progress{
+
+margin-top:25px;
+
+width:250px;
+height:8px;
+
+background:#222;
+
+border-radius:30px;
+
+overflow:hidden;
+
+}
+
+#progressFill{
+
+height:100%;
+
+width:0;
+
+background:linear-gradient(90deg,#7a0000,#ff0000);
+
+border-radius:30px;
+
+}
+
+/* ==========================================
+NAVBAR
+========================================== */
+
+#navbar{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+padding:18px 6%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+z-index:999;
+
+background:rgba(0,0,0,.25);
+
+backdrop-filter:blur(14px);
+
+transition:.4s;
+
+}
+
+.navbar-scroll{
+
+background:#111;
+
+box-shadow:0 5px 20px rgba(0,0,0,.4);
+
+border-bottom:1px solid #7a0000;
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+font-size:24px;
+
+font-weight:700;
+
+}
+
+.logo img{
+
+width:48px;
+
+}
+
+#navLinks{
+
+display:flex;
+
+gap:35px;
+
+}
+
+#navLinks a{
+
+font-weight:500;
+
+transition:.3s;
+
+position:relative;
+
+}
+
+#navLinks a:hover{
+
+color:#ff5555;
+
+}
+
+#navLinks a::after{
+
+content:"";
+
+position:absolute;
+
+left:0;
+bottom:-6px;
+
+width:0;
+
+height:2px;
+
+background:#ff0000;
+
+transition:.4s;
+
+}
+
+#navLinks a:hover::after{
+
+width:100%;
+
+}
+
+/* Mobile Button */
+
+#menuBtn{
+
+display:none;
+
+font-size:28px;
+
+cursor:pointer;
+
+}
+
+/* ==========================================
+HERO
+========================================== */
+
+.hero{
+
+min-height:100vh;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
+
+padding:140px 20px;
+
+background:
+linear-gradient(rgba(0,0,0,.72),rgba(0,0,0,.75)),
+linear-gradient(135deg,#7a0000,#1b0000);
+
+}
+
+.hero h1{
+
+font-size:70px;
+
+font-weight:800;
+
+margin-bottom:15px;
+
+}
+
+.hero p{
+
+font-size:22px;
+
+color:#ddd;
+
+margin-bottom:35px;
+
+}
+
+.hero-buttons{
+
+display:flex;
+
+justify-content:center;
+
+gap:20px;
+
+flex-wrap:wrap;
+
+}
+
+.btn{
+
+padding:15px 34px;
+
+border-radius:12px;
+
+font-weight:700;
+
+cursor:pointer;
+
+transition:.35s;
+
+border:none;
+
+}
+
+.btn-primary{
+
+background:white;
+
+color:black;
+
+}
+
+.btn-primary:hover{
+
+background:#7a0000;
+
+color:white;
+
+transform:translateY(-5px);
+
+}
+
+.btn-outline{
+
+border:2px solid white;
+
+background:transparent;
+
+color:white;
+
+}
+
+.btn-outline:hover{
+
+background:white;
+
+color:black;
+
+}
+
+/* Section */
+
+.section{
+
+padding:100px 7%;
+
+}
+
+.section-title{
+
+font-size:42px;
+
+font-weight:700;
+
+margin-bottom:50px;
+
+text-align:center;
+
+}
+/* ==========================================
+   CHISHTI LIBRARY V1.0
+   STYLE.CSS - PART 2
+   Search + Counters + Book Cards + Filters
+========================================== */
+
+
+/* ==========================================
+SEARCH
+========================================== */
+
+.search-section{
+
+padding:70px 7%;
+
+background:#111;
+
+}
+
+.search-box{
+
+max-width:850px;
+
+margin:auto;
+
+display:flex;
+
+gap:15px;
+
+}
+
+.search-box input{
+
+flex:1;
+
+padding:18px 22px;
+
+background:#161616;
+
+border:1px solid #333;
+
+border-radius:14px;
+
+color:white;
+
+font-size:17px;
+
+outline:none;
+
+transition:.3s;
+
+}
+
+.search-box input:focus{
+
+border-color:#7a0000;
+
+box-shadow:0 0 15px rgba(122,0,0,.4);
+
+}
+
+.search-box button{
+
+padding:18px 30px;
+
+background:white;
+
+color:black;
+
+font-weight:700;
+
+border:none;
+
+border-radius:14px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.search-box button:hover{
+
+background:#7a0000;
+
+color:white;
+
+}
+
+
+/* ==========================================
+COUNTERS
+========================================== */
+
+.counter-section{
+
+padding:90px 7%;
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:25px;
+
+}
+
+.counter-card{
+
+background:#161616;
+
+border:1px solid #282828;
+
+border-radius:18px;
+
+padding:35px;
+
+text-align:center;
+
+transition:.35s;
+
+box-shadow:0 10px 30px rgba(0,0,0,.35);
+
+}
+
+.counter-card:hover{
+
+transform:translateY(-8px);
+
+border-color:#7a0000;
+
+box-shadow:0 0 25px rgba(122,0,0,.35);
+
+}
+
+.counter-card h2{
+
+font-size:42px;
+
+color:white;
+
+margin-bottom:12px;
+
+}
+
+.counter-card p{
+
+color:#bbbbbb;
+
+font-size:16px;
+
+}
+
+
+/* ==========================================
+BOOK FILTERS
+========================================== */
+
+.filter-buttons{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:18px;
+
+margin:50px 0;
+
+}
+
+.filter-buttons button{
+
+padding:14px 28px;
+
+background:#161616;
+
+color:white;
+
+border:1px solid #444;
+
+border-radius:12px;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:.35s;
+
+}
+
+.filter-buttons button:hover{
+
+background:#7a0000;
+
+border-color:#7a0000;
+
+transform:translateY(-4px);
+
+}
+
+
+/* ==========================================
+BOOK GRID
+========================================== */
+
+.books-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+gap:30px;
+
+}
+
+
+/* ==========================================
+BOOK CARD
+========================================== */
+
+.book-card{
+
+background:#161616;
+
+border:1px solid #292929;
+
+border-radius:18px;
+
+overflow:hidden;
+
+transition:.35s;
+
+box-shadow:0 8px 25px rgba(0,0,0,.35);
+
+}
+
+.book-card:hover{
+
+transform:translateY(-8px);
+
+border-color:#7a0000;
+
+box-shadow:0 0 25px rgba(122,0,0,.35);
+
+}
+
+
+/* ==========================================
+BOOK IMAGE
+========================================== */
+
+.book-image{
+
+height:430px;
+
+overflow:hidden;
+
+}
+
+.book-image img{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+transition:.45s;
+
+}
+
+.book-card:hover img{
+
+transform:scale(1.08);
+
+}
+
+
+/* ==========================================
+BOOK CONTENT
+========================================== */
+
+.book-content{
+
+padding:25px;
+
+}
+
+.book-content h2{
+
+font-size:24px;
+
+margin-bottom:10px;
+
+}
+
+.author{
+
+color:#bbbbbb;
+
+margin-bottom:12px;
+
+}
+
+.category{
+
+display:inline-block;
+
+background:#7a0000;
+
+padding:6px 14px;
+
+border-radius:30px;
+
+font-size:13px;
+
+margin-bottom:15px;
+
+}
+
+.description{
+
+line-height:1.8;
+
+color:#cccccc;
+
+margin-bottom:25px;
+
+}
+
+
+/* ==========================================
+BOOK BUTTONS
+========================================== */
+
+.book-buttons{
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+}
+
+.book-buttons a,
+
+.book-buttons button{
+
+padding:14px;
+
+border:none;
+
+border-radius:12px;
+
+text-align:center;
+
+cursor:pointer;
+
+font-weight:700;
+
+transition:.35s;
+
+}
+
+.read-btn{
+
+background:white;
+
+color:black;
+
+}
+
+.download-btn{
+
+background:#7a0000;
+
+color:white;
+
+}
+
+.offline-btn{
+
+background:#232323;
+
+color:white;
+
+}
+
+.read-btn:hover{
+
+background:#7a0000;
+
+color:white;
+
+}
+
+.download-btn:hover{
+
+background:#a00000;
+
+}
+
+.offline-btn:hover{
+
+background:white;
+
+color:black;
+
+}
+
+
+/* ==========================================
+BOOK STATS
+========================================== */
+
+.book-stats{
+
+margin-top:20px;
+
+display:flex;
+
+justify-content:space-between;
+
+color:#bfbfbf;
+
+font-size:14px;
+
+border-top:1px solid #2d2d2d;
+
+padding-top:18px;
+
+}
+
+
+/* ==========================================
+HOVER GLOW
+========================================== */
+
+.book-card::before{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+background:linear-gradient(
+
+180deg,
+
+transparent,
+
+rgba(122,0,0,.08)
+
+);
+
+opacity:0;
+
+transition:.35s;
+
+pointer-events:none;
+
+}
+
+.book-card:hover::before{
+
+opacity:1;
+
+}
+/* ==========================================
+   CHISHTI LIBRARY V1.0
+   STYLE.CSS - PART 4 (FINAL)
+   Footer + Responsive + Animations
+========================================== */
+
+
+/* ==========================================
+FOOTER
+========================================== */
+
+footer{
+
+background:#080808;
+
+padding:70px 7% 30px;
+
+border-top:1px solid #222;
+
+}
+
+.footer-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+gap:40px;
+
+margin-bottom:40px;
+
+}
+
+.footer-logo{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+font-size:28px;
+
+font-weight:700;
+
+}
+
+.footer-logo img{
+
+width:60px;
+
+}
+
+.footer-links a{
+
+display:block;
+
+margin:12px 0;
+
+color:#cccccc;
+
+transition:.3s;
+
+}
+
+.footer-links a:hover{
+
+color:#ffffff;
+
+padding-left:8px;
+
+}
+
+.footer-social{
+
+display:flex;
+
+gap:15px;
+
+margin-top:20px;
+
+}
+
+.footer-social a{
+
+width:45px;
+
+height:45px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:#161616;
+
+border-radius:50%;
+
+transition:.35s;
+
+}
+
+.footer-social a:hover{
+
+background:#7a0000;
+
+transform:translateY(-5px);
+
+}
+
+.copyright{
+
+text-align:center;
+
+padding-top:30px;
+
+border-top:1px solid #222;
+
+color:#999;
+
+font-size:15px;
+
+}
+
+
+/* ==========================================
+SCROLL TO TOP
+========================================== */
+
+#topBtn{
+
+position:fixed;
+
+right:25px;
+
+bottom:110px;
+
+width:55px;
+
+height:55px;
+
+background:#7a0000;
+
+border:none;
+
+border-radius:50%;
+
+color:#fff;
+
+cursor:pointer;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:22px;
+
+opacity:0;
+
+visibility:hidden;
+
+transition:.35s;
+
+z-index:999;
+
+}
+
+#topBtn.showTop{
+
+opacity:1;
+
+visibility:visible;
+
+}
+
+
+/* ==========================================
+REVEAL ANIMATION
+========================================== */
+
+.reveal{
+
+opacity:0;
+
+transform:translateY(60px);
+
+transition:1s;
+
+}
+
+.reveal.active{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+
+/* ==========================================
+RIPPLE EFFECT
+========================================== */
+
+.btn{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.ripple{
+
+position:absolute;
+
+width:12px;
+
+height:12px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.45);
+
+transform:scale(0);
+
+animation:ripple .6s linear;
+
+pointer-events:none;
+
+}
+
+@keyframes ripple{
+
+to{
+
+transform:scale(25);
+
+opacity:0;
+
+}
+
+}
+
+
+/* ==========================================
+GLASS CARD
+========================================== */
+
+.glass{
+
+background:rgba(255,255,255,.05);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.08);
+
+}
+
+
+/* ==========================================
+LIGHT THEME READY
+========================================== */
+
+.light-theme{
+
+background:#ffffff;
+
+color:#111111;
+
+}
+
+.light-theme .book-card,
+
+.light-theme .counter-card,
+
+.light-theme .contact-card,
+
+.light-theme .about-card{
+
+background:#f3f3f3;
+
+color:#111;
+
+}
+
+.light-theme #navbar{
+
+background:rgba(255,255,255,.8);
+
+}
+
+
+/* ==========================================
+RESPONSIVE
+========================================== */
+
+@media(max-width:992px){
+
+.hero h1{
+
+font-size:48px;
+
+}
+
+.hero p{
+
+font-size:18px;
+
+}
+
+.author-card{
+
+flex-direction:column;
+
+text-align:center;
+
+}
+
+#chatWindow{
+
+width:340px;
+
+height:520px;
+
+}
+
+}
+
+@media(max-width:768px){
+
+#menuBtn{
+
+display:block;
+
+}
+
+#navLinks{
+
+position:absolute;
+
+top:80px;
+
+left:0;
+
+width:100%;
+
+background:#111;
+
+display:none;
+
+flex-direction:column;
+
+padding:30px;
+
+gap:20px;
+
+}
+
+#navLinks.show{
+
+display:flex;
+
+}
+
+.hero{
+
+padding-top:160px;
+
+}
+
+.hero h1{
+
+font-size:38px;
+
+}
+
+.hero-buttons{
+
+flex-direction:column;
+
+}
+
+.search-box{
+
+flex-direction:column;
+
+}
+
+.counter-section{
+
+grid-template-columns:1fr 1fr;
+
+}
+
+.books-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.book-image{
+
+height:380px;
+
+}
+
+#chatWindow{
+
+right:10px;
+
+left:10px;
+
+width:auto;
+
+height:500px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+.section{
+
+padding:70px 20px;
+
+}
+
+.hero h1{
+
+font-size:30px;
+
+}
+
+.hero p{
+
+font-size:16px;
+
+}
+
+.counter-section{
+
+grid-template-columns:1fr;
+
+}
+
+.logo{
+
+font-size:18px;
+
+}
+
+.logo img{
+
+width:40px;
+
+}
+
+.book-image{
+
+height:320px;
+
+}
+
+.book-content{
+
+padding:18px;
+
+}
+
+.book-buttons a,
+
+.book-buttons button{
+
+font-size:14px;
+
+}
+
+.footer-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.footer-logo{
+
+justify-content:center;
+
+}
+
+.footer-links{
+
+text-align:center;
+
+}
+
+.footer-social{
+
+justify-content:center;
+
+}
+
+}
+
+
+/* ==========================================
+UTILITY CLASSES
+========================================== */
+
+.text-center{
+
+text-align:center;
+
+}
+
+.mt-1{margin-top:10px;}
+.mt-2{margin-top:20px;}
+.mt-3{margin-top:30px;}
+.mt-4{margin-top:40px;}
+.mt-5{margin-top:50px;}
+
+.mb-1{margin-bottom:10px;}
+.mb-2{margin-bottom:20px;}
+.mb-3{margin-bottom:30px;}
+.mb-4{margin-bottom:40px;}
+.mb-5{margin-bottom:50px;}
+
+.hidden{
+
+display:none!important;
+
+}
+
+.show{
+
+display:block!important;
+
+}
+
+
+/* ==========================================
+END OF STYLE.CSS
+Version 1.0 Premium
+========================================== */
