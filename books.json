@@ -5,18 +5,10 @@
     "author": "Saim Chishti",
     "language": "Urdu",
     "category": "Naatia Kalam",
-    "cover": "husn-e-kainat-cover.png",
-    "reader": "husn-e-kainat.html",
-    "pdf": "husn-e-kainat.pdf",
-    "description": "Husn-e-Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain.",
-    "views": 2540,
-    "likes": 486,
-    "comments": 72,
-    "downloads": 615,
-    "featured": true,
-    "popular": true,
-    "latest": true,
-    "year": 2026
+    "cover": "image.png",
+    "reader": "read.html",
+    "pdf": "book1.pdf",
+    "description": "Naatia collection of Islamic poetry"
   },
   {
     "id": 2,
@@ -25,17 +17,11 @@
     "language": "Urdu",
     "category": "Islamic History",
     "cover": "image.png",
-    "reader": "shahdaye-karbala-4.html",
-    "pdf": "shahdaye-karbala.pdf",
-    "description": "Shahdaye Karbala ek manqabati majmua hai jo Karbala ke shahidon aur Ahle Bait Athar ki shaan mein likha gaya hai.",
-    "views": 1980,
-    "likes": 390,
-    "comments": 41,
-    "downloads": 540,
-    "featured": true,
-    "popular": true,
-    "latest": false,
-    "year": 2024
+    "reader": "read2.html",
+    "pdf": "book2.pdf",
+    "description": "Karbala history based book"
+  }
+]
   },
   {
     "id": 3,
