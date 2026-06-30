@@ -2,56 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chishti Library | Premium Digital Library</title>
+    <title>Chishti Library</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<!-- Loader -->
-<div id="loader"><div class="loader-box"><img src="logo.png" class="loader-logo"><h3>CHISHTI LIBRARY</h3></div></div>
+    <header>
+        <nav>
+            <div class="logo">CHISHTI LIBRARY</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="books.html">Books</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<div id="website" style="display:none;">
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">CHISHTI LIBRARY</div>
-        <ul><li><a href="index.html">Home</a></li><li><a href="books.html">Books</a></li></ul>
-    </nav>
-
-    <!-- Premium Hero -->
-    <section class="hero-premium">
-        <div class="glass-overlay">
-            <h1>Chishti Library</h1>
-            <p>Ilm-e-Deen aur Ruhaniyat ka Markaz</p>
-            <div class="cta-group">
-                <a href="books.html" class="btn-primary">Explore Library</a>
-            </div>
-        </div>
+    <section class="hero">
+        <h1>Welcome to Chishti Library</h1>
+        <p>Digital Islamic Library</p>
+        <a href="books.html" class="btn">View Books</a>
     </section>
 
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="stat-item" data-count="120"><h1 id="count1">0+</h1><p>Books</p></div>
-        <div class="stat-item" data-count="15000"><h1 id="count2">0+</h1><p>Readers</p></div>
-        <div class="stat-item" data-count="100"><h1 id="count3">0%</h1><p>Free Access</p></div>
-    </section>
+    <div id="booksContainer"></div>
 
-    <!-- Featured Books -->
-    <section class="container">
-        <h2>Featured Books</h2>
-        <div id="featuredBooks" class="books-grid"></div>
-    </section>
-
-    <!-- Chatbot -->
-    <div id="chatButton">🤖</div>
-    <div id="chatBox">
-        <div class="chat-header">Chishti AI <span id="closeChat">✕</span></div>
-        <div class="chat-body" id="chatBody"></div>
-        <div class="chat-input"><input type="text" id="aiInput" placeholder="Ask anything..."><button id="sendBtn">➤</button></div>
-    </div>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
