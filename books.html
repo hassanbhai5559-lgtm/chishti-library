@@ -1,86 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chishti Library | Book Collection</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Specific Page Overrides */
-        .page-hero { padding: 80px 20px; text-align: center; background: linear-gradient(rgba(122,0,0,0.9), rgba(11,11,11,1)); }
-        .controls { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .filter-btn { padding: 10px 25px; border: 1px solid #333; background: #161616; color: white; cursor: pointer; border-radius: 25px; transition: 0.3s; }
-        .filter-btn:hover, .filter-btn.active { background: var(--primary-red); border-color: var(--primary-red); }
-        .search-input { width: 100%; max-width: 600px; padding: 15px; border-radius: 50px; border: 1px solid #333; background: #000; color: #fff; margin-top: 20px; outline: none; }
-    </style>
+<meta charset="UTF-8">
+<title>Chishti Library | Books</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <nav id="navbar">
-        <div class="logo">CHISHTI LIBRARY</div>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="books.html" style="color:var(--primary-red)">Books</a></li>
-        </ul>
-    </nav>
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="logo">
+    <img src="logo.png">
+    <span>CHISHTI LIBRARY</span>
+  </div>
 
-    <section class="page-hero">
-        <h1>BOOK SECTION</h1>
-        <input type="text" id="s" class="search-input" placeholder="Search books by title, author, or category...">
-        <div class="controls">
-            <button class="filter-btn active" onclick="filterBooks('All')">All</button>
-            <button class="filter-btn" onclick="filterBooks('Islamic History')">History</button>
-            <button class="filter-btn" onclick="filterBooks('Naatia Kalam')">Naat</button>
-        </div>
-    </section>
+  <div id="navLinks">
+    <a href="index.html">Home</a>
+    <a href="books.html">Books</a>
+    <a href="author.html">Author</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
 
-    <section id="g" class="books-grid"></section>
+<!-- HERO BANNER -->
+<section class="hero small-hero">
+  <h1>📚 Books Collection</h1>
+  <input id="searchInput" placeholder="Search books...">
+</section>
 
-    <script src="script.js"></script>
-    <script>
-        // Specific logic for this page
-        let allBooks = [];
-        const grid = document.getElementById('g');
-        const searchInput = document.getElementById('s');
+<!-- FILTERS -->
+<div class="filter-buttons">
+  <button onclick="filterBooks('popular')">Popular</button>
+  <button onclick="filterBooks('latest')">Latest</button>
+  <button onclick="filterBooks('old')">Old</button>
+  <button onclick="filterBooks('all')">All</button>
+</div>
 
-        fetch("books.json")
-            .then(r => r.json())
-            .then(data => {
-                allBooks = data;
-                renderBooks(allBooks);
-            });
+<!-- BOOK GRID -->
+<section id="booksGrid" class="books-grid"></section>
 
-        function renderBooks(arr) {
-            grid.innerHTML = "";
-            arr.forEach(b => {
-                grid.innerHTML += `
-                    <div class="book-card">
-                        <img src="${b.cover}" style="height: 300px; object-fit: cover; border-radius: 10px;">
-                        <h3>${b.title}</h3>
-                        <p style="color: #aaa;">${b.author}</p>
-                        <div style="margin-top: 20px;">
-                            <a href="${b.reader}" class="btn">Read Online</a>
-                            <button class="btn" style="background:#333; color:white;" onclick="addToOffline('${b.title}')">Download</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Chishti Library</p>
+</footer>
 
-        searchInput.oninput = (e) => {
-            const val = e.target.value.toLowerCase();
-            const filtered = allBooks.filter(b => 
-                b.title.toLowerCase().includes(val) || 
-                b.author.toLowerCase().includes(val) || 
-                b.category.toLowerCase().includes(val)
-            );
-            renderBooks(filtered);
-        };
-
-        function filterBooks(cat) {
-            if(cat === 'All') return renderBooks(allBooks);
-            renderBooks(allBooks.filter(b => b.category === cat));
-        }
-    </script>
+<script src="script.js"></script>
 </body>
 </html>
