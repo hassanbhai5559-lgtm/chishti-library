@@ -572,7 +572,10 @@ function sendMessage() {
 /* ========= ADD MESSAGE ========= */
 
 function addMessage(text, sender) {
-
+function toggleChat(){
+    document.getElementById("chatWindow")
+    .classList.toggle("showChat");
+}
     const chat = document.getElementById("chatMessages");
 
     const div = document.createElement("div");
