@@ -1,34 +1,59 @@
 [
-{
-"title": "Husn-e-Kainat",
-"author": "Saim Chishti",
-"language": "Urdu",
-"category": "Naatia Kalam",
-"cover": "husn-e-kainat-cover.png",
-"reader": "husn-e-kainat.html",
-"pdf": "husn-e-kainat.pdf",
-"description": "Husn-e-Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain."
-},
-
-{
-"title": "Shahdaye Karbala",
-"author": "Saim Chishti",
-"language": "Urdu",
-"category": "Islamic History",
-"cover": "image.png",
-"reader": "shahdaye-karbala-4.html",
-"pdf": "shahdaye-karbala.pdf.pdf",
-"description": "Shahdaye Karbala ek manqabati majmua hai jo Karbala ke shahidon aur Ahle Bait Athar ki shaan mein likha gaya hai."
-},
-
-{
-  "title": "Shaheed Ibn-e-Shaheed",
-  "author": saim chishti",
-  "language": "Urdu",
-  "category": "Islamic History",
-  "cover": "shaheed-ibn-e-shaheed-cover.png",
-  "reader": "shaheed-ibn-e-shaheed.html",
-  "pdf": "shaheed-ibn-e-shaheed.pdf",
-  "description": "Shaheed Ibn-e-Shaheed waqia-e-Karbala aur shahadat ke mauzu par mabni ek aham kitab hai."
-}
+  {
+    "id": 1,
+    "title": "Husn-e-Kainat",
+    "author": "Saim Chishti",
+    "language": "Urdu",
+    "category": "Naatia Kalam",
+    "cover": "husn-e-kainat-cover.png",
+    "reader": "husn-e-kainat.html",
+    "pdf": "husn-e-kainat.pdf",
+    "description": "Husn-e-Kainat ek naatia majmua hai jisme Huzoor Akram ﷺ ki shaan mein naat, salam aur manqabat shamil hain.",
+    "views": 2540,
+    "likes": 486,
+    "comments": 72,
+    "downloads": 615,
+    "featured": true,
+    "popular": true,
+    "latest": true,
+    "year": 2026
+  },
+  {
+    "id": 2,
+    "title": "Shahdaye Karbala",
+    "author": "Saim Chishti",
+    "language": "Urdu",
+    "category": "Islamic History",
+    "cover": "image.png",
+    "reader": "shahdaye-karbala-4.html",
+    "pdf": "shahdaye-karbala.pdf",
+    "description": "Shahdaye Karbala ek manqabati majmua hai jo Karbala ke shahidon aur Ahle Bait Athar ki shaan mein likha gaya hai.",
+    "views": 1980,
+    "likes": 390,
+    "comments": 41,
+    "downloads": 540,
+    "featured": true,
+    "popular": true,
+    "latest": false,
+    "year": 2024
+  },
+  {
+    "id": 3,
+    "title": "Shaheed Ibn-e-Shaheed",
+    "author": "Saim Chishti",
+    "language": "Urdu",
+    "category": "Islamic History",
+    "cover": "shaheed-ibn-e-shaheed-cover.png",
+    "reader": "shaheed-ibn-e-shaheed.html",
+    "pdf": "shaheed-ibn-e-shaheed.pdf",
+    "description": "Shaheed Ibn-e-Shaheed waqia-e-Karbala aur shahadat ke mauzu par mabni ek aham kitab hai.",
+    "views": 1425,
+    "likes": 276,
+    "comments": 33,
+    "downloads": 321,
+    "featured": false,
+    "popular": false,
+    "latest": false,
+    "year": 2022
+  }
 ]
