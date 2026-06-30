@@ -306,7 +306,14 @@ cursor:pointer;
 /* ==========================================
 HERO
 ========================================== */
+.hero{
+    background:
+    linear-gradient(rgba(122,0,0,.85),rgba(0,0,0,.9)),
+    url("image.png");
 
+    background-size:cover;
+    background-position:center;
+}
 .hero{
 
 min-height:100vh;
