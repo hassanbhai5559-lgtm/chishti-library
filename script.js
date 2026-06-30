@@ -172,3 +172,9 @@ sendBtn.addEventListener("click", sendMessage);
 aiInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") sendMessage();
 });
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.getElementById("loader").style.display = "none";
+    document.getElementById("website").style.display = "block";
+  }, 1200);
+});
