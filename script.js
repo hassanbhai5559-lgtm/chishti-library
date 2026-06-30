@@ -2,7 +2,7 @@ let knowledge = [];
 let libraryBooks = [];
 
 /* =========================
-   LOAD DATA (SAFE + WAIT READY)
+   AUTO LOAD DATA (SAFE)
 ========================= */
 async function loadData() {
   try {
@@ -12,16 +12,16 @@ async function loadData() {
     const res2 = await fetch("books.json");
     libraryBooks = await res2.json();
 
-    console.log("Data loaded successfully");
-  } catch (error) {
-    console.log("Error loading data:", error);
+    console.log("✅ Data loaded");
+  } catch (err) {
+    console.log("❌ Data load error", err);
   }
 }
 
 loadData();
 
 /* =========================
-   SMART MATCH ENGINE
+   MATCH ENGINE
 ========================= */
 function matchScore(text, keyword) {
   if (!text || !keyword) return 0;
@@ -40,7 +40,7 @@ function matchScore(text, keyword) {
 }
 
 /* =========================
-   KNOWLEDGE SEARCH
+   SEARCH SYSTEM
 ========================= */
 function searchKnowledge(text) {
   let best = null;
@@ -48,9 +48,7 @@ function searchKnowledge(text) {
 
   for (let item of knowledge || []) {
     for (let key of item?.keywords || []) {
-
       let score = matchScore(text, key);
-
       if (score > bestScore) {
         bestScore = score;
         best = item;
@@ -61,17 +59,12 @@ function searchKnowledge(text) {
   return bestScore > 0.5 ? best.answer_en : null;
 }
 
-/* =========================
-   BOOK SEARCH
-========================= */
 function searchBook(text) {
   let best = null;
   let bestScore = 0;
 
   for (let book of libraryBooks || []) {
-
     let score = matchScore(text, book?.title || "");
-
     if (score > bestScore) {
       bestScore = score;
       best = book;
@@ -82,10 +75,11 @@ function searchBook(text) {
 }
 
 /* =========================
-   TYPE ANIMATION (CHATGPT STYLE)
+   TYPE MESSAGE (AI STYLE)
 ========================= */
 function typeMessage(msg) {
   const chatBody = document.getElementById("chatBody");
+  if (!chatBody) return;
 
   let div = document.createElement("div");
   div.className = "bot-message";
@@ -98,7 +92,7 @@ function typeMessage(msg) {
     if (i < msg.length) {
       div.innerHTML += msg.charAt(i);
       i++;
-      setTimeout(typing, 10);
+      setTimeout(typing, 8);
     }
   }
 
@@ -107,45 +101,40 @@ function typeMessage(msg) {
 }
 
 /* =========================
-   BOT ENGINE
+   CHAT BOT
 ========================= */
 function botReply(text) {
-
   text = text.toLowerCase();
 
-  // greeting
   if (text.includes("hi") || text.includes("hello")) {
-    return typeMessage("👋 Assalam-o-Alaikum! Main Chishti Library AI hoon. Aap books ya authors ke baare mein pooch sakte hain.");
+    return typeMessage("👋 Assalam-o-Alaikum! Main Chishti Library AI hoon.");
   }
 
-  // knowledge
   let k = searchKnowledge(text);
   if (k) return typeMessage(k);
 
-  // book
   let b = searchBook(text);
   if (b) {
     return typeMessage(
 `📚 ${b.title}
-👤 Author: ${b.author}
-
-📖 Read Online: ${b.reader}
-⬇ Download PDF: ${b.pdf}`
+👤 ${b.author}
+📖 ${b.reader}
+⬇ ${b.pdf}`
     );
   }
 
-  // fallback
-  return typeMessage("🤖 Mujhe samajh nahi aaya. Please book ka naam ya topic likhein.");
+  return typeMessage("🤖 Mujhe samajh nahi aaya.");
 }
 
 /* =========================
-   CHAT UI FIXED
+   CHAT UI SAFE
 ========================= */
 const aiInput = document.getElementById("aiInput");
 const sendBtn = document.getElementById("sendBtn");
 
 function addUser(msg) {
   const chatBody = document.getElementById("chatBody");
+  if (!chatBody) return;
 
   let div = document.createElement("div");
   div.className = "user-message";
@@ -155,8 +144,9 @@ function addUser(msg) {
   chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-/* SEND MESSAGE */
 function sendMessage() {
+  if (!aiInput) return;
+
   let text = aiInput.value.trim();
   if (!text) return;
 
@@ -166,15 +156,43 @@ function sendMessage() {
   aiInput.value = "";
 }
 
-/* EVENTS */
-sendBtn.addEventListener("click", sendMessage);
+if (sendBtn) sendBtn.addEventListener("click", sendMessage);
 
-aiInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") sendMessage();
-});
+if (aiInput) {
+  aiInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+}
+
+/* =========================
+   AUTO DAY/NIGHT THEME
+========================= */
+function autoTheme() {
+  let hour = new Date().getHours();
+  let body = document.body;
+
+  body.classList.remove("light", "dark", "yellow");
+
+  if (hour >= 6 && hour < 18) {
+    // DAY MODE (WHITE + YELLOW)
+    body.classList.add("light");
+  } else {
+    // NIGHT MODE (BLACK + WHITE)
+    body.classList.add("dark");
+  }
+}
+
+/* =========================
+   FIX LOADER (NO STUCK)
+========================= */
 window.addEventListener("load", () => {
+  autoTheme();
+
   setTimeout(() => {
-    document.getElementById("loader").style.display = "none";
-    document.getElementById("website").style.display = "block";
-  }, 1200);
+    let loader = document.getElementById("loader");
+    let website = document.getElementById("website");
+
+    if (loader) loader.style.display = "none";
+    if (website) website.style.display = "block";
+  }, 900);
 });
