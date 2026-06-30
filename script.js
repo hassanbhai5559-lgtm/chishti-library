@@ -1,249 +1,207 @@
+/* ==========================================================================
+   CHISHTI LIBRARY - GOLDEN MASTER PRODUCTION ENGINE (v3.0)
+   - Queue-based Chatbot (No collision)
+   - Weighted Ranking Search
+   - Safe DOM Construction (No XSS)
+   - Roman Urdu & Command Support
+   ========================================================================== */
+
 let knowledge = [];
 let libraryBooks = [];
+const msgQueue = [];
+let isTyping = false;
 
 /* =========================
-   AUTO LOAD DATA (SAFE)
+   1. UTILS & HELPERS
+========================= */
+const ROMAN_URDU = ["kitab", "namaz", "roza", "hajj", "tasawwuf", "naat", "quran", "islam"];
+
+function createEl(tag, className, text = "") {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text) el.textContent = text;
+    return el;
+}
+
+/* =========================
+   2. DATA LOADING (Robust)
 ========================= */
 async function loadData() {
-  try {
-    const res1 = await fetch("knowledge.json");
-    knowledge = await res1.json();
+    try {
+        const [knowRes, bookRes] = await Promise.all([
+            fetch("knowledge.json"), fetch("books.json")
+        ]);
 
-    const res2 = await fetch("books.json");
-    libraryBooks = await res2.json();
+        if (!knowRes.ok || !bookRes.ok) throw new Error("JSON Fetch Failed");
 
-    console.log("✅ Data loaded");
-  } catch (err) {
-    console.log("❌ Data load error", err);
-  }
-}
+        const k = await knowRes.json();
+        const b = await bookRes.json();
 
-loadData();
+        knowledge = Array.isArray(k) ? k : [];
+        libraryBooks = Array.isArray(b) ? b : [];
 
-/* =========================
-   MATCH ENGINE
-========================= */
-function matchScore(text, keyword) {
-  if (!text || !keyword) return 0;
-
-  text = text.toLowerCase();
-  keyword = keyword.toLowerCase();
-
-  let words = keyword.split(" ");
-  let score = 0;
-
-  for (let w of words) {
-    if (text.includes(w)) score++;
-  }
-
-  return score / words.length;
-}
-
-/* =========================
-   SEARCH SYSTEM
-========================= */
-function searchKnowledge(text) {
-  let best = null;
-  let bestScore = 0;
-
-  for (let item of knowledge || []) {
-    for (let key of item?.keywords || []) {
-      let score = matchScore(text, key);
-      if (score > bestScore) {
-        bestScore = score;
-        best = item;
-      }
+        renderLibrary();
+    } catch (err) {
+        console.error("❌ Critical Load Error:", err);
+        const chat = document.getElementById("chatBody");
+        if (chat) chat.appendChild(createEl("div", "bot-message", "⚠️ Unable to load library. Please check connection."));
     }
-  }
-
-  return bestScore > 0.5 ? best.answer_en : null;
 }
 
-function searchBook(text) {
-  let best = null;
-  let bestScore = 0;
+/* =========================
+   3. WEIGHTED SEARCH ENGINE
+========================= */
+function searchEngine(query) {
+    const q = query.toLowerCase().trim();
+    let matches = [];
 
-  for (let book of libraryBooks || []) {
-    let score = matchScore(text, book?.title || "");
-    if (score > bestScore) {
-      bestScore = score;
-      best = book;
+    libraryBooks.forEach(book => {
+        let score = 0;
+        const title = (book.title || "").toLowerCase();
+        const author = (book.author || "").toLowerCase();
+        const keywords = Array.isArray(book.keywords) ? book.keywords.join(" ").toLowerCase() : "";
+
+        if (title.includes(q)) score += 100;
+        else if (author.includes(q)) score += 80;
+        else if (keywords.includes(q)) score += 60;
+
+        if (score > 0) matches.push({ book, score });
+    });
+
+    return matches.sort((a, b) => b.score - a.score)[0]?.book || null;
+}
+
+/* =========================
+   4. CHATBOT QUEUE SYSTEM
+========================= */
+function processQueue() {
+    if (isTyping || msgQueue.length === 0) return;
+    
+    const msg = msgQueue.shift();
+    isTyping = true;
+    
+    const chatBody = document.getElementById("chatBody");
+    const div = createEl("div", "bot-message");
+    chatBody.appendChild(div);
+
+    let i = 0;
+    const typing = setInterval(() => {
+        if (i < msg.length) {
+            div.textContent += msg.charAt(i);
+            i++;
+            chatBody.scrollTop = chatBody.scrollHeight;
+        } else {
+            clearInterval(typing);
+            isTyping = false;
+            processQueue();
+        }
+    }, Math.random() * 15 + 5);
+}
+
+function botReply(input) {
+    const text = input.toLowerCase().trim();
+    
+    // Command Handlers
+    if (["help", "hi", "salam"].includes(text)) {
+        msgQueue.push("Assalam-o-Alaikum! Try: 'books', 'latest', or ask about a topic.");
+    } else if (text === "books" || text === "show books") {
+        msgQueue.push(libraryBooks.slice(0, 5).map(b => "📚 " + b.title).join("\n"));
+    } else if (text === "latest") {
+        msgQueue.push(libraryBooks.slice(-5).map(b => "🆕 " + b.title).join("\n"));
+    } else {
+        // Knowledge
+        const match = knowledge.find(k => (k.keywords || []).some(key => text.includes(key.toLowerCase())));
+        if (match) {
+            const lang = (text.match(/[\u0600-\u06FF]/)) ? 'ur' : (ROMAN_URDU.some(w => text.includes(w)) ? 'ur' : 'en');
+            msgQueue.push(match.answer?.[lang] || match.answer || "Information found.");
+        } else {
+            // Book
+            const book = searchEngine(text);
+            if (book) {
+                const div = createEl("div", "bot-message");
+                div.appendChild(createEl("strong", null, book.title));
+                div.appendChild(document.createElement("br"));
+                const btn = createEl("a", "btn", "Read PDF");
+                btn.href = book.pdf || "#";
+                btn.target = "_blank";
+                btn.rel = "noopener noreferrer";
+                if (!book.pdf) btn.disabled = true;
+                div.appendChild(btn);
+                document.getElementById("chatBody").appendChild(div);
+            } else {
+                msgQueue.push("Sorry, I couldn't find that. Try searching for a book title.");
+            }
+        }
     }
-  }
-
-  return bestScore > 0.5 ? best : null;
+    processQueue();
 }
 
 /* =========================
-   TYPE MESSAGE (AI STYLE)
+   5. UI RENDERING
 ========================= */
-function typeMessage(msg) {
-  const chatBody = document.getElementById("chatBody");
-  if (!chatBody) return;
+function renderLibrary() {
+    const featured = document.getElementById("featuredBooks");
+    const latest = document.getElementById("latestBooks");
+    
+    if (featured) featured.innerHTML = "";
+    if (latest) latest.innerHTML = "";
 
-  let div = document.createElement("div");
-  div.className = "bot-message";
-  chatBody.appendChild(div);
+    libraryBooks.slice(0, 4).forEach(b => featured?.appendChild(createBookCard(b)));
+    libraryBooks.slice(-4).reverse().forEach(b => latest?.appendChild(createBookCard(b)));
+}
 
-  let i = 0;
-  div.innerHTML = "";
-
-  function typing() {
-    if (i < msg.length) {
-      div.innerHTML += msg.charAt(i);
-      i++;
-      setTimeout(typing, 8);
-    }
-  }
-
-  typing();
-  chatBody.scrollTop = chatBody.scrollHeight;
+function createBookCard(b) {
+    const div = createEl("div", "book-card");
+    const img = document.createElement("img");
+    img.src = b.cover || "default.png";
+    img.alt = b.title;
+    img.onerror = function() { this.onerror=null; this.src='default.png'; };
+    
+    div.appendChild(img);
+    div.appendChild(createEl("h3", null, b.title));
+    div.appendChild(createEl("p", null, b.author));
+    
+    const a = createEl("a", "btn", "Read PDF");
+    a.href = b.pdf || "#";
+    if (!b.pdf) a.style.pointerEvents = "none";
+    div.appendChild(a);
+    return div;
 }
 
 /* =========================
-   CHAT BOT
+   6. INIT & EVENTS
 ========================= */
-function botReply(text) {
-  text = text.toLowerCase();
+document.addEventListener("DOMContentLoaded", () => {
+    // Theme
+    const h = new Date().getHours();
+    document.body.className = (h >= 6 && h < 18) ? "light" : "dark";
+    
+    document.getElementById("themeBtn")?.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        document.body.classList.toggle("light");
+    });
 
-  if (text.includes("hi") || text.includes("hello")) {
-    return typeMessage("👋 Assalam-o-Alaikum! Main Chishti Library AI hoon.");
-  }
+    // Chat
+    document.getElementById("chatButton")?.addEventListener("click", () => document.getElementById("chatBox").style.display = "block");
+    document.getElementById("closeChat")?.addEventListener("click", () => document.getElementById("chatBox").style.display = "none");
+    
+    document.getElementById("sendBtn")?.addEventListener("click", () => {
+        const input = document.getElementById("aiInput");
+        if (!input.value.trim()) return;
+        const msg = input.value;
+        const chat = document.getElementById("chatBody");
+        chat.appendChild(createEl("div", "user-message", msg));
+        input.value = "";
+        botReply(msg);
+    });
 
-  let k = searchKnowledge(text);
-  if (k) return typeMessage(k);
-
-  let b = searchBook(text);
-  if (b) {
-    return typeMessage(
-`📚 ${b.title}
-👤 ${b.author}
-📖 ${b.reader}
-⬇ ${b.pdf}`
-    );
-  }
-
-  return typeMessage("🤖 Mujhe samajh nahi aaya.");
-}
-
-/* =========================
-   CHAT UI SAFE
-========================= */
-const aiInput = document.getElementById("aiInput");
-const sendBtn = document.getElementById("sendBtn");
-
-function addUser(msg) {
-  const chatBody = document.getElementById("chatBody");
-  if (!chatBody) return;
-
-  let div = document.createElement("div");
-  div.className = "user-message";
-  div.textContent = msg;
-
-  chatBody.appendChild(div);
-  chatBody.scrollTop = chatBody.scrollHeight;
-}
-
-function sendMessage() {
-  if (!aiInput) return;
-
-  let text = aiInput.value.trim();
-  if (!text) return;
-
-  addUser(text);
-  botReply(text);
-
-  aiInput.value = "";
-}
-
-if (sendBtn) sendBtn.addEventListener("click", sendMessage);
-
-if (aiInput) {
-  aiInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") sendMessage();
-  });
-}
-
-/* =========================
-   AUTO DAY/NIGHT THEME
-========================= */
-function autoTheme() {
-  let hour = new Date().getHours();
-  let body = document.body;
-
-  body.classList.remove("light", "dark", "yellow");
-
-  if (hour >= 6 && hour < 18) {
-    // DAY MODE (WHITE + YELLOW)
-    body.classList.add("light");
-  } else {
-    // NIGHT MODE (BLACK + WHITE)
-    body.classList.add("dark");
-  }
-}
-
-/* =========================
-   FIX LOADER (NO STUCK)
-========================= */
-// SHOW SITE AFTER LOAD
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.getElementById("loader").style.display = "none";
-    document.getElementById("website").style.display = "block";
-    applyAutoTheme();
-  }, 1000);
+    loadData();
 });
 
-// THEME SYSTEM
-function setTheme(mode) {
-  if (mode === "dark") document.body.className = "dark";
-  else if (mode === "light") document.body.className = "light";
-  else applyAutoTheme();
-}
-
-// AUTO DAY/NIGHT
-function applyAutoTheme() {
-  let h = new Date().getHours();
-
-  if (h >= 6 && h < 18) document.body.className = "light";
-  else document.body.className = "dark";
-}
-
-// CHAT TOGGLE
-function toggleChat() {
-  let box = document.getElementById("chatBox");
-  box.style.display = box.style.display === "block" ? "none" : "block";
-}
-
-// CHAT MESSAGE
-function addMessage(text, cls) {
-  let div = document.createElement("div");
-  div.className = cls;
-  div.textContent = text;
-  document.getElementById("chatBody").appendChild(div);
-}
-
-// BOT RESPONSE
-function botReply(msg) {
-  msg = msg.toLowerCase();
-
-  if (msg.includes("hi") || msg.includes("hello"))
-    return "👋 Assalam-o-Alaikum! Welcome to Chishti Library";
-
-  if (msg.includes("book"))
-    return "📚 We have Islamic books available in PDF format.";
-
-  return "🤖 Sorry, I didn't understand.";
-}
-
-// SEND MESSAGE
-function sendMessage() {
-  let input = document.getElementById("aiInput");
-  let text = input.value.trim();
-  if (!text) return;
-
-  addMessage(text, "user");
-  addMessage(botReply(text), "bot");
-
-  input.value = "";
-}
+window.addEventListener("load", () => {
+    const loader = document.getElementById("loader");
+    if (loader) {
+        loader.classList.add("fade-out");
+        setTimeout(() => loader.parentNode?.removeChild(loader), 500);
+    }
+});
