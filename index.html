@@ -247,7 +247,20 @@
 </footer>
 <!-- ================= CHAT BUTTON ================= -->
 <div id="chatBtn" onclick="toggleChat()">🤖</div>
+<div id="chatBtn" onclick="toggleChat()">
+🤖 AI
+</div>
 
+<div id="chatWindow">
+    <div class="chat-header">Chishti AI</div>
+
+    <div id="chatMessages"></div>
+
+    <div class="chat-input">
+        <input id="userInput" placeholder="Ask something...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
 <!-- ================= CHAT WINDOW ================= -->
 <div id="chatWindow">
 
