@@ -4,12 +4,182 @@
 
 /* RESET */
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
+ *{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins;
 }
 
+/* LOADER */
+#loader{
+position:fixed;
+inset:0;
+background:#0f172a;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.loader-logo{
+color:white;
+font-size:24px;
+font-weight:bold;
+animation:zoom 1s infinite alternate;
+}
+
+@keyframes zoom{
+from{transform:scale(1);}
+to{transform:scale(1.2);}
+}
+
+/* WEBSITE */
+#website{
+display:none;
+}
+
+/* NAVBAR */
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:space-between;
+padding:15px 30px;
+background:white;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.nav-buttons button{
+margin-left:10px;
+padding:6px 10px;
+border:none;
+cursor:pointer;
+}
+
+/* HERO */
+.hero{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+background:#111827;
+color:white;
+}
+
+.center-logo{
+font-size:80px;
+animation:float 2s infinite ease-in-out;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+100%{transform:translateY(0);}
+}
+
+/* BUTTON */
+.btn{
+display:inline-block;
+margin-top:20px;
+padding:10px 20px;
+background:#22c55e;
+color:white;
+border-radius:25px;
+text-decoration:none;
+}
+
+/* BOOKS */
+.books-section{
+padding:80px 20px;
+text-align:center;
+}
+
+.books-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.book-card{
+background:white;
+padding:15px;
+border-radius:15px;
+box-shadow:0 10px 20px rgba(0,0,0,0.1);
+}
+
+.book-card img{
+width:100%;
+border-radius:10px;
+}
+
+/* CHAT */
+#chatButton{
+position:fixed;
+bottom:20px;
+right:20px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#22c55e;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:25px;
+cursor:pointer;
+}
+
+#chatBox{
+position:fixed;
+bottom:90px;
+right:20px;
+width:300px;
+background:white;
+display:none;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+#chatBody{
+height:250px;
+overflow:auto;
+padding:10px;
+}
+
+.chat-input{
+display:flex;
+padding:10px;
+}
+
+.chat-input input{
+flex:1;
+padding:8px;
+}
+
+.chat-input button{
+padding:8px;
+}
+
+/* THEMES */
+body.dark{
+background:#0b1220;
+color:white;
+}
+
+body.dark .navbar{
+background:#111827;
+color:white;
+}
+
+body.dark .book-card,
+body.dark #chatBox{
+background:#1f2937;
+color:white;
+}
 html{
   scroll-behavior:smooth;
 }
