@@ -1,62 +1,31 @@
-
-/* Animation Keyframes */
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-
-
-/* Chat Box Animation */
-
-#chatBox { 
-
-    transition: 0.3s; 
-
-    transform-origin: bottom right;
-
+:root {
+    --primary-red: #7a0000;
+    --bg-black: #0b0b0b;
+    --card-black: #161616;
+    --text-white: #ffffff;
+    --gold: #ffd700;
 }
 
+body { background: var(--bg-black); color: var(--text-white); font-family: 'Segoe UI', sans-serif; margin: 0; }
 
+/* Loader */
+#loader { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.rotate-logo { width: 80px; animation: spin 2s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* Book Card Hover Effect */
+/* Navbar */
+nav { position: fixed; width: 100%; padding: 20px; transition: 0.4s; z-index: 1000; display: flex; justify-content: space-between; align-items: center; }
+nav.scrolled { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--primary-red); }
 
-.book-card { 
+/* Premium Hero */
+.hero { height: 100vh; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), var(--primary-red); display: flex; align-items: center; justify-content: center; text-align: center; }
+.btn { background: var(--text-white); color: var(--bg-black); padding: 15px 30px; border: none; cursor: pointer; transition: 0.3s; font-weight: bold; }
+.btn:hover { background: var(--primary-red); color: white; transform: scale(1.05); }
 
-    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+/* Book Cards */
+.books-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 50px; }
+.book-card { background: var(--card-black); padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.3s; }
+.book-card:hover { border-color: var(--primary-red); box-shadow: 0 10px 20px rgba(122,0,0,0.2); }
 
-}
-
-.book-card:hover { 
-
-    transform: scale(1.05); 
-
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15); 
-
-}
-
-
-
-/* Chat Button Animation */
-
-#chatBtn {
-
-    animation: pulse 2s infinite;
-
-}
-
-@keyframes pulse {
-
-    0% { transform: scale(1); }
-
-    50% { transform: scale(1.1); }
-
-    100% { transform: scale(1); }
-
-}
-
-
-
-/* Stats Section Animation */
-
-.stat-box h3 { font-size: 1.2rem; }
-
-.stat-box p { font-size: 2rem; font-weight: bold; margin: 5px 0; }
+/* Chatbot */
+#chatBtn { position: fixed; bottom: 30px; right: 30px; background: var(--primary-red); padding: 15px 25px; border-radius: 30px; cursor: pointer; z-index: 999; }
