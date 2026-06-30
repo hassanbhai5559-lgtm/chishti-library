@@ -1,43 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Chishti Library | Premium Digital Library</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chishti Library</title>
+<style>
+:root{--red:#7a0000;--bg:#0b0b0b;--card:#161616}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:var(--bg);color:#fff}
+#loader{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999}
+.logo{width:90px;height:90px;border:3px solid #fff;border-radius:50%;display:flex;align-items:center;justify-content:center;animation:spin 2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bar{width:220px;height:8px;background:#333;border-radius:20px;overflow:hidden;margin-top:20px}.fill{height:100%;width:0;background:#7a0000;animation:load 3s forwards}
+@keyframes load{to{width:100%}}
+header{position:sticky;top:0;background:#000c;backdrop-filter:blur(8px);display:flex;justify-content:space-between;padding:15px 25px;border-bottom:1px solid #7a0000}
+nav a{color:#fff;text-decoration:none;margin-left:18px}
+.hero{padding:100px 20px;text-align:center;background:linear-gradient(135deg,#7a0000,#250000)}
+.btn{padding:12px 24px;background:#fff;color:#000;text-decoration:none;border-radius:8px;font-weight:bold}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;padding:30px}
+.stat{background:var(--card);padding:20px;border-radius:12px;text-align:center}
+footer{text-align:center;padding:30px;border-top:1px solid #222}
+#chat{position:fixed;right:20px;bottom:20px;background:#7a0000;padding:15px 18px;border-radius:30px}
+</style></head>
 <body>
-
-    <div id="loader">
-        <img src="logo.png" class="rotate-logo">
-        <h1>CHISHTI LIBRARY</h1>
-    </div>
-
-    <nav id="navbar">
-        <div class="logo">CHISHTI LIBRARY</div>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="books.html">Books</a></li>
-        </ul>
-    </nav>
-
-    <section class="hero">
-        <div>
-            <h1>CHISHTI LIBRARY</h1>
-            <p>Digital Islamic Library</p>
-            <button class="btn">Explore Books</button>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <div class="stats-section">
-        <div class="stat">Total Books: <span id="totalBooks" class="counter" data-target="0">0</span></div>
-    </div>
-
-    <section id="booksGrid" class="books-grid"></section>
-
-    <!-- Chatbot -->
-    <div id="chatBtn">CHISHTI AI</div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+<div id="loader"><div class="logo">📚</div><h2 id="txt">Preparing Library...</h2><div class="bar"><div class="fill"></div></div></div>
+<header><strong>CHISHTI LIBRARY</strong><nav><a href="index.html">Home</a><a href="books.html">Books</a><a href="author.html">Author</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav></header>
+<section class="hero"><h1>CHISHTI LIBRARY</h1><p>Digital Islamic Library</p><input placeholder="Search books..." style="padding:12px;width:min(500px,90%)"><br><br><a class="btn" href="books.html">Explore Books</a></section>
+<section class="stats">
+<div class="stat"><h2 id="tb">0</h2><p>Total Books</p></div>
+<div class="stat"><h2>0</h2><p>Downloads</p></div>
+<div class="stat"><h2>0</h2><p>Readers</p></div>
+<div class="stat"><h2>0</h2><p>Views</p></div>
+</section>
+<footer>© 2026 Chishti Library</footer>
+<div id="chat">Chishti AI</div>
+<script>
+const msgs=["Preparing Library...","Loading Books...","Initializing Chishti AI...","Welcome..."];
+let i=0;setInterval(()=>{if(i<msgs.length)txt.textContent=msgs[i++]},700);
+window.onload=()=>setTimeout(()=>loader.style.display="none",3200);
+fetch("books.json").then(r=>r.json()).then(d=>tb.textContent=d.length).catch(()=>{});
+</script>
+</body></html>
