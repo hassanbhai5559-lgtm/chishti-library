@@ -1,121 +1,82 @@
 /* ==========================================================================
-   CHISHTI LIBRARY - GOLDEN MASTER CSS
+   CHISHTI LIBRARY - INTEGRATED MASTER ENGINE (v3.1)
    ========================================================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+let libraryBooks = [];
+let knowledge = [];
+const msgQueue = [];
+let isTyping = false;
+
+// 1. DATA LOADING
+async function init() {
+    try {
+        // Fetching databases (Ensure these files exist in your root folder)
+        const [bookRes, knowRes] = await Promise.all([
+            fetch('data/books.json').then(r => r.json()),
+            fetch('data/knowledge.json').then(r => r.json())
+        ]);
+        
+        libraryBooks = bookRes;
+        knowledge = knowRes;
+        
+        renderLibrary();
+        hideLoader();
+    } catch (err) {
+        console.error("Initialization Failed:", err);
+    }
 }
 
-body {
-    background: #f5f8fc;
-    color: #111;
-    transition: 0.3s ease;
-    overflow-x: hidden;
+// 2. DOM RENDERING
+function renderLibrary() {
+    const featured = document.getElementById('featuredBooks');
+    const latest = document.getElementById('latestBooks');
+    
+    // Clear previous
+    featured.innerHTML = "";
+    latest.innerHTML = "";
+
+    // Render Featured (First 4)
+    libraryBooks.slice(0, 4).forEach(book => {
+        featured.appendChild(createBookCard(book));
+    });
+
+    // Render Latest (Last 4)
+    libraryBooks.slice(-4).reverse().forEach(book => {
+        latest.appendChild(createBookCard(book));
+    });
 }
 
-/* 1. LOADER */
-#loader {
-    position: fixed;
-    inset: 0;
-    background: #0f172a;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 99999;
-}
-.fade-out { opacity: 0; transition: 0.5s; pointer-events: none; }
-
-/* 2. NAVBAR */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background: white;
-    box-shadow: 0 5px 20px rgba(0,0,0,.08);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+function createBookCard(b) {
+    const card = document.createElement('div');
+    card.className = 'book-card';
+    card.innerHTML = `
+        <img src="${b.cover || 'assets/default.png'}" alt="${b.title}">
+        <h3>${b.title}</h3>
+        <p>${b.author}</p>
+        <a href="${b.pdf}" class="btn" target="_blank">Read PDF</a>
+    `;
+    return card;
 }
 
-/* 3. HERO (Centered & Responsive) */
-.hero {
-    min-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)), url("bookshelf.png");
-    background-size: cover;
-    background-position: center;
-    color: white;
-}
-.hero h1 { font-size: clamp(2rem, 5vw, 4rem); animation: float 3s infinite; }
-@keyframes float { 0%, 100% {transform: translateY(0);} 50% {transform: translateY(-10px);} }
-
-/* 4. BOOKS */
-.books-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: auto;
-}
-.book-card {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    text-align: center;
-}
-.book-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-.btn { display: inline-block; margin-top: 10px; padding: 8px 16px; background: #22c55e; color: white; border-radius: 6px; text-decoration: none; font-size: 14px; }
-
-/* 5. CHATBOT COMPACT UI */
-#chatButton {
-    position: fixed; bottom: 20px; right: 20px;
-    width: 55px; height: 55px; border-radius: 50%;
-    background: linear-gradient(135deg, #00c853, #2196f3);
-    color: white; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; z-index: 9999; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+// 3. UI HELPERS
+function hideLoader() {
+    const loader = document.getElementById('loader');
+    loader.classList.add('fade-out');
+    setTimeout(() => loader.style.display = 'none', 500);
 }
 
-#chatBox {
-    position: fixed; bottom: 85px; right: 20px;
-    width: 300px; height: 400px; background: white;
-    border-radius: 12px; display: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 9999;
-    display: flex; flex-direction: column;
-}
+// 4. THEME TOGGLE
+document.getElementById('themeBtn')?.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+});
 
-#chatBody { flex: 1; overflow-y: auto; padding: 10px; font-size: 13px; }
+// 5. CHATBOT INTEGRATION
+const chatBtn = document.getElementById('chatButton');
+const chatBox = document.getElementById('chatBox');
+const closeChat = document.getElementById('closeChat');
 
-/* JS Integration: Bot/User Message Classes */
-.user-message { background: #2196f3; color: white; padding: 8px; margin: 5px 0; border-radius: 8px; align-self: flex-end; }
-.bot-message { background: #e5e7eb; color: #111; padding: 8px; margin: 5px 0; border-radius: 8px; }
+chatBtn?.addEventListener('click', () => chatBox.style.display = 'flex');
+closeChat?.addEventListener('click', () => chatBox.style.display = 'none');
 
-.inputBox { display: flex; border-top: 1px solid #ddd; padding: 5px; }
-.inputBox input { flex: 1; padding: 8px; border: none; outline: none; }
-.inputBox button { padding: 8px 12px; border: none; background: #00c853; color: white; border-radius: 4px; }
-
-/* 6. DARK MODE */
-body.dark { background: #0f172a; color: white; }
-body.dark .navbar { background: #111827; }
-body.dark #chatBox { background: #111827; border: 1px solid #333; }
-body.dark .bot-message { background: #1f2937; color: white; }
-body.dark .book-card { background: #1f2937; color: white; }
-body.dark #themeBtn { background: #374151; color: white; }
-
-/* 7. RESPONSIVE */
-@media(max-width:768px){
-    #chatBox { width: 90%; right: 5%; bottom: 80px; }
-    .hero h1 { font-size: 2rem; }
-}
+// Initializer
+document.addEventListener('DOMContentLoaded', init);
