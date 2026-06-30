@@ -1,82 +1,35 @@
-/* ==========================================================================
-   CHISHTI LIBRARY - INTEGRATED MASTER ENGINE (v3.1)
-   ========================================================================== */
-
-let libraryBooks = [];
-let knowledge = [];
-const msgQueue = [];
-let isTyping = false;
-
-// 1. DATA LOADING
-async function init() {
-    try {
-        // Fetching databases (Ensure these files exist in your root folder)
-        const [bookRes, knowRes] = await Promise.all([
-            fetch('data/books.json').then(r => r.json()),
-            fetch('data/knowledge.json').then(r => r.json())
-        ]);
-        
-        libraryBooks = bookRes;
-        knowledge = knowRes;
-        
-        renderLibrary();
-        hideLoader();
-    } catch (err) {
-        console.error("Initialization Failed:", err);
-    }
+:root {
+    --primary: #00c853;
+    --gold: #d4af37;
+    --bg: #f5f8fc;
+    --card: #ffffff;
+    --text: #1f2937;
 }
 
-// 2. DOM RENDERING
-function renderLibrary() {
-    const featured = document.getElementById('featuredBooks');
-    const latest = document.getElementById('latestBooks');
-    
-    // Clear previous
-    featured.innerHTML = "";
-    latest.innerHTML = "";
+/* LOADER */
+#loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; }
+.loader-logo { width: 100px; animation: pulse 2s infinite; }
 
-    // Render Featured (First 4)
-    libraryBooks.slice(0, 4).forEach(book => {
-        featured.appendChild(createBookCard(book));
-    });
+/* NAVBAR */
+.navbar { position: fixed; top: 0; width: 100%; height: 80px; display: flex; justify-content: space-between; align-items: center; padding: 0 8%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 999; }
+.logo-area { display: flex; align-items: center; text-decoration: none; color: var(--primary); font-weight: 700; font-size: 20px; }
+.logo-area img { width: 45px; margin-right: 10px; }
 
-    // Render Latest (Last 4)
-    libraryBooks.slice(-4).reverse().forEach(book => {
-        latest.appendChild(createBookCard(book));
-    });
-}
+/* HERO */
+.hero { height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('hero.jpg') center/cover; color: white; }
+.hero-logo { width: 150px; background: white; padding: 10px; border-radius: 50%; animation: float 3s infinite; }
 
-function createBookCard(b) {
-    const card = document.createElement('div');
-    card.className = 'book-card';
-    card.innerHTML = `
-        <img src="${b.cover || 'assets/default.png'}" alt="${b.title}">
-        <h3>${b.title}</h3>
-        <p>${b.author}</p>
-        <a href="${b.pdf}" class="btn" target="_blank">Read PDF</a>
-    `;
-    return card;
-}
+/* CHAT UI */
+#chatButton { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+#chatBox { position: fixed; bottom: 100px; right: 30px; width: 350px; height: 500px; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden; }
+.chat-header { background: var(--primary); color: white; padding: 15px; display: flex; justify-content: space-between; }
+.chat-body { flex: 1; padding: 20px; overflow-y: auto; }
+.chat-input { padding: 15px; border-top: 1px solid #eee; display: flex; }
 
-// 3. UI HELPERS
-function hideLoader() {
-    const loader = document.getElementById('loader');
-    loader.classList.add('fade-out');
-    setTimeout(() => loader.style.display = 'none', 500);
-}
+/* CARD GRID */
+.books-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; padding: 50px 8%; }
+.book-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); transition: 0.3s; }
+.book-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+.book-card img { width: 100%; height: 300px; object-fit: cover; border-radius: 15px; }
 
-// 4. THEME TOGGLE
-document.getElementById('themeBtn')?.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-});
-
-// 5. CHATBOT INTEGRATION
-const chatBtn = document.getElementById('chatButton');
-const chatBox = document.getElementById('chatBox');
-const closeChat = document.getElementById('closeChat');
-
-chatBtn?.addEventListener('click', () => chatBox.style.display = 'flex');
-closeChat?.addEventListener('click', () => chatBox.style.display = 'none');
-
-// Initializer
-document.addEventListener('DOMContentLoaded', init);
+@keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-15px); } 100% { transform: translateY(0); } }
