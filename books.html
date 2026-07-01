@@ -1,51 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<title>Chishti Library | Books</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Books | Chishti Library</title>
+
+<meta name="description" content="Read Islamic Books Online">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav id="navbar">
-  <div class="logo">
-    <img src="logo.png">
-    <span>CHISHTI LIBRARY</span>
-  </div>
+<!--=========================
+NAVBAR
+==========================-->
 
-  <div id="navLinks">
-    <a href="index.html">Home</a>
-    <a href="books.html">Books</a>
-    <a href="author.html">Author</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </div>
-</nav>
+<nav class="navbar">
 
-<!-- HERO BANNER -->
-<section class="hero small-hero">
-  <h1>📚 Books Collection</h1>
-  <input id="searchInput" placeholder="Search books...">
-</section>
+<div class="logo">
 
-<!-- FILTERS -->
-<div class="filter-buttons">
-  <button onclick="filterBooks('popular')">Popular</button>
-  <button onclick="filterBooks('latest')">Latest</button>
-  <button onclick="filterBooks('old')">Old</button>
-  <button onclick="filterBooks('all')">All</button>
+<img src="logo.png">
+
+<div>
+
+<h2>CHISHTI LIBRARY</h2>
+
+<span>Digital Islamic Library</span>
+
 </div>
 
-<!-- BOOK GRID -->
-<section id="booksGrid" class="books-grid"></section>
+</div>
 
-<!-- FOOTER -->
-<footer>
-  <p>© 2026 Chishti Library</p>
+<ul class="menu">
+
+<li><a href="index.html">Home</a></li>
+
+<li><a href="books.html" class="active">Books</a></li>
+
+<li><a href="author.html">Authors</a></li>
+
+<li><a href="about.html">About</a></li>
+
+<li><a href="contact.html">Contact</a></li>
+
+</ul>
+
+<div class="mobile-menu">
+
+<i class="fas fa-bars"></i>
+
+</div>
+
+</nav>
+
+<!--=========================
+BOOK HERO
+==========================-->
+
+<section class="books-hero">
+
+<div class="hero-overlay"></div>
+
+<div class="books-content">
+
+<img src="logo.png" class="hero-logo">
+
+<h1>Islamic Book Collection</h1>
+
+<p>
+
+Read, Download and Explore the complete collection of Hazrat Allama Saim Chishti.
+
+</p>
+
+<div class="search-box">
+
+<i class="fas fa-search"></i>
+
+<input
+
+type="text"
+
+id="searchInput"
+
+placeholder="Search Books..."
+
+onkeyup="searchBooks()">
+
+</div>
+
+</div>
+
+</section>
+
+<!--=========================
+BOOK COUNTER
+==========================-->
+
+<section class="counter-area">
+
+<div class="counter-card">
+
+<i class="fas fa-book-open"></i>
+
+<h2 id="bookCounter">
+
+0
+
+</h2>
+
+<p>
+
+Books Available
+
+</p>
+
+</div>
+
+</section>
+<!--=========================
+BOOK CATEGORIES
+==========================-->
+
+<section class="categories">
+
+<h2 class="section-title">
+
+Browse Categories
+
+</h2>
+
+<div class="category-grid">
+
+<button class="category active"
+onclick="filterBooks('All')">
+
+ALL
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Naat')">
+
+NAAT
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Manqabat')">
+
+MANQABAT
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Hamd')">
+
+HAMD
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Maqala')">
+
+MAQALA
+
+</button>
+
+</div>
+
+</section>
+
+<!--=========================
+BOOK SEARCH RESULT
+==========================-->
+
+<section class="featured-books">
+
+<h2 class="section-title">
+
+Available Books
+
+</h2>
+
+<div id="booksContainer" class="books-grid">
+
+<!-- books.json automatically load here -->
+
+</div>
+
+</section>
+
+<!--=========================
+BIG LIBRARY BANNER
+==========================-->
+
+<section class="library-banner">
+
+<img src="logo.png" class="banner-logo">
+
+<h1>
+
+CHISHTI LIBRARY
+
+</h1>
+
+<p>
+
+Digital Islamic Library 2026
+
+</p>
+
+</section>
+
+<!--=========================
+CHISHTI AI
+==========================-->
+
+<button id="chatBtn">
+
+<img src="image.png" alt="CHISHTI AI">
+
+</button>
+
+<div id="chatWindow">
+
+<div class="chat-header">
+
+<img src="image.png">
+
+<h3>
+
+CHISHTI AI
+
+</h3>
+
+<button id="closeChat">
+
+<i class="fas fa-times"></i>
+
+</button>
+
+</div>
+
+<div id="chatMessages">
+
+<div class="bot-message">
+
+Assalamu Alaikum 👋
+
+How can I help you today?
+
+</div>
+
+</div>
+
+<div class="chat-input">
+
+<input
+type="text"
+id="chatInput"
+placeholder="Ask Chishti AI...">
+
+<button onclick="sendMessage()">
+
+<i class="fas fa-paper-plane"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!--=========================
+SCROLL TOP
+==========================-->
+
+<button id="scrollTop">
+
+<i class="fas fa-arrow-up"></i>
+
+</button>
+<!--=========================
+FOOTER
+==========================-->
+
+<footer class="footer">
+
+    <div class="footer-logo">
+
+        <img src="logo.png" alt="Chishti Library">
+
+        <h2>CHISHTI LIBRARY</h2>
+
+        <p>Digital Islamic Library</p>
+
+    </div>
+
+    <div class="footer-links">
+
+        <a href="index.html">Home</a>
+
+        <a href="books.html">Books</a>
+
+        <a href="author.html">Authors</a>
+
+        <a href="about.html">About</a>
+
+        <a href="contact.html">Contact</a>
+
+    </div>
+
+    <div class="footer-contact">
+
+        <h3>Contact</h3>
+
+        <p><i class="fas fa-phone"></i> 03067813783</p>
+
+        <p><i class="fas fa-phone"></i> 03006674752</p>
+
+        <p><i class="fas fa-phone"></i> 03027190715</p>
+
+    </div>
+
+    <div class="footer-copy">
+
+        <p>
+
+            © 2026 Chishti Library
+
+        </p>
+
+        <small>
+
+            Developed with ❤️ for Islamic Knowledge
+
+        </small>
+
+    </div>
+
 </footer>
 
+<!--=========================
+SCRIPT FILES
+==========================-->
+
 <script src="script.js"></script>
+
 </body>
 </html>
