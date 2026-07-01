@@ -1,245 +1,144 @@
-/* ==========================================
-   CHISHTI LIBRARY V1.0
-   SCRIPT.JS - PART 1A
-   Core + Loader + Navbar + Theme
-========================================== */
+/*==================================
+CHISHTI LIBRARY
+SCRIPT.JS PART 1
+==================================*/
 
-"use strict";
+/*==============
+LOADER
+===============*/
 
-/* ========= GLOBAL APP ========= */
+window.addEventListener("load", function () {
 
-const App = {
-    books: [],
-    knowledge: {},
-    offlineBooks: JSON.parse(localStorage.getItem("offlineBooks")) || [],
-    views: JSON.parse(localStorage.getItem("bookViews")) || {},
-    likes: JSON.parse(localStorage.getItem("bookLikes")) || {},
-    comments: JSON.parse(localStorage.getItem("bookComments")) || {}
-};
+    const loader = document.getElementById("loader");
 
-/* ========= SELECTORS ========= */
+    setTimeout(() => {
 
-const $ = (element) => document.querySelector(element);
-const $$ = (element) => document.querySelectorAll(element);
+        loader.style.opacity = "0";
 
-/* ========= LOADER ========= */
+        loader.style.visibility = "hidden";
 
-const loadingMessages = [
-
-    "Preparing Library...",
-    "Loading Books...",
-    "Initializing Chishti AI...",
-    "Loading Author...",
-    "Welcome..."
-
-];
-
-function startLoader(){
-
-    const loader = $("#loader");
-
-    if(!loader) return;
-
-    const loadingText = $("#loadingText");
-    const progress = $("#progressFill");
-
-    let value = 0;
-    let index = 0;
-
-    const timer = setInterval(()=>{
-
-        value++;
-
-        if(progress){
-
-            progress.style.width = value + "%";
-
-        }
-
-        if(value % 20 === 0){
-
-            if(loadingText){
-
-                loadingText.innerHTML = loadingMessages[index];
-
-            }
-
-            index++;
-
-            if(index >= loadingMessages.length){
-
-                index = loadingMessages.length-1;
-
-            }
-
-        }
-
-        if(value >= 100){
-
-            clearInterval(timer);
-
-            loader.classList.add("hide-loader");
-
-            setTimeout(()=>{
-
-                loader.remove();
-
-            },700);
-
-        }
-
-    },35);
-
-}
-
-/* ========= NAVBAR ========= */
-
-function navbarEffect(){
-
-    const navbar = $("#navbar");
-
-    if(!navbar) return;
-
-    window.addEventListener("scroll",()=>{
-
-        if(window.scrollY > 80){
-
-            navbar.classList.add("navbar-scroll");
-
-        }
-
-        else{
-
-            navbar.classList.remove("navbar-scroll");
-
-        }
-
-    });
-
-}
-
-/* ========= MOBILE MENU ========= */
-
-function mobileMenu(){
-
-    const menu = $("#menuBtn");
-    const nav = $("#navLinks");
-
-    if(!menu || !nav) return;
-
-    menu.onclick = ()=>{
-
-        nav.classList.toggle("showMenu");
-
-    }
-
-}
-
-/* ========= SCROLL TO TOP ========= */
-
-function scrollTopButton(){
-
-    const topBtn = $("#topBtn");
-
-    if(!topBtn) return;
-
-    window.addEventListener("scroll",()=>{
-
-        if(window.scrollY > 500){
-
-            topBtn.classList.add("showTop");
-
-        }
-
-        else{
-
-            topBtn.classList.remove("showTop");
-
-        }
-
-    });
-
-    topBtn.onclick=()=>{
-
-        window.scrollTo({
-
-            top:0,
-            behavior:"smooth"
-
-        });
-
-    }
-
-}
-
-/* ========= COUNTER ========= */
-
-function animateCounter(counter){
-
-    const target = Number(counter.dataset.target);
-
-    let current = 0;
-
-    const speed = target/120;
-
-    const update = ()=>{
-
-        current += speed;
-
-        if(current < target){
-
-            counter.innerHTML = Math.floor(current);
-
-            requestAnimationFrame(update);
-
-        }
-
-        else{
-
-            counter.innerHTML = target;
-
-        }
-
-    }
-
-    update();
-
-}
-
-function startCounters(){
-
-    const counters = $$(".counter");
-
-    counters.forEach(counter=>{
-
-        animateCounter(counter);
-
-    });
-
-}
-
-/* ========= INIT ========= */
-
-document.addEventListener("DOMContentLoaded",()=>{
-
-    startLoader();
-
-    navbarEffect();
-
-    mobileMenu();
-
-    scrollTopButton();
-
-    startCounters();
+    }, 2500);
 
 });
-/* ==========================================
-   CHISHTI LIBRARY V1.0
-   SCRIPT.JS - PART 1B
-   Books Loader + Search + Filters + Render
-========================================== */
 
-/* ========= LOAD BOOKS ========= */
+/*==============
+MOBILE MENU
+===============*/
+
+const menuBtn = document.querySelector(".mobile-menu");
+const menu = document.querySelector(".menu");
+
+if (menuBtn) {
+
+    menuBtn.addEventListener("click", () => {
+
+        menu.classList.toggle("show");
+
+    });
+
+}
+
+/*==============
+SCROLL TOP
+===============*/
+
+const scrollTopBtn = document.getElementById("scrollTop");
+
+window.addEventListener("scroll", () => {
+
+    if (window.scrollY > 300) {
+
+        scrollTopBtn.style.display = "block";
+
+    } else {
+
+        scrollTopBtn.style.display = "none";
+
+    }
+
+});
+
+scrollTopBtn.onclick = () => {
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+};
+
+/*==============
+VISITOR COUNTER
+===============*/
+
+let visitors = localStorage.getItem("visitorCount");
+
+if (!visitors) {
+
+    visitors = 1;
+
+} else {
+
+    visitors = Number(visitors) + 1;
+
+}
+
+localStorage.setItem("visitorCount", visitors);
+
+const visitorCounter = document.getElementById("visitorCounter");
+
+let visitorValue = 0;
+
+const visitorAnimation = setInterval(() => {
+
+    visitorValue++;
+
+    visitorCounter.innerHTML = visitorValue;
+
+    if (visitorValue >= visitors) {
+
+        clearInterval(visitorAnimation);
+
+    }
+
+}, 20);
+
+/*==============
+BOOK COUNTER
+===============*/
+
+const TOTAL_BOOKS = 150;
+
+const bookCounter = document.getElementById("bookCounter");
+
+let bookValue = 0;
+
+const bookAnimation = setInterval(() => {
+
+    bookValue++;
+
+    bookCounter.innerHTML = bookValue;
+
+    if (bookValue >= TOTAL_BOOKS) {
+
+        clearInterval(bookAnimation);
+
+    }
+
+}, 20);
+/*==================================
+SCRIPT.JS PART 2
+SEARCH + CATEGORY + BOOKS
+==================================*/
+
+let allBooks = [];
+
+/*==================
+LOAD BOOKS
+==================*/
 
 async function loadBooks() {
 
@@ -247,123 +146,53 @@ async function loadBooks() {
 
         const response = await fetch("books.json");
 
-        App.books = await response.json();
+        allBooks = await response.json();
 
-        renderBooks(App.books);
+        displayBooks(allBooks);
 
-        updateBookCounter();
+        document.getElementById("bookCounter").innerHTML = allBooks.length;
 
     } catch (error) {
 
-        console.error("Books Loading Error:", error);
+        console.log("Books not found.");
 
     }
 
 }
 
-/* ========= BOOK COUNTER ========= */
+loadBooks();
 
-function updateBookCounter() {
+/*==================
+DISPLAY BOOKS
+==================*/
 
-    const counter = document.getElementById("bookCounter");
+function displayBooks(books) {
 
-    if (counter) {
+    const container = document.getElementById("booksContainer");
 
-        counter.innerHTML = App.books.length;
+    if (!container) return;
 
-    }
+    container.innerHTML = "";
 
-}
+    books.forEach(book => {
 
-/* ========= RENDER BOOKS ========= */
+        container.innerHTML += `
 
-function renderBooks(data) {
+        <div class="book-card">
 
-    const grid = document.getElementById("booksGrid");
+            <img src="${book.cover}" alt="${book.title}">
 
-    if (!grid) return;
+            <div class="book-content">
 
-    grid.innerHTML = "";
+                <h2>${book.title}</h2>
 
-    data.forEach(book => {
+                <h3>${book.author}</h3>
 
-        const card = document.createElement("div");
+                <p>${book.category}</p>
 
-        card.className = "book-card";
-
-        card.innerHTML = `
-
-        <div class="book-image">
-
-            <img loading="lazy"
-
-            src="${book.cover}"
-
-            alt="${book.title}">
-
-        </div>
-
-        <div class="book-content">
-
-            <span class="category">
-
-                ${book.category}
-
-            </span>
-
-            <h2>${book.title}</h2>
-
-            <p class="author">
-
-                ${book.author}
-
-            </p>
-
-            <p class="description">
-
-                ${book.description}
-
-            </p>
-
-            <div class="book-buttons">
-
-                <a href="${book.reader}"
-
-                class="read-btn">
-
-                📖 Read Online
-
+                <a href="${book.pdf}" class="btn">
+                Read Book
                 </a>
-
-                <a href="${book.pdf}"
-
-                download
-
-                class="download-btn">
-
-                ⬇ Download PDF
-
-                </a>
-
-                <button
-
-                class="offline-btn"
-
-                onclick="downloadOffline(${book.id})">
-
-                💾 Offline
-
-                </button>
-
-            </div>
-
-            <div class="book-stats">
-
-                <span>👁 ${book.views || 0}</span>
-
-                <span>❤️ ${book.likes || 0}</span>
-
-                <span>💬 ${book.comments || 0}</span>
 
             </div>
 
@@ -371,848 +200,369 @@ function renderBooks(data) {
 
         `;
 
-        grid.appendChild(card);
-
     });
 
 }
 
-/* ========= SEARCH ========= */
+/*==================
+LIVE SEARCH
+==================*/
 
-function liveSearch() {
+function searchBooks() {
 
-    const input = document.getElementById("searchInput");
+    const value = document
+    .getElementById("searchInput")
+    .value
+    .toLowerCase();
 
-    if (!input) return;
+    const result = allBooks.filter(book =>
 
-    input.addEventListener("input", function () {
+        book.title.toLowerCase().includes(value) ||
 
-        const keyword = this.value.toLowerCase();
+        book.author.toLowerCase().includes(value) ||
 
-        const filtered = App.books.filter(book => {
-
-            return (
-
-                book.title.toLowerCase().includes(keyword) ||
-
-                book.author.toLowerCase().includes(keyword) ||
-
-                book.category.toLowerCase().includes(keyword)
-
-            );
-
-        });
-
-        renderBooks(filtered);
-
-    });
-
-}
-
-/* ========= FILTERS ========= */
-
-function filterBooks(type) {
-
-    if (type === "popular") {
-
-        renderBooks(
-
-            [...App.books].sort(
-
-                (a, b) =>
-
-                (b.views || 0) -
-
-                (a.views || 0)
-
-            )
-
-        );
-
-    }
-
-    else if (type === "latest") {
-
-        renderBooks(
-
-            [...App.books].sort(
-
-                (a, b) =>
-
-                (b.year || 0) -
-
-                (a.year || 0)
-
-            )
-
-        );
-
-    }
-
-    else if (type === "old") {
-
-        renderBooks(
-
-            [...App.books].sort(
-
-                (a, b) =>
-
-                (a.year || 0) -
-
-                (b.year || 0)
-
-            )
-
-        );
-
-    }
-
-    else {
-
-        renderBooks(App.books);
-
-    }
-
-}
-
-/* ========= OFFLINE ========= */
-
-function downloadOffline(id) {
-
-    if (!App.offlineBooks.includes(id)) {
-
-        App.offlineBooks.push(id);
-
-        localStorage.setItem(
-
-            "offlineBooks",
-
-            JSON.stringify(App.offlineBooks)
-
-        );
-
-        alert("Book saved in Offline Library.");
-
-    }
-
-    else {
-
-        alert("Book already exists.");
-
-    }
-
-}
-
-/* ========= START ========= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    loadBooks();
-
-    liveSearch();
-
-});
-/* ==========================================
-   CHISHTI LIBRARY V1.0
-   SCRIPT.JS - PART 1C
-   Chishti AI + knowledge.json
-========================================== */
-
-/* ========= LOAD KNOWLEDGE ========= */
-
-async function loadKnowledge() {
-
-    try {
-
-        const response = await fetch("knowledge.json");
-
-        App.knowledge = await response.json();
-
-        console.log("Knowledge Loaded");
-
-    }
-
-    catch (error) {
-
-        console.error("Knowledge Loading Failed", error);
-
-    }
-
-}
-
-/* ========= CHAT ========= */
-
-function sendMessage() {
-
-    const input = document.getElementById("userInput");
-    const chat = document.getElementById("chatMessages");
-
-    if (!input || !chat) return;
-
-    const question = input.value.trim();
-
-    if (question === "") return;
-
-    addMessage(question, "user");
-
-    input.value = "";
-
-    setTimeout(() => {
-
-        const reply = getAIReply(question);
-
-        addMessage(reply, "bot");
-
-        saveChat();
-
-    }, 500);
-
-}
-
-/* ========= ADD MESSAGE ========= */
-
-function addMessage(text, sender) {
-function toggleChat(){
-    document.getElementById("chatWindow")
-    .classList.toggle("showChat");
-}
-    const chat = document.getElementById("chatMessages");
-
-    const div = document.createElement("div");
-
-    div.className = sender + "-message";
-
-    div.innerHTML = `
-        <div class="message">
-            ${text}
-        </div>
-    `;
-
-    chat.appendChild(div);
-
-    chat.scrollTop = chat.scrollHeight;
-
-}
-
-/* ========= AI ========= */
-
-function getAIReply(question) {
-
-    if (!App.knowledge.intents)
-        return "Knowledge not loaded.";
-
-    question = question.toLowerCase();
-
-    for (const intent of App.knowledge.intents) {
-
-        for (const keyword of intent.keywords) {
-
-            if (question.includes(keyword.toLowerCase())) {
-
-                return intent.reply;
-
-            }
-
-        }
-
-    }
-
-    return App.knowledge.fallback ||
-        "Sorry, I couldn't understand your question.";
-
-}
-
-/* ========= CHAT HISTORY ========= */
-
-function saveChat() {
-
-    const chat = document.getElementById("chatMessages");
-
-    localStorage.setItem(
-
-        "chatHistory",
-
-        chat.innerHTML
+        book.category.toLowerCase().includes(value)
 
     );
 
-}
-
-function loadChat() {
-
-    const chat = document.getElementById("chatMessages");
-
-    const history = localStorage.getItem("chatHistory");
-
-    if (history) {
-
-        chat.innerHTML = history;
-
-    }
+    displayBooks(result);
 
 }
 
-function clearChat() {
+/*==================
+CATEGORY FILTER
+==================*/
 
-    localStorage.removeItem("chatHistory");
+function filterBooks(category) {
 
-    document.getElementById("chatMessages").innerHTML = "";
+    document.querySelectorAll(".category")
+    .forEach(btn => {
 
-}
+        btn.classList.remove("active");
 
-/* ========= CHAT WINDOW ========= */
+    });
 
-function toggleChat() {
+    event.target.classList.add("active");
 
-    const box = document.getElementById("chatWindow");
+    if (category === "All") {
 
-    if (!box) return;
-
-    box.classList.toggle("showChat");
-
-}
-
-/* ========= ENTER ========= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    loadKnowledge();
-
-    loadChat();
-
-    const input = document.getElementById("userInput");
-
-    if (input) {
-
-        input.addEventListener("keypress", function (e) {
-
-            if (e.key === "Enter") {
-
-                sendMessage();
-
-            }
-
-        });
-
-    }
-
-});
-/* ==========================================
-   CHISHTI LIBRARY V1.0
-   SCRIPT.JS - PART 4
-   Voice Input + Text To Speech
-   Likes + Views + Comments
-========================================== */
-
-
-/* ==========================================
-      VOICE INPUT
-========================================== */
-
-let recognition;
-
-function startVoiceInput() {
-
-    if (!('webkitSpeechRecognition' in window)) {
-
-        alert("Voice Input is not supported.");
+        displayBooks(allBooks);
 
         return;
 
     }
 
-    recognition = new webkitSpeechRecognition();
+    const filtered = allBooks.filter(book =>
 
-    recognition.lang = "ur-PK";
-
-    recognition.continuous = false;
-
-    recognition.interimResults = false;
-
-    recognition.start();
-
-    recognition.onresult = function (event) {
-
-        let text = event.results[0][0].transcript;
-
-        document.getElementById("userInput").value = text;
-
-        sendMessage();
-
-    };
-
-}
-
-
-/* ==========================================
-      TEXT TO SPEECH
-========================================== */
-
-function speak(text) {
-
-    speechSynthesis.cancel();
-
-    const speech = new SpeechSynthesisUtterance();
-
-    speech.text = text;
-
-    speech.lang = "ur-PK";
-
-    speech.rate = 1;
-
-    speech.pitch = 1;
-
-    speech.volume = 1;
-
-    speechSynthesis.speak(speech);
-
-}
-
-
-/* ==========================================
-      AI AUTO SPEAK
-========================================== */
-
-const oldReply = getAIReply;
-
-getAIReply = function (question) {
-
-    const answer = oldReply(question);
-
-    speak(answer);
-
-    return answer;
-
-};
-
-
-/* ==========================================
-      BOOK VIEW COUNTER
-========================================== */
-
-function addView(bookID) {
-
-    if (!App.views[bookID]) {
-
-        App.views[bookID] = 0;
-
-    }
-
-    App.views[bookID]++;
-
-    localStorage.setItem(
-
-        "bookViews",
-
-        JSON.stringify(App.views)
+        book.category === category
 
     );
 
-}
-
-
-/* ==========================================
-      LIKE SYSTEM
-========================================== */
-
-function likeBook(bookID) {
-
-    if (!App.likes[bookID]) {
-
-        App.likes[bookID] = 0;
-
-    }
-
-    App.likes[bookID]++;
-
-    localStorage.setItem(
-
-        "bookLikes",
-
-        JSON.stringify(App.likes)
-
-    );
-
-    alert("❤️ Thanks for liking this book.");
+    displayBooks(filtered);
 
 }
+/*==================================
+SCRIPT.JS PART 3
+CHISHTI AI CHATBOT
+==================================*/
 
+/*==================
+CHAT ELEMENTS
+==================*/
 
-/* ==========================================
-      COMMENT SYSTEM
-========================================== */
+const chatBtn = document.getElementById("chatBtn");
+const chatWindow = document.getElementById("chatWindow");
+const closeChat = document.getElementById("closeChat");
+const chatInput = document.getElementById("chatInput");
+const chatMessages = document.getElementById("chatMessages");
 
-function addComment(bookID) {
+/*==================
+OPEN CHAT
+==================*/
 
-    const comment = prompt("Write your comment");
+if(chatBtn){
 
-    if (!comment) return;
+chatBtn.addEventListener("click",()=>{
 
-    if (!App.comments[bookID]) {
+chatWindow.style.display="flex";
 
-        App.comments[bookID] = [];
-
-    }
-
-    App.comments[bookID].push({
-
-        text: comment,
-
-        time: new Date().toLocaleString()
-
-    });
-
-    localStorage.setItem(
-
-        "bookComments",
-
-        JSON.stringify(App.comments)
-
-    );
-
-    alert("Comment Added");
+});
 
 }
 
+/*==================
+CLOSE CHAT
+==================*/
 
-/* ==========================================
-      DOWNLOAD COUNTER
-========================================== */
+if(closeChat){
 
-function increaseDownload(bookID){
+closeChat.addEventListener("click",()=>{
 
-    let downloads = JSON.parse(
+chatWindow.style.display="none";
 
-        localStorage.getItem("downloads")
-
-    ) || {};
-
-    if(!downloads[bookID]){
-
-        downloads[bookID]=0;
-
-    }
-
-    downloads[bookID]++;
-
-    localStorage.setItem(
-
-        "downloads",
-
-        JSON.stringify(downloads)
-
-    );
+});
 
 }
 
+/*==================
+ENTER KEY
+==================*/
 
-/* ==========================================
-      GET DOWNLOADS
-========================================== */
+if(chatInput){
 
-function getDownloads(bookID){
+chatInput.addEventListener("keypress",(e)=>{
 
-    let downloads = JSON.parse(
+if(e.key==="Enter"){
 
-        localStorage.getItem("downloads")
-
-    ) || {};
-
-    return downloads[bookID] || 0;
+sendMessage();
 
 }
 
+});
 
-/* ==========================================
-      PAGE VIEWS
-========================================== */
+}
 
-(function(){
+/*==================
+SEND MESSAGE
+==================*/
 
-let views = Number(
+async function sendMessage(){
 
-localStorage.getItem("websiteViews")
+const text=chatInput.value.trim();
 
-)||0;
+if(text==="") return;
 
-views++;
+chatMessages.innerHTML+=`
 
-localStorage.setItem(
+<div class="user-message">
 
-"websiteViews",
+${text}
 
-views
+</div>
+
+`;
+
+chatInput.value="";
+
+chatMessages.scrollTop=chatMessages.scrollHeight;
+
+let reply="";
+
+try{
+
+const response=await fetch("qa.json");
+
+const data=await response.json();
+
+const msg=text.toLowerCase();
+
+const found=data.find(item=>
+
+msg.includes(item.question.toLowerCase())
 
 );
 
-const counter=document.getElementById(
+if(found){
 
-"websiteViews"
+reply=found.answer;
 
-);
+}else{
 
-if(counter){
-
-counter.innerHTML=views;
+reply="Sorry, mujhe is sawal ka jawab library database me nahi mila.";
 
 }
 
-})();
+}catch{
 
-
-/* ==========================================
-      READER COUNTER
-========================================== */
-
-(function(){
-
-let readers = Number(
-
-localStorage.getItem("readers")
-
-)||0;
-
-readers++;
-
-localStorage.setItem(
-
-"readers",
-
-readers
-
-);
-
-const counter=document.getElementById(
-
-"readerCounter"
-
-);
-
-if(counter){
-
-counter.innerHTML=readers;
+reply="AI Database load nahi ho saka.";
 
 }
 
-})();
+setTimeout(()=>{
 
-/* ==========================================
-   CHISHTI LIBRARY V1.0
-   SCRIPT.JS - PART 5
-   Premium UI + Animations + Utilities
-========================================== */
+chatMessages.innerHTML+=`
 
+<div class="bot-message">
 
-/* ==========================================
-   SCROLL REVEAL ANIMATION
-========================================== */
+${reply}
 
-function scrollReveal() {
+</div>
 
-    const elements = document.querySelectorAll(".reveal");
+`;
 
-    const reveal = () => {
+chatMessages.scrollTop=chatMessages.scrollHeight;
 
-        const windowHeight = window.innerHeight;
-
-        elements.forEach(el => {
-
-            const top = el.getBoundingClientRect().top;
-
-            if (top < windowHeight - 120) {
-
-                el.classList.add("active");
-
-            }
-
-        });
-
-    };
-
-    window.addEventListener("scroll", reveal);
-
-    reveal();
+},700);
 
 }
 
+/*==================
+AUTO SCROLL
+==================*/
 
-/* ==========================================
-   SMOOTH PAGE LINKS
-========================================== */
+const observer=new MutationObserver(()=>{
 
-document.querySelectorAll('a[href^="#"]').forEach(link => {
-
-    link.addEventListener("click", function (e) {
-
-        e.preventDefault();
-
-        const target = document.querySelector(this.getAttribute("href"));
-
-        if (target) {
-
-            target.scrollIntoView({
-
-                behavior: "smooth"
-
-            });
-
-        }
-
-    });
+chatMessages.scrollTop=chatMessages.scrollHeight;
 
 });
 
+if(chatMessages){
 
-/* ==========================================
-   BUTTON RIPPLE EFFECT
-========================================== */
+observer.observe(chatMessages,{
 
-document.addEventListener("click", function (e) {
-
-    if (!e.target.classList.contains("btn")) return;
-
-    const circle = document.createElement("span");
-
-    circle.className = "ripple";
-
-    circle.style.left = e.offsetX + "px";
-
-    circle.style.top = e.offsetY + "px";
-
-    e.target.appendChild(circle);
-
-    setTimeout(() => {
-
-        circle.remove();
-
-    }, 600);
+childList:true
 
 });
 
-
-/* ==========================================
-   ACTIVE NAVBAR LINK
-========================================== */
-
-function activeNav() {
-
-    const links = document.querySelectorAll(".nav-link");
-
-    const current = location.pathname.split("/").pop();
-
-    links.forEach(link => {
-
-        const href = link.getAttribute("href");
-
-        if (href === current) {
-
-            link.classList.add("active");
-
-        }
-
-    });
-
 }
+/*==================================
+SCRIPT.JS PART 4
+FINAL FUNCTIONS
+==================================*/
 
+/*==================
+BOOK SEARCH FROM AI
+==================*/
 
-/* ==========================================
-   CHAT TYPING ANIMATION
-========================================== */
+function findBook(message){
 
-function typingAnimation(text, callback) {
+    const text = message.toLowerCase();
 
-    const chat = document.getElementById("chatMessages");
+    const found = allBooks.find(book =>
 
-    if (!chat) return;
+        book.title.toLowerCase().includes(text)
 
-    const box = document.createElement("div");
+    );
 
-    box.className = "bot-message";
+    if(found){
 
-    chat.appendChild(box);
+        return `
+        📚 <b>${found.title}</b><br>
+        👤 ${found.author}<br>
+        📂 ${found.category}<br><br>
 
-    let i = 0;
-
-    const timer = setInterval(() => {
-
-        box.innerHTML += text.charAt(i);
-
-        i++;
-
-        chat.scrollTop = chat.scrollHeight;
-
-        if (i >= text.length) {
-
-            clearInterval(timer);
-
-            if (callback) callback();
-
-        }
-
-    }, 25);
-
-}
-
-
-/* ==========================================
-   COPY BOOK LINK
-========================================== */
-
-function copyBookLink(url) {
-
-    navigator.clipboard.writeText(url);
-
-    alert("Book link copied.");
-
-}
-
-
-/* ==========================================
-   SHARE BOOK
-========================================== */
-
-function shareBook(title, url) {
-
-    if (navigator.share) {
-
-        navigator.share({
-
-            title: title,
-
-            text: title,
-
-            url: url
-
-        });
-
-    } else {
-
-        copyBookLink(url);
+        <a href="${found.pdf}" class="btn">
+        Read Book
+        </a>
+        `;
 
     }
 
+    return null;
+
 }
 
+/*==================
+UPDATE SEND MESSAGE
+==================*/
 
-/* ==========================================
-   IMAGE LAZY LOAD
-========================================== */
+async function sendMessage(){
 
-const lazyImages = document.querySelectorAll("img[data-src]");
+    const text = chatInput.value.trim();
 
-const observer = new IntersectionObserver(entries => {
+    if(text=="") return;
 
-    entries.forEach(entry => {
+    chatMessages.innerHTML += `
 
-        if (entry.isIntersecting) {
+    <div class="user-message">
 
-            const img = entry.target;
+        ${text}
 
-            img.src = img.dataset.src;
+    </div>
 
-            img.removeAttribute("data-src");
+    `;
 
-            observer.unobserve(img);
+    chatInput.value="";
+
+    chatMessages.scrollTop=chatMessages.scrollHeight;
+
+    let reply = findBook(text);
+
+    if(reply){
+
+        setTimeout(()=>{
+
+            chatMessages.innerHTML += `
+
+            <div class="bot-message">
+
+                ${reply}
+
+            </div>
+
+            `;
+
+            chatMessages.scrollTop=chatMessages.scrollHeight;
+
+        },500);
+
+        return;
+
+    }
+
+    try{
+
+        const response=await fetch("qa.json");
+
+        const qa=await response.json();
+
+        const msg=text.toLowerCase();
+
+        const answer=qa.find(item=>
+
+            msg.includes(item.question.toLowerCase())
+
+        );
+
+        if(answer){
+
+            reply=answer.answer;
+
+        }else{
+
+            reply="📖 Sorry, mujhe iska jawab library me nahi mila.";
+
+        }
+
+    }catch{
+
+        reply="⚠ AI Database Error.";
+
+    }
+
+    setTimeout(()=>{
+
+        chatMessages.innerHTML += `
+
+        <div class="bot-message">
+
+            ${reply}
+
+        </div>
+
+        `;
+
+        chatMessages.scrollTop=chatMessages.scrollHeight;
+
+    },700);
+
+}
+
+/*==================
+PAGE ANIMATION
+==================*/
+
+window.addEventListener("scroll",()=>{
+
+    document.querySelectorAll("section").forEach(section=>{
+
+        const top = section.getBoundingClientRect().top;
+
+        if(top < window.innerHeight-100){
+
+            section.style.opacity="1";
+
+            section.style.transform="translateY(0px)";
 
         }
 
@@ -1220,298 +570,22 @@ const observer = new IntersectionObserver(entries => {
 
 });
 
-lazyImages.forEach(img => observer.observe(img));
-/* ==========================================
-   BOOK HOVER EFFECT
-========================================== */
+/*==================
+SECTION DEFAULT
+==================*/
 
-document.querySelectorAll(".book-card").forEach(card => {
+document.querySelectorAll("section").forEach(section=>{
 
-    card.addEventListener("mouseenter", () => {
+    section.style.opacity="0";
 
-        card.classList.add("hover");
+    section.style.transform="translateY(40px)";
 
-    });
-
-    card.addEventListener("mouseleave", () => {
-
-        card.classList.remove("hover");
-
-    });
-});
-/* ==========================================
-   START PREMIUM FUNCTIONS
-========================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    scrollReveal();
-
-    activeNav();
-
-});
-/* ==========================================
-   CHISHTI LIBRARY V1.0
-   SCRIPT.JS - PART 6 (FINAL)
-   Performance + Mobile + Final Functions
-========================================== */
-
-
-/* ==========================================
-      MOBILE MENU
-========================================== */
-
-function initMobileMenu() {
-
-    const menuBtn = document.getElementById("menuBtn");
-    const navLinks = document.getElementById("navLinks");
-
-    if (!menuBtn || !navLinks) return;
-
-    menuBtn.addEventListener("click", () => {
-
-        navLinks.classList.toggle("show");
-
-        menuBtn.classList.toggle("active");
-
-    });
-
-}
-/* ==========================================
-      CLOSE MENU
-========================================== */
-
-document.querySelectorAll("#navLinks a").forEach(link => {
-
-    link.addEventListener("click", () => {
-
-        const nav = document.getElementById("navLinks");
-
-        if (nav) {
-
-            nav.classList.remove("show");
-
-        }
-
-    });
-
-});
-/* ==========================================
-      PAGE LOADER FADE
-========================================== */
-
-window.addEventListener("load", () => {
-
-    const loader = document.getElementById("loader");
-
-    if (!loader) return;
-
-    loader.classList.add("loader-hide");
-
-    setTimeout(() => {
-
-        loader.remove();
-
-    }, 800);
+    section.style.transition=".8s";
 
 });
 
-
-/* ==========================================
-      SAVE READING PROGRESS
-========================================== */
-
-function saveReading(bookID, page) {
-
-    let progress = JSON.parse(
-
-        localStorage.getItem("readingProgress")
-
-    ) || {};
-
-    progress[bookID] = page;
-
-    localStorage.setItem(
-
-        "readingProgress",
-
-        JSON.stringify(progress)
-
-    );
-
-}
-
-
-/* ==========================================
-      GET READING PROGRESS
-========================================== */
-
-function getReading(bookID) {
-
-    let progress = JSON.parse(
-
-        localStorage.getItem("readingProgress")
-
-    ) || {};
-
-    return progress[bookID] || 1;
-
-}
-
-
-/* ==========================================
-      FAVORITES
-========================================== */
-
-function addFavorite(bookID) {
-
-    let fav = JSON.parse(
-
-        localStorage.getItem("favorites")
-
-    ) || [];
-
-    if (!fav.includes(bookID)) {
-
-        fav.push(bookID);
-
-    }
-
-    localStorage.setItem(
-
-        "favorites",
-
-        JSON.stringify(fav)
-
-    );
-
-    alert("Book added to Favorites.");
-
-}
-
-
-/* ==========================================
-      BOOKMARK
-========================================== */
-
-function bookmarkBook(bookID) {
-
-    let bookmark = JSON.parse(
-
-        localStorage.getItem("bookmarks")
-
-    ) || [];
-
-    if (!bookmark.includes(bookID)) {
-
-        bookmark.push(bookID);
-
-    }
-
-    localStorage.setItem(
-
-        "bookmarks",
-
-        JSON.stringify(bookmark)
-
-    );
-
-}
-
-
-/* ==========================================
-      DARK MODE READY
-========================================== */
-
-function toggleTheme() {
-
-    document.body.classList.toggle("light-theme");
-
-    localStorage.setItem(
-
-        "theme",
-
-        document.body.classList.contains("light-theme")
-
-    );
-
-}
-
-
-(function () {
-
-    if (localStorage.getItem("theme") === "true") {
-
-        document.body.classList.add("light-theme");
-
-    }
-
-})();
-
-
-/* ==========================================
-      ERROR HANDLER
-========================================== */
-
-window.onerror = function (
-
-    message,
-
-    source,
-
-    line,
-
-    column,
-
-    error
-
-) {
-
-    console.error(
-
-        "Library Error:",
-
-        message,
-
-        source,
-
-        line
-
-    );
-
-};
-
-
-/* ==========================================
-      PERFORMANCE
-========================================== */
-
-window.addEventListener("pageshow", () => {
-
-    console.log(
-
-        "Chishti Library Loaded Successfully"
-
-    );
-
-});
-
-
-/* ==========================================
-      APP START
-========================================== */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    initMobileMenu();
-
-});
-
-
-/* ==========================================
-      VERSION
-========================================== */
-
-const VERSION = "1.0 Premium";
-
-console.log("Chishti Library", VERSION);
+/*==================
+CONSOLE
+==================*/
+
+console.log("✅ Chishti Library Loaded Successfully");
