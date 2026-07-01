@@ -1,19 +1,20 @@
-/*==============================
+/*=========================================
 CHISHTI LIBRARY
-STYLE.CSS PART 1
-==============================*/
+PREMIUM STYLE
+PART 1
+=========================================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-scroll-behavior:smooth;
 font-family:'Poppins',sans-serif;
+scroll-behavior:smooth;
 }
 
 body{
 
-background:#0B0B0B;
+background:linear-gradient(135deg,#7A0000 0%,#3B0000 50%,#0B0B0B 100%);
 color:#fff;
 overflow-x:hidden;
 
@@ -33,20 +34,15 @@ display:block;
 
 }
 
-:root{
+section{
 
---primary:#7A0000;
---dark:#3B0000;
---black:#0B0B0B;
---gold:#C9A227;
---green:#7CFC00;
---white:#ffffff;
+padding:80px 8%;
 
 }
 
-/*==============================
+/*=========================================
 LOADER
-==============================*/
+=========================================*/
 
 #loader{
 
@@ -55,11 +51,12 @@ top:0;
 left:0;
 width:100%;
 height:100%;
-background:linear-gradient(135deg,#7A0000,#3B0000,#0B0B0B);
+background:#0b0b0b;
 display:flex;
 justify-content:center;
 align-items:center;
-z-index:99999;
+z-index:999999;
+transition:.6s;
 
 }
 
@@ -79,74 +76,59 @@ animation:floatLogo 3s ease-in-out infinite;
 .loader-content h1{
 
 margin-top:20px;
-font-size:35px;
-letter-spacing:3px;
+font-size:38px;
+font-weight:800;
+letter-spacing:2px;
 
 }
 
 .loader-content p{
 
 margin:20px 0;
-font-size:18px;
-color:#ddd;
+color:#cccccc;
 
 }
 
 .loading-bar{
 
-width:280px;
-height:10px;
-background:#222;
+width:300px;
+height:8px;
+background:#333;
 border-radius:50px;
 overflow:hidden;
-margin:auto;
 
 }
 
 .loading-progress{
 
+width:0%;
 height:100%;
-width:0;
-background:linear-gradient(90deg,#C9A227,#7CFC00);
-animation:loading 3s linear forwards;
+background:linear-gradient(90deg,#C9A227,#FFD700);
+animation:loading 2.5s linear forwards;
 
 }
 
 @keyframes loading{
 
-100%{
+0%{width:0%;}
 
-width:100%;
-
-}
+100%{width:100%;}
 
 }
 
 @keyframes floatLogo{
 
-0%{
+0%{transform:translateY(0px);}
 
-transform:translateY(0);
+50%{transform:translateY(-12px);}
 
-}
-
-50%{
-
-transform:translateY(-12px);
+100%{transform:translateY(0px);}
 
 }
 
-100%{
-
-transform:translateY(0);
-
-}
-
-}
-
-/*==============================
+/*=========================================
 NAVBAR
-==============================*/
+=========================================*/
 
 .navbar{
 
@@ -154,13 +136,13 @@ position:fixed;
 top:0;
 left:0;
 width:100%;
-padding:15px 8%;
+padding:18px 8%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-background:rgba(20,20,20,.35);
+background:rgba(0,0,0,.45);
 backdrop-filter:blur(15px);
-z-index:999;
+z-index:9999;
 
 }
 
@@ -180,74 +162,59 @@ width:60px;
 
 .logo h2{
 
-font-size:22px;
-color:white;
+font-size:30px;
+font-weight:800;
 
 }
 
 .logo span{
 
 font-size:13px;
-color:#ccc;
+color:#ddd;
 
 }
 
 .menu{
 
 display:flex;
-gap:30px;
 list-style:none;
+gap:35px;
 
 }
 
 .menu a{
 
-font-size:16px;
-font-weight:500;
+font-weight:600;
 transition:.3s;
 
 }
 
 .menu a:hover{
 
-color:var(--gold);
+color:#C9A227;
 
 }
 
 .mobile-menu{
 
 display:none;
-font-size:28px;
+font-size:30px;
 cursor:pointer;
 
 }
 
-/*==============================
+/*=========================================
 HERO
-==============================*/
+=========================================*/
 
 .hero{
 
-min-height:100vh;
-
-background:
-
-linear-gradient(
-135deg,
-#7A0000 0%,
-#3B0000 50%,
-#0B0B0B 100%
-);
-
+height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
 text-align:center;
-padding:140px 20px 80px;
-
 position:relative;
-
-overflow:hidden;
 
 }
 
@@ -255,7 +222,7 @@ overflow:hidden;
 
 position:absolute;
 inset:0;
-background:rgba(0,0,0,.35);
+background:rgba(0,0,0,.25);
 
 }
 
@@ -263,584 +230,248 @@ background:rgba(0,0,0,.35);
 
 position:relative;
 z-index:2;
-max-width:900px;
 
 }
 
 .hero-logo{
 
-width:180px;
+width:170px;
 margin:auto;
-margin-bottom:25px;
-
 animation:floatLogo 4s ease-in-out infinite;
 
-filter:drop-shadow(0 0 20px rgba(201,162,39,.5));
+filter:drop-shadow(0 0 25px gold);
 
 }
 
 .hero h1{
 
-font-size:60px;
-font-weight:800;
-letter-spacing:3px;
+font-size:72px;
+font-weight:900;
+margin-top:20px;
 
 }
 
 .hero h3{
 
-font-size:26px;
-margin-top:10px;
-color:var(--gold);
+font-size:36px;
+color:#FFD700;
+margin:18px 0;
 
 }
 
 .hero p{
 
-margin-top:20px;
-font-size:19px;
-line-height:34px;
-color:#f2f2f2;
-
-}
-/*==============================
-LATEST BOOK
-==============================*/
-
-.latest-book{
-
-padding:100px 8%;
-background:#111;
+font-size:22px;
+max-width:800px;
+margin:auto;
 
 }
 
-.latest-book-card{
+/*=========================================
+SEARCH
+=========================================*/
 
+.search-box{
+
+width:700px;
+max-width:95%;
+margin:40px auto;
 display:flex;
-justify-content:center;
 align-items:center;
-gap:50px;
-flex-wrap:wrap;
-
-background:rgba(255,255,255,.05);
-
-border:1px solid rgba(255,255,255,.12);
-
-backdrop-filter:blur(15px);
-
-border-radius:25px;
-
-padding:40px;
-
-transition:.4s;
+background:white;
+border-radius:50px;
+padding:15px 25px;
 
 }
 
-.latest-book-card:hover{
+.search-box i{
 
-transform:translateY(-8px);
-
-box-shadow:0 0 30px rgba(201,162,39,.25);
-
-}
-
-.book-image img{
-
-width:280px;
-
-border-radius:18px;
-
-box-shadow:0 0 25px rgba(0,0,0,.5);
-
-}
-
-.book-info{
-
-max-width:550px;
-
-}
-
-.book-info h2{
-
-font-size:40px;
-
-margin-bottom:15px;
-
-}
-
-.book-info h3{
-
-font-size:24px;
-
-color:var(--gold);
-
-margin-bottom:20px;
-
-}
-
-.book-info p{
-
-font-size:18px;
-
-line-height:32px;
-
-margin-bottom:25px;
-
-color:#ddd;
-
-}
-
-.book-buttons{
-
-display:flex;
-
-gap:15px;
-
-flex-wrap:wrap;
-
-}
-
-/*==============================
-AI CHAT BUTTON
-==============================*/
-
-#chatBtn{
-
-position:fixed;
-
-right:25px;
-
-bottom:25px;
-
-width:75px;
-
-height:75px;
-
-border:none;
-
-background:transparent;
-
-cursor:pointer;
-
-z-index:9999;
-
-animation:floatLogo 3s ease-in-out infinite;
-
-}
-
-#chatBtn img{
-
-width:100%;
-
-height:100%;
-
-border-radius:50%;
-
-box-shadow:0 0 25px rgba(201,162,39,.55);
-
-}
-
-/*==============================
-CHAT WINDOW
-==============================*/
-
-#chatWindow{
-
-position:fixed;
-
-right:25px;
-
-bottom:115px;
-
-width:360px;
-
-height:520px;
-
-background:#181818;
-
-border-radius:20px;
-
-overflow:hidden;
-
-display:none;
-
-flex-direction:column;
-
-box-shadow:0 0 40px rgba(0,0,0,.55);
-
-z-index:9999;
-
-}
-
-.chat-header{
-
-height:70px;
-
-background:linear-gradient(135deg,#7A0000,#3B0000);
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-padding:15px;
-
-}
-
-.chat-header img{
-
-width:45px;
-
-}
-
-.chat-header h3{
-
+color:#7A0000;
 font-size:20px;
 
 }
 
-#closeChat{
+.search-box input{
 
+flex:1;
+border:none;
+outline:none;
+padding-left:15px;
+font-size:18px;
 background:none;
 
-border:none;
-
-color:white;
-
-font-size:24px;
-
-cursor:pointer;
-
 }
-
-#chatMessages{
-
-flex:1;
-
-padding:18px;
-
-overflow-y:auto;
-
-}
-
-.bot-message{
-
-background:#292929;
-
-padding:15px;
-
-border-radius:15px;
-
-margin-bottom:15px;
-
-line-height:28px;
-
-}
-
-.chat-input{
-
-display:flex;
-
-padding:15px;
-
-background:#111;
-
-}
-
-.chat-input input{
-
-flex:1;
-
-height:50px;
-
-background:#222;
-
-border:none;
-
-outline:none;
-
-padding:0 15px;
-
-color:white;
-
-border-radius:10px;
-
-}
-
-.chat-input button{
-
-width:55px;
-
-margin-left:10px;
-
-border:none;
-
-background:var(--gold);
-
-border-radius:10px;
-
-cursor:pointer;
-
-font-size:20px;
-
-}
-/*==============================
-PREMIUM BANNER
-==============================*/
+/*=========================================
+PREMIUM LIBRARY BANNER
+=========================================*/
 
 .library-banner{
 
 padding:100px 20px;
-
 text-align:center;
+background:linear-gradient(135deg,#3B0000,#7A0000,#0B0B0B);
 
-background:
-linear-gradient(
-135deg,
-#7A0000,
-#3B0000,
-#0B0B0B
-);
+border-top:2px solid rgba(201,162,39,.4);
+border-bottom:2px solid rgba(201,162,39,.4);
 
 }
 
 .banner-logo{
 
-width:170px;
-
+width:150px;
 margin:auto;
-
-margin-bottom:25px;
-
 animation:floatLogo 4s ease-in-out infinite;
-
-filter:drop-shadow(0 0 20px rgba(201,162,39,.6));
+filter:drop-shadow(0 0 20px gold);
 
 }
 
 .library-banner h1{
 
-font-size:65px;
-
-font-weight:800;
-
+font-size:60px;
+font-weight:900;
+margin-top:25px;
 letter-spacing:3px;
-
-color:white;
 
 }
 
 .library-banner h3{
 
-margin-top:20px;
-
 font-size:26px;
+margin-top:15px;
+color:#FFD700;
 
-color:var(--gold);
+}
+
+/*=========================================
+SECTION TITLE
+=========================================*/
+
+.section-title{
+
+font-size:42px;
+text-align:center;
+margin-bottom:50px;
+font-weight:800;
 
 }
 
-/*==============================
-CATEGORIES
-==============================*/
-
-.categories{
-
-padding:100px 8%;
-
-background:#0B0B0B;
-
-}
+/*=========================================
+CATEGORY
+=========================================*/
 
 .category-grid{
 
 display:flex;
-
 justify-content:center;
-
 gap:20px;
-
 flex-wrap:wrap;
 
 }
 
 .category{
 
-padding:15px 35px;
-
+padding:14px 35px;
 border:none;
-
-border-radius:50px;
-
-background:#202020;
-
+border-radius:40px;
+background:#1b1b1b;
 color:white;
-
-font-size:17px;
-
-font-weight:600;
-
 cursor:pointer;
-
-transition:.35s;
-
-}
-
-.category:hover{
-
-background:var(--gold);
-
-color:#111;
-
-transform:translateY(-5px);
+font-weight:700;
+transition:.3s;
 
 }
 
+.category:hover,
 .category.active{
 
-background:var(--gold);
-
+background:#C9A227;
 color:#111;
 
 }
 
-/*==============================
-FEATURED BOOKS
-==============================*/
-
-.featured-books{
-
-padding:100px 8%;
-
-background:#111;
-
-}
+/*=========================================
+BOOKS GRID
+=========================================*/
 
 #booksContainer{
 
 display:grid;
-
-grid-template-columns:
-repeat(auto-fit,minmax(260px,1fr));
-
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:35px;
 
 }
 
 .book-card{
 
-background:#1b1b1b;
-
-border-radius:20px;
-
+background:#181818;
+border-radius:22px;
 overflow:hidden;
-
 transition:.4s;
-
 border:1px solid rgba(255,255,255,.08);
 
 }
 
 .book-card:hover{
 
-transform:translateY(-10px);
-
-box-shadow:0 0 25px rgba(201,162,39,.25);
+transform:translateY(-12px);
+box-shadow:0 0 30px rgba(201,162,39,.35);
 
 }
 
 .book-card img{
 
 width:100%;
-
-height:350px;
-
+height:360px;
 object-fit:cover;
 
 }
 
 .book-content{
 
-padding:20px;
+padding:25px;
 
 }
 
 .book-content h2{
 
-font-size:22px;
-
+font-size:24px;
 margin-bottom:10px;
 
 }
 
 .book-content h3{
 
-font-size:17px;
-
-color:var(--gold);
-
-margin-bottom:15px;
+font-size:16px;
+color:#FFD700;
+margin-bottom:12px;
 
 }
 
 .book-content p{
 
 color:#ccc;
-
-font-size:15px;
-
-line-height:28px;
-
-margin-bottom:20px;
+margin-bottom:25px;
 
 }
 
-.book-content .btn{
-
-width:100%;
-
-text-align:center;
-
-}
-/*==============================
+/*=========================================
 AUTHORS
-==============================*/
-
-.authors{
-
-padding:100px 8%;
-
-background:#0B0B0B;
-
-}
+=========================================*/
 
 .author-grid{
 
 display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-
+grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
 gap:40px;
-
-margin-top:50px;
 
 }
 
 .author-card{
 
-background:rgba(255,255,255,.06);
-
-border:1px solid rgba(255,255,255,.1);
-
-backdrop-filter:blur(15px);
-
-border-radius:25px;
-
+background:#181818;
 padding:35px;
-
+border-radius:25px;
 text-align:center;
-
 transition:.4s;
 
 }
@@ -849,191 +480,140 @@ transition:.4s;
 
 transform:translateY(-10px);
 
-box-shadow:0 0 30px rgba(201,162,39,.3);
-
 }
 
 .author-card img{
 
 width:220px;
-
 height:220px;
-
 margin:auto;
-
-border-radius:20px;
-
+border-radius:50%;
 object-fit:cover;
-
-margin-bottom:25px;
+border:5px solid #C9A227;
 
 }
 
 .author-card h2{
 
+margin-top:25px;
 font-size:30px;
-
-margin-bottom:10px;
 
 }
 
 .author-card h3{
 
-font-size:28px;
-
-color:var(--gold);
-
-font-family:"Noto Nastaliq Urdu",serif;
+margin-top:10px;
+font-size:30px;
+color:#FFD700;
 
 }
 
-/*==============================
+/*=========================================
 CONTACT
-==============================*/
+=========================================*/
 
 .contact{
 
-padding:100px 8%;
-
 background:#111;
-
 text-align:center;
-
-}
-
-.contact h2{
-
-font-size:45px;
-
-margin-bottom:50px;
 
 }
 
 .contact-card{
 
-max-width:700px;
-
-margin:auto;
-
-background:rgba(255,255,255,.06);
-
-border:1px solid rgba(255,255,255,.1);
-
-border-radius:25px;
-
-padding:40px;
+display:inline-block;
+padding:40px 70px;
+border-radius:20px;
+background:#1b1b1b;
 
 }
 
 .contact-card p{
 
 font-size:22px;
-
 margin:20px 0;
 
 }
 
 .contact-card i{
 
-color:var(--gold);
-
-margin-right:12px;
+color:#7CFC00;
+margin-right:15px;
 
 }
 
-/*==============================
+/*=========================================
 FOOTER
-==============================*/
+=========================================*/
 
 footer{
 
-padding:60px 20px;
-
-background:#050505;
-
+padding:70px 20px;
+background:#090909;
 text-align:center;
 
 }
 
 footer img{
 
-width:100px;
-
+width:90px;
 margin:auto;
-
-margin-bottom:20px;
 
 }
 
 footer h2{
 
-font-size:32px;
-
-margin-bottom:10px;
+margin-top:20px;
+font-size:34px;
 
 }
 
 footer p{
 
+margin-top:10px;
 color:#bbb;
-
-margin-bottom:20px;
 
 }
 
 footer h4{
 
-font-size:18px;
-
-color:var(--gold);
+margin-top:35px;
+color:#888;
 
 }
 
-/*==============================
-SCROLL TOP
-==============================*/
+/*=========================================
+SCROLL BUTTON
+=========================================*/
 
 #scrollTop{
 
 position:fixed;
-
-right:25px;
-
-bottom:120px;
-
+right:30px;
+bottom:140px;
 width:55px;
-
 height:55px;
-
 border:none;
-
 border-radius:50%;
-
-background:var(--gold);
-
+background:#C9A227;
 color:#111;
-
-font-size:20px;
-
+font-size:22px;
 cursor:pointer;
-
 display:none;
-
 z-index:999;
-
 transition:.3s;
 
 }
 
 #scrollTop:hover{
 
-transform:translateY(-5px);
+transform:scale(1.1);
 
 }
 
-/*==============================
+/*=========================================
 RESPONSIVE
-==============================*/
+=========================================*/
 
 @media(max-width:991px){
 
@@ -1049,27 +629,28 @@ display:block;
 
 }
 
+.menu.show{
+
+display:flex;
+position:absolute;
+top:90px;
+left:0;
+width:100%;
+background:#111;
+flex-direction:column;
+padding:20px;
+
+}
+
 .hero h1{
 
-font-size:42px;
+font-size:48px;
 
 }
 
 .hero h3{
 
-font-size:22px;
-
-}
-
-.hero-logo{
-
-width:140px;
-
-}
-
-.library-banner h1{
-
-font-size:45px;
+font-size:24px;
 
 }
 
@@ -1077,23 +658,38 @@ font-size:45px;
 
 flex-direction:column;
 
-text-align:center;
-
 }
 
 .book-image img{
 
-width:220px;
+width:100%;
+
+}
+
+.library-banner h1{
+
+font-size:42px;
+
+}
+
+.section-title{
+
+font-size:34px;
 
 }
 
 #chatWindow{
 
 width:95%;
-
 right:2.5%;
+bottom:120px;
 
-height:500px;
+}
+
+.author-card img{
+
+width:180px;
+height:180px;
 
 }
 
@@ -1103,7 +699,13 @@ height:500px;
 
 .hero{
 
-padding:120px 15px 70px;
+padding-top:100px;
+
+}
+
+.hero-logo{
+
+width:120px;
 
 }
 
@@ -1113,17 +715,21 @@ font-size:34px;
 
 }
 
+.hero h3{
+
+font-size:20px;
+
+}
+
 .hero p{
 
 font-size:16px;
-
-line-height:28px;
 
 }
 
 .search-box{
 
-height:55px;
+padding:12px 18px;
 
 }
 
@@ -1135,68 +741,20 @@ width:100%;
 
 .library-banner h1{
 
-font-size:32px;
-
-}
-
-.section-title{
-
 font-size:30px;
 
 }
 
-.author-card img{
-
-width:170px;
-
-height:170px;
-
-}
-
-.contact-card p{
+.library-banner h3{
 
 font-size:18px;
 
 }
 
-}
-/* ==========================
-CHISHTI AI FLOATING BUTTON
-========================== */
+.book-card img{
 
-#chatBtn{
-position:fixed;
-right:20px;
-bottom:20px;
-width:90px;
-height:90px;
-background:transparent;
-border:none;
-cursor:pointer;
-z-index:99999;
-animation:floatLogo 3s ease-in-out infinite;
+height:280px;
+
 }
 
-#chatBtn img{
-width:100%;
-height:100%;
-object-fit:contain;
-filter:drop-shadow(0 0 20px #C9A227);
-transition:.3s;
-}
-
-#chatBtn:hover{
-transform:scale(1.1);
-}
-
-@keyframes floatLogo{
-0%{
-transform:translateY(0);
-}
-50%{
-transform:translateY(-12px);
-}
-100%{
-transform:translateY(0);
-}
 }
