@@ -1007,3 +1007,285 @@ ${book.featured ? '<span class="featured" style="display:block;">Featured</span>
 
 <span>
 <i class="fas fa-eye"></i
+/*====================================
+LIVE SEARCH
+====================================*/
+
+const searchInput = document.getElementById("searchInput");
+
+if (searchInput) {
+
+    searchInput.addEventListener("keyup", function () {
+
+        const value = this.value.toLowerCase();
+
+        const filtered = booksData.filter(book =>
+
+            book.title.toLowerCase().includes(value) ||
+
+            book.author.toLowerCase().includes(value) ||
+
+            book.category.toLowerCase().includes(value)
+
+        );
+
+        renderBooks(filtered);
+
+    });
+
+}
+
+/*====================================
+CATEGORY FILTER
+====================================*/
+
+function filterBooks(category) {
+
+    document.querySelectorAll(".category").forEach(btn => {
+
+        btn.classList.remove("active");
+
+    });
+
+    if (event) {
+
+        event.target.classList.add("active");
+
+    }
+
+    if (category === "All") {
+
+        renderBooks(booksData);
+
+        return;
+
+    }
+
+    const filtered = booksData.filter(book =>
+
+        book.category === category
+
+    );
+
+    renderBooks(filtered);
+
+}
+
+/*====================================
+AUTO LOAD
+====================================*/
+
+loadBooks();
+/*====================================
+CHISHTI AI
+====================================*/
+
+let knowledge = [];
+
+/*==========================
+LOAD KNOWLEDGE
+==========================*/
+
+async function loadKnowledge(){
+
+try{
+
+const response = await fetch("knowledge.json");
+
+knowledge = await response.json();
+
+}catch(e){
+
+console.log("Knowledge not found");
+
+}
+
+}
+
+loadKnowledge();
+
+/*==========================
+CHAT OPEN
+==========================*/
+
+const chatBtn=document.getElementById("chatBtn");
+const chatWindow=document.getElementById("chatWindow");
+const closeChat=document.getElementById("closeChat");
+
+if(chatBtn){
+
+chatBtn.onclick=()=>{
+
+chatWindow.classList.add("show");
+
+}
+
+}
+
+if(closeChat){
+
+closeChat.onclick=()=>{
+
+chatWindow.classList.remove("show");
+
+}
+
+}
+
+/*==========================
+SEND MESSAGE
+==========================*/
+
+function sendMessage(){
+
+const input=document.getElementById("chatInput");
+
+const message=input.value.trim();
+
+if(message==="") return;
+
+const messages=document.getElementById("chatMessages");
+
+messages.innerHTML+=`
+
+<div class="user-message">
+
+${message}
+
+</div>
+
+`;
+
+input.value="";
+
+replyAI(message);
+
+}
+
+/*==========================
+REPLY
+==========================*/
+
+function replyAI(text){
+
+const messages=document.getElementById("chatMessages");
+
+const msg=text.toLowerCase();
+
+/* BOOK SEARCH */
+
+const foundBook=booksData.find(book=>
+
+book.title.toLowerCase().includes(msg)
+
+);
+
+if(foundBook){
+
+messages.innerHTML+=`
+
+<div class="bot-message">
+
+📚 <b>${foundBook.title}</b><br><br>
+
+Author : ${foundBook.author}<br>
+
+Category : ${foundBook.category}<br><br>
+
+<a href="${foundBook.reader}" class="btn">
+
+Read Online
+
+</a>
+
+</div>
+
+`;
+
+messages.scrollTop=messages.scrollHeight;
+
+return;
+
+}
+
+/*==========================
+KNOWLEDGE SEARCH
+==========================*/
+
+const answer = knowledge.find(item =>
+
+    msg.includes(item.question.toLowerCase()) ||
+
+    (item.roman && msg.includes(item.roman.toLowerCase())) ||
+
+    (item.urdu && msg.includes(item.urdu.toLowerCase()))
+
+);
+
+if(answer){
+
+messages.innerHTML += `
+
+<div class="bot-message">
+
+${answer.answer}
+
+</div>
+
+`;
+
+messages.scrollTop = messages.scrollHeight;
+
+return;
+
+}
+
+/* DEFAULT */
+
+messages.innerHTML+=`
+
+<div class="bot-message">
+
+Sorry, mujhe iska jawab nahi mila.<br><br>
+
+Please ask about:
+
+📚 Books
+
+👤 Authors
+
+📖 Chishti Library
+
+🤲 Naat
+
+🕌 Manqabat
+
+📜 Hamd
+
+</div>
+
+`;
+
+messages.scrollTop=messages.scrollHeight;
+
+}
+
+/*==========================
+ENTER KEY
+==========================*/
+
+const chatInput=document.getElementById("chatInput");
+
+if(chatInput){
+
+chatInput.addEventListener("keypress",e=>{
+
+if(e.key==="Enter"){
+
+sendMessage();
+
+}
+
+});
+
+}
