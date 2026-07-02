@@ -1,16 +1,12 @@
-/* =============================
-   CHISHTI LIBRARY SCRIPT
-============================= */
-
 let books = [];
 let filteredBooks = [];
 
 const booksContainer = document.getElementById("booksContainer");
 const searchInput = document.getElementById("searchInput");
 
-/* =============================
-   LOAD BOOKS
-============================= */
+/* ==============================
+        LOAD BOOKS
+============================== */
 
 async function loadBooks() {
     try {
@@ -20,69 +16,83 @@ async function loadBooks() {
         filteredBooks = [...books];
 
         renderBooks(filteredBooks);
-        updateCounters();
+        updateBookCounter();
         loadLatestBook();
 
     } catch (error) {
-        console.error("Error loading books:", error);
+        console.log("Error loading books:", error);
     }
 }
 
-/* =============================
-   RENDER BOOKS
-============================= */
+loadBooks();
 
-function renderBooks(bookList) {
+/* ==============================
+        RENDER BOOKS
+============================== */
+
+function renderBooks(list) {
+
+    if (!booksContainer) return;
 
     booksContainer.innerHTML = "";
 
-    if (!bookList.length) {
-        booksContainer.innerHTML = "<h2 style='color:#fff'>No Books Found</h2>";
-        return;
-    }
+    list.forEach(book => {
 
-    const template = document.getElementById("bookTemplate");
+        const card = document
+            .getElementById("bookTemplate")
+            .content
+            .cloneNode(true);
 
-    bookList.forEach(book => {
-
-        const card = template.content.cloneNode(true);
-
-        // COVER
+        // IMAGE FIX
         card.querySelector(".cover").src =
-            book.cover || "images/no-image.png";
+            book.cover || "no-image.png";
 
-        card.querySelector(".cover").alt = book.title;
+        card.querySelector(".cover").alt =
+            book.title;
 
-        // TEXT
-        card.querySelector(".title").textContent = book.title;
-        card.querySelector(".author").textContent = book.author;
-        card.querySelector(".description").textContent = book.description || "";
-        card.querySelector(".book-category").textContent = book.category;
+        card.querySelector(".title").textContent =
+            book.title;
 
-        // STATS
-        card.querySelector(".views").textContent = book.views || 0;
-        card.querySelector(".downloads").textContent = book.downloads || 0;
+        card.querySelector(".author").textContent =
+            book.author;
 
-        // LINKS
-        card.querySelector(".readBtn").href = book.reader;
-        card.querySelector(".downloadBtn").href = book.pdf;
+        card.querySelector(".description").textContent =
+            book.description || "";
 
-        // FEATURED TAG
-        const latestTag = card.querySelector(".latest-tag");
+        card.querySelector(".book-category").textContent =
+            book.category;
+
+        card.querySelector(".views").textContent =
+            book.views || 0;
+
+        card.querySelector(".downloads").textContent =
+            book.downloads || 0;
+
+        card.querySelector(".readBtn").href =
+            book.reader;
+
+        card.querySelector(".downloadBtn").href =
+            book.pdf;
+
+        const latestTag =
+            card.querySelector(".latest-tag");
 
         if (latestTag) {
-            latestTag.style.display = book.latest ? "inline-block" : "none";
+            latestTag.style.display = book.latest ? "block" : "none";
         }
 
         booksContainer.appendChild(card);
+
     });
+
 }
 
-/* =============================
-   SEARCH
-============================= */
+/* ==============================
+        SEARCH
+============================== */
 
 if (searchInput) {
+
     searchInput.addEventListener("input", function () {
 
         const keyword = this.value.toLowerCase();
@@ -95,11 +105,12 @@ if (searchInput) {
 
         renderBooks(filteredBooks);
     });
+
 }
 
-/* =============================
-   CATEGORY FILTER
-============================= */
+/* ==============================
+        CATEGORY FILTER (FIXED)
+============================== */
 
 function filterBooks(category, btn) {
 
@@ -119,25 +130,22 @@ function filterBooks(category, btn) {
     renderBooks(filteredBooks);
 }
 
-/* =============================
-   COUNTERS
-============================= */
+/* ==============================
+        COUNTER
+============================== */
 
-function updateCounters() {
+function updateBookCounter() {
 
-    const bookCounter = document.getElementById("bookCounter");
-    const downloadCounter = document.getElementById("downloadCounter");
+    const counter = document.getElementById("bookCounter");
 
-    if (bookCounter) bookCounter.textContent = books.length;
+    if (!counter) return;
 
-    let totalDownloads = books.reduce((sum, b) => sum + (b.downloads || 0), 0);
-
-    if (downloadCounter) downloadCounter.textContent = totalDownloads;
+    counter.textContent = books.length;
 }
 
-/* =============================
-   LATEST BOOK
-============================= */
+/* ==============================
+        LATEST BOOK
+============================== */
 
 function loadLatestBook() {
 
@@ -145,37 +153,11 @@ function loadLatestBook() {
 
     if (!latest) return;
 
-    const img = document.querySelector(".latest-cover img");
-    const title = document.querySelector(".latest-content h2");
-    const author = document.querySelector(".latest-content h4");
-
-    if (img) img.src = latest.cover;
-    if (title) title.textContent = latest.title;
-    if (author) author.textContent = latest.author;
+    console.log("Latest Book:", latest.title);
 }
 
-/* =============================
-   CHAT BOT (SIMPLE FIX)
-============================= */
+/* ==============================
+        FIX BUTTON CLICK ISSUE
+============================== */
 
-const chatBtn = document.getElementById("chatBtn");
-const chatWindow = document.getElementById("chatWindow");
-const closeChat = document.getElementById("closeChat");
-
-if (chatBtn) {
-    chatBtn.addEventListener("click", () => {
-        chatWindow.classList.toggle("active");
-    });
-}
-
-if (closeChat) {
-    closeChat.addEventListener("click", () => {
-        chatWindow.classList.remove("active");
-    });
-}
-
-/* =============================
-   INIT
-============================= */
-
-window.addEventListener("DOMContentLoaded", loadBooks);
+window.filterBooks = filterBooks;
