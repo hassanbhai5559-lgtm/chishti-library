@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +7,16 @@
 <title>Chishti Library</title>
 
 <link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
 
 <!-- LOADER -->
 <div id="loader">
-  <h2>Loading...</h2>
+  <h2>CHISHTI LIBRARY</h2>
 </div>
 
 <!-- NAV -->
@@ -24,8 +26,18 @@
 
 <!-- HERO -->
 <section class="hero">
-  <h1>Chishti Library</h1>
+  <h1>Digital Islamic Library</h1>
+
+  <input type="text" id="searchInput" placeholder="Search books...">
 </section>
+
+<!-- CATEGORY -->
+<div class="categories">
+  <button onclick="filterBooks('All')">All</button>
+  <button onclick="filterBooks('Naat')">Naat</button>
+  <button onclick="filterBooks('Manqabat')">Manqabat</button>
+  <button onclick="filterBooks('Hamd')">Hamd</button>
+</div>
 
 <!-- BOOKS -->
 <section>
@@ -35,68 +47,17 @@
 <!-- CHAT BUTTON -->
 <button id="chatBtn">🤖</button>
 
-<!-- CHAT WINDOW -->
+<!-- CHAT -->
 <div id="chatWindow">
-
   <div id="chatMessages"></div>
 
-  <input id="userInput" type="text" placeholder="Ask...">
-
+  <input id="userInput" placeholder="Ask about books...">
   <button onclick="sendMessage()">Send</button>
-
 </div>
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Chishti Library</title>
-
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<!-- LOADER -->
-<div id="loader">
-  <h2>Loading...</h2>
-</div>
-
-<!-- NAV -->
-<nav class="navbar">
-  <h2>Chishti Library</h2>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <h1>Chishti Library</h1>
-</section>
-
-<!-- BOOKS -->
-<section>
-  <div id="booksContainer"></div>
-</section>
-
-<!-- CHAT BUTTON -->
-<button id="chatBtn">🤖</button>
-
-<!-- CHAT WINDOW -->
-<div id="chatWindow">
-
-  <div id="chatMessages"></div>
-
-  <input id="userInput" type="text" placeholder="Ask...">
-
-  <button onclick="sendMessage()">Send</button>
-
-</div>
-    
 <!-- FOOTER -->
 <footer>
-  <p>© 2026 Chishti Library</p>
+  © 2026 Chishti Library
 </footer>
 
 <script src="script.js"></script>
