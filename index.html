@@ -2,497 +2,101 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Chishti Library | Digital Islamic Library</title>
+<title>Chishti Library</title>
 
-<meta name="description"
-content="Official Chishti Library - Digital Islamic Library of Hazrat Allama Saim Chishti">
-
-<meta name="keywords"
-content="Islamic Books, Urdu Books, Naat, Hamd, Manqabat, Hazrat Allama Saim Chishti, Chishti Library">
-
-<meta name="author"
-content="Chishti Library">
-
-<link rel="icon"
-href="logo.png">
-
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
-
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-<link rel="stylesheet"
-href="style.css">
-
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!--==========================
-PREMIUM LOADER
-===========================-->
-
+<!-- LOADER -->
 <div id="loader">
-
-<div class="loader-content">
-
-<img src="logo.png"
-class="loader-logo">
-
-<h1>CHISHTI LIBRARY</h1>
-
-<p>
-
-Preparing Digital Library...
-
-</p>
-
-<div class="loading-bar">
-
-<div class="loading-progress"></div>
-
+  <h2>Loading...</h2>
 </div>
 
-</div>
-
-</div>
-
-<!--==========================
-NAVBAR
-===========================-->
-
+<!-- NAV -->
 <nav class="navbar">
-
-<div class="logo">
-
-<img src="logo.png">
-
-<div>
-
-<h2>
-
-CHISHTI LIBRARY
-
-</h2>
-
-<span>
-
-Digital Islamic Library
-
-</span>
-
-</div>
-
-</div>
-
-<ul class="menu">
-
-<li>
-
-<a href="index.html">
-
-Home
-
-</a>
-
-</li>
-
-<li>
-
-<a href="books.html">
-
-Books
-
-</a>
-
-</li>
-
-<li>
-
-<a href="author.html">Author</a>
-
-</li>
-
-<li>
-
-<a href="#contact">
-
-Contact
-
-</a>
-
-</li>
-
-</ul>
-
-<div class="mobile-menu">
-
-<i class="fas fa-bars"></i>
-
-</div>
-
+  <h2>Chishti Library</h2>
 </nav>
 
-<!--==========================
-HERO
-===========================-->
-
+<!-- HERO -->
 <section class="hero">
-
-<div class="hero-overlay"></div>
-
-<div class="hero-content">
-
-<img src="logo.png"
-class="hero-logo">
-
-<h1>
-
-CHISHTI LIBRARY
-
-</h1>
-
-<h3>
-
-Digital Islamic Library
-
-</h3>
-
-<p>
-
-Read Islamic Books,
-Naat,
-Hamd,
-Manqabat,
-Maqala,
-Islamic History
-and much more.
-
-</p>
-
-<!-- SEARCH -->
-
-<div class="search-box">
-
-<i class="fas fa-search"></i>
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search Books...">
-
-</div>
-
-<!-- COUNTERS -->
-
-<div class="counter-area">
-
-<div class="counter-card">
-
-<i class="fas fa-eye"></i>
-
-<h2 id="visitorCounter">
-
-0
-
-</h2>
-
-<p>
-
-Visitors
-
-</p>
-
-</div>
-
-<div class="counter-card">
-
-<i class="fas fa-book-open"></i>
-
-<h2 id="bookCounter">
-
-0
-
-</h2>
-
-<p>
-
-Books
-
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-<!--==========================
-LATEST BOOK
-===========================-->
-
-<section class="latest-book">
-
-<h2 class="section-title">
-
-Latest Book
-
-</h2>
-
-<div class="latest-book-card">
-
-<div class="book-image">
-
-<img src="images/books/shaheed-ibn-e-shaheed-cover.png"
-alt="Latest Book">
-
-</div>
-
-<div class="book-info">
-
-<h2>
-
-Shaheed Ibn-e-Shaheed
-
-</h2>
-
-<h3>
-
-Hazrat Allama Saim Chishti
-
-</h3>
-
-<p>
-
-Read the latest Islamic book from Chishti Library.
-
-</p>
-
-<div class="book-buttons">
-
-<a href="shaheed-ibn-e-shaheed.html"
-class="btn">
-
-Read Online
-
-</a>
-
-<a href="shaheed-ibn-e-shaheed.pdf"
-class="btn"
-download>
-
-Download PDF
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
+  <h1>Chishti Library</h1>
 </section>
 
-<!--==========================
-AI CHATBOT
-===========================-->
+<!-- BOOKS -->
+<section>
+  <div id="booksContainer"></div>
+</section>
 
-<button id="chatBtn">
+<!-- CHAT BUTTON -->
+<button id="chatBtn">🤖</button>
 
-<img src="images/chishti-ai-logo.png"
-alt="AI">
-
-</button>
-
+<!-- CHAT WINDOW -->
 <div id="chatWindow">
 
-<div class="chat-header">
+  <div id="chatMessages"></div>
 
-<img src="images/chishti-ai-logo.png">
+  <input id="userInput" type="text" placeholder="Ask...">
 
-<h3>
-
-CHISHTI AI
-
-</h3>
-
-<button id="closeChat">
-
-<i class="fas fa-times"></i>
-
-</button>
+  <button onclick="sendMessage()">Send</button>
 
 </div>
 
-<div id="messages">
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="bot-message">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-Assalamu Alaikum 👋<br>
+<title>Chishti Library</title>
 
-Welcome to Chishti Library AI.<br>
+<link rel="stylesheet" href="style.css">
+</head>
 
-Ask me anything.
+<body>
 
+<!-- LOADER -->
+<div id="loader">
+  <h2>Loading...</h2>
 </div>
 
-</div>
+<!-- NAV -->
+<nav class="navbar">
+  <h2>Chishti Library</h2>
+</nav>
 
-<div class="typing"
-id="typing">
-
-AI is typing...
-
-</div>
-
-<div class="chat-input">
-
-<input
-type="text"
-id="userInput"
-placeholder="Ask anything...">
-
-<button
-onclick="sendMessage()">
-
-<i class="fas fa-paper-plane"></i>
-
-</button>
-
-</div>
-
-</div>
-
-<!--==========================
-PREMIUM BANNER
-===========================-->
-
-<section class="library-banner">
-
-<img src="logo.png"
-class="banner-logo">
-
-<h1>
-
-CHISHTI LIBRARY
-
-</h1>
-
-<h3>
-
-World Class Digital Islamic Library
-
-</h3>
-
+<!-- HERO -->
+<section class="hero">
+  <h1>Chishti Library</h1>
 </section>
 
-<!--==========================
-BOOK CATEGORIES
-===========================-->
+<!-- BOOKS -->
+<section>
+  <div id="booksContainer"></div>
+</section>
 
-<section class="categories">
+<!-- CHAT BUTTON -->
+<button id="chatBtn">🤖</button>
 
-<h2 class="section-title">
+<!-- CHAT WINDOW -->
+<div id="chatWindow">
 
-Book Categories
+  <div id="chatMessages"></div>
 
-</h2>
+  <input id="userInput" type="text" placeholder="Ask...">
 
-<div class="category-grid">
-
-<button class="category active">
-
-All
-
-</button>
-
-<button class="category">
-
-Naat
-
-</button>
-
-<button class="category">
-
-Hamd
-
-</button>
-
-<button class="category">
-
-Manqabat
-
-</button>
-
-<button class="category">
-
-Maqala
-
-</button>
+  <button onclick="sendMessage()">Send</button>
 
 </div>
-
-</section>
-
-<!--==========================
-BOOKS
-===========================-->
-
-<section class="featured-books">
-
-<h2 class="section-title">
-
-Books
-
-</h2>
-
-<div id="booksContainer">
-
-<!-- books.json auto load -->
-
-</div>
-
-</section>
-<!--==========================
-CONTACT
-===========================-->
-
-<section id="contact" class="contact-section">
-
-    <h2 class="section-title">Contact</h2>
-
-    <div class="contact-box">
-
-        <i class="fas fa-phone-alt"></i>
-
-        <a href="tel:+923027190715">+92 302 7190715</a>
-
-    </div>
-
-</section>
-
-<!--==========================
-FOOTER
-===========================-->
-
+    
+<!-- FOOTER -->
 <footer>
-
-    <p>© 2026 Chishti Library. All Rights Reserved.</p>
-
+  <p>© 2026 Chishti Library</p>
 </footer>
 
 <script src="script.js"></script>
