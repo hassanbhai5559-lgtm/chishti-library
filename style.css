@@ -1,324 +1,85 @@
-/* =========================
-   GLOBAL RESET
-========================= */
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
 body{
-    background:#0f172a;
-    color:#fff;
-    overflow-x:hidden;
+font-family: Arial;
+margin:0;
+background:#0f172a;
+color:white;
 }
-
-/* =========================
-   NAVBAR
-========================= */
 
 .navbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 30px;
-    background:#111827;
-    position:sticky;
-    top:0;
-    z-index:999;
+display:flex;
+align-items:center;
+padding:10px;
+background:#111;
 }
 
-.navbar .logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
+.logo img{
+width:40px;
+margin-right:10px;
 }
 
-.navbar .logo img{
-    width:45px;
-    height:45px;
-    border-radius:50%;
-}
-
-.menu{
-    display:flex;
-    list-style:none;
-    gap:20px;
-}
-
-.menu li a{
-    color:#fff;
-    text-decoration:none;
-    font-weight:500;
-    transition:0.3s;
-}
-
-.menu li a:hover,
-.menu li a.active{
-    color:gold;
-}
-
-/* =========================
-   HERO
-========================= */
-
-.books-hero{
-    padding:80px 20px;
-    text-align:center;
-    background:linear-gradient(135deg,#111827,#0f172a);
-}
-
-.books-hero h1{
-    font-size:40px;
-    margin:20px 0;
-}
-
-.books-hero p{
-    color:#aaa;
-}
-
-/* =========================
-   SEARCH BOX
-========================= */
-
-.search-box{
-    margin-top:20px;
-    display:flex;
-    justify-content:center;
-    gap:10px;
-}
-
-.search-box input{
-    padding:12px;
-    width:250px;
-    border-radius:8px;
-    border:none;
-    outline:none;
-}
-
-.search-box button{
-    padding:12px 18px;
-    background:gold;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-/* =========================
-   COUNTER
-========================= */
-
-.counter-section{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-    gap:15px;
-    padding:30px;
-}
-
-.counter-card{
-    background:#1f2937;
-    padding:20px;
-    text-align:center;
-    border-radius:12px;
-}
-
-/* =========================
-   CATEGORIES
-========================= */
-
-.categories{
-    padding:30px;
-    text-align:center;
-}
-
-.category-grid{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-    margin-top:20px;
-}
-
-.category{
-    padding:10px 20px;
-    border:none;
-    background:#1f2937;
-    color:#fff;
-    border-radius:20px;
-    cursor:pointer;
-    transition:0.3s;
-}
-
-.category:hover{
-    background:gold;
-    color:#000;
-}
-
-.category.active{
-    background:gold;
-    color:#000;
-}
-
-/* =========================
-   BOOK GRID
-========================= */
-
+/* BOOK GRID */
 .books-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-    padding:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+padding:20px;
 }
 
 .book-card{
-    background:#1f2937;
-    border-radius:15px;
-    overflow:hidden;
-    transition:0.3s;
+background:#1e293b;
+padding:10px;
+border-radius:10px;
 }
 
-.book-card:hover{
-    transform:translateY(-5px);
+.book-card img{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:10px;
 }
 
-.book-cover img{
-    width:100%;
-    height:250px;
-    object-fit:cover;
+/* CATEGORY */
+.categories{
+display:flex;
+gap:10px;
+padding:10px;
 }
 
-.book-details{
-    padding:15px;
+.category{
+padding:8px 12px;
+border:none;
+cursor:pointer;
+background:#334155;
+color:white;
 }
 
-.book-details h2{
-    font-size:18px;
+.category.active{
+background:gold;
+color:black;
 }
 
-.book-details h3{
-    font-size:14px;
-    color:#aaa;
-}
-
-.book-buttons{
-    display:flex;
-    justify-content:space-between;
-    margin-top:10px;
-}
-
-.btn{
-    padding:8px 12px;
-    border-radius:6px;
-    text-decoration:none;
-    font-size:13px;
-}
-
-.readBtn{
-    background:gold;
-    color:#000;
-}
-
-.downloadBtn{
-    background:#374151;
-    color:#fff;
-}
-
-/* =========================
-   LATEST TAG
-========================= */
-
-.latest-tag{
-    position:absolute;
-    background:red;
-    padding:5px 10px;
-    font-size:12px;
-    top:10px;
-    left:10px;
-    border-radius:5px;
-}
-
-/* =========================
-   CHATBOT BUTTON (FLOAT FIXED)
-========================= */
-
+/* AI BUTTON FLOAT */
 #chatBtn{
-    position:fixed;
-    bottom:25px;
-    right:25px;
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    background:#111827;
-    border:2px solid gold;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    z-index:9999;
-    animation:float 3s ease-in-out infinite;
+position:fixed;
+bottom:20px;
+right:20px;
+width:70px;
+height:70px;
+border-radius:50%;
+border:none;
+cursor:pointer;
+background:#111;
+z-index:9999;
+animation:float 3s infinite ease-in-out;
 }
 
 #chatBtn img{
-    width:40px;
-    height:40px;
+width:40px;
+height:40px;
 }
-
-/* FLOAT ANIMATION */
 
 @keyframes float{
-    0%{transform:translateY(0);}
-    50%{transform:translateY(-10px);}
-    100%{transform:translateY(0);}
-}
-
-/* =========================
-   CHAT WINDOW
-========================= */
-
-.chat-window{
-    position:fixed;
-    bottom:110px;
-    right:25px;
-    width:320px;
-    height:450px;
-    background:#111827;
-    border-radius:15px;
-    overflow:hidden;
-    display:none;
-    flex-direction:column;
-    z-index:9999;
-}
-
-.chat-window.active{
-    display:flex;
-}
-
-.chat-header{
-    background:#1f2937;
-    padding:10px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:768px){
-    .menu{
-        display:none;
-    }
-
-    .books-hero h1{
-        font-size:28px;
-    }
-
-    .chat-window{
-        width:90%;
-        right:5%;
-    }
+0%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0);}
 }
