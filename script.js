@@ -161,3 +161,6 @@ function loadLatestBook() {
 ============================== */
 
 window.filterBooks = filterBooks;
+window.onload = () => {
+    document.getElementById("loader").style.display = "none";
+}
