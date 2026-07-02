@@ -1,96 +1,211 @@
+/*=====================================
+        GLOBAL VARIABLES
+=====================================*/
+
 let books = [];
 let filteredBooks = [];
 
-const container = document.getElementById("booksContainer");
-const template = document.getElementById("bookTemplate").content;
+const booksContainer = document.getElementById("booksContainer");
+const searchInput = document.getElementById("searchInput");
 
-fetch("books.json")
-    .then(res => res.json())
-    .then(data => {
-        books = data;
-        filteredBooks = data;
-        renderBooks(books);
-        updateCounter();
-    });
+/*=====================================
+        LOAD BOOKS
+=====================================*/
 
-function renderBooks(list) {
+async function loadBooks() {
 
-    container.innerHTML = "";
+    try {
 
-    list.forEach(book => {
+        const res = await fetch("books.json");
+        books = await res.json();
 
-        const card = template.cloneNode(true);
+        filteredBooks = [...books];
+
+        renderBooks(filteredBooks);
+        updateBookCounter();
+        loadLatestBook();
+
+    } catch (error) {
+        console.log("Error loading books:", error);
+    }
+}
+
+/*=====================================
+        RENDER BOOKS
+=====================================*/
+
+function renderBooks(bookList) {
+
+    if (!booksContainer) return;
+
+    booksContainer.innerHTML = "";
+
+    bookList.forEach(book => {
+
+        const template = document.getElementById("bookTemplate");
+        const card = template.content.cloneNode(true);
 
         card.querySelector(".cover").src =
-            book.cover || "images/no-image.png";
+            book.cover || "no-image.png";
+
+        card.querySelector(".cover").alt =
+            book.title;
 
         card.querySelector(".title").textContent =
-            book.title || "No Title";
+            book.title;
 
         card.querySelector(".author").textContent =
-            book.author || "";
+            book.author;
 
         card.querySelector(".description").textContent =
             book.description || "";
 
         card.querySelector(".book-category").textContent =
-            book.category || "";
+            book.category;
 
         card.querySelector(".views").textContent =
-            book.views ?? 0;
+            book.views || 0;
 
         card.querySelector(".downloads").textContent =
-            book.downloads ?? 0;
+            book.downloads || 0;
 
         card.querySelector(".readBtn").href =
-            book.reader || "#";
+            book.reader;
 
         card.querySelector(".downloadBtn").href =
-            book.pdf || "#";
+            book.pdf;
 
-        const badge = card.querySelector(".latest-tag");
+        const latest = card.querySelector(".latest-tag");
 
-        if (badge) {
-            badge.style.display = book.latest ? "block" : "none";
+        if (latest) {
+            latest.style.display = book.latest ? "block" : "none";
         }
 
-        container.appendChild(card);
+        booksContainer.appendChild(card);
+
     });
 }
 
-/* SEARCH */
-document.getElementById("searchInput")?.addEventListener("input", function () {
+/*=====================================
+        SEARCH SYSTEM
+=====================================*/
 
-    const value = this.value.toLowerCase();
+if (searchInput) {
 
-    filteredBooks = books.filter(book =>
-        book.title.toLowerCase().includes(value) ||
-        book.author.toLowerCase().includes(value) ||
-        book.category.toLowerCase().includes(value)
-    );
+    searchInput.addEventListener("input", function () {
 
-    renderBooks(filteredBooks);
-});
+        const keyword = this.value.toLowerCase();
 
-/* CATEGORY FIX */
-function filterBooks(category) {
+        filteredBooks = books.filter(book => {
+
+            return (
+                book.title.toLowerCase().includes(keyword) ||
+                book.author.toLowerCase().includes(keyword) ||
+                book.category.toLowerCase().includes(keyword)
+            );
+
+        });
+
+        renderBooks(filteredBooks);
+
+    });
+}
+
+/*=====================================
+        CATEGORY FILTER FIXED
+=====================================*/
+
+function filterBooks(category, button) {
 
     document.querySelectorAll(".category")
         .forEach(btn => btn.classList.remove("active"));
 
-    event.target.classList.add("active");
+    if (button) {
+        button.classList.add("active");
+    }
 
-    filteredBooks = category === "All"
-        ? books
-        : books.filter(b => b.category.toLowerCase() === category.toLowerCase());
+    if (category === "All") {
+        filteredBooks = [...books];
+    } else {
+        filteredBooks = books.filter(book =>
+            book.category.toLowerCase() === category.toLowerCase()
+        );
+    }
 
     renderBooks(filteredBooks);
 }
 
-/* COUNTER */
-function updateCounter() {
+/*=====================================
+        BOOK COUNTER
+=====================================*/
+
+function updateBookCounter() {
+
     const counter = document.getElementById("bookCounter");
+
     if (!counter) return;
 
-    counter.textContent = books.length;
+    let count = 0;
+
+    const interval = setInterval(() => {
+
+        count++;
+        counter.textContent = count;
+
+        if (count >= books.length) {
+            clearInterval(interval);
+        }
+
+    }, 100);
 }
+
+/*=====================================
+        LATEST BOOK
+=====================================*/
+
+function loadLatestBook() {
+
+    const latest = books.find(book => book.latest);
+
+    if (!latest) return;
+
+    const title = document.querySelector(".latest-book h2");
+    const author = document.querySelector(".latest-book h4");
+
+    if (title) title.textContent = latest.title;
+    if (author) author.textContent = latest.author;
+}
+
+/*=====================================
+        SCROLL TOP
+=====================================*/
+
+const scrollBtn = document.getElementById("scrollTop");
+
+if (scrollBtn) {
+
+    window.addEventListener("scroll", () => {
+
+        if (window.scrollY > 300) {
+            scrollBtn.style.display = "block";
+        } else {
+            scrollBtn.style.display = "none";
+        }
+
+    });
+
+    scrollBtn.addEventListener("click", () => {
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+}
+
+/*=====================================
+        INIT
+=====================================*/
+
+window.addEventListener("DOMContentLoaded", loadBooks);
