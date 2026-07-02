@@ -1,82 +1,191 @@
-let books = [];
+/* =========================
+CHISHTI LIBRARY - FINAL JS
+FIXED + PREMIUM VERSION
+========================= */
 
-/* LOAD BOOKS */
-fetch("books.json")
-.then(res => res.json())
-.then(data => {
-  books = data;
-  renderBooks(books);
+/* ================= LOADER ================= */
+window.addEventListener("load", () => {
+  const loader = document.getElementById("loader");
+
+  if (loader) {
+    setTimeout(() => {
+      loader.style.opacity = "0";
+      loader.style.visibility = "hidden";
+    }, 1500);
+  }
 });
 
-/* RENDER BOOKS */
-function renderBooks(data){
-  let box = document.getElementById("booksContainer");
-  box.innerHTML = "";
+/* ================= MOBILE MENU ================= */
+const menuBtn = document.querySelector(".mobile-menu");
+const menu = document.querySelector(".menu");
 
-  data.forEach(b => {
-    box.innerHTML += `
-      <div class="book">
-        <img src="${b.cover}">
-        <h3>${b.title}</h3>
-        <p>${b.author}</p>
+if (menuBtn && menu) {
+  menuBtn.addEventListener("click", () => {
+    menu.classList.toggle("active");
+  });
+}
 
-        <a href="${b.reader}" target="_blank">Read Online</a><br>
-        <a href="${b.pdf}" download>Download</a>
+/* ================= VISITOR COUNTER ================= */
+let v = localStorage.getItem("visitors");
+
+if (!v) v = 1;
+else v = Number(v) + 1;
+
+localStorage.setItem("visitors", v);
+
+const visitorCounter = document.getElementById("visitorCounter");
+
+if (visitorCounter) {
+  visitorCounter.innerText = v;
+}
+
+/* ================= BOOK DATA ================= */
+let allBooks = [];
+
+/* ================= LOAD BOOKS ================= */
+async function loadBooks() {
+  try {
+    const res = await fetch("books.json");
+    allBooks = await res.json();
+
+    renderBooks(allBooks);
+  } catch (err) {
+    console.log("Books load error:", err);
+  }
+}
+
+loadBooks();
+
+/* ================= RENDER BOOKS ================= */
+function renderBooks(books) {
+  const container = document.getElementById("booksContainer");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  books.forEach((book) => {
+    container.innerHTML += `
+      <div class="book-card">
+        <img src="${book.cover}" alt="${book.title}" style="width:100%">
+        <div style="padding:15px">
+          <h3>${book.title}</h3>
+          <p>${book.author}</p>
+          <span>${book.category}</span>
+          <br><br>
+          <a class="btn" href="${book.reader || book.pdf}">
+            Read Online
+          </a>
+        </div>
       </div>
     `;
   });
 }
 
-/* SEARCH */
-document.getElementById("searchInput").addEventListener("keyup", function(){
-  let val = this.value.toLowerCase();
+/* ================= SEARCH ================= */
+const searchInput = document.getElementById("searchInput");
 
-  let filtered = books.filter(b =>
-    b.title.toLowerCase().includes(val) ||
-    b.author.toLowerCase().includes(val) ||
-    b.category.toLowerCase().includes(val)
-  );
+if (searchInput) {
+  searchInput.addEventListener("input", (e) => {
+    const value = e.target.value.toLowerCase();
 
-  renderBooks(filtered);
-});
+    const filtered = allBooks.filter((b) =>
+      b.title.toLowerCase().includes(value) ||
+      b.author.toLowerCase().includes(value) ||
+      b.category.toLowerCase().includes(value)
+    );
 
-/* FILTER */
-function filterBooks(cat){
+    renderBooks(filtered);
+  });
+}
 
-  if(cat === "All"){
-    renderBooks(books);
+/* ================= CATEGORY FILTER ================= */
+function filterBooks(category) {
+  if (category === "All") {
+    renderBooks(allBooks);
     return;
   }
 
-  let filtered = books.filter(b => b.category === cat);
+  const filtered = allBooks.filter(
+    (b) => b.category === category
+  );
+
   renderBooks(filtered);
 }
 
-/* CHAT */
-document.getElementById("chatBtn").onclick = () => {
-  document.getElementById("chatWindow").classList.toggle("show");
-};
+/* ================= CHATBOT ================= */
+const chatBtn = document.getElementById("chatBtn");
+const chatWindow = document.getElementById("chatWindow");
+const closeChat = document.getElementById("closeChat");
+const chatMessages = document.getElementById("chatMessages");
+const userInput = document.getElementById("userInput");
+const typing = document.getElementById("typing");
 
-function sendMessage(){
+if (chatBtn) {
+  chatBtn.addEventListener("click", () => {
+    chatWindow.style.display = "flex";
+  });
+}
 
-  let input = document.getElementById("userInput");
-  let msg = input.value;
-  let chat = document.getElementById("chatMessages");
+if (closeChat) {
+  closeChat.addEventListener("click", () => {
+    chatWindow.style.display = "none";
+  });
+}
 
-  if(msg === "") return;
+/* ================= AI RESPONSE ================= */
+function aiReply(msg) {
+  msg = msg.toLowerCase();
 
-  chat.innerHTML += `<div>User: ${msg}</div>`;
-
-  // SIMPLE AI
-  let reply = "Mujhe samajh nahi aaya 😅";
-
-  let found = books.find(b => msg.toLowerCase().includes(b.title.toLowerCase()));
-
-  if(found){
-    reply = `📚 ${found.title} by ${found.author}`;
+  if (msg.includes("book")) {
+    return "📚 Aap books section me jaa kar Islamic books read kar sakte ho.";
   }
 
-  chat.innerHTML += `<div>Bot: ${reply}</div>`;
+  if (msg.includes("author")) {
+    return "✍️ Authors section me Hazrat Allama Saim Chishti ki details available hain.";
+  }
 
-  input.value = "";
+  if (msg.includes("download")) {
+    return "⬇️ Har book ke sath download button diya gaya hai.";
+  }
+
+  if (msg.includes("assalam")) {
+    return "Wa Alaikum Assalam 🤍 Welcome to Chishti Library";
+  }
+
+  return "🤖 Mujhe samajh nahi aaya, please books ya author ke bare me poochain.";
+}
+
+/* ================= SEND MESSAGE ================= */
+function sendMessage() {
+  const text = userInput.value.trim();
+  if (!text) return;
+
+  chatMessages.innerHTML += `
+    <div style="margin:10px;text-align:right;">
+      <b>You:</b> ${text}
+    </div>
+  `;
+
+  userInput.value = "";
+
+  if (typing) typing.style.display = "block";
+
+  setTimeout(() => {
+    if (typing) typing.style.display = "none";
+
+    chatMessages.innerHTML += `
+      <div style="margin:10px;background:#f1f1f1;padding:10px;border-radius:10px;">
+        <b>AI:</b> ${aiReply(text)}
+      </div>
+    `;
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }, 800);
+}
+
+/* ================= ENTER KEY ================= */
+if (userInput) {
+  userInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
 }
