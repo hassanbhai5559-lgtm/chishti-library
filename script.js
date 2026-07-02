@@ -34,10 +34,12 @@ async function loadBooks() {
 
 function renderBooks(list) {
 
+    if (!booksContainer) return;
+
     booksContainer.innerHTML = "";
 
     if (!list || list.length === 0) {
-        booksContainer.innerHTML = "<p style='color:white'>No Books Found</p>";
+        booksContainer.innerHTML = "<p style='color:white;text-align:center'>No Books Found</p>";
         return;
     }
 
@@ -48,7 +50,7 @@ function renderBooks(list) {
         const card = template.content.cloneNode(true);
 
         card.querySelector(".cover").src =
-            book.cover || "no-image.png";
+            book.cover || "images/no-image.png";
 
         card.querySelector(".cover").alt =
             book.title;
@@ -72,13 +74,12 @@ function renderBooks(list) {
             book.downloads || 0;
 
         card.querySelector(".readBtn").href =
-            book.reader;
+            book.reader || "#";
 
         card.querySelector(".downloadBtn").href =
-            book.pdf;
+            book.pdf || "#";
 
         const latestTag = card.querySelector(".latest-tag");
-
         if (latestTag) {
             latestTag.style.display = book.latest ? "block" : "none";
         }
@@ -94,7 +95,7 @@ function renderBooks(list) {
 if (searchInput) {
     searchInput.addEventListener("input", function () {
 
-        const value = this.value.toLowerCase();
+        const value = this.value.toLowerCase().trim();
 
         filteredBooks = books.filter(book =>
             book.title.toLowerCase().includes(value) ||
@@ -107,29 +108,31 @@ if (searchInput) {
 }
 
 /* =========================
-    FILTER BOOKS
+    CATEGORY FILTER (FIXED)
 ========================= */
 
-function filterBooks(category, button) {
+window.filterBooks = function (category, button) {
 
+    // remove active class from all buttons
     document.querySelectorAll(".category")
         .forEach(btn => btn.classList.remove("active"));
 
+    // add active to clicked button
     if (button) button.classList.add("active");
 
     if (category === "All") {
         filteredBooks = books;
     } else {
         filteredBooks = books.filter(book =>
-            book.category.toLowerCase() === category.toLowerCase()
+            (book.category || "").toLowerCase() === category.toLowerCase()
         );
     }
 
     renderBooks(filteredBooks);
-}
+};
 
 /* =========================
-    BOOK COUNTER
+    COUNTER
 ========================= */
 
 function updateBookCounter() {
@@ -146,7 +149,7 @@ function updateBookCounter() {
         if (count >= books.length) {
             clearInterval(interval);
         }
-    }, 100);
+    }, 50);
 }
 
 /* =========================
@@ -154,31 +157,10 @@ function updateBookCounter() {
 ========================= */
 
 function loadLatestBook() {
-
     const latest = books.find(b => b.latest);
     if (!latest) return;
 
     console.log("Latest Book:", latest.title);
-}
-
-/* =========================
-    AI CHAT BUTTON (BASIC)
-========================= */
-
-const chatBtn = document.getElementById("chatBtn");
-const chatWindow = document.getElementById("chatWindow");
-const closeChat = document.getElementById("closeChat");
-
-if (chatBtn && chatWindow) {
-    chatBtn.addEventListener("click", () => {
-        chatWindow.classList.toggle("active");
-    });
-}
-
-if (closeChat) {
-    closeChat.addEventListener("click", () => {
-        chatWindow.classList.remove("active");
-    });
 }
 
 /* =========================
