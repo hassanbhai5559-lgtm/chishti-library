@@ -223,3 +223,36 @@ footer {
     height: 85vh;
   }
 }
+/* ================= CHAT MESSAGES ================= */
+
+.bot-message,
+.user-message {
+  padding: 12px 15px;
+  margin: 10px;
+  border-radius: 12px;
+  max-width: 80%;
+  word-wrap: break-word;
+}
+
+.bot-message {
+  background: #1a1a1a;
+  color: #fff;
+  align-self: flex-start;
+}
+
+.user-message {
+  background: var(--gold);
+  color: #000;
+  align-self: flex-end;
+}
+
+/* ================= CHAT WINDOW FIX ================= */
+
+#chatWindow {
+  display: none;
+  flex-direction: column;
+}
+
+#chatWindow.show {
+  display: flex;
+}
