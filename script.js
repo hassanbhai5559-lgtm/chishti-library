@@ -1,6 +1,4 @@
-/*==================================================
-  CHISHTI LIBRARY - MASTER SCRIPT
-==================================================*/
+/*================================================== CHISHTI LIBRARY - MASTER SCRIPT ==================================================*/
 "use strict";
 
 /*--- 1. SELECTORS & VARIABLES ---*/
@@ -20,7 +18,7 @@ let knowledgeData = [];
 /*--- 2. UI & LOADER ---*/
 window.addEventListener("load", () => {
     setTimeout(() => {
-        if (loader) {
+        if(loader) {
             loader.style.opacity = "0";
             loader.style.visibility = "hidden";
             loader.style.pointerEvents = "none";
@@ -58,7 +56,7 @@ mobileMenu?.addEventListener("click", () => {
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "light") {
     body.classList.add("light-theme");
-    if (themeBtn) themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+    if(themeBtn) themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
 }
 
 themeBtn?.addEventListener("click", () => {
@@ -94,16 +92,13 @@ loadBooks();
 
 function renderBooks(bookArray) {
     if (!booksContainer || !bookTemplate) return;
-
     booksContainer.innerHTML = "";
-
     if (bookArray.length === 0) {
-        if (noBooks) noBooks.style.display = "block";
+        if(noBooks) noBooks.style.display = "block";
         return;
     }
-
-    if (noBooks) noBooks.style.display = "none";
-
+    if(noBooks) noBooks.style.display = "none";
+    
     bookArray.forEach(book => {
         const card = bookTemplate.content.cloneNode(true);
         card.querySelector(".cover").src = book.cover || "images/no-image.png";
@@ -146,15 +141,15 @@ loadAI();
 function sendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
-
+    
     // Add User Message
     createMessage(text, "user");
     userInput.value = "";
-
-    if (typing) typing.style.display = "block";
-
+    
+    if(typing) typing.style.display = "block";
+    
     setTimeout(() => {
-        if (typing) typing.style.display = "none";
+        if(typing) typing.style.display = "none";
         const reply = findBestReply(text);
         createMessage(reply, "bot");
     }, 800);
@@ -162,20 +157,20 @@ function sendMessage() {
 
 function findBestReply(question) {
     const q = question.toLowerCase();
-
+    
     // AI Logic
     const match = [...chatbotData, ...knowledgeData].find(item => 
         q.includes(item.question.toLowerCase())
     );
     if (match) return match.answer;
-
+    
     // Books Logic
     const book = books.find(b => 
         q.includes(b.title.toLowerCase()) || 
         q.includes(b.author.toLowerCase())
     );
     if (book) return `📚 ${book.title} by ${book.author}. Check the books section.`;
-
+    
     return "Sorry, please ask about books or library.";
 }
 
@@ -190,13 +185,12 @@ function createMessage(text, type) {
 /*--- 6. UTILS ---*/
 function updateBookCounter() {
     const counter = document.getElementById("bookCounter");
-    if (counter) counter.textContent = books.length;
+    if(counter) counter.textContent = books.length;
 }
 
 function updateVisitorCounter() {
     const counter = document.getElementById("visitorCounter");
     if (!counter) return;
-
     let visitors = Number(localStorage.getItem("visitors")) || 1250;
     visitors++;
     localStorage.setItem("visitors", visitors);
