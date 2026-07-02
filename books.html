@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>All Books | Chishti Library</title>
+
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
+
 <body>
 
-    <!-- Header (Same as index.html) -->
+    <!-- Header -->
     <header>
         <nav class="navbar">
+
             <div class="logo">
                 <img src="images/logo.png" alt="Logo">
+
                 <div class="logo-text">
                     <h2>CHISHTI LIBRARY</h2>
                     <span>Digital Islamic Library</span>
                 </div>
             </div>
+
             <ul class="menu">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="books.html" class="active">Books</a></li>
@@ -26,61 +33,129 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
+
             <div class="nav-actions">
-                <button class="theme-btn"><i class="fas fa-moon"></i></button>
+                <button class="theme-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
+
         </nav>
     </header>
 
-    <!-- Books Collection Section -->
-    <section class="featured-books" style="padding-top: 150px;">
+    <!-- Books Section -->
+    <section class="featured-books" style="padding-top:150px;">
+
         <div class="section-heading">
             <h2>Our Complete Collection</h2>
             <p>Explore all categories and search your favorite books here.</p>
         </div>
 
-        <!-- Search Bar -->
-        <div class="search-box" style="margin: 20px auto; max-width: 600px; display: flex; justify-content: center;">
-            <input type="text" id="searchInput" placeholder="Search by title, author or category..." style="width: 100%; padding: 15px; border-radius: 25px; border: 1px solid #444; background: transparent; color: white;">
+        <!-- Search -->
+        <div class="search-box"
+            style="margin:20px auto;max-width:600px;display:flex;justify-content:center;">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by title, author or category..."
+                style="width:100%;padding:15px;border-radius:25px;border:1px solid #444;background:transparent;color:white;">
+
         </div>
 
-        <!-- Filters -->
-        <div class="category-grid" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 30px;">
-            <button class="category active" onclick="filterBooks('All', this)">All</button>
-            <button class="category" onclick="filterBooks('Naat', this)">Naat</button>
-            <button class="category" onclick="filterBooks('Hamd', this)">Hamd</button>
-            <button class="category" onclick="filterBooks('Manqabat', this)">Manqabat</button>
-            <button class="category" onclick="filterBooks('Maqala', this)">Maqala</button>
+        <!-- Categories -->
+        <div class="category-grid"
+            style="display:flex;justify-content:center;gap:10px;margin-bottom:30px;">
+
+            <button class="category active" onclick="filterBooks('All', this)">
+                All
+            </button>
+
+            <button class="category" onclick="filterBooks('Naat', this)">
+                Naat
+            </button>
+
+            <button class="category" onclick="filterBooks('Hamd', this)">
+                Hamd
+            </button>
+
+            <button class="category" onclick="filterBooks('Manqabat', this)">
+                Manqabat
+            </button>
+
+            <button class="category" onclick="filterBooks('Maqala', this)">
+                Maqala
+            </button>
+
         </div>
 
-        <div id="noBooks" class="no-books" style="display:none; text-align: center; padding: 50px;">
+        <!-- No Books -->
+        <div id="noBooks"
+             class="no-books"
+             style="display:none;text-align:center;padding:50px;">
+
             <h2>No Books Found</h2>
+
         </div>
 
+        <!-- Books Container -->
         <div id="booksContainer" class="books-grid">
-            <!-- Books will be injected here by script.js -->
+
+            <!-- Books will load here -->
+
         </div>
+
     </section>
 
-    <!-- Template for JS -->
+    <!-- Book Template -->
     <template id="bookTemplate">
+
         <div class="book-card">
-            <img class="cover" src="images/no-image.png" alt="Cover">
-            <h2 class="title">Title</h2>
-            <p class="author">Author</p>
-            <div class="book-category">Category</div>
-            <div class="book-actions">
-                <a class="btn readBtn" target="_blank">Read</a>
-                <a class="btn downloadBtn" download>Download</a>
+
+            <img
+                class="cover"
+                src="images/no-image.png"
+                alt="Cover">
+
+            <h2 class="title">
+                Title
+            </h2>
+
+            <p class="author">
+                Author
+            </p>
+
+            <div class="book-category">
+                Category
             </div>
+
+            <div class="book-actions">
+
+                <a class="btn readBtn" target="_blank">
+                    Read
+                </a>
+
+                <a class="btn downloadBtn" download>
+                    Download
+                </a>
+
+            </div>
+
         </div>
+
     </template>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-bottom">© 2026 Chishti Library | All Rights Reserved</div>
+
+        <div class="footer-bottom">
+            © 2026 Chishti Library | All Rights Reserved
+        </div>
+
     </footer>
 
     <script src="script.js"></script>
+
 </body>
+
 </html>
