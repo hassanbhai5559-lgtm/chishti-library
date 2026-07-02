@@ -1,77 +1,46 @@
-/* =========================
-    GLOBAL VARIABLES
-========================= */
-
 let books = [];
 let filteredBooks = [];
 
-const booksContainer = document.getElementById("booksContainer");
-const searchInput = document.getElementById("searchInput");
+const container = document.getElementById("booksContainer");
+const template = document.getElementById("bookTemplate").content;
 
-/* =========================
-    LOAD BOOKS
-========================= */
-
-async function loadBooks() {
-    try {
-        const res = await fetch("books.json");
-        books = await res.json();
-
-        filteredBooks = books;
-
-        renderBooks(filteredBooks);
-        updateBookCounter();
-        loadLatestBook();
-
-    } catch (error) {
-        console.error("Books load error:", error);
-    }
-}
-
-/* =========================
-    RENDER BOOKS
-========================= */
+fetch("books.json")
+    .then(res => res.json())
+    .then(data => {
+        books = data;
+        filteredBooks = data;
+        renderBooks(books);
+        updateCounter();
+    });
 
 function renderBooks(list) {
 
-    if (!booksContainer) return;
-
-    booksContainer.innerHTML = "";
-
-    if (!list || list.length === 0) {
-        booksContainer.innerHTML = "<p style='color:white;text-align:center'>No Books Found</p>";
-        return;
-    }
-
-    const template = document.getElementById("bookTemplate");
+    container.innerHTML = "";
 
     list.forEach(book => {
 
-        const card = template.content.cloneNode(true);
+        const card = template.cloneNode(true);
 
         card.querySelector(".cover").src =
             book.cover || "images/no-image.png";
 
-        card.querySelector(".cover").alt =
-            book.title;
-
         card.querySelector(".title").textContent =
-            book.title;
+            book.title || "No Title";
 
         card.querySelector(".author").textContent =
-            book.author;
+            book.author || "";
 
         card.querySelector(".description").textContent =
             book.description || "";
 
         card.querySelector(".book-category").textContent =
-            book.category;
+            book.category || "";
 
         card.querySelector(".views").textContent =
-            book.views || 0;
+            book.views ?? 0;
 
         card.querySelector(".downloads").textContent =
-            book.downloads || 0;
+            book.downloads ?? 0;
 
         card.querySelector(".readBtn").href =
             book.reader || "#";
@@ -79,92 +48,49 @@ function renderBooks(list) {
         card.querySelector(".downloadBtn").href =
             book.pdf || "#";
 
-        const latestTag = card.querySelector(".latest-tag");
-        if (latestTag) {
-            latestTag.style.display = book.latest ? "block" : "none";
+        const badge = card.querySelector(".latest-tag");
+
+        if (badge) {
+            badge.style.display = book.latest ? "block" : "none";
         }
 
-        booksContainer.appendChild(card);
+        container.appendChild(card);
     });
 }
 
-/* =========================
-    SEARCH
-========================= */
+/* SEARCH */
+document.getElementById("searchInput")?.addEventListener("input", function () {
 
-if (searchInput) {
-    searchInput.addEventListener("input", function () {
+    const value = this.value.toLowerCase();
 
-        const value = this.value.toLowerCase().trim();
+    filteredBooks = books.filter(book =>
+        book.title.toLowerCase().includes(value) ||
+        book.author.toLowerCase().includes(value) ||
+        book.category.toLowerCase().includes(value)
+    );
 
-        filteredBooks = books.filter(book =>
-            book.title.toLowerCase().includes(value) ||
-            book.author.toLowerCase().includes(value) ||
-            book.category.toLowerCase().includes(value)
-        );
+    renderBooks(filteredBooks);
+});
 
-        renderBooks(filteredBooks);
-    });
-}
+/* CATEGORY FIX */
+function filterBooks(category) {
 
-/* =========================
-    CATEGORY FILTER (FIXED)
-========================= */
-
-window.filterBooks = function (category, button) {
-
-    // remove active class from all buttons
     document.querySelectorAll(".category")
         .forEach(btn => btn.classList.remove("active"));
 
-    // add active to clicked button
-    if (button) button.classList.add("active");
+    event.target.classList.add("active");
 
-    if (category === "All") {
-        filteredBooks = books;
-    } else {
-        filteredBooks = books.filter(book =>
-            (book.category || "").toLowerCase() === category.toLowerCase()
-        );
-    }
+    filteredBooks = category === "All"
+        ? books
+        : books.filter(b => b.category.toLowerCase() === category.toLowerCase());
 
     renderBooks(filteredBooks);
-};
+}
 
-/* =========================
-    COUNTER
-========================= */
-
-function updateBookCounter() {
-
+/* COUNTER */
+function updateCounter() {
     const counter = document.getElementById("bookCounter");
     if (!counter) return;
 
-    let count = 0;
-
-    const interval = setInterval(() => {
-        count++;
-        counter.textContent = count;
-
-        if (count >= books.length) {
-            clearInterval(interval);
-        }
-    }, 50);
+    counter.textContent = books.length;
 }
-
-/* =========================
-    LATEST BOOK
-========================= */
-
-function loadLatestBook() {
-    const latest = books.find(b => b.latest);
-    if (!latest) return;
-
-    console.log("Latest Book:", latest.title);
-}
-
-/* =========================
-    INIT
-========================= */
-
-window.addEventListener("DOMContentLoaded", loadBooks);
