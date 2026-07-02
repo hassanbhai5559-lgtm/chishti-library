@@ -941,3 +941,69 @@ WELCOME
 console.log("%cCHISHTI LIBRARY","color:#C9A227;font-size:26px;font-weight:bold;");
 
 console.log("%cDigital Islamic Library Loaded Successfully","color:lime;font-size:15px;");
+/*====================================
+BOOKS PAGE
+LOAD FROM books.json
+====================================*/
+
+let booksData = [];
+
+/*==========================
+LOAD BOOKS
+==========================*/
+
+async function loadBooks() {
+
+    try {
+
+        const response = await fetch("books.json");
+        booksData = await response.json();
+
+        renderBooks(booksData);
+
+    } catch (err) {
+
+        console.error("Books not loaded", err);
+
+    }
+
+}
+
+/*==========================
+RENDER BOOKS
+==========================*/
+
+function renderBooks(data) {
+
+    const grid = document.getElementById("booksGrid");
+
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    data.forEach(book => {
+
+        grid.innerHTML += `
+
+<div class="book-card">
+
+<div class="book-cover">
+
+<img src="${book.cover}" alt="${book.title}">
+
+${book.featured ? '<span class="featured" style="display:block;">Featured</span>' : ""}
+
+</div>
+
+<div class="book-details">
+
+<h2>${book.title}</h2>
+
+<h3>${book.author}</h3>
+
+<p>${book.category}</p>
+
+<div class="stats">
+
+<span>
+<i class="fas fa-eye"></i
