@@ -1289,3 +1289,278 @@ sendMessage();
 });
 
 }
+
+/*==================================
+CHISHTI AI
+PART 1
+==================================*/
+
+const aiButton = document.getElementById("aiButton");
+
+const aiChat = document.getElementById("aiChat");
+
+const closeAI = document.getElementById("closeAI");
+
+const sendBtn = document.getElementById("sendBtn");
+
+const userInput = document.getElementById("userInput");
+
+const chatMessages = document.getElementById("chatMessages");
+
+const typing = document.getElementById("typing");
+
+/*====================
+OPEN CHAT
+====================*/
+
+aiButton.addEventListener("click", () => {
+
+    aiChat.style.display = "flex";
+
+    userInput.focus();
+
+});
+
+/*====================
+CLOSE CHAT
+====================*/
+
+closeAI.addEventListener("click", () => {
+
+    aiChat.style.display = "none";
+
+});
+
+/*====================
+ENTER KEY
+====================*/
+
+userInput.addEventListener("keypress", function(e){
+
+    if(e.key==="Enter"){
+
+        sendMessage();
+
+    }
+
+});
+
+/*====================
+SEND BUTTON
+====================*/
+
+sendBtn.addEventListener("click", sendMessage);
+
+/*====================
+ADD USER MESSAGE
+====================*/
+
+function addUserMessage(text){
+
+    chatMessages.innerHTML += `
+
+    <div class="user-message">
+
+        <div class="message-text">
+
+            ${text}
+
+        </div>
+
+    </div>
+
+    `;
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+}
+
+/*====================
+ADD BOT MESSAGE
+====================*/
+
+function addBotMessage(text){
+
+    chatMessages.innerHTML += `
+
+    <div class="bot-message">
+
+        <img src="ai-logo.png" class="bot-avatar">
+
+        <div class="message-text">
+
+            ${text}
+
+        </div>
+
+    </div>
+
+    `;
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+}
+
+/*====================
+SEND MESSAGE
+====================*/
+
+function sendMessage(){
+
+    const msg = userInput.value.trim();
+
+    if(msg==="") return;
+
+    addUserMessage(msg);
+
+    userInput.value="";
+
+    typing.style.display="block";
+
+}
+/*==================================
+CHISHTI AI
+PART 2
+LOAD KNOWLEDGE
+==================================*/
+
+let knowledge = [];
+let books = [];
+
+/*====================
+LOAD DATABASE
+====================*/
+
+async function loadAI() {
+
+    try {
+
+        const k = await fetch("knowledge.json");
+        knowledge = await k.json();
+
+    } catch (e) {
+
+        console.log("knowledge.json not found");
+
+    }
+
+    try {
+
+        const b = await fetch("books.json");
+        books = await b.json();
+
+    } catch (e) {
+
+        console.log("books.json not found");
+
+    }
+
+}
+
+loadAI();
+
+/*====================
+SEARCH BOOK
+====================*/
+
+function searchBook(message){
+
+    const msg = message.toLowerCase();
+
+    const found = books.find(book =>
+
+        msg.includes(book.title.toLowerCase()) ||
+
+        msg.includes(book.category.toLowerCase())
+
+    );
+
+    return found || null;
+
+}
+
+/*====================
+AI ANSWER
+====================*/
+
+function getAIAnswer(message){
+
+    const msg = message.toLowerCase();
+
+    /* BOOK SEARCH */
+
+    const foundBook = searchBook(msg);
+
+    if(foundBook){
+
+        return `
+        📚 <b>${foundBook.title}</b><br><br>
+
+        👤 ${foundBook.author}<br>
+
+        📂 ${foundBook.category}<br>
+
+        📅 ${foundBook.year}<br><br>
+
+        <a href="${foundBook.reader}" target="_blank">📖 Read Online</a>
+
+        <br><br>
+
+        <a href="${foundBook.pdf}" target="_blank">⬇ Download PDF</a>
+        `;
+
+    }
+
+    /* KNOWLEDGE SEARCH */
+
+    for(const item of knowledge){
+
+        if(item.keywords){
+
+            for(const key of item.keywords){
+
+                if(msg.includes(key.toLowerCase())){
+
+                    return item.answer_en ||
+                           item.answer ||
+                           item.reply;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return "❌ Sorry, mujhe iska jawab Knowledge Base me nahi mila.";
+}
+/*==================================
+CHISHTI AI
+PART 3
+FINAL REPLY
+==================================*/
+
+function sendMessage(){
+
+    const msg = userInput.value.trim();
+
+    if(msg==="") return;
+
+    addUserMessage(msg);
+
+    userInput.value="";
+
+    typing.style.display="block";
+
+    setTimeout(()=>{
+
+        typing.style.display="none";
+
+        const reply = getAIAnswer(msg);
+
+        addBotMessage(reply);
+
+    },700);
+
+}
