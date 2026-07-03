@@ -2226,3 +2226,52 @@ justify-content:center;
 body{
 overflow-x:hidden !important;
 }
+/*==================================================
+   LOGO FIX + HERO ROUND LOGO ADJUST (ONLY FIX)
+==================================================*/
+
+/* ❌ HEADER BIG LOGO REMOVE / SMALL */
+.navbar img,
+.logo img{
+max-height:45px !important;
+width:auto !important;
+object-fit:contain;
+}
+
+/* ❌ if logo still big anywhere */
+img[alt*="logo"]{
+max-width:60px !important;
+height:auto !important;
+}
+
+/* 🔵 HERO ROUND LOGO (MAIN FIX) */
+.hero-logo-circle,
+.hero .circle,
+.hero img{
+max-width:320px !important;
+max-height:320px !important;
+width:320px;
+height:320px;
+border-radius:50%;
+object-fit:cover;
+display:block;
+margin:20px auto;
+}
+
+/* 🔵 CENTER HERO LOGO PROPERLY */
+.hero-right,
+.hero-image{
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* 🔵 MOVE ROUND LOGO UP (LESS GAP) */
+.hero{
+padding-top:60px !important;
+}
+
+/* ❌ REMOVE EXTRA LARGE SPACING */
+.hero img{
+transform:scale(1) !important;
+}
