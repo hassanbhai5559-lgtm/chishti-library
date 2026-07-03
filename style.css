@@ -2134,3 +2134,95 @@ img{
 max-width:100%;
 height:auto;
 }
+/*==================================================
+        HOME PAGE FINAL FIX (LOGO + NAV + HERO)
+==================================================*/
+
+/* ===== NAVBAR CLEAN FIX ===== */
+.navbar{
+display:flex !important;
+justify-content:space-between !important;
+align-items:center !important;
+padding:12px 25px !important;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+z-index:99999;
+backdrop-filter: blur(10px);
+background: rgba(0,0,0,0.7);
+}
+
+/* ===== MENU ALIGN FIX ===== */
+.navbar ul,
+.menu{
+display:flex !important;
+gap:18px;
+align-items:center;
+list-style:none !important;
+margin:0;
+padding:0;
+}
+
+.navbar ul li a{
+color:white;
+text-decoration:none;
+font-weight:500;
+}
+
+.navbar ul li a:hover{
+color:#D4AF37;
+}
+
+/* ===== HERO LOGO FIX (MAIN ISSUE SOLVED) ===== */
+.hero-logo,
+.hero img,
+.main-logo,
+.logo img{
+max-width:180px !important;
+height:auto !important;
+display:block;
+margin:0 auto;
+}
+
+/* agar bohat bada ho raha ho to force shrink */
+.hero img{
+max-height:200px !important;
+object-fit:contain;
+}
+
+/* ===== HERO CENTER ALIGN ===== */
+.hero,
+.home-hero,
+.header-content{
+text-align:center;
+padding-top:100px !important;
+}
+
+/* ===== FLOATING AI BUTTON FIX ===== */
+.ai-button{
+position:fixed !important;
+right:20px;
+bottom:20px;
+z-index:999999;
+width:65px;
+height:65px;
+}
+
+/* ===== REMOVE BULLET MENU ISSUE ===== */
+ul{
+list-style:none;
+}
+
+/* ===== SEARCH BAR CENTER FIX ===== */
+.search-box,
+.search-bar{
+margin:20px auto;
+display:flex;
+justify-content:center;
+}
+
+/* ===== MOBILE OVERFLOW FIX ===== */
+body{
+overflow-x:hidden !important;
+}
