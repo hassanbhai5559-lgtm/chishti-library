@@ -3,6 +3,7 @@
         FINAL SCRIPT.JS (FULL CLEAN VERSION)
 ==================================================*/
 
+
 /*==============================
         GLOBAL DATA
 ==============================*/
@@ -279,3 +280,4 @@ window.addEventListener("load", () => {
 loadBooks();
 console.log("Chishti Library Ready 🚀");
 });
+
