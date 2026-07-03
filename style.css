@@ -2048,3 +2048,89 @@ height:70vh;
 /*==================================================
         END OF STYLE.CSS
 ==================================================*/
+/*==================================================
+        CHISHTI LIBRARY - FINAL BUG FIX PATCH
+        (PASTE AT END OF CSS)
+==================================================*/
+
+/* ===== 1. NAVBAR FIX ===== */
+.navbar{
+display:flex !important;
+justify-content:space-between !important;
+align-items:center !important;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+z-index:99999;
+}
+
+/* ===== 2. MENU FIX (REMOVE BULLETS + ROW STYLE) ===== */
+.menu{
+display:flex !important;
+gap:20px;
+list-style:none !important;
+align-items:center;
+margin:0;
+padding:0;
+}
+
+.menu li{
+list-style:none !important;
+}
+
+.menu li a{
+text-decoration:none !important;
+color:white;
+font-weight:500;
+transition:0.3s;
+}
+
+.menu li a:hover{
+color:#D4AF37;
+}
+
+/* ===== 3. HERO ALIGN FIX ===== */
+.hero{
+padding-top:120px !important;
+text-align:center;
+}
+
+/* ===== 4. BOOK ERROR SAFE FIX ===== */
+#booksContainer{
+min-height:200px;
+display:grid;
+gap:20px;
+}
+
+/* ===== 5. CHATBOT FIX ===== */
+.ai-button{
+position:fixed !important;
+right:20px;
+bottom:20px;
+width:70px;
+height:70px;
+z-index:999999;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.chat-window{
+position:fixed !important;
+right:20px;
+bottom:100px;
+z-index:1000000;
+}
+
+/* ===== 6. MOBILE OVERFLOW FIX ===== */
+body{
+overflow-x:hidden !important;
+}
+
+/* ===== 7. IMAGE SAFE FIX ===== */
+img{
+max-width:100%;
+height:auto;
+}
