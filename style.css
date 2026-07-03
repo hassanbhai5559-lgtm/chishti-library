@@ -230,83 +230,107 @@ max-width:700px;
 margin:auto;
 
 }
-/*==============================
-        LOADING SCREEN
-==============================*/
+/*=========================================
+        PREMIUM LOADING SCREEN
+=========================================*/
 
 #loader{
 
 position:fixed;
-
-inset:0;
-
-background:#050505;
+top:0;
+left:0;
+width:100%;
+height:100%;
 
 display:flex;
-
 align-items:center;
-
 justify-content:center;
+
+background:linear-gradient(
+180deg,
+#050505,
+#111111,
+#1a140b,
+#050505
+);
 
 z-index:99999;
 
-transition:.8s;
+opacity:1;
+visibility:visible;
+
+transition:
+opacity .8s ease,
+visibility .8s ease;
 
 }
 
-.loader-box{
+.loader-content{
 
 text-align:center;
+
+width:100%;
+max-width:420px;
+
+padding:20px;
 
 }
 
 .loader-logo{
 
 width:120px;
-
 height:120px;
-
-margin:auto;
 
 border-radius:50%;
 
-animation:logoFloat 3s ease-in-out infinite;
+display:block;
+
+margin:0 auto 20px;
+
+box-shadow:
+0 0 20px rgba(212,175,55,.4),
+0 0 50px rgba(212,175,55,.25);
+
+animation:logoFloat 2.5s ease-in-out infinite;
 
 }
 
-.loader-box h1{
-
-margin-top:25px;
+.loader-content h1{
 
 font-size:2rem;
 
+font-weight:700;
+
 letter-spacing:2px;
 
-color:var(--primary);
+color:#d4af37;
+
+margin-bottom:10px;
 
 }
 
-.loader-box p{
+.loader-content p{
 
-margin-top:10px;
+color:#cccccc;
 
-color:#bbb;
+font-size:1rem;
+
+margin-bottom:30px;
 
 }
 
 .loader-progress{
 
-width:280px;
-
+width:320px;
 height:8px;
+
+margin:0 auto;
 
 background:#222;
 
 border-radius:50px;
 
 overflow:hidden;
-
-margin:30px auto;
 
 }
 
@@ -316,20 +340,56 @@ width:0%;
 
 height:100%;
 
-background:linear-gradient(90deg,#d4af37,#ffd95c);
+border-radius:50px;
+
+background:linear-gradient(
+90deg,
+#d4af37,
+#ffd95c,
+#d4af37
+);
 
 animation:loadingBar 5s linear forwards;
 
 }
 
-#loaderText{
+@keyframes loadingBar{
 
-font-size:.9rem;
+0%{
 
-color:#999;
+width:0%;
 
 }
 
+100%{
+
+width:100%;
+
+}
+
+}
+
+@keyframes logoFloat{
+
+0%{
+
+transform:translateY(0px);
+
+}
+
+50%{
+
+transform:translateY(-12px);
+
+}
+
+100%{
+
+transform:translateY(0px);
+
+}
+
+}
 /*==============================
         FALLING STARS
 ==============================*/
