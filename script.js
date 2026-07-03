@@ -771,18 +771,36 @@ block:"start"
         INITIALIZE
 ==============================*/
 
-window.addEventListener("DOMContentLoaded",async()=>{
+window.addEventListener("DOMContentLoaded", async () => {
 
-await loadBooks();
+    await loadBooks();
 
-await loadChatbot();
+    await loadChatbot();
 
-updateVisitorCounter();
+    updateVisitorCounter();
 
-updateDownloadCounter();
+    updateDownloadCounter();
 
-createStars();
+    createStars();
 
-console.log("✅ Chishti Library Ready");
+    console.log("✅ Chishti Library Ready");
+
+    // Loading Screen (5 seconds)
+    setTimeout(() => {
+
+        const loader = document.getElementById("loader");
+
+        if (loader) {
+
+            loader.style.opacity = "0";
+            loader.style.transition = "opacity 0.8s ease";
+
+            setTimeout(() => {
+                loader.style.display = "none";
+            }, 800);
+
+        }
+
+    }, 5000);
 
 });
