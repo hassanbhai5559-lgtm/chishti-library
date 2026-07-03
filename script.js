@@ -95,26 +95,46 @@ booksContainer.appendChild(card);
 
 }
 
-/*==============================
-        SEARCH
-==============================*/
+/*==================================================
+        BOOK SEARCH FIX (ALI WORKING)
+==================================================*/
 
-if (searchInput) {
+const searchInput = document.querySelector(".search-box input, .search-bar input, #searchInput");
 
-searchInput.addEventListener("input", (e) => {
+const booksContainer = document.getElementById("booksContainer");
 
-const val = e.target.value.toLowerCase();
+function searchBooks() {
+if (!searchInput) return;
 
-filteredBooks = books.filter(b =>
-b.title.toLowerCase().includes(val) ||
-b.author.toLowerCase().includes(val) ||
-b.category.toLowerCase().includes(val)
-);
+const query = searchInput.value.toLowerCase().trim();
 
-renderBooks(filteredBooks);
+/* get all books */
+const books = document.querySelectorAll(".book-card");
+
+books.forEach(book => {
+
+const title = book.querySelector(".title")?.innerText.toLowerCase() || "";
+const author = book.querySelector(".author")?.innerText.toLowerCase() || "";
+const category = book.querySelector(".book-category")?.innerText.toLowerCase() || "";
+
+const match =
+title.includes(query) ||
+author.includes(query) ||
+category.includes(query);
+
+if (match) {
+book.style.display = "block";
+} else {
+book.style.display = "none";
+}
 
 });
 
+}
+
+/* LIVE SEARCH */
+if (searchInput) {
+searchInput.addEventListener("input", searchBooks);
 }
 
 /*==============================
