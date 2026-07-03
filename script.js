@@ -1,18 +1,17 @@
 /*==================================================
         CHISHTI LIBRARY 2026
-        MAIN SCRIPT
+        SCRIPT.JS - PART 1
 ==================================================*/
 
 /*==============================
-        GLOBAL VARIABLES
+        GLOBAL DATA
 ==============================*/
 
 let books = [];
 let filteredBooks = [];
-let chatbotData = [];
 
 /*==============================
-        DOM ELEMENTS
+        ELEMENTS
 ==============================*/
 
 const booksContainer = document.getElementById("booksContainer");
@@ -20,27 +19,9 @@ const bookTemplate = document.getElementById("bookTemplate");
 
 const searchInput = document.getElementById("searchInput");
 
-const booksCounter = document.getElementById("booksCounter");
+const bookCounter = document.getElementById("bookCounter");
 const visitorCounter = document.getElementById("visitorCounter");
 const downloadCounter = document.getElementById("downloadCounter");
-
-const latestBookCover = document.getElementById("latestBookCover");
-const latestBookTitle = document.getElementById("latestBookTitle");
-const latestBookAuthor = document.getElementById("latestBookAuthor");
-const latestBookDescription = document.getElementById("latestBookDescription");
-const latestBookCategory = document.getElementById("latestBookCategory");
-const latestBookYear = document.getElementById("latestBookYear");
-const latestReadBtn = document.getElementById("latestReadBtn");
-const latestDownloadBtn = document.getElementById("latestDownloadBtn");
-
-const chatBtn = document.getElementById("chatBtn");
-const chatWindow = document.getElementById("chatWindow");
-const closeChat = document.getElementById("closeChat");
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
-const sendMessageBtn = document.getElementById("sendMessage");
-
-const loader = document.getElementById("loader");
 
 /*==============================
         LOAD BOOKS
@@ -48,106 +29,126 @@ const loader = document.getElementById("loader");
 
 async function loadBooks() {
 
-try {
+    try {
 
-const response = await fetch("books.json");
+        const response = await fetch("books.json");
 
-if (!response.ok)
-throw new Error("books.json not found");
+        if (!response.ok) {
+            throw new Error("books.json not found");
+        }
 
-books = await response.json();
+        books = await response.json();
 
-filteredBooks = [...books];
+        filteredBooks = [...books];
 
-renderBooks(filteredBooks);
+        renderBooks(filteredBooks);
 
-loadLatestBook();
+        updateBookCounter();
 
-updateBooksCounter();
+        loadLatestBook();
+
+    } catch (error) {
+
+        console.error("Books Load Error:", error);
+
+        if (booksContainer) {
+
+            booksContainer.innerHTML = `
+            <div class="error-box">
+                <h2>⚠ Books Could Not Load</h2>
+                <p>Please check books.json</p>
+            </div>
+            `;
+
+        }
+
+    }
 
 }
 
-catch(error){
+/*==============================
+        BOOK COUNTER
+==============================*/
 
-console.error(error);
+function updateBookCounter(){
 
-if(booksContainer){
+    if(!bookCounter) return;
 
-booksContainer.innerHTML=`
-<h2 style="text-align:center;color:#ff5555;">
-Unable to load books.
-</h2>
-`;
-
-}
-
-}
+    bookCounter.textContent = books.length;
 
 }
 /*==============================
         RENDER BOOKS
 ==============================*/
 
-function renderBooks(list){
+function renderBooks(list) {
 
-if(!booksContainer || !bookTemplate) return;
+    if (!booksContainer || !bookTemplate) return;
 
-booksContainer.innerHTML="";
+    booksContainer.innerHTML = "";
 
-list.forEach((book,index)=>{
+    if (list.length === 0) {
 
-const card=bookTemplate.content.cloneNode(true);
+        booksContainer.innerHTML = `
+        <div class="error-box">
+            <h2>No Books Found</h2>
+        </div>
+        `;
 
-const cover=card.querySelector(".cover");
-const title=card.querySelector(".title");
-const author=card.querySelector(".author");
-const description=card.querySelector(".description");
-const category=card.querySelector(".book-category");
-const views=card.querySelector(".views");
-const downloads=card.querySelector(".downloads");
-const readBtn=card.querySelector(".readBtn");
-const downloadBtn=card.querySelector(".downloadBtn");
-const latestTag=card.querySelector(".latest-tag");
+        return;
+    }
 
-cover.src=book.cover || "images/no-image.png";
-cover.alt=book.title;
+    list.forEach(book => {
 
-title.textContent=book.title;
-author.textContent=book.author;
-description.textContent=book.description || "";
+        const card = bookTemplate.content.cloneNode(true);
 
-category.textContent=book.category || "Islamic";
+        const cover = card.querySelector(".cover");
+        const title = card.querySelector(".title");
+        const author = card.querySelector(".author");
+        const description = card.querySelector(".description");
+        const category = card.querySelector(".book-category");
 
-views.textContent=book.views || 0;
-downloads.textContent=book.downloads || 0;
+        const views = card.querySelector(".views");
+        const downloads = card.querySelector(".downloads");
 
-readBtn.href=book.reader || "#";
+        const readBtn = card.querySelector(".readBtn");
+        const downloadBtn = card.querySelector(".downloadBtn");
 
-downloadBtn.href=book.pdf || "#";
+        const latestTag = card.querySelector(".latest-tag");
 
-downloadBtn.addEventListener("click",()=>{
+        if (cover)
+            cover.src = book.cover || "logo.png";
 
-book.downloads=(book.downloads || 0)+1;
+        if (title)
+            title.textContent = book.title;
 
-downloads.textContent=book.downloads;
+        if (author)
+            author.textContent = book.author;
 
-updateDownloadCounter();
+        if (description)
+            description.textContent = book.description || "";
 
-});
+        if (category)
+            category.textContent = book.category || "Book";
 
-if(book.latest){
+        if (views)
+            views.textContent = book.views || 0;
 
-latestTag.style.display="inline-flex";
+        if (downloads)
+            downloads.textContent = book.downloads || 0;
 
-}else{
+        if (readBtn)
+            readBtn.href = book.reader || "#";
 
-latestTag.style.display="none";
+        if (downloadBtn)
+            downloadBtn.href = book.pdf || "#";
 
-}
+        if (latestTag)
+            latestTag.style.display = book.latest ? "inline-block" : "none";
 
-booksContainer.appendChild(card);
+        booksContainer.appendChild(card);
 
-});
+    });
 
 }
 
@@ -155,27 +156,109 @@ booksContainer.appendChild(card);
         LATEST BOOK
 ==============================*/
 
-function loadLatestBook(){
+function loadLatestBook() {
 
-const latest=books.find(book=>book.latest);
+    const latest = books.find(book => book.latest);
 
-if(!latest) return;
+    if (!latest) return;
 
-latestBookCover.src=latest.cover || "images/no-image.png";
+    const cover = document.getElementById("latestBookCover");
+    const title = document.getElementById("latestBookTitle");
+    const author = document.getElementById("latestBookAuthor");
+    const description = document.getElementById("latestBookDescription");
 
-latestBookTitle.textContent=latest.title;
+    if (cover)
+        cover.src = latest.cover;
 
-latestBookAuthor.textContent=latest.author;
+    if (title)
+        title.textContent = latest.title;
 
-latestBookDescription.textContent=latest.description;
+    if (author)
+        author.textContent = latest.author;
 
-latestBookCategory.textContent=latest.category;
+    if (description)
+        description.textContent = latest.description;
 
-latestBookYear.textContent=latest.year || "2026";
+}
+/*==============================
+        LIVE SEARCH
+==============================*/
 
-latestReadBtn.href=latest.reader || "#";
+function searchBooks() {
 
-latestDownloadBtn.href=latest.pdf || "#";
+    if (!searchInput) return;
+
+    const query = searchInput.value.toLowerCase().trim();
+
+    filteredBooks = books.filter(book => {
+
+        return (
+            (book.title || "").toLowerCase().includes(query) ||
+            (book.author || "").toLowerCase().includes(query) ||
+            (book.category || "").toLowerCase().includes(query)
+        );
+
+    });
+
+    renderBooks(filteredBooks);
+
+}
+
+if (searchInput) {
+
+    searchInput.addEventListener("input", searchBooks);
+
+}
+
+/*==============================
+        CATEGORY FILTER
+==============================*/
+
+function filterBooks(category, button = null) {
+
+    document.querySelectorAll(".category").forEach(btn => {
+
+        btn.classList.remove("active");
+
+    });
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+    if (category === "All") {
+
+        filteredBooks = [...books];
+
+    } else {
+
+        filteredBooks = books.filter(book =>
+            (book.category || "").toLowerCase() === category.toLowerCase()
+        );
+
+    }
+
+    renderBooks(filteredBooks);
+
+}
+
+/*==============================
+        VISITOR COUNTER
+==============================*/
+
+function updateVisitorCounter() {
+
+    if (!visitorCounter) return;
+
+    let visitors = Number(localStorage.getItem("visitorCounter")) || 0;
+
+    visitors++;
+
+    localStorage.setItem("visitorCounter", visitors);
+
+    visitorCounter.textContent = visitors;
 
 }
 
@@ -183,390 +266,100 @@ latestDownloadBtn.href=latest.pdf || "#";
         DOWNLOAD COUNTER
 ==============================*/
 
-function updateDownloadCounter(){
+function updateDownloadCounter() {
 
-let total=0;
+    if (!downloadCounter) return;
 
-books.forEach(book=>{
+    let totalDownloads = 0;
 
-total+=book.downloads || 0;
+    books.forEach(book => {
+
+        totalDownloads += Number(book.downloads || 0);
+
+    });
+
+    downloadCounter.textContent = totalDownloads;
+
+}
+
+/*==============================
+        DOWNLOAD BUTTON EVENT
+==============================*/
+
+document.addEventListener("click", function(e){
+
+    const btn = e.target.closest(".downloadBtn");
+
+    if(!btn) return;
+
+    let downloads = Number(localStorage.getItem("downloads")) || 0;
+
+    downloads++;
+
+    localStorage.setItem("downloads", downloads);
+
+    if(downloadCounter){
+
+        downloadCounter.textContent = downloads;
+
+    }
 
 });
-
-if(downloadCounter){
-
-downloadCounter.textContent=total;
-
-}
-
-}
 /*==============================
-        BOOK COUNTER
+        AI CHATBOT
 ==============================*/
 
-function updateBooksCounter(){
+const chatBtn = document.getElementById("chatBtn");
+const chatWindow = document.getElementById("chatWindow");
+const closeChat = document.getElementById("closeChat");
 
-if(!booksCounter) return;
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendMessage");
+const chatMessages = document.getElementById("chatMessages");
 
-let current = 0;
-
-const total = books.length;
-
-const timer = setInterval(()=>{
-
-current++;
-
-booksCounter.textContent = current;
-
-if(current >= total){
-
-clearInterval(timer);
-
-}
-
-},40);
-
-}
+let chatbotData = [];
 
 /*==============================
-        VISITOR COUNTER
-==============================*/
-
-function updateVisitorCounter(){
-
-if(!visitorCounter) return;
-
-let visitors = Number(localStorage.getItem("chishtiVisitors")) || 0;
-
-const today = new Date().toDateString();
-
-const lastVisit = localStorage.getItem("lastVisit");
-
-if(lastVisit !== today){
-
-visitors++;
-
-localStorage.setItem("chishtiVisitors",visitors);
-
-localStorage.setItem("lastVisit",today);
-
-}
-
-visitorCounter.textContent = visitors;
-
-}
-
-/*==============================
-        LIVE SEARCH
-==============================*/
-
-function searchBooks(){
-
-const keyword = searchInput.value
-.toLowerCase()
-.trim();
-
-filteredBooks = books.filter(book=>{
-
-return(
-
-book.title.toLowerCase().includes(keyword) ||
-
-book.author.toLowerCase().includes(keyword) ||
-
-book.category.toLowerCase().includes(keyword)
-
-);
-
-});
-
-renderBooks(filteredBooks);
-
-}
-
-if(searchInput){
-
-searchInput.addEventListener("input",searchBooks);
-
-}
-
-/*==============================
-        CATEGORY FILTER
-==============================*/
-
-function filterBooks(category,button){
-
-document.querySelectorAll(".category")
-.forEach(btn=>{
-
-btn.classList.remove("active");
-
-});
-
-if(button){
-
-button.classList.add("active");
-
-}
-
-if(category==="All"){
-
-filteredBooks=[...books];
-
-}else{
-
-filteredBooks=books.filter(book=>
-
-book.category.toLowerCase()===category.toLowerCase()
-
-);
-
-}
-
-renderBooks(filteredBooks);
-
-}
-
-/*==============================
-        TOTAL DOWNLOADS
-==============================*/
-
-updateDownloadCounter();
-
-updateVisitorCounter();/*==============================
-        BOOK COUNTER
-==============================*/
-
-function updateBooksCounter(){
-
-if(!booksCounter) return;
-
-let current = 0;
-
-const total = books.length;
-
-const timer = setInterval(()=>{
-
-current++;
-
-booksCounter.textContent = current;
-
-if(current >= total){
-
-clearInterval(timer);
-
-}
-
-},40);
-
-}
-
-/*==============================
-        VISITOR COUNTER
-==============================*/
-
-function updateVisitorCounter(){
-
-if(!visitorCounter) return;
-
-let visitors = Number(localStorage.getItem("chishtiVisitors")) || 0;
-
-const today = new Date().toDateString();
-
-const lastVisit = localStorage.getItem("lastVisit");
-
-if(lastVisit !== today){
-
-visitors++;
-
-localStorage.setItem("chishtiVisitors",visitors);
-
-localStorage.setItem("lastVisit",today);
-
-}
-
-visitorCounter.textContent = visitors;
-
-}
-
-/*==============================
-        LIVE SEARCH
-==============================*/
-
-function searchBooks(){
-
-const keyword = searchInput.value
-.toLowerCase()
-.trim();
-
-filteredBooks = books.filter(book=>{
-
-return(
-
-book.title.toLowerCase().includes(keyword) ||
-
-book.author.toLowerCase().includes(keyword) ||
-
-book.category.toLowerCase().includes(keyword)
-
-);
-
-});
-
-renderBooks(filteredBooks);
-
-}
-
-if(searchInput){
-
-searchInput.addEventListener("input",searchBooks);
-
-}
-
-/*==============================
-        CATEGORY FILTER
-==============================*/
-
-function filterBooks(category,button){
-
-document.querySelectorAll(".category")
-.forEach(btn=>{
-
-btn.classList.remove("active");
-
-});
-
-if(button){
-
-button.classList.add("active");
-
-}
-
-if(category==="All"){
-
-filteredBooks=[...books];
-
-}else{
-
-filteredBooks=books.filter(book=>
-
-book.category.toLowerCase()===category.toLowerCase()
-
-);
-
-}
-
-renderBooks(filteredBooks);
-
-}
-
-/*==============================
-        TOTAL DOWNLOADS
-==============================*/
-
-updateDownloadCounter();
-
-updateVisitorCounter();
-/*==============================
-        LOAD CHATBOT DATA
+        LOAD CHATBOT
 ==============================*/
 
 async function loadChatbot(){
 
-try{
+    try{
 
-const response = await fetch("chatbot.json");
+        const response = await fetch("chatbot.json");
 
-if(!response.ok)
-throw new Error("chatbot.json not found");
+        if(!response.ok) throw new Error("chatbot.json not found");
 
-chatbotData = await response.json();
+        chatbotData = await response.json();
 
-console.log("Chatbot Loaded");
+    }catch(error){
 
-}catch(error){
+        console.error("Chatbot Error:",error);
 
-console.error(error);
-
-chatbotData = [];
-
-}
+    }
 
 }
 
 /*==============================
-        OPEN / CLOSE CHAT
+        OPEN CHAT
 ==============================*/
 
-if(chatBtn){
+chatBtn?.addEventListener("click",()=>{
 
-chatBtn.addEventListener("click",()=>{
-
-chatWindow.classList.add("active");
-
-chatInput.focus();
+    chatWindow.classList.add("active");
 
 });
 
-}
+/*==============================
+        CLOSE CHAT
+==============================*/
 
-if(closeChat){
+closeChat?.addEventListener("click",()=>{
 
-closeChat.addEventListener("click",()=>{
-
-chatWindow.classList.remove("active");
+    chatWindow.classList.remove("active");
 
 });
-
-}
-
-/*==============================
-        ADD MESSAGE
-==============================*/
-
-function addMessage(type,text){
-
-const message=document.createElement("div");
-
-message.className=type+"-message";
-
-message.innerHTML=`
-
-<div class="message-content">
-
-${text}
-
-</div>
-
-`;
-
-chatMessages.appendChild(message);
-
-chatMessages.scrollTop=chatMessages.scrollHeight;
-
-}
-
-/*==============================
-        FIND BOT REPLY
-==============================*/
-
-function getBotReply(question){
-
-const q=question.toLowerCase();
-
-for(const item of chatbotData){
-
-if(item.keywords.some(word=>q.includes(word.toLowerCase()))){
-
-return item.reply;
-
-}
-
-}
-
-return "🤲 Sorry, I couldn't understand your question. Please ask about books, authors, downloads or the Chishti Library.";
-
-}
 
 /*==============================
         SEND MESSAGE
@@ -574,102 +367,89 @@ return "🤲 Sorry, I couldn't understand your question. Please ask about books,
 
 function sendMessage(){
 
-const text=chatInput.value.trim();
+    if(!chatInput) return;
 
-if(text==="") return;
+    const text = chatInput.value.trim();
 
-addMessage("user",text);
+    if(text==="") return;
 
-chatInput.value="";
+    chatMessages.innerHTML += `
+    <div class="user-message">
+        ${text}
+    </div>
+    `;
 
-setTimeout(()=>{
+    chatInput.value="";
 
-const reply=getBotReply(text);
+    let reply =
+    "Assalamu Alaikum 🌹<br>Welcome to Chishti AI.";
 
-addMessage("bot",reply);
+    chatbotData.forEach(item=>{
 
-},500);
+        if(
+            text.toLowerCase().includes(item.keyword.toLowerCase())
+        ){
+
+            reply=item.reply;
+
+        }
+
+    });
+
+    setTimeout(()=>{
+
+        chatMessages.innerHTML += `
+        <div class="bot-message">
+            ${reply}
+        </div>
+        `;
+
+        chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+    },600);
 
 }
 
 /*==============================
-        SEND EVENTS
+        EVENTS
 ==============================*/
 
-if(sendMessageBtn){
+sendBtn?.addEventListener("click",sendMessage);
 
-sendMessageBtn.addEventListener("click",sendMessage);
+chatInput?.addEventListener("keypress",(e)=>{
 
-}
+    if(e.key==="Enter"){
 
-if(chatInput){
+        sendMessage();
 
-chatInput.addEventListener("keydown",(e)=>{
-
-if(e.key==="Enter"){
-
-e.preventDefault();
-
-sendMessage();
-
-}
+    }
 
 });
-
-}
-/*==============================
-        LOADING SCREEN
-==============================*/
-
-window.addEventListener("load", () => {
-
-setTimeout(() => {
-
-if(loader){
-
-loader.style.opacity = "0";
-
-loader.style.visibility = "hidden";
-
-}
-
-},5000);
-
-});
-
 /*==============================
         FALLING STARS
 ==============================*/
 
-function createStars(){
+function createStars() {
 
-const starsContainer = document.getElementById("stars");
+    const starsContainer = document.getElementById("stars");
 
-if(!starsContainer) return;
+    if (!starsContainer) return;
 
-for(let i=0;i<80;i++){
+    for (let i = 0; i < 60; i++) {
 
-const star=document.createElement("span");
+        const star = document.createElement("span");
 
-star.className="star";
+        star.classList.add("star");
 
-star.style.left=Math.random()*100+"%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.top = Math.random() * -100 + "vh";
 
-star.style.top=Math.random()*-100+"vh";
+        star.style.animationDuration = (3 + Math.random() * 5) + "s";
+        star.style.opacity = Math.random();
 
-star.style.animationDuration=(4+Math.random()*8)+"s";
-
-star.style.animationDelay=Math.random()*6+"s";
-
-star.style.opacity=Math.random();
-
-star.style.width=(2+Math.random()*3)+"px";
-
-star.style.height=star.style.width;
-
-starsContainer.appendChild(star);
-
-}
+        starsContainer.appendChild(star);
+    }
 
 }
 
@@ -677,33 +457,26 @@ starsContainer.appendChild(star);
         BACK TO TOP
 ==============================*/
 
-const backToTop=document.getElementById("backToTop");
+const backToTop = document.getElementById("backToTop");
 
+window.addEventListener("scroll", () => {
 
+    if (!backToTop) return;
 
-if(!backToTop) return;
-
-if(window.scrollY>400){
-
-backToTop.classList.add("show");
-
-}else{
-
-backToTop.classList.remove("show");
-
-}
+    if (window.scrollY > 400) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
 
 });
 
-backToTop?.addEventListener("click",()=>{
+backToTop?.addEventListener("click", () => {
 
-window.scrollTo({
-
-top:0,
-
-behavior:"smooth"
-
-});
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
 });
 
@@ -711,96 +484,29 @@ behavior:"smooth"
         MOBILE MENU
 ==============================*/
 
-const menuBtn=document.getElementById("menuBtn");
+const menuBtn = document.getElementById("menuBtn");
+const navbar = document.querySelector(".navbar");
 
-const navbar=document.querySelector(".navbar");
+menuBtn?.addEventListener("click", () => {
 
-menuBtn?.addEventListener("click",()=>{
-
-navbar.classList.toggle("active");
-
-menuBtn.classList.toggle("active");
+    navbar.classList.toggle("active");
 
 });
 
 /*==============================
-        CLOSE MOBILE MENU
-==============================*/
-
-document.querySelectorAll(".navbar a").forEach(link=>{
-
-link.addEventListener("click",()=>{
-
-navbar?.classList.remove("active");
-
-menuBtn?.classList.remove("active");
-
-});
-
-});
-
-/*==============================
-        SMOOTH SCROLL
-==============================*/
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
-
-anchor.addEventListener("click",function(e){
-
-e.preventDefault();
-
-const target=document.querySelector(this.getAttribute("href"));
-
-if(target){
-
-target.scrollIntoView({
-
-behavior:"smooth",
-
-block:"start"
-
-});
-
-}
-
-});
-
-});
-
-/*==============================
-        INITIALIZE
+        INIT PROJECT
 ==============================*/
 
 window.addEventListener("DOMContentLoaded", async () => {
 
     await loadBooks();
-
     await loadChatbot();
 
     updateVisitorCounter();
-
     updateDownloadCounter();
 
     createStars();
 
-    console.log("✅ Chishti Library Ready");
-
-    // Loading Screen (5 seconds)
-    setTimeout(() => {
-
-        const loader = document.getElementById("loader");
-
-        if (loader) {
-
-            loader.style.opacity = "0";
-            loader.style.transition = "opacity 0.8s ease";
-
-            setTimeout(() => {
-                loader.style.display = "none";
-            }, 800);
-
-        }
-
-    }, 5000);
+    console.log("✅ Chishti Library Loaded Successfully 🚀");
 
 });
