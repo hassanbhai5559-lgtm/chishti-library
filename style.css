@@ -4931,3 +4931,17 @@ color:#000;
 /*==================================================
 END OF CHISHTI LIBRARY STYLESHEET
 ==================================================*/
+
+/* Remove Big Logo From Books Page */
+
+.library-banner{
+display:none;
+}
+
+.banner-logo{
+display:none;
+}
+
+.hero-logo{
+display:none;
+}
