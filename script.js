@@ -1,2674 +1,1442 @@
 /*==================================================
+CHISHTI LIBRARY 2026
+PART 1
+RESET + BODY + NAVBAR + HERO
+==================================================*/
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+}
+
+body{
+
+font-family:'Poppins',sans-serif;
+background:#f8f9fb;
+color:#222;
+overflow-x:hidden;
+
+}
+
+/*==========================
+SCROLLBAR
+==========================*/
+
+::-webkit-scrollbar{
+
+width:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#eee;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#0b6b3a;
+border-radius:20px;
+
+}
+
+/*==========================
+NAVBAR
+==========================*/
+
+.navbar{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:80px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:0 70px;
+
+background:rgba(255,255,255,.95);
+
+backdrop-filter:blur(15px);
+
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+z-index:9999;
+
+transition:.4s;
+
+}
+
+.logo{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+}
+
+.logo img{
+
+width:60px;
+height:60px;
+border-radius:50%;
+
+}
+
+.logo-text h2{
+
+font-size:22px;
+font-weight:700;
+color:#0b6b3a;
+
+}
+
+.logo-text span{
+
+font-size:13px;
+color:#666;
+
+}
+
+.menu{
+
+display:flex;
+gap:35px;
+list-style:none;
+
+}
+
+.menu a{
+
+text-decoration:none;
+color:#222;
+font-weight:600;
+transition:.3s;
+
+}
+
+.menu a:hover{
+
+color:#0b6b3a;
+
+}
+
+.mobile-menu{
+
+display:none;
+font-size:28px;
+cursor:pointer;
+
+}
+
+/*==========================
+HERO
+==========================*/
+
+.hero{
+
+height:100vh;
+
+background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+
+url("images/banner.jpg") center center/cover;
+
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+
+padding-top:90px;
+
+color:#fff;
+
+}
+
+.hero-content{
+
+max-width:850px;
+
+}
+
+.hero-logo{
+
+width:170px;
+
+margin-bottom:25px;
+
+animation:float 3s ease-in-out infinite;
+
+}
+
+.hero h1{
+
+font-size:62px;
+font-weight:800;
+letter-spacing:2px;
+
+margin-bottom:10px;
+
+}
+
+.hero h3{
+
+font-size:28px;
+font-weight:400;
+
+margin-bottom:20px;
+
+color:#ffd86b;
+
+}
+
+.hero p{
+
+font-size:18px;
+
+line-height:32px;
+
+margin-bottom:40px;
+
+}
+
+/*==========================
+SEARCH BOX
+==========================*/
+
+.search-box{
+
+width:100%;
+max-width:650px;
+
+margin:auto;
+
+background:#fff;
+
+display:flex;
+align-items:center;
+
+padding:15px 20px;
+
+border-radius:50px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.18);
+
+}
+
+.search-box i{
+
+font-size:22px;
+color:#0b6b3a;
+
+margin-right:15px;
+
+}
+
+.search-box input{
+
+flex:1;
+border:none;
+outline:none;
+
+font-size:17px;
+
+}
+
+/*==========================
+COUNTERS
+==========================*/
+
+.counter-area{
+
+display:flex;
+justify-content:center;
+gap:30px;
+
+margin-top:45px;
+
+flex-wrap:wrap;
+
+}
+
+.counter-card{
+
+background:#fff;
+
+padding:30px;
+
+border-radius:20px;
+
+width:220px;
+
+color:#222;
+
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+transition:.4s;
+
+}
+
+.counter-card:hover{
+
+transform:translateY(-10px);
+
+}
+
+.counter-card i{
+
+font-size:35px;
+
+color:#0b6b3a;
+
+margin-bottom:15px;
+
+}
+
+.counter-card h2{
+
+font-size:34px;
+
+color:#0b6b3a;
+
+margin-bottom:8px;
+
+}
+
+.counter-card p{
+
+font-weight:600;
+
+}
+
+/*==========================
+BUTTONS
+==========================*/
+
+.btn{
+
+display:inline-block;
+
+padding:14px 35px;
+
+background:#0b6b3a;
+
+color:#fff;
+
+text-decoration:none;
+
+border-radius:40px;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.btn:hover{
+
+background:#09552f;
+
+transform:translateY(-3px);
+
+}
+
+/*==========================
+SECTION TITLE
+==========================*/
+
+.section-title{
+
+text-align:center;
+
+font-size:40px;
+
+font-weight:700;
+
+color:#0b6b3a;
+
+margin-bottom:50px;
+
+}
+
+/*==========================
+FLOAT ANIMATION
+==========================*/
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0px);
+
+}
+
+50%{
+
+transform:translateY(-12px);
+
+}
+
+100%{
+
+transform:translateY(0px);
+
+}
+
+}
+/*==================================================
+CHISHTI LIBRARY 2026
+PART 1
+RESET + BODY + NAVBAR + HERO
+==================================================*/
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+scroll-behavior:smooth;
+}
+
+body{
+
+font-family:'Poppins',sans-serif;
+background:#f8f9fb;
+color:#222;
+overflow-x:hidden;
+
+}
+
+/*==========================
+SCROLLBAR
+==========================*/
+
+::-webkit-scrollbar{
+
+width:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#eee;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#0b6b3a;
+border-radius:20px;
+
+}
+
+/*==========================
+NAVBAR
+==========================*/
+
+.navbar{
+
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:80px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:0 70px;
+
+background:rgba(255,255,255,.95);
+
+backdrop-filter:blur(15px);
+
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+z-index:9999;
+
+transition:.4s;
+
+}
+
+.logo{
+
+display:flex;
+align-items:center;
+gap:15px;
+
+}
+
+.logo img{
+
+width:60px;
+height:60px;
+border-radius:50%;
+
+}
+
+.logo-text h2{
+
+font-size:22px;
+font-weight:700;
+color:#0b6b3a;
+
+}
+
+.logo-text span{
+
+font-size:13px;
+color:#666;
+
+}
+
+.menu{
+
+display:flex;
+gap:35px;
+list-style:none;
+
+}
+
+.menu a{
+
+text-decoration:none;
+color:#222;
+font-weight:600;
+transition:.3s;
+
+}
+
+.menu a:hover{
+
+color:#0b6b3a;
+
+}
+
+.mobile-menu{
+
+display:none;
+font-size:28px;
+cursor:pointer;
+
+}
+
+/*==========================
+HERO
+==========================*/
+
+.hero{
+
+height:100vh;
+
+background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+
+url("images/banner.jpg") center center/cover;
+
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+
+padding-top:90px;
+
+color:#fff;
+
+}
+
+.hero-content{
+
+max-width:850px;
+
+}
+
+.hero-logo{
+
+width:170px;
+
+margin-bottom:25px;
+
+animation:float 3s ease-in-out infinite;
+
+}
+
+.hero h1{
+
+font-size:62px;
+font-weight:800;
+letter-spacing:2px;
+
+margin-bottom:10px;
+
+}
+
+.hero h3{
+
+font-size:28px;
+font-weight:400;
+
+margin-bottom:20px;
+
+color:#ffd86b;
+
+}
+
+.hero p{
+
+font-size:18px;
+
+line-height:32px;
+
+margin-bottom:40px;
+
+}
+
+/*==========================
+SEARCH BOX
+==========================*/
+
+.search-box{
+
+width:100%;
+max-width:650px;
+
+margin:auto;
+
+background:#fff;
+
+display:flex;
+align-items:center;
+
+padding:15px 20px;
+
+border-radius:50px;
+
+box-shadow:0 10px 30px rgba(0,0,0,.18);
+
+}
+
+.search-box i{
+
+font-size:22px;
+color:#0b6b3a;
+
+margin-right:15px;
+
+}
+
+.search-box input{
+
+flex:1;
+border:none;
+outline:none;
+
+font-size:17px;
+
+}
+
+/*==========================
+COUNTERS
+==========================*/
+
+.counter-area{
+
+display:flex;
+justify-content:center;
+gap:30px;
+
+margin-top:45px;
+
+flex-wrap:wrap;
+
+}
+
+.counter-card{
+
+background:#fff;
+
+padding:30px;
+
+border-radius:20px;
+
+width:220px;
+
+color:#222;
+
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+transition:.4s;
+
+}
+
+.counter-card:hover{
+
+transform:translateY(-10px);
+
+}
+
+.counter-card i{
+
+font-size:35px;
+
+color:#0b6b3a;
+
+margin-bottom:15px;
+
+}
+
+.counter-card h2{
+
+font-size:34px;
+
+color:#0b6b3a;
+
+margin-bottom:8px;
+
+}
+
+.counter-card p{
+
+font-weight:600;
+
+}
+
+/*==========================
+BUTTONS
+==========================*/
+
+.btn{
+
+display:inline-block;
+
+padding:14px 35px;
+
+background:#0b6b3a;
+
+color:#fff;
+
+text-decoration:none;
+
+border-radius:40px;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.btn:hover{
+
+background:#09552f;
+
+transform:translateY(-3px);
+
+}
+
+/*==========================
+SECTION TITLE
+==========================*/
+
+.section-title{
+
+text-align:center;
+
+font-size:40px;
+
+font-weight:700;
+
+color:#0b6b3a;
+
+margin-bottom:50px;
+
+}
+
+/*==========================
+FLOAT ANIMATION
+==========================*/
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0px);
+
+}
+
+50%{
+
+transform:translateY(-12px);
+
+}
+
+100%{
+
+transform:translateY(0px);
+
+}
+
+}
+/*==================================================
+CHISHTI LIBRARY 2026
+PART 2
+LATEST BOOK + CATEGORIES + BOOKS
+==================================================*/
+
+/*==========================
+LATEST BOOK
+==========================*/
+
+.latest-book{
+
+padding:100px 8%;
+background:#fff;
+
+}
+
+.latest-book-card{
+
+display:flex;
+align-items:center;
+gap:50px;
+
+background:#ffffff;
+
+border-radius:25px;
+
+padding:40px;
+
+box-shadow:0 15px 40px rgba(0,0,0,.08);
+
+flex-wrap:wrap;
+
+}
+
+.book-image{
+
+flex:1;
+text-align:center;
+
+}
+
+.book-image img{
+
+width:320px;
+max-width:100%;
+
+border-radius:18px;
+
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+transition:.4s;
+
+}
+
+.book-image img:hover{
+
+transform:scale(1.05);
+
+}
+
+.book-info{
+
+flex:1;
+
+}
+
+.book-info h2{
+
+font-size:38px;
+color:#0b6b3a;
+margin-bottom:12px;
+
+}
+
+.book-info h3{
+
+font-size:22px;
+color:#666;
+margin-bottom:20px;
+
+}
+
+.book-info p{
+
+font-size:17px;
+line-height:30px;
+margin-bottom:30px;
+
+}
+
+.book-buttons{
+
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+
+}
+
+/*==========================
+CATEGORIES
+==========================*/
+
+.categories{
+
+padding:90px 8%;
+
+background:#f7f7f7;
+
+}
+
+.category-grid{
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+gap:15px;
+
+}
+
+.category{
+
+padding:14px 28px;
+
+border:none;
+
+background:#fff;
+
+border-radius:40px;
+
+cursor:pointer;
+
+font-weight:600;
+
+font-size:15px;
+
+transition:.35s;
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.category:hover{
+
+background:#0b6b3a;
+
+color:#fff;
+
+}
+
+.category.active{
+
+background:#0b6b3a;
+
+color:#fff;
+
+}
+
+/*==========================
+BOOK SECTION
+==========================*/
+
+.featured-books{
+
+padding:100px 8%;
+
+background:#fff;
+
+}
+
+.books-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+
+gap:35px;
+
+}
+
+/*==========================
+BOOK CARD
+==========================*/
+
+.book-card{
+
+background:#fff;
+
+border-radius:22px;
+
+overflow:hidden;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+transition:.35s;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+.book-card:hover{
+
+transform:translateY(-10px);
+
+box-shadow:0 18px 45px rgba(0,0,0,.15);
+
+}
+
+.book-card img{
+
+width:100%;
+
+height:420px;
+
+object-fit:cover;
+
+}
+
+.book-info{
+
+padding:25px;
+
+}
+
+.book-info .category{
+
+display:inline-block;
+
+background:#e8f6ef;
+
+color:#0b6b3a;
+
+padding:8px 16px;
+
+border-radius:25px;
+
+font-size:13px;
+
+font-weight:600;
+
+margin-bottom:15px;
+
+}
+
+.book-info h2{
+
+font-size:24px;
+
+margin-bottom:8px;
+
+color:#222;
+
+}
+
+.book-info h3{
+
+font-size:17px;
+
+color:#777;
+
+margin-bottom:15px;
+
+}
+
+.book-info p{
+
+font-size:15px;
+
+line-height:28px;
+
+margin-bottom:22px;
+
+color:#555;
+
+}
+
+.book-buttons{
+
+display:flex;
+
+gap:12px;
+
+flex-wrap:wrap;
+
+}
+
+.book-buttons .btn{
+
+flex:1;
+
+text-align:center;
+
+}
+
+.book-buttons .btn2{
+
+background:#444;
+
+}
+
+.book-buttons .btn2:hover{
+
+background:#222;
+
+}
+
+/*==========================
+NO BOOKS
+==========================*/
+
+.no-books{
+
+text-align:center;
+
+padding:80px;
+
+font-size:22px;
+
+font-weight:600;
+
+color:#888;
+
+}
+/*==================================================
 CHISHTI LIBRARY
-Production Script
-Part 1 - Global Variables & Initialization
+SCRIPT.JS
+PART 2
+Search + Categories + AI + Login
 ==================================================*/
 
-"use strict";
+/*==========================
+LIVE SEARCH
+==========================*/
 
-/*==================================================
-Global State
-==================================================*/
+const searchInput = document.getElementById("searchInput");
 
-let books = [];
-let filteredBooks = [];
-let chatbotData = [];
+if (searchInput) {
 
-/*==================================================
-Local Storage Keys
-==================================================*/
+    searchInput.addEventListener("keyup", () => {
 
-const STORAGE = {
-    visitor: "chishti_visitor",
-    visitors: "chishti_total_visitors",
-    downloads: "chishti_total_downloads"
+        const keyword = searchInput.value.toLowerCase();
+
+        const filtered = books.filter(book => {
+
+            return (
+
+                book.title.toLowerCase().includes(keyword) ||
+
+                book.author.toLowerCase().includes(keyword) ||
+
+                book.category.toLowerCase().includes(keyword)
+
+            );
+
+        });
+
+        renderBooks(filtered);
+
+    });
+
+}
+
+/*==========================
+RENDER BOOKS
+==========================*/
+
+function renderBooks(data){
+
+    if(!booksContainer) return;
+
+    booksContainer.innerHTML="";
+
+    data.forEach(book=>{
+
+        booksContainer.innerHTML += `
+
+<div class="book-card">
+
+<img src="${book.cover}" alt="${book.title}">
+
+<div class="book-info">
+
+<span class="category">${book.category}</span>
+
+<h2>${book.title}</h2>
+
+<h3>${book.author}</h3>
+
+<p>${book.description}</p>
+
+<div class="book-buttons">
+
+<a href="${book.reader}" class="btn" target="_blank">
+
+Read Online
+
+</a>
+
+<a href="${book.pdf}" class="btn" target="_blank">
+
+Download
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+    });
+
+}
+
+/*==========================
+CATEGORY FILTER
+==========================*/
+
+function filterBooks(category){
+
+    document.querySelectorAll(".category").forEach(btn=>{
+
+        btn.classList.remove("active");
+
+    });
+
+    if(event){
+
+        event.target.classList.add("active");
+
+    }
+
+    if(category==="All"){
+
+        renderBooks(books);
+
+        return;
+
+    }
+
+    const filtered=books.filter(book=>{
+
+        return book.category===category;
+
+    });
+
+    renderBooks(filtered);
+
+}
+
+/*==========================
+AI CHAT OPEN/CLOSE
+==========================*/
+
+const chatBtn=document.getElementById("chatBtn");
+const chatWindow=document.getElementById("chatWindow");
+const closeChat=document.getElementById("closeChat");
+
+if(chatBtn){
+
+chatBtn.onclick=()=>{
+
+chatWindow.classList.add("show");
+
 };
 
-/*==================================================
-DOM Elements
-==================================================*/
-
-const booksContainer = document.getElementById("booksContainer");
-const latestBooksContainer = document.getElementById("latestBooks");
-const categoryButtons = document.getElementById("categoryButtons");
-
-const heroSearch = document.getElementById("heroSearch");
-const librarySearch = document.getElementById("librarySearch");
-
-const noBooksFound = document.getElementById("noBooksFound");
-
-const totalBooks = document.getElementById("booksCount");
-const totalVisitors = document.getElementById("visitorsCount");
-const totalDownloads = document.getElementById("downloadsCount");
-const totalAuthors = document.getElementById("authorsCount");
-
-const loader = document.getElementById("loader");
-const backToTop = document.getElementById("backToTop");
-
-const header = document.getElementById("header");
-
-/*==================================================
-Utility Functions
-==================================================*/
-
-function $(selector) {
-    return document.querySelector(selector);
 }
 
-function $all(selector) {
-    return document.querySelectorAll(selector);
-}
+if(closeChat){
 
-/*==================================================
-Toast Notification
-==================================================*/
+closeChat.onclick=()=>{
 
-function showToast(message, type = "success") {
+chatWindow.classList.remove("show");
 
-    const toast = document.getElementById("toast");
-
-    if (!toast) return;
-
-    toast.className = "toast";
-
-    toast.classList.add(type);
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    setTimeout(() => {
-
-        toast.classList.remove("show");
-
-    }, 3000);
+};
 
 }
 
-/*==================================================
-Loader
-==================================================*/
+/*==========================
+AI LOGIN CHECK
+==========================*/
 
-function hideLoader() {
+let fullAI=false;
 
-    if (!loader) return;
+auth.onAuthStateChanged(user=>{
 
-    setTimeout(() => {
+if(user){
 
-        loader.classList.add("hide");
+fullAI=true;
 
-    }, 600);
+document.getElementById("loginMenu").style.display="none";
 
-}
+document.getElementById("adminMenu").style.display="block";
 
-/*==================================================
-Visitor Counter
-==================================================*/
+document.getElementById("dashboardMenu").style.display="block";
 
-function updateVisitorCounter() {
+}else{
 
-    let visitors = Number(
-        localStorage.getItem(STORAGE.visitors)
-    ) || 0;
-
-    const visited = localStorage.getItem(
-        STORAGE.visitor
-    );
-
-    if (!visited) {
-
-        visitors++;
-
-        localStorage.setItem(
-            STORAGE.visitors,
-            visitors
-        );
-
-        localStorage.setItem(
-            STORAGE.visitor,
-            "true"
-        );
-
-    }
-
-    if (totalVisitors) {
-
-        totalVisitors.textContent =
-            visitors.toLocaleString();
-
-    }
+fullAI=false;
 
 }
-
-/*==================================================
-Download Counter
-==================================================*/
-
-function updateDownloadCounter() {
-
-    let downloads = Number(
-        localStorage.getItem(STORAGE.downloads)
-    ) || 0;
-
-    downloads++;
-
-    localStorage.setItem(
-        STORAGE.downloads,
-        downloads
-    );
-
-    if (totalDownloads) {
-
-        totalDownloads.textContent =
-            downloads.toLocaleString();
-
-    }
-
-}
-
-/*==================================================
-Load Saved Download Count
-==================================================*/
-
-function loadDownloadCounter() {
-
-    const downloads = Number(
-        localStorage.getItem(STORAGE.downloads)
-    ) || 0;
-
-    if (totalDownloads) {
-
-        totalDownloads.textContent =
-            downloads.toLocaleString();
-
-    }
-
-}
-
-/*==================================================
-Animated Counter
-==================================================*/
-
-function animateCounter(element, target) {
-
-    if (!element) return;
-
-    let start = 0;
-
-    const duration = 1200;
-
-    const increment = target / (duration / 16);
-
-    function update() {
-
-        start += increment;
-
-        if (start >= target) {
-
-            element.textContent =
-                target.toLocaleString();
-
-            return;
-
-        }
-
-        element.textContent =
-            Math.floor(start).toLocaleString();
-
-        requestAnimationFrame(update);
-
-    }
-
-    update();
-
-}
-
-/*==================================================
-Header Scroll Effect
-==================================================*/
-
-window.addEventListener("scroll", () => {
-
-    if (!header) return;
-
-    if (window.scrollY > 60) {
-
-        header.classList.add("scrolled");
-
-    } else {
-
-        header.classList.remove("scrolled");
-
-    }
 
 });
 
-/*==================================================
-Back To Top Button
-==================================================*/
+/*==========================
+SEND MESSAGE
+==========================*/
 
-window.addEventListener("scroll", () => {
+const sendBtn=document.getElementById("sendBtn");
+const userInput=document.getElementById("userInput");
+const chatMessages=document.getElementById("chatMessages");
 
-    if (!backToTop) return;
+if(sendBtn){
 
-    if (window.scrollY > 500) {
+sendBtn.onclick=sendMessage;
 
-        backToTop.classList.add("show");
+}
 
-    } else {
+if(userInput){
 
-        backToTop.classList.remove("show");
+userInput.addEventListener("keypress",(e)=>{
 
-    }
+if(e.key==="Enter"){
+
+sendMessage();
+
+}
 
 });
 
-if (backToTop) {
+}
 
-    backToTop.addEventListener("click", () => {
+function addUser(text){
 
-        window.scrollTo({
+chatMessages.innerHTML += `
 
-            top: 0,
+<div class="user-message">
 
-            behavior: "smooth"
+${text}
 
-        });
+</div>
 
-    });
+`;
 
-}                           
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 2 - Load Books & Categories
-==================================================*/
-
-/*==================================================
-Load Books
-==================================================*/
-
-async function loadBooks() {
-
-    try {
-
-        const response = await fetch("books.json");
-
-        if (!response.ok) {
-            throw new Error("Unable to load books.json");
-        }
-
-        books = await response.json();
-
-        filteredBooks = [...books];
-
-        renderBooks(filteredBooks);
-
-        loadLatestBooks();
-
-        generateCategories();
-
-        updateCounters();
-
-    } catch (error) {
-
-        console.error(error);
-
-        showToast("Unable to load library.", "error");
-
-    }
+chatMessages.scrollTop=chatMessages.scrollHeight;
 
 }
 
-/*==================================================
-Latest Books
-==================================================*/
+function addBot(text){
 
-function loadLatestBooks() {
+chatMessages.innerHTML += `
 
-    if (!latestBooksContainer) return;
+<div class="bot-message">
 
-    latestBooksContainer.innerHTML = "";
+${text}
 
-    const latest = books.filter(book => book.latest === true);
+</div>
 
-    if (latest.length === 0) {
+`;
 
-        latestBooksContainer.innerHTML =
-        `
-            <div class="no-books">
-                <h3>No Latest Books Found</h3>
-            </div>
-        `;
-
-        return;
-
-    }
-
-    latest.forEach(book => {
-
-        latestBooksContainer.insertAdjacentHTML(
-            "beforeend",
-            createBookCard(book)
-        );
-
-    });
+chatMessages.scrollTop=chatMessages.scrollHeight;
 
 }
 
-/*==================================================
-Generate Categories
-==================================================*/
+function sendMessage(){
 
-function generateCategories() {
+const msg=userInput.value.trim();
 
-    if (!categoryButtons) return;
+if(msg==="") return;
 
-    categoryButtons.innerHTML = "";
+addUser(msg);
 
-    const categories = [
-        "All",
-        ...new Set(
-            books.map(book => book.category)
-        )
-    ];
+userInput.value="";
 
-    categories.forEach(category => {
+/*==========================
+GUEST MODE
+==========================*/
 
-        const button = document.createElement("button");
+if(!fullAI){
 
-        button.textContent = category;
+const q=msg.toLowerCase();
 
-        if (category === "All") {
+if(
 
-            button.classList.add("active");
+q.includes("who is saim chishti") ||
 
-        }
+q.includes("husn e kainat") ||
 
-        button.addEventListener("click", () => {
+q.includes("assalam") ||
 
-            document
-                .querySelectorAll("#categoryButtons button")
-                .forEach(btn => btn.classList.remove("active"));
+q.includes("aslam") ||
 
-            button.classList.add("active");
+q.includes("aoa")
 
-            filterBooks(category);
+){
 
-        });
+addBot("Hazrat Allama Saim Chishti is a renowned Islamic scholar and writer.");
 
-        categoryButtons.appendChild(button);
+}else{
 
-    });
+addBot("🔒 Please login to use Full Chishti AI.");
 
 }
 
-/*==================================================
-Update Counters
-==================================================*/
-
-function updateCounters() {
-
-    if (totalBooks) {
-
-        animateCounter(
-            totalBooks,
-            books.length
-        );
-
-    }
-
-    const uniqueAuthors = new Set(
-        books.map(book => book.author)
-    );
-
-    if (totalAuthors) {
-
-        animateCounter(
-            totalAuthors,
-            uniqueAuthors.size
-        );
-
-    }
-
-    updateVisitorCounter();
-
-    loadDownloadCounter();
+return;
 
 }
 
-/*==================================================
-Footer Categories
-==================================================*/
+/*==========================
+FULL AI
+==========================*/
 
-function loadFooterCategories() {
-
-    const footer = document.getElementById(
-        "footerCategories"
-    );
-
-    if (!footer) return;
-
-    footer.innerHTML = "";
-
-    const categories = [
-        ...new Set(
-            books.map(book => book.category)
-        )
-    ];
-
-    categories.forEach(category => {
-
-        const li = document.createElement("li");
-
-        li.innerHTML = `<a href="books.html">${category}</a>`;
-
-        footer.appendChild(li);
-
-    });
+searchBookAI(msg);
 
 }
 
-/*==================================================
-Load Everything
-==================================================*/
+function searchBookAI(text){
 
-document.addEventListener("DOMContentLoaded", () => {
+const q=text.toLowerCase();
 
-    loadBooks();
+const found=books.find(book=>
 
-    loadFooterCategories();
-
-    hideLoader();
-
-});
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 3 - Render Books & Book Cards
-==================================================*/
-
-/*==================================================
-Create Book Card
-==================================================*/
-
-function createBookCard(book) {
-
-    return `
-
-    <article class="book-card fade-up">
-
-        <div class="book-cover">
-
-            <img
-                src="${book.cover}"
-                alt="${book.title}"
-                loading="lazy"
-            >
-
-            ${book.latest
-                ? '<span class="latest-badge">Latest</span>'
-                : ""
-            }
-
-            <span class="category-badge">
-                ${book.category}
-            </span>
-
-        </div>
-
-        <div class="book-content">
-
-            <h3 class="book-title">
-                ${book.title}
-            </h3>
-
-            <div class="book-author">
-                ${book.author}
-            </div>
-
-            <p class="book-description">
-                ${book.description}
-            </p>
-
-            <div class="book-stats">
-
-                <div class="book-stat">
-
-                    👁️
-                    <span>${book.views}</span>
-
-                </div>
-
-                <div class="book-stat">
-
-                    📥
-                    <span>${book.downloads}</span>
-
-                </div>
-
-            </div>
-
-            <div class="book-actions">
-
-                <a
-                    class="read-btn"
-                    href="reader.html?book=${book.id}"
-                >
-                    Read Online
-                </a>
-
-                <a
-                    class="download-btn"
-                    href="${book.pdf}"
-                    download
-                    data-book="${book.id}"
-                >
-                    Download PDF
-                </a>
-
-            </div>
-
-        </div>
-
-    </article>
-
-    `;
-
-}
-
-/*==================================================
-Render Books
-==================================================*/
-
-function renderBooks(bookList) {
-
-    if (!booksContainer) return;
-
-    booksContainer.innerHTML = "";
-
-    if (!bookList.length) {
-
-        booksContainer.innerHTML = `
-
-            <div class="no-books">
-
-                <img
-                    src="assets/images/logo.png"
-                    class="empty-logo"
-                    alt="Logo"
-                >
-
-                <h3>No Books Found</h3>
-
-                <p>
-                    Try another search or category.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-    bookList.forEach(book => {
-
-        booksContainer.insertAdjacentHTML(
-
-            "beforeend",
-
-            createBookCard(book)
-
-        );
-
-    });
-
-    attachDownloadEvents();
-
-}
-
-/*==================================================
-Download Events
-==================================================*/
-
-function attachDownloadEvents() {
-
-    const buttons = document.querySelectorAll(
-
-        ".download-btn"
-
-    );
-
-    buttons.forEach(button => {
-
-        button.addEventListener(
-
-            "click",
-
-            function () {
-
-                updateDownloadCounter();
-
-                const id = Number(
-
-                    this.dataset.book
-
-                );
-
-                const book = books.find(
-
-                    item => item.id === id
-
-                );
-
-                if (book) {
-
-                    book.downloads++;
-
-                }
-
-                showToast(
-
-                    "Download Started",
-
-                    "success"
-
-                );
-
-            }
-
-        );
-
-    });
-
-}
-
-/*==================================================
-Read Button Animation
-==================================================*/
-
-document.addEventListener(
-
-    "click",
-
-    event => {
-
-        if (
-
-            event.target.classList.contains(
-
-                "read-btn"
-
-            )
-
-        ) {
-
-            showToast(
-
-                "Opening Reader...",
-
-                "success"
-
-            );
-
-        }
-
-    }
+book.title.toLowerCase().includes(q)
 
 );
 
-/*==================================================
-Refresh Library
-==================================================*/
+if(found){
 
-function refreshLibrary() {
+addBot(`
 
-    renderBooks(filteredBooks);
+📚 <b>${found.title}</b><br><br>
 
-}
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 4 - Search & Category Filtering
-==================================================*/
+Author : ${found.author}<br>
 
-/*==================================================
-Filter Books By Category
-==================================================*/
+Category : ${found.category}<br><br>
 
-function filterBooks(category) {
+<a href="${found.reader}" target="_blank">
 
-    if (category === "All") {
+Read Online
 
-        filteredBooks = [...books];
+</a>
 
-    } else {
+`);
 
-        filteredBooks = books.filter(book =>
-            book.category.toLowerCase() ===
-            category.toLowerCase()
-        );
-
-    }
-
-    renderBooks(filteredBooks);
+return;
 
 }
 
-/*==================================================
-Search Books
-==================================================*/
-
-function searchBooks(searchText) {
-
-    const keyword = searchText.trim().toLowerCase();
-
-    if (keyword === "") {
-
-        renderBooks(filteredBooks);
-
-        return;
-
-    }
-
-    const results = filteredBooks.filter(book => {
-
-        const title = (book.title || "").toLowerCase();
-
-        const author = (book.author || "").toLowerCase();
-
-        const category = (book.category || "").toLowerCase();
-
-        const description = (book.description || "").toLowerCase();
-
-        const keywords = Array.isArray(book.keywords)
-            ? book.keywords.join(" ").toLowerCase()
-            : "";
-
-        return (
-
-            title.includes(keyword) ||
-
-            author.includes(keyword) ||
-
-            category.includes(keyword) ||
-
-            description.includes(keyword) ||
-
-            keywords.includes(keyword)
-
-        );
-
-    });
-
-    renderBooks(results);
+addBot("AI Answer: "+text);
 
 }
 
-/*==================================================
-Hero Search
-==================================================*/
-
-if (heroSearch) {
-
-    heroSearch.addEventListener("input", e => {
-
-        searchBooks(e.target.value);
-
-    });
-
-}
-
-/*==================================================
-Library Search
-==================================================*/
-
-if (librarySearch) {
-
-    librarySearch.addEventListener("input", e => {
-
-        searchBooks(e.target.value);
-
-    });
-
-}
-
-/*==================================================
-Search On Enter
-==================================================*/
-
-function handleSearchEnter(input) {
-
-    if (!input) return;
-
-    input.addEventListener("keypress", event => {
-
-        if (event.key === "Enter") {
-
-            event.preventDefault();
-
-            searchBooks(input.value);
-
-        }
-
-    });
-
-}
-
-handleSearchEnter(heroSearch);
-
-handleSearchEnter(librarySearch);
-
-/*==================================================
-Clear Search
-==================================================*/
-
-function clearSearch() {
-
-    if (heroSearch) {
-
-        heroSearch.value = "";
-
-    }
-
-    if (librarySearch) {
-
-        librarySearch.value = "";
-
-    }
-
-    renderBooks(filteredBooks);
-
-}
-
-/*==================================================
-Highlight Active Category
-==================================================*/
-
-function setActiveCategory(button) {
-
-    document.querySelectorAll("#categoryButtons button")
-
-        .forEach(btn => {
-
-            btn.classList.remove("active");
-
-        });
-
-    button.classList.add("active");
-
-}
-
-/*==================================================
-Search From URL
-Example:
-books.html?search=naat
-==================================================*/
-
-function searchFromURL() {
-
-    const params = new URLSearchParams(window.location.search);
-
-    const keyword = params.get("search");
-
-    if (!keyword) return;
-
-    if (heroSearch) {
-
-        heroSearch.value = keyword;
-
-    }
-
-    if (librarySearch) {
-
-        librarySearch.value = keyword;
-
-    }
-
-    searchBooks(keyword);
-
-}
-
-/*==================================================
-Initialize Search
-==================================================*/
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    searchFromURL();
-
-});
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 5 - Counters & Statistics
-==================================================*/
-
-/*==================================================
-Book Counter
-==================================================*/
-
-function updateBookCounter() {
-
-    if (!totalBooks) return;
-
-    animateCounter(
-
-        totalBooks,
-
-        books.length
-
-    );
-
-}
-
-/*==================================================
-Author Counter
-==================================================*/
-
-function updateAuthorCounter() {
-
-    if (!totalAuthors) return;
-
-    const uniqueAuthors = [
-
-        ...new Set(
-
-            books.map(book => book.author)
-
-        )
-
-    ];
-
-    animateCounter(
-
-        totalAuthors,
-
-        uniqueAuthors.length
-
-    );
-
-}
-
-/*==================================================
-Download Counter
-==================================================*/
-
-function getTotalDownloads() {
-
-    const localDownloads = Number(
-
-        localStorage.getItem(
-
-            STORAGE.downloads
-
-        )
-
-    ) || 0;
-
-    if (totalDownloads) {
-
-        animateCounter(
-
-            totalDownloads,
-
-            localDownloads
-
-        );
-
-    }
-
-}
-
-/*==================================================
-Visitor Counter
-==================================================*/
-
-function getVisitorCount() {
-
-    const visitors = Number(
-
-        localStorage.getItem(
-
-            STORAGE.visitors
-
-        )
-
-    ) || 1;
-
-    if (totalVisitors) {
-
-        animateCounter(
-
-            totalVisitors,
-
-            visitors
-
-        );
-
-    }
-
-}
-
-/*==================================================
-Library Statistics
-==================================================*/
-
-function calculateStatistics() {
-
-    const stats = {
-
-        books: books.length,
-
-        authors: new Set(
-
-            books.map(book => book.author)
-
-        ).size,
-
-        categories: new Set(
-
-            books.map(book => book.category)
-
-        ).size,
-
-        views: books.reduce(
-
-            (total, book) =>
-
-                total + (Number(book.views) || 0),
-
-            0
-
-        ),
-
-        downloads: books.reduce(
-
-            (total, book) =>
-
-                total + (Number(book.downloads) || 0),
-
-            0
-
-        )
-
-    };
-
-    return stats;
-
-}
-
-/*==================================================
-Console Statistics
-==================================================*/
-
-function printStatistics() {
-
-    const stats = calculateStatistics();
-
-    console.table({
-
-        Books: stats.books,
-
-        Authors: stats.authors,
-
-        Categories: stats.categories,
-
-        Views: stats.views,
-
-        Downloads: stats.downloads
-
-    });
-
-}
-
-/*==================================================
-Update All Counters
-==================================================*/
-
-function refreshCounters() {
-
-    updateBookCounter();
-
-    updateAuthorCounter();
-
-    getVisitorCount();
-
-    getTotalDownloads();
-
-}
-
-/*==================================================
-Increment Book View
-==================================================*/
-
-function incrementBookView(bookId) {
-
-    const book = books.find(
-
-        item => item.id == bookId
-
-    );
-
-    if (!book) return;
-
-    book.views = Number(book.views) + 1;
-
-}
-
-/*==================================================
-Increment Book Download
-==================================================*/
-
-function incrementBookDownload(bookId) {
-
-    const book = books.find(
-
-        item => item.id == bookId
-
-    );
-
-    if (!book) return;
-
-    book.downloads = Number(book.downloads) + 1;
-
-    updateDownloadCounter();
-
-}
-
-/*==================================================
-Popular Books
-==================================================*/
-
-function getPopularBooks(limit = 6) {
-
-    return [...books]
-
-        .sort(
-
-            (a, b) =>
-
-                b.views - a.views
-
-        )
-
-        .slice(0, limit);
-
-}
-
-/*==================================================
-Newest Books
-==================================================*/
-
-function getLatestBooks(limit = 6) {
-
-    return books
-
-        .filter(
-
-            book => book.latest === true
-
-        )
-
-        .slice(0, limit);
-
-}
-
-/*==================================================
-Featured Authors
-==================================================*/
-
-function getFeaturedAuthors(limit = 6) {
-
-    const authors = {};
-
-    books.forEach(book => {
-
-        if (!authors[book.author]) {
-
-            authors[book.author] = 0;
-
-        }
-
-        authors[book.author]++;
-
-    });
-
-    return Object.entries(authors)
-
-        .sort(
-
-            (a, b) =>
-
-                b[1] - a[1]
-
-        )
-
-        .slice(0, limit);
-
-}
-
-/*==================================================
-Initialize Statistics
-==================================================*/
-
-document.addEventListener(
-
-    "DOMContentLoaded",
-
-    () => {
-
-        setTimeout(() => {
-
-            refreshCounters();
-
-            printStatistics();
-
-        }, 500);
-
-    }
-
-);
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 6 - Authors
-==================================================*/
-
-/*==================================================
-Unique Authors
-==================================================*/
-
-function getUniqueAuthors() {
-
-    const map = new Map();
-
-    books.forEach(book => {
-
-        const name = (book.author || "").trim();
-
-        if (!name) return;
-
-        if (!map.has(name)) {
-
-            map.set(name, {
-                name: name,
-                books: []
-            });
-
-        }
-
-        map.get(name).books.push(book);
-
-    });
-
-    return [...map.values()]
-        .sort((a, b) => a.name.localeCompare(b.name));
-
-}
-
-/*==================================================
-Create Author Card
-==================================================*/
-
-function createAuthorCard(author) {
-
-    const firstBook = author.books[0];
-
-    const cover = firstBook.cover;
-
-    return `
-
-    <article class="author-card fade-up">
-
-        <div class="author-image">
-
-            <img
-                src="${cover}"
-                alt="${author.name}"
-                loading="lazy"
-            >
-
-        </div>
-
-        <div class="author-content">
-
-            <h3 class="author-name">
-
-                ${author.name}
-
-            </h3>
-
-            <p class="author-books">
-
-                ${author.books.length}
-                Book${author.books.length > 1 ? "s" : ""}
-
-            </p>
-
-            <p class="author-bio">
-
-                Islamic writer featured in the
-                Chishti Library collection.
-
-            </p>
-
-            <button
-                class="author-view-btn"
-                data-author="${author.name}"
-            >
-
-                View Books
-
-            </button>
-
-        </div>
-
-    </article>
-
-    `;
-
-}
-
-/*==================================================
-Render Authors
-==================================================*/
-
-function loadAuthors() {
-
-    const container =
-        document.getElementById("authorsContainer");
-
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    const authors = getUniqueAuthors();
-
-    authors.forEach(author => {
-
-        container.insertAdjacentHTML(
-
-            "beforeend",
-
-            createAuthorCard(author)
-
-        );
-
-    });
-
-    attachAuthorButtons();
-
-}
-
-/*==================================================
-Author Buttons
-==================================================*/
-
-function attachAuthorButtons() {
-
-    document
-
-        .querySelectorAll(".author-view-btn")
-
-        .forEach(button => {
-
-            button.addEventListener(
-
-                "click",
-
-                function () {
-
-                    const author =
-
-                        this.dataset.author;
-
-                    window.location.href =
-
-                        "books.html?search=" +
-
-                        encodeURIComponent(author);
-
-                }
-
-            );
-
-        });
-
-}
-
-/*==================================================
-Author Search
-==================================================*/
-
-function searchAuthors(keyword) {
-
-    const cards =
-
-        document.querySelectorAll(".author-card");
-
-    const text =
-
-        keyword.trim().toLowerCase();
-
-    cards.forEach(card => {
-
-        const name =
-
-            card
-
-            .querySelector(".author-name")
-
-            .textContent
-
-            .toLowerCase();
-
-        if (
-
-            name.includes(text)
-
-        ) {
-
-            card.style.display = "";
-
-        } else {
-
-            card.style.display = "none";
-
-        }
-
-    });
-
-}
-
-/*==================================================
-Author Search Input
-==================================================*/
-
-const authorSearch =
-
-    document.getElementById("authorSearch");
-
-if (authorSearch) {
-
-    authorSearch.addEventListener(
-
-        "input",
-
-        e => {
-
-            searchAuthors(
-
-                e.target.value
-
-            );
-
-        }
-
-    );
-
-}
-
-/*==================================================
-Initialize Authors
-==================================================*/
-
-document.addEventListener(
-
-    "DOMContentLoaded",
-
-    () => {
-
-        loadAuthors();
-
-    }
-
-);
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 7 - AI Chatbot
-==================================================*/
-
-/*==================================================
-Chatbot State
-==================================================*/
-
-let chatbotKnowledge = [];
-
-/*==================================================
-DOM Elements
-==================================================*/
-
-const chatToggle = document.getElementById("chatToggle");
-const chatWindow = document.getElementById("chatWindow");
-const chatClose = document.getElementById("chatClose");
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
-const chatSend = document.getElementById("chatSend");
-const typingIndicator = document.getElementById("typingIndicator");
-
-/*==================================================
-Load Chatbot JSON
-==================================================*/
-
-async function loadChatbot() {
-
-    try {
-
-        const response = await fetch("chatbot.json");
-
-        if (!response.ok) {
-            throw new Error("Unable to load chatbot.json");
-        }
-
-        chatbotKnowledge = await response.json();
-
-    } catch (error) {
-
-        console.error(error);
-
-        chatbotKnowledge = [];
-
-    }
-
-}
-
-/*==================================================
-Open / Close Chat
-==================================================*/
-
-function openChat() {
-
-    if (!chatWindow) return;
-
-    chatWindow.classList.add("active");
-
-    chatInput.focus();
-
-}
-
-function closeChat() {
-
-    if (!chatWindow) return;
-
-    chatWindow.classList.remove("active");
-
-}
-
-if (chatToggle) {
-
-    chatToggle.addEventListener("click", openChat);
-
-}
-
-if (chatClose) {
-
-    chatClose.addEventListener("click", closeChat);
-
-}
-
-/*==================================================
-Create Message
-==================================================*/
-
-function createMessage(text, sender = "bot") {
-
-    if (!chatMessages) return;
-
-    const wrapper = document.createElement("div");
-
-    wrapper.className =
-        sender === "user"
-            ? "message user"
-            : "message";
-
-            if (sender === "
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 8 - Reader Page (PDF Viewer System)
-==================================================*/
-
-/*==================================================
-Get Book ID from URL
-==================================================*/
-
-function getBookIdFromURL() {
-
-    const params = new URLSearchParams(window.location.search);
-
-    return params.get("book");
-
-}
-
-/*==================================================
-Load Book into Reader
-==================================================*/
-
-function loadReaderBook() {
-
-    const bookId = getBookIdFromURL();
-
-    if (!bookId) return;
-
-    const book = books.find(b => b.id == bookId);
-
-    if (!book) {
-
-        showToast("Book not found", "error");
-
-        return;
-
-    }
-
-    const readerFrame = document.getElementById("readerFrame");
-
-    const readerTitle = document.getElementById("readerTitle");
-
-    if (readerFrame) {
-
-        readerFrame.src = book.reader || book.pdf;
-
-    }
-
-    if (readerTitle) {
-
-        readerTitle.textContent = book.title;
-
-    }
-
-    incrementBookView(bookId);
-
-}
-
-/*==================================================
-Reader Controls
-==================================================*/
-
-function setupReaderControls() {
-
-    const backBtn = document.getElementById("backBtn");
-
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-
-    const downloadBtn = document.getElementById("downloadBtn");
-
-    const readerFrame = document.getElementById("readerFrame");
-
-    /* Back Button */
-
-    if (backBtn) {
-
-        backBtn.addEventListener("click", () => {
-
-            window.history.back();
-
-        });
-
-    }
-
-    /* Fullscreen */
-
-    if (fullscreenBtn && readerFrame) {
-
-        fullscreenBtn.addEventListener("click", () => {
-
-            if (readerFrame.requestFullscreen) {
-
-                readerFrame.requestFullscreen();
-
-            }
-
-        });
-
-    }
-
-    /* Download */
-
-    if (downloadBtn) {
-
-        downloadBtn.addEventListener("click", () => {
-
-            const bookId = getBookIdFromURL();
-
-            const book = books.find(b => b.id == bookId);
-
-            if (!book) return;
-
-            const link = document.createElement("a");
-
-            link.href = book.pdf;
-
-            link.download = book.title + ".pdf";
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            document.body.removeChild(link);
-
-            incrementBookDownload(bookId);
-
-            showToast("Download Started", "success");
-
-        });
-
-    }
-
-}
-
-/*==================================================
-Zoom Controls (Optional UI support)
-==================================================*/
-
-let zoomLevel = 1;
-
-function zoomIn() {
-
-    const frame = document.getElementById("readerFrame");
-
-    if (!frame) return;
-
-    zoomLevel += 0.1;
-
-    frame.style.transform = `scale(${zoomLevel})`;
-
-}
-
-function zoomOut() {
-
-    const frame = document.getElementById("readerFrame");
-
-    if (!frame) return;
-
-    zoomLevel -= 0.1;
-
-    if (zoomLevel < 0.5) zoomLevel = 0.5;
-
-    frame.style.transform = `scale(${zoomLevel})`;
-
-}
-
-/*==================================================
-Reader Init
-==================================================*/
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    if (window.location.pathname.includes("reader.html")) {
-
-        setTimeout(() => {
-
-            loadReaderBook();
-
-            setupReaderControls();
-
-        }, 500);
-
-    }
-
-});
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 9 - Navigation, Header, Smooth Scroll
-==================================================*/
-
-/*==================================================
-Smooth Scroll
-==================================================*/
-
-function smoothScroll() {
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-        anchor.addEventListener("click", function (e) {
-
-            e.preventDefault();
-
-            const target = document.querySelector(this.getAttribute("href"));
-
-            if (target) {
-
-                target.scrollIntoView({
-
-                    behavior: "smooth",
-
-                    block: "start"
-
-                });
-
-            }
-
-        });
-
-    });
-
-}
-
-/*==================================================
-Header Shrink Effect
-==================================================*/
-
-function handleHeaderScroll() {
-
-    if (!header) return;
-
-    window.addEventListener("scroll", () => {
-
-        if (window.scrollY > 80) {
-
-            header.classList.add("shrink");
-
-        } else {
-
-            header.classList.remove("shrink");
-
-        }
-
-    });
-
-}
-
-/*==================================================
-Mobile Menu Toggle
-==================================================*/
-
-function initMobileMenu() {
-
-    const menuBtn = document.getElementById("menuToggle");
-
-    const nav = document.getElementById("navMenu");
-
-    if (!menuBtn || !nav) return;
-
-    menuBtn.addEventListener("click", () => {
-
-        nav.classList.toggle("active");
-
-        menuBtn.classList.toggle("active");
-
-    });
-
-    document.querySelectorAll("#navMenu a").forEach(link => {
-
-        link.addEventListener("click", () => {
-
-            nav.classList.remove("active");
-
-            menuBtn.classList.remove("active");
-
-        });
-
-    });
-
-}
-
-/*==================================================
-Active Navigation Link
-==================================================*/
-
-function setActiveNav() {
-
-    const links = document.querySelectorAll("#navMenu a");
-
-    const currentPage = window.location.pathname.split("/").pop();
-
-    links.forEach(link => {
-
-        if (link.getAttribute("href") === currentPage) {
-
-            link.classList.add("active");
-
-        }
-
-    });
-
-}
-
-/*==================================================
-Scroll Reveal Helper
-==================================================*/
-
-function revealOnScroll() {
-
-    const elements = document.querySelectorAll(".fade-up, .fade-left, .fade-right, .zoom-in");
-
-    const observer = new IntersectionObserver(entries => {
-
-        entries.forEach(entry => {
-
-            if (entry.isIntersecting) {
-
-                entry.target.classList.add("show");
-
-            }
-
-        });
-
-    }, {
-
-        threshold: 0.15
-
-    });
-
-    elements.forEach(el => observer.observe(el));
-
-}
-
-/*==================================================
-Back To Top Smooth Behavior
-==================================================*/
-
-function enhanceBackToTop() {
-
-    if (!backToTop) return;
-
-    backToTop.addEventListener("click", () => {
-
-        window.scrollTo({
-
-            top: 0,
-
-            behavior: "smooth"
-
-        });
-
-    });
-
-}
-
-/*==================================================
-Initialize Part 9 Features
-==================================================*/
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    smoothScroll();
-
-    handleHeaderScroll();
-
-    initMobileMenu();
-
-    setActiveNav();
-
-    revealOnScroll();
-
-    enhanceBackToTop();
-
-});
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 10 - Loader, Background Effects & Animations
-==================================================*/
-
-/*==================================================
-Loader Control
-==================================================*/
-
-window.addEventListener("load", () => {
-
-    setTimeout(() => {
-
-        hideLoader();
-
-        createStars();
-
-        initParticles();
-
-        smoothScroll();
-
-    }, 800);
-
-});
-
-/*==================================================
-Create Falling Stars Background
-==================================================*/
-
-function createStars() {
-
-    const starContainer = document.createElement("div");
-
-    starContainer.className = "stars-container";
-
-    document.body.appendChild(starContainer);
-
-    for (let i = 0; i < 60; i++) {
-
-        const star = document.createElement("span");
-
-        star.className = "star";
-
-        star.style.left = Math.random() * 100 + "%";
-
-        star.style.top = Math.random() * 100 + "%";
-
-        star.style.animationDuration = (Math.random() * 3 + 2) + "s";
-
-        star.style.opacity = Math.random();
-
-        starContainer.appendChild(star);
-
-    }
-
-}
-
-/*==================================================
-Particles Background Effect
-==================================================*/
-
-function initParticles() {
-
-    const particleContainer = document.createElement("div");
-
-    particleContainer.className = "particles";
-
-    document.body.appendChild(particleContainer);
-
-    for (let i = 0; i < 40; i++) {
-
-        const p = document.createElement("div");
-
-        p.className = "particle";
-
-        p.style.left = Math.random() * 100 + "%";
-
-        p.style.top = Math.random() * 100 + "%";
-
-        p.style.animationDuration = (Math.random() * 5 + 3) + "s";
-
-        particleContainer.appendChild(p);
-
-    }
-
-}
-
-/*==================================================
-Smooth Scroll
-==================================================*/
-
-function smoothScroll() {
-
-    document.querySelectorAll("a[href^='#']").forEach(anchor => {
-
-        anchor.addEventListener("click", function (e) {
-
-            e.preventDefault();
-
-            const target = document.querySelector(this.getAttribute("href"));
-
-            if (target) {
-
-                target.scrollIntoView({
-
-                    behavior: "smooth"
-
-                });
-
-            }
-
-        });
-
-    });
-
-}
-
-/*==================================================
-Scroll Animations (Intersection Observer)
-==================================================*/
-
-function initScrollAnimations() {
-
-    const elements = document.querySelectorAll(".fade-up, .fade-left, .fade-right, .zoom-in");
-
-    const observer = new IntersectionObserver(entries => {
-
-        entries.forEach(entry => {
-
-            if (entry.isIntersecting) {
-
-                entry.target.classList.add("show");
-
-            }
-
-        });
-
-    }, {
-
-        threshold: 0.15
-
-    });
-
-    elements.forEach(el => observer.observe(el));
-
-}
-
-/*==================================================
-Parallax Effect
-==================================================*/
-
-window.addEventListener("scroll", () => {
-
-    const scrolled = window.scrollY;
-
-    const stars = document.querySelectorAll(".star");
-
-    stars.forEach((star, index) => {
-
-        const speed = (index % 5 + 1) * 0.2;
-
-        star.style.transform =
-
-            `translateY(${scrolled * speed}px)`;
-
-    });
-
-});
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 11 - Search Modal, Toast, Utilities
-==================================================*/
-
-/*==================================================
-Search Modal Elements
-==================================================*/
-
-const searchModal = document.getElementById("searchModal");
-const openSearchBtn = document.getElementById("openSearch");
-const closeSearchBtn = document.getElementById("closeSearch");
-const modalSearchInput = document.getElementById("modalSearchInput");
-const modalSearchResults = document.getElementById("modalSearchResults");
-
-/*==================================================
-Open Search Modal
-==================================================*/
-
-function openSearchModal() {
-
-    if (!searchModal) return;
-
-    searchModal.classList.add("active");
-
-    setTimeout(() => {
-
-        modalSearchInput?.focus();
-
-    }, 200);
-
-}
-
-/*==================================================
-Close Search Modal
-==================================================*/
-
-function closeSearchModal() {
-
-    if (!searchModal) return;
-
-    searchModal.classList.remove("active");
-
-}
-
-/*==================================================
-Bind Search Modal Events
-==================================================*/
-
-if (openSearchBtn) {
-
-    openSearchBtn.addEventListener("click", openSearchModal);
-
-}
-
-if (closeSearchBtn) {
-
-    closeSearchBtn.addEventListener("click", closeSearchModal);
-
-}
-
-if (searchModal) {
-
-    searchModal.addEventListener("click", (e) => {
-
-        if (e.target === searchModal) {
-
-            closeSearchModal();
-
-        }
-
-    });
-
-}
-
-/*==================================================
-Modal Search Function
-==================================================*/
-
-function modalSearch(keyword) {
-
-    const text = keyword.trim().toLowerCase();
-
-    if (!modalSearchResults) return;
-
-    modalSearchResults.innerHTML = "";
-
-    if (!text) return;
-
-    const results = books.filter(book => {
-
-        return (
-
-            book.title.toLowerCase().includes(text) ||
-
-            book.author.toLowerCase().includes(text) ||
-
-            book.category.toLowerCase().includes(text)
-
-        );
-
-    });
-
-    if (results.length === 0) {
-
-        modalSearchResults.innerHTML = `
-            <div class="search-item">
-                <h4>No Results Found</h4>
-                <p>Try another keyword</p>
-            </div>
-        `;
-
-        return;
-
-    }
-
-    results.forEach(book => {
-
-        const item = document.createElement("div");
-
-        item.className = "search-item";
-
-        item.innerHTML = `
-            <h4>${book.title}</h4>
-            <p>${book.author} • ${book.category}</p>
-        `;
-
-        item.addEventListener("click", () => {
-
-            window.location.href =
-                `reader.html?book=${book.id}`;
-
-        });
-
-        modalSearchResults.appendChild(item);
-
-    });
-
-}
-
-/*==================================================
-Modal Input Listener
-==================================================*/
-
-if (modalSearchInput) {
-
-    modalSearchInput.addEventListener("input", (e) => {
-
-        modalSearch(e.target.value);
-
-    });
-
-}
-
-/*==================================================
-Toast System (Improved Safety)
-==================================================*/
-
-function showToast(message, type = "success") {
-
-    const toast = document.getElementById("toast");
-
-    if (!toast) return;
-
-    toast.className = "toast";
-
-    toast.classList.add(type);
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    clearTimeout(window.toastTimer);
-
-    window.toastTimer = setTimeout(() => {
-
-        toast.classList.remove("show");
-
-    }, 2500);
-
-}
-
-/*==================================================
-Smooth Scroll Utility
-==================================================*/
-
-function smoothScrollTo(targetId) {
-
-    const el = document.getElementById(targetId);
-
-    if (!el) return;
-
-    window.scrollTo({
-
-        top: el.offsetTop - 80,
-
-        behavior: "smooth"
-
-    });
-
-}
-
-/*==================================================
-Debounce Utility (Performance)
-==================================================*/
-
-function debounce(func, delay = 300) {
-
-    let timer;
-
-    return function (...args) {
-
-        clearTimeout(timer);
-
-        timer = setTimeout(() => {
-
-            func.apply(this, args);
-
-        }, delay);
-
-    };
-
-}
-
-/*==================================================
-Throttled Scroll Handler Helper
-==================================================*/
-
-function throttle(func, limit = 100) {
-
-    let lastFunc;
-
-    let lastRan;
-
-    return function () {
-
-        const context = this;
-
-        const args = arguments;
-
-        if (!lastRan) {
-
-            func.apply(context, args);
-
-            lastRan = Date.now();
-
-        } else {
-
-            clearTimeout(lastFunc);
-
-            lastFunc = setTimeout(() => {
-
-                if ((Date.now() - lastRan) >= limit) {
-
-                    func.apply(context, args);
-
-                    lastRan = Date.now();
-
-                }
-
-            }, limit - (Date.now() - lastRan));
-
-        }
-
-    };
-
-}
-
-/*==================================================
-Keyboard ESC Close Modals
-==================================================*/
-
-document.addEventListener("keydown", (e) => {
-
-    if (e.key === "Escape") {
-
-        closeSearchModal();
-
-    }
-
-});
-/*==================================================
-CHISHTI LIBRARY
-Production Script
-Part 12 - FINAL INIT, EVENTS & SYSTEM CLEANUP
-==================================================*/
-
-/*==================================================
-Smooth Scroll
-==================================================*/
-
-function smoothScroll() {
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-        anchor.addEventListener("click", function (e) {
-
-            e.preventDefault();
-
-            const target = document.querySelector(this.getAttribute("href"));
-
-            if (target) {
-
-                target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-
-            }
-
-        });
-
-    });
-
-}
-
-/*==================================================
-Global Click Handler
-==================================================*/
-
-document.addEventListener("click", (e) => {
-
-    // Close dropdowns or modals if needed later
-
-    if (e.target.classList.contains("overlay-close")) {
-
-        document.querySelectorAll(".active").forEach(el => {
-
-            el.classList.remove("active");
-
-        });
-
-    }
-
-});
-
-/*==================================================
-Initialize Stars / Effects Hook
-==================================================*/
-
-function initEffects() {
-
-    // Placeholder hook for CSS animated stars
-    // Can be extended later if canvas effects added
-
-    console.log("✨ Chishti Library Effects Loaded");
-
-}
-
-/*==================================================
-Main Initialization Function
-==================================================*/
-
-function initApp() {
-
-    try {
-
-        // Core system
-        smoothScroll();
-
-        initEffects();
-
-        // Load main data
-        loadBooks();
-
-        // Counters
-        refreshCounters();
-
-        // Authors
-        loadAuthors();
-
-        // Hide loader safely
-        hideLoader();
-
-        // Print system status
-        console.log("📚 Chishti Library Loaded Successfully");
-
-    } catch (error) {
-
-        console.error("Init Error:", error);
-
-        showToast("System Error Loading Library", "error");
-
-    }
-
-}
-
-/*==================================================
-Download Hook Override (Global Safety)
-==================================================*/
-
-document.addEventListener("click", (e) => {
-
-    const downloadBtn = e.target.closest(".download-btn");
-
-    if (downloadBtn) {
-
-        const bookId = downloadBtn.dataset.book;
-
-        if (bookId) {
-
-            incrementBookDownload(bookId);
-
-        }
-
-    }
-
-});
-
-/*==================================================
-Reader Page Handler
-==================================================*/
-
-function initReaderPage() {
-
-    const params = new URLSearchParams(window.location.search);
-
-    const bookId = params.get("book");
-
-    const frame = document.getElementById("pdfFrame");
-
-    if (!bookId || !frame) return;
-
-    const book = books.find(b => b.id == bookId);
-
-    if (!book) return;
-
-    frame.src = book.reader || book.pdf;
-
-    incrementBookView(bookId);
-
-}
-
-/*==================================================
-Page Detection
-==================================================*/
-
-function detectPage() {
-
-    const path = window.location.pathname;
-
-    if (path.includes("reader.html")) {
-
-        setTimeout(initReaderPage, 500);
-
-    }
-
-}
-
-/*==================================================
-Keyboard Shortcuts
-==================================================*/
-
-document.addEventListener("keydown", (e) => {
-
-    // ESC key resets search
-
-    if (e.key === "Escape") {
-
-        clearSearch();
-
-    }
-
-});
-
-/*==================================================
-Error Handling
-==================================================*/
-
-window.addEventListener("error", (e) => {
-
-    console.error("Global Error:", e.message);
-
-});
-
-/*==================================================
-Network Safety (Fetch Fallback)
-==================================================*/
-
-window.addEventListener("offline", () => {
-
-    showToast("You are offline", "warning");
-
-});
-
-window.addEventListener("online", () => {
-
-    showToast("Back Online", "success");
-
-});
-
-/*==================================================
-FINAL BOOTSTRAP
-==================================================*/
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    initApp();
-
-    detectPage();
-
-});
+console.log("SCRIPT PART 2 LOADED");
