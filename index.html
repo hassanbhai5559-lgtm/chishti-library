@@ -4,42 +4,22 @@
 <head>
 
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>CHISHTI LIBRARY | Premium Islamic Digital Library</title>
+<title>Chishti Library | Digital Islamic Library</title>
 
-<meta name="description"
-content="Read, Download and Explore Authentic Islamic Books, Urdu Books, Naats, Hamd, Manqabat, Maqalat and Islamic Literature.">
+<meta name="description" content="Official Chishti Library - Digital Islamic Library of Hazrat Allama Saim Chishti">
+<meta name="keywords" content="Islamic Books, Urdu Books, Naat, Hamd, Manqabat, Hazrat Allama Saim Chishti">
+<meta name="author" content="Chishti Library">
 
-<meta name="keywords"
-content="Islamic Library, Chishti Library, Urdu Books, PDF Books, Islamic Books, Naat, Hamd, Manqabat">
-
-<meta name="author" content="CHISHTI LIBRARY">
-
-<meta property="og:title"
-content="CHISHTI LIBRARY">
-
-<meta property="og:description"
-content="Premium Islamic Digital Library">
-
-<meta property="og:image"
-content="logo.png">
-
-<meta property="og:type"
-content="website">
-
-<meta property="og:url"
-content="https://yourdomain.com">
-
-<link rel="icon" href="logo.png">
+<link rel="icon" href="images/logo.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <link rel="stylesheet" href="style.css">
 
@@ -47,106 +27,120 @@ rel="stylesheet">
 
 <body>
 
-<!-- Animated Background -->
+<!-- ===========================
+NAVBAR
+=========================== -->
 
-<div id="stars"></div>
+<nav class="navbar">
 
-<div class="particles"></div>
+<div class="logo">
 
-<div class="blur-circle blur-one"></div>
+<a href="index.html">
 
-<div class="blur-circle blur-two"></div>
+<img src="images/logo.png" alt="Chishti Library">
 
-<div class="blur-circle blur-three"></div>
-
-<!-- ================= HEADER ================= -->
-
-<header id="header">
-
-<div class="container">
-
-<div class="navbar">
-
-<a href="index.html" class="logo">
-
-<img src="logo.png"
-alt="CHISHTI LIBRARY Logo">
+</a>
 
 <div class="logo-text">
 
 <h2>CHISHTI LIBRARY</h2>
 
-<p>Digital Islamic Library</p>
+<span>Digital Islamic Library</span>
 
 </div>
 
-</a>
+</div>
 
-<nav>
+<ul class="menu">
 
-<ul class="nav-links">
+<li><a href="index.html">Home</a></li>
 
-<li>
+<li><a href="#books">Books</a></li>
 
-<a href="index.html" class="active">
+<li><a href="#about">About</a></li>
 
-Home
+<li><a href="#contact">Contact</a></li>
 
-</a>
+<!-- Hidden until Admin Login -->
 
+<li id="adminMenu" style="display:none;">
+<a href="admin.html">Upload Books</a>
 </li>
 
-<li>
-
-<a href="books.html">
-
-Books
-
-</a>
-
+<li id="dashboardMenu" style="display:none;">
+<a href="dashboard.html">Dashboard</a>
 </li>
 
-<li>
-
-<a href="authors.html">
-
-Authors
-
+<li id="loginMenu">
+<a href="login.html">
+<i class="fa-solid fa-user-lock"></i>
+Admin Login
 </a>
-
-</li>
-
-<li>
-
-<a href="about.html">
-
-About
-
-</a>
-
-</li>
-
-<li>
-
-<a href="contact.html">
-
-Contact
-
-</a>
-
 </li>
 
 </ul>
 
-</nav>
-
 <div class="mobile-menu">
 
-<span></span>
+<i class="fas fa-bars"></i>
 
-<span></span>
+</div>
 
-<span></span>
+</nav>
+
+<!-- ===========================
+HERO SECTION
+=========================== -->
+
+<section class="hero">
+
+<div class="hero-overlay"></div>
+
+<div class="hero-content">
+
+<img src="images/logo.png" class="hero-logo" alt="Logo">
+
+<h1>CHISHTI LIBRARY</h1>
+
+<h3>Digital Islamic Library</h3>
+
+<p>
+
+Read Islamic Books, Naat, Hamd, Manqabat,
+History and much more.
+
+</p>
+
+<div class="search-box">
+
+<i class="fas fa-search"></i>
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search Books...">
+
+</div>
+
+<div class="counter-area">
+
+<div class="counter-card">
+
+<i class="fas fa-eye"></i>
+
+<h2 id="visitorCounter">0</h2>
+
+<p>Visitors</p>
+
+</div>
+
+<div class="counter-card">
+
+<i class="fas fa-book-open"></i>
+
+<h2 id="bookCounter">0</h2>
+
+<p>Books</p>
 
 </div>
 
@@ -154,1121 +148,421 @@ Contact
 
 </div>
 
-</header>
+</section>
+<!-- ===========================
+LATEST BOOK
+=========================== -->
 
-<!-- ================= HERO SECTION ================= -->
+<section class="latest-book">
 
-<section class="hero" id="home">
+<h2 class="section-title">
+Latest Book
+</h2>
 
-    <div class="container hero-container">
+<div class="latest-book-card">
 
-        <!-- Left Content -->
+<div class="book-image">
 
-        <div class="hero-content">
+<img id="latestCover"
+src="images/books/default-book.png"
+alt="Latest Book">
 
-            <span class="hero-badge">
-                ☪ Islamic Digital Library
-            </span>
+</div>
 
-            <h1>
-                Welcome To
-                <span>CHISHTI LIBRARY</span>
-            </h1>
+<div class="book-info">
 
-            <p class="hero-description">
+<h2 id="latestTitle">
+Latest Book
+</h2>
 
-                Read, Download and Explore Authentic Islamic Books,
-                Urdu Books,
-                Naats,
-                Hamd,
-                Manqabat,
-                Maqalat,
-                Islamic Literature
-                and much more from one beautiful digital library.
+<h3 id="latestAuthor">
+Hazrat Allama Saim Chishti
+</h3>
 
-            </p>
+<p>
+Read the newest book available in Chishti Library.
+</p>
 
-            <div class="hero-buttons">
+<div class="book-buttons">
 
-                <a href="books.html" class="btn btn-primary">
+<a id="latestRead"
+href="#"
+class="btn">
 
-                    Explore Books
+Read Online
 
-                </a>
+</a>
 
-                <a href="#latest-books" class="btn btn-outline">
+<a id="latestDownload"
+href="#"
+class="btn"
+download>
 
-                    Latest Books
+Download PDF
 
-                </a>
+</a>
 
-            </div>
+</div>
 
-            <!-- Search -->
+</div>
 
-            <div class="hero-search">
-
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search Books, Authors or Categories...">
-
-                <button id="searchButton">
-
-                    🔍
-
-                </button>
-
-            </div>
-
-            <!-- Counters -->
-
-            <div class="hero-counters">
-
-                <div class="counter-box">
-
-                    <h2 id="bookCount">
-
-                        0
-
-                    </h2>
-
-                    <span>
-
-                        Books
-
-                    </span>
-
-                </div>
-
-                <div class="counter-box">
-
-                    <h2 id="visitorCount">
-
-                        0
-
-                    </h2>
-
-                    <span>
-
-                        Visitors
-
-                    </span>
-
-                </div>
-
-                <div class="counter-box">
-
-                    <h2 id="downloadCount">
-
-                        0
-
-                    </h2>
-
-                    <span>
-
-                        Downloads
-
-                    </span>
-
-                </div>
-
-                <div class="counter-box">
-
-                    <h2 id="authorCount">
-
-                        0
-
-                    </h2>
-
-                    <span>
-
-                        Authors
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Right Side -->
-
-        <div class="hero-image">
-
-            <div class="logo-circle">
-
-                <img
-                    src="logo.png"
-                    alt="CHISHTI LIBRARY">
-
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 </section>
 
-<!-- ================= END HERO ================= -->
- <!-- ================= LATEST BOOKS SECTION ================= -->
+<!-- ===========================
+CHISHTI AI
+=========================== -->
 
-<section class="latest-books section" id="latest-books">
+<button id="chatBtn" class="chat-btn">
 
-    <div class="container">
-
-        <div class="section-header">
-
-            <span class="section-badge">
-                ✨ Recently Added
-            </span>
-
-            <h2 class="section-title">
-
-                Latest Islamic Books
-
-            </h2>
-
-            <p class="section-description">
-
-                Discover the newest additions to the CHISHTI LIBRARY.
-                Every book below is loaded automatically from
-                <strong>books.json</strong>.
-
-            </p>
-
-        </div>
-
-        <div id="latestBooks" class="books-grid">
-
-            <!-- Latest books loaded by script.js -->
-
-        </div>
-
-        <div class="section-footer">
-
-            <a href="books.html" class="btn btn-primary">
-
-                View Complete Library
-
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ================= FEATURE HIGHLIGHTS ================= -->
-
-<section class="features section">
-
-    <div class="container">
-
-        <div class="feature-grid">
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    📖
-
-                </div>
-
-                <h3>
-
-                    Read Online
-
-                </h3>
-
-                <p>
-
-                    Open books instantly in the premium PDF reader
-                    without downloading.
-
-                </p>
-
-            </div>
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    ⬇️
-
-                </div>
-
-                <h3>
-
-                    Download PDF
-
-                </h3>
-
-                <p>
-
-                    Download authentic Islamic books with one click.
-
-                </p>
-
-            </div>
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    🔍
-
-                </div>
-
-                <h3>
-
-                    Smart Search
-
-                </h3>
-
-                <p>
-
-                    Search books by title,
-                    author,
-                    category,
-                    or keywords instantly.
-
-                </p>
-
-            </div>
-
-            <div class="feature-card">
-
-                <div class="feature-icon">
-
-                    🤖
-
-                </div>
-
-                <h3>
-
-                    Chishti AI
-
-                </h3>
-
-                <p>
-
-                    Ask questions about books,
-                    authors,
-                    and Islamic literature using the AI assistant.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ================= END LATEST BOOKS ================= -->
- <!-- ================= CATEGORIES SECTION ================= -->
-
-<section class="categories section" id="categories">
-
-    <div class="container">
-
-        <div class="section-header">
-
-            <span class="section-badge">
-
-                📚 Browse Collection
-
-            </span>
-
-            <h2 class="section-title">
-
-                Explore By Category
-
-            </h2>
-
-            <p class="section-description">
-
-                Browse authentic Islamic books by category.
-                Categories are loaded automatically from
-                <strong>books.json</strong> and update instantly.
-
-            </p>
-
-        </div>
-
-        <div id="categoryButtons" class="category-buttons">
-
-            <!-- Categories will be generated automatically -->
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ================= POPULAR CATEGORIES ================= -->
-
-<section class="popular-categories section">
-
-    <div class="container">
-
-        <div class="popular-grid">
-
-            <div class="popular-card">
-
-                <div class="popular-icon">📖</div>
-
-                <h3>Islamic Books</h3>
-
-                <p>
-
-                    Aqeedah, Fiqh, Tafseer,
-                    Hadith and authentic Islamic literature.
-
-                </p>
-
-            </div>
-
-            <div class="popular-card">
-
-                <div class="popular-icon">🎙</div>
-
-                <h3>Naat</h3>
-
-                <p>
-
-                    Collection of beautiful Naats in Urdu,
-                    Arabic and other languages.
-
-                </p>
-
-            </div>
-
-            <div class="popular-card">
-
-                <div class="popular-icon">🤲</div>
-
-                <h3>Hamd</h3>
-
-                <p>
-
-                    Hamd Sharif praising Allah Almighty.
-
-                </p>
-
-            </div>
-
-            <div class="popular-card">
-
-                <div class="popular-icon">🌹</div>
-
-                <h3>Manqabat</h3>
-
-                <p>
-
-                    Devotional poetry in praise of the
-                    Prophet ﷺ and Awliya Allah.
-
-                </p>
-
-            </div>
-
-            <div class="popular-card">
-
-                <div class="popular-icon">📝</div>
-
-                <h3>Maqalat</h3>
-
-                <p>
-
-                    Islamic articles,
-                    speeches,
-                    research papers and essays.
-
-                </p>
-
-            </div>
-
-            <div class="popular-card">
-
-                <div class="popular-icon">🖋</div>
-
-                <h3>Urdu Poetry</h3>
-
-                <p>
-
-                    Islamic Urdu poetry,
-                    ghazals,
-                    nazms and spiritual literature.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ================= CATEGORY FILTER INFO ================= -->
-
-<section class="filter-info">
-
-    <div class="container">
-
-        <div class="filter-box">
-
-            <h3>
-
-                Find Your Favorite Books
-
-            </h3>
-
-            <p>
-
-                Select any category above to instantly filter
-                the complete library without reloading the page.
-
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ================= END CATEGORIES ================= -->
-
-<!-- ================= LIBRARY SECTION ================= -->
-
-<section class="library section" id="library">
-
-    <div class="container">
-
-        <div class="section-header">
-
-            <span class="section-badge">
-
-                📚 Digital Collection
-
-            </span>
-
-            <h2 class="section-title">
-
-                Complete Library
-
-            </h2>
-
-            <p class="section-description">
-
-                Browse our complete collection of Islamic books.
-                Every book is loaded automatically from
-                <strong>books.json</strong>.
-
-            </p>
-
-        </div>
-
-        <!-- Library Search -->
-
-        <div class="library-search">
-
-            <input
-                type="text"
-                id="librarySearch"
-                placeholder="Search by title, author, category or keywords...">
-
-        </div>
-
-        <!-- Books Grid -->
-
-        <div id="booksContainer" class="books-grid">
-
-            <!-- Books will be loaded here by script.js -->
-
-        </div>
-
-        <!-- Empty State -->
-
-        <div id="noBooksFound" class="no-books" style="display:none;">
-
-            <img src="logo.png"
-                 alt="No Books Found"
-                 class="empty-logo">
-
-            <h3>
-
-                No Books Found
-
-            </h3>
-
-            <p>
-
-                Try another keyword or select another category.
-
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ================= WHY CHOOSE US ================= -->
-
-<section class="why-us section">
-
-    <div class="container">
-
-        <div class="section-header">
-
-            <span class="section-badge">
-
-                ⭐ Why Choose Us
-
-            </span>
-
-            <h2 class="section-title">
-
-                Trusted Islamic Digital Library
-
-            </h2>
-
-        </div>
-
-        <div class="why-grid">
-
-            <div class="why-card">
-
-                <div class="why-icon">
-
-                    📚
-
-                </div>
-
-                <h3>
-
-                    Authentic Books
-
-                </h3>
-
-                <p>
-
-                    Carefully organized Islamic literature
-                    from trusted scholars and authors.
-
-                </p>
-
-            </div>
-
-            <div class="why-card">
-
-                <div class="why-icon">
-
-                    ⚡
-
-                </div>
-
-                <h3>
-
-                    Fast Reader
-
-                </h3>
-
-                <p>
-
-                    Read books online instantly with a modern,
-                    responsive PDF reader.
-
-                </p>
-
-            </div>
-
-            <div class="why-card">
-
-                <div class="why-icon">
-
-                    🔒
-
-                </div>
-
-                <h3>
-
-                    Safe Downloads
-
-                </h3>
-
-                <p>
-
-                    Download PDF books directly from the library
-                    with secure access.
-
-                </p>
-
-            </div>
-
-            <div class="why-card">
-
-                <div class="why-icon">
-
-                    🌍
-
-                </div>
-
-                <h3>
-
-                    Available Everywhere
-
-                </h3>
-
-                <p>
-
-                    Access your Islamic library from desktop,
-                    tablet or mobile devices.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ================= END LIBRARY ================= -->
-
-<!-- ================= CHISHTI AI CHATBOT ================= -->
-
-<!-- Floating Chat Button -->
-
-<button id="chatToggle" class="chat-toggle" aria-label="Open AI Chat">
-
-    <img
-        src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
-        alt="Chishti AI">
+<img src="images/chishti-ai-logo.png"
+alt="Chishti AI">
 
 </button>
-
-<!-- Chat Window -->
 
 <div id="chatWindow" class="chat-window">
 
-    <!-- Header -->
+<div class="chat-header">
 
-    <div class="chat-header">
+<div class="chat-title">
 
-        <div class="chat-profile">
+<img src="images/chishti-ai-logo.png">
 
-            <img
-                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
-                alt="Chishti AI">
+<div>
 
-            <div>
+<h3>CHISHTI AI</h3>
 
-                <h3>
-
-                    Chishti AI
-
-                </h3>
-
-                <span>
-
-                    Islamic Library Assistant
-
-                </span>
-
-            </div>
-
-        </div>
-
-        <button id="closeChat" class="chat-close">
-
-            ✕
-
-        </button>
-
-    </div>
-
-    <!-- Messages -->
-
-    <div id="chatMessages" class="chat-messages">
-
-        <div class="message bot">
-
-            <img
-                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
-                alt="AI">
-
-            <div class="message-content">
-
-                <p>
-
-                    Assalamu Alaikum 👋
-
-                </p>
-
-                <p>
-
-                    Welcome to <strong>CHISHTI LIBRARY</strong>.
-
-                </p>
-
-                <p>
-
-                    I can help you find books,
-                    authors,
-                    categories,
-                    downloads,
-                    and answer general questions about the library.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Typing Animation -->
-
-    <div id="typingIndicator" class="typing-indicator">
-
-        <span></span>
-
-        <span></span>
-
-        <span></span>
-
-    </div>
-
-    <!-- Input -->
-
-    <div class="chat-input">
-
-        <input
-            type="text"
-            id="userInput"
-            placeholder="Ask Chishti AI...">
-
-        <button
-            id="sendButton"
-            aria-label="Send">
-
-            Send
-
-        </button>
-
-    </div>
+<small>Digital Islamic Assistant</small>
 
 </div>
 
-<!-- ================= QUICK ACTIONS ================= -->
-
-<div class="chat-shortcuts">
-
-    <button class="quick-question">
-
-        Latest Books
-
-    </button>
-
-    <button class="quick-question">
-
-        Islamic Books
-
-    </button>
-
-    <button class="quick-question">
-
-        Naat Books
-
-    </button>
-
-    <button class="quick-question">
-
-        Authors
-
-    </button>
-
 </div>
 
-<!-- ================= END AI CHATBOT ================= -->
- <!-- ================= FOOTER ================= -->
+<button id="closeChat">
 
-<footer class="footer">
-
-    <div class="container">
-
-        <div class="footer-grid">
-
-            <!-- Logo -->
-
-            <div class="footer-column">
-
-                <div class="footer-logo">
-
-                    <img
-                        src="logo.png"
-                        alt="CHISHTI LIBRARY">
-
-                    <div>
-
-                        <h2>
-
-                            CHISHTI LIBRARY
-
-                        </h2>
-
-                        <p>
-
-                            Digital Islamic Library
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <p class="footer-text">
-
-                    CHISHTI LIBRARY is a premium Islamic Digital Library
-                    dedicated to preserving and sharing authentic Islamic
-                    literature, Urdu books, Naats, Hamd, Manqabat,
-                    Maqalat and educational resources for readers worldwide.
-
-                </p>
-
-            </div>
-
-            <!-- Quick Links -->
-
-            <div class="footer-column">
-
-                <h3>
-
-                    Quick Links
-
-                </h3>
-
-                <ul>
-
-                    <li>
-
-                        <a href="index.html">
-
-                            Home
-
-                        </a>
-
-                    </li>
-
-                    <li>
-
-                        <a href="books.html">
-
-                            Books
-
-                        </a>
-
-                    </li>
-
-                    <li>
-
-                        <a href="authors.html">
-
-                            Authors
-
-                        </a>
-
-                    </li>
-
-                    <li>
-
-                        <a href="about.html">
-
-                            About
-
-                        </a>
-
-                    </li>
-
-                    <li>
-
-                        <a href="contact.html">
-
-                            Contact
-
-                        </a>
-
-                    </li>
-
-                </ul>
-
-            </div>
-
-            <!-- Categories -->
-
-            <div class="footer-column">
-
-                <h3>
-
-                    Categories
-
-                </h3>
-
-                <ul id="footerCategories">
-
-                    <!-- Loaded dynamically -->
-
-                </ul>
-
-            </div>
-
-            <!-- Contact -->
-
-            <div class="footer-column">
-
-                <h3>
-
-                    Contact
-
-                </h3>
-
-                <ul class="contact-list">
-
-                    <li>
-
-                        📍 Pakistan
-
-                    </li>
-
-                    <li>
-
-                        📚 Digital Islamic Library
-
-                    </li>
-
-                    <li>
-
-                        ✉ info@chishtilibrary.com
-
-                    </li>
-
-                </ul>
-
-                <div class="social-links">
-
-                    <a href="#" aria-label="Facebook">
-
-                        Facebook
-
-                    </a>
-
-                    <a href="#" aria-label="YouTube">
-
-                        YouTube
-
-                    </a>
-
-                    <a href="#" aria-label="Instagram">
-
-                        Instagram
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <hr class="footer-divider">
-
-        <div class="footer-bottom">
-
-            <p>
-
-                © 2025 CHISHTI LIBRARY. All Rights Reserved.
-
-            </p>
-
-            <a href="#home" class="back-top">
-
-                ↑ Back To Top
-
-            </a>
-
-        </div>
-
-    </div>
-
-</footer>
-
-
-<!-- ================= BACK TO TOP ================= -->
-
-<button
-    id="backToTop"
-    class="back-to-top"
-    aria-label="Back To Top">
-
-    ↑
+<i class="fas fa-times"></i>
 
 </button>
 
-<!-- ================= SEARCH MODAL ================= -->
+</div>
 
-<div
-    id="searchModal"
-    class="search-modal">
+<div id="chatMessages" class="chat-messages">
 
-    <div class="search-modal-content">
+<div class="bot-message">
 
-        <button
-            id="closeSearchModal"
-            class="close-modal">
+Assalamu Alaikum 👋<br><br>
 
-            ✕
+Welcome to Chishti AI.<br>
 
-        </button>
-
-        <h2>
-
-            Search Library
-
-        </h2>
-
-        <input
-            type="text"
-            id="modalSearchInput"
-            placeholder="Search Books, Authors or Categories...">
-
-        <div
-            id="modalSearchResults"
-            class="modal-search-results">
-
-        </div>
-
-    </div>
+How can I help you today?
 
 </div>
 
-<!-- ================= NOTIFICATION ================= -->
+</div>
 
-<div
-    id="toast"
-    class="toast">
+<div id="typing" class="typing">
+
+AI is typing...
 
 </div>
 
-<!-- ================= SCRIPTS ================= -->
+<div class="chat-input">
+
+<input
+type="text"
+id="userInput"
+placeholder="Ask anything...">
+
+<button id="sendBtn">
+
+<i class="fas fa-paper-plane"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ===========================
+BOOK CATEGORIES
+=========================== -->
+
+<section class="categories">
+
+<h2 class="section-title">
+
+Book Categories
+
+</h2>
+
+<div class="category-grid">
+
+<button class="category active"
+onclick="filterBooks('All')">
+
+All
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Naat')">
+
+Naat
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Hamd')">
+
+Hamd
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Manqabat')">
+
+Manqabat
+
+</button>
+
+<button class="category"
+onclick="filterBooks('Maqala')">
+
+Maqala
+
+</button>
+
+<button class="category"
+onclick="filterBooks('History')">
+
+History
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ===========================
+BOOKS
+=========================== -->
+
+<section id="books" class="featured-books">
+
+<h2 class="section-title">
+
+Books Collection
+
+</h2>
+
+<div id="booksContainer"
+class="books-grid">
+
+<!-- Firebase Auto Books -->
+
+</div>
+
+</section>
+<!-- ===========================
+ABOUT AUTHOR
+=========================== -->
+
+<section id="about" class="about-section">
+
+<div class="container">
+
+<h2 class="section-title">
+About Author
+</h2>
+
+<div class="about-card">
+
+<div class="about-image">
+
+<img src="author.jfif" alt="Hazrat Allama Saim Chishti">
+
+</div>
+
+<div class="about-content">
+
+<h2>Hazrat Allama Saim Chishti</h2>
+
+<p>
+
+Hazrat Allama Saim Chishti is a renowned Islamic scholar, writer, poet and researcher. Chishti Library preserves and publishes his Islamic books digitally for readers around the world.
+
+</p>
+
+<a href="author.html" class="btn">
+
+Read Biography
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+CONTACT
+=========================== -->
+
+<section id="contact" class="contact-section">
+
+<div class="container">
+
+<h2 class="section-title">
+
+Contact Us
+
+</h2>
+
+<div class="contact-box">
+
+<div class="contact-item">
+
+<i class="fas fa-phone"></i>
+
+<span>03006674752</span>
+
+</div>
+
+<div class="contact-item">
+
+<i class="fas fa-phone"></i>
+
+<span>03027190715</span>
+
+</div>
+
+<div class="contact-item">
+
+<i class="fas fa-phone"></i>
+
+<span>03067813783</span>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+SOCIAL MEDIA
+=========================== -->
+
+<section class="social-section">
+
+<h2 class="section-title">
+
+Follow Chishti Library
+
+</h2>
+
+<div class="social-icons">
+
+<a href="https://youtube.com/@saimtv5?si=IG7XJ8r0x9gvDVxc"
+target="_blank">
+
+<i class="fab fa-youtube"></i>
+
+</a>
+
+<a href="https://www.facebook.com/saimchishtiofficial"
+target="_blank">
+
+<i class="fab fa-facebook-f"></i>
+
+</a>
+
+<a href="https://facebook.com/profile.php?id=100063724950961"
+target="_blank">
+
+<i class="fab fa-facebook"></i>
+
+</a>
+
+<a href="https://facebook.com/Sajid7475"
+target="_blank">
+
+<i class="fab fa-facebook"></i>
+
+</a>
+
+<a href="https://youtube.com/@alishorts1920-w8s?si=Wd6PRofI-t1-liX5"
+target="_blank">
+
+<i class="fab fa-youtube"></i>
+
+</a>
+
+</div>
+
+</section>
+
+<!-- ===========================
+FOOTER
+=========================== -->
+
+<footer class="footer">
+
+<div class="footer-logo">
+
+<img src="logo.png" alt="Logo">
+
+<h2>CHISHTI LIBRARY</h2>
+
+<p>
+
+Digital Islamic Library
+
+</p>
+
+</div>
+
+<p class="copyright">
+
+© <span id="year"></span>
+
+Chishti Library
+
+All Rights Reserved.
+
+</p>
+
+</footer>
+
+<!-- ===========================
+SCROLL TO TOP
+=========================== -->
+
+<button id="scrollTop">
+
+<i class="fas fa-arrow-up"></i>
+
+</button>
+
+<!-- Firebase -->
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
+<script src="firebase.js"></script>
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
