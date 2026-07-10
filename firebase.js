@@ -3,62 +3,140 @@ CHISHTI LIBRARY
 firebase.js
 ==================================================*/
 
+/*==========================
+FIREBASE CONFIG
+==========================*/
+
 const firebaseConfig = {
+
   apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
+
   authDomain: "chishti-library.firebaseapp.com",
+
   projectId: "chishti-library",
+
   storageBucket: "chishti-library.firebasestorage.app",
+
   messagingSenderId: "103447043162",
+
   appId: "1:103447043162:web:f242cd2670aaa9786e8c63",
+
   measurementId: "G-833P7N3LNT"
+
 };
 
-// Initialize Firebase
+/*==========================
+INITIALIZE FIREBASE
+==========================*/
+
 firebase.initializeApp(firebaseConfig);
 
-// Services
+/*==========================
+SERVICES
+==========================*/
+
 const auth = firebase.auth();
+
 const db = firebase.firestore();
+
 const storage = firebase.storage();
 
-// Login Persistence
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+/*==========================
+AUTH SETTINGS
+==========================*/
 
-// Export
-window.auth = auth;
-window.db = db;
-window.storage = storage;
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+.then(() => {
 
-// Logout
-function logout() {
-    auth.signOut().then(() => {
-        window.location.href = "login.html";
-    });
-}
+    console.log("Auth Persistence Enabled");
 
-window.logout = logout;
+})
+.catch((error)=>{
 
-// Check Login
-auth.onAuthStateChanged((user) => {
-
-    if (user) {
-
-        console.log("✅ Admin Login:", user.email);
-
-        const adminMenu = document.getElementById("adminMenu");
-        const dashboardMenu = document.getElementById("dashboardMenu");
-        const loginMenu = document.getElementById("loginMenu");
-
-        if(adminMenu) adminMenu.style.display="block";
-        if(dashboardMenu) dashboardMenu.style.display="block";
-        if(loginMenu) loginMenu.style.display="none";
-
-    } else {
-
-        console.log("Guest Mode");
-
-    }
+    console.log(error.message);
 
 });
 
-console.log("🔥 Firebase Connected Successfully");
+/*==========================
+CHECK ADMIN LOGIN
+==========================*/
+
+function checkAdmin(){
+
+auth.onAuthStateChanged((user)=>{
+
+if(user){
+
+console.log("Logged In :",user.email);
+
+const adminMenu=document.getElementById("adminMenu");
+const dashboardMenu=document.getElementById("dashboardMenu");
+const loginMenu=document.getElementById("loginMenu");
+
+if(adminMenu) adminMenu.style.display="block";
+if(dashboardMenu) dashboardMenu.style.display="block";
+if(loginMenu) loginMenu.style.display="none";
+
+}else{
+
+console.log("Guest User");
+
+const adminMenu=document.getElementById("adminMenu");
+const dashboardMenu=document.getElementById("dashboardMenu");
+const loginMenu=document.getElementById("loginMenu");
+
+if(adminMenu) adminMenu.style.display="none";
+if(dashboardMenu) dashboardMenu.style.display="none";
+if(loginMenu) loginMenu.style.display="block";
+
+}
+
+});
+
+}
+
+/*==========================
+LOGOUT
+==========================*/
+
+function logout(){
+
+auth.signOut()
+
+.then(()=>{
+
+alert("Logout Successful");
+
+window.location.href="login.html";
+
+})
+
+.catch((error)=>{
+
+alert(error.message);
+
+});
+
+}
+
+/*==========================
+GLOBAL VARIABLES
+==========================*/
+
+window.auth = auth;
+window.db = db;
+window.storage = storage;
+window.logout = logout;
+window.checkAdmin = checkAdmin;
+
+/*==========================
+READY
+==========================*/
+
+console.log("================================");
+
+console.log("CHISHTI LIBRARY");
+
+console.log("Firebase Connected Successfully");
+
+console.log("================================");
