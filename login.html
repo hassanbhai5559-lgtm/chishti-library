@@ -4,6 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Login | Chishti Library</title>
@@ -13,177 +14,50 @@
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<style>
-
-body{
-
-margin:0;
-
-font-family:Poppins,sans-serif;
-
-background:linear-gradient(135deg,#0b6b3a,#1c1c1c);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-height:100vh;
-
-}
-
-.login-box{
-
-width:420px;
-
-background:#fff;
-
-padding:40px;
-
-border-radius:20px;
-
-box-shadow:0 20px 60px rgba(0,0,0,.3);
-
-text-align:center;
-
-}
-
-.login-box img{
-
-width:90px;
-
-margin-bottom:20px;
-
-}
-
-.login-box h2{
-
-margin-bottom:10px;
-
-color:#0b6b3a;
-
-}
-
-.login-box p{
-
-color:#666;
-
-margin-bottom:25px;
-
-}
-
-.input-group{
-
-margin-bottom:18px;
-
-}
-
-.input-group input{
-
-width:100%;
-
-padding:15px;
-
-font-size:16px;
-
-border:1px solid #ccc;
-
-border-radius:10px;
-
-outline:none;
-
-box-sizing:border-box;
-
-}
-
-.login-btn{
-
-width:100%;
-
-padding:15px;
-
-background:#0b6b3a;
-
-color:#fff;
-
-border:none;
-
-font-size:17px;
-
-border-radius:10px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.login-btn:hover{
-
-background:#09552f;
-
-}
-
-#error{
-
-margin-top:15px;
-
-color:red;
-
-font-size:15px;
-
-}
-
-.back{
-
-margin-top:25px;
-
-display:inline-block;
-
-color:#0b6b3a;
-
-text-decoration:none;
-
-font-weight:bold;
-
-}
-
-</style>
-
 </head>
 
 <body>
 
+<div class="login-container">
+
 <div class="login-box">
 
-<img src="images/logo.png">
+<div style="text-align:center;">
 
-<h2>Admin Login</h2>
+<img src="logo.png"
+width="90">
 
-<p>Only Chishti Library Administrator</p>
+<h2>
 
-<div class="input-group">
+CHISHTI LIBRARY
+
+</h2>
+
+<p>
+
+Admin Secure Login
+
+</p>
+
+</div>
+
+<form id="loginForm">
 
 <input
 type="email"
 id="email"
-placeholder="Admin Email">
-
-</div>
-
-<div class="input-group">
+placeholder="Admin Email"
+required>
 
 <input
 type="password"
 id="password"
-placeholder="Password">
-
-</div>
+placeholder="Password"
+required>
 
 <button
-class="login-btn"
-onclick="login()">
+type="submit"
+class="btn">
 
 <i class="fas fa-lock"></i>
 
@@ -191,13 +65,26 @@ Login
 
 </button>
 
-<div id="error"></div>
+</form>
 
-<a href="index.html" class="back">
+<br>
 
-← Back to Home
+<a
+href="index.html"
+class="btn"
+style="background:#444;width:100%;display:block;text-align:center;">
+
+Back To Home
 
 </a>
+
+<p
+id="message"
+style="margin-top:20px;color:red;text-align:center;">
+
+</p>
+
+</div>
 
 </div>
 
@@ -207,37 +94,11 @@ Login
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script src="firebase.js"></script>
 
-<script>
-
-function login(){
-
-const email=document.getElementById("email").value;
-
-const password=document.getElementById("password").value;
-
-firebase.auth()
-
-.signInWithEmailAndPassword(email,password)
-
-.then(()=>{
-
-window.location="admin.html";
-
-})
-
-.catch(()=>{
-
-document.getElementById("error").innerHTML=
-
-"Invalid Email or Password";
-
-});
-
-}
-
-</script>
+<script src="login.js"></script>
 
 </body>
 
