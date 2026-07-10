@@ -19,7 +19,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <link rel="stylesheet" href="style.css">
 
@@ -33,15 +34,15 @@ NAVBAR
 
 <nav class="navbar">
 
-<div class="logo.png">
+<div class="logo">
 
 <a href="index.html">
 
-<img src="logo.png" alt="Chishti Library">
+<img src="logo.png" alt="Chishti Library Logo">
 
 </a>
 
-<div class="logo.png-text">
+<div class="logo-text">
 
 <h2>CHISHTI LIBRARY</h2>
 
@@ -61,20 +62,27 @@ NAVBAR
 
 <li><a href="#contact">Contact</a></li>
 
-<!-- Hidden until Admin Login -->
+<!-- Visible only after Admin Login -->
 
 <li id="adminMenu" style="display:none;">
-<a href="admin.html">Upload Books</a>
+<a href="admin.html">
+Upload Books
+</a>
 </li>
 
 <li id="dashboardMenu" style="display:none;">
-<a href="dashboard.html">Dashboard</a>
+<a href="dashboard.html">
+Dashboard
+</a>
 </li>
 
 <li id="loginMenu">
 <a href="login.html">
+
 <i class="fa-solid fa-user-lock"></i>
+
 Admin Login
+
 </a>
 </li>
 
@@ -98,6 +106,9 @@ HERO SECTION
 
 <div class="hero-content">
 
+<img src="logo.png"
+class="hero-logo"
+alt="Chishti Library">
 
 <h1>CHISHTI LIBRARY</h1>
 
@@ -105,8 +116,12 @@ HERO SECTION
 
 <p>
 
-Read Islamic Books, Naat, Hamd, Manqabat,
-History and much more.
+Read Islamic Books,
+Naat,
+Hamd,
+Manqabat,
+History
+and much more.
 
 </p>
 
@@ -143,6 +158,16 @@ placeholder="Search Books...">
 
 </div>
 
+<div class="counter-card">
+
+<i class="fas fa-robot"></i>
+
+<h2 id="aiCounter">0</h2>
+
+<p>AI Uses</p>
+
+</div>
+
 </div>
 
 </div>
@@ -155,14 +180,17 @@ LATEST BOOK
 <section class="latest-book">
 
 <h2 class="section-title">
+
 Latest Book
+
 </h2>
 
 <div class="latest-book-card">
 
 <div class="book-image">
 
-<img id="latestCover"
+<img
+id="latestCover"
 src="images/books/default-book.png"
 alt="Latest Book">
 
@@ -171,20 +199,27 @@ alt="Latest Book">
 <div class="book-info">
 
 <h2 id="latestTitle">
+
 Latest Book
+
 </h2>
 
 <h3 id="latestAuthor">
+
 Hazrat Allama Saim Chishti
+
 </h3>
 
 <p>
+
 Read the newest book available in Chishti Library.
+
 </p>
 
 <div class="book-buttons">
 
-<a id="latestRead"
+<a
+id="latestRead"
 href="#"
 class="btn">
 
@@ -192,7 +227,8 @@ Read Online
 
 </a>
 
-<a id="latestDownload"
+<a
+id="latestDownload"
 href="#"
 class="btn"
 download>
@@ -215,7 +251,7 @@ CHISHTI AI
 
 <button id="chatBtn" class="chat-btn">
 
-<img src="chishti-ai-6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+<img src="images/chishti-ai-logo.png"
 alt="Chishti AI">
 
 </button>
@@ -226,7 +262,7 @@ alt="Chishti AI">
 
 <div class="chat-title">
 
-<img src="chishti-ai-6d587a32-1b31-4895-8a67-e5e3a64257e4.png">
+<img src="images/chishti-ai-logo.png">
 
 <div>
 
@@ -250,9 +286,13 @@ alt="Chishti AI">
 
 <div class="bot-message">
 
-Assalamu Alaikum 👋<br><br>
+Assalamu Alaikum 👋
 
-Welcome to Chishti AI.<br>
+<br><br>
+
+Welcome to Chishti AI.
+
+<br>
 
 How can I help you today?
 
@@ -271,7 +311,7 @@ AI is typing...
 <input
 type="text"
 id="userInput"
-placeholder="Ask anything...">
+placeholder="Ask Chishti AI...">
 
 <button id="sendBtn">
 
@@ -344,10 +384,12 @@ History
 </section>
 
 <!-- ===========================
-BOOKS
+BOOK COLLECTION
 =========================== -->
 
-<section id="books" class="featured-books">
+<section
+id="books"
+class="featured-books">
 
 <h2 class="section-title">
 
@@ -355,7 +397,8 @@ Books Collection
 
 </h2>
 
-<div id="booksContainer"
+<div
+id="booksContainer"
 class="books-grid">
 
 <!-- Firebase Auto Books -->
@@ -372,24 +415,36 @@ ABOUT AUTHOR
 <div class="container">
 
 <h2 class="section-title">
+
 About Author
+
 </h2>
 
 <div class="about-card">
 
 <div class="about-image">
 
-<img src="author.jfif" alt="Hazrat Allama Saim Chishti">
+<img src="images/author.jpg"
+alt="Hazrat Allama Saim Chishti">
 
 </div>
 
 <div class="about-content">
 
-<h2>Hazrat Allama Saim Chishti</h2>
+<h2>
+
+Hazrat Allama Saim Chishti
+
+</h2>
 
 <p>
 
-Hazrat Allama Saim Chishti is a renowned Islamic scholar, writer, poet and researcher. Chishti Library preserves and publishes his Islamic books digitally for readers around the world.
+Hazrat Allama Saim Chishti is a renowned Islamic scholar,
+writer,
+poet and researcher.
+
+Chishti Library preserves and publishes his Islamic books digitally
+for readers around the world.
 
 </p>
 
@@ -454,7 +509,7 @@ Contact Us
 </section>
 
 <!-- ===========================
-SOCIAL MEDIA
+SOCIAL LINKS
 =========================== -->
 
 <section class="social-section">
@@ -467,36 +522,31 @@ Follow Chishti Library
 
 <div class="social-icons">
 
-<a href="https://youtube.com/@saimtv5?si=IG7XJ8r0x9gvDVxc"
-target="_blank">
+<a href="https://youtube.com/@saimtv5?si=IG7XJ8r0x9gvDVxc" target="_blank">
 
 <i class="fab fa-youtube"></i>
 
 </a>
 
-<a href="https://www.facebook.com/saimchishtiofficial"
-target="_blank">
-
-<i class="fab fa-facebook-f"></i>
-
-</a>
-
-<a href="https://facebook.com/profile.php?id=100063724950961"
-target="_blank">
+<a href="https://www.facebook.com/saimchishtiofficial" target="_blank">
 
 <i class="fab fa-facebook"></i>
 
 </a>
 
-<a href="https://facebook.com/Sajid7475"
-target="_blank">
+<a href="https://facebook.com/profile.php?id=100063724950961" target="_blank">
 
 <i class="fab fa-facebook"></i>
 
 </a>
 
-<a href="https://youtube.com/@alishorts1920-w8s?si=Wd6PRofI-t1-liX5"
-target="_blank">
+<a href="https://facebook.com/Sajid7475" target="_blank">
+
+<i class="fab fa-facebook"></i>
+
+</a>
+
+<a href="https://youtube.com/@alishorts1920-w8s?si=Wd6PRofI-t1-liX5" target="_blank">
 
 <i class="fab fa-youtube"></i>
 
@@ -512,7 +562,15 @@ FOOTER
 
 <footer class="footer">
 
-<h2>CHISHTI LIBRARY</h2>
+<div class="footer-logo">
+
+<img src="logo.png" alt="Logo">
+
+<h2>
+
+CHISHTI LIBRARY
+
+</h2>
 
 <p>
 
@@ -522,7 +580,7 @@ Digital Islamic Library
 
 </div>
 
-<p class="copyright">
+<p>
 
 © <span id="year"></span>
 
@@ -535,7 +593,7 @@ All Rights Reserved.
 </footer>
 
 <!-- ===========================
-SCROLL TO TOP
+SCROLL TOP
 =========================== -->
 
 <button id="scrollTop">
@@ -544,7 +602,9 @@ SCROLL TO TOP
 
 </button>
 
-<!-- Firebase -->
+<!-- ===========================
+FIREBASE
+=========================== -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
@@ -555,6 +615,8 @@ SCROLL TO TOP
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 
 <script src="firebase.js"></script>
+
+<!-- Website Script -->
 
 <script src="script.js"></script>
 
