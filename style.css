@@ -40,93 +40,6 @@ overflow-x:hidden;
 
 }
 
-/*============================
-LOADER
-=============================*/
-
-#loader{
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-width:100%;
-
-height:100%;
-
-background:#0B0B0B;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-z-index:999999;
-
-flex-direction:column;
-
-}
-
-.loader-logo{
-
-width:180px;
-
-animation:floatLogo 3s ease-in-out infinite;
-
-filter:drop-shadow(0 0 25px var(--gold));
-
-}
-
-.loader-content h1{
-
-margin-top:20px;
-
-font-size:42px;
-
-letter-spacing:3px;
-
-}
-
-.loader-content p{
-
-margin:20px 0;
-
-color:#ddd;
-
-}
-
-.loading-bar{
-
-width:320px;
-
-height:8px;
-
-background:#222;
-
-border-radius:50px;
-
-overflow:hidden;
-
-}
-
-.loading-progress{
-
-width:0;
-
-height:100%;
-
-background:linear-gradient(
-90deg,
-var(--gold),
-var(--green)
-);
-
-animation:loading 2.5s linear forwards;
-
-}
 
 /*============================
 NAVBAR
@@ -1440,5 +1353,395 @@ border-radius:20px;
 ::-webkit-scrollbar-thumb:hover{
 
 background:#e0bb45;
+
+}
+/*=========================================
+CHISHTI LIBRARY
+STYLE.CSS
+PART 4
+PREMIUM EFFECTS
+=========================================*/
+
+/*=========================
+SECTION ANIMATION
+=========================*/
+
+section{
+
+opacity:0;
+
+transform:translateY(50px);
+
+transition:all .8s ease;
+
+}
+
+.show-section{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+/*=========================
+NAVBAR SHADOW
+=========================*/
+
+.nav-shadow{
+
+background:rgba(11,11,11,.95);
+
+backdrop-filter:blur(15px);
+
+box-shadow:0 10px 35px rgba(0,0,0,.45);
+
+}
+
+/*=========================
+BOOK CARD
+=========================*/
+
+.book-card{
+
+position:relative;
+
+overflow:hidden;
+
+transition:.35s;
+
+border-radius:18px;
+
+background:#161616;
+
+border:1px solid rgba(201,162,39,.15);
+
+}
+
+.book-card:hover{
+
+transform:translateY(-10px);
+
+box-shadow:
+
+0 20px 40px rgba(0,0,0,.45),
+
+0 0 20px rgba(201,162,39,.18);
+
+}
+
+/*=========================
+BUTTON RIPPLE
+=========================*/
+
+.btn{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.ripple{
+
+position:absolute;
+
+width:20px;
+
+height:20px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.45);
+
+transform:translate(-50%,-50%);
+
+animation:ripple .6s linear;
+
+pointer-events:none;
+
+}
+
+@keyframes ripple{
+
+0%{
+
+width:0;
+
+height:0;
+
+opacity:.8;
+
+}
+
+100%{
+
+width:300px;
+
+height:300px;
+
+opacity:0;
+
+}
+
+}
+
+/*=========================
+CHAT WINDOW
+=========================*/
+
+#chatWindow{
+
+display:none;
+
+flex-direction:column;
+
+position:fixed;
+
+right:25px;
+
+bottom:120px;
+
+width:360px;
+
+height:520px;
+
+background:#141414;
+
+border-radius:20px;
+
+overflow:hidden;
+
+border:1px solid rgba(201,162,39,.3);
+
+box-shadow:0 15px 45px rgba(0,0,0,.5);
+
+z-index:9999;
+
+animation:chatOpen .3s ease;
+
+}
+
+@keyframes chatOpen{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+/*=========================
+USER MESSAGE
+=========================*/
+
+.user-message{
+
+background:#7A0000;
+
+color:#fff;
+
+padding:12px 16px;
+
+margin:10px;
+
+border-radius:15px 15px 0 15px;
+
+max-width:80%;
+
+margin-left:auto;
+
+}
+
+/*=========================
+BOT MESSAGE
+=========================*/
+
+.bot-message{
+
+background:#242424;
+
+color:#fff;
+
+padding:12px 16px;
+
+margin:10px;
+
+border-radius:15px 15px 15px 0;
+
+max-width:80%;
+
+}
+
+/*=========================
+NO BOOKS
+=========================*/
+
+.no-books{
+
+text-align:center;
+
+padding:80px 20px;
+
+color:#fff;
+
+}
+
+/*=========================
+CATEGORY BUTTON
+=========================*/
+
+.category{
+
+transition:.3s;
+
+}
+
+.category:hover{
+
+background:#C9A227;
+
+color:#111;
+
+}
+
+.category.active{
+
+background:#C9A227;
+
+color:#111;
+
+}
+
+/*=========================
+SCROLLBAR
+=========================*/
+
+::-webkit-scrollbar{
+
+width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#111;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#7A0000;
+
+border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+background:#C9A227;
+
+}
+
+/*=========================
+IMAGE ANIMATION
+=========================*/
+
+.book-card img{
+
+transition:.4s;
+
+}
+
+.book-card:hover img{
+
+transform:scale(1.06);
+
+}
+
+/*=========================
+HERO LOGO FLOAT
+=========================*/
+
+.hero-logo{
+
+animation:heroFloat 4s ease-in-out infinite;
+
+}
+
+@keyframes heroFloat{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-12px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+/*=========================
+FOOTER
+=========================*/
+
+footer{
+
+border-top:1px solid rgba(201,162,39,.2);
+
+}
+
+/*=========================
+PREMIUM GLOW
+=========================*/
+
+.section-title{
+
+text-shadow:0 0 15px rgba(201,162,39,.25);
+
+}
+
+/*=========================
+RESPONSIVE
+=========================*/
+
+@media(max-width:768px){
+
+#chatWindow{
+
+width:92%;
+
+right:4%;
+
+height:75vh;
+
+}
+
+.book-card{
+
+margin-bottom:20px;
+
+}
 
 }
