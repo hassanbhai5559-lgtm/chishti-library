@@ -23,6 +23,11 @@
   { "question": "saim chishti books", "answer": "Allama Saim Chishti has authored legendary books like Husn-e-Kainat, Shahdaye Karbala, Shaheed Ibn-e-Shaheed, and many others." },
   { "question": "who is latif sajid chishti", "answer": "Sahibzada Latif Sajid Chishti is a prominent Islamic scholar, writer, and the key patron carrying forward the legacy of Hazrat Saim Chishti." },
   { "question": "latif sajid chishti kaun hain", "answer": "Sahibzada Latif Sajid Chishti aik maroof scholar aur musannif hain jo Allama Saim Chishti (RA) ke ilmi silsile ko aage barha rahe hain." },
+  { "question": "how many sons of hazrat allama saim chishti", "answer": "Hazrat Allama Saim Chishti had three sons: Sahibzada Latif Sajid Chishti (who continues his literary and spiritual legacy), Sahibzada Muhammad Shafiq Mujahid Chishti, and Sahibzada Muhammad Tauseef Haider Chishti." },
+  { "question": "sons of saim chishti", "answer": "Allama Saim Chishti had three sons: 1) Sahibzada Latif Sajid Chishti, 2) Sahibzada Muhammad Shafiq Mujahid Chishti, and 3) Sahibzada Muhammad Tauseef Haider Chishti." },
+  { "question": "who is the eldest son of saim chishti", "answer": "His son Sahibzada Latif Sajid Chishti is a well-known writer, scholar, and poet who leads the Saim Chishti Research Center and carries forward his father's academic legacy." },
+  { "question": "who is muhammad shafiq mujahid chishti", "answer": "Sahibzada Muhammad Shafiq Mujahid Chishti is the second son of Hazrat Allama Saim Chishti. He is known for reciting, preserving, and sharing his father's beautiful kalam and poetic works." },
+  { "question": "who is muhammad tauseef haider chishti", "answer": "Sahibzada Muhammad Tauseef Haider Chishti is the third son of Hazrat Allama Saim Chishti, who upholds the family's spiritual values and religious traditions." },
   { "question": "authors of chishti library", "answer": "The primary authors featured in Chishti Library are Hazrat Allama Saim Chishti (RA) and Sahibzada Latif Sajid Chishti." },
   { "question": "writers names", "answer": "Our main writers are Hazrat Allama Saim Chishti (RA) and Sahibzada Latif Sajid Chishti." },
   { "question": "books available", "answer": "We have a vast collection of books including Husn-e-Kainat, Shahdaye Karbala, Shaheed Ibn-e-Shaheed, and various Fiqh, Naat, and Tareekh volumes." },
@@ -128,7 +133,7 @@
   { "question": "broken link", "answer": "If you find any broken link, please let us know. We will update the book's source file immediately." },
   { "question": "link nahi chal raha", "answer": "Agar download link kaam na kare, to meharbani farma kar admin numbers par rabta kar ke report karein." },
   { "question": "add new book", "answer": "If you want to suggest a book for upload, please send the title and author details to our admin team." },
-  { "question": "kitab upload karwana", "answer": "Agar aap koi kitab upload karwana chahte hain, to hamare admin se contact kar ke kitab ki details share karein." },
+  { "question": "kitab upload karwana", "answer": "Agar aapkoi kitab upload karwana chahte hain, to hamare admin se contact kar ke kitab ki details share karein." },
   { "question": "sufi poetry", "answer": "We have incredible Sufi poetry collections capturing divine love and spiritual longing written by Hazrat Saim Chishti (RA)." },
   { "question": "ishq e rasool", "answer": "Chishti Library ka khususi mauzoo 'Ishq-e-Rasool ﷺ' hai. Hamara tamam Naatiya kalam isi jazbe se labrez hai." },
   { "question": "darood sharif", "answer": "Reciting Darood Sharif brings endless blessings. Read our books on the virtues of sending salutations upon Prophet Muhammad ﷺ." },
@@ -202,166 +207,5 @@
   { "question": "contact via whatsapp", "answer": "Yes, you can use our contact numbers on WhatsApp to chat directly with our administration team." },
   { "question": "whatsapp number", "answer": "You can reach out to our admin team on WhatsApp using the numbers: 03067813783 or 03006674752." },
   { "question": "whatsapp par rabta", "answer": "Ji haan! Aap hamare in numbers par WhatsApp par baat kar sakte hain: 03067813783, 03006674752." },
-  { "question": "where is library located", "answer": "Our administrative operations are based in Pakistan, but our digital library is globally accessible 24/7." },
-  { "question": "daftari pata", "answer": "Hamara setup digital hai aur admin team Pakistan se operate karti hai. Aap website ke zariye dunya bhar se parh sakte hain." },
-  { "question": "best book for beginners", "answer": "For basic Islamic teachings, we highly recommend browsing our Fiqh and Aqaid categories." },
-  { "question": "shuruat ke liye behtareen kitab", "answer": "Agar aap buniyadi islami maloomat chahte hain to 'Fiqh' aur 'Aqaid' ki aasan kitabein parhein." },
-  { "question": "children books", "answer": "We are planning to add a dedicated section for children's Islamic stories and basic ethics soon." },
-  { "question": "bachon ki kitabein", "answer": "Bachon ke liye islami sabaq aur sachi kahaniyon ki kitabein jald hi library mein shamil ki jayengi." },
-  { "question": "can i print books", "answer": "Yes, you have full permission to print downloaded PDF books for your personal reading or educational purposes." },
-  { "question": "print nikalna", "answer": "Ji haan! Aap download kiye gaye PDF ko apne kisi bhi qareebi printer se print karwa sakte hain." },
-  { "question": "commercial use of books", "answer": "Selling these free books for commercial profit is strictly prohibited. They are meant for free propagation of knowledge." },
-  { "question": "kitabein bechna", "answer": "In kutub ko bechna ya tijarti maqsad ke liye istemal karna sakht mana hai. Yeh khalis deeni aur muft khidmat hai." },
-  { "question": "sufism meaning", "answer": "Sufism is the inner, mystical, and spiritual dimension of Islam focused on purifying the heart and loving Allah." },
-  { "question": "tasawwuf kya hai", "answer": "Tasawwuf dil ki pakeezgi, nafs ko qaboo karne, aur Allah o Uske Rasool ﷺ ki mohabbat pane ka rasta hai." },
-  { "question": "how to search authors", "answer": "You can find books by specific authors by checking the 'Authors' page or filtering searches by writer names." },
-  { "question": "writer ke mutabiq search", "answer": "Aap library ke 'Authors' page par ja kar kisi bhi musannif ki saari kitabein aik sath dekh sakte hain." },
-  { "question": "punjabi naat collection", "answer": "Hazrat Saim Chishti's Punjabi Naat compilations are world-famous. They are available under our Punjabi Books category." },
-  { "question": "how to report error", "answer": "Please capture a screenshot of the error and WhatsApp it to our team at 03067813783 for instant resolution." },
-  { "question": "masla report karna", "answer": "Agar website mein koi kharabi nazar aaye to hamare WhatsApp number 03067813783 par batayein." },
-  { "question": "donations", "answer": "We run this library purely for Sawab-e-Jariyah. We do not ask for cash donations. Your prayers are our biggest support." },
-  { "question": "chanda ya imdad", "answer": "Hum koi chanda ya donation nahi lete. Yeh khidmat bilkul muft hai. Aap ki dua hamare liye sab se bari madad hai." },
-  { "question": "fasting guide", "answer": "Look up our 'Ramadan' tag to download full booklets regarding rules, exceptions, and blessings of fasting." },
-  { "question": "roze ke ahkaam", "answer": "Roze ke mutaliq masail aur unke hal ke liye hamari Fiqh section ki kitabein parhein." },
-  { "question": "sufi saints of islam", "answer": "Read about Data Ganj Bakhsh, Khwaja Gharib Nawaz, and Baba Farid (RA) in our Sufi biography collection." },
-  { "question": "baba farid book", "answer": "Hazrat Baba Farid Ganjshakar (RA) aur deegar Chishtiya silsile ke buzurgon par likhi gayi kutub library mein mojud hain." },
-  { "question": "khwaja gharib nawaz", "answer": "Hazrat Khwaja Moinuddin Chishti Ajmeri (RA) ke halat-e-zindagi aur unki shikshayein hamari Chishtiya tareekh kutub mein parhein." },
-  { "question": "hazrat data ganj bakhsh", "answer": "Read outstanding books on Hazrat Ali Hujweri (Data Ganj Bakhsh) and his masterpiece Kashf-ul-Mahjoob." },
-  { "question": "kashf ul mahjoob", "answer": "Kashf-ul-Mahjoob (the ultimate book on Sufism) aur uski sharah par likhi gayi kitabein download karein." },
-  { "question": "dua e jamilah", "answer": "We have books containing the compilation of famous Duas, including Dua-e-Jamilah and its incredible benefits." },
-  { "question": "duaon ki kitabein", "answer": "Hamare paas har moqa ki masnoon duaon par mabni mukhtalif kitabein aur wazaif ke booklets mojud hain." },
-  { "question": "sharah of hadith", "answer": "Look into our Hadith category to find Urdu and Arabic explanations (Sharah) of classic Hadith books." },
-  { "question": "hadees ki sharah", "answer": "Hadees ke mafhoom ko samajhne ke liye 'Hadith' section se sharah par mabni kutub download karein." },
-  { "question": "who is chishti ai", "answer": "I am Chishti AI, your helpful guide. I don't sleep, and I am here 24/7 to help you search Islamic books!" },
-  { "question": "can i translate books", "answer": "Our books are protected under respective copyrights. For translation permissions, please contact our administrative heads." },
-  { "question": "kitab tarjuma karna", "answer": "Kutub ke tarjuma ke liye admin team se baqaida ijazat nama hasil karna zaroori hai." },
-  { "question": "social media links", "answer": "Follow our official social media handles linked at the bottom of the homepage for daily updates and new uploads." },
-  { "question": "facebook page", "answer": "Our official Facebook page links are available in the website footer. Join us to stay updated with new book releases." },
-  { "question": "youtube channel", "answer": "We do not host an official YouTube channel right now. Any official update will be posted directly on this website." },
-  { "question": "daily updates", "answer": "We regularly upload new books. Keep visiting our homepage to check the 'Recently Added' section!" },
-  { "question": "rozana naye kitabein", "answer": "Hum baqaidgi se naye kitabein upload karte hain. Homepage par 'Naye Kutub' ka section lazmi check kiya karein." },
-  { "question": "islamic history in urdu", "answer": "Yes, we have an exclusive 'Tareekh' (History) category featuring extensive Islamic history books written in simple Urdu." }
-]
-{
-    "question": "how many sons of hazrat allama saim chishti",
-    "answer": "Hazrat Allama Saim Chishti had three sons: Sahibzada Latif Sajid Chishti (who continues his literary and spiritual legacy), Sahibzada Muhammad Shafiq Mujahid Chishti, and Sahibzada Muhammad Tauseef Haider Chishti."
-  },
-  {
-    "question": "sons of saim chishti",
-    "answer": "Allama Saim Chishti had three sons: 1) Sahibzada Latif Sajid Chishti, 2) Sahibzada Muhammad Shafiq Mujahid Chishti, and 3) Sahibzada Muhammad Tauseef Haider Chishti."
-  },
-  {
-    "question": "who is the eldest son of saim chishti",
-    "answer": "His son Sahibzada Latif Sajid Chishti is a well-known writer, scholar, and poet who leads the Saim Chishti Research Center and carries forward his father's academic legacy."
-  },
-  {
-    "question": "who is muhammad shafiq mujahid chishti",
-    "answer": "Sahibzada Muhammad Shafiq Mujahid Chishti is the second son of Hazrat Allama Saim Chishti. He is known for reciting, preserving, and sharing his father's beautiful kalam and poetic works."
-  },
-  {
-    "question": "who is muhammad tauseef haider chishti",
-    "answer": "Sahibzada Muhammad Tauseef Haider Chishti is the third son of Hazrat Allama Saim Chishti, who upholds the family's spiritual values and religious traditions."
-  }
-
-[
-  {
-    "question": "who is saim chishti",
-    "answer": "Hazrat Allama Saim Chishti (رحمۃ اللہ علیہ) was an Islamic scholar, Naat poet, researcher, translator, publisher, and Sufi spiritual leader associated with the Chishti Sabri order."
-  },
-  {
-    "question": "hazrat allama saim chishti",
-    "answer": "Hazrat Allama Saim Chishti was born on 25 December 1932 in Gandiwind (near Amritsar) and passed away on 22 January 2000 in Faisalabad. He is a legendary figure in Naat literature."
-  },
-  {
-    "question": "saim chishti birth",
-    "answer": "Hazrat Allama Saim Chishti was born on 25 December 1932 (with some sources stating 18 December 1932) in Gandiwind, near Amritsar, British India."
-  },
-  {
-    "question": "saim chishti death",
-    "answer": "Hazrat Allama Saim Chishti passed away on 22 January 2000 in Faisalabad, Punjab, Pakistan."
-  },
-  {
-    "question": "saim chishti education",
-    "answer": "He received early education from his father, Sheikh Muhammad Ismail, and later earned the Sanad-e-Fazilat from Jamia Rizvia, Faisalabad around 1970."
-  },
-  {
-    "question": "saim chishti books",
-    "answer": "He authored and translated around 500 books. Famous works include Nawa-e-Saim, Noor Da Zahoor, Armaghan-e-Madina, and Nun Wal Qalam."
-  },
-  {
-    "question": "saim chishti translations",
-    "answer": "He translated monumental classical Arabic works into Urdu, including Futuhat-al-Makkiyyah (Ibn Arabi), Tafsir al-Kabir, and Iman-e-Abi Talib."
-  },
-  {
-    "question": "institutions established by saim chishti",
-    "answer": "He established several institutions in Faisalabad including Chishtia Library, Hassan Naat College, and Dar-ul-Uloom Haideria Chishtia Rizvia."
-  },
-  {
-    "question": "saim chishti poetry",
-    "answer": "His poetry focused on deep love for Prophet Muhammad ﷺ, Tasawwuf (Sufism), Islamic ethics, and immense praise for the Ahl al-Bayt and Companions."
-  },
-  {
-    "question": "saim chishti family",
-    "answer": "He had three sons: Sahibzada Muhammad Latif Sajid Chishti, Sahibzada Muhammad Shafiq Mujahid Chishti, and Sahibzada Muhammad Tauseef Haider Chishti."
-  },
-  {
-    "question": "latif sajid chishti",
-    "answer": "Sahibzada Muhammad Latif Sajid Chishti is a prominent Islamic writer and poet who manages the Saim Chishti Research Center and continues his father's literary legacy."
-  },
-  {
-    "question": "latif sajid chishti books",
-    "answer": "His famous books include Shaheed-e-Uhud, Ashab-e-Badar, Imam Jazoli Da Waqia, Baran Mah Sajid, and Manaqib Bara Imam."
-  },
-  {
-    "question": "shaheed e uhud book",
-    "answer": "Shaheed-e-Uhud is a 342-page collection of manaqib by Latif Sajid Chishti, dedicated to Hazrat Sayyiduna Amir Hamza (RA)."
-  },
-  {
-    "question": "ashab e badar book",
-    "answer": "Ashab-e-Badar is a poetic tribute by Latif Sajid Chishti in the form of qataat (quatrains) highlighting the companions of the Battle of Badr."
-  },
-  {
-    "question": "latif sajid chishti kalam",
-    "answer": "His popular written kalams include 'Rang Duniya Sy Nirala Hai Ali Walon Ka', 'Aqa Main Wi Wikhan Noori Noori Jalyan', and 'Rab Sohne Karam Kamya'."
-  },
-  {
-    "question": "shafiq mujahid chishti",
-    "answer": "Sahibzada Muhammad Shafiq Mujahid Chishti, often referred to as Ibn-e-Saim, was a son of Allama Saim Chishti who preserved and recited his father's devotional poetry."
-  },
-  {
-    "question": "tauseef haider chishti",
-    "answer": "Sahibzada Muhammad Tauseef Haider Chishti is part of the esteemed Chishti family lineage carrying forward the spiritual and literary traditions in Faisalabad."
-  },
-  {
-    "question": "saim chishti research center",
-    "answer": "The Saim Chishti Research Center is based in Faisalabad, managed by his family, dedicated to preserving and publishing his 500+ literary works."
-  },
-  {
-    "question": "chishti silsila",
-    "answer": "Hazrat Allama Saim Chishti belonged to the Chishti Sabri spiritual order (Silsila), focusing on Sufi teachings and love for the Prophet ﷺ."
-  },
-  {
-    "question": "futuhat al makkiyyah urdu",
-    "answer": "Allama Saim Chishti provided a landmark Urdu translation of Ibn Arabi's monumental Sufi masterpiece, Al-Futuhat al-Makkiyyah."
-  },
-  {
-    "question": "tafsir al kabir urdu",
-    "answer": "He accomplished the massive task of translating Imam Fakhr al-Din al-Razi's grand Quranic exegesis, Tafsir al-Kabir, into Urdu."
-  },
-  {
-    "question": "iman e abi talib book",
-    "answer": "Iman-e-Abi Talib is a highly researched theological defense written/translated by Allama Saim Chishti regarding the faith of Hazrat Abu Talib."
-  },
-  {
-    "question": "al batool book",
-    "answer": "Al-Batool is a beautifully written Urdu biography exploring the life, purity, and virtues of Hazrat Syeda Fatima Zahra (SA)."
-  },
-  {
-    "question": "mushkil kusha book",
-    "answer": "Mushkil Kusha is a detailed multi-volume biography and research work on the life of Hazrat Ali ibn Abi Talib (RA) by Allama Saim Chishti."
-  },
-  {
-    "question": "saim chishti videos",
-    "answer": "You can find original recordings of Allama Saim Chishti reciting his own kalam and Naats by searching for 'Allama Saim Chishti Kalam o Awaz' on YouTube."
-  }
+  { "question": "where is library located", "answer": "Our administrative operations are based in Faisalabad, Punjab, Pakistan, where the Saim Chishti Research Center is located." }
 ]
