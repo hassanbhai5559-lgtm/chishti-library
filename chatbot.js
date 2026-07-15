@@ -1,112 +1,96 @@
-const chat = document.getElementById("chat");
-let knowledgeData = [];
+let qaData = [];
 
-// Cache bypass karne ke liye URL ke sath unique timestamp generate kiya hai
-const jsonFile = 'knowledge.json?v=' + new Date().getTime(); 
-
-// 1. JSON Data fetch karna (Fresh copy har baar)
-fetch(jsonFile)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("HTTP error " + response.status);
-        }
-        return response.json();
-    })
+// 1. knowledge.json file se data dynamically load karein
+fetch('knowledge.json')
+    .then(response => response.json())
     .then(data => {
-        knowledgeData = data;
-        console.log("Database loaded fresh from knowledge.json!", knowledgeData);
+        qaData = data;
+        console.log("Database successfully loaded. Total entries:", qaData.length);
     })
     .catch(error => {
-        console.error("Error loading database: ", error);
-        addMsg("⚠️ Chishti AI System Alert: `knowledge.json` load nahi ho saki.", "bot");
+        console.error("Error loading knowledge.json database:", error);
     });
 
-function addMsg(text, type) {
-    const div = document.createElement("div");
-    div.className = "msg " + type;
-    div.innerHTML = text;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
+// Normalization Function: Punctuation hatane ke liye
+function cleanText(text) {
+    return text.toLowerCase()
+               .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, "") // Saare symbols dho kar saaf karein
+               .replace(/\s+/g, " ")                        // Faltu spacing dur karein
+               .trim();
 }
 
-function typing(cb) {
-    const t = document.createElement("div");
-    t.className = "msg bot";
-    t.innerHTML = `
-    <div class="typing">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    </div>`;
-    chat.appendChild(t);
-    chat.scrollTop = chat.scrollHeight;
+// Smart Matching Logic
+function findBestAnswer(userInput) {
+    const cleanUser = cleanText(userInput);
+    if (!cleanUser) return "Ji? Aapne kuch likha nahi.";
 
-    setTimeout(() => {
-        t.remove();
-        cb();
-    }, 800);
-}
+    const userWords = cleanUser.split(" ");
+    let bestMatch = null;
+    let maxScore = 0;
 
-/* ===== SMART FUZZY AI BRAIN ===== */
-function ai(msg) {
-    // 1. Clean the input (punctuation khatam karein aur lowercase karein)
-    const cleanMsg = msg.replace(/['"!?.,;:-]+/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
-
-    if (knowledgeData && knowledgeData.length > 0) {
+    qaData.forEach(item => {
+        const cleanQuestion = cleanText(item.question);
         
-        // Match 1: Exact Match check (Punctuation ke baghair)
-        for (let item of knowledgeData) {
-            const cleanQuestion = item.question.replace(/['"!?.,;:-]+/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
-            if (cleanMsg === cleanQuestion) {
-                return item.answer;
-            }
+        // Exact Match test
+        if (cleanUser === cleanQuestion) {
+            maxScore = 100;
+            bestMatch = item;
+            return;
         }
 
-        // Match 2: Partial Match check (E.g. "who is saim chishti" -> checks if contains "saim chishti")
-        for (let item of knowledgeData) {
-            const cleanQuestion = item.question.replace(/['"!?.,;:-]+/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
-            if (cleanMsg.includes(cleanQuestion) || cleanQuestion.includes(cleanMsg)) {
-                return item.answer;
-            }
-        }
+        // Word overlap checking
+        const questionWords = cleanQuestion.split(" ");
+        let matchCount = 0;
 
-        // Match 3: Keyword Match check (Agar user ke words question mein match hote hain)
-        for (let item of knowledgeData) {
-            const cleanQuestion = item.question.replace(/['"!?.,;:-]+/g, '').toLowerCase().trim();
-            const userWords = cleanMsg.split(' ');
-            
-            let matches = 0;
-            userWords.forEach(word => {
-                // Saim, Chishti, Latif, Sajid, Born jaise words check karne ke liye (>3 characters)
-                if (word.length > 3 && cleanQuestion.includes(word)) {
-                    matches++;
-                }
-            });
-
-            // Agar kam az kam 2 keyword match ho jayein (jaise "saim" aur "chishti")
-            if (matches >= 2) {
-                return item.answer;
+        userWords.forEach(word => {
+            if (questionWords.includes(word)) {
+                matchCount++;
             }
+        });
+
+        // Match Score system (Fuzzy match ratio)
+        const score = matchCount / Math.max(userWords.length, questionWords.length);
+
+        if (score > maxScore) {
+            maxScore = score;
+            bestMatch = item;
         }
+    });
+
+    // Agar match ka score 20% se zyada hai to reply nikalega
+    if (maxScore > 0.2) {
+        return bestMatch.answer;
     }
 
-    // Fallback normal greetings ke liye:
-    if (cleanMsg.includes("hi") || cleanMsg.includes("hello") || cleanMsg.includes("hey") || cleanMsg.includes("salam")) {
-        return "Wa Alaikum Assalam! Welcome to Chishti Library. How may I assist you today?";
-    }
-    
-    return "Mera jawab database mein nahi mila. Aap Saim Chishti ke bare mein, ya unki books ke mutalik sawal pooch sakte hain.";
+    // Default response agar kuch bhi na mile
+    return "Maaf kijiye, mujhe iska jawab nahi maloom. Aap deeni kitabein, Saim Chishti (RA) ya library se mutaliq koi aur sawal pooch sakte hain.";
 }
 
-function send() {
-    const input = document.getElementById("input");
-    const text = input.value.trim();
-    if (!text) return;
+// User Ka Message Send Karne Ka Function
+function sendMessage() {
+    const inputField = document.getElementById("userInput");
+    const chatArea = document.getElementById("chat");
+    const text = inputField.value.trim();
 
-    addMsg(text, "user");
-    input.value = "";
+    if (text === "") return;
 
-    typing(() => {
-        addMsg(ai(text), "bot");
-    });
+    // User Message create karein
+    const userDiv = document.createElement("div");
+    userDiv.className = "msg user";
+    userDiv.innerText = text;
+    chatArea.appendChild(userDiv);
+
+    // Box clear aur scroll set karein
+    inputField.value = "";
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    // AI Response generate karein thode realistic pause ke sath
+    setTimeout(() => {
+        const responseText = findBestAnswer(text);
+        const botDiv = document.createElement("div");
+        botDiv.className = "msg bot";
+        botDiv.innerText = responseText;
+        chatArea.appendChild(botDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }, 400);
 }
