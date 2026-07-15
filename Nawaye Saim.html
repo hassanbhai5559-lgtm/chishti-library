@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Nawaye Saim | Online Reader</title>
+<title>Nawaye Saim | Chishti Library</title>
 
 <style>
 
@@ -15,28 +16,45 @@ box-sizing:border-box;
 }
 
 body{
-font-family:Poppins,sans-serif;
-background:#0B0B0B;
+font-family:Poppins,Arial,sans-serif;
+background:#111;
 overflow:hidden;
 }
 
 .header{
-background:linear-gradient(135deg,#7A0000,#3B0000,#0B0B0B);
+height:70px;
+background:linear-gradient(135deg,#7A0000,#B8860B);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
 color:#fff;
-padding:18px;
-text-align:center;
-border-bottom:3px solid #C9A227;
-box-shadow:0 5px 20px rgba(0,0,0,.4);
+box-shadow:0 3px 15px rgba(0,0,0,.4);
 }
 
 .header h2{
-font-size:26px;
-font-weight:700;
+font-size:24px;
+font-weight:600;
+}
+
+.back-btn{
+background:#fff;
+color:#7A0000;
+padding:10px 18px;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+transition:.3s;
+}
+
+.back-btn:hover{
+background:#B8860B;
+color:#fff;
 }
 
 .reader{
 width:100%;
-height:calc(100vh - 72px);
+height:calc(100vh - 70px);
 }
 
 .reader iframe{
@@ -56,13 +74,15 @@ background:#fff;
 
 <h2>📖 Nawaye Saim</h2>
 
+<a href="books.html" class="back-btn">
+← Back to Library
+</a>
+
 </div>
 
 <div class="reader">
 
-<iframe
-src="https://docs.google.com/gview?embedded=true&url=https://hassanbhai5559-lgtm.github.io/chishti-library/nawaye-saim.pdf">
-</iframe>
+<iframe src="noori.pdf"></iframe>
 
 </div>
 
