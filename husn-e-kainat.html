@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Husn-e-Kainat | Online Reader</title>
+<title>Husn-e-Kainat | Chishti Library</title>
 
 <style>
 
@@ -15,20 +16,40 @@ box-sizing:border-box;
 }
 
 body{
-font-family:Arial,sans-serif;
-background:#f4f8fc;
+font-family:Poppins,Arial,sans-serif;
+background:#111;
+overflow:hidden;
 }
 
 .header{
-background:linear-gradient(135deg,#00c853,#2196f3);
-color:white;
-padding:15px;
-text-align:center;
-box-shadow:0 2px 10px rgba(0,0,0,.15);
+height:70px;
+background:linear-gradient(135deg,#7A0000,#B8860B);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+color:#fff;
+box-shadow:0 3px 15px rgba(0,0,0,.4);
 }
 
-.header h1{
+.header h2{
 font-size:24px;
+font-weight:600;
+}
+
+.back-btn{
+background:#fff;
+color:#7A0000;
+padding:10px 18px;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+transition:.3s;
+}
+
+.back-btn:hover{
+background:#B8860B;
+color:#fff;
 }
 
 .reader{
@@ -40,23 +61,28 @@ height:calc(100vh - 70px);
 width:100%;
 height:100%;
 border:none;
-background:white;
+background:#fff;
 }
 
 </style>
 
 </head>
+
 <body>
 
 <div class="header">
-<h1>📖 Husn-e-Kainat</h1>
+
+<h2>📖 Husn-e-Kainat</h2>
+
+<a href="books.html" class="back-btn">
+← Back to Library
+</a>
+
 </div>
 
 <div class="reader">
 
-<iframe
-src="https://docs.google.com/gview?embedded=true&url=https://hassanbhai5559-lgtm.github.io/chishti-library/husn-e-kainat.pdf">
-</iframe>
+<iframe src="husn-e-kainat.pdf"></iframe>
 
 </div>
 
