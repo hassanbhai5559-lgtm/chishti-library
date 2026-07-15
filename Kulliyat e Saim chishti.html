@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kulliyat-e-Saim | Chishti Library</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+background:#111;
+overflow:hidden;
+}
+
+.header{
+height:72px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 25px;
+background:linear-gradient(90deg,#7a0000,#b76500);
+color:#fff;
+box-shadow:0 4px 15px rgba(0,0,0,.4);
+}
+
+.title{
+display:flex;
+align-items:center;
+gap:12px;
+font-size:28px;
+font-weight:700;
+}
+
+.back-btn{
+background:#fff;
+color:#8b0000;
+text-decoration:none;
+padding:10px 20px;
+border-radius:8px;
+font-weight:600;
+transition:.3s;
+}
+
+.back-btn:hover{
+background:#ffe9d5;
+}
+
+.viewer{
+width:100%;
+height:calc(100vh - 72px);
+border:none;
+background:#222;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="title">
+📖 Kulliyat-e-Saim
+</div>
+
+<a href="books.html" class="back-btn">
+← Back to Library
+</a>
+
+</div>
+
+<iframe
+class="viewer"
+src="kulliyat-e-saim.pdf">
+</iframe>
+
+</body>
+</html>
