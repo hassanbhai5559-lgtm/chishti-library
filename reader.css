@@ -1,0 +1,391 @@
+/* ==========================
+   CHISHTI LIBRARY READER PRO
+   reader.css
+========================== */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+}
+
+body{
+
+background:#1b1b1b;
+
+overflow:hidden;
+
+transition:.4s;
+
+}
+
+/* HEADER */
+
+.reader-header{
+
+height:70px;
+
+background:linear-gradient(135deg,#0b6b3a,#0d47a1);
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 25px;
+
+color:#fff;
+
+box-shadow:0 5px 20px rgba(0,0,0,.35);
+
+z-index:999;
+
+position:relative;
+
+}
+
+.reader-logo{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.reader-logo img{
+
+width:45px;
+
+height:45px;
+
+border-radius:50%;
+
+}
+
+.reader-title{
+
+font-size:22px;
+
+font-weight:700;
+
+}
+
+/* BOOK AREA */
+
+.reader-container{
+
+height:calc(100vh - 150px);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:25px;
+
+overflow:hidden;
+
+}
+
+/* BOOK */
+
+#flipbook{
+
+width:920px;
+
+height:640px;
+
+background:#fff;
+
+box-shadow:
+
+0 30px 60px rgba(0,0,0,.45),
+
+0 0 20px rgba(255,255,255,.08);
+
+border-radius:12px;
+
+overflow:hidden;
+
+transition:.4s;
+
+}
+
+/* PAGE */
+
+.page{
+
+background:#fff;
+
+overflow:hidden;
+
+}
+
+.page canvas{
+
+width:100%!important;
+
+height:100%!important;
+
+}
+
+/* TOOLBAR */
+
+.reader-toolbar{
+
+position:fixed;
+
+bottom:25px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+background:#fff;
+
+padding:14px 20px;
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+border-radius:60px;
+
+box-shadow:0 10px 35px rgba(0,0,0,.35);
+
+z-index:999;
+
+}
+
+/* BUTTON */
+
+.tool-btn{
+
+width:48px;
+
+height:48px;
+
+border:none;
+
+border-radius:50%;
+
+cursor:pointer;
+
+font-size:18px;
+
+background:#f1f1f1;
+
+transition:.3s;
+
+}
+
+.tool-btn:hover{
+
+background:#0b6b3a;
+
+color:white;
+
+transform:translateY(-4px);
+
+}
+
+/* PAGE NUMBER */
+
+.page-count{
+
+font-size:18px;
+
+font-weight:bold;
+
+padding:0 15px;
+
+color:#0b6b3a;
+
+}
+
+/* BOOK SHADOW */
+
+#flipbook::after{
+
+content:"";
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+width:90%;
+
+height:90%;
+
+transform:translate(-50%,-50%);
+
+box-shadow:0 0 80px rgba(0,0,0,.2);
+
+z-index:-1;
+
+}
+
+/* DARK MODE */
+
+.dark{
+
+background:#111;
+
+}
+
+.dark .reader-toolbar{
+
+background:#222;
+
+}
+
+.dark .tool-btn{
+
+background:#333;
+
+color:#fff;
+
+}
+
+.dark .reader-header{
+
+background:#000;
+
+}
+
+/* LOADING */
+
+.loader{
+
+position:absolute;
+
+top:50%;
+
+left:50%;
+
+transform:translate(-50%,-50%);
+
+width:70px;
+
+height:70px;
+
+border-radius:50%;
+
+border:6px solid rgba(255,255,255,.2);
+
+border-top:6px solid #0b6b3a;
+
+animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+100%{
+
+transform:translate(-50%,-50%) rotate(360deg);
+
+}
+
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+#flipbook{
+
+width:100%;
+
+height:520px;
+
+}
+
+.reader-toolbar{
+
+gap:6px;
+
+padding:10px;
+
+}
+
+.tool-btn{
+
+width:42px;
+
+height:42px;
+
+font-size:15px;
+
+}
+
+.page-count{
+
+font-size:14px;
+
+}
+
+.reader-title{
+
+font-size:18px;
+
+}
+
+}
+
+/* ANIMATION */
+
+#flipbook{
+
+animation:fadeBook .8s ease;
+
+}
+
+@keyframes fadeBook{
+
+from{
+
+opacity:0;
+
+transform:scale(.95);
+
+}
+
+to{
+
+opacity:1;
+
+transform:scale(1);
+
+}
+
+}
+
+/* WATERMARK */
+
+.watermark{
+
+position:fixed;
+
+bottom:10px;
+
+right:15px;
+
+font-size:12px;
+
+color:#888;
+
+letter-spacing:2px;
+
+user-select:none;
+
+}
