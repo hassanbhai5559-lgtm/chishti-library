@@ -422,3 +422,466 @@ loadPDF();
 
 console.log("Reader Part 2 Loaded");
 
+/*====================================
+ CHISHTI LIBRARY READER PRO
+ Part 3
+ Premium Features
+====================================*/
+
+/*============================
+ Reading Progress
+============================*/
+
+const progressBar = document.getElementById("readingProgress");
+
+function updateProgress() {
+
+    if (!progressBar) return;
+
+    const percent = (currentPage / totalPages) * 100;
+
+    progressBar.style.width = percent + "%";
+
+}
+
+/*============================
+ Override renderPage
+============================*/
+
+const oldRender = renderPage;
+
+renderPage = async function(page){
+
+    await oldRender(page);
+
+    updateProgress();
+
+};
+
+/*============================
+ Bookmark
+============================*/
+
+function bookmarkPage(){
+
+    const key = "bookmark_" + pdfFile;
+
+    localStorage.setItem(key,currentPage);
+
+    alert("Bookmark saved on page " + currentPage);
+
+}
+
+function openBookmark(){
+
+    const key = "bookmark_" + pdfFile;
+
+    const page = localStorage.getItem(key);
+
+    if(page){
+
+        currentPage = Number(page);
+
+        renderPage(currentPage);
+
+    }
+
+}
+
+/*============================
+ Theme
+============================*/
+
+const themes = [
+
+"light",
+
+"dark",
+
+"sepia",
+
+"emerald"
+
+];
+
+let themeIndex = 0;
+
+function changeTheme(){
+
+    document.body.classList.remove(
+
+        "light",
+
+        "dark",
+
+        "sepia",
+
+        "emerald"
+
+    );
+
+    themeIndex++;
+
+    if(themeIndex>=themes.length){
+
+        themeIndex=0;
+
+    }
+
+    document.body.classList.add(
+
+        themes[themeIndex]
+
+    );
+
+}
+
+/*============================
+ Fullscreen
+============================*/
+
+function fullscreenReader(){
+
+    if(document.fullscreenElement){
+
+        document.exitFullscreen();
+
+    }
+
+    else{
+
+        document.documentElement.requestFullscreen();
+
+    }
+
+}
+
+/*============================
+ Print
+============================*/
+
+function printBook(){
+
+    window.open(pdfFile);
+
+}
+
+/*============================
+ Download
+============================*/
+
+function downloadBook(){
+
+    const a=document.createElement("a");
+
+    a.href=pdfFile;
+
+    a.download="";
+
+    a.click();
+
+}
+
+/*============================
+ Thumbnail Sidebar
+============================*/
+
+const sidebar=document.getElementById("sidebar");
+
+function toggleSidebar(){
+
+    if(!sidebar) return;
+
+    sidebar.classList.toggle("show");
+
+}
+
+/*============================
+ Reader Animation
+============================*/
+
+canvas.style.transition=".35s";
+
+function pageAnimation(){
+
+    canvas.animate([
+
+        {
+
+            transform:"scale(.96)",
+
+            opacity:.6
+
+        },
+
+        {
+
+            transform:"scale(1)",
+
+            opacity:1
+
+        }
+
+    ],
+
+    {
+
+        duration:350
+
+    });
+
+}
+
+const renderOriginal=renderPage;
+
+renderPage=async function(page){
+
+    await renderOriginal(page);
+
+    pageAnimation();
+
+    updateProgress();
+
+};
+
+/*============================
+ Buttons
+============================*/
+
+document.getElementById("bookmark")
+?.addEventListener("click",bookmarkPage);
+
+document.getElementById("theme")
+?.addEventListener("click",changeTheme);
+
+document.getElementById("fullscreen")
+?.addEventListener("click",fullscreenReader);
+
+document.getElementById("download")
+?.addEventListener("click",downloadBook);
+
+document.getElementById("print")
+?.addEventListener("click",printBook);
+
+document.getElementById("menu")
+?.addEventListener("click",toggleSidebar);
+
+/*============================
+ Welcome
+============================*/
+
+console.log("Reader Part 3 Loaded");
+
+/*=====================================
+ CHISHTI LIBRARY READER PRO
+ Part 4
+ Premium Animation
+======================================*/
+
+/***************
+LOADING
+****************/
+
+const loading=document.getElementById("loading");
+
+window.onload=function(){
+
+setTimeout(()=>{
+
+loading.style.opacity="0";
+
+loading.style.visibility="hidden";
+
+},800);
+
+}
+
+/***************
+PAGE SOUND
+****************/
+
+const flipSound=new Audio(
+
+"https://cdn.pixabay.com/download/audio/2022/03/15/audio_115b9d3d64.mp3"
+
+);
+
+function playFlip(){
+
+flipSound.currentTime=0;
+
+flipSound.play();
+
+}
+
+/***************
+NEXT
+****************/
+
+const next=document.getElementById("next");
+
+next.onclick=function(){
+
+playFlip();
+
+nextPage();
+
+}
+
+/***************
+PREVIOUS
+****************/
+
+const prev=document.getElementById("prev");
+
+prev.onclick=function(){
+
+playFlip();
+
+previousPage();
+
+}
+
+/***************
+DOUBLE CLICK
+****************/
+
+viewer.addEventListener("dblclick",()=>{
+
+fullscreenReader();
+
+});
+
+/***************
+MOUSE WHEEL ZOOM
+****************/
+
+viewer.addEventListener("wheel",(e)=>{
+
+e.preventDefault();
+
+if(e.deltaY<0){
+
+zoomIn();
+
+}else{
+
+zoomOut();
+
+}
+
+});
+
+/***************
+READING TIMER
+****************/
+
+let seconds=0;
+
+setInterval(()=>{
+
+seconds++;
+
+const time=document.getElementById("readingTime");
+
+if(time){
+
+time.innerHTML=
+
+Math.floor(seconds/60)+" min";
+
+}
+
+},1000);
+
+/***************
+BOOKMARK AUTO
+****************/
+
+setInterval(()=>{
+
+localStorage.setItem(
+
+pdfFile+"_last",
+
+currentPage
+
+);
+
+},5000);
+
+/***************
+RESTORE
+****************/
+
+const last=
+
+localStorage.getItem(pdfFile+"_last");
+
+if(last){
+
+currentPage=Number(last);
+
+renderPage(currentPage);
+
+}
+
+/***************
+PROGRESS
+****************/
+
+setInterval(()=>{
+
+const progress=
+
+(currentPage/totalPages)*100;
+
+const bar=document.getElementById("progress");
+
+if(bar){
+
+bar.style.width=progress+"%";
+
+}
+
+},200);
+
+/***************
+SHORTCUTS
+****************/
+
+document.addEventListener("keydown",(e)=>{
+
+if(e.code==="Space"){
+
+nextPage();
+
+}
+
+if(e.code==="KeyB"){
+
+bookmarkPage();
+
+}
+
+if(e.code==="KeyF"){
+
+fullscreenReader();
+
+}
+
+if(e.code==="KeyP"){
+
+printBook();
+
+}
+
+});
+
+/***************
+END
+****************/
+
+console.log("Reader Part 4 Loaded");
+
+
