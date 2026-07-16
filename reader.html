@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Chishti Library Reader</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial,sans-serif;
+background:#f4f4f4;
+}
+
+.header{
+
+height:65px;
+
+background:#00695c;
+
+color:#fff;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:0 20px;
+
+}
+
+.header a{
+
+color:#fff;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
+
+iframe{
+
+width:100%;
+
+height:calc(100vh - 65px);
+
+border:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2 id="bookTitle">📖 Chishti Library</h2>
+
+<a href="books.html">⬅ Back</a>
+
+</div>
+
+<iframe id="pdfViewer"></iframe>
+
+<script>
+
+const params=new URLSearchParams(window.location.search);
+
+const pdf=params.get("book");
+
+const title=params.get("title");
+
+document.getElementById("bookTitle").innerHTML="📖 "+decodeURIComponent(title||"Book");
+
+document.getElementById("pdfViewer").src=decodeURIComponent(pdf);
+
+</script>
+
+</body>
+</html>
