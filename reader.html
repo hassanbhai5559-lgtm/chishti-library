@@ -7,6 +7,9 @@
 
 <title>Chishti Library Reader</title>
 
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf_viewer.min.css"/>
+
 <style>
 
 *{
@@ -16,17 +19,18 @@ box-sizing:border-box;
 }
 
 body{
-font-family:Arial,sans-serif;
-background:#f4f4f4;
+font-family:Poppins,Arial,sans-serif;
+background:#f5f5f5;
+overflow:hidden;
 }
 
 .header{
 
 height:65px;
 
-background:#00695c;
+background:linear-gradient(135deg,#0b6b3a,#1565c0);
 
-color:#fff;
+color:white;
 
 display:flex;
 
@@ -38,23 +42,53 @@ padding:0 20px;
 
 }
 
-.header a{
+.header h2{
 
-color:#fff;
+font-size:22px;
 
-text-decoration:none;
+}
+
+.toolbar{
+
+display:flex;
+
+gap:10px;
+
+align-items:center;
+
+}
+
+button{
+
+padding:8px 14px;
+
+border:none;
+
+border-radius:8px;
+
+cursor:pointer;
 
 font-weight:bold;
 
 }
 
-iframe{
+canvas{
 
-width:100%;
+display:block;
+
+margin:auto;
+
+box-shadow:0 0 20px rgba(0,0,0,.2);
+
+}
+
+.viewer{
 
 height:calc(100vh - 65px);
 
-border:none;
+overflow:auto;
+
+padding:20px;
 
 }
 
@@ -66,27 +100,126 @@ border:none;
 
 <div class="header">
 
-<h2 id="bookTitle">📖 Chishti Library</h2>
+<h2 id="title">Book</h2>
 
-<a href="books.html">⬅ Back</a>
+<div class="toolbar">
+
+<button onclick="zoomOut()">➖</button>
+
+<button onclick="zoomIn()">➕</button>
+
+<button onclick="printPDF()">🖨 Print</button>
+
+<button onclick="downloadPDF()">⬇ Download</button>
+
+<a href="books.html">
+
+<button>⬅ Back</button>
+
+</a>
 
 </div>
 
-<iframe id="pdfViewer"></iframe>
+</div>
 
-<script>
+<div class="viewer">
 
-const params=new URLSearchParams(window.location.search);
+<div id="pdf-container"></div>
 
-const pdf=params.get("book");
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+
+<script type="module">
+
+import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+
+const params=new URLSearchParams(location.search);
+
+const file=params.get("book");
 
 const title=params.get("title");
 
-document.getElementById("bookTitle").innerHTML="📖 "+decodeURIComponent(title||"Book");
+document.getElementById("title").innerHTML=decodeURIComponent(title);
 
-document.getElementById("pdfViewer").src=decodeURIComponent(pdf);
+let pdfDoc=null;
+
+let scale=1.4;
+
+async function render(){
+
+document.getElementById("pdf-container").innerHTML="";
+
+pdfDoc=await pdfjsLib.getDocument(file).promise;
+
+for(let i=1;i<=pdfDoc.numPages;i++){
+
+const page=await pdfDoc.getPage(i);
+
+const viewport=page.getViewport({scale});
+
+const canvas=document.createElement("canvas");
+
+const ctx=canvas.getContext("2d");
+
+canvas.width=viewport.width;
+
+canvas.height=viewport.height;
+
+await page.render({
+
+canvasContext:ctx,
+
+viewport
+
+}).promise;
+
+document.getElementById("pdf-container").appendChild(canvas);
+
+}
+
+}
+
+window.zoomIn=function(){
+
+scale+=0.2;
+
+render();
+
+}
+
+window.zoomOut=function(){
+
+if(scale>0.6){
+
+scale-=0.2;
+
+render();
+
+}
+
+}
+
+window.downloadPDF=function(){
+
+window.open(file);
+
+}
+
+window.printPDF=function(){
+
+const w=window.open(file);
+
+w.print();
+
+}
+
+render();
 
 </script>
 
 </body>
+
 </html>
