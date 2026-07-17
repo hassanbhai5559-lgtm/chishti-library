@@ -4,390 +4,183 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Chishti Library Reader</title>
+<title>Chishti Reader Pro</title>
+
+<meta name="description" content="Chishti Library Professional Reader">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI;
-}
-
-body{
-
-background:#181818;
-overflow:hidden;
-
-}
-
-/******** HEADER ********/
-
-.header{
-
-height:65px;
-
-background:#0b6b3a;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-color:white;
-
-font-size:24px;
-
-font-weight:bold;
-
-letter-spacing:1px;
-
-box-shadow:0 5px 15px rgba(0,0,0,.4);
-
-}
-
-/******** BOOK ********/
-
-#bookContainer{
-
-height:calc(100vh - 130px);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-overflow:hidden;
-
-position:relative;
-
-}
-
-#flipbook{
-
-width:920px;
-
-height:640px;
-
-}
-
-.page{
-
-background:white;
-
-overflow:hidden;
-
-}
-
-.page canvas{
-
-width:100%!important;
-
-height:100%!important;
-
-}
-
-/******** TOOLBAR ********/
-
-.toolbar{
-
-position:fixed;
-
-bottom:25px;
-
-left:50%;
-
-transform:translateX(-50%);
-
-display:flex;
-
-gap:10px;
-
-padding:12px 20px;
-
-background:white;
-
-border-radius:50px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.35);
-
-z-index:999;
-
-}
-
-.tool{
-
-width:45px;
-
-height:45px;
-
-border-radius:50%;
-
-border:none;
-
-cursor:pointer;
-
-background:#f4f4f4;
-
-font-size:18px;
-
-transition:.3s;
-
-}
-
-.tool:hover{
-
-background:#0b6b3a;
-
-color:white;
-
-transform:translateY(-4px);
-
-}
-
-.pageNumber{
-
-font-size:18px;
-
-font-weight:bold;
-
-padding:10px;
-
-}
-
-</style>
+<link rel="stylesheet" href="reader.css">
 
 </head>
 
 <body>
 
-<div class="header">
+<!-- Loading -->
 
-📚 Chishti Library
+<div id="loading">
 
-</div>
+<div class="loader"></div>
 
-<div id="bookContainer">
-
-<div id="flipbook"></div>
+<h2>Opening Chishti Reader...</h2>
 
 </div>
 
-<div class="toolbar">
+<!-- Header -->
 
-<button class="tool" id="fullscreen">
+<header class="topbar">
+
+<div class="logo">
+
+<i class="fa-solid fa-book-open"></i>
+
+<span>Chishti Reader Pro</span>
+
+</div>
+
+<div class="book-name" id="bookTitle">
+
+Loading Book...
+
+</div>
+
+<div class="top-buttons">
+
+<button id="theme">
+
+<i class="fa-solid fa-moon"></i>
+
+</button>
+
+<button id="fullscreen">
 
 <i class="fa-solid fa-expand"></i>
 
 </button>
 
-<button class="tool" id="download">
+<button onclick="location.href='../books.html'">
 
-<i class="fa-solid fa-download"></i>
-
-</button>
-
-<button class="tool" id="zoomOut">
-
-<i class="fa-solid fa-magnifying-glass-minus"></i>
+<i class="fa-solid fa-arrow-left"></i>
 
 </button>
-
-<button class="tool" id="zoomIn">
-
-<i class="fa-solid fa-magnifying-glass-plus"></i>
-
-</button>
-
-<button class="tool" id="theme">
-
-<i class="fa-solid fa-palette"></i>
-
-</button>
-
-<button class="tool" id="print">
-
-<i class="fa-solid fa-print"></i>
-
-</button>
-
-<div class="pageNumber">
-
-<span id="pageNum">1</span>
 
 </div>
 
-<button class="tool" id="prev">
+</header>
+
+<!-- Sidebar -->
+
+<aside id="sidebar">
+
+<div class="sidebar-title">
+
+Book Pages
+
+</div>
+
+<div id="thumbnailContainer">
+
+<!-- JS -->
+
+</div>
+
+</aside>
+
+<!-- Main Reader -->
+
+<main class="reader-area">
+
+<div class="book-container">
+
+<canvas id="pdfCanvas"></canvas>
+
+</div>
+
+</main>
+
+<!-- Progress -->
+
+<div class="progress">
+
+<div id="readingProgress"></div>
+
+</div>
+
+<!-- Bottom Toolbar -->
+
+<footer class="toolbar">
+
+<button id="prev">
 
 <i class="fa-solid fa-chevron-left"></i>
 
 </button>
 
-<button class="tool" id="next">
+<button id="zoomOut">
+
+<i class="fa-solid fa-magnifying-glass-minus"></i>
+
+</button>
+
+<div class="page-box">
+
+<span id="pageCounter">1</span>
+
+/
+
+<span id="totalPages">0</span>
+
+</div>
+
+<button id="zoomIn">
+
+<i class="fa-solid fa-magnifying-glass-plus"></i>
+
+</button>
+
+<button id="bookmark">
+
+<i class="fa-solid fa-bookmark"></i>
+
+</button>
+
+<button id="print">
+
+<i class="fa-solid fa-print"></i>
+
+</button>
+
+<button id="download">
+
+<i class="fa-solid fa-download"></i>
+
+</button>
+
+<button id="next">
 
 <i class="fa-solid fa-chevron-right"></i>
 
 </button>
 
-</div>
+</footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<!-- PDF.js -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+<!-- Reader -->
 
-<script>
+<script src="pdf-reader.js"></script>
 
-const pdf="armughan e madina.pdf";
-
-pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
-
-let pdfDoc;
-
-pdfjsLib.getDocument(pdf).promise.then(function(doc){
-
-pdfDoc=doc;
-
-let promises=[];
-
-for(let i=1;i<=doc.numPages;i++){
-
-promises.push(
-
-doc.getPage(i).then(function(page){
-
-let viewport=page.getViewport({scale:1.4});
-
-let canvas=document.createElement("canvas");
-
-let ctx=canvas.getContext("2d");
-
-canvas.width=viewport.width;
-
-canvas.height=viewport.height;
-
-return page.render({
-
-canvasContext:ctx,
-
-viewport:viewport
-
-}).promise.then(()=>{
-
-let div=document.createElement("div");
-
-div.className="page";
-
-div.appendChild(canvas);
-
-document.getElementById("flipbook").appendChild(div);
-
-});
-
-})
-
-);
-
-}
-
-Promise.all(promises).then(function(){
-
-$("#flipbook").turn({
-
-width:920,
-
-height:640,
-
-autoCenter:true,
-
-gradients:true,
-
-acceleration:true,
-
-when:{
-
-turned:function(e,page){
-
-document.getElementById("pageNum").innerHTML=page;
-
-}
-
-}
-
-});
-
-});
-
-});
-
-document.getElementById("next").onclick=function(){
-
-$("#flipbook").turn("next");
-
-}
-
-document.getElementById("prev").onclick=function(){
-
-$("#flipbook").turn("previous");
-
-}
-
-document.getElementById("download").onclick=function(){
-
-window.open(pdf);
-
-}
-
-document.getElementById("print").onclick=function(){
-
-window.open(pdf);
-
-}
-
-document.getElementById("fullscreen").onclick=function(){
-
-document.documentElement.requestFullscreen();
-
-}
-
-let zoom=1;
-
-document.getElementById("zoomIn").onclick=function(){
-
-zoom+=0.1;
-
-document.getElementById("flipbook").style.transform="scale("+zoom+")";
-
-}
-
-document.getElementById("zoomOut").onclick=function(){
-
-zoom-=0.1;
-
-document.getElementById("flipbook").style.transform="scale("+zoom+")";
-
-}
-
-let dark=true;
-
-document.getElementById("theme").onclick=function(){
-
-dark=!dark;
-
-document.body.style.background=dark?"#181818":"#ddd";
-
-}
-
-</script>
+<script src="reader.js"></script>
 
 </body>
 
