@@ -432,3 +432,1051 @@ min-width:90px;
 text-align:center;
 
 }
+/*=====================================
+ CHISHTI READER PRO
+ Part 3
+ Premium Book Animation
+======================================*/
+
+
+/*==============================
+Book Depth
+==============================*/
+
+.book-container{
+
+position:relative;
+
+perspective:2000px;
+
+transform-style:preserve-3d;
+
+}
+
+
+/*==============================
+Book Spine
+==============================*/
+
+.book-container::after{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-12px;
+
+width:12px;
+
+height:100%;
+
+background:linear-gradient(
+
+180deg,
+
+#6d4c41,
+
+#4e342e,
+
+#6d4c41
+
+);
+
+border-radius:8px 0 0 8px;
+
+box-shadow:
+
+inset -2px 0 4px rgba(255,255,255,.15),
+
+2px 0 8px rgba(0,0,0,.25);
+
+}
+
+
+/*==============================
+Golden Border
+==============================*/
+
+.book-container{
+
+border:4px solid rgba(212,175,55,.35);
+
+}
+
+
+/*==============================
+Paper Glow
+==============================*/
+
+.book-container{
+
+box-shadow:
+
+0 25px 60px rgba(0,0,0,.25),
+
+0 0 40px rgba(212,175,55,.15);
+
+}
+
+
+/*==============================
+Page Effect
+==============================*/
+
+#pdfCanvas{
+
+border-radius:8px;
+
+background:white;
+
+box-shadow:
+
+0 8px 18px rgba(0,0,0,.12);
+
+transition:
+
+transform .35s,
+
+box-shadow .35s;
+
+}
+
+#pdfCanvas:hover{
+
+transform:scale(1.01);
+
+box-shadow:
+
+0 15px 35px rgba(0,0,0,.22);
+
+}
+
+
+/*==============================
+Page Turn Animation
+==============================*/
+
+.page-turn{
+
+animation:pageTurn .45s ease;
+
+transform-origin:left center;
+
+}
+
+@keyframes pageTurn{
+
+0%{
+
+transform:
+
+rotateY(0deg)
+
+scale(1);
+
+opacity:1;
+
+}
+
+40%{
+
+transform:
+
+rotateY(-18deg)
+
+scale(.98);
+
+opacity:.7;
+
+}
+
+100%{
+
+transform:
+
+rotateY(0deg)
+
+scale(1);
+
+opacity:1;
+
+}
+
+}
+
+
+/*==============================
+Book Open Effect
+==============================*/
+
+.book-open{
+
+animation:bookOpening 1s ease;
+
+}
+
+@keyframes bookOpening{
+
+0%{
+
+transform:
+
+scale(.85)
+
+rotateX(18deg);
+
+opacity:0;
+
+}
+
+100%{
+
+transform:
+
+scale(1)
+
+rotateX(0);
+
+opacity:1;
+
+}
+
+}
+
+
+/*==============================
+Floating Book
+==============================*/
+
+.book-container{
+
+animation:floating 5s ease-in-out infinite;
+
+}
+
+@keyframes floating{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-6px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+
+/*==============================
+Toolbar Glass Effect
+==============================*/
+
+.toolbar{
+
+backdrop-filter:blur(12px);
+
+background:rgba(255,255,255,.88);
+
+}
+
+
+/*==============================
+Premium Buttons
+==============================*/
+
+.toolbar button{
+
+background:
+
+linear-gradient(
+
+135deg,
+
+#0b6b3a,
+
+#157347
+
+);
+
+}
+
+.toolbar button:hover{
+
+background:
+
+linear-gradient(
+
+135deg,
+
+#d4af37,
+
+#ffd54f
+
+);
+
+}
+
+
+/*==============================
+Sidebar Animation
+==============================*/
+
+.page-thumb{
+
+animation:thumbFade .35s ease;
+
+}
+
+@keyframes thumbFade{
+
+from{
+
+opacity:0;
+
+transform:translateX(-20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateX(0);
+
+}
+
+}
+
+
+/*==============================
+Reader Background
+==============================*/
+
+.reader-area{
+
+background:
+
+radial-gradient(circle at center,
+
+#f9faf8,
+
+#dde8de);
+
+}
+
+
+/*==============================
+Book Glow
+==============================*/
+
+.book-container:hover{
+
+box-shadow:
+
+0 35px 70px rgba(0,0,0,.28),
+
+0 0 50px rgba(212,175,55,.25);
+
+}
+
+
+/*==============================
+Signature
+==============================*/
+
+.book-container::before{
+
+content:"Chishti Library";
+
+position:absolute;
+
+bottom:15px;
+
+right:20px;
+
+font-size:11px;
+
+letter-spacing:3px;
+
+color:rgba(0,0,0,.08);
+
+font-weight:700;
+
+pointer-events:none;
+
+}
+/*=====================================
+ CHISHTI READER PRO
+ Part 4
+ Luxury Book Effects
+======================================*/
+
+
+/*==============================
+Luxury Paper Texture
+==============================*/
+
+.book-container{
+
+background:
+linear-gradient(180deg,#fffef9,#f8f5ec);
+
+background-image:
+
+radial-gradient(circle at 20% 20%,
+rgba(255,255,255,.9),
+transparent 60%),
+
+radial-gradient(circle at 80% 80%,
+rgba(255,255,255,.4),
+transparent 50%);
+
+}
+
+
+/*==============================
+Book Light
+==============================*/
+
+.reader-area{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.reader-area::before{
+
+content:"";
+
+position:absolute;
+
+top:-250px;
+
+left:50%;
+
+transform:translateX(-50%);
+
+width:900px;
+
+height:900px;
+
+border-radius:50%;
+
+background:radial-gradient(
+
+circle,
+
+rgba(255,255,255,.65),
+
+transparent 70%
+
+);
+
+pointer-events:none;
+
+}
+
+
+/*==============================
+Folded Corner
+==============================*/
+
+.book-container{
+
+overflow:hidden;
+
+}
+
+.book-container::after{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+right:0;
+
+width:70px;
+
+height:70px;
+
+background:
+
+linear-gradient(
+
+135deg,
+
+transparent 50%,
+
+rgba(220,220,220,.9) 50%
+
+);
+
+box-shadow:
+
+-5px 5px 12px rgba(0,0,0,.15);
+
+}
+
+
+/*==============================
+Paper Lines
+==============================*/
+
+#pdfCanvas{
+
+background-image:
+
+linear-gradient(
+
+transparent 97%,
+
+rgba(0,0,0,.03) 100%
+
+);
+
+}
+
+
+/*==============================
+Luxury Border
+==============================*/
+
+.book-container{
+
+outline:2px solid rgba(212,175,55,.2);
+
+outline-offset:8px;
+
+}
+
+
+/*==============================
+Soft Shadow
+==============================*/
+
+.book-container{
+
+filter:
+
+drop-shadow(0 30px 40px rgba(0,0,0,.18));
+
+}
+
+
+/*==============================
+Book Hover
+==============================*/
+
+.book-container:hover{
+
+transform:
+
+translateY(-6px)
+
+scale(1.01);
+
+}
+
+
+/*==============================
+Toolbar Glass
+==============================*/
+
+.toolbar{
+
+background:rgba(255,255,255,.78);
+
+backdrop-filter:blur(15px);
+
+border-top:1px solid rgba(255,255,255,.5);
+
+}
+
+
+/*==============================
+Golden Icons
+==============================*/
+
+.toolbar button:hover{
+
+color:#111;
+
+background:
+
+linear-gradient(
+
+135deg,
+
+#d4af37,
+
+#ffdf6b
+
+);
+
+}
+
+
+/*==============================
+Sidebar Card
+==============================*/
+
+.page-thumb{
+
+background:#fff;
+
+box-shadow:
+
+0 8px 20px rgba(0,0,0,.08);
+
+}
+
+
+/*==============================
+Thumbnail Hover
+==============================*/
+
+.page-thumb:hover{
+
+transform:
+
+scale(1.04)
+
+translateX(6px);
+
+}
+
+
+/*==============================
+Premium Progress
+==============================*/
+
+#readingProgress{
+
+background:
+
+linear-gradient(
+
+90deg,
+
+#0b6b3a,
+
+#3cb371,
+
+#ffd54f
+
+);
+
+}
+
+
+/*==============================
+Selection
+==============================*/
+
+::selection{
+
+background:#0b6b3a;
+
+color:white;
+
+}
+
+
+/*==============================
+Focus
+==============================*/
+
+button:focus{
+
+outline:none;
+
+box-shadow:
+
+0 0 0 4px rgba(21,115,71,.25);
+
+}
+
+
+/*==============================
+Smooth Everything
+==============================*/
+
+*{
+
+transition:
+
+background .3s,
+
+color .3s,
+
+box-shadow .3s,
+
+transform .3s;
+
+}
+/*=====================================
+ CHISHTI READER PRO
+ Part 5
+ Signature Premium Effects
+======================================*/
+
+
+/*==============================
+Book Stage
+==============================*/
+
+.reader-area{
+
+perspective:2500px;
+
+}
+
+
+/*==============================
+Book 3D
+==============================*/
+
+.book-container{
+
+transform-style:preserve-3d;
+
+transition:transform .6s ease;
+
+}
+
+.book-container:hover{
+
+transform:
+
+rotateX(2deg)
+
+rotateY(-2deg)
+
+translateY(-8px);
+
+}
+
+
+/*==============================
+Page Shine
+==============================*/
+
+.book-container::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-120%;
+
+width:70%;
+
+height:100%;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.45),
+
+transparent
+
+);
+
+transform:skewX(-20deg);
+
+pointer-events:none;
+
+}
+
+.book-container:hover::before{
+
+animation:shine 1.2s linear;
+
+}
+
+@keyframes shine{
+
+0%{
+
+left:-120%;
+
+}
+
+100%{
+
+left:160%;
+
+}
+
+}
+
+
+/*==============================
+Canvas Border
+==============================*/
+
+#pdfCanvas{
+
+border:12px solid #ffffff;
+
+outline:1px solid rgba(212,175,55,.3);
+
+}
+
+
+/*==============================
+Luxury Shadow
+==============================*/
+
+#pdfCanvas{
+
+box-shadow:
+
+0 15px 35px rgba(0,0,0,.20),
+
+inset 0 0 8px rgba(0,0,0,.06);
+
+}
+
+
+/*==============================
+Book Breathing
+==============================*/
+
+.book-container{
+
+animation:breath 6s ease-in-out infinite;
+
+}
+
+@keyframes breath{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.005);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
+
+
+/*==============================
+Toolbar Gradient
+==============================*/
+
+.toolbar{
+
+background:
+
+linear-gradient(
+
+180deg,
+
+rgba(255,255,255,.92),
+
+rgba(245,245,245,.92)
+
+);
+
+}
+
+
+/*==============================
+Toolbar Icons
+==============================*/
+
+.toolbar button i{
+
+transition:.25s;
+
+}
+
+.toolbar button:hover i{
+
+transform:scale(1.15);
+
+}
+
+
+/*==============================
+Sidebar Luxury
+==============================*/
+
+#sidebar{
+
+background:
+
+linear-gradient(
+
+180deg,
+
+#ffffff,
+
+#f8faf8
+
+);
+
+}
+
+
+/*==============================
+Thumbnail Active
+==============================*/
+
+.page-thumb.active{
+
+background:#0b6b3a;
+
+color:white;
+
+box-shadow:
+
+0 10px 25px rgba(11,107,58,.25);
+
+}
+
+
+/*==============================
+Reading Progress Glow
+==============================*/
+
+#readingProgress{
+
+box-shadow:
+
+0 0 12px rgba(255,215,0,.4);
+
+}
+
+
+/*==============================
+Background Pattern
+==============================*/
+
+body{
+
+background-image:
+
+radial-gradient(
+
+rgba(11,107,58,.04) 1px,
+
+transparent 1px
+
+);
+
+background-size:30px 30px;
+
+}
+
+
+/*==============================
+Book Title
+==============================*/
+
+.book-name{
+
+letter-spacing:1px;
+
+font-weight:700;
+
+}
+
+
+/*==============================
+Smooth Page Transition
+==============================*/
+
+.page-turn{
+
+animation:pageMove .45s ease;
+
+}
+
+@keyframes pageMove{
+
+0%{
+
+opacity:.2;
+
+transform:translateX(40px);
+
+}
+
+100%{
+
+opacity:1;
+
+transform:translateX(0);
+
+}
+
+}
+
+
+/*==============================
+Mobile Optimization
+==============================*/
+
+@media(max-width:768px){
+
+.book-container{
+
+width:100%;
+
+padding:10px;
+
+border-radius:12px;
+
+}
+
+#pdfCanvas{
+
+border:6px solid #fff;
+
+}
+
+.toolbar{
+
+padding:0 8px;
+
+overflow-x:auto;
+
+}
+
+}
