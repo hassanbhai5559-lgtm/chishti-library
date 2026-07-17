@@ -565,3 +565,683 @@ audio.play().catch(()=>{});
 }
 
 console.log("PDF Engine Part 2 Loaded");
+/*=========================================
+ CHISHTI READER PRO
+ pdf-engine.js
+ Part 3
+ Storage & Reader Tools
+=========================================*/
+
+/*=========================================
+STORAGE KEY
+=========================================*/
+
+const STORAGE_KEY =
+
+"chishti_reader_" +
+
+btoa(Reader.book);
+
+/*=========================================
+SAVE READING
+=========================================*/
+
+function saveReading(){
+
+const data={
+
+page:Reader.page,
+
+zoom:Reader.zoom,
+
+rotation:Reader.rotation,
+
+time:new Date().toISOString(),
+
+theme:
+
+document.body.className
+
+};
+
+localStorage.setItem(
+
+STORAGE_KEY,
+
+JSON.stringify(data)
+
+);
+
+}
+
+/*=========================================
+RESTORE
+=========================================*/
+
+function restoreReading(){
+
+const data=
+
+localStorage.getItem(
+
+STORAGE_KEY
+
+);
+
+if(!data) return;
+
+try{
+
+const saved=
+
+JSON.parse(data);
+
+Reader.page=
+
+saved.page||1;
+
+Reader.zoom=
+
+saved.zoom||1.4;
+
+Reader.rotation=
+
+saved.rotation||0;
+
+if(saved.theme){
+
+document.body.className=
+
+saved.theme;
+
+}
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+/*=========================================
+AUTO SAVE
+=========================================*/
+
+setInterval(
+
+saveReading,
+
+5000
+
+);
+
+/*=========================================
+FULLSCREEN
+=========================================*/
+
+document
+
+.getElementById(
+
+"fullscreenBtn"
+
+)
+
+.onclick=()=>{
+
+if(
+
+!document.fullscreenElement
+
+){
+
+document
+
+.documentElement
+
+.requestFullscreen();
+
+}else{
+
+document
+
+.exitFullscreen();
+
+}
+
+};
+
+/*=========================================
+DOWNLOAD
+=========================================*/
+
+document
+
+.getElementById(
+
+"downloadBtn"
+
+)
+
+.onclick=()=>{
+
+window.open(
+
+Reader.book,
+
+"_blank"
+
+);
+
+};
+
+/*=========================================
+PRINT
+=========================================*/
+
+document
+
+.getElementById(
+
+"printBtn"
+
+)
+
+.onclick=()=>{
+
+const frame=
+
+document.createElement(
+
+"iframe"
+
+);
+
+frame.style.display="none";
+
+frame.src=Reader.book;
+
+document.body.appendChild(frame);
+
+frame.onload=()=>{
+
+frame.contentWindow.focus();
+
+frame.contentWindow.print();
+
+};
+
+};
+
+/*=========================================
+READING TIMER
+=========================================*/
+
+let seconds=0;
+
+const readingTimer=
+
+document.getElementById(
+
+"readingTime"
+
+);
+
+setInterval(()=>{
+
+seconds++;
+
+const h=
+
+String(
+
+Math.floor(seconds/3600)
+
+).padStart(2,"0");
+
+const m=
+
+String(
+
+Math.floor(
+
+(seconds%3600)/60
+
+)
+
+).padStart(2,"0");
+
+const s=
+
+String(
+
+seconds%60
+
+).padStart(2,"0");
+
+readingTimer.innerHTML=
+
+`${h}:${m}:${s}`;
+
+},1000);
+
+/*=========================================
+PAGE INPUT UPDATE
+=========================================*/
+
+function updatePageBox(){
+
+const box=
+
+document.getElementById(
+
+"pageNumber"
+
+);
+
+if(box){
+
+box.value=
+
+Reader.page;
+
+}
+
+}
+
+/*=========================================
+OVERRIDE
+=========================================*/
+
+const oldQueue=queue;
+
+queue=function(page){
+
+oldQueue(page);
+
+updatePageBox();
+
+};
+
+/*=========================================
+TOAST
+=========================================*/
+
+function toast(text){
+
+const t=
+
+document.getElementById(
+
+"toast"
+
+);
+
+if(!t) return;
+
+t.innerHTML=text;
+
+t.classList.add("show");
+
+setTimeout(()=>{
+
+t.classList.remove(
+
+"show"
+
+);
+
+},2000);
+
+}
+
+/*=========================================
+SAVE BUTTON
+=========================================*/
+
+const saveBtn=
+
+document.getElementById(
+
+"saveReading"
+
+);
+
+if(saveBtn){
+
+saveBtn.onclick=()=>{
+
+saveReading();
+
+toast(
+
+"Reading Progress Saved"
+
+);
+
+};
+
+}
+
+console.log(
+
+"PDF Engine Part 3 Loaded"
+
+);
+/*=========================================
+ CHISHTI READER PRO
+ pdf-engine.js
+ Part 4
+ Touch • Cache • Performance
+=========================================*/
+
+/*=========================================
+PAGE CACHE
+=========================================*/
+
+const PageCache=new Map();
+
+async function getCachedPage(page){
+
+if(PageCache.has(page)){
+
+return PageCache.get(page);
+
+}
+
+const pdfPage=
+
+await Reader.pdf.getPage(page);
+
+PageCache.set(page,pdfPage);
+
+return pdfPage;
+
+}
+
+/*=========================================
+PRELOAD
+=========================================*/
+
+async function preloadPages(){
+
+const next=Reader.page+1;
+
+const prev=Reader.page-1;
+
+if(next<=Reader.pages){
+
+getCachedPage(next);
+
+}
+
+if(prev>=1){
+
+getCachedPage(prev);
+
+}
+
+}
+
+/*=========================================
+OVERRIDE RENDER
+=========================================*/
+
+const oldRenderPage=renderPage;
+
+renderPage=async function(page){
+
+Reader.rendering=true;
+
+const pdfPage=
+
+await getCachedPage(page);
+
+const viewport=
+
+pdfPage.getViewport({
+
+scale:Reader.zoom,
+
+rotation:Reader.rotation
+
+});
+
+canvas.width=viewport.width;
+
+canvas.height=viewport.height;
+
+await pdfPage.render({
+
+canvasContext:ctx,
+
+viewport
+
+}).promise;
+
+Reader.rendering=false;
+
+pageCounter.innerHTML=page;
+
+updateProgress();
+
+hideLoader();
+
+preloadPages();
+
+};
+
+/*=========================================
+DOUBLE CLICK
+=========================================*/
+
+canvas.addEventListener(
+
+"dblclick",
+
+()=>{
+
+if(Reader.zoom<2.2){
+
+Reader.zoom=2.2;
+
+}else{
+
+Reader.zoom=1.4;
+
+}
+
+queue(Reader.page);
+
+});
+
+/*=========================================
+TOUCH SWIPE
+=========================================*/
+
+let touchStartX=0;
+
+let touchEndX=0;
+
+canvas.addEventListener(
+
+"touchstart",
+
+e=>{
+
+touchStartX=
+
+e.changedTouches[0].clientX;
+
+});
+
+canvas.addEventListener(
+
+"touchend",
+
+e=>{
+
+touchEndX=
+
+e.changedTouches[0].clientX;
+
+const diff=
+
+touchStartX-touchEndX;
+
+if(diff>70){
+
+nextPage();
+
+}
+
+if(diff<-70){
+
+previousPage();
+
+}
+
+});
+
+/*=========================================
+MOUSE DRAG
+=========================================*/
+
+let dragStart=0;
+
+canvas.addEventListener(
+
+"mousedown",
+
+e=>{
+
+dragStart=e.clientX;
+
+});
+
+canvas.addEventListener(
+
+"mouseup",
+
+e=>{
+
+const diff=
+
+dragStart-e.clientX;
+
+if(diff>120){
+
+nextPage();
+
+}
+
+if(diff<-120){
+
+previousPage();
+
+}
+
+});
+
+/*=========================================
+AUTO HIDE TOOLBAR
+=========================================*/
+
+const toolbar=
+
+document.querySelector(
+
+".reader-toolbar"
+
+);
+
+let hideTimer;
+
+document.addEventListener(
+
+"mousemove",
+
+()=>{
+
+toolbar.style.opacity="1";
+
+clearTimeout(hideTimer);
+
+hideTimer=setTimeout(()=>{
+
+toolbar.style.opacity=".15";
+
+},3500);
+
+});
+
+/*=========================================
+FPS
+=========================================*/
+
+let lastFrame=performance.now();
+
+function fps(){
+
+const now=performance.now();
+
+const delta=now-lastFrame;
+
+lastFrame=now;
+
+requestAnimationFrame(fps);
+
+}
+
+fps();
+
+/*=========================================
+VISIBILITY
+=========================================*/
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(document.hidden){
+
+saveReading();
+
+}
+
+});
+
+/*=========================================
+BEFORE CLOSE
+=========================================*/
+
+window.addEventListener(
+
+"beforeunload",
+
+()=>{
+
+saveReading();
+
+});
+
+/*=========================================
+BOOK READY
+=========================================*/
+
+window.addEventListener(
+
+"load",
+
+()=>{
+
+console.log(
+
+"Chishti Reader Ready"
+
+);
+
+});
