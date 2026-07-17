@@ -5,90 +5,103 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
 
 <title>Chishti Reader Pro</title>
 
-<meta name="description" content="Professional Reader by Chishti Library">
+<meta name="theme-color"
+content="#0b6b3a">
 
-<meta name="theme-color" content="#0b6b3a">
+<meta name="description"
+content="Official Chishti Reader Pro">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
 
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<link rel="stylesheet" href="reader.css">
+<link rel="stylesheet"
+href="reader.css">
 
 </head>
 
 <body>
 
-<!-- Loader -->
+<!--==========================
+Loader
+===========================-->
 
-<div id="loading">
+<div id="loader">
 
-<div class="loader"></div>
+<div class="loader-book">
+
+<div class="loader-cover"></div>
+
+<div class="loader-pages"></div>
+
+</div>
 
 <h2>Opening Chishti Reader...</h2>
 
-<p>Please wait...</p>
+<p>Please Wait</p>
 
 </div>
 
-<!-- Main Reader -->
+<!--==========================
+Reader
+===========================-->
 
-<div id="readerApp">
+<div id="reader">
 
-<!-- Header -->
+<!--==========================
+Top Bar
+===========================-->
 
 <header class="topbar">
 
-<div class="left-header">
+<div class="logo">
 
-<button id="menuBtn">
+<img src="logo.png"
+alt="Chishti Library">
 
-<i class="fa-solid fa-bars"></i>
+<div>
 
-</button>
+<h2>
 
-<div class="brand">
+Chishti Reader
 
-<i class="fa-solid fa-book-quran"></i>
+</h2>
 
-<span>Chishti Reader Pro</span>
+<p>
 
-</div>
+Digital Islamic Library
 
-</div>
-
-<div class="book-title" id="bookTitle">
-
-Loading Book...
+</p>
 
 </div>
 
-<div class="right-header">
+</div>
+
+<div class="top-actions">
 
 <button id="themeBtn">
 
-<i class="fa-solid fa-moon"></i>
+<i class="fa-solid fa-palette"></i>
 
 </button>
 
-<button id="fullscreenBtn">
+<button id="printBtn">
 
-<i class="fa-solid fa-expand"></i>
-
-</button>
-
-<button id="homeBtn">
-
-<i class="fa-solid fa-house"></i>
+<i class="fa-solid fa-print"></i>
 
 </button>
 
@@ -96,76 +109,132 @@ Loading Book...
 
 </header>
 
-<!-- Content -->
+<!--==========================
+Book Intro
+===========================-->
 
-<div class="content">
+<section
+class="intro-screen">
 
-<!-- Sidebar -->
+<div class="cover-area">
 
-<aside id="sidebar">
+<img
 
-<div class="sidebar-header">
+id="bookCover"
 
-<h3>
+src=""
 
-<i class="fa-solid fa-bookmark"></i>
-
-Library
-
-</h3>
+alt="Book Cover">
 
 </div>
 
-<div class="search-box">
+<h1
 
-<input
+id="bookTitle">
 
-type="text"
+Loading Book...
 
-id="searchInput"
+</h1>
 
-placeholder="Search page...">
+<p
 
-<button id="searchBtn">
+id="bookAuthor">
 
-<i class="fa-solid fa-search"></i>
+Chishti Library
+
+</p>
+
+<button
+
+id="readBook">
+
+<i class="fa-solid fa-book-open"></i>
+
+Read Book
 
 </button>
 
+</section>
+
+<!--==========================
+Reading Area
+===========================-->
+
+<section
+class="reading-area">
+
+<!-- Left Sidebar -->
+
+<aside
+
+class="left-sidebar">
+
+<div
+
+class="sidebar-title">
+
+Navigation
+
 </div>
 
-<div id="thumbnailContainer">
+<div
 
-<!-- JS -->
+id="bookmarkList">
 
 </div>
 
 </aside>
 
-<!-- Reader -->
+<!--====================-->
 
-<main class="reader-area">
+<div
 
-<div class="book-stage">
+class="book-stage">
 
-<div class="book-shadow"></div>
+<div
 
-<div class="book-container">
+class="book-shadow">
 
-<canvas id="pdfCanvas"></canvas>
+</div>
+
+<div
+
+id="bookViewer">
+
+<!-- JS -->
 
 </div>
 
 </div>
 
-</main>
+<!--====================-->
+
+<aside
+
+class="right-sidebar">
+
+<div
+
+class="sidebar-title">
+
+Contents
 
 </div>
-<!-- Bottom Toolbar -->
 
-<footer class="toolbar">
+<div
 
-<div class="toolbar-left">
+id="toc">
+
+</div>
+
+</aside>
+
+</section>
+<!--==================================
+Floating Toolbar
+===================================-->
+
+<div class="reader-toolbar">
 
 <button id="prevPage" title="Previous Page">
 
@@ -179,9 +248,7 @@ placeholder="Search page...">
 
 </button>
 
-</div>
-
-<div class="toolbar-center">
+<div class="toolbar-divider"></div>
 
 <button id="zoomOut" title="Zoom Out">
 
@@ -189,21 +256,13 @@ placeholder="Search page...">
 
 </button>
 
-<div class="page-info">
+<div class="zoom-level">
 
-<input
+<span id="zoomValue">
 
-type="number"
+100%
 
-id="pageNumber"
-
-value="1"
-
-min="1">
-
-<span>/</span>
-
-<span id="totalPages">0</span>
+</span>
 
 </div>
 
@@ -213,15 +272,7 @@ min="1">
 
 </button>
 
-</div>
-
-<div class="toolbar-right">
-
-<button id="bookmarkBtn" title="Bookmark">
-
-<i class="fa-solid fa-bookmark"></i>
-
-</button>
+<div class="toolbar-divider"></div>
 
 <button id="rotateBtn" title="Rotate">
 
@@ -229,9 +280,15 @@ min="1">
 
 </button>
 
-<button id="printBtn" title="Print">
+<button id="fullscreenBtn" title="Fullscreen">
 
-<i class="fa-solid fa-print"></i>
+<i class="fa-solid fa-expand"></i>
+
+</button>
+
+<button id="bookmarkBtn" title="Bookmark">
+
+<i class="fa-solid fa-bookmark"></i>
 
 </button>
 
@@ -243,49 +300,21 @@ min="1">
 
 </div>
 
-</footer>
+<!--==================================
+Reading Information
+===================================-->
 
-<!-- Reading Progress -->
-
-<div class="progress-wrapper">
-
-<div id="readingProgress"></div>
-
-</div>
-
-<!-- Status Bar -->
-
-<div class="status-bar">
+<div class="reader-info">
 
 <div>
 
 <i class="fa-solid fa-book-open"></i>
 
-<span id="statusBook">
-
-Book Loaded
-
-</span>
+Book
 
 </div>
 
 <div>
-
-<i class="fa-solid fa-clock"></i>
-
-<span id="readingTime">
-
-00:00
-
-</span>
-
-</div>
-
-<div>
-
-<i class="fa-solid fa-file-lines"></i>
-
-<span>
 
 Page
 
@@ -295,49 +324,73 @@ Page
 
 </span>
 
-of
+/
 
-<span id="pagesCount">
+<span id="totalPages">
 
 0
 
 </span>
 
+</div>
+
+<div>
+
+Reading Time
+
+<span id="readingTime">
+
+00:00
+
 </span>
 
 </div>
 
 </div>
 
-<!-- Bookmark Popup -->
+<!--==================================
+Progress
+===================================-->
 
-<div id="bookmarkPopup" class="popup">
+<div class="progress-bar">
 
-<div class="popup-box">
+<div id="progressFill">
+
+</div>
+
+</div>
+
+<!--==================================
+Save Reading Popup
+===================================-->
+
+<div id="savePopup"
+
+class="popup">
+
+<div class="popup-card">
 
 <h3>
 
-Save Bookmark
+Save Reading Progress
 
 </h3>
 
-<input
+<p>
 
-type="text"
+Continue later from this page?
 
-id="bookmarkTitle"
-
-placeholder="Bookmark Name">
+</p>
 
 <div class="popup-buttons">
 
-<button id="saveBookmark">
+<button id="saveReading">
 
 Save
 
 </button>
 
-<button id="closeBookmark">
+<button id="cancelSave">
 
 Cancel
 
@@ -349,27 +402,210 @@ Cancel
 
 </div>
 
-<!-- Search Result -->
+<!--==================================
+Bookmark Popup
+===================================-->
 
-<div id="searchResult"></div>
+<div id="bookmarkPopup"
 
-<!-- Scripts -->
+class="popup">
+
+<div class="popup-card">
+
+<h3>
+
+Bookmark
+
+</h3>
+
+<input
+
+type="text"
+
+id="bookmarkName"
+
+placeholder="Bookmark Name">
+
+<div class="popup-buttons">
+
+<button id="bookmarkSave">
+
+Save
+
+</button>
+
+<button id="bookmarkCancel">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!--==================================
+Search Popup
+===================================-->
+
+<div id="searchPopup"
+
+class="popup">
+
+<div class="popup-card">
+
+<h3>
+
+Search Book
+
+</h3>
+
+<input
+
+type="text"
+
+id="searchText"
+
+placeholder="Search...">
+
+<div id="searchResults">
+
+</div>
+
+</div>
+
+</div>
+
+<!--==================================
+Reader Notifications
+===================================-->
+
+<div id="toast">
+
+Saved Successfully
+
+</div>
+<!--==================================
+Chishti AI Floating Button
+===================================-->
+
+<button id="aiButton">
+
+<img src="images/chishti-ai.png"
+
+alt="Chishti AI">
+
+</button>
+
+<!--==================================
+Theme Selector
+===================================-->
+
+<div id="themePanel">
+
+<h3>Reader Themes</h3>
+
+<div class="theme-grid">
+
+<div class="theme-card emerald"
+
+data-theme="emerald">
+
+Royal Emerald
+
+</div>
+
+<div class="theme-card royal"
+
+data-theme="royal">
+
+Royal Black
+
+</div>
+
+<div class="theme-card manuscript"
+
+data-theme="manuscript">
+
+Old Manuscript
+
+</div>
+
+<div class="theme-card midnight"
+
+data-theme="midnight">
+
+Midnight
+
+</div>
+
+</div>
+
+</div>
+
+<!--==================================
+Loading Overlay
+===================================-->
+
+<div id="pageLoader">
+
+<div class="spinner"></div>
+
+<p>Loading Page...</p>
+
+</div>
+
+<!--==================================
+Audio
+===================================-->
+
+<audio id="pageFlipSound">
+
+<source
+
+src="sounds/page-flip.mp3"
+
+type="audio/mpeg">
+
+</audio>
+
+<!--==================================
+PDF.js
+===================================-->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.js"></script>
 
-<script src="pdf-engine.js"></script>
+<!--==================================
+Reader Engine
+===================================-->
 
-<script src="reader.js"></script>
+<script src="js/pdf-engine.js"></script>
 
-<script src="animations.js"></script>
+<script src="js/reader.js"></script>
 
-<script src="thumbnails.js"></script>
+<script src="js/storage.js"></script>
 
-<script src="search.js"></script>
+<script src="js/theme.js"></script>
 
-<script src="bookmarks.js"></script>
+<script src="js/search.js"></script>
 
-<script src="page-engine.js"></script>
+<script src="js/bookmarks.js"></script>
+
+<script src="js/thumbnails.js"></script>
+
+<script src="js/toolbar.js"></script>
+
+<script src="js/animations.js"></script>
+
+<script src="js/flip-engine.js"></script>
+
+<script src="js/page-engine.js"></script>
+
+<script src="js/ai.js"></script>
+
+</div>
 
 </body>
 
