@@ -1,12 +1,28 @@
-/*=====================================
- CHISHTI READER PRO
+/*=========================================
+ CHISHTI READER PRO v5
  Part 1
-======================================*/
+ Foundation
+==========================================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
+}
+
+:root{
+
+--primary:#0B6B3A;
+--secondary:#D4AF37;
+--bg:#F6F7F9;
+--card:#FFFFFF;
+--text:#202020;
+--shadow:0 15px 35px rgba(0,0,0,.12);
+
+--radius:18px;
+
+--transition:.35s;
+
 }
 
 html{
@@ -17,21 +33,773 @@ scroll-behavior:smooth;
 
 body{
 
-font-family:'Poppins',sans-serif;
+font-family:"Poppins",sans-serif;
 
-background:#eef4ef;
+background:var(--bg);
+
+color:var(--text);
 
 overflow:hidden;
 
-color:#1d1d1d;
+}
+
+/*=========================================
+Loader
+==========================================*/
+
+#loader{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100vh;
+
+background:linear-gradient(
+135deg,
+#0B6B3A,
+#084E2A
+);
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:999999;
 
 }
 
-/*==============================
-Loading
-==============================*/
+.loader-book{
 
-#loading{
+position:relative;
+
+width:90px;
+
+height:70px;
+
+}
+
+.loader-cover{
+
+position:absolute;
+
+width:90px;
+
+height:70px;
+
+background:var(--secondary);
+
+border-radius:6px;
+
+animation:coverOpen 1.6s infinite;
+
+transform-origin:left;
+
+}
+
+.loader-pages{
+
+position:absolute;
+
+left:10px;
+
+top:6px;
+
+width:70px;
+
+height:58px;
+
+background:white;
+
+border-radius:4px;
+
+}
+
+#loader h2{
+
+color:white;
+
+margin-top:35px;
+
+font-size:24px;
+
+font-weight:700;
+
+}
+
+#loader p{
+
+margin-top:10px;
+
+color:#dfeee6;
+
+font-size:15px;
+
+}
+
+@keyframes coverOpen{
+
+0%{
+
+transform:rotateY(0deg);
+
+}
+
+50%{
+
+transform:rotateY(-45deg);
+
+}
+
+100%{
+
+transform:rotateY(0deg);
+
+}
+
+}
+
+/*=========================================
+Reader Container
+==========================================*/
+
+#reader{
+
+width:100%;
+
+height:100vh;
+
+display:flex;
+
+flex-direction:column;
+
+}
+
+/*=========================================
+Top Bar
+==========================================*/
+
+.topbar{
+
+height:72px;
+
+padding:0 24px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+background:rgba(255,255,255,.88);
+
+backdrop-filter:blur(18px);
+
+box-shadow:0 2px 12px rgba(0,0,0,.06);
+
+z-index:100;
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.logo img{
+
+width:48px;
+
+height:48px;
+
+border-radius:12px;
+
+object-fit:cover;
+
+}
+
+.logo h2{
+
+font-size:20px;
+
+font-weight:700;
+
+color:var(--primary);
+
+}
+
+.logo p{
+
+font-size:12px;
+
+color:#777;
+
+}
+
+.top-actions{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+}
+
+.top-actions button{
+
+width:46px;
+
+height:46px;
+
+border:none;
+
+border-radius:50%;
+
+background:white;
+
+cursor:pointer;
+
+font-size:18px;
+
+color:var(--primary);
+
+transition:var(--transition);
+
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.top-actions button:hover{
+
+background:var(--primary);
+
+color:white;
+
+transform:translateY(-3px);
+
+}
+
+/*=========================================
+Intro Screen
+==========================================*/
+
+.intro-screen{
+
+position:absolute;
+
+inset:0;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+background:
+linear-gradient(
+135deg,
+#eef8f1,
+#ffffff
+);
+
+z-index:90;
+
+}
+
+.cover-area{
+
+width:260px;
+
+height:360px;
+
+border-radius:18px;
+
+overflow:hidden;
+
+box-shadow:
+0 25px 60px rgba(0,0,0,.18);
+
+transition:.5s;
+
+}
+
+.cover-area img{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+}
+
+#bookTitle{
+
+margin-top:35px;
+
+font-size:34px;
+
+font-weight:700;
+
+text-align:center;
+
+}
+
+#bookAuthor{
+
+margin-top:10px;
+
+font-size:17px;
+
+color:#777;
+
+}
+
+#readBook{
+
+margin-top:35px;
+
+padding:15px 40px;
+
+border:none;
+
+border-radius:50px;
+
+background:linear-gradient(
+135deg,
+var(--primary),
+#157347
+);
+
+color:white;
+
+font-size:18px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.35s;
+
+box-shadow:0 15px 35px rgba(11,107,58,.25);
+
+}
+
+#readBook:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 25px 50px rgba(11,107,58,.35);
+
+}
+
+/*=========================================
+ CHISHTI READER PRO v5
+ Part 2
+ Reading Layout
+==========================================*/
+
+/*=========================================
+Reading Area
+==========================================*/
+
+.reading-area{
+
+flex:1;
+
+display:grid;
+
+grid-template-columns:280px 1fr 280px;
+
+overflow:hidden;
+
+}
+
+/*=========================================
+Sidebars
+==========================================*/
+
+.left-sidebar,
+.right-sidebar{
+
+background:#ffffff;
+
+border-right:1px solid rgba(0,0,0,.06);
+
+overflow:auto;
+
+padding:20px;
+
+}
+
+.right-sidebar{
+
+border-right:none;
+
+border-left:1px solid rgba(0,0,0,.06);
+
+}
+
+.sidebar-title{
+
+font-size:18px;
+
+font-weight:700;
+
+color:var(--primary);
+
+margin-bottom:20px;
+
+padding-bottom:10px;
+
+border-bottom:2px solid rgba(11,107,58,.15);
+
+}
+
+/*=========================================
+Book Stage
+==========================================*/
+
+.book-stage{
+
+position:relative;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+overflow:hidden;
+
+background:
+
+radial-gradient(circle at center,
+#ffffff,
+#eef5f0);
+
+}
+
+/*=========================================
+Book Shadow
+==========================================*/
+
+.book-shadow{
+
+position:absolute;
+
+width:760px;
+
+height:70px;
+
+background:rgba(0,0,0,.18);
+
+filter:blur(30px);
+
+border-radius:50%;
+
+bottom:70px;
+
+}
+
+/*=========================================
+Book Viewer
+==========================================*/
+
+#bookViewer{
+
+position:relative;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+perspective:2500px;
+
+transform-style:preserve-3d;
+
+}
+
+/*=========================================
+Canvas
+==========================================*/
+
+#pdfCanvas{
+
+background:white;
+
+border-radius:12px;
+
+box-shadow:
+
+0 20px 60px rgba(0,0,0,.18);
+
+transition:.4s;
+
+max-width:100%;
+
+max-height:80vh;
+
+}
+
+/*=========================================
+Canvas Hover
+==========================================*/
+
+#pdfCanvas:hover{
+
+transform:
+
+translateY(-4px)
+
+scale(1.01);
+
+}
+
+/*=========================================
+Floating Toolbar
+==========================================*/
+
+.reader-toolbar{
+
+position:absolute;
+
+left:50%;
+
+bottom:25px;
+
+transform:translateX(-50%);
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:12px 18px;
+
+border-radius:60px;
+
+background:rgba(255,255,255,.88);
+
+backdrop-filter:blur(18px);
+
+box-shadow:
+
+0 15px 40px rgba(0,0,0,.15);
+
+z-index:100;
+
+}
+
+/*=========================================
+Toolbar Buttons
+==========================================*/
+
+.reader-toolbar button{
+
+width:46px;
+
+height:46px;
+
+border:none;
+
+border-radius:50%;
+
+background:white;
+
+cursor:pointer;
+
+font-size:18px;
+
+color:var(--primary);
+
+transition:.3s;
+
+box-shadow:
+
+0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.reader-toolbar button:hover{
+
+background:var(--primary);
+
+color:white;
+
+transform:translateY(-3px);
+
+}
+
+/*=========================================
+Divider
+==========================================*/
+
+.toolbar-divider{
+
+width:1px;
+
+height:34px;
+
+background:rgba(0,0,0,.08);
+
+}
+
+/*=========================================
+Zoom
+==========================================*/
+
+.zoom-level{
+
+min-width:70px;
+
+text-align:center;
+
+font-weight:700;
+
+font-size:15px;
+
+}
+
+/*=========================================
+Progress
+==========================================*/
+
+.progress-bar{
+
+position:absolute;
+
+bottom:0;
+
+left:0;
+
+width:100%;
+
+height:5px;
+
+background:#dcdcdc;
+
+overflow:hidden;
+
+}
+
+#progressFill{
+
+width:0;
+
+height:100%;
+
+background:linear-gradient(
+90deg,
+var(--primary),
+var(--secondary)
+);
+
+transition:.35s;
+
+}
+
+/*=========================================
+Reader Info
+==========================================*/
+
+.reader-info{
+
+position:absolute;
+
+top:90px;
+
+right:20px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
+
+padding:16px;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.92);
+
+backdrop-filter:blur(12px);
+
+box-shadow:
+
+0 10px 25px rgba(0,0,0,.12);
+
+font-size:14px;
+
+}
+
+.reader-info div{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+}
+
+/*=========================================
+Responsive
+==========================================*/
+
+@media(max-width:1100px){
+
+.reading-area{
+
+grid-template-columns:1fr;
+
+}
+
+.left-sidebar,
+.right-sidebar{
+
+display:none;
+
+}
+
+.reader-info{
+
+display:none;
+
+}
+
+}
+
+/*=========================================
+ CHISHTI READER PRO v5
+ Part 3
+ Popup • Theme • AI • Animation
+==========================================*/
+
+/*=========================================
+Popup
+==========================================*/
+
+.popup{
 
 position:fixed;
 
@@ -43,709 +811,417 @@ width:100%;
 
 height:100%;
 
-background:linear-gradient(135deg,#0f5132,#1b5e20);
-
 display:flex;
-
-flex-direction:column;
 
 justify-content:center;
 
 align-items:center;
 
+background:rgba(0,0,0,.45);
+
+backdrop-filter:blur(8px);
+
+visibility:hidden;
+
+opacity:0;
+
+transition:.35s;
+
 z-index:9999;
-
-color:white;
-
-transition:.5s;
 
 }
 
-.loader{
+.popup.active{
 
-width:75px;
+visibility:visible;
 
-height:75px;
+opacity:1;
 
-border:6px solid rgba(255,255,255,.25);
+}
 
-border-top:6px solid #ffd54f;
+.popup-card{
 
-border-radius:50%;
+width:420px;
 
-animation:spin 1s linear infinite;
+max-width:92%;
+
+background:#fff;
+
+border-radius:22px;
+
+padding:30px;
+
+box-shadow:
+
+0 30px 70px rgba(0,0,0,.25);
+
+animation:popupShow .35s;
+
+}
+
+.popup-card h3{
+
+font-size:24px;
+
+margin-bottom:18px;
+
+color:var(--primary);
+
+}
+
+.popup-card p{
 
 margin-bottom:20px;
 
-}
+color:#666;
 
-@keyframes spin{
-
-100%{
-
-transform:rotate(360deg);
+line-height:1.6;
 
 }
 
-}
+.popup-card input{
 
-/*==============================
-Top Bar
-==============================*/
+width:100%;
 
-.topbar{
+padding:14px 16px;
 
-height:70px;
+border:2px solid #ddd;
 
-background:linear-gradient(135deg,#0b6b3a,#155724);
+border-radius:14px;
 
-display:flex;
+font-size:15px;
 
-align-items:center;
-
-justify-content:space-between;
-
-padding:0 25px;
-
-color:#fff;
-
-box-shadow:0 4px 18px rgba(0,0,0,.25);
-
-z-index:100;
-
-position:relative;
-
-}
-
-.logo{
-
-display:flex;
-
-align-items:center;
-
-gap:12px;
-
-font-size:22px;
-
-font-weight:700;
-
-}
-
-.logo i{
-
-color:#ffd54f;
-
-font-size:28px;
-
-}
-
-.book-name{
-
-font-size:18px;
-
-font-weight:600;
-
-white-space:nowrap;
-
-overflow:hidden;
-
-text-overflow:ellipsis;
-
-max-width:45%;
-
-text-align:center;
-
-}
-
-.top-buttons{
-
-display:flex;
-
-gap:10px;
-
-}
-
-.top-buttons button{
-
-width:45px;
-
-height:45px;
-
-border:none;
-
-border-radius:12px;
-
-background:white;
-
-color:#0b6b3a;
-
-cursor:pointer;
-
-font-size:18px;
+outline:none;
 
 transition:.3s;
 
 }
 
-.top-buttons button:hover{
+.popup-card input:focus{
 
-transform:translateY(-2px);
-
-background:#ffd54f;
+border-color:var(--primary);
 
 }
 
-/*==============================
-Sidebar
-==============================*/
+.popup-buttons{
 
-#sidebar{
-
-position:absolute;
-
-top:70px;
-
-left:0;
-
-width:250px;
-
-height:calc(100vh - 70px);
-
-background:#ffffff;
-
-border-right:1px solid #ddd;
-
-overflow-y:auto;
-
-transition:.35s;
-
-box-shadow:4px 0 12px rgba(0,0,0,.08);
-
-}
-
-.sidebar-title{
-
-padding:18px;
-
-font-size:18px;
-
-font-weight:700;
-
-color:#0b6b3a;
-
-border-bottom:1px solid #eee;
-
-background:#f7f7f7;
-
-}
-
-#thumbnailContainer{
-
-padding:15px;
+margin-top:25px;
 
 display:flex;
 
-flex-direction:column;
+justify-content:flex-end;
 
-gap:15px;
-
-}
-
-/*==============================
-Reader Area
-==============================*/
-
-.reader-area{
-
-margin-left:250px;
-
-height:calc(100vh - 130px);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-background:
-
-linear-gradient(
-
-135deg,
-
-#eef5ef,
-
-#dde9df
-
-);
-
-overflow:auto;
-
-padding:35px;
+gap:12px;
 
 }
 
-/*==============================
-Book
-==============================*/
+.popup-buttons button{
 
-.book-container{
-
-background:white;
-
-padding:25px;
-
-border-radius:18px;
-
-box-shadow:
-
-0 15px 35px rgba(0,0,0,.18);
-
-transition:.35s;
-
-max-width:900px;
-
-}
-
-.book-container:hover{
-
-transform:translateY(-5px);
-
-box-shadow:
-
-0 25px 55px rgba(0,0,0,.25);
-
-}
-
-#pdfCanvas{
-
-display:block;
-
-max-width:100%;
-
-height:auto;
-
-border-radius:10px;
-
-background:white;
-
-}
-
-/*==============================
-Progress
-==============================*/
-
-.progress{
-
-height:5px;
-
-background:#d8d8d8;
-
-width:100%;
-
-}
-
-#readingProgress{
-
-height:100%;
-
-width:0%;
-
-background:
-
-linear-gradient(
-
-90deg,
-
-#0b6b3a,
-
-#ffd54f
-
-);
-
-transition:.25s;
-
-}
-
-/*==============================
-Toolbar
-==============================*/
-
-.toolbar{
-
-height:55px;
-
-background:white;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-gap:15px;
-
-box-shadow:0 -4px 12px rgba(0,0,0,.08);
-
-}
-
-.toolbar button{
-
-width:45px;
-
-height:45px;
+padding:12px 26px;
 
 border:none;
 
 border-radius:12px;
 
-background:#0b6b3a;
+cursor:pointer;
 
-color:white;
+font-weight:600;
+
+background:var(--primary);
+
+color:#fff;
+
+transition:.3s;
+
+}
+
+.popup-buttons button:hover{
+
+transform:translateY(-2px);
+
+}
+
+/*=========================================
+Theme Panel
+==========================================*/
+
+#themePanel{
+
+position:fixed;
+
+right:25px;
+
+top:90px;
+
+width:330px;
+
+background:#fff;
+
+border-radius:22px;
+
+padding:22px;
+
+box-shadow:
+
+0 25px 60px rgba(0,0,0,.18);
+
+display:none;
+
+z-index:900;
+
+}
+
+#themePanel h3{
+
+margin-bottom:18px;
+
+color:var(--primary);
+
+}
+
+.theme-grid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+
+}
+
+.theme-card{
+
+padding:18px;
+
+border-radius:16px;
 
 cursor:pointer;
 
-font-size:18px;
-
-transition:.25s;
-
-}
-
-.toolbar button:hover{
-
-background:#ffd54f;
-
-color:#111;
-
-transform:translateY(-3px);
-
-}
-
-.page-box{
-
 font-weight:700;
-
-font-size:18px;
-
-min-width:90px;
 
 text-align:center;
 
-}
-/*=====================================
- CHISHTI READER PRO
- Part 3
- Premium Book Animation
-======================================*/
+transition:.3s;
 
-
-/*==============================
-Book Depth
-==============================*/
-
-.book-container{
-
-position:relative;
-
-perspective:2000px;
-
-transform-style:preserve-3d;
+border:2px solid transparent;
 
 }
 
+.theme-card:hover{
 
-/*==============================
-Book Spine
-==============================*/
+transform:translateY(-4px);
 
-.book-container::after{
-
-content:"";
-
-position:absolute;
-
-top:0;
-
-left:-12px;
-
-width:12px;
-
-height:100%;
-
-background:linear-gradient(
-
-180deg,
-
-#6d4c41,
-
-#4e342e,
-
-#6d4c41
-
-);
-
-border-radius:8px 0 0 8px;
-
-box-shadow:
-
-inset -2px 0 4px rgba(255,255,255,.15),
-
-2px 0 8px rgba(0,0,0,.25);
+border-color:var(--secondary);
 
 }
 
+.theme-card.emerald{
 
-/*==============================
-Golden Border
-==============================*/
+background:#0B6B3A;
 
-.book-container{
-
-border:4px solid rgba(212,175,55,.35);
+color:#fff;
 
 }
 
+.theme-card.royal{
 
-/*==============================
-Paper Glow
-==============================*/
+background:#1B1B1B;
 
-.book-container{
-
-box-shadow:
-
-0 25px 60px rgba(0,0,0,.25),
-
-0 0 40px rgba(212,175,55,.15);
+color:#FFD700;
 
 }
 
+.theme-card.manuscript{
 
-/*==============================
-Page Effect
-==============================*/
+background:#E9DFC7;
 
-#pdfCanvas{
-
-border-radius:8px;
-
-background:white;
-
-box-shadow:
-
-0 8px 18px rgba(0,0,0,.12);
-
-transition:
-
-transform .35s,
-
-box-shadow .35s;
+color:#5B4636;
 
 }
 
-#pdfCanvas:hover{
+.theme-card.midnight{
 
-transform:scale(1.01);
+background:#0D1B2A;
 
-box-shadow:
-
-0 15px 35px rgba(0,0,0,.22);
+color:#D6F5E3;
 
 }
 
+/*=========================================
+Toast
+==========================================*/
 
-/*==============================
-Page Turn Animation
-==============================*/
+#toast{
 
-.page-turn{
+position:fixed;
 
-animation:pageTurn .45s ease;
+bottom:30px;
 
-transform-origin:left center;
+left:50%;
 
-}
+transform:translateX(-50%);
 
-@keyframes pageTurn{
+padding:15px 28px;
 
-0%{
+background:#0B6B3A;
 
-transform:
+color:#fff;
 
-rotateY(0deg)
+border-radius:50px;
 
-scale(1);
-
-opacity:1;
-
-}
-
-40%{
-
-transform:
-
-rotateY(-18deg)
-
-scale(.98);
-
-opacity:.7;
-
-}
-
-100%{
-
-transform:
-
-rotateY(0deg)
-
-scale(1);
-
-opacity:1;
-
-}
-
-}
-
-
-/*==============================
-Book Open Effect
-==============================*/
-
-.book-open{
-
-animation:bookOpening 1s ease;
-
-}
-
-@keyframes bookOpening{
-
-0%{
-
-transform:
-
-scale(.85)
-
-rotateX(18deg);
+font-weight:600;
 
 opacity:0;
 
+visibility:hidden;
+
+transition:.35s;
+
+z-index:99999;
+
 }
 
-100%{
-
-transform:
-
-scale(1)
-
-rotateX(0);
+#toast.show{
 
 opacity:1;
 
-}
+visibility:visible;
 
 }
 
+/*=========================================
+AI Button
+==========================================*/
 
-/*==============================
-Floating Book
-==============================*/
+#aiButton{
 
-.book-container{
+position:fixed;
 
-animation:floating 5s ease-in-out infinite;
+right:28px;
 
-}
+bottom:35px;
 
-@keyframes floating{
+width:72px;
 
-0%{
+height:72px;
 
-transform:translateY(0);
+border:none;
 
-}
+border-radius:50%;
 
-50%{
+cursor:pointer;
 
-transform:translateY(-6px);
-
-}
-
-100%{
-
-transform:translateY(0);
-
-}
-
-}
-
-
-/*==============================
-Toolbar Glass Effect
-==============================*/
-
-.toolbar{
-
-backdrop-filter:blur(12px);
-
-background:rgba(255,255,255,.88);
-
-}
-
-
-/*==============================
-Premium Buttons
-==============================*/
-
-.toolbar button{
-
-background:
-
-linear-gradient(
+background:linear-gradient(
 
 135deg,
 
-#0b6b3a,
+#0B6B3A,
 
 #157347
 
 );
 
-}
+box-shadow:
 
-.toolbar button:hover{
+0 18px 45px rgba(11,107,58,.35);
 
-background:
+transition:.35s;
 
-linear-gradient(
+z-index:999;
 
-135deg,
-
-#d4af37,
-
-#ffd54f
-
-);
+overflow:hidden;
 
 }
 
+#aiButton img{
 
-/*==============================
-Sidebar Animation
-==============================*/
+width:100%;
 
-.page-thumb{
+height:100%;
 
-animation:thumbFade .35s ease;
+object-fit:cover;
 
 }
 
-@keyframes thumbFade{
+#aiButton:hover{
+
+transform:scale(1.08);
+
+}
+
+/*=========================================
+Search Result
+==========================================*/
+
+#searchResults{
+
+margin-top:20px;
+
+max-height:280px;
+
+overflow:auto;
+
+}
+
+.search-item{
+
+padding:12px;
+
+border-radius:12px;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+.search-item:hover{
+
+background:#eef8f1;
+
+}
+
+/*=========================================
+Bookmark Card
+==========================================*/
+
+.bookmark-card{
+
+padding:14px;
+
+margin-bottom:14px;
+
+background:#fff;
+
+border-radius:16px;
+
+box-shadow:
+
+0 8px 20px rgba(0,0,0,.08);
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.bookmark-card:hover{
+
+transform:translateY(-3px);
+
+}
+
+/*=========================================
+Animation
+==========================================*/
+
+@keyframes popupShow{
 
 from{
 
 opacity:0;
 
-transform:translateX(-20px);
+transform:translateY(30px) scale(.95);
 
 }
 
@@ -753,112 +1229,221 @@ to{
 
 opacity:1;
 
-transform:translateX(0);
+transform:translateY(0) scale(1);
 
 }
 
 }
 
+@keyframes fadeUp{
 
-/*==============================
-Reader Background
-==============================*/
+from{
 
-.reader-area{
+opacity:0;
 
-background:
-
-radial-gradient(circle at center,
-
-#f9faf8,
-
-#dde8de);
+transform:translateY(20px);
 
 }
 
+to{
 
-/*==============================
-Book Glow
-==============================*/
+opacity:1;
 
-.book-container:hover{
+transform:translateY(0);
+
+}
+
+}
+
+@keyframes glow{
+
+0%{
 
 box-shadow:
 
-0 35px 70px rgba(0,0,0,.28),
-
-0 0 50px rgba(212,175,55,.25);
+0 0 0 rgba(212,175,55,0);
 
 }
 
+50%{
 
-/*==============================
-Signature
-==============================*/
+box-shadow:
 
-.book-container::before{
-
-content:"Chishti Library";
-
-position:absolute;
-
-bottom:15px;
-
-right:20px;
-
-font-size:11px;
-
-letter-spacing:3px;
-
-color:rgba(0,0,0,.08);
-
-font-weight:700;
-
-pointer-events:none;
+0 0 35px rgba(212,175,55,.45);
 
 }
-/*=====================================
- CHISHTI READER PRO
+
+100%{
+
+box-shadow:
+
+0 0 0 rgba(212,175,55,0);
+
+}
+
+}
+
+/*=========================================
+Reader Entrance
+==========================================*/
+
+.book-stage{
+
+animation:fadeUp .7s ease;
+
+}
+
+#bookViewer{
+
+animation:glow 3s infinite;
+
+}
+
+/*=========================================
+ CHISHTI READER PRO v5
  Part 4
- Luxury Book Effects
-======================================*/
+ Book Effects • Paper • Themes
+==========================================*/
 
-
-/*==============================
-Luxury Paper Texture
-==============================*/
+/*=========================================
+Book Container
+==========================================*/
 
 .book-container{
 
-background:
-linear-gradient(180deg,#fffef9,#f8f5ec);
-
-background-image:
-
-radial-gradient(circle at 20% 20%,
-rgba(255,255,255,.9),
-transparent 60%),
-
-radial-gradient(circle at 80% 80%,
-rgba(255,255,255,.4),
-transparent 50%);
-
-}
-
-
-/*==============================
-Book Light
-==============================*/
-
-.reader-area{
-
 position:relative;
+
+padding:22px;
+
+background:linear-gradient(
+180deg,
+#fffefb,
+#f8f4ea
+);
+
+border-radius:16px;
+
+box-shadow:
+
+0 30px 70px rgba(0,0,0,.18);
 
 overflow:hidden;
 
+transition:.45s;
+
 }
 
-.reader-area::before{
+/*=========================================
+Book Spine
+==========================================*/
+
+.book-container::before{
+
+content:"";
+
+position:absolute;
+
+left:0;
+
+top:0;
+
+width:22px;
+
+height:100%;
+
+background:linear-gradient(
+
+90deg,
+
+rgba(0,0,0,.28),
+
+rgba(255,255,255,.08)
+
+);
+
+}
+
+/*=========================================
+Paper Texture
+==========================================*/
+
+.book-container::after{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+background-image:
+
+radial-gradient(
+
+rgba(0,0,0,.02) 1px,
+
+transparent 1px
+
+);
+
+background-size:14px 14px;
+
+pointer-events:none;
+
+opacity:.55;
+
+}
+
+/*=========================================
+Canvas
+==========================================*/
+
+#pdfCanvas{
+
+border-radius:10px;
+
+background:white;
+
+box-shadow:
+
+0 10px 30px rgba(0,0,0,.12);
+
+}
+
+/*=========================================
+Book Hover
+==========================================*/
+
+.book-container:hover{
+
+transform:
+
+translateY(-6px)
+
+rotateX(1deg)
+
+rotateY(-1deg);
+
+}
+
+/*=========================================
+Page Glow
+==========================================*/
+
+#pdfCanvas:hover{
+
+box-shadow:
+
+0 0 35px rgba(212,175,55,.25),
+
+0 20px 40px rgba(0,0,0,.16);
+
+}
+
+/*=========================================
+Book Light
+==========================================*/
+
+.book-stage::before{
 
 content:"";
 
@@ -874,13 +1459,13 @@ width:900px;
 
 height:900px;
 
-border-radius:50%;
+background:
 
-background:radial-gradient(
+radial-gradient(
 
 circle,
 
-rgba(255,255,255,.65),
+rgba(255,255,255,.75),
 
 transparent 70%
 
@@ -890,20 +1475,11 @@ pointer-events:none;
 
 }
 
+/*=========================================
+Fold Corner
+==========================================*/
 
-/*==============================
-Folded Corner
-==============================*/
-
-.book-container{
-
-overflow:hidden;
-
-}
-
-.book-container::after{
-
-content:"";
+.fold-corner{
 
 position:absolute;
 
@@ -921,101 +1497,21 @@ linear-gradient(
 
 135deg,
 
-transparent 50%,
+transparent 48%,
 
-rgba(220,220,220,.9) 50%
-
-);
-
-box-shadow:
-
--5px 5px 12px rgba(0,0,0,.15);
-
-}
-
-
-/*==============================
-Paper Lines
-==============================*/
-
-#pdfCanvas{
-
-background-image:
-
-linear-gradient(
-
-transparent 97%,
-
-rgba(0,0,0,.03) 100%
+rgba(0,0,0,.12) 50%
 
 );
 
-}
-
-
-/*==============================
-Luxury Border
-==============================*/
-
-.book-container{
-
-outline:2px solid rgba(212,175,55,.2);
-
-outline-offset:8px;
+pointer-events:none;
 
 }
 
+/*=========================================
+Reader Background
+==========================================*/
 
-/*==============================
-Soft Shadow
-==============================*/
-
-.book-container{
-
-filter:
-
-drop-shadow(0 30px 40px rgba(0,0,0,.18));
-
-}
-
-
-/*==============================
-Book Hover
-==============================*/
-
-.book-container:hover{
-
-transform:
-
-translateY(-6px)
-
-scale(1.01);
-
-}
-
-
-/*==============================
-Toolbar Glass
-==============================*/
-
-.toolbar{
-
-background:rgba(255,255,255,.78);
-
-backdrop-filter:blur(15px);
-
-border-top:1px solid rgba(255,255,255,.5);
-
-}
-
-
-/*==============================
-Golden Icons
-==============================*/
-
-.toolbar button:hover{
-
-color:#111;
+.book-stage{
 
 background:
 
@@ -1023,161 +1519,317 @@ linear-gradient(
 
 135deg,
 
-#d4af37,
+#eef7f1,
 
-#ffdf6b
-
-);
-
-}
-
-
-/*==============================
-Sidebar Card
-==============================*/
-
-.page-thumb{
-
-background:#fff;
-
-box-shadow:
-
-0 8px 20px rgba(0,0,0,.08);
-
-}
-
-
-/*==============================
-Thumbnail Hover
-==============================*/
-
-.page-thumb:hover{
-
-transform:
-
-scale(1.04)
-
-translateX(6px);
-
-}
-
-
-/*==============================
-Premium Progress
-==============================*/
-
-#readingProgress{
-
-background:
-
-linear-gradient(
-
-90deg,
-
-#0b6b3a,
-
-#3cb371,
-
-#ffd54f
+#fefefe
 
 );
 
 }
 
+/*=========================================
+EMERALD THEME
+==========================================*/
 
-/*==============================
-Selection
-==============================*/
+body.emerald{
 
-::selection{
+--primary:#0B6B3A;
 
-background:#0b6b3a;
+--secondary:#D4AF37;
+
+--bg:#EEF7F1;
+
+}
+
+/*=========================================
+ROYAL BLACK
+==========================================*/
+
+body.royal{
+
+--primary:#111111;
+
+--secondary:#FFD700;
+
+--bg:#202020;
+
+color:#fff;
+
+}
+
+body.royal .topbar,
+
+body.royal .left-sidebar,
+
+body.royal .right-sidebar{
+
+background:#2A2A2A;
+
+color:#fff;
+
+}
+
+/*=========================================
+MANUSCRIPT
+==========================================*/
+
+body.manuscript{
+
+--primary:#6E4F2A;
+
+--secondary:#A66A2B;
+
+--bg:#EFE5CC;
+
+}
+
+body.manuscript .book-container{
+
+background:#F8EFD8;
+
+}
+
+/*=========================================
+MIDNIGHT
+==========================================*/
+
+body.midnight{
+
+--primary:#12304C;
+
+--secondary:#55C89A;
+
+--bg:#08141F;
+
+color:#fff;
+
+}
+
+body.midnight .topbar,
+
+body.midnight .left-sidebar,
+
+body.midnight .right-sidebar{
+
+background:#102332;
 
 color:white;
 
 }
 
+/*=========================================
+Smooth Theme
+==========================================*/
 
-/*==============================
-Focus
-==============================*/
+body,
 
-button:focus{
+.topbar,
 
-outline:none;
+.left-sidebar,
 
-box-shadow:
+.right-sidebar,
 
-0 0 0 4px rgba(21,115,71,.25);
+.book-container,
 
-}
-
-
-/*==============================
-Smooth Everything
-==============================*/
-
-*{
+.reader-toolbar{
 
 transition:
 
-background .3s,
+background .4s,
 
-color .3s,
+color .4s,
 
-box-shadow .3s,
-
-transform .3s;
-
-}
-/*=====================================
- CHISHTI READER PRO
- Part 5
- Signature Premium Effects
-======================================*/
-
-
-/*==============================
-Book Stage
-==============================*/
-
-.reader-area{
-
-perspective:2500px;
+box-shadow .4s;
 
 }
 
+/*=========================================
+Floating Animation
+==========================================*/
 
-/*==============================
-Book 3D
-==============================*/
+@keyframes floatingBook{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-5px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
 
 .book-container{
 
-transform-style:preserve-3d;
-
-transition:transform .6s ease;
+animation:floatingBook 6s ease-in-out infinite;
 
 }
 
-.book-container:hover{
+/*=========================================
+ CHISHTI READER PRO v5
+ Part 5
+ Signature Animation
+==========================================*/
+
+/*=========================================
+Book Opening Animation
+==========================================*/
+
+.book-opening{
+
+animation:bookOpening 1.2s cubic-bezier(.22,.61,.36,1) forwards;
+
+}
+
+@keyframes bookOpening{
+
+0%{
+
+opacity:0;
 
 transform:
 
-rotateX(2deg)
+translateY(120px)
 
-rotateY(-2deg)
+scale(.55)
 
-translateY(-8px);
+rotateY(-45deg);
 
 }
 
+50%{
 
-/*==============================
-Page Shine
-==============================*/
+opacity:1;
 
-.book-container::before{
+transform:
+
+translateY(-10px)
+
+scale(1.05)
+
+rotateY(8deg);
+
+}
+
+100%{
+
+opacity:1;
+
+transform:
+
+translateY(0)
+
+scale(1)
+
+rotateY(0deg);
+
+}
+
+}
+
+/*=========================================
+Book Closing
+==========================================*/
+
+.book-closing{
+
+animation:bookClosing .9s ease forwards;
+
+}
+
+@keyframes bookClosing{
+
+0%{
+
+opacity:1;
+
+transform:scale(1);
+
+}
+
+100%{
+
+opacity:0;
+
+transform:
+
+translateY(100px)
+
+scale(.6)
+
+rotateY(35deg);
+
+}
+
+}
+
+/*=========================================
+Page Flip
+==========================================*/
+
+.page-flip{
+
+transform-origin:left center;
+
+animation:pageFlip .45s ease;
+
+}
+
+@keyframes pageFlip{
+
+0%{
+
+transform:
+
+perspective(1800px)
+
+rotateY(0);
+
+}
+
+50%{
+
+transform:
+
+perspective(1800px)
+
+rotateY(-18deg);
+
+}
+
+100%{
+
+transform:
+
+perspective(1800px)
+
+rotateY(0);
+
+}
+
+}
+
+/*=========================================
+Golden Sweep
+==========================================*/
+
+.book-container{
+
+overflow:hidden;
+
+}
+
+.book-container::after{
 
 content:"";
 
@@ -1185,7 +1837,7 @@ position:absolute;
 
 top:0;
 
-left:-120%;
+left:-150%;
 
 width:70%;
 
@@ -1211,272 +1863,252 @@ pointer-events:none;
 
 }
 
-.book-container:hover::before{
+.book-opening::after{
 
-animation:shine 1.2s linear;
+animation:goldSweep 1.4s linear;
 
 }
 
-@keyframes shine{
+@keyframes goldSweep{
 
 0%{
+
+left:-150%;
+
+}
+
+100%{
+
+left:180%;
+
+}
+
+}
+
+/*=========================================
+Read Button
+==========================================*/
+
+#readBook{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+#readBook::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
 
 left:-120%;
 
-}
+width:100%;
 
-100%{
-
-left:160%;
-
-}
-
-}
-
-
-/*==============================
-Canvas Border
-==============================*/
-
-#pdfCanvas{
-
-border:12px solid #ffffff;
-
-outline:1px solid rgba(212,175,55,.3);
-
-}
-
-
-/*==============================
-Luxury Shadow
-==============================*/
-
-#pdfCanvas{
-
-box-shadow:
-
-0 15px 35px rgba(0,0,0,.20),
-
-inset 0 0 8px rgba(0,0,0,.06);
-
-}
-
-
-/*==============================
-Book Breathing
-==============================*/
-
-.book-container{
-
-animation:breath 6s ease-in-out infinite;
-
-}
-
-@keyframes breath{
-
-0%{
-
-transform:scale(1);
-
-}
-
-50%{
-
-transform:scale(1.005);
-
-}
-
-100%{
-
-transform:scale(1);
-
-}
-
-}
-
-
-/*==============================
-Toolbar Gradient
-==============================*/
-
-.toolbar{
+height:100%;
 
 background:
 
 linear-gradient(
 
-180deg,
+90deg,
 
-rgba(255,255,255,.92),
+transparent,
 
-rgba(245,245,245,.92)
+rgba(255,255,255,.4),
 
-);
-
-}
-
-
-/*==============================
-Toolbar Icons
-==============================*/
-
-.toolbar button i{
-
-transition:.25s;
-
-}
-
-.toolbar button:hover i{
-
-transform:scale(1.15);
-
-}
-
-
-/*==============================
-Sidebar Luxury
-==============================*/
-
-#sidebar{
-
-background:
-
-linear-gradient(
-
-180deg,
-
-#ffffff,
-
-#f8faf8
+transparent
 
 );
 
 }
 
+#readBook:hover::before{
 
-/*==============================
-Thumbnail Active
-==============================*/
-
-.page-thumb.active{
-
-background:#0b6b3a;
-
-color:white;
-
-box-shadow:
-
-0 10px 25px rgba(11,107,58,.25);
+animation:buttonSweep .7s linear;
 
 }
 
-
-/*==============================
-Reading Progress Glow
-==============================*/
-
-#readingProgress{
-
-box-shadow:
-
-0 0 12px rgba(255,215,0,.4);
-
-}
-
-
-/*==============================
-Background Pattern
-==============================*/
-
-body{
-
-background-image:
-
-radial-gradient(
-
-rgba(11,107,58,.04) 1px,
-
-transparent 1px
-
-);
-
-background-size:30px 30px;
-
-}
-
-
-/*==============================
-Book Title
-==============================*/
-
-.book-name{
-
-letter-spacing:1px;
-
-font-weight:700;
-
-}
-
-
-/*==============================
-Smooth Page Transition
-==============================*/
-
-.page-turn{
-
-animation:pageMove .45s ease;
-
-}
-
-@keyframes pageMove{
-
-0%{
-
-opacity:.2;
-
-transform:translateX(40px);
-
-}
+@keyframes buttonSweep{
 
 100%{
 
-opacity:1;
-
-transform:translateX(0);
+left:150%;
 
 }
 
 }
 
+/*=========================================
+Toolbar Glass
+==========================================*/
 
-/*==============================
-Mobile Optimization
-==============================*/
+.reader-toolbar{
+
+border:1px solid rgba(255,255,255,.25);
+
+backdrop-filter:blur(25px);
+
+}
+
+/*=========================================
+Scrollbar
+==========================================*/
+
+::-webkit-scrollbar{
+
+width:8px;
+
+height:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:var(--primary);
+
+border-radius:20px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:transparent;
+
+}
+
+/*=========================================
+Selection
+==========================================*/
+
+::selection{
+
+background:var(--secondary);
+
+color:#fff;
+
+}
+
+/*=========================================
+Responsive
+==========================================*/
 
 @media(max-width:768px){
 
-.book-container{
+.topbar{
 
-width:100%;
+height:64px;
+
+padding:0 14px;
+
+}
+
+.logo h2{
+
+font-size:17px;
+
+}
+
+.logo p{
+
+display:none;
+
+}
+
+.cover-area{
+
+width:180px;
+
+height:250px;
+
+}
+
+#bookTitle{
+
+font-size:24px;
+
+padding:0 15px;
+
+}
+
+#readBook{
+
+padding:13px 28px;
+
+font-size:16px;
+
+}
+
+.reader-toolbar{
+
+width:95%;
+
+bottom:15px;
 
 padding:10px;
 
-border-radius:12px;
-
-}
-
-#pdfCanvas{
-
-border:6px solid #fff;
-
-}
-
-.toolbar{
-
-padding:0 8px;
+gap:6px;
 
 overflow-x:auto;
 
 }
+
+.reader-toolbar button{
+
+width:42px;
+
+height:42px;
+
+font-size:16px;
+
+}
+
+.book-shadow{
+
+width:320px;
+
+}
+
+#aiButton{
+
+width:58px;
+
+height:58px;
+
+bottom:90px;
+
+right:18px;
+
+}
+
+}
+
+/*=========================================
+Signature
+==========================================*/
+
+body::after{
+
+content:"Chishti Reader Pro";
+
+position:fixed;
+
+bottom:12px;
+
+right:18px;
+
+font-size:11px;
+
+letter-spacing:2px;
+
+color:rgba(0,0,0,.12);
+
+pointer-events:none;
+
+user-select:none;
 
 }
