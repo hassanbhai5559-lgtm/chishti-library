@@ -1,32 +1,103 @@
-/* ==========================
-   CHISHTI LIBRARY READER PRO
-   reader.css
-========================== */
+/*=====================================
+ CHISHTI READER PRO
+ Part 1
+======================================*/
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:"Poppins",sans-serif;
+}
+
+html{
+
+scroll-behavior:smooth;
+
 }
 
 body{
 
-background:#1b1b1b;
+font-family:'Poppins',sans-serif;
+
+background:#eef4ef;
 
 overflow:hidden;
 
-transition:.4s;
+color:#1d1d1d;
 
 }
 
-/* HEADER */
+/*==============================
+Loading
+==============================*/
 
-.reader-header{
+#loading{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:linear-gradient(135deg,#0f5132,#1b5e20);
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+z-index:9999;
+
+color:white;
+
+transition:.5s;
+
+}
+
+.loader{
+
+width:75px;
+
+height:75px;
+
+border:6px solid rgba(255,255,255,.25);
+
+border-top:6px solid #ffd54f;
+
+border-radius:50%;
+
+animation:spin 1s linear infinite;
+
+margin-bottom:20px;
+
+}
+
+@keyframes spin{
+
+100%{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+/*==============================
+Top Bar
+==============================*/
+
+.topbar{
 
 height:70px;
 
-background:linear-gradient(135deg,#0b6b3a,#0d47a1);
+background:linear-gradient(135deg,#0b6b3a,#155724);
 
 display:flex;
 
@@ -38,117 +109,15 @@ padding:0 25px;
 
 color:#fff;
 
-box-shadow:0 5px 20px rgba(0,0,0,.35);
+box-shadow:0 4px 18px rgba(0,0,0,.25);
 
-z-index:999;
+z-index:100;
 
 position:relative;
 
 }
 
-.reader-logo{
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-}
-
-.reader-logo img{
-
-width:45px;
-
-height:45px;
-
-border-radius:50%;
-
-}
-
-.reader-title{
-
-font-size:22px;
-
-font-weight:700;
-
-}
-
-/* BOOK AREA */
-
-.reader-container{
-
-height:calc(100vh - 150px);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-padding:25px;
-
-overflow:hidden;
-
-}
-
-/* BOOK */
-
-#flipbook{
-
-width:920px;
-
-height:640px;
-
-background:#fff;
-
-box-shadow:
-
-0 30px 60px rgba(0,0,0,.45),
-
-0 0 20px rgba(255,255,255,.08);
-
-border-radius:12px;
-
-overflow:hidden;
-
-transition:.4s;
-
-}
-
-/* PAGE */
-
-.page{
-
-background:#fff;
-
-overflow:hidden;
-
-}
-
-.page canvas{
-
-width:100%!important;
-
-height:100%!important;
-
-}
-
-/* TOOLBAR */
-
-.reader-toolbar{
-
-position:fixed;
-
-bottom:25px;
-
-left:50%;
-
-transform:translateX(-50%);
-
-background:#fff;
-
-padding:14px 20px;
+.logo{
 
 display:flex;
 
@@ -156,236 +125,310 @@ align-items:center;
 
 gap:12px;
 
-border-radius:60px;
+font-size:22px;
 
-box-shadow:0 10px 35px rgba(0,0,0,.35);
-
-z-index:999;
+font-weight:700;
 
 }
 
-/* BUTTON */
+.logo i{
 
-.tool-btn{
+color:#ffd54f;
 
-width:48px;
+font-size:28px;
 
-height:48px;
+}
+
+.book-name{
+
+font-size:18px;
+
+font-weight:600;
+
+white-space:nowrap;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
+
+max-width:45%;
+
+text-align:center;
+
+}
+
+.top-buttons{
+
+display:flex;
+
+gap:10px;
+
+}
+
+.top-buttons button{
+
+width:45px;
+
+height:45px;
 
 border:none;
 
-border-radius:50%;
+border-radius:12px;
+
+background:white;
+
+color:#0b6b3a;
 
 cursor:pointer;
 
 font-size:18px;
 
-background:#f1f1f1;
-
 transition:.3s;
 
 }
 
-.tool-btn:hover{
+.top-buttons button:hover{
+
+transform:translateY(-2px);
+
+background:#ffd54f;
+
+}
+
+/*==============================
+Sidebar
+==============================*/
+
+#sidebar{
+
+position:absolute;
+
+top:70px;
+
+left:0;
+
+width:250px;
+
+height:calc(100vh - 70px);
+
+background:#ffffff;
+
+border-right:1px solid #ddd;
+
+overflow-y:auto;
+
+transition:.35s;
+
+box-shadow:4px 0 12px rgba(0,0,0,.08);
+
+}
+
+.sidebar-title{
+
+padding:18px;
+
+font-size:18px;
+
+font-weight:700;
+
+color:#0b6b3a;
+
+border-bottom:1px solid #eee;
+
+background:#f7f7f7;
+
+}
+
+#thumbnailContainer{
+
+padding:15px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+/*==============================
+Reader Area
+==============================*/
+
+.reader-area{
+
+margin-left:250px;
+
+height:calc(100vh - 130px);
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:
+
+linear-gradient(
+
+135deg,
+
+#eef5ef,
+
+#dde9df
+
+);
+
+overflow:auto;
+
+padding:35px;
+
+}
+
+/*==============================
+Book
+==============================*/
+
+.book-container{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:
+
+0 15px 35px rgba(0,0,0,.18);
+
+transition:.35s;
+
+max-width:900px;
+
+}
+
+.book-container:hover{
+
+transform:translateY(-5px);
+
+box-shadow:
+
+0 25px 55px rgba(0,0,0,.25);
+
+}
+
+#pdfCanvas{
+
+display:block;
+
+max-width:100%;
+
+height:auto;
+
+border-radius:10px;
+
+background:white;
+
+}
+
+/*==============================
+Progress
+==============================*/
+
+.progress{
+
+height:5px;
+
+background:#d8d8d8;
+
+width:100%;
+
+}
+
+#readingProgress{
+
+height:100%;
+
+width:0%;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+#0b6b3a,
+
+#ffd54f
+
+);
+
+transition:.25s;
+
+}
+
+/*==============================
+Toolbar
+==============================*/
+
+.toolbar{
+
+height:55px;
+
+background:white;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+gap:15px;
+
+box-shadow:0 -4px 12px rgba(0,0,0,.08);
+
+}
+
+.toolbar button{
+
+width:45px;
+
+height:45px;
+
+border:none;
+
+border-radius:12px;
 
 background:#0b6b3a;
 
 color:white;
 
-transform:translateY(-4px);
-
-}
-
-/* PAGE NUMBER */
-
-.page-count{
+cursor:pointer;
 
 font-size:18px;
 
-font-weight:bold;
-
-padding:0 15px;
-
-color:#0b6b3a;
+transition:.25s;
 
 }
 
-/* BOOK SHADOW */
+.toolbar button:hover{
 
-#flipbook::after{
+background:#ffd54f;
 
-content:"";
+color:#111;
 
-position:absolute;
-
-left:50%;
-
-top:50%;
-
-width:90%;
-
-height:90%;
-
-transform:translate(-50%,-50%);
-
-box-shadow:0 0 80px rgba(0,0,0,.2);
-
-z-index:-1;
+transform:translateY(-3px);
 
 }
 
-/* DARK MODE */
+.page-box{
 
-.dark{
-
-background:#111;
-
-}
-
-.dark .reader-toolbar{
-
-background:#222;
-
-}
-
-.dark .tool-btn{
-
-background:#333;
-
-color:#fff;
-
-}
-
-.dark .reader-header{
-
-background:#000;
-
-}
-
-/* LOADING */
-
-.loader{
-
-position:absolute;
-
-top:50%;
-
-left:50%;
-
-transform:translate(-50%,-50%);
-
-width:70px;
-
-height:70px;
-
-border-radius:50%;
-
-border:6px solid rgba(255,255,255,.2);
-
-border-top:6px solid #0b6b3a;
-
-animation:spin 1s linear infinite;
-
-}
-
-@keyframes spin{
-
-100%{
-
-transform:translate(-50%,-50%) rotate(360deg);
-
-}
-
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-#flipbook{
-
-width:100%;
-
-height:520px;
-
-}
-
-.reader-toolbar{
-
-gap:6px;
-
-padding:10px;
-
-}
-
-.tool-btn{
-
-width:42px;
-
-height:42px;
-
-font-size:15px;
-
-}
-
-.page-count{
-
-font-size:14px;
-
-}
-
-.reader-title{
+font-weight:700;
 
 font-size:18px;
 
-}
+min-width:90px;
 
-}
-
-/* ANIMATION */
-
-#flipbook{
-
-animation:fadeBook .8s ease;
-
-}
-
-@keyframes fadeBook{
-
-from{
-
-opacity:0;
-
-transform:scale(.95);
-
-}
-
-to{
-
-opacity:1;
-
-transform:scale(1);
-
-}
-
-}
-
-/* WATERMARK */
-
-.watermark{
-
-position:fixed;
-
-bottom:10px;
-
-right:15px;
-
-font-size:12px;
-
-color:#888;
-
-letter-spacing:2px;
-
-user-select:none;
+text-align:center;
 
 }
