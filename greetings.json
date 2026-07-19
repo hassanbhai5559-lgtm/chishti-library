@@ -163,3 +163,85 @@
     "response": "Marhaba ❤️\nChishti Library mein aap ka istaqbal hai."
   }
 ]
+[
+  {
+    "keywords": ["jummah mubarak"],
+    "response": "Jummah Mubarak ❤️\nAllah Ta'ala aap ki tamam jaiz duain qabool farmaye."
+  },
+  {
+    "keywords": ["eid mubarak"],
+    "response": "Eid Mubarak ❤️\nAllah Ta'ala aap ki Eid khushiyon aur barkaton se bhar de."
+  },
+  {
+    "keywords": ["ramadan mubarak", "ramzan mubarak"],
+    "response": "Ramadan Mubarak 🌙❤️\nAllah Ta'ala is mubarak maheene ki barkatein naseeb farmaye."
+  },
+  {
+    "keywords": ["ramadan kareem", "ramzan kareem"],
+    "response": "Ramadan Kareem 🌙❤️\nAllah Ta'ala aap ki ibadat qabool farmaye."
+  },
+  {
+    "keywords": ["jazakallah", "jazakallah khair"],
+    "response": "Wa Iyyakum ❤️\nAllah Ta'ala aap ko bhi behtareen ajr ata farmaye."
+  },
+  {
+    "keywords": ["barakallahu feek"],
+    "response": "Wa Feek BarakAllah ❤️"
+  },
+  {
+    "keywords": ["fi amanillah"],
+    "response": "Fi Amanillah ❤️\nAllah Ta'ala aap ki hifazat farmaye."
+  },
+  {
+    "keywords": ["good morning salam"],
+    "response": "Good Morning ☀️\nAssalamu Alaikum ❤️\nChishti Library mein aap ka khush aamdeed."
+  },
+  {
+    "keywords": ["good evening salam"],
+    "response": "Good Evening 🌙\nAssalamu Alaikum ❤️"
+  },
+  {
+    "keywords": ["good night salam"],
+    "response": "Good Night 🌙\nAllah Hafiz ❤️"
+  },
+  {
+    "keywords": ["hello salam"],
+    "response": "Assalamu Alaikum ❤️\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["hi aoa"],
+    "response": "Wa Alaikum Assalam ❤️\nMain Chishti AI hoon."
+  },
+  {
+    "keywords": ["welcome ji"],
+    "response": "Khush Aamdeed Ji ❤️\nMain aap ki kis cheez mein madad kar sakta hoon?"
+  },
+  {
+    "keywords": ["hello dost"],
+    "response": "Salam Dost ❤️\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["hello brother"],
+    "response": "Assalamu Alaikum Bhai ❤️\nBatayein main aap ki kya madad kar sakta hoon?"
+  },
+  {
+    "keywords": ["salam chishti ai"],
+    "response": "Wa Alaikum Assalam ❤️\nMain Chishti AI hoon."
+  },
+  {
+    "keywords": ["hi friend"],
+    "response": "Hello Dost ❤️\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["peace be upon you"],
+    "response": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️"
+  },
+  {
+    "keywords": ["greetings"],
+    "response": "Assalamu Alaikum ❤️\nWelcome to Chishti Library.\nMain Chishti AI hoon."
+  },
+  {
+    "keywords": ["start chat", "begin"],
+    "response": "Bismillah ❤️\nMain Chishti AI hoon.\nAap apna sawal pooch sakte hain."
+  }
+]
