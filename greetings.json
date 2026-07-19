@@ -1,0 +1,83 @@
+[
+  {
+    "keywords": ["hello", "hi", "hey"],
+    "response": "Assalamu Alaikum ❤️\nWelcome to Chishti Library.\nMain Chishti AI hoon.\nMain aap ki kis cheez mein madad kar sakta hoon?"
+  },
+  {
+    "keywords": ["assalamu alaikum", "assalamualaikum", "aoa", "asalam o alaikum", "slam", "slm"],
+    "response": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️\nChishti Library mein aap ka khush aamdeed."
+  },
+  {
+    "keywords": ["wa alaikum assalam", "walikum salam"],
+    "response": "JazakAllah Khair ❤️\nMain aap ki kis cheez mein madad kar sakta hoon?"
+  },
+  {
+    "keywords": ["good morning", "morning"],
+    "response": "Good Morning ☀️\nSubah Bakhair.\nAllah Ta'ala aap ka din khair o barkat wala banaye."
+  },
+  {
+    "keywords": ["good afternoon", "afternoon"],
+    "response": "Good Afternoon 🌤️\nDopahar Bakhair.\nMain aap ki kis cheez mein madad kar sakta hoon?"
+  },
+  {
+    "keywords": ["good evening", "evening"],
+    "response": "Good Evening 🌙\nShaam Bakhair.\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["good night", "night"],
+    "response": "Good Night 🌙\nShab Bakhair.\nAllah Ta'ala aap ko apni hifazat mein rakhe."
+  },
+  {
+    "keywords": ["welcome"],
+    "response": "Khush Aamdeed ❤️\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["how are you", "how r u"],
+    "response": "Alhamdulillah, main bilkul theek hoon ❤️\nAap kaise hain?"
+  },
+  {
+    "keywords": ["kia haal hai", "kya haal hai", "kaise ho", "kese ho"],
+    "response": "Alhamdulillah ❤️\nMain theek hoon.\nUmeed hai aap bhi khairiyat se honge."
+  },
+  {
+    "keywords": ["salam"],
+    "response": "Wa Alaikum Assalam ❤️\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["salam bhai", "hello bhai", "hi bhai"],
+    "response": "Wa Alaikum Assalam Bhai ❤️\nMain Chishti AI hoon.\nMain aap ki kis cheez mein madad kar sakta hoon?"
+  },
+  {
+    "keywords": ["good to see you"],
+    "response": "Mujhe bhi aap se baat karke khushi hui ❤️"
+  },
+  {
+    "keywords": ["nice to meet you"],
+    "response": "Nice to meet you too ❤️\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["thank you", "thanks"],
+    "response": "You're most welcome ❤️\nAgar aur madad chahiye ho to zaroor batayein."
+  },
+  {
+    "keywords": ["shukriya"],
+    "response": "Koi baat nahi ❤️\nKhidmat karna mere liye khushi ki baat hai."
+  },
+  {
+    "keywords": ["bye", "goodbye"],
+    "response": "Allah Hafiz ❤️\nApna khayal rakhiye.\nPhir mulaqat hogi."
+  },
+  {
+    "keywords": ["allah hafiz", "khuda hafiz"],
+    "response": "Allah Hafiz ❤️\nAllah Ta'ala aap ko apni aman mein rakhe."
+  },
+  {
+    "keywords": ["see you", "see you later"],
+    "response": "InshaAllah phir mulaqat hogi ❤️"
+  },
+  {
+    "keywords": ["welcome back"],
+    "response": "Welcome Back ❤️\nChishti Library mein dobara aap ka khush aamdeed."
+  }
+]
+
