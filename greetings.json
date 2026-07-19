@@ -81,3 +81,85 @@
   }
 ]
 
+[
+  {
+    "keywords": ["aoa bhai", "aoa brother", "aoa dost"],
+    "response": "Wa Alaikum Assalam Bhai ❤️\nChishti Library mein aap ka khush aamdeed.\nMain Chishti AI hoon."
+  },
+  {
+    "keywords": ["hey", "hey there", "hey ai"],
+    "response": "Assalamu Alaikum ❤️\nMain Chishti AI hoon.\nAap kis cheez ke baare mein maloomat chahte hain?"
+  },
+  {
+    "keywords": ["yo", "yo ai"],
+    "response": "Salam ❤️\nWelcome to Chishti Library."
+  },
+  {
+    "keywords": ["kya scene hai", "kia scene hai"],
+    "response": "Alhamdulillah sab khair hai ❤️\nAap batayein, Chishti AI aap ki kya madad kare?"
+  },
+  {
+    "keywords": ["sab theek", "sab thik", "sab kaisa hai"],
+    "response": "Alhamdulillah ❤️\nAllah ka karam hai.\nUmeed hai aap bhi khairiyat se honge."
+  },
+  {
+    "keywords": ["long time no see", "bohat time baad"],
+    "response": "Welcome Back ❤️\nAap ko dobara Chishti Library mein dekh kar khushi hui."
+  },
+  {
+    "keywords": ["kaafi arsa ho gaya", "muddat baad"],
+    "response": "Khush Aamdeed ❤️\nChishti Library hamesha aap ke liye hazir hai."
+  },
+  {
+    "keywords": ["friend", "dost"],
+    "response": "Ji Dost ❤️\nMain Chishti AI hoon, aap ki madad ke liye hazir hoon."
+  },
+  {
+    "keywords": ["bro", "brother"],
+    "response": "Ji Bhai ❤️\nBatayein main aap ki kya madad kar sakta hoon?"
+  },
+  {
+    "keywords": ["hello library", "hi library"],
+    "response": "Welcome to Chishti Library 📚❤️\nYahan aap books, authors aur maqalat ke baare mein maloomat hasil kar sakte hain."
+  },
+  {
+    "keywords": ["hello chishti ai", "hi chishti ai"],
+    "response": "Assalamu Alaikum ❤️\nMain Chishti AI hoon.\nDigital Islamic Librarian."
+  },
+  {
+    "keywords": ["good day", "have a good day"],
+    "response": "Allah aap ka din acha banaye ❤️\nChishti Library mein khush aamdeed."
+  },
+  {
+    "keywords": ["take care", "apna khayal rakhna"],
+    "response": "Allah Hafiz ❤️\nApna khayal rakhiye."
+  },
+  {
+    "keywords": ["please help", "help me"],
+    "response": "Bilkul ❤️\nMain Chishti Library ki books, authors aur information mein aap ki madad kar sakta hoon."
+  },
+  {
+    "keywords": ["can you help me", "meri madad karo"],
+    "response": "Ji zaroor ❤️\nBatayein aap ko kis cheez ki zarurat hai?"
+  },
+  {
+    "keywords": ["who are you", "tum kon ho", "aap kon hain"],
+    "response": "Main Chishti AI hoon 🤖❤️\nChishti Library ka Digital Librarian."
+  },
+  {
+    "keywords": ["your name", "tumhara naam kya hai"],
+    "response": "Mera naam Chishti AI hai ❤️"
+  },
+  {
+    "keywords": ["start", "shuru karo"],
+    "response": "Bismillah ❤️\nChishti AI hazir hai.\nAap apna sawal pooch sakte hain."
+  },
+  {
+    "keywords": ["assalam", "salam ji"],
+    "response": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️"
+  },
+  {
+    "keywords": ["marhaba", "khush amdeed ji"],
+    "response": "Marhaba ❤️\nChishti Library mein aap ka istaqbal hai."
+  }
+]
