@@ -1,0 +1,848 @@
+[
+  {
+    "id":"cmd_001",
+    "intent":"library",
+    "priority":85,
+    "keywords":["open library","library kholo"],
+    "response":"📚 Chishti Library kholi ja rahi hai ❤️"
+  },
+  {
+    "id":"cmd_002",
+    "intent":"library",
+    "priority":85,
+    "keywords":["books"],
+    "response":"📖 Books section khola ja raha hai ❤️"
+  },
+  {
+    "id":"cmd_003",
+    "intent":"library",
+    "priority":85,
+    "keywords":["authors"],
+    "response":"👤 Authors section khola ja raha hai ❤️"
+  },
+  {
+    "id":"cmd_004",
+    "intent":"library",
+    "priority":85,
+    "keywords":["maqalat"],
+    "response":"📄 Maqalat section khola ja raha hai ❤️"
+  },
+  {
+    "id":"cmd_005",
+    "intent":"library",
+    "priority":85,
+    "keywords":["categories"],
+    "response":"🗂 Categories kholi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_006",
+    "intent":"library",
+    "priority":85,
+    "keywords":["latest books"],
+    "response":"🆕 Latest books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_007",
+    "intent":"library",
+    "priority":85,
+    "keywords":["popular books"],
+    "response":"🔥 Popular books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_008",
+    "intent":"library",
+    "priority":85,
+    "keywords":["new books"],
+    "response":"📘 Nai books load ki ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_009",
+    "intent":"library",
+    "priority":85,
+    "keywords":["urdu books"],
+    "response":"📚 Urdu books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_010",
+    "intent":"library",
+    "priority":85,
+    "keywords":["english books"],
+    "response":"📚 English books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_011",
+    "intent":"library",
+    "priority":85,
+    "keywords":["pdf books"],
+    "response":"📄 PDF books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_012",
+    "intent":"library",
+    "priority":85,
+    "keywords":["book list"],
+    "response":"📚 Books ki list kholi ja rahi hai ❤️"
+  },
+  {
+    "id":"cmd_013",
+    "intent":"library",
+    "priority":85,
+    "keywords":["show books"],
+    "response":"📖 Available books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_014",
+    "intent":"library",
+    "priority":85,
+    "keywords":["browse books"],
+    "response":"📚 Books browse ki ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_015",
+    "intent":"library",
+    "priority":85,
+    "keywords":["book details"],
+    "response":"📖 Book ki details dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_016",
+    "intent":"library",
+    "priority":85,
+    "keywords":["open reader"],
+    "response":"📖 Reader khola ja raha hai ❤️"
+  },
+  {
+    "id":"cmd_017",
+    "intent":"library",
+    "priority":85,
+    "keywords":["continue reading"],
+    "response":"📚 Reading resume ki ja rahi hai ❤️"
+  },
+  {
+    "id":"cmd_018",
+    "intent":"library",
+    "priority":85,
+    "keywords":["bookmarks"],
+    "response":"🔖 Bookmarks khole ja rahe hain ❤️"
+  },
+  {
+    "id":"cmd_019",
+    "intent":"library",
+    "priority":85,
+    "keywords":["favorites"],
+    "response":"⭐ Favorite books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_020",
+    "intent":"library",
+    "priority":85,
+    "keywords":["history"],
+    "response":"📜 Reading history kholi ja rahi hai ❤️"
+  },
+  {
+    "id":"cmd_021",
+    "intent":"library",
+    "priority":85,
+    "keywords":["download book"],
+    "response":"⬇️ Book download ki tayyari ki ja rahi hai ❤️"
+  },
+  {
+    "id":"cmd_022",
+    "intent":"library",
+    "priority":85,
+    "keywords":["share book"],
+    "response":"📤 Book share option khola ja raha hai ❤️"
+  },
+  {
+    "id":"cmd_023",
+    "intent":"library",
+    "priority":85,
+    "keywords":["search book"],
+    "response":"🔍 Book ka naam batayein ❤️"
+  },
+  {
+    "id":"cmd_024",
+    "intent":"library",
+    "priority":85,
+    "keywords":["search author"],
+    "response":"👤 Author ka naam batayein ❤️"
+  },
+  {
+    "id":"cmd_025",
+    "intent":"library",
+    "priority":85,
+    "keywords":["random book"],
+    "response":"🎲 Ek random book suggest ki ja rahi hai ❤️"
+  },
+  {
+    "id":"cmd_026",
+    "intent":"library",
+    "priority":85,
+    "keywords":["recommended books"],
+    "response":"🌟 Recommended books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_027",
+    "intent":"library",
+    "priority":85,
+    "keywords":["islamic books"],
+    "response":"🕌 Islami books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_028",
+    "intent":"library",
+    "priority":85,
+    "keywords":["poetry books"],
+    "response":"🖋 Poetry books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_029",
+    "intent":"library",
+    "priority":85,
+    "keywords":["naat books"],
+    "response":"🌹 Naat collections dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"cmd_030",
+    "intent":"library",
+    "priority":85,
+    "keywords":["research books"],
+    "response":"📚 Research books dikhayi ja rahi hain ❤️"
+  }
+]
+
+
+{
+  "id":"cmd_031",
+  "intent":"library",
+  "priority":85,
+  "keywords":["biography books"],
+  "response":"👤 Biography books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_032",
+  "intent":"library",
+  "priority":85,
+  "keywords":["history books"],
+  "response":"🏛 History books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_033",
+  "intent":"library",
+  "priority":85,
+  "keywords":["aqeedah books"],
+  "response":"📘 Aqeedah books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_034",
+  "intent":"library",
+  "priority":85,
+  "keywords":["fiqh books"],
+  "response":"⚖️ Fiqh books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_035",
+  "intent":"library",
+  "priority":85,
+  "keywords":["hadith books"],
+  "response":"📖 Hadith books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_036",
+  "intent":"library",
+  "priority":85,
+  "keywords":["tafseer books"],
+  "response":"📚 Tafseer books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_037",
+  "intent":"library",
+  "priority":85,
+  "keywords":["quran books"],
+  "response":"🕌 Quran related books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_038",
+  "intent":"library",
+  "priority":85,
+  "keywords":["naat"],
+  "response":"🌹 Naat collections kholi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_039",
+  "intent":"library",
+  "priority":85,
+  "keywords":["hamd"],
+  "response":"🤲 Hamd collections dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_040",
+  "intent":"library",
+  "priority":85,
+  "keywords":["manqabat"],
+  "response":"💚 Manqabat collections dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_041",
+  "intent":"library",
+  "priority":85,
+  "keywords":["author details"],
+  "response":"👤 Author profile khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_042",
+  "intent":"library",
+  "priority":85,
+  "keywords":["author books"],
+  "response":"📚 Is author ki tamam books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_043",
+  "intent":"library",
+  "priority":85,
+  "keywords":["related books"],
+  "response":"📖 Related books suggest ki ja rahi hain ❤️"
+},
+{
+  "id":"cmd_044",
+  "intent":"library",
+  "priority":85,
+  "keywords":["similar books"],
+  "response":"📚 Similar books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_045",
+  "intent":"library",
+  "priority":85,
+  "keywords":["book info"],
+  "response":"ℹ️ Book ki information load ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_046",
+  "intent":"library",
+  "priority":85,
+  "keywords":["book summary"],
+  "response":"📝 Book summary dikhayi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_047",
+  "intent":"library",
+  "priority":85,
+  "keywords":["book cover"],
+  "response":"🖼 Book cover dikhaya ja raha hai ❤️"
+},
+{
+  "id":"cmd_048",
+  "intent":"library",
+  "priority":85,
+  "keywords":["book pdf"],
+  "response":"📄 PDF khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_049",
+  "intent":"library",
+  "priority":85,
+  "keywords":["reader settings"],
+  "response":"⚙️ Reader settings kholi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_050",
+  "intent":"library",
+  "priority":85,
+  "keywords":["exit reader"],
+  "response":"📕 Reader band kiya ja raha hai ❤️"
+},
+{
+  "id":"cmd_051",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library home"],
+  "response":"🏠 Library Home khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_052",
+  "intent":"library",
+  "priority":85,
+  "keywords":["refresh library"],
+  "response":"🔄 Library refresh ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_053",
+  "intent":"library",
+  "priority":85,
+  "keywords":["recent books"],
+  "response":"🕒 Recently added books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_054",
+  "intent":"library",
+  "priority":85,
+  "keywords":["offline books"],
+  "response":"📥 Offline books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_055",
+  "intent":"library",
+  "priority":85,
+  "keywords":["downloads"],
+  "response":"⬇️ Downloaded books kholi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_056",
+  "intent":"library",
+  "priority":85,
+  "keywords":["saved books"],
+  "response":"💾 Saved books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_057",
+  "intent":"library",
+  "priority":85,
+  "keywords":["open category"],
+  "response":"🗂 Category kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_058",
+  "intent":"library",
+  "priority":85,
+  "keywords":["browse authors"],
+  "response":"👥 Authors browse kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_059",
+  "intent":"library",
+  "priority":85,
+  "keywords":["browse maqalat"],
+  "response":"📄 Maqalat browse kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_060",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library help"],
+  "response":"❤️ Main books, authors, maqalat aur reader ke mutaliq aap ki madad kar sakta hoon."
+}
+
+,
+{
+  "id":"cmd_091",
+  "intent":"library",
+  "priority":85,
+  "keywords":["open all books"],
+  "response":"📚 Tamam books kholi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_092",
+  "intent":"library",
+  "priority":85,
+  "keywords":["show all authors"],
+  "response":"👤 Tamam authors dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_093",
+  "intent":"library",
+  "priority":85,
+  "keywords":["show all categories"],
+  "response":"🗂 Tamam categories load ki ja rahi hain ❤️"
+},
+{
+  "id":"cmd_094",
+  "intent":"library",
+  "priority":85,
+  "keywords":["open favorites"],
+  "response":"⭐ Favorite collection kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_095",
+  "intent":"library",
+  "priority":85,
+  "keywords":["recent books"],
+  "response":"🕒 Recently added books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_096",
+  "intent":"library",
+  "priority":85,
+  "keywords":["my history"],
+  "response":"📜 Aap ki reading history load ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_097",
+  "intent":"library",
+  "priority":85,
+  "keywords":["continue last book"],
+  "response":"📖 Aakhri padi hui kitab dobara kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_098",
+  "intent":"library",
+  "priority":85,
+  "keywords":["recommended authors"],
+  "response":"👥 Recommended authors dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_099",
+  "intent":"library",
+  "priority":85,
+  "keywords":["show research"],
+  "response":"🎓 Research section khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_100",
+  "intent":"library",
+  "priority":85,
+  "keywords":["poetry"],
+  "response":"🖋 Poetry collection kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_101",
+  "intent":"library",
+  "priority":85,
+  "keywords":["hamd"],
+  "response":"🤲 Hamd collection dikhayi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_102",
+  "intent":"library",
+  "priority":85,
+  "keywords":["naat"],
+  "response":"🌹 Naat collection kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_103",
+  "intent":"library",
+  "priority":85,
+  "keywords":["manqabat"],
+  "response":"✨ Manqabat collection dikhayi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_104",
+  "intent":"library",
+  "priority":85,
+  "keywords":["islamic articles"],
+  "response":"📄 Islami maqalat load kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_105",
+  "intent":"library",
+  "priority":85,
+  "keywords":["urdu articles"],
+  "response":"📑 Urdu maqalat dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_106",
+  "intent":"library",
+  "priority":85,
+  "keywords":["download article"],
+  "response":"⬇️ Article download ki tayyari ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_107",
+  "intent":"library",
+  "priority":85,
+  "keywords":["share article"],
+  "response":"📤 Article share option khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_108",
+  "intent":"library",
+  "priority":85,
+  "keywords":["book information"],
+  "response":"ℹ️ Kitab ki mukammal maloomat load ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_109",
+  "intent":"library",
+  "priority":85,
+  "keywords":["author information"],
+  "response":"👤 Musannif ki maloomat dikhayi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_110",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library settings"],
+  "response":"⚙️ Library settings kholi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_111",
+  "intent":"library",
+  "priority":85,
+  "keywords":["refresh books"],
+  "response":"🔄 Books list refresh ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_112",
+  "intent":"library",
+  "priority":85,
+  "keywords":["reload library"],
+  "response":"♻️ Library dobara load ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_113",
+  "intent":"library",
+  "priority":85,
+  "keywords":["book collection"],
+  "response":"📚 Book collection kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_114",
+  "intent":"library",
+  "priority":85,
+  "keywords":["author collection"],
+  "response":"👥 Author collection dikhayi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_115",
+  "intent":"library",
+  "priority":85,
+  "keywords":["latest articles"],
+  "response":"📰 Latest maqalat load kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_116",
+  "intent":"library",
+  "priority":85,
+  "keywords":["top books"],
+  "response":"🏆 Top books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_117",
+  "intent":"library",
+  "priority":85,
+  "keywords":["top authors"],
+  "response":"🏅 Top authors dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_118",
+  "intent":"library",
+  "priority":85,
+  "keywords":["featured books"],
+  "response":"⭐ Featured books load ki ja rahi hain ❤️"
+},
+{
+  "id":"cmd_119",
+  "intent":"library",
+  "priority":85,
+  "keywords":["featured authors"],
+  "response":"🌟 Featured authors dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_120",
+  "intent":"library",
+  "priority":85,
+  "keywords":["go home"],
+  "response":"🏠 Chishti Library Home par wapas ja rahe hain ❤️"
+}
+
+,
+{
+  "id":"cmd_121",
+  "intent":"library",
+  "priority":85,
+  "keywords":["search islam"],
+  "response":"🕌 Islami topics search kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_122",
+  "intent":"library",
+  "priority":85,
+  "keywords":["find pdf"],
+  "response":"📄 PDF dhoonda ja raha hai ❤️"
+},
+{
+  "id":"cmd_123",
+  "intent":"library",
+  "priority":85,
+  "keywords":["latest uploads"],
+  "response":"📤 Latest uploads dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_124",
+  "intent":"library",
+  "priority":85,
+  "keywords":["bookmarks list"],
+  "response":"🔖 Bookmark list kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_125",
+  "intent":"library",
+  "priority":85,
+  "keywords":["saved articles"],
+  "response":"📄 Saved articles load kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_126",
+  "intent":"library",
+  "priority":85,
+  "keywords":["continue article"],
+  "response":"📖 Article reading continue ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_127",
+  "intent":"library",
+  "priority":85,
+  "keywords":["my downloads"],
+  "response":"⬇️ Downloads list kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_128",
+  "intent":"library",
+  "priority":85,
+  "keywords":["open downloads"],
+  "response":"📥 Downloads section khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_129",
+  "intent":"library",
+  "priority":85,
+  "keywords":["my library"],
+  "response":"📚 Aap ki personal library kholi ja rahi hai ❤️"
+},
+{
+  "id":"cmd_130",
+  "intent":"library",
+  "priority":85,
+  "keywords":["open dashboard"],
+  "response":"🏠 Library dashboard khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_131",
+  "intent":"library",
+  "priority":85,
+  "keywords":["book search"],
+  "response":"🔍 Book search ready hai. Naam batayein ❤️"
+},
+{
+  "id":"cmd_132",
+  "intent":"library",
+  "priority":85,
+  "keywords":["author search"],
+  "response":"👤 Author search ready hai. Naam batayein ❤️"
+},
+{
+  "id":"cmd_133",
+  "intent":"library",
+  "priority":85,
+  "keywords":["article search"],
+  "response":"📄 Article search ready hai ❤️"
+},
+{
+  "id":"cmd_134",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library info"],
+  "response":"ℹ️ Chishti Library ki maloomat load ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_135",
+  "intent":"library",
+  "priority":85,
+  "keywords":["about library"],
+  "response":"📚 Chishti Library Islami kutub aur research ka digital platform hai ❤️"
+},
+{
+  "id":"cmd_136",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library books"],
+  "response":"📖 Library ki tamam books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_137",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library authors"],
+  "response":"👥 Library ke tamam authors dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_138",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library articles"],
+  "response":"📰 Library ke maqalat load kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_139",
+  "intent":"library",
+  "priority":85,
+  "keywords":["explore library"],
+  "response":"🌍 Chishti Library explore ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_140",
+  "intent":"library",
+  "priority":85,
+  "keywords":["browse library"],
+  "response":"📚 Library browse ki ja rahi hai ❤️"
+},
+{
+  "id":"cmd_141",
+  "intent":"library",
+  "priority":85,
+  "keywords":["quick search"],
+  "response":"⚡ Quick Search activate ho gayi ❤️"
+},
+{
+  "id":"cmd_142",
+  "intent":"library",
+  "priority":85,
+  "keywords":["open search"],
+  "response":"🔍 Search page khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_143",
+  "intent":"library",
+  "priority":85,
+  "keywords":["today books"],
+  "response":"📚 Aaj ki featured books dikhayi ja rahi hain ❤️"
+},
+{
+  "id":"cmd_144",
+  "intent":"library",
+  "priority":85,
+  "keywords":["today articles"],
+  "response":"📄 Aaj ke featured maqalat load kiye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_145",
+  "intent":"library",
+  "priority":85,
+  "keywords":["today authors"],
+  "response":"👤 Featured authors dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"cmd_146",
+  "intent":"library",
+  "priority":85,
+  "keywords":["help library"],
+  "response":"❤️ Main books, authors, maqalat aur search mein aap ki madad kar sakta hoon."
+},
+{
+  "id":"cmd_147",
+  "intent":"library",
+  "priority":85,
+  "keywords":["library support"],
+  "response":"🤝 Chishti AI aap ki khidmat ke liye hamesha tayyar hai ❤️"
+},
+{
+  "id":"cmd_148",
+  "intent":"library",
+  "priority":85,
+  "keywords":["home"],
+  "response":"🏠 Home page khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_149",
+  "intent":"library",
+  "priority":85,
+  "keywords":["main menu"],
+  "response":"📋 Main Menu khola ja raha hai ❤️"
+},
+{
+  "id":"cmd_150",
+  "intent":"library",
+  "priority":85,
+  "keywords":["exit library","close library"],
+  "response":"👋 Chishti Library band ki ja rahi hai. Allah Hafiz ❤️"
+}
