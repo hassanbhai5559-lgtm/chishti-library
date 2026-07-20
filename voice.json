@@ -1,0 +1,610 @@
+[
+  {
+    "id":"voice_001",
+    "intent":"voice",
+    "keywords":["open library","library kholo"],
+    "response":"📚 Chishti Library kholi ja rahi hai ❤️"
+  },
+  {
+    "id":"voice_002",
+    "intent":"voice",
+    "keywords":["open books","books kholo"],
+    "response":"📖 Books section khola ja raha hai ❤️"
+  },
+  {
+    "id":"voice_003",
+    "intent":"voice",
+    "keywords":["open authors","authors kholo"],
+    "response":"👤 Authors section khola ja raha hai ❤️"
+  },
+  {
+    "id":"voice_004",
+    "intent":"voice",
+    "keywords":["open maqalat","maqalat kholo"],
+    "response":"📄 Maqalat section khola ja raha hai ❤️"
+  },
+  {
+    "id":"voice_005",
+    "intent":"voice",
+    "keywords":["go home","home kholo"],
+    "response":"🏠 Home page par ja rahe hain ❤️"
+  },
+  {
+    "id":"voice_006",
+    "intent":"voice",
+    "keywords":["search books","book search"],
+    "response":"🔍 Batayein kaunsi kitab dhoondhni hai? ❤️"
+  },
+  {
+    "id":"voice_007",
+    "intent":"voice",
+    "keywords":["search author","author search"],
+    "response":"🔍 Batayein kis musannif ko dhoondhna hai? ❤️"
+  },
+  {
+    "id":"voice_008",
+    "intent":"voice",
+    "keywords":["open reader","reader kholo"],
+    "response":"📖 Reader khola ja raha hai ❤️"
+  },
+  {
+    "id":"voice_009",
+    "intent":"voice",
+    "keywords":["continue reading"],
+    "response":"📚 Pichla mutala dobara khola ja raha hai ❤️"
+  },
+  {
+    "id":"voice_010",
+    "intent":"voice",
+    "keywords":["resume reading"],
+    "response":"📖 Reading resume ki ja rahi hai ❤️"
+  },
+  {
+    "id":"voice_011",
+    "intent":"voice",
+    "keywords":["latest books"],
+    "response":"🆕 Latest books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"voice_012",
+    "intent":"voice",
+    "keywords":["popular books"],
+    "response":"🔥 Popular books kholi ja rahi hain ❤️"
+  },
+  {
+    "id":"voice_013",
+    "intent":"voice",
+    "keywords":["bookmark page"],
+    "response":"🔖 Current page bookmark kar diya gaya ❤️"
+  },
+  {
+    "id":"voice_014",
+    "intent":"voice",
+    "keywords":["reading history"],
+    "response":"📜 Reading history kholi ja rahi hai ❤️"
+  },
+  {
+    "id":"voice_015",
+    "intent":"voice",
+    "keywords":["favorites"],
+    "response":"⭐ Favorite books dikhayi ja rahi hain ❤️"
+  },
+  {
+    "id":"voice_016",
+    "intent":"voice",
+    "keywords":["open settings"],
+    "response":"⚙️ Settings kholi ja rahi hain ❤️"
+  },
+  {
+    "id":"voice_017",
+    "intent":"voice",
+    "keywords":["dark mode"],
+    "response":"🌙 Dark mode activate kiya ja raha hai ❤️"
+  },
+  {
+    "id":"voice_018",
+    "intent":"voice",
+    "keywords":["light mode"],
+    "response":"☀️ Light mode activate kiya ja raha hai ❤️"
+  },
+  {
+    "id":"voice_019",
+    "intent":"voice",
+    "keywords":["help"],
+    "response":"❤️ Main aap ki madad ke liye hazir hoon. Command boliye."
+  },
+  {
+    "id":"voice_020",
+    "intent":"voice",
+    "keywords":["stop listening"],
+    "response":"🎙️ Voice listening band kar di gayi ❤️"
+  }
+]
+
+,
+{
+  "id":"voice_021",
+  "intent":"voice",
+  "keywords":["next page","page next"],
+  "response":"➡️ Agla safha khola ja raha hai ❤️"
+},
+{
+  "id":"voice_022",
+  "intent":"voice",
+  "keywords":["previous page","back page"],
+  "response":"⬅️ Pichla safha khola ja raha hai ❤️"
+},
+{
+  "id":"voice_023",
+  "intent":"voice",
+  "keywords":["first page"],
+  "response":"📖 Kitab ka pehla safha khola ja raha hai ❤️"
+},
+{
+  "id":"voice_024",
+  "intent":"voice",
+  "keywords":["last page"],
+  "response":"📖 Kitab ka aakhri safha khola ja raha hai ❤️"
+},
+{
+  "id":"voice_025",
+  "intent":"voice",
+  "keywords":["zoom in"],
+  "response":"🔍 Page zoom in kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_026",
+  "intent":"voice",
+  "keywords":["zoom out"],
+  "response":"🔎 Page zoom out kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_027",
+  "intent":"voice",
+  "keywords":["full screen"],
+  "response":"🖥️ Full screen mode activate kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_028",
+  "intent":"voice",
+  "keywords":["exit full screen"],
+  "response":"🖥️ Full screen mode band kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_029",
+  "intent":"voice",
+  "keywords":["download pdf","download book"],
+  "response":"⬇️ PDF download ki tayyari ki ja rahi hai ❤️"
+},
+{
+  "id":"voice_030",
+  "intent":"voice",
+  "keywords":["share book"],
+  "response":"📤 Book share option khola ja raha hai ❤️"
+},
+{
+  "id":"voice_031",
+  "intent":"voice",
+  "keywords":["copy link"],
+  "response":"🔗 Book link copy kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_032",
+  "intent":"voice",
+  "keywords":["search"],
+  "response":"🔍 Batayein kya search karna hai? ❤️"
+},
+{
+  "id":"voice_033",
+  "intent":"voice",
+  "keywords":["clear search"],
+  "response":"🧹 Search clear kar di gayi ❤️"
+},
+{
+  "id":"voice_034",
+  "intent":"voice",
+  "keywords":["refresh"],
+  "response":"🔄 Page refresh kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_035",
+  "intent":"voice",
+  "keywords":["reload"],
+  "response":"🔄 Content dobara load kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_036",
+  "intent":"voice",
+  "keywords":["go back"],
+  "response":"⬅️ Pichle page par wapas ja rahe hain ❤️"
+},
+{
+  "id":"voice_037",
+  "intent":"voice",
+  "keywords":["go forward"],
+  "response":"➡️ Agle page par ja rahe hain ❤️"
+},
+{
+  "id":"voice_038",
+  "intent":"voice",
+  "keywords":["open menu"],
+  "response":"☰ Menu khola ja raha hai ❤️"
+},
+{
+  "id":"voice_039",
+  "intent":"voice",
+  "keywords":["close menu"],
+  "response":"❌ Menu band kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_040",
+  "intent":"voice",
+  "keywords":["start listening"],
+  "response":"🎙️ Voice listening shuru kar di gayi ❤️"
+}
+
+,
+{
+  "id":"voice_041",
+  "intent":"voice",
+  "keywords":["go to page"],
+  "response":"📖 Kis page number par jana hai? ❤️"
+},
+{
+  "id":"voice_042",
+  "intent":"voice",
+  "keywords":["page number"],
+  "response":"🔢 Page number batayein ❤️"
+},
+{
+  "id":"voice_043",
+  "intent":"voice",
+  "keywords":["open bookmark"],
+  "response":"🔖 Bookmarks khole ja rahe hain ❤️"
+},
+{
+  "id":"voice_044",
+  "intent":"voice",
+  "keywords":["remove bookmark"],
+  "response":"🗑️ Bookmark hata diya gaya ❤️"
+},
+{
+  "id":"voice_045",
+  "intent":"voice",
+  "keywords":["save progress"],
+  "response":"💾 Reading progress save kar di gayi ❤️"
+},
+{
+  "id":"voice_046",
+  "intent":"voice",
+  "keywords":["reading mode"],
+  "response":"📚 Reading mode activate kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_047",
+  "intent":"voice",
+  "keywords":["night mode"],
+  "response":"🌙 Night Reading Mode on kar diya gaya ❤️"
+},
+{
+  "id":"voice_048",
+  "intent":"voice",
+  "keywords":["day mode"],
+  "response":"☀️ Day Reading Mode on kar diya gaya ❤️"
+},
+{
+  "id":"voice_049",
+  "intent":"voice",
+  "keywords":["increase font"],
+  "response":"🔠 Font size barhaya ja raha hai ❤️"
+},
+{
+  "id":"voice_050",
+  "intent":"voice",
+  "keywords":["decrease font"],
+  "response":"🔡 Font size kam kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_051",
+  "intent":"voice",
+  "keywords":["rotate page"],
+  "response":"🔄 Page rotate kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_052",
+  "intent":"voice",
+  "keywords":["fit page"],
+  "response":"📄 Page screen ke mutabiq fit kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_053",
+  "intent":"voice",
+  "keywords":["fit width"],
+  "response":"↔️ Page width fit ki ja rahi hai ❤️"
+},
+{
+  "id":"voice_054",
+  "intent":"voice",
+  "keywords":["fit height"],
+  "response":"↕️ Page height fit ki ja rahi hai ❤️"
+},
+{
+  "id":"voice_055",
+  "intent":"voice",
+  "keywords":["show thumbnails"],
+  "response":"🖼️ Page thumbnails dikhaye ja rahe hain ❤️"
+},
+{
+  "id":"voice_056",
+  "intent":"voice",
+  "keywords":["hide thumbnails"],
+  "response":"🙈 Page thumbnails chhupaye ja rahe hain ❤️"
+},
+{
+  "id":"voice_057",
+  "intent":"voice",
+  "keywords":["scroll down"],
+  "response":"⬇️ Neeche scroll kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_058",
+  "intent":"voice",
+  "keywords":["scroll up"],
+  "response":"⬆️ Upar scroll kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_059",
+  "intent":"voice",
+  "keywords":["close reader"],
+  "response":"📕 Reader band kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_060",
+  "intent":"voice",
+  "keywords":["open reader again"],
+  "response":"📖 Reader dobara khola ja raha hai ❤️"
+}
+
+,
+{
+  "id":"voice_061",
+  "intent":"voice",
+  "keywords":["read aloud","read this"],
+  "response":"🔊 Main is matn ko buland awaaz mein padh raha hoon ❤️"
+},
+{
+  "id":"voice_062",
+  "intent":"voice",
+  "keywords":["stop speaking","stop voice"],
+  "response":"🔇 Voice reading band kar di gayi ❤️"
+},
+{
+  "id":"voice_063",
+  "intent":"voice",
+  "keywords":["pause reading"],
+  "response":"⏸️ Voice reading pause kar di gayi ❤️"
+},
+{
+  "id":"voice_064",
+  "intent":"voice",
+  "keywords":["resume voice"],
+  "response":"▶️ Voice reading dobara shuru ki ja rahi hai ❤️"
+},
+{
+  "id":"voice_065",
+  "intent":"voice",
+  "keywords":["mute"],
+  "response":"🔇 AI voice mute kar di gayi ❤️"
+},
+{
+  "id":"voice_066",
+  "intent":"voice",
+  "keywords":["unmute"],
+  "response":"🔊 AI voice unmute kar di gayi ❤️"
+},
+{
+  "id":"voice_067",
+  "intent":"voice",
+  "keywords":["increase volume"],
+  "response":"🔊 Volume barhaya ja raha hai ❤️"
+},
+{
+  "id":"voice_068",
+  "intent":"voice",
+  "keywords":["decrease volume"],
+  "response":"🔉 Volume kam kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_069",
+  "intent":"voice",
+  "keywords":["maximum volume"],
+  "response":"📢 Volume maximum kar diya gaya ❤️"
+},
+{
+  "id":"voice_070",
+  "intent":"voice",
+  "keywords":["minimum volume"],
+  "response":"🔈 Volume minimum kar diya gaya ❤️"
+},
+{
+  "id":"voice_071",
+  "intent":"voice",
+  "keywords":["slow voice"],
+  "response":"🐢 Voice speed slow kar di gayi ❤️"
+},
+{
+  "id":"voice_072",
+  "intent":"voice",
+  "keywords":["fast voice"],
+  "response":"⚡ Voice speed fast kar di gayi ❤️"
+},
+{
+  "id":"voice_073",
+  "intent":"voice",
+  "keywords":["normal voice"],
+  "response":"🎙️ Voice speed normal kar di gayi ❤️"
+},
+{
+  "id":"voice_074",
+  "intent":"voice",
+  "keywords":["english voice"],
+  "response":"🇬🇧 English voice select kar li gayi ❤️"
+},
+{
+  "id":"voice_075",
+  "intent":"voice",
+  "keywords":["urdu voice"],
+  "response":"🇵🇰 Urdu voice select kar li gayi ❤️"
+},
+{
+  "id":"voice_076",
+  "intent":"voice",
+  "keywords":["roman urdu voice"],
+  "response":"💬 Roman Urdu voice activate kar di gayi ❤️"
+},
+{
+  "id":"voice_077",
+  "intent":"voice",
+  "keywords":["male voice"],
+  "response":"👨 Male AI voice select kar li gayi ❤️"
+},
+{
+  "id":"voice_078",
+  "intent":"voice",
+  "keywords":["female voice"],
+  "response":"👩 Female AI voice select kar li gayi ❤️"
+},
+{
+  "id":"voice_079",
+  "intent":"voice",
+  "keywords":["change voice"],
+  "response":"🎙️ AI voice change ki ja rahi hai ❤️"
+},
+{
+  "id":"voice_080",
+  "intent":"voice",
+  "keywords":["voice settings"],
+  "response":"⚙️ Voice settings kholi ja rahi hain ❤️"
+}
+
+,
+{
+  "id":"voice_081",
+  "intent":"voice",
+  "keywords":["hey chishti","hello chishti ai"],
+  "response":"🤖 Ji, main sun raha hoon. Batayein aap ki kya madad kar sakta hoon? ❤️"
+},
+{
+  "id":"voice_082",
+  "intent":"voice",
+  "keywords":["listen to me"],
+  "response":"🎤 Ji, main aap ki baat sun raha hoon ❤️"
+},
+{
+  "id":"voice_083",
+  "intent":"voice",
+  "keywords":["microphone on"],
+  "response":"🎙️ Microphone activate kiya ja raha hai ❤️"
+},
+{
+  "id":"voice_084",
+  "intent":"voice",
+  "keywords":["microphone off"],
+  "response":"🎙️ Microphone band kar diya gaya ❤️"
+},
+{
+  "id":"voice_085",
+  "intent":"voice",
+  "keywords":["voice search"],
+  "response":"🔍 Voice Search shuru ho gayi. Apna sawal boliye ❤️"
+},
+{
+  "id":"voice_086",
+  "intent":"voice",
+  "keywords":["cancel voice"],
+  "response":"❌ Voice command cancel kar di gayi ❤️"
+},
+{
+  "id":"voice_087",
+  "intent":"voice",
+  "keywords":["repeat"],
+  "response":"🔁 Main dobara repeat kar raha hoon ❤️"
+},
+{
+  "id":"voice_088",
+  "intent":"voice",
+  "keywords":["repeat again"],
+  "response":"🔄 Zaroor, main phir se bolta hoon ❤️"
+},
+{
+  "id":"voice_089",
+  "intent":"voice",
+  "keywords":["next command"],
+  "response":"➡️ Agli command ke liye tayyar hoon ❤️"
+},
+{
+  "id":"voice_090",
+  "intent":"voice",
+  "keywords":["previous command"],
+  "response":"⬅️ Pichli command par wapas ja rahe hain ❤️"
+},
+{
+  "id":"voice_091",
+  "intent":"voice",
+  "keywords":["open chatbot"],
+  "response":"🤖 Chishti AI Chat kholi ja rahi hai ❤️"
+},
+{
+  "id":"voice_092",
+  "intent":"voice",
+  "keywords":["close chatbot"],
+  "response":"❌ AI Chat band ki ja rahi hai ❤️"
+},
+{
+  "id":"voice_093",
+  "intent":"voice",
+  "keywords":["start conversation"],
+  "response":"💬 Conversation shuru karte hain. Apna sawal boliye ❤️"
+},
+{
+  "id":"voice_094",
+  "intent":"voice",
+  "keywords":["end conversation"],
+  "response":"👋 Conversation khatam ki ja rahi hai. Allah Hafiz ❤️"
+},
+{
+  "id":"voice_095",
+  "intent":"voice",
+  "keywords":["read book"],
+  "response":"📖 Kitab reading mode mein kholi ja rahi hai ❤️"
+},
+{
+  "id":"voice_096",
+  "intent":"voice",
+  "keywords":["find book"],
+  "response":"📚 Kitab dhoondi ja rahi hai. Naam batayein ❤️"
+},
+{
+  "id":"voice_097",
+  "intent":"voice",
+  "keywords":["find author"],
+  "response":"👤 Musannif dhoonda ja raha hai. Naam batayein ❤️"
+},
+{
+  "id":"voice_098",
+  "intent":"voice",
+  "keywords":["go to library"],
+  "response":"🏛️ Chishti Library kholi ja rahi hai ❤️"
+},
+{
+  "id":"voice_099",
+  "intent":"voice",
+  "keywords":["what can you do"],
+  "response":"🤖 Main books search, authors search, reading aur Islami maloomat mein aap ki madad kar sakta hoon ❤️"
+},
+{
+  "id":"voice_100",
+  "intent":"voice",
+  "keywords":["thank you voice"],
+  "response":"❤️ Aap ka bhi bohot shukriya. Allah Ta'ala aap ko jazaye khair ata farmaye."
+}
