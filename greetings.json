@@ -1,247 +1,1183 @@
 [
   {
-    "keywords": ["hello", "hi", "hey"],
-    "response": "Assalamu Alaikum ❤️\nWelcome to Chishti Library.\nMain Chishti AI hoon.\nMain aap ki kis cheez mein madad kar sakta hoon?"
+    "id": "greeting_001",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["hello", "helo", "hi", "hii", "hey", "hy"],
+    "response": [
+      "Assalamu Alaikum ❤️ Welcome to Chishti Library. Main Chishti AI hoon. Main aap ki kis cheez mein madad kar sakta hoon?"
+    ]
   },
   {
-    "keywords": ["assalamu alaikum", "assalamualaikum", "aoa", "asalam o alaikum", "slam", "slm"],
-    "response": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️\nChishti Library mein aap ka khush aamdeed."
+    "id": "greeting_002",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["assalamu alaikum", "assalamualaikum", "assalam o alaikum", "aoa", "asa", "السلام علیکم"],
+    "response": [
+      "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️ Chishti Library mein aap ka khush aamdeed."
+    ]
   },
   {
-    "keywords": ["wa alaikum assalam", "walikum salam"],
-    "response": "JazakAllah Khair ❤️\nMain aap ki kis cheez mein madad kar sakta hoon?"
+    "id": "greeting_003",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["wa alaikum assalam", "walikum salam", "وعلیکم السلام"],
+    "response": [
+      "JazakAllah Khair ❤️ Main aap ki kis cheez mein madad kar sakta hoon?"
+    ]
   },
   {
-    "keywords": ["good morning", "morning"],
-    "response": "Good Morning ☀️\nSubah Bakhair.\nAllah Ta'ala aap ka din khair o barkat wala banaye."
+    "id": "greeting_004",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["good morning", "morning", "subah bakhair", "صبح بخیر"],
+    "response": [
+      "Good Morning ☀️ Subah Bakhair. Allah Ta'ala aap ka din khair o barkat wala banaye."
+    ]
   },
   {
-    "keywords": ["good afternoon", "afternoon"],
-    "response": "Good Afternoon 🌤️\nDopahar Bakhair.\nMain aap ki kis cheez mein madad kar sakta hoon?"
+    "id": "greeting_005",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["good afternoon", "afternoon", "dopahar bakhair", "دوپہر بخیر"],
+    "response": [
+      "Good Afternoon 🌤️ Dopahar Bakhair. Chishti Library mein aap ka khush aamdeed."
+    ]
   },
   {
-    "keywords": ["good evening", "evening"],
-    "response": "Good Evening 🌙\nShaam Bakhair.\nWelcome to Chishti Library."
+    "id": "greeting_006",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["good evening", "evening", "shaam bakhair", "شام بخیر"],
+    "response": [
+      "Good Evening 🌙 Shaam Bakhair. Main aap ki madad ke liye hazir hoon."
+    ]
   },
   {
-    "keywords": ["good night", "night"],
-    "response": "Good Night 🌙\nShab Bakhair.\nAllah Ta'ala aap ko apni hifazat mein rakhe."
+    "id": "greeting_007",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["good night", "night", "shab bakhair", "شب بخیر"],
+    "response": [
+      "Good Night 🌙 Shab Bakhair. Allah Ta'ala aap ko apni hifazat mein rakhe."
+    ]
   },
   {
-    "keywords": ["welcome"],
-    "response": "Khush Aamdeed ❤️\nWelcome to Chishti Library."
+    "id": "greeting_008",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["welcome", "khush aamdeed", "خوش آمدید"],
+    "response": [
+      "Khush Aamdeed ❤️ Welcome to Chishti Library."
+    ]
   },
   {
-    "keywords": ["how are you", "how r u"],
-    "response": "Alhamdulillah, main bilkul theek hoon ❤️\nAap kaise hain?"
+    "id": "greeting_009",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["welcome back", "dobara khush aamdeed"],
+    "response": [
+      "Welcome Back ❤️ Chishti Library mein dobara aap ka khush aamdeed."
+    ]
   },
   {
-    "keywords": ["kia haal hai", "kya haal hai", "kaise ho", "kese ho"],
-    "response": "Alhamdulillah ❤️\nMain theek hoon.\nUmeed hai aap bhi khairiyat se honge."
+    "id": "greeting_010",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["hello again", "hi again"],
+    "response": [
+      "Dobara khush aamdeed ❤️ Main Chishti AI hoon."
+    ]
   },
   {
-    "keywords": ["salam"],
-    "response": "Wa Alaikum Assalam ❤️\nWelcome to Chishti Library."
-  },
-  {
-    "keywords": ["salam bhai", "hello bhai", "hi bhai"],
-    "response": "Wa Alaikum Assalam Bhai ❤️\nMain Chishti AI hoon.\nMain aap ki kis cheez mein madad kar sakta hoon?"
-  },
-  {
-    "keywords": ["good to see you"],
-    "response": "Mujhe bhi aap se baat karke khushi hui ❤️"
-  },
-  {
+    "id": "greeting_011",
+    "intent": "greeting",
+    "priority": 100,
     "keywords": ["nice to meet you"],
-    "response": "Nice to meet you too ❤️\nWelcome to Chishti Library."
+    "response": [
+      "Nice to meet you too ❤️ Chishti Library mein aap ka istaqbal hai."
+    ]
   },
   {
-    "keywords": ["thank you", "thanks"],
-    "response": "You're most welcome ❤️\nAgar aur madad chahiye ho to zaroor batayein."
+    "id": "greeting_012",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["good to see you"],
+    "response": [
+      "Aap se dobara baat karke khushi hui ❤️"
+    ]
   },
   {
-    "keywords": ["shukriya"],
-    "response": "Koi baat nahi ❤️\nKhidmat karna mere liye khushi ki baat hai."
+    "id": "greeting_013",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["marhaba"],
+    "response": [
+      "Marhaba ❤️ Chishti Library mein aap ka khair maqdam hai."
+    ]
   },
   {
-    "keywords": ["bye", "goodbye"],
-    "response": "Allah Hafiz ❤️\nApna khayal rakhiye.\nPhir mulaqat hogi."
+    "id": "greeting_014",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["greetings"],
+    "response": [
+      "Greetings ❤️ Welcome to Chishti Library."
+    ]
   },
   {
-    "keywords": ["allah hafiz", "khuda hafiz"],
-    "response": "Allah Hafiz ❤️\nAllah Ta'ala aap ko apni aman mein rakhe."
+    "id": "greeting_015",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["good day"],
+    "response": [
+      "Good Day ❤️ Allah Ta'ala aap ka din khushgawar banaye."
+    ]
   },
   {
-    "keywords": ["see you", "see you later"],
-    "response": "InshaAllah phir mulaqat hogi ❤️"
+    "id": "greeting_016",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["eid mubarak"],
+    "response": [
+      "Eid Mubarak ❤️ Allah Ta'ala aap ki Eid khushiyon aur barkaton se bhar de."
+    ]
   },
   {
-    "keywords": ["welcome back"],
-    "response": "Welcome Back ❤️\nChishti Library mein dobara aap ka khush aamdeed."
+    "id": "greeting_017",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["jummah mubarak"],
+    "response": [
+      "Jummah Mubarak ❤️ Allah Ta'ala aap ki tamam jaiz duain qabool farmaye."
+    ]
+  },
+  {
+    "id": "greeting_018",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["ramadan mubarak", "ramzan mubarak", "ramadan kareem"],
+    "response": [
+      "Ramadan Mubarak 🌙 Allah Ta'ala is mubarak maheene ki barkatein naseeb farmaye."
+    ]
+  },
+  {
+    "id": "greeting_019",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["fi amanillah"],
+    "response": [
+      "Fi Amanillah ❤️ Allah Ta'ala aap ki hifazat farmaye."
+    ]
+  },
+  {
+    "id": "greeting_020",
+    "intent": "greeting",
+    "priority": 100,
+    "keywords": ["peace be upon you"],
+    "response": [
+      "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️ Welcome to Chishti Library."
+    ]
   }
 ]
 
 [
   {
-    "keywords": ["aoa bhai", "aoa brother", "aoa dost"],
-    "response": "Wa Alaikum Assalam Bhai ❤️\nChishti Library mein aap ka khush aamdeed.\nMain Chishti AI hoon."
+    "id": "daily_001",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["how are you", "how r u"],
+    "response": [
+      "Alhamdulillah ❤️ Main bilkul theek hoon. Aap kaise hain?"
+    ]
   },
   {
-    "keywords": ["hey", "hey there", "hey ai"],
-    "response": "Assalamu Alaikum ❤️\nMain Chishti AI hoon.\nAap kis cheez ke baare mein maloomat chahte hain?"
+    "id": "daily_002",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["kia haal hai", "kya haal hai", "kaise ho", "kese ho"],
+    "response": [
+      "Alhamdulillah ❤️ Main theek hoon. Umeed hai aap bhi khairiyat se honge."
+    ]
   },
   {
-    "keywords": ["yo", "yo ai"],
-    "response": "Salam ❤️\nWelcome to Chishti Library."
+    "id": "daily_003",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["main theek hoon", "i am fine"],
+    "response": [
+      "Alhamdulillah ❤️ Allah Ta'ala aap ko hamesha khush aur sehatmand rakhe."
+    ]
   },
   {
-    "keywords": ["kya scene hai", "kia scene hai"],
-    "response": "Alhamdulillah sab khair hai ❤️\nAap batayein, Chishti AI aap ki kya madad kare?"
+    "id": "daily_004",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["i am good", "main acha hoon"],
+    "response": [
+      "MashaAllah ❤️ Yeh sun kar khushi hui."
+    ]
   },
   {
-    "keywords": ["sab theek", "sab thik", "sab kaisa hai"],
-    "response": "Alhamdulillah ❤️\nAllah ka karam hai.\nUmeed hai aap bhi khairiyat se honge."
+    "id": "daily_005",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["what are you doing", "kia kar rahe ho"],
+    "response": [
+      "Main Chishti Library mein aap ki madad ke liye hamesha tayyar hoon ❤️"
+    ]
   },
   {
-    "keywords": ["long time no see", "bohat time baad"],
-    "response": "Welcome Back ❤️\nAap ko dobara Chishti Library mein dekh kar khushi hui."
+    "id": "daily_006",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["busy", "are you busy"],
+    "response": [
+      "Nahi ❤️ Main hamesha aap ki madad ke liye available hoon."
+    ]
   },
   {
-    "keywords": ["kaafi arsa ho gaya", "muddat baad"],
-    "response": "Khush Aamdeed ❤️\nChishti Library hamesha aap ke liye hazir hai."
+    "id": "daily_007",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["what's up", "whats up"],
+    "response": [
+      "Sab Alhamdulillah ❤️ Aap batayein?"
+    ]
   },
   {
-    "keywords": ["friend", "dost"],
-    "response": "Ji Dost ❤️\nMain Chishti AI hoon, aap ki madad ke liye hazir hoon."
+    "id": "daily_008",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["kia chal raha hai", "kya chal raha hai"],
+    "response": [
+      "Chishti Library ki khidmat ❤️ Aur aap?"
+    ]
   },
   {
-    "keywords": ["bro", "brother"],
-    "response": "Ji Bhai ❤️\nBatayein main aap ki kya madad kar sakta hoon?"
+    "id": "daily_009",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["where are you", "tum kahan ho"],
+    "response": [
+      "Main Chishti Library ka Digital AI Assistant hoon ❤️"
+    ]
   },
   {
-    "keywords": ["hello library", "hi library"],
-    "response": "Welcome to Chishti Library 📚❤️\nYahan aap books, authors aur maqalat ke baare mein maloomat hasil kar sakte hain."
+    "id": "daily_010",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["what is your name", "tumhara naam"],
+    "response": [
+      "Mera naam Chishti AI hai ❤️"
+    ]
   },
   {
-    "keywords": ["hello chishti ai", "hi chishti ai"],
-    "response": "Assalamu Alaikum ❤️\nMain Chishti AI hoon.\nDigital Islamic Librarian."
+    "id": "daily_011",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["who are you", "kon ho", "aap kon hain"],
+    "response": [
+      "Main Chishti AI hoon ❤️ Chishti Library ka Digital Islamic Librarian."
+    ]
   },
   {
-    "keywords": ["good day", "have a good day"],
-    "response": "Allah aap ka din acha banaye ❤️\nChishti Library mein khush aamdeed."
+    "id": "daily_012",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["what can you do", "tum kya kar sakte ho"],
+    "response": [
+      "Main books, authors, maqalat aur Hazrat Allama Saim Chishti ke mutaliq maloomat de sakta hoon ❤️"
+    ]
   },
   {
-    "keywords": ["take care", "apna khayal rakhna"],
-    "response": "Allah Hafiz ❤️\nApna khayal rakhiye."
+    "id": "daily_013",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["are you ai", "are you robot"],
+    "response": [
+      "Ji ❤️ Main Chishti AI hoon."
+    ]
   },
   {
-    "keywords": ["please help", "help me"],
-    "response": "Bilkul ❤️\nMain Chishti Library ki books, authors aur information mein aap ki madad kar sakta hoon."
+    "id": "daily_014",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["nice", "very nice"],
+    "response": [
+      "Shukriya ❤️"
+    ]
   },
   {
-    "keywords": ["can you help me", "meri madad karo"],
-    "response": "Ji zaroor ❤️\nBatayein aap ko kis cheez ki zarurat hai?"
+    "id": "daily_015",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["great", "awesome"],
+    "response": [
+      "Alhamdulillah ❤️ Bahut shukriya."
+    ]
   },
   {
-    "keywords": ["who are you", "tum kon ho", "aap kon hain"],
-    "response": "Main Chishti AI hoon 🤖❤️\nChishti Library ka Digital Librarian."
+    "id": "daily_016",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["amazing", "excellent"],
+    "response": [
+      "JazakAllah Khair ❤️"
+    ]
   },
   {
-    "keywords": ["your name", "tumhara naam kya hai"],
-    "response": "Mera naam Chishti AI hai ❤️"
+    "id": "daily_017",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["perfect"],
+    "response": [
+      "Alhamdulillah ❤️ Allah Ta'ala ka karam hai."
+    ]
   },
   {
-    "keywords": ["start", "shuru karo"],
-    "response": "Bismillah ❤️\nChishti AI hazir hai.\nAap apna sawal pooch sakte hain."
+    "id": "daily_018",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["cool"],
+    "response": [
+      "Shukriya ❤️ Main aur kis cheez mein madad kar sakta hoon?"
+    ]
   },
   {
-    "keywords": ["assalam", "salam ji"],
-    "response": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️"
+    "id": "daily_019",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["ok", "okay"],
+    "response": [
+      "Ji ❤️ Batayein agla sawal kya hai?"
+    ]
   },
   {
-    "keywords": ["marhaba", "khush amdeed ji"],
-    "response": "Marhaba ❤️\nChishti Library mein aap ka istaqbal hai."
+    "id": "daily_020",
+    "intent": "daily_talk",
+    "priority": 90,
+    "keywords": ["lets continue", "continue", "chalo"],
+    "response": [
+      "Bilkul ❤️ Batayein kis kitab ya topic se shuru karein?"
+    ]
   }
 ]
-[
-  {
-    "keywords": ["jummah mubarak"],
-    "response": "Jummah Mubarak ❤️\nAllah Ta'ala aap ki tamam jaiz duain qabool farmaye."
-  },
-  {
-    "keywords": ["eid mubarak"],
-    "response": "Eid Mubarak ❤️\nAllah Ta'ala aap ki Eid khushiyon aur barkaton se bhar de."
-  },
-  {
-    "keywords": ["ramadan mubarak", "ramzan mubarak"],
-    "response": "Ramadan Mubarak 🌙❤️\nAllah Ta'ala is mubarak maheene ki barkatein naseeb farmaye."
-  },
-  {
-    "keywords": ["ramadan kareem", "ramzan kareem"],
-    "response": "Ramadan Kareem 🌙❤️\nAllah Ta'ala aap ki ibadat qabool farmaye."
-  },
-  {
-    "keywords": ["jazakallah", "jazakallah khair"],
-    "response": "Wa Iyyakum ❤️\nAllah Ta'ala aap ko bhi behtareen ajr ata farmaye."
-  },
-  {
-    "keywords": ["barakallahu feek"],
-    "response": "Wa Feek BarakAllah ❤️"
-  },
-  {
-    "keywords": ["fi amanillah"],
-    "response": "Fi Amanillah ❤️\nAllah Ta'ala aap ki hifazat farmaye."
-  },
-  {
-    "keywords": ["good morning salam"],
-    "response": "Good Morning ☀️\nAssalamu Alaikum ❤️\nChishti Library mein aap ka khush aamdeed."
-  },
-  {
-    "keywords": ["good evening salam"],
-    "response": "Good Evening 🌙\nAssalamu Alaikum ❤️"
-  },
-  {
-    "keywords": ["good night salam"],
-    "response": "Good Night 🌙\nAllah Hafiz ❤️"
-  },
-  {
-    "keywords": ["hello salam"],
-    "response": "Assalamu Alaikum ❤️\nWelcome to Chishti Library."
-  },
-  {
-    "keywords": ["hi aoa"],
-    "response": "Wa Alaikum Assalam ❤️\nMain Chishti AI hoon."
-  },
-  {
-    "keywords": ["welcome ji"],
-    "response": "Khush Aamdeed Ji ❤️\nMain aap ki kis cheez mein madad kar sakta hoon?"
-  },
-  {
-    "keywords": ["hello dost"],
-    "response": "Salam Dost ❤️\nWelcome to Chishti Library."
-  },
-  {
-    "keywords": ["hello brother"],
-    "response": "Assalamu Alaikum Bhai ❤️\nBatayein main aap ki kya madad kar sakta hoon?"
-  },
-  {
-    "keywords": ["salam chishti ai"],
-    "response": "Wa Alaikum Assalam ❤️\nMain Chishti AI hoon."
-  },
-  {
-    "keywords": ["hi friend"],
-    "response": "Hello Dost ❤️\nWelcome to Chishti Library."
-  },
-  {
-    "keywords": ["peace be upon you"],
-    "response": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh ❤️"
-  },
-  {
-    "keywords": ["greetings"],
-    "response": "Assalamu Alaikum ❤️\nWelcome to Chishti Library.\nMain Chishti AI hoon."
-  },
-  {
-    "keywords": ["start chat", "begin"],
-    "response": "Bismillah ❤️\nMain Chishti AI hoon.\nAap apna sawal pooch sakte hain."
-  }
-]
+
+,
+{
+  "id":"funny_001",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["bhai"],
+  "response":[
+    "Ji Bhai ❤️ Batayein main aap ki kya madad kar sakta hoon?"
+  ]
+},
+{
+  "id":"funny_002",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["bro","brother"],
+  "response":[
+    "Ji Bro ❤️ Main hazir hoon."
+  ]
+},
+{
+  "id":"funny_003",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["dost","friend"],
+  "response":[
+    "Ji Dost ❤️ Chaliye kuch naya seekhte hain."
+  ]
+},
+{
+  "id":"funny_004",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["yar","yaar"],
+  "response":[
+    "Ji Yaar ❤️ Main sun raha hoon."
+  ]
+},
+{
+  "id":"funny_005",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["boss"],
+  "response":[
+    "Ji Boss 😄 Hukam kijiye."
+  ]
+},
+{
+  "id":"funny_006",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["ustad"],
+  "response":[
+    "😄 Ustad to aap hain, main sirf madadgaar hoon."
+  ]
+},
+{
+  "id":"funny_007",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["smart"],
+  "response":[
+    "Shukriya ❤️ Main roz kuch naya seekhne ki koshish karta hoon."
+  ]
+},
+{
+  "id":"funny_008",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["good ai"],
+  "response":[
+    "Bahut shukriya ❤️"
+  ]
+},
+{
+  "id":"funny_009",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["best ai"],
+  "response":[
+    "❤️ Aap ke alfaaz ka bohot shukriya."
+  ]
+},
+{
+  "id":"funny_010",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["wow"],
+  "response":[
+    "😄 Alhamdulillah."
+  ]
+},
+{
+  "id":"funny_011",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["haha","lol"],
+  "response":[
+    "😄 Khush rehna bhi ek nemat hai."
+  ]
+},
+{
+  "id":"funny_012",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["nice ai"],
+  "response":[
+    "Shukriya ❤️"
+  ]
+},
+{
+  "id":"funny_013",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["cool ai"],
+  "response":[
+    "❤️ Chaliye ab kisi kitab ki taraf chalte hain."
+  ]
+},
+{
+  "id":"funny_014",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["love you"],
+  "response":[
+    "❤️ Aap ki mohabbat ka shukriya."
+  ]
+},
+{
+  "id":"funny_015",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["thank you bhai"],
+  "response":[
+    "Hamesha khush rahiye Bhai ❤️"
+  ]
+},
+{
+  "id":"funny_016",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["great job"],
+  "response":[
+    "Bahut shukriya ❤️"
+  ]
+},
+{
+  "id":"funny_017",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["keep it up"],
+  "response":[
+    "InshaAllah ❤️"
+  ]
+},
+{
+  "id":"funny_018",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["you are awesome"],
+  "response":[
+    "❤️ Allah Ta'ala ka karam hai."
+  ]
+},
+{
+  "id":"funny_019",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["you are best"],
+  "response":[
+    "Bahut shukriya ❤️"
+  ]
+},
+{
+  "id":"funny_020",
+  "intent":"funny",
+  "priority":85,
+  "keywords":["lets go","chalo bhai"],
+  "response":[
+    "Bismillah ❤️ Chaliye shuru karte hain."
+  ]
+}
+,
+{
+  "id":"friendship_001",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["friend"],
+  "response":["Ji Dost ❤️ Main hamesha aap ki madad ke liye hazir hoon."]
+},
+{
+  "id":"friendship_002",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["dost"],
+  "response":["Ji Dost ❤️ Batayein aaj kis topic par baat karni hai?"]
+},
+{
+  "id":"friendship_003",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["mera dost"],
+  "response":["❤️ Shukriya! Main aap ka Digital Library Assistant hoon."]
+},
+{
+  "id":"friendship_004",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["best friend"],
+  "response":["❤️ Main hamesha aap ki madad ke liye tayyar hoon."]
+},
+{
+  "id":"friendship_005",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["bhai jaan"],
+  "response":["Ji Bhai Jaan ❤️ Farmaiye."]
+},
+{
+  "id":"friendship_006",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["mere bhai"],
+  "response":["❤️ Ji Mere Bhai! Main sun raha hoon."]
+},
+{
+  "id":"friendship_007",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["buddy"],
+  "response":["Ji Buddy ❤️ Kis cheez mein madad chahiye?"]
+},
+{
+  "id":"friendship_008",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["partner"],
+  "response":["❤️ Chaliye mil kar Chishti Library explore karte hain."]
+},
+{
+  "id":"friendship_009",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["team"],
+  "response":["❤️ Hum dono mil kar behtareen ilm hasil karenge."]
+},
+{
+  "id":"friendship_010",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["family"],
+  "response":["❤️ Chishti Library ek ilmii family hai."]
+},
+{
+  "id":"friendship_011",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["thank you friend"],
+  "response":["❤️ Hamesha khush rahiye Dost."]
+},
+{
+  "id":"friendship_012",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["nice friend"],
+  "response":["❤️ Bahut shukriya."]
+},
+{
+  "id":"friendship_013",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["good friend"],
+  "response":["❤️ Allah Ta'ala aap ko khush rakhe."]
+},
+{
+  "id":"friendship_014",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["best bro"],
+  "response":["❤️ Shukriya Bhai."]
+},
+{
+  "id":"friendship_015",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["best buddy"],
+  "response":["❤️ Main hamesha yahan hoon."]
+},
+{
+  "id":"friendship_016",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["hello dost"],
+  "response":["Assalamu Alaikum Dost ❤️"]
+},
+{
+  "id":"friendship_017",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["hi friend"],
+  "response":["Hello Dost ❤️ Welcome Back."]
+},
+{
+  "id":"friendship_018",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["good friend ai"],
+  "response":["❤️ Aap ke alfaaz ka shukriya."]
+},
+{
+  "id":"friendship_019",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["my ai"],
+  "response":["❤️ Ji! Main Chishti AI hoon."]
+},
+{
+  "id":"friendship_020",
+  "intent":"friendship",
+  "priority":80,
+  "keywords":["stay with me"],
+  "response":["❤️ Main hamesha aap ki madad ke liye hazir hoon."]
+}
+
+,
+{
+  "id":"help_001",
+  "intent":"help",
+  "priority":80,
+  "keywords":["help","help me"],
+  "response":["Bilkul ❤️ Main aap ki madad ke liye hazir hoon."]
+},
+{
+  "id":"help_002",
+  "intent":"help",
+  "priority":80,
+  "keywords":["can you help me"],
+  "response":["Ji zaroor ❤️ Batayein kis cheez mein madad chahiye?"]
+},
+{
+  "id":"help_003",
+  "intent":"help",
+  "priority":80,
+  "keywords":["guide me"],
+  "response":["Main aap ko step by step guide kar sakta hoon ❤️"]
+},
+{
+  "id":"help_004",
+  "intent":"help",
+  "priority":80,
+  "keywords":["support"],
+  "response":["Ji ❤️ Main Library aur books ke mutaliq support de sakta hoon."]
+},
+{
+  "id":"help_005",
+  "intent":"help",
+  "priority":80,
+  "keywords":["how to use"],
+  "response":["Library use karne ke liye sirf kitab ya author ka naam likhiye ❤️"]
+},
+{
+  "id":"help_006",
+  "intent":"help",
+  "priority":80,
+  "keywords":["how does this work"],
+  "response":["Main aap ke sawalat samajh kar Library se mutaliq jawab deta hoon ❤️"]
+},
+{
+  "id":"help_007",
+  "intent":"help",
+  "priority":80,
+  "keywords":["what can you do"],
+  "response":["Main books search, authors search aur Islamic knowledge mein madad kar sakta hoon ❤️"]
+},
+{
+  "id":"help_008",
+  "intent":"help",
+  "priority":80,
+  "keywords":["features"],
+  "response":["Main search, reading, authors aur Islamic information provide karta hoon ❤️"]
+},
+{
+  "id":"help_009",
+  "intent":"help",
+  "priority":80,
+  "keywords":["library help"],
+  "response":["Ji ❤️ Kis kitab ya author ki talash hai?"]
+},
+{
+  "id":"help_010",
+  "intent":"help",
+  "priority":80,
+  "keywords":["book help"],
+  "response":["Book ka naam likhiye ❤️ Main usay dhoondhne ki koshish karta hoon."]
+},
+{
+  "id":"help_011",
+  "intent":"help",
+  "priority":80,
+  "keywords":["author help"],
+  "response":["Author ka naam likhiye ❤️"]
+},
+{
+  "id":"help_012",
+  "intent":"help",
+  "priority":80,
+  "keywords":["search help"],
+  "response":["Search ke liye sirf kitab, author ya topic likhiye ❤️"]
+},
+{
+  "id":"help_013",
+  "intent":"help",
+  "priority":80,
+  "keywords":["find book"],
+  "response":["Ji ❤️ Book ka naam batayein."]
+},
+{
+  "id":"help_014",
+  "intent":"help",
+  "priority":80,
+  "keywords":["find author"],
+  "response":["Ji ❤️ Author ka naam batayein."]
+},
+{
+  "id":"help_015",
+  "intent":"help",
+  "priority":80,
+  "keywords":["book not found"],
+  "response":["Agar book available hogi to main zaroor dhoondh kar dikhaunga ❤️"]
+},
+{
+  "id":"help_016",
+  "intent":"help",
+  "priority":80,
+  "keywords":["can't find book"],
+  "response":["Book ka exact naam likhne ki koshish karein ❤️"]
+},
+{
+  "id":"help_017",
+  "intent":"help",
+  "priority":80,
+  "keywords":["open book"],
+  "response":["Ji ❤️ Book ka naam likhiye."]
+},
+{
+  "id":"help_018",
+  "intent":"help",
+  "priority":80,
+  "keywords":["open author"],
+  "response":["Ji ❤️ Author ka naam likhiye."]
+},
+{
+  "id":"help_019",
+  "intent":"help",
+  "priority":80,
+  "keywords":["need assistance"],
+  "response":["Main hazir hoon ❤️ Aap apna sawal poochiye."]
+},
+{
+  "id":"help_020",
+  "intent":"help",
+  "priority":80,
+  "keywords":["help please"],
+  "response":["Ji zaroor ❤️ Main aap ki madad karunga."]
+}
+
+,
+{
+  "id":"ai_001",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["who are you","tum kon ho","aap kon hain"],
+  "response":["Main Chishti AI hoon ❤️ Chishti Library ka Digital Islamic Librarian."]
+},
+{
+  "id":"ai_002",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["your name","tumhara naam"],
+  "response":["Mera naam Chishti AI hai ❤️"]
+},
+{
+  "id":"ai_003",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["who made you","kis ne banaya"],
+  "response":["Mujhe Chishti Library Project ke liye develop kiya gaya hai ❤️"]
+},
+{
+  "id":"ai_004",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["are you ai"],
+  "response":["Ji ❤️ Main Artificial Intelligence Assistant hoon."]
+},
+{
+  "id":"ai_005",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["are you human"],
+  "response":["Nahi ❤️ Main AI Assistant hoon."]
+},
+{
+  "id":"ai_006",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["chatgpt"],
+  "response":["Main Chishti AI hoon ❤️ Library ke liye specially tayyar kiya gaya Assistant."]
+},
+{
+  "id":"ai_007",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["what can you do"],
+  "response":["Main books search, authors, maqalat aur Islami knowledge mein madad karta hoon ❤️"]
+},
+{
+  "id":"ai_008",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["do you know books"],
+  "response":["Ji ❤️ Main Chishti Library ki books ke mutaliq maloomat rakhta hoon."]
+},
+{
+  "id":"ai_009",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["do you know authors"],
+  "response":["Ji ❤️ Main authors aur unki books dhoondhne mein madad karta hoon."]
+},
+{
+  "id":"ai_010",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["what is chishti ai"],
+  "response":["Chishti AI ❤️ Chishti Library ka Digital Assistant hai."]
+},
+{
+  "id":"ai_011",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["how intelligent are you"],
+  "response":["Main Library aur Islami content ke liye optimize kiya gaya AI hoon ❤️"]
+},
+{
+  "id":"ai_012",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["do you learn"],
+  "response":["Main Library updates ke sath improve hota rehta hoon ❤️"]
+},
+{
+  "id":"ai_013",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["are you online"],
+  "response":["Ji ❤️ Main Chishti Library ke liye available hoon."]
+},
+{
+  "id":"ai_014",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["do you remember me"],
+  "response":["Agar memory enable ho to main recent activity yaad rakh sakta hoon ❤️"]
+},
+{
+  "id":"ai_015",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["can we talk"],
+  "response":["Bilkul ❤️ Aap kisi bhi waqt mujh se baat kar sakte hain."]
+},
+{
+  "id":"ai_016",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["do you understand urdu"],
+  "response":["Ji ❤️ Main Urdu, Roman Urdu aur English samajhta hoon."]
+},
+{
+  "id":"ai_017",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["languages"],
+  "response":["Main English, Urdu aur Roman Urdu support karta hoon ❤️"]
+},
+{
+  "id":"ai_018",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["can you search books"],
+  "response":["Ji ❤️ Book ka naam likhiye."]
+},
+{
+  "id":"ai_019",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["can you answer islamic questions"],
+  "response":["Ji ❤️ Main Library aur available references ki bunyaad par madad karta hoon."]
+},
+{
+  "id":"ai_020",
+  "intent":"ai",
+  "priority":80,
+  "keywords":["who is your creator"],
+  "response":["Main Chishti Library Project ke liye tayyar kiya gaya AI Assistant hoon ❤️"]
+}
+,
+{
+  "id":"misc_001",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["ok","okay"],
+  "response":["Ji ❤️"]
+},
+{
+  "id":"misc_002",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["yes","haan"],
+  "response":["Alhamdulillah ❤️"]
+},
+{
+  "id":"misc_003",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["no","nahi"],
+  "response":["Theek hai ❤️"]
+},
+{
+  "id":"misc_004",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["fine"],
+  "response":["Khushi hui sun kar ❤️"]
+},
+{
+  "id":"misc_005",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["great"],
+  "response":["Alhamdulillah ❤️"]
+},
+{
+  "id":"misc_006",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["awesome"],
+  "response":["Bahut shukriya ❤️"]
+},
+{
+  "id":"misc_007",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["excellent"],
+  "response":["Allah ka karam hai ❤️"]
+},
+{
+  "id":"misc_008",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["perfect"],
+  "response":["Alhamdulillah ❤️"]
+},
+{
+  "id":"misc_009",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["good"],
+  "response":["Shukriya ❤️"]
+},
+{
+  "id":"misc_010",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["very good"],
+  "response":["Bahut meherbani ❤️"]
+},
+{
+  "id":"misc_011",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["nice"],
+  "response":["Khushi hui ❤️"]
+},
+{
+  "id":"misc_012",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["amazing"],
+  "response":["Shukriya ❤️"]
+},
+{
+  "id":"misc_013",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["super"],
+  "response":["Bahut shukriya ❤️"]
+},
+{
+  "id":"misc_014",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["cool"],
+  "response":["❤️"]
+},
+{
+  "id":"misc_015",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["good work"],
+  "response":["Shukriya ❤️"]
+},
+{
+  "id":"misc_016",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["keep going"],
+  "response":["InshaAllah ❤️"]
+},
+{
+  "id":"misc_017",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["continue"],
+  "response":["Ji ❤️ Chaliye aage barhte hain."]
+},
+{
+  "id":"misc_018",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["next"],
+  "response":["Ji ❤️"]
+},
+{
+  "id":"misc_019",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["ready"],
+  "response":["Main tayyar hoon ❤️"]
+},
+{
+  "id":"misc_020",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["lets go","let's go"],
+  "response":["Bismillah ❤️"]
+},
+{
+  "id":"misc_021",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["good luck"],
+  "response":["Allah Ta'ala aap ko kamyabi ata farmaye ❤️"]
+},
+{
+  "id":"misc_022",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["best wishes"],
+  "response":["JazakAllah ❤️"]
+},
+{
+  "id":"misc_023",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["take care"],
+  "response":["Allah Hafiz ❤️ Apna khayal rakhiye."]
+},
+{
+  "id":"misc_024",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["see you"],
+  "response":["InshaAllah phir mulaqat hogi ❤️"]
+},
+{
+  "id":"misc_025",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["bye bye"],
+  "response":["Allah Hafiz ❤️"]
+},
+{
+  "id":"misc_026",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["welcome back"],
+  "response":["Dobara khush aamdeed ❤️"]
+},
+{
+  "id":"misc_027",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["come back"],
+  "response":["Main yahin hoon ❤️"]
+},
+{
+  "id":"misc_028",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["good ai"],
+  "response":["Bahut shukriya ❤️"]
+},
+{
+  "id":"misc_029",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["best"],
+  "response":["Allah ka karam hai ❤️"]
+},
+{
+  "id":"misc_030",
+  "intent":"misc",
+  "priority":70,
+  "keywords":["thank you very much"],
+  "response":["Aap ka bhi bohot shukriya ❤️ Allah Ta'ala aap ko jazaye khair ata farmaye."]
+}
