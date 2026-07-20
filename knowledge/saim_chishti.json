@@ -1,0 +1,487 @@
+[
+  {
+    "id": "saim_001",
+    "intent": "saim_chishti",
+    "keywords": ["who is allama saim chishti", "hazrat allama saim chishti", "allama saim chishti"],
+    "response": "Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) aik mashhoor Islami scholar, naat-go shair aur musannif thay. Unhon ne deeni, adabi aur roohani khidmaat anjaam dein."
+  },
+  {
+    "id": "saim_002",
+    "intent": "saim_chishti",
+    "keywords": ["who is saim chishti"],
+    "response": "Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) Chishti silsile se talluq rakhne wale alim aur shair thay."
+  },
+  {
+    "id": "saim_003",
+    "intent": "saim_chishti",
+    "keywords": ["about saim chishti", "about allama saim chishti"],
+    "response": "Hazrat Allama Saim Chishti ne Islami adab, naat, hamd aur deeni tahqeeq ke maydan mein qabil-e-qadr khidmaat anjaam dein."
+  },
+  {
+    "id": "saim_004",
+    "intent": "saim_chishti",
+    "keywords": ["biography", "biography of saim chishti"],
+    "response": "Hazrat Allama Saim Chishti ki zindagi ilm, ibadat aur Ishq-e-Rasool ﷺ se bharpoor thi."
+  },
+  {
+    "id": "saim_005",
+    "intent": "saim_chishti",
+    "keywords": ["full name"],
+    "response": "Un ka mashhoor naam Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) hai."
+  },
+  {
+    "id": "saim_006",
+    "intent": "saim_chishti",
+    "keywords": ["occupation", "profession"],
+    "response": "Woh alim, musannif, shair aur Islami researcher thay."
+  },
+  {
+    "id": "saim_007",
+    "intent": "saim_chishti",
+    "keywords": ["what did he write"],
+    "response": "Unhon ne naat, hamd, manqabat, Islami kutub aur maqalat tasneef kiye."
+  },
+  {
+    "id": "saim_008",
+    "intent": "saim_chishti",
+    "keywords": ["books of saim chishti"],
+    "response": "Hazrat Allama Saim Chishti ki kai mashhoor kutub Chishti Library mein mojood hain."
+  },
+  {
+    "id": "saim_009",
+    "intent": "saim_chishti",
+    "keywords": ["poetry"],
+    "response": "Un ki shairi Ishq-e-Rasool ﷺ, Ahl-e-Baitؑ aur deeni akhlaq par mabni hai."
+  },
+  {
+    "id": "saim_010",
+    "intent": "saim_chishti",
+    "keywords": ["naat"],
+    "response": "Hazrat Allama Saim Chishti ki naatiya shairi bohot maqbool hai."
+  },
+  {
+    "id": "saim_011",
+    "intent": "saim_chishti",
+    "keywords": ["hamd"],
+    "response": "Unhon ne Allah Ta'ala ki hamd mein bhi behtareen kalam likha."
+  },
+  {
+    "id": "saim_012",
+    "intent": "saim_chishti",
+    "keywords": ["manqabat"],
+    "response": "Un ki manqabati shairi Ahl-e-Baitؑ aur Auliya Allah ki muhabbat ka izhar karti hai."
+  },
+  {
+    "id": "saim_013",
+    "intent": "saim_chishti",
+    "keywords": ["research work"],
+    "response": "Un ki tahqeeqi khidmaat Islami adab aur tareekh mein aham maqam rakhti hain."
+  },
+  {
+    "id": "saim_014",
+    "intent": "saim_chishti",
+    "keywords": ["articles"],
+    "response": "Hazrat Allama Saim Chishti ke maqalat Chishti Library mein dastiyab hain."
+  },
+  {
+    "id": "saim_015",
+    "intent": "saim_chishti",
+    "keywords": ["library"],
+    "response": "Chishti Library ka maqsad Hazrat Allama Saim Chishti ki ilm-o-adab ki khidmaat ko digital soorat mein mehfooz karna hai."
+  },
+  {
+    "id": "saim_016",
+    "intent": "saim_chishti",
+    "keywords": ["purpose"],
+    "response": "Un ki tasneefaat ka maqsad ilm, akhlaq aur Ishq-e-Rasool ﷺ ko aam karna tha."
+  },
+  {
+    "id": "saim_017",
+    "intent": "saim_chishti",
+    "keywords": ["legacy"],
+    "response": "Hazrat Allama Saim Chishti ka ilm aur adabi virsa aaj bhi qeemati asasa hai."
+  },
+  {
+    "id": "saim_018",
+    "intent": "saim_chishti",
+    "keywords": ["teachings"],
+    "response": "Un ki taleemat Qur'an, Sunnat aur muhabbat-e-Rasool ﷺ par mabni hain."
+  },
+  {
+    "id": "saim_019",
+    "intent": "saim_chishti",
+    "keywords": ["famous"],
+    "response": "Hazrat Allama Saim Chishti apni deeni, adabi aur roohani khidmaat ki wajah se jane jate hain."
+  },
+  {
+    "id": "saim_020",
+    "intent": "saim_chishti",
+    "keywords": ["chishti ai"],
+    "response": "Main Chishti AI hoon. Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ki kutub aur ilm ke mutaliq aap ki madad ke liye hazir hoon."
+  }
+]
+
+,
+{
+  "id":"saim_021",
+  "intent":"saim_chishti",
+  "keywords":["kis silsile se taluq tha","chishti silsila"],
+  "response":"Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ka talluq Chishti silsila se tha."
+},
+{
+  "id":"saim_022",
+  "intent":"saim_chishti",
+  "keywords":["ilm"],
+  "response":"Hazrat Allama Saim Chishti ne apni zindagi ilm-e-deen ke farogh ke liye waqf ki."
+},
+{
+  "id":"saim_023",
+  "intent":"saim_chishti",
+  "keywords":["deen"],
+  "response":"Un ki tamam khidmaat Qur'an, Sunnat aur muhabbat-e-Rasool ﷺ ke gird ghoomti hain."
+},
+{
+  "id":"saim_024",
+  "intent":"saim_chishti",
+  "keywords":["islamic scholar"],
+  "response":"Hazrat Allama Saim Chishti aik mohtaram Islami scholar aur musannif thay."
+},
+{
+  "id":"saim_025",
+  "intent":"saim_chishti",
+  "keywords":["writer"],
+  "response":"Unhon ne Islami kutub, maqalat aur naatiya adab par beshumar tasneefaat likheen."
+},
+{
+  "id":"saim_026",
+  "intent":"saim_chishti",
+  "keywords":["naat writer"],
+  "response":"Hazrat Allama Saim Chishti naatiya adab ke numaya shu'ara mein shumar hote hain."
+},
+{
+  "id":"saim_027",
+  "intent":"saim_chishti",
+  "keywords":["hamd writer"],
+  "response":"Unhon ne Allah Ta'ala ki hamd mein dilnasheen kalam likha."
+},
+{
+  "id":"saim_028",
+  "intent":"saim_chishti",
+  "keywords":["manqabat writer"],
+  "response":"Un ki manqabati shairi Ahl-e-Baitؑ aur buzurgan-e-deen ki muhabbat ka aaina hai."
+},
+{
+  "id":"saim_029",
+  "intent":"saim_chishti",
+  "keywords":["urdu poet"],
+  "response":"Hazrat Allama Saim Chishti Urdu ke mashhoor deeni shairon mein shumar kiye jate hain."
+},
+{
+  "id":"saim_030",
+  "intent":"saim_chishti",
+  "keywords":["researcher"],
+  "response":"Woh Islami research aur deeni tahqeeq se bhi gehra shughaf rakhte thay."
+},
+{
+  "id":"saim_031",
+  "intent":"saim_chishti",
+  "keywords":["digital library"],
+  "response":"Chishti Library un ki ilm-o-adab ki khidmaat ko digital soorat mein mehfooz kar rahi hai."
+},
+{
+  "id":"saim_032",
+  "intent":"saim_chishti",
+  "keywords":["why chishti library"],
+  "response":"Chishti Library ka maqsad Hazrat Allama Saim Chishti ki kutub ko duniya bhar tak pohanchana hai."
+},
+{
+  "id":"saim_033",
+  "intent":"saim_chishti",
+  "keywords":["mission"],
+  "response":"Mission ye hai ke ilm, Ishq-e-Rasool ﷺ aur muhabbat-e-Ahl-e-Baitؑ ko aam kiya jaye."
+},
+{
+  "id":"saim_034",
+  "intent":"saim_chishti",
+  "keywords":["vision"],
+  "response":"Vision ye hai ke deeni kutub ko digital platform par mehfooz aur aasani se dastiyab banaya jaye."
+},
+{
+  "id":"saim_035",
+  "intent":"saim_chishti",
+  "keywords":["urdu books"],
+  "response":"Hazrat Allama Saim Chishti ki aksar tasneefaat Urdu zaban mein hain."
+},
+{
+  "id":"saim_036",
+  "intent":"saim_chishti",
+  "keywords":["library books"],
+  "response":"Chishti Library mein Hazrat Allama Saim Chishti ki mukhtalif kutub mojood hain."
+},
+{
+  "id":"saim_037",
+  "intent":"saim_chishti",
+  "keywords":["maqalat"],
+  "response":"Un ke tahqeeqi maqalat bhi Chishti Library ka hissa hain."
+},
+{
+  "id":"saim_038",
+  "intent":"saim_chishti",
+  "keywords":["best work"],
+  "response":"Hazrat Allama Saim Chishti ki kutub aur naatiya adab un ki aham ilmi khidmaat mein shamil hain."
+},
+{
+  "id":"saim_039",
+  "intent":"saim_chishti",
+  "keywords":["islamic literature"],
+  "response":"Un ki tasneefaat Islami adab ka qeemati hissa hain."
+},
+{
+  "id":"saim_040",
+  "intent":"saim_chishti",
+  "keywords":["about library project"],
+  "response":"Chishti AI aur Chishti Library ka maqsad Hazrat Allama Saim Chishti ke ilm ko digital duniya tak pohanchana hai."
+}
+
+,
+{
+  "id":"saim_041",
+  "intent":"saim_chishti",
+  "keywords":["kis cheez ke shair thay","poet"],
+  "response":"Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) deeni, naatiya aur roohani shair thay."
+},
+{
+  "id":"saim_042",
+  "intent":"saim_chishti",
+  "keywords":["deeni khidmat"],
+  "response":"Unhon ne apni zindagi deeni taleem, tasneef aur Islami adab ki khidmat mein guzari."
+},
+{
+  "id":"saim_043",
+  "intent":"saim_chishti",
+  "keywords":["islami adab"],
+  "response":"Hazrat Allama Saim Chishti ka Islami adab mein numaya maqam hai."
+},
+{
+  "id":"saim_044",
+  "intent":"saim_chishti",
+  "keywords":["ishq e rasool"],
+  "response":"Un ki aksar tasneefaat aur shairi Ishq-e-Rasool ﷺ se roshan hai."
+},
+{
+  "id":"saim_045",
+  "intent":"saim_chishti",
+  "keywords":["ahl e bait"],
+  "response":"Hazrat Allama Saim Chishti ne Ahl-e-Baitؑ ki muhabbat ko apne kalam mein numaya jagah di."
+},
+{
+  "id":"saim_046",
+  "intent":"saim_chishti",
+  "keywords":["sufi"],
+  "response":"Un ki tahreeron mein tasawwuf aur akhlaq ka khoobsurat rang nazar aata hai."
+},
+{
+  "id":"saim_047",
+  "intent":"saim_chishti",
+  "keywords":["akhlaq"],
+  "response":"Unhon ne hamesha husn-e-akhlaq aur deeni qadr-o-qeemat ko farogh diya."
+},
+{
+  "id":"saim_048",
+  "intent":"saim_chishti",
+  "keywords":["islami books"],
+  "response":"Hazrat Allama Saim Chishti ki Islami kutub Chishti Library mein mojood hain."
+},
+{
+  "id":"saim_049",
+  "intent":"saim_chishti",
+  "keywords":["library mission"],
+  "response":"Chishti Library ka mission un ki tamam tasneefaat ko digital soorat mein mehfooz rakhna hai."
+},
+{
+  "id":"saim_050",
+  "intent":"saim_chishti",
+  "keywords":["digital preservation"],
+  "response":"Library ka maqsad ilm ko mehfooz rakhna aur aane wali naslon tak pohanchana hai."
+},
+{
+  "id":"saim_051",
+  "intent":"saim_chishti",
+  "keywords":["books available"],
+  "response":"Aap Hazrat Allama Saim Chishti ki kai mashhoor kutub Chishti Library mein parh sakte hain."
+},
+{
+  "id":"saim_052",
+  "intent":"saim_chishti",
+  "keywords":["naatiya adab"],
+  "response":"Un ka naatiya adab Urdu Islami literature ka qeemati hissa hai."
+},
+{
+  "id":"saim_053",
+  "intent":"saim_chishti",
+  "keywords":["hamdiya kalam"],
+  "response":"Hazrat Allama Saim Chishti ka Hamdiya kalam Allah Ta'ala ki azmat ka izhar karta hai."
+},
+{
+  "id":"saim_054",
+  "intent":"saim_chishti",
+  "keywords":["manqabati kalam"],
+  "response":"Un ki manqabatein buzurgan-e-deen aur Ahl-e-Baitؑ ki muhabbat se labraiz hain."
+},
+{
+  "id":"saim_055",
+  "intent":"saim_chishti",
+  "keywords":["islami research"],
+  "response":"Un ki research Islami tareekh aur deeni adab ke liye qeemati asasa hai."
+},
+{
+  "id":"saim_056",
+  "intent":"saim_chishti",
+  "keywords":["urdu literature"],
+  "response":"Hazrat Allama Saim Chishti Urdu deeni adab ke numaya musannifon mein shumar hote hain."
+},
+{
+  "id":"saim_057",
+  "intent":"saim_chishti",
+  "keywords":["library purpose"],
+  "response":"Chishti Library ka bunyadi maqsad ilm ko aasaan aur digital andaaz mein faraham karna hai."
+},
+{
+  "id":"saim_058",
+  "intent":"saim_chishti",
+  "keywords":["legacy of saim chishti"],
+  "response":"Hazrat Allama Saim Chishti ka ilmi aur adabi virsa hamesha zinda rahega InshaAllah."
+},
+{
+  "id":"saim_059",
+  "intent":"saim_chishti",
+  "keywords":["chishti ai purpose"],
+  "response":"Chishti AI ka maqsad Hazrat Allama Saim Chishti ki kutub aur Islami maloomat tak rasai ko aasaan banana hai."
+},
+{
+  "id":"saim_060",
+  "intent":"saim_chishti",
+  "keywords":["tell me about hazrat allama saim chishti"],
+  "response":"Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) aik azeem alim, musannif aur naat-go shair thay. Un ki deeni, adabi aur roohani khidmaat Chishti Library ke zariye mehfooz ki ja rahi hain."
+}
+,
+{
+  "id":"saim_061",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti ki books","books list"],
+  "response":"Hazrat Allama Saim Chishti ki mukhtalif deeni aur adabi kutub Chishti Library mein dastiyab hain."
+},
+{
+  "id":"saim_062",
+  "intent":"saim_chishti",
+  "keywords":["kulliyat e saim chishti"],
+  "response":"Kulliyat-e-Saim Chishti Hazrat Allama Saim Chishti ke kalam ka majmua hai jo Chishti Library mein mojood hai."
+},
+{
+  "id":"saim_063",
+  "intent":"saim_chishti",
+  "keywords":["nawaye saim"],
+  "response":"Nawaye Saim Hazrat Allama Saim Chishti ki adabi aur deeni tasneefaat mein se ek hai."
+},
+{
+  "id":"saim_064",
+  "intent":"saim_chishti",
+  "keywords":["armaghan e madina"],
+  "response":"Armaghan-e-Madina Hazrat Allama Saim Chishti ki mashhoor tasneefaat mein shamil hai."
+},
+{
+  "id":"saim_065",
+  "intent":"saim_chishti",
+  "keywords":["husn e kainat"],
+  "response":"Husn-e-Kainat Hazrat Allama Saim Chishti ki deeni aur adabi kitab hai."
+},
+{
+  "id":"saim_066",
+  "intent":"saim_chishti",
+  "keywords":["shahdaye karbala"],
+  "response":"Shahdaye Karbala Hazrat Allama Saim Chishti ki aham Islami tasneefaat mein se hai."
+},
+{
+  "id":"saim_067",
+  "intent":"saim_chishti",
+  "keywords":["allama saim chishti ki tasneefaat"],
+  "response":"Hazrat Allama Saim Chishti ne naat, hamd, manqabat aur deeni mauzu'at par kai tasneefaat likheen."
+},
+{
+  "id":"saim_068",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti ka kalam"],
+  "response":"Un ka kalam Ishq-e-Rasool ﷺ, muhabbat aur deeni jazbat ka izhar karta hai."
+},
+{
+  "id":"saim_069",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti poetry"],
+  "response":"Hazrat Allama Saim Chishti ki poetry deeni aur roohani rang liye hue hai."
+},
+{
+  "id":"saim_070",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti naat"],
+  "response":"Un ki naatiya shairi mein Nabi-e-Kareem ﷺ se muhabbat ka izhar milta hai."
+},
+{
+  "id":"saim_071",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti hamd"],
+  "response":"Un ki Hamdiya shairi Allah Ta'ala ki hamd aur shukar par mabni hai."
+},
+{
+  "id":"saim_072",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti manqabat"],
+  "response":"Un ki manqabati shairi buzurgan-e-deen aur Ahl-e-Baitؑ ki muhabbat bayan karti hai."
+},
+{
+  "id":"saim_073",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti language"],
+  "response":"Hazrat Allama Saim Chishti ka zyada tar adabi kaam Urdu zaban mein hai."
+},
+{
+  "id":"saim_074",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti library"],
+  "response":"Chishti Library mein Hazrat Allama Saim Chishti ki kutub aur maloomat aik jagah jama ki gayi hain."
+},
+{
+  "id":"saim_075",
+  "intent":"saim_chishti",
+  "keywords":["why famous saim chishti"],
+  "response":"Hazrat Allama Saim Chishti apni deeni, adabi aur roohani khidmaat ki wajah se mashhoor hain."
+},
+{
+  "id":"saim_076",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti message"],
+  "response":"Un ka paigham ilm, muhabbat, akhlaq aur deen ki roshni phailana tha."
+},
+{
+  "id":"saim_077",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti teaching"],
+  "response":"Un ki taleemat ilm-e-deen aur behtareen akhlaq ki taraf rehnumai karti hain."
+},
+{
+  "id":"saim_078",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti importance"],
+  "response":"Hazrat Allama Saim Chishti ka kaam Urdu Islami adab mein qabil-e-qadr maqam rakhta hai."
+},
+{
+  "id":"saim_079",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti knowledge"],
+  "response":"Main Chishti AI hoon aur Hazrat Allama Saim Chishti ki kutub aur ilm ke mutaliq maloomat faraham kar sakta hoon."
+},
+{
+  "id":"saim_080",
+  "intent":"saim_chishti",
+  "keywords":["learn saim chishti"],
+  "response":"Aap Chishti Library ke zariye Hazrat Allama Saim Chishti ki kutub, shairi aur deeni kaam ka mutala kar sakte hain."
+}
