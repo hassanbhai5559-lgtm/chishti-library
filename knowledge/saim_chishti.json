@@ -485,3 +485,370 @@
   "keywords":["learn saim chishti"],
   "response":"Aap Chishti Library ke zariye Hazrat Allama Saim Chishti ki kutub, shairi aur deeni kaam ka mutala kar sakte hain."
 }
+
+
+,
+{
+  "id":"saim_101",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti library"],
+  "response":"Chishti Library Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ki kutub aur ilmi virsay ko digital soorat mein mehfooz karne ka project hai."
+},
+{
+  "id":"saim_102",
+  "intent":"saim_chishti",
+  "keywords":["digital project"],
+  "response":"Chishti Library ka digital project ilm ko har shakhs tak aasani se pohanchane ke liye banaya gaya hai."
+},
+{
+  "id":"saim_103",
+  "intent":"saim_chishti",
+  "keywords":["saim chishti research"],
+  "response":"Hazrat Allama Saim Chishti ki tahqeeqi khidmaat Islami adab ka qeemati hissa hain."
+},
+{
+  "id":"saim_104",
+  "intent":"saim_chishti",
+  "keywords":["urdu scholar"],
+  "response":"Hazrat Allama Saim Chishti Urdu deeni adab ke numaya scholar aur musannif thay."
+},
+{
+  "id":"saim_105",
+  "intent":"saim_chishti",
+  "keywords":["religious poet"],
+  "response":"Un ki shairi mein deen, akhlaq aur Ishq-e-Rasool ﷺ ka paigham numayan hai."
+},
+{
+  "id":"saim_106",
+  "intent":"saim_chishti",
+  "keywords":["naat poet"],
+  "response":"Hazrat Allama Saim Chishti ko naatiya adab mein khaas maqam hasil hai."
+},
+{
+  "id":"saim_107",
+  "intent":"saim_chishti",
+  "keywords":["islamic writer"],
+  "response":"Unhon ne Islami kutub aur maqalat ke zariye ilm-e-deen ko farogh diya."
+},
+{
+  "id":"saim_108",
+  "intent":"saim_chishti",
+  "keywords":["best poetry"],
+  "response":"Hazrat Allama Saim Chishti ka naatiya aur hamdiya kalam bohot maqbool hai."
+},
+{
+  "id":"saim_109",
+  "intent":"saim_chishti",
+  "keywords":["books collection"],
+  "response":"Un ki tamam dastiyab kutub Chishti Library mein yakja ki ja rahi hain."
+},
+{
+  "id":"saim_110",
+  "intent":"saim_chishti",
+  "keywords":["complete works"],
+  "response":"Chishti Library ka maqsad Hazrat Allama Saim Chishti ki tamam ilmi tasneefaat ko ek jagah jama karna hai."
+},
+{
+  "id":"saim_111",
+  "intent":"saim_chishti",
+  "keywords":["legacy project"],
+  "response":"Yeh project Hazrat Allama Saim Chishti ke ilmi aur adabi virsay ko mehfooz rakhne ke liye tayar kiya gaya hai."
+},
+{
+  "id":"saim_112",
+  "intent":"saim_chishti",
+  "keywords":["knowledge base"],
+  "response":"Chishti AI ka knowledge base Hazrat Allama Saim Chishti ki kutub aur Islami maloomat par mabni hai."
+},
+{
+  "id":"saim_113",
+  "intent":"saim_chishti",
+  "keywords":["islamic knowledge"],
+  "response":"Main Chishti AI Islami topics aur Hazrat Allama Saim Chishti ki tasneefaat se mutaliq maloomat faraham karta hoon."
+},
+{
+  "id":"saim_114",
+  "intent":"saim_chishti",
+  "keywords":["about project"],
+  "response":"Chishti Library aur Chishti AI ka maqsad ilm ko digital andaaz mein har shakhs tak pohanchana hai."
+},
+{
+  "id":"saim_115",
+  "intent":"saim_chishti",
+  "keywords":["future mission"],
+  "response":"Mustaqbil mein Chishti Library mein mazeed kutub, maqalat aur research shamil ki jayegi."
+},
+{
+  "id":"saim_116",
+  "intent":"saim_chishti",
+  "keywords":["why library"],
+  "response":"Taake Hazrat Allama Saim Chishti ki ilmi khidmaat hamesha ke liye mehfooz rahen aur duniya bhar ke qariyeen tak pohanch saken."
+},
+{
+  "id":"saim_117",
+  "intent":"saim_chishti",
+  "keywords":["who made chishti library"],
+  "response":"Chishti Library Hazrat Allama Saim Chishti ke ilmi virsay ko mehfooz aur aam karne ke maqsad se tayar ki gayi hai."
+},
+{
+  "id":"saim_118",
+  "intent":"saim_chishti",
+  "keywords":["purpose of chishti ai"],
+  "response":"Chishti AI ka maqsad users ko books, authors aur Islami maloomat tak foran rasai dena hai."
+},
+{
+  "id":"saim_119",
+  "intent":"saim_chishti",
+  "keywords":["digital islamic library"],
+  "response":"Chishti Library ek Digital Islamic Library hai jahan deeni kutub aur research aasani se dastiyab hain."
+},
+{
+  "id":"saim_120",
+  "intent":"saim_chishti",
+  "keywords":["hazrat allama saim chishti knowledge"],
+  "response":"Main Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ki kutub, shairi, research aur deeni khidmaat ke mutaliq maloomat faraham kar sakta hoon."
+}
+
+,
+{
+  "id":"saim_121",
+  "intent":"saim_chishti",
+  "keywords":["ilm o adab"],
+  "response":"Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ne ilm-o-adab ke farogh ke liye qeemati khidmaat anjaam dein."
+},
+{
+  "id":"saim_122",
+  "intent":"saim_chishti",
+  "keywords":["deeni adab"],
+  "response":"Un ki tasneefaat deeni adab ka aham hissa hain aur qari ko ilm ke saath akhlaq bhi sikhati hain."
+},
+{
+  "id":"saim_123",
+  "intent":"saim_chishti",
+  "keywords":["roohaniyat"],
+  "response":"Hazrat Allama Saim Chishti ki tahreeron mein roohaniyat aur Allah ki muhabbat ka paigham milta hai."
+},
+{
+  "id":"saim_124",
+  "intent":"saim_chishti",
+  "keywords":["islami taleem"],
+  "response":"Unhon ne Islami taleem ko aasaan aur dilnasheen andaaz mein pesh kiya."
+},
+{
+  "id":"saim_125",
+  "intent":"saim_chishti",
+  "keywords":["qalam"],
+  "response":"Hazrat Allama Saim Chishti ka qalam hamesha deen, akhlaq aur muhabbat-e-Rasool ﷺ ke liye istemal hua."
+},
+{
+  "id":"saim_126",
+  "intent":"saim_chishti",
+  "keywords":["urdu books author"],
+  "response":"Unhon ne Urdu zaban mein kai qeemati deeni aur adabi kutub tasneef ki."
+},
+{
+  "id":"saim_127",
+  "intent":"saim_chishti",
+  "keywords":["islamic author"],
+  "response":"Hazrat Allama Saim Chishti aik mohtaram Islami author aur researcher thay."
+},
+{
+  "id":"saim_128",
+  "intent":"saim_chishti",
+  "keywords":["digital books"],
+  "response":"Un ki digital books Chishti Library ke zariye aasani se mutala ke liye dastiyab hain."
+},
+{
+  "id":"saim_129",
+  "intent":"saim_chishti",
+  "keywords":["online reading"],
+  "response":"Aap Chishti Library Reader ke zariye Hazrat Allama Saim Chishti ki kutub online parh sakte hain."
+},
+{
+  "id":"saim_130",
+  "intent":"saim_chishti",
+  "keywords":["library vision"],
+  "response":"Chishti Library ka vision ilm ko digital soorat mein har shakhs tak pohanchana hai."
+},
+{
+  "id":"saim_131",
+  "intent":"saim_chishti",
+  "keywords":["knowledge project"],
+  "response":"Yeh project Hazrat Allama Saim Chishti ke ilmi virsay ko mehfooz rakhne ki ek koshish hai."
+},
+{
+  "id":"saim_132",
+  "intent":"saim_chishti",
+  "keywords":["islamic digital library"],
+  "response":"Chishti Library ek Digital Islamic Library hai jahan qeemati kutub aur research mojood hai."
+},
+{
+  "id":"saim_133",
+  "intent":"saim_chishti",
+  "keywords":["online islamic books"],
+  "response":"Chishti Library online Islami kutub aur deeni mutala ka platform hai."
+},
+{
+  "id":"saim_134",
+  "intent":"saim_chishti",
+  "keywords":["library objective"],
+  "response":"Library ka objective ilm ko mehfooz karna aur aasani se dastiyab banana hai."
+},
+{
+  "id":"saim_135",
+  "intent":"saim_chishti",
+  "keywords":["future library"],
+  "response":"Mustaqbil mein Chishti Library mein mazeed kutub, maqalat aur AI features shamil kiye jayenge."
+},
+{
+  "id":"saim_136",
+  "intent":"saim_chishti",
+  "keywords":["research library"],
+  "response":"Chishti Library researchers aur students ke liye bhi mufeed digital platform hai."
+},
+{
+  "id":"saim_137",
+  "intent":"saim_chishti",
+  "keywords":["students"],
+  "response":"Students Hazrat Allama Saim Chishti ki kutub aur maqalat se ilmi faida hasil kar sakte hain."
+},
+{
+  "id":"saim_138",
+  "intent":"saim_chishti",
+  "keywords":["scholars"],
+  "response":"Scholars ke liye Chishti Library ek qeemati research resource hai."
+},
+{
+  "id":"saim_139",
+  "intent":"saim_chishti",
+  "keywords":["legacy of knowledge"],
+  "response":"Hazrat Allama Saim Chishti ka ilmi virsa aane wali naslon ke liye ek qeemati amanat hai."
+},
+{
+  "id":"saim_140",
+  "intent":"saim_chishti",
+  "keywords":["about hazrat allama saim chishti library"],
+  "response":"Chishti Library Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ki kutub, research aur deeni khidmaat ko digital soorat mein mehfooz karne ka project hai."
+}
+
+,
+{
+  "id":"saim_141",
+  "intent":"saim_chishti",
+  "keywords":["hazrat allama saim chishti ka mission"],
+  "response":"Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ka mission deen ki khidmat, ilm ka farogh aur Ishq-e-Rasool ﷺ ko aam karna tha."
+},
+{
+  "id":"saim_142",
+  "intent":"saim_chishti",
+  "keywords":["un ka paigham"],
+  "response":"Un ka paigham Qur'an, Sunnat, akhlaq aur muhabbat par mabni tha."
+},
+{
+  "id":"saim_143",
+  "intent":"saim_chishti",
+  "keywords":["islami khidmat"],
+  "response":"Hazrat Allama Saim Chishti ne apni zindagi Islami khidmat aur taleem ke liye waqf ki."
+},
+{
+  "id":"saim_144",
+  "intent":"saim_chishti",
+  "keywords":["deeni books"],
+  "response":"Un ki deeni kutub qari ko ilm aur amal dono ki taraf rehnumai karti hain."
+},
+{
+  "id":"saim_145",
+  "intent":"saim_chishti",
+  "keywords":["library founder"],
+  "response":"Chishti Library Hazrat Allama Saim Chishti ke ilmi virsay ko mehfooz karne ke maqsad se qayam ki gayi hai."
+},
+{
+  "id":"saim_146",
+  "intent":"saim_chishti",
+  "keywords":["digital islam"],
+  "response":"Chishti Library digital technology ke zariye Islami ilm ko duniya bhar tak pohancha rahi hai."
+},
+{
+  "id":"saim_147",
+  "intent":"saim_chishti",
+  "keywords":["best islamic books"],
+  "response":"Hazrat Allama Saim Chishti ki kutub Islami adab aur roohaniyat ka qeemati zakhira hain."
+},
+{
+  "id":"saim_148",
+  "intent":"saim_chishti",
+  "keywords":["islami library"],
+  "response":"Chishti Library ek modern Digital Islamic Library hai."
+},
+{
+  "id":"saim_149",
+  "intent":"saim_chishti",
+  "keywords":["research books"],
+  "response":"Library mein research books aur maqalat bhi mojood hain."
+},
+{
+  "id":"saim_150",
+  "intent":"saim_chishti",
+  "keywords":["islamic articles"],
+  "response":"Chishti Library mein Islami maqalat aur tahqeeqi mazameen bhi dastiyab hain."
+},
+{
+  "id":"saim_151",
+  "intent":"saim_chishti",
+  "keywords":["digital reader"],
+  "response":"Chishti Reader users ko books online parhne ka behtareen tajurba faraham karta hai."
+},
+{
+  "id":"saim_152",
+  "intent":"saim_chishti",
+  "keywords":["pdf reader"],
+  "response":"Library ka PDF Reader books ko aasani se mutala karne ke liye tayar kiya gaya hai."
+},
+{
+  "id":"saim_153",
+  "intent":"saim_chishti",
+  "keywords":["online books"],
+  "response":"Aap Chishti Library ki kutub online aur mobile dono par parh sakte hain."
+},
+{
+  "id":"saim_154",
+  "intent":"saim_chishti",
+  "keywords":["future ai"],
+  "response":"Mustaqbil mein Chishti AI mazeed intelligent aur context-aware banaya jayega."
+},
+{
+  "id":"saim_155",
+  "intent":"saim_chishti",
+  "keywords":["future features"],
+  "response":"Future updates mein Voice AI, Smart Search aur AI Recommendations shamil hongi."
+},
+{
+  "id":"saim_156",
+  "intent":"saim_chishti",
+  "keywords":["why use chishti ai"],
+  "response":"Chishti AI books, authors aur Islami maloomat tak foran rasai ke liye tayar kiya gaya hai."
+},
+{
+  "id":"saim_157",
+  "intent":"saim_chishti",
+  "keywords":["library ai"],
+  "response":"Chishti AI Digital Librarian ki tarah users ki rehnumai karta hai."
+},
+{
+  "id":"saim_158",
+  "intent":"saim_chishti",
+  "keywords":["smart library"],
+  "response":"Chishti Library AI aur modern technology ki madad se Smart Digital Library ban rahi hai."
+},
+{
+  "id":"saim_159",
+  "intent":"saim_chishti",
+  "keywords":["digital knowledge"],
+  "response":"Chishti AI ka knowledge base waqt ke sath mazeed barhta rahega InshaAllah."
+},
+{
+  "id":"saim_160",
+  "intent":"saim_chishti",
+  "keywords":["about chishti ai"],
+  "response":"Chishti AI ek Digital Islamic Library Assistant hai jo Hazrat Allama Saim Chishti (رحمہ اللہ علیہ) ki kutub, research aur Islami maloomat mein aap ki madad karta hai."
+}
