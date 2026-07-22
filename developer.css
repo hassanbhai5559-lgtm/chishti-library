@@ -1,0 +1,309 @@
+/* ==========================================
+DEVELOPER PAGE
+========================================== */
+
+body{
+    margin:0;
+    padding:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#4b0000,#150000);
+    color:#fff;
+}
+
+/* Container */
+
+.container{
+    width:90%;
+    max-width:1100px;
+    margin:auto;
+}
+
+/* Main Section */
+
+.developer-page{
+    padding:80px 0;
+}
+
+/* Card */
+
+.developer-card{
+
+    background:#fff;
+
+    color:#222;
+
+    border-radius:25px;
+
+    padding:50px;
+
+    text-align:center;
+
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+
+}
+
+/* Image */
+
+.developer-card img{
+
+    width:180px;
+
+    height:180px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:8px solid #d4af37;
+
+    margin-bottom:20px;
+
+}
+
+/* Heading */
+
+.developer-card h1{
+
+    margin:0;
+
+    color:#800000;
+
+    font-size:40px;
+
+    font-weight:700;
+
+}
+
+/* Subtitle */
+
+.developer-card h2{
+
+    color:#d4af37;
+
+    margin-top:10px;
+
+    font-size:22px;
+
+    font-weight:500;
+
+}
+
+/* Intro */
+
+.developer-intro{
+
+    margin-top:35px;
+
+    line-height:2;
+
+    font-size:18px;
+
+    text-align:center;
+
+}
+
+/* Divider */
+
+.divider{
+
+    width:120px;
+
+    height:4px;
+
+    background:#d4af37;
+
+    margin:35px auto;
+
+    border-radius:50px;
+
+}
+
+/* Journey */
+
+.journey{
+
+    text-align:left;
+
+    line-height:2.1;
+
+    font-size:18px;
+
+    color:#444;
+
+}
+
+.journey h2{
+
+    color:#800000;
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    font-size:34px;
+
+}
+
+.journey p{
+
+    margin-bottom:18px;
+
+}
+
+/* Quote */
+
+.quote{
+
+    margin-top:35px;
+
+    background:#fff8e6;
+
+    border-left:6px solid #d4af37;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    color:#800000;
+
+    font-style:italic;
+
+    font-size:22px;
+
+    text-align:center;
+
+}
+
+/* Developer Info */
+
+.developer-info{
+
+    margin-top:50px;
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+
+}
+
+.info-box{
+
+    background:#800000;
+
+    color:#fff;
+
+    padding:18px 28px;
+
+    border-radius:12px;
+
+    min-width:220px;
+
+    transition:.3s;
+
+}
+
+.info-box:hover{
+
+    transform:translateY(-6px);
+
+    background:#a00000;
+
+}
+
+/* Buttons */
+
+.dev-buttons{
+
+    margin-top:40px;
+
+}
+
+.dev-buttons a{
+
+    display:inline-block;
+
+    margin:10px;
+
+    padding:14px 30px;
+
+    background:#d4af37;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    border-radius:50px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.dev-buttons a:hover{
+
+    background:#800000;
+
+}
+
+/* Footer */
+
+.footer{
+
+    margin-top:70px;
+
+    text-align:center;
+
+    color:#ddd;
+
+    font-size:15px;
+
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.developer-card{
+
+padding:25px;
+
+}
+
+.developer-card h1{
+
+font-size:30px;
+
+}
+
+.developer-card h2{
+
+font-size:18px;
+
+}
+
+.developer-card img{
+
+width:140px;
+
+height:140px;
+
+}
+
+.journey{
+
+font-size:16px;
+
+}
+
+.quote{
+
+font-size:18px;
+
+}
+
+}
