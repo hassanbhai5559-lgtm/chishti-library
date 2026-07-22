@@ -192,3 +192,151 @@ START
 loadPDF();
 
 console.log("✅ Chishti Reader Loaded");
+
+/*=========================================
+CHISHTI READER
+PART 4
+EXTRA FEATURES
+=========================================*/
+
+/*=========================
+FULLSCREEN
+=========================*/
+
+function toggleFullscreen(){
+
+if(!document.fullscreenElement){
+
+document.documentElement.requestFullscreen();
+
+}else{
+
+document.exitFullscreen();
+
+}
+
+}
+
+/*=========================
+DOUBLE CLICK ZOOM
+=========================*/
+
+canvas.addEventListener("dblclick",()=>{
+
+if(scale<2.5){
+
+scale+=0.5;
+
+}else{
+
+scale=1.5;
+
+}
+
+renderPage(currentPage);
+
+});
+
+/*=========================
+MOUSE WHEEL ZOOM
+=========================*/
+
+canvas.addEventListener("wheel",(e)=>{
+
+e.preventDefault();
+
+if(e.deltaY<0){
+
+scale+=0.1;
+
+}else{
+
+if(scale>0.8){
+
+scale-=0.1;
+
+}
+
+}
+
+renderPage(currentPage);
+
+});
+
+/*=========================
+TOUCH SWIPE
+=========================*/
+
+let touchStartX=0;
+
+let touchEndX=0;
+
+canvas.addEventListener("touchstart",(e)=>{
+
+touchStartX=e.changedTouches[0].screenX;
+
+});
+
+canvas.addEventListener("touchend",(e)=>{
+
+touchEndX=e.changedTouches[0].screenX;
+
+handleSwipe();
+
+});
+
+function handleSwipe(){
+
+if(touchEndX<touchStartX-80){
+
+if(currentPage<totalPages){
+
+currentPage++;
+
+renderPage(currentPage);
+
+}
+
+}
+
+if(touchEndX>touchStartX+80){
+
+if(currentPage>1){
+
+currentPage--;
+
+renderPage(currentPage);
+
+}
+
+}
+
+}
+
+/*=========================
+LOADING TITLE
+=========================*/
+
+document.title="📖 Chishti Reader";
+
+/*=========================
+PREVENT RIGHT CLICK
+=========================*/
+
+document.addEventListener("contextmenu",(e)=>{
+
+e.preventDefault();
+
+});
+
+/*=========================
+DISABLE IMAGE DRAG
+=========================*/
+
+canvas.addEventListener("dragstart",(e)=>{
+
+e.preventDefault();
+
+});
+
+console.log("✅ Reader Part 4 Loaded");
