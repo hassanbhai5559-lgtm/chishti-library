@@ -2,10 +2,10 @@
   {
     "id": 1,
     "title": "Al-Rehman",
-    "author": "Hazrat Allama Saim Chishti",
+    "author": "Sahibzada Muhammad Latif Sajid Chishti",
     "category": "Hamd",
-    "cover": "covers/al-rehman-cover.png",
-    "pdf": "books/al-rehman.pdf",
+    "cover": "al-rehman-cover.png",
+    "pdf": "Al Rehman .. Latif Sajid.C.pdf",
     "description": "99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti."
   },
   {
@@ -13,8 +13,8 @@
     "title": "Husn-e-Kainat",
     "author": "Hazrat Allama Saim Chishti",
     "category": "Naat",
-    "cover": "covers/husn-e-kainat.jpg",
-    "pdf": "books/husn-e-kainat.pdf",
+    "cover": "husn-e-kainat-cover.png",
+    "pdf": "husn-e-kainat.pdf",
     "description": "Naatiya Kalam by Hazrat Allama Saim Chishti."
   },
   {
@@ -22,62 +22,62 @@
     "title": "Shahdaye Karbala",
     "author": "Hazrat Allama Saim Chishti",
     "category": "Manqabat",
-    "cover": "covers/shahdaye-karbala.jpg",
-    "pdf": "books/shahdaye-karbala.pdf",
+    "cover": "shahdaye-karbala-cover.png",
+    "pdf": "shahdaye-karbala.pdf",
     "description": "Book about the martyrs of Karbala."
   },
   {
     "id": 4,
     "title": "Shaheed Ibn-e-Shaheed",
     "author": "Hazrat Allama Saim Chishti",
-    "category": "Maqala",
-    "cover": "covers/shaheed-ibn-e-shaheed.jpg",
-    "pdf": "books/shaheed-ibn-e-shaheed.pdf",
-    "description": "Historical Maqala."
+    "category": "Manqbat",
+    "cover": "shaheed-ibn-e-shaheed-cover.png",
+    "pdf": "shaheed-ibn-e-shaheed.pdf",
+    "description": "Historical Manaqib book by Hazrat Allama Saim Chishti."
   },
   {
     "id": 5,
     "title": "Nawaye Saim",
     "author": "Hazrat Allama Saim Chishti",
     "category": "Naat",
-    "cover": "covers/nawaye-saim.jpg",
-    "pdf": "books/nawaye-saim.pdf",
-    "description": "Naatiya Majmua."
+    "cover": "nawaye-saim-cover.png",
+    "pdf": "noori.pdf",
+    "description": "Naatiya Majmua by Hazrat Allama Saim Chishti."
   },
   {
     "id": 6,
     "title": "Kulliyat-e-Saim Chishti",
     "author": "Hazrat Allama Saim Chishti",
     "category": "Kulliyat",
-    "cover": "covers/kulliyat.jpg",
-    "pdf": "books/kulliyat.pdf",
-    "description": "Complete Kulliyat."
+    "cover": "kulliyat-e-saim-chishti-cover.png",
+    "pdf": "Kulliyat e Saim Chishti By Allama Saim Chishti.pdf",
+    "description": "Complete Kulliyat of Hazrat Allama Saim Chishti."
   },
   {
     "id": 7,
     "title": "Punjabi Maqala",
     "author": "Hazrat Allama Saim Chishti",
     "category": "Maqala",
-    "cover": "covers/punjabi-maqala.jpg",
-    "pdf": "books/punjabi-maqala.pdf",
-    "description": "Punjabi Islamic Maqala."
+    "cover": "punjabi-maqala-cover.png",
+    "pdf": "allamasaimchishtipunjabimaqala-231010120010-3ca7944b (1).pdf",
+    "description": "Punjabi Maqala by Hazrat Allama Saim Chishti."
   },
   {
     "id": 8,
     "title": "Armaghan-e-Madina",
     "author": "Hazrat Allama Saim Chishti",
     "category": "Naat",
-    "cover": "covers/armaghan-e-madina.jpg",
-    "pdf": "books/armaghan-e-madina.pdf",
-    "description": "Collection of Naats."
+    "cover": "armaghan-e-madina-cover.webp",
+    "pdf": "armughan e madina.pdf",
+    "description": "Collection of Naats by Hazrat Allama Saim Chishti."
   },
   {
     "id": 9,
     "title": "Shan-e-Kainat",
     "author": "Hazrat Allama Saim Chishti",
     "category": "Naat",
-    "cover": "covers/shan-e-kainat.jpg",
-    "pdf": "books/shan-e-kainat.pdf",
-    "description": "Naatiya Collection."
+    "cover": "shan-e-kainat-cover.png",
+    "pdf": "shan-e-kainat.pdf",
+    "description": "Naatiya Collection by Hazrat Allama Saim Chishti."
   }
 ]
