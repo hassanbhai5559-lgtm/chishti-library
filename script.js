@@ -501,17 +501,14 @@ function searchBook(question) {
 
     const q = question.toLowerCase();
 
-for (const book of allBooks) {
+    for (const book of allBooks) {
 
-    if (
+        if (
+            (book.title || "").toLowerCase().includes(q) ||
+            (book.category || "").toLowerCase().includes(q)
+        ) {
 
-        (book.title || "").toLowerCase().includes(q) ||
-
-        (book.category || "").toLowerCase().includes(q)
-
-    ) {
-
-        return `
+            return `
 
 📚 <b>${book.title}</b><br>
 
@@ -523,24 +520,12 @@ for (const book of allBooks) {
 📖 Read Online
 </a>
 
-</a>
-
 &nbsp;
 
 <a href="${book.pdf}" download class="btn">
-
 ⬇ Download
-
 </a>
 
-`;
-
-    }
-
-}
-
-return null;
-</a>
 `;
 
         }
@@ -548,7 +533,6 @@ return null;
     }
 
     return null;
-
 }
 
 /*=========================
