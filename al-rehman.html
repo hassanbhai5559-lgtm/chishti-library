@@ -4,131 +4,47 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Books | Chishti Library</title>
+<title>Al-Rehman | Chishti Library</title>
 
 <link rel="stylesheet" href="style.css">
-
-<style>
-
-body{
-background:#0d0d0d;
-font-family:Poppins,sans-serif;
-color:white;
-margin:0;
-padding:50px;
-}
-
-.grid{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:30px;
-
-}
-
-.card{
-
-background:#1b1b1b;
-border-radius:15px;
-overflow:hidden;
-padding:20px;
-text-align:center;
-
-}
-
-.card img{
-
-width:220px;
-height:320px;
-object-fit:cover;
-border-radius:10px;
-
-}
-
-button{
-
-margin-top:15px;
-padding:12px 25px;
-border:none;
-background:#b8860b;
-color:white;
-border-radius:30px;
-cursor:pointer;
-font-size:16px;
-
-}
-
-button:hover{
-
-background:#0a8d42;
-
-}
-
-</style>
 
 </head>
 
 <body>
 
-<h1>Books</h1>
+<section class="book-page">
 
-<div id="books" class="grid"></div>
+<img src="al-rehman-cover.png" alt="Al-Rehman">
 
-<script>
+<h1>Al-Rehman</h1>
 
-fetch("books.json")
+<h2>Sahibzada Muhammad Latif Sajid Chishti</h2>
 
-.then(r=>r.json())
+<p>
+99 Names of Allah Book Series.
+</p>
 
-.then(data=>{
+<a class="btn" 
+href="Al Rehman .. Latif Sajid.C.pdf"
+target="_blank">
 
-let html="";
-
-data.books.forEach(book=>{
-
-html+=`
-
-<div class="card">
-
-<img src="${book.cover}">
-
-<h2>${book.title}</h2>
-
-<p>${book.author}</p>
-
-<p>${book.description}</p>
-
-<button onclick="window.open('${book.pdf}','_blank')">
-
-Read Online
-
-</button>
-
-<br>
-
-<a href="${book.pdf}" download>
-
-<button>
-
-Download
-
-</button>
+📖 Read Online
 
 </a>
 
-</div>
 
-`;
+<a class="btn"
+href="Al Rehman .. Latif Sajid.C.pdf"
+download>
 
-});
+⬇ Download
 
-document.getElementById("books").innerHTML=html;
+</a>
 
-});
+</section>
 
-</script>
 
 </body>
 
