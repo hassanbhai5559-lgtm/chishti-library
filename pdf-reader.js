@@ -3,36 +3,52 @@
  Part 1 - Foundation
 =========================================*/
 
+// ================================
 // PDF.js Worker
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.js";
+// ================================
 
-/*=========================================
- URL PARAMETERS
-=========================================*/
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+// ================================
+// URL Parameters
+// ================================
 
 const params = new URLSearchParams(window.location.search);
 
 const pdfFile = params.get("book");
-const bookTitle = params.get("title") || "Chishti Library";
 
-/*=========================================
- ELEMENTS
-=========================================*/
+const bookTitle =
+params.get("title") || "Chishti Library";
 
-const canvas = document.getElementById("pdfCanvas");
-const ctx = canvas.getContext("2d");
+// ================================
+// HTML Elements
+// ================================
 
-const loading = document.getElementById("loading");
+const canvas =
+document.getElementById("pdfCanvas");
 
-const pageCounter = document.getElementById("pageCounter");
-const totalPagesText = document.getElementById("totalPages");
+const ctx =
+canvas.getContext("2d");
 
-const titleElement = document.getElementById("bookTitle");
+const loading =
+document.getElementById("loading");
 
-/*=========================================
- PDF VARIABLES
-=========================================*/
+const title =
+document.getElementById("bookTitle");
+
+const pageCounter =
+document.getElementById("pageCounter");
+
+const totalPagesText =
+document.getElementById("totalPages");
+
+const progressBar =
+document.getElementById("readingProgress");
+
+// ================================
+// PDF Variables
+// ================================
 
 let pdfDoc = null;
 
@@ -40,273 +56,196 @@ let currentPage = 1;
 
 let totalPages = 0;
 
-let scale = 1.4;
+let zoom = 1.4;
 
-let isRendering = false;
+let rendering = false;
 
 let pendingPage = null;
 
-/*=========================================
- SHOW TITLE
-=========================================*/
+// ================================
+// Show Title
+// ================================
 
-if (titleElement) {
+title.textContent =
+decodeURIComponent(bookTitle);
 
-    titleElement.textContent = decodeURIComponent(bookTitle);
+document.title =
+decodeURIComponent(bookTitle);
 
-}
-
-document.title = decodeURIComponent(bookTitle);
-
-/*=========================================
- CHECK BOOK
-=========================================*/
+// ================================
+// Book Check
+// ================================
 
 if (!pdfFile) {
 
-    if (loading) {
+    loading.innerHTML = `
+        <h2>❌ Book Not Found</h2>
+        <p>Please open this book from Chishti Library.</p>
+    `;
 
-        loading.innerHTML = `
-            <h2>❌ Book Not Found</h2>
-            <p>Please open this page from Chishti Library.</p>
-        `;
-
-    }
-
-    throw new Error("PDF file missing.");
-
-}
-
-/*=========================================
- HELPER FUNCTIONS
-=========================================*/
-
-function updatePageInfo() {
-
-    if (pageCounter)
-        pageCounter.textContent = currentPage;
-
-    if (totalPagesText)
-        totalPagesText.textContent = totalPages;
-
-}
-
-function showLoader(text = "Opening Chishti Reader...") {
-
-    if (!loading) return;
-
-    loading.style.display = "flex";
-
-    loading.innerHTML = `<h2>${text}</h2>`;
-
-}
-
-function hideLoader() {
-
-    if (!loading) return;
-
-    loading.style.display = "none";
+    throw new Error("No PDF Selected");
 
 }
 
 console.log("✅ Reader Part 1 Loaded");
 
+
 /*=========================================
- CHISHTI READER PRO
- pdf-reader.js
- PART 2
- LOAD PDF + RENDER
+ CHISHTI LIBRARY PDF READER
+ Part 2 - Load PDF
 =========================================*/
 
-// ========================
-// LOAD PDF
-// ========================
+// ================================
+// Load PDF
+// ================================
 
 async function loadBook() {
 
-    if (!pdfFile) {
-
-        document.getElementById("loading").innerHTML =
-            "Book Not Found";
-
-        return;
-
-    }
-
     try {
 
-        const loadingTask =
-            pdfjsLib.getDocument(decodeURIComponent(pdfFile));
+        loading.innerHTML = `
+            <h2>Opening Chishti Reader...</h2>
+        `;
 
-        pdf = await loadingTask.promise;
+        const loadingTask = pdfjsLib.getDocument({
 
-        totalPages = pdf.numPages;
-
-        document.getElementById("totalPages").innerText =
-            totalPages;
-
-        // Restore Bookmark
-        const last =
-            localStorage.getItem(pdfFile);
-
-        if (last) {
-
-            pageNum = parseInt(last);
-
-        }
-
-        renderPage(pageNum);
-
-        hideLoader();
-
-    } catch (error) {
-
-        console.error(error);
-
-        document.getElementById("loading").innerHTML =
-            "Failed To Open PDF";
-
-    }
-
-}
-
-// ========================
-// RENDER PAGE
-// ========================
-
-async function renderPage(num) {
-
-    rendering = true;
-
-    const page =
-        await pdf.getPage(num);
-
-    const viewport =
-        page.getViewport({
-
-            scale: zoom
+            url: decodeURIComponent(pdfFile)
 
         });
 
-    canvas.width =
-        viewport.width;
+        pdfDoc = await loadingTask.promise;
 
-    canvas.height =
-        viewport.height;
+        totalPages = pdfDoc.numPages;
 
-    const renderContext = {
+        // Restore Last Page
+        const savedPage = localStorage.getItem(
 
-        canvasContext: ctx,
+            "bookmark_" + pdfFile
 
-        viewport: viewport
+        );
 
-    };
+        if (savedPage) {
 
-    await page.render(renderContext).promise;
+            currentPage = parseInt(savedPage);
 
-    document.getElementById("pageCounter").innerText =
-        num;
+        }
 
-    updateProgress();
+        totalPagesText.textContent = totalPages;
 
-    rendering = false;
+        renderPage(currentPage);
 
-    if (pendingPage !== null) {
+        setTimeout(() => {
 
-        renderPage(pendingPage);
+            loading.style.display = "none";
 
-        pendingPage = null;
+        }, 500);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        loading.innerHTML = `
+
+            <h2>❌ Failed To Open PDF</h2>
+
+            <p>
+            Check PDF path or filename.
+            </p>
+
+        `;
 
     }
 
 }
 
-// ========================
-// QUEUE RENDER
-// ========================
-
-function queueRender(num) {
-
-    if (rendering) {
-
-        pendingPage = num;
-
-    } else {
-
-        renderPage(num);
-
-    }
-
-}
-
-// ========================
-// START
-// ========================
+// ================================
+// Start Reader
+// ================================
 
 loadBook();
 
 console.log("✅ Reader Part 2 Loaded");
 
 /*=========================================
- CHISHTI READER PRO
- pdf-reader.js
- PART 3
- Render PDF Pages
+ CHISHTI LIBRARY PDF READER
+ Part 3 - Render PDF
 =========================================*/
 
-/*========================
-RENDER PAGE
-========================*/
+// ================================
+// Render PDF Page
+// ================================
 
-async function renderPage(pageNumber){
+async function renderPage(pageNumber) {
 
     rendering = true;
 
-    const page = await pdf.getPage(pageNumber);
+    const page = await pdfDoc.getPage(pageNumber);
 
     const viewport = page.getViewport({
+
         scale: zoom
+
     });
 
     canvas.width = viewport.width;
+
     canvas.height = viewport.height;
 
     const renderContext = {
+
         canvasContext: ctx,
+
         viewport: viewport
+
     };
 
     await page.render(renderContext).promise;
 
-    document.getElementById("pageCounter").textContent = pageNumber;
-    document.getElementById("totalPages").textContent = totalPages;
+    // Update Page Counter
 
-    rendering = false;
+    pageCounter.textContent = pageNumber;
 
-    if(pendingPage !== null){
+    totalPagesText.textContent = totalPages;
 
-        const next = pendingPage;
-        pendingPage = null;
+    // Update Progress Bar
 
-        renderPage(next);
+    if (progressBar) {
+
+        const percent = (pageNumber / totalPages) * 100;
+
+        progressBar.style.width = percent + "%";
 
     }
 
-    updateProgress();
+    rendering = false;
+
+    // Render queued page if any
+
+    if (pendingPage !== null) {
+
+        const nextPage = pendingPage;
+
+        pendingPage = null;
+
+        renderPage(nextPage);
+
+    }
 
 }
 
-/*========================
-QUEUE PAGE
-========================*/
+// ================================
+// Queue Rendering
+// ================================
 
-function queueRender(pageNumber){
+function queueRender(pageNumber) {
 
-    if(rendering){
+    if (rendering) {
 
         pendingPage = pageNumber;
 
-    }else{
+    } else {
 
         renderPage(pageNumber);
 
@@ -314,116 +253,82 @@ function queueRender(pageNumber){
 
 }
 
-/*========================
-READING PROGRESS
-========================*/
-
-function updateProgress(){
-
-    const percent = (pageNum / totalPages) * 100;
-
-    const bar = document.getElementById("readingProgress");
-
-    if(bar){
-
-        bar.style.width = percent + "%";
-
-    }
-
-}
-
-/*========================
-PAGE TURN EFFECT
-========================*/
-
-function animatePage(){
-
-    canvas.classList.remove("page-turn");
-
-    void canvas.offsetWidth;
-
-    canvas.classList.add("page-turn");
-
-}
-
-console.log("✅ Part 3 Loaded");
+console.log("✅ Reader Part 3 Loaded");
 
 /*=========================================
- CHISHTI READER PRO
- pdf-reader.js
- PART 4
- Controls + Features
+ CHISHTI LIBRARY PDF READER
+ Part 4 - Controls
 =========================================*/
 
-/*========================
-NEXT PAGE
-========================*/
+// ================================
+// Next Page
+// ================================
 
-function nextPage(){
+function nextPage() {
 
-    if(pageNum >= totalPages) return;
+    if (currentPage >= totalPages) return;
 
-    pageNum++;
+    currentPage++;
 
-    queueRender(pageNum);
+    queueRender(currentPage);
 
-    animatePage();
-
-}
-
-/*========================
-PREVIOUS PAGE
-========================*/
-
-function previousPage(){
-
-    if(pageNum <= 1) return;
-
-    pageNum--;
-
-    queueRender(pageNum);
-
-    animatePage();
+    saveBookmark();
 
 }
 
-/*========================
-ZOOM IN
-========================*/
+// ================================
+// Previous Page
+// ================================
 
-function zoomIn(){
+function previousPage() {
+
+    if (currentPage <= 1) return;
+
+    currentPage--;
+
+    queueRender(currentPage);
+
+    saveBookmark();
+
+}
+
+// ================================
+// Zoom In
+// ================================
+
+function zoomIn() {
 
     zoom += 0.2;
 
-    queueRender(pageNum);
+    queueRender(currentPage);
 
 }
 
-/*========================
-ZOOM OUT
-========================*/
+// ================================
+// Zoom Out
+// ================================
 
-function zoomOut(){
+function zoomOut() {
 
-    if(zoom <= 0.8) return;
+    if (zoom <= 0.8) return;
 
     zoom -= 0.2;
 
-    queueRender(pageNum);
+    queueRender(currentPage);
 
 }
 
-/*========================
-FULLSCREEN
-========================*/
+// ================================
+// Fullscreen
+// ================================
 
-function fullscreenBook(){
+function fullscreenBook() {
 
-    if(!document.fullscreenElement){
+    if (!document.fullscreenElement) {
 
         document.documentElement.requestFullscreen();
 
-    }else{
+    } else {
 
         document.exitFullscreen();
 
@@ -431,15 +336,15 @@ function fullscreenBook(){
 
 }
 
-/*========================
-DOWNLOAD
-========================*/
+// ================================
+// Download PDF
+// ================================
 
-function downloadBook(){
+function downloadBook() {
 
     const a = document.createElement("a");
 
-    a.href = pdfFile;
+    a.href = decodeURIComponent(pdfFile);
 
     a.download = "";
 
@@ -447,55 +352,43 @@ function downloadBook(){
 
 }
 
-/*========================
-PRINT
-========================*/
+// ================================
+// Print PDF
+// ================================
 
-function printBook(){
+function printBook() {
 
-    window.open(pdfFile);
+    window.open(decodeURIComponent(pdfFile), "_blank");
 
 }
 
-/*========================
-BOOKMARK
-========================*/
+// ================================
+// Bookmark
+// ================================
 
-function bookmarkPage(){
+function saveBookmark() {
 
     localStorage.setItem(
 
-        "bookmark_"+pdfFile,
+        "bookmark_" + pdfFile,
 
-        pageNum
+        currentPage
 
     );
 
-    alert("Bookmark Saved");
+}
+
+function bookmarkPage() {
+
+    saveBookmark();
+
+    alert("✅ Bookmark Saved");
 
 }
 
-/*========================
-RESTORE BOOKMARK
-========================*/
-
-const savedPage =
-
-localStorage.getItem(
-
-"bookmark_"+pdfFile
-
-);
-
-if(savedPage){
-
-    pageNum = parseInt(savedPage);
-
-}
-
-/*========================
-BUTTON EVENTS
-========================*/
+// ================================
+// Button Events
+// ================================
 
 document.getElementById("next").onclick = nextPage;
 
@@ -505,161 +398,123 @@ document.getElementById("zoomIn").onclick = zoomIn;
 
 document.getElementById("zoomOut").onclick = zoomOut;
 
-document.getElementById("fullscreen").onclick = fullscreenBook;
-
 document.getElementById("download").onclick = downloadBook;
 
 document.getElementById("print").onclick = printBook;
 
+document.getElementById("fullscreen").onclick = fullscreenBook;
+
 document.getElementById("bookmark").onclick = bookmarkPage;
 
-/*========================
-KEYBOARD
-========================*/
+// ================================
+// Keyboard
+// ================================
 
-document.addEventListener("keydown",(e)=>{
+document.addEventListener("keydown", function(e){
 
     switch(e.key){
 
         case "ArrowRight":
-
             nextPage();
-
             break;
 
         case "ArrowLeft":
-
             previousPage();
-
             break;
 
         case "+":
-
             zoomIn();
-
             break;
 
         case "-":
-
             zoomOut();
-
             break;
 
         case "f":
-
             fullscreenBook();
-
             break;
 
     }
 
 });
 
-console.log("✅ Chishti Reader Ready");
+console.log("✅ Reader Part 4 Loaded");
 
 /*=========================================
- CHISHTI READER PRO
- PART 5
- Professional Features
+ CHISHTI LIBRARY PDF READER
+ Part 5 - Professional Features
 =========================================*/
 
-/*========================
-LOADER
-========================*/
+// ================================
+// Double Click Zoom
+// ================================
 
-function hideLoader(){
+canvas.addEventListener("dblclick", () => {
 
-    const loader = document.getElementById("loading");
+    if (zoom < 2.6) {
 
-    if(!loader) return;
+        zoom += 0.4;
 
-    setTimeout(()=>{
+    } else {
 
-        loader.style.opacity="0";
-
-        loader.style.visibility="hidden";
-
-        setTimeout(()=>{
-
-            loader.remove();
-
-        },500);
-
-    },600);
-
-}
-
-/*========================
-DOUBLE CLICK ZOOM
-========================*/
-
-canvas.addEventListener("dblclick",()=>{
-
-    if(zoom<2.6){
-
-        zoom+=0.4;
-
-    }else{
-
-        zoom=1.4;
+        zoom = 1.4;
 
     }
 
-    queueRender(pageNum);
+    queueRender(currentPage);
 
 });
 
-/*========================
-MOUSE WHEEL ZOOM
-========================*/
+// ================================
+// Mouse Wheel Zoom
+// ================================
 
-canvas.addEventListener("wheel",(e)=>{
+canvas.addEventListener("wheel", (e) => {
 
     e.preventDefault();
 
-    if(e.deltaY<0){
+    if (e.deltaY < 0) {
 
-        zoom+=0.1;
+        zoom += 0.1;
 
-    }else{
+    } else {
 
-        if(zoom>0.8){
+        if (zoom > 0.8) {
 
-            zoom-=0.1;
+            zoom -= 0.1;
 
         }
 
     }
 
-    queueRender(pageNum);
+    queueRender(currentPage);
 
 });
 
-/*========================
-MOBILE SWIPE
-========================*/
+// ================================
+// Mobile Swipe
+// ================================
 
-let startX=0;
+let startX = 0;
+let endX = 0;
 
-let endX=0;
+canvas.addEventListener("touchstart", (e) => {
 
-canvas.addEventListener("touchstart",(e)=>{
-
-    startX=e.changedTouches[0].screenX;
+    startX = e.changedTouches[0].screenX;
 
 });
 
-canvas.addEventListener("touchend",(e)=>{
+canvas.addEventListener("touchend", (e) => {
 
-    endX=e.changedTouches[0].screenX;
+    endX = e.changedTouches[0].screenX;
 
-    if(endX<startX-80){
+    if (endX < startX - 80) {
 
         nextPage();
 
     }
 
-    if(endX>startX+80){
+    if (endX > startX + 80) {
 
         previousPage();
 
@@ -667,52 +522,72 @@ canvas.addEventListener("touchend",(e)=>{
 
 });
 
-/*========================
-SAVE LAST PAGE
-========================*/
+// ================================
+// Auto Save Page
+// ================================
 
-window.addEventListener("beforeunload",()=>{
+window.addEventListener("beforeunload", () => {
 
-    localStorage.setItem(
-
-        "bookmark_"+pdfFile,
-
-        pageNum
-
-    );
+    saveBookmark();
 
 });
 
-/*========================
-PREVENT IMAGE DRAG
-========================*/
+// ================================
+// Page Turn Animation
+// ================================
 
-canvas.addEventListener("dragstart",(e)=>{
+function animatePage() {
+
+    canvas.classList.remove("page-turn");
+
+    void canvas.offsetWidth;
+
+    canvas.classList.add("page-turn");
+
+}
+
+// Animation on page change
+
+const oldNext = nextPage;
+nextPage = function () {
+
+    oldNext();
+
+    animatePage();
+
+};
+
+const oldPrev = previousPage;
+previousPage = function () {
+
+    oldPrev();
+
+    animatePage();
+
+};
+
+// ================================
+// Prevent Image Drag
+// ================================
+
+canvas.addEventListener("dragstart", (e) => {
 
     e.preventDefault();
 
 });
 
-/*========================
-DISABLE RIGHT CLICK
-========================*/
+// ================================
+// Disable Right Click
+// ================================
 
-document.addEventListener("contextmenu",(e)=>{
+document.addEventListener("contextmenu", (e) => {
 
     e.preventDefault();
 
 });
 
-/*========================
-TITLE
-========================*/
+// ================================
+// Reader Loaded
+// ================================
 
-document.title=
-
-decodeURIComponent(bookTitle)+" | Chishti Reader";
-
-/*========================
-CONSOLE
-========================*/
-
-console.log("📖 Chishti Reader Professional Ready");
+console.log("📖 Chishti Reader Professional Loaded Successfully");
