@@ -1,233 +1,194 @@
-// ==========================================
-// Chishti Reader Engine v1.0
-// reader.js
-// ==========================================
+/*=========================================
+CHISHTI READER
+reader.js
+PART 3
+=========================================*/
 
-class ChishtiReader {
+// PDF.js Worker
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js";
 
-    constructor() {
+/*=========================
+VARIABLES
+=========================*/
 
-        // Current Book
-        this.book = null;
+const canvas = document.getElementById("pdfCanvas");
+const ctx = canvas.getContext("2d");
 
-        // PDF Document
-        this.pdf = null;
+const loading = document.getElementById("loading");
 
-        // Page Control
-        this.page = 1;
+const pageNumber = document.getElementById("pageNumber");
 
-        this.totalPages = 0;
+const prevBtn = document.getElementById("prevPage");
+const nextBtn = document.getElementById("nextPage");
 
+const zoomIn = document.getElementById("zoomIn");
+const zoomOut = document.getElementById("zoomOut");
 
-        // View Settings
-        this.zoom = 1.0;
+let pdfDoc = null;
+let currentPage = 1;
+let totalPages = 0;
 
-        this.rotation = 0;
+let scale = 1.5;
 
-        this.theme = "light";
+let rendering = false;
 
+/*=========================
+GET PDF FROM URL
+=========================*/
 
-        // Reader Status
-        this.loaded = false;
+const params = new URLSearchParams(window.location.search);
 
+const pdfFile = params.get("book");
 
-        // Reading Memory
-        this.progress = {
+if (!pdfFile) {
 
-            lastPage: 1,
+    loading.innerHTML = "❌ No Book Selected";
 
-            completed: false
+    throw new Error("No PDF Found");
 
-        };
+}
 
+/*=========================
+LOAD PDF
+=========================*/
 
-        // User Data
-        this.bookmarks = [];
+async function loadPDF() {
 
-    }
+    try {
 
+        pdfDoc = await pdfjsLib.getDocument(pdfFile).promise;
 
-    // =====================================
-    // Initialize Reader
-    // =====================================
+        totalPages = pdfDoc.numPages;
 
-    init() {
+        loading.style.display = "none";
 
-        console.log(
-            "📚 Chishti Reader Started"
-        );
-
-        return true;
-
-    }
-
-
-
-    // =====================================
-    // Book
-    // =====================================
-
-    setBook(book) {
-
-        this.book = book;
-
-        return book;
+        renderPage(currentPage);
 
     }
 
+    catch (err) {
 
-    getBook() {
+        console.error(err);
 
-        return this.book;
-
-    }
-
-
-
-    // =====================================
-    // PDF
-    // =====================================
-
-    setPDF(pdf) {
-
-        this.pdf = pdf;
-
-    }
-
-
-    getPDF() {
-
-        return this.pdf;
-
-    }
-
-
-
-    // =====================================
-    // Page
-    // =====================================
-
-    setPage(page) {
-
-        this.page = page;
-
-        this.progress.lastPage = page;
-
-    }
-
-
-    getCurrentPage() {
-
-        return this.page;
-
-    }
-
-
-
-    // =====================================
-    // Total Pages
-    // =====================================
-
-    setTotalPages(total) {
-
-        this.totalPages = total;
-
-    }
-
-
-    getTotalPages() {
-
-        return this.totalPages;
-
-    }
-
-
-
-    // =====================================
-    // Zoom
-    // =====================================
-
-    setZoom(value) {
-
-        this.zoom = value;
-
-    }
-
-
-    getZoom() {
-
-        return this.zoom;
-
-    }
-
-
-
-    // =====================================
-    // Loading Status
-    // =====================================
-
-    setLoaded(status) {
-
-        this.loaded = status;
-
-    }
-
-
-    isReady() {
-
-        return this.loaded;
-
-    }
-
-
-
-    // =====================================
-    // Bookmark
-    // =====================================
-
-    addBookmark(page) {
-
-        this.bookmarks.push(page);
-
-    }
-
-
-    getBookmarks() {
-
-        return this.bookmarks;
-
-    }
-
-
-
-    // =====================================
-    // Reset Reader
-    // =====================================
-
-    reset() {
-
-        this.book = null;
-
-        this.pdf = null;
-
-        this.page = 1;
-
-        this.totalPages = 0;
-
-        this.zoom = 1.0;
-
-        this.loaded = false;
+        loading.innerHTML = "❌ Failed To Load PDF";
 
     }
 
 }
 
+/*=========================
+RENDER PAGE
+=========================*/
 
+async function renderPage(num) {
 
-// ==========================================
-// Export Instance
-// ==========================================
+    rendering = true;
 
-const Reader = new ChishtiReader();
+    const page = await pdfDoc.getPage(num);
 
-export default Reader;
+    const viewport = page.getViewport({
+
+        scale: scale
+
+    });
+
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    await page.render({
+
+        canvasContext: ctx,
+
+        viewport: viewport
+
+    }).promise;
+
+    rendering = false;
+
+    pageNumber.innerHTML =
+        "Page " + currentPage + " / " + totalPages;
+
+}
+
+/*=========================
+NEXT PAGE
+=========================*/
+
+nextBtn.onclick = () => {
+
+    if (currentPage >= totalPages) return;
+
+    currentPage++;
+
+    renderPage(currentPage);
+
+};
+
+/*=========================
+PREVIOUS PAGE
+=========================*/
+
+prevBtn.onclick = () => {
+
+    if (currentPage <= 1) return;
+
+    currentPage--;
+
+    renderPage(currentPage);
+
+};
+
+/*=========================
+ZOOM IN
+=========================*/
+
+zoomIn.onclick = () => {
+
+    scale += 0.2;
+
+    renderPage(currentPage);
+
+};
+
+/*=========================
+ZOOM OUT
+=========================*/
+
+zoomOut.onclick = () => {
+
+    if (scale <= 0.8) return;
+
+    scale -= 0.2;
+
+    renderPage(currentPage);
+
+};
+
+/*=========================
+KEYBOARD
+=========================*/
+
+document.addEventListener("keydown", (e) => {
+
+    if (e.key === "ArrowRight") {
+
+        nextBtn.click();
+
+    }
+
+    if (e.key === "ArrowLeft") {
+
+        prevBtn.click();
+
+    }
+
+});
+
+/*=========================
+START
+=========================*/
+
+loadPDF();
+
+console.log("✅ Chishti Reader Loaded");
