@@ -39,7 +39,14 @@ GET PDF FROM URL
 
 const params = new URLSearchParams(window.location.search);
 
-const pdfFile = params.get("book");
+const params = new URLSearchParams(window.location.search);
+
+const book = params.get("book");
+
+const pdfFile =
+"https://hassanbhai5559-lgtm.github.io/chishti-library/" + book;
+
+console.log(pdfFile);
 
 if (!pdfFile) {
 
