@@ -520,8 +520,8 @@ for (const book of allBooks) {
 📂 ${book.category}<br><br>
 
 <a href="reader.html?book=${encodeURIComponent(book.pdf)}" class="btn">
-
 📖 Read Online
+</a>
 
 </a>
 
