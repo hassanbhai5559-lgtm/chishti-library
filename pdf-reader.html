@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Chishti Reader</title>
+
+<link rel="stylesheet"
+href="pdf-reader.css">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+</head>
+
+<body>
+
+<!--========================
+LOADER
+=========================-->
+
+<div id="loading">
+
+<div class="loader-box">
+
+<img src="logo.png" alt="Logo">
+
+<h2>Opening Chishti Reader...</h2>
+
+<p>Please Wait</p>
+
+</div>
+
+</div>
+
+<!--========================
+HEADER
+=========================-->
+
+<header class="reader-header">
+
+<div class="reader-logo">
+
+<img src="logo.png">
+
+<div>
+
+<h2>CHISHTI LIBRARY</h2>
+
+<p>Digital Islamic Library</p>
+
+</div>
+
+</div>
+
+<div class="reader-title">
+
+<h3 id="bookTitle">
+
+Loading Book...
+
+</h3>
+
+</div>
+
+<div class="reader-tools">
+
+<button id="bookmark">
+
+<i class="fas fa-bookmark"></i>
+
+</button>
+
+<button id="download">
+
+<i class="fas fa-download"></i>
+
+</button>
+
+<button id="print">
+
+<i class="fas fa-print"></i>
+
+</button>
+
+<button id="fullscreen">
+
+<i class="fas fa-expand"></i>
+
+</button>
+
+</div>
+
+</header>
+
+<!--========================
+PROGRESS BAR
+=========================-->
+
+<div class="progress-container">
+
+<div id="readingProgress">
+
+</div>
+
+</div>
+
+<!--========================
+MAIN READER
+=========================-->
+
+<div class="reader-container">
+
+<div class="book-frame">
+
+<canvas id="pdfCanvas"></canvas>
+
+</div>
+
+</div>
+
+<script src="pdf-reader.js"></script>
+
+</body>
+
+</html>
