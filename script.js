@@ -209,10 +209,6 @@ PART 2
 DISPLAY BOOKS + SEARCH + FILTER
 =========================================*/
 
-/*=========================
-DISPLAY BOOKS
-=========================*/
-
 function displayBooks(books) {
 
     const container = document.getElementById("booksContainer");
@@ -224,19 +220,13 @@ function displayBooks(books) {
     if (books.length === 0) {
 
         container.innerHTML = `
-
         <div class="no-books">
-
             <h2>No Books Found</h2>
-
             <p>Try another search.</p>
-
         </div>
-
         `;
 
         return;
-
     }
 
     books.forEach(book => {
@@ -245,14 +235,14 @@ function displayBooks(books) {
 
         <div class="book-card">
 
-            <img src="${book.cover}" alt="${book.title}" loading="lazy">
+            <img src="${book.cover}"
+                 alt="${book.title}"
+                 loading="lazy">
 
             <div class="book-content">
 
                 <span class="book-category">
-
                     ${book.category}
-
                 </span>
 
                 <h2>${book.title}</h2>
@@ -273,16 +263,15 @@ function displayBooks(books) {
 
                 <div class="book-buttons">
 
-                    <a href="${book.pdf}" target="_blank" class="btn">
-
-                        Read Online
-
+                    <a href="reader.html?book=${encodeURIComponent(book.pdf)}"
+                       class="btn">
+                        📖 Read Online
                     </a>
 
-                    <a href="${book.pdf}" download class="btn">
-
-                        Download
-
+                    <a href="${book.pdf}"
+                       download
+                       class="btn">
+                        ⬇ Download
                     </a>
 
                 </div>
@@ -296,7 +285,6 @@ function displayBooks(books) {
     });
 
 }
-
 /*=========================
 LIVE SEARCH
 =========================*/
