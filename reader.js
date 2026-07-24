@@ -1,349 +1,80 @@
-/*=========================================
-CHISHTI READER
-reader.js
-PART 3
-=========================================*/
+/*====================================================
+ CHISHTI READER
+ reader.js
+ PART 1
+ Foundation
+====================================================*/
 
-// PDF.js Worker
+/*=========================
+ PDF.js Worker
+=========================*/
+
 pdfjsLib.GlobalWorkerOptions.workerSrc =
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js";
 
 /*=========================
-VARIABLES
+ URL PARAMETERS
 =========================*/
 
-const canvas = document.getElementById("pdfCanvas");
-const ctx = canvas.getContext("2d");
+const urlParams = new URLSearchParams(window.location.search);
 
-const loading = document.getElementById("loading");
+const pdfURL =
+decodeURIComponent(urlParams.get("book") || "");
 
-const pageNumber = document.getElementById("pageNumber");
+const bookTitle =
+decodeURIComponent(urlParams.get("title") || "Chishti Library");
 
-const prevBtn = document.getElementById("prevPage");
-const nextBtn = document.getElementById("nextPage");
+/*=========================
+ ELEMENTS
+=========================*/
 
-const zoomIn = document.getElementById("zoomIn");
-const zoomOut = document.getElementById("zoomOut");
+const leftCanvas =
+document.getElementById("leftPage");
 
-let pdfDoc = null;
+const rightCanvas =
+document.getElementById("rightPage");
+
+const leftCtx =
+leftCanvas.getContext("2d");
+
+const rightCtx =
+rightCanvas.getContext("2d");
+
+/*=========================
+ PDF VARIABLES
+=========================*/
+
+let pdfDocument = null;
+
 let currentPage = 1;
+
 let totalPages = 0;
 
-let scale = 1.5;
+let zoom = 1.5;
 
 let rendering = false;
 
+let pendingPage = null;
+
 /*=========================
-GET PDF FROM URL
+ CHECK BOOK
 =========================*/
 
-const params = new URLSearchParams(window.location.search);
+if(pdfURL===""){
 
-const params = new URLSearchParams(window.location.search);
+    alert("Book Not Found");
 
-const book = params.get("book");
-
-const pdfFile =
-"https://hassanbhai5559-lgtm.github.io/chishti-library/" + book;
-
-console.log(pdfFile);
-
-if (!pdfFile) {
-
-    loading.innerHTML = "❌ No Book Selected";
-
-    throw new Error("No PDF Found");
+    throw new Error("No PDF Selected.");
 
 }
 
 /*=========================
-LOAD PDF
+ START
 =========================*/
 
-async function loadPDF() {
+console.log("✅ CHISHTI READER");
+console.log("Book :",pdfURL);
+console.log("Title :",bookTitle);
 
-    try {
+document.title = bookTitle;
 
-        pdfDoc = await pdfjsLib.getDocument(pdfFile).promise;
-
-        totalPages = pdfDoc.numPages;
-
-        loading.style.display = "none";
-
-        renderPage(currentPage);
-
-    }
-
-    catch (err) {
-
-        console.error(err);
-
-        loading.innerHTML = "❌ Failed To Load PDF";
-
-    }
-
-}
-
-/*=========================
-RENDER PAGE
-=========================*/
-
-async function renderPage(num) {
-
-    rendering = true;
-
-    const page = await pdfDoc.getPage(num);
-
-    const viewport = page.getViewport({
-
-        scale: scale
-
-    });
-
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-
-    await page.render({
-
-        canvasContext: ctx,
-
-        viewport: viewport
-
-    }).promise;
-
-    rendering = false;
-
-    pageNumber.innerHTML =
-        "Page " + currentPage + " / " + totalPages;
-
-}
-
-/*=========================
-NEXT PAGE
-=========================*/
-
-nextBtn.onclick = () => {
-
-    if (currentPage >= totalPages) return;
-
-    currentPage++;
-
-    renderPage(currentPage);
-
-};
-
-/*=========================
-PREVIOUS PAGE
-=========================*/
-
-prevBtn.onclick = () => {
-
-    if (currentPage <= 1) return;
-
-    currentPage--;
-
-    renderPage(currentPage);
-
-};
-
-/*=========================
-ZOOM IN
-=========================*/
-
-zoomIn.onclick = () => {
-
-    scale += 0.2;
-
-    renderPage(currentPage);
-
-};
-
-/*=========================
-ZOOM OUT
-=========================*/
-
-zoomOut.onclick = () => {
-
-    if (scale <= 0.8) return;
-
-    scale -= 0.2;
-
-    renderPage(currentPage);
-
-};
-
-/*=========================
-KEYBOARD
-=========================*/
-
-document.addEventListener("keydown", (e) => {
-
-    if (e.key === "ArrowRight") {
-
-        nextBtn.click();
-
-    }
-
-    if (e.key === "ArrowLeft") {
-
-        prevBtn.click();
-
-    }
-
-});
-
-/*=========================
-START
-=========================*/
-
-loadPDF();
-
-console.log("✅ Chishti Reader Loaded");
-
-/*=========================================
-CHISHTI READER
-PART 4
-EXTRA FEATURES
-=========================================*/
-
-/*=========================
-FULLSCREEN
-=========================*/
-
-function toggleFullscreen(){
-
-if(!document.fullscreenElement){
-
-document.documentElement.requestFullscreen();
-
-}else{
-
-document.exitFullscreen();
-
-}
-
-}
-
-/*=========================
-DOUBLE CLICK ZOOM
-=========================*/
-
-canvas.addEventListener("dblclick",()=>{
-
-if(scale<2.5){
-
-scale+=0.5;
-
-}else{
-
-scale=1.5;
-
-}
-
-renderPage(currentPage);
-
-});
-
-/*=========================
-MOUSE WHEEL ZOOM
-=========================*/
-
-canvas.addEventListener("wheel",(e)=>{
-
-e.preventDefault();
-
-if(e.deltaY<0){
-
-scale+=0.1;
-
-}else{
-
-if(scale>0.8){
-
-scale-=0.1;
-
-}
-
-}
-
-renderPage(currentPage);
-
-});
-
-/*=========================
-TOUCH SWIPE
-=========================*/
-
-let touchStartX=0;
-
-let touchEndX=0;
-
-canvas.addEventListener("touchstart",(e)=>{
-
-touchStartX=e.changedTouches[0].screenX;
-
-});
-
-canvas.addEventListener("touchend",(e)=>{
-
-touchEndX=e.changedTouches[0].screenX;
-
-handleSwipe();
-
-});
-
-function handleSwipe(){
-
-if(touchEndX<touchStartX-80){
-
-if(currentPage<totalPages){
-
-currentPage++;
-
-renderPage(currentPage);
-
-}
-
-}
-
-if(touchEndX>touchStartX+80){
-
-if(currentPage>1){
-
-currentPage--;
-
-renderPage(currentPage);
-
-}
-
-}
-
-}
-
-/*=========================
-LOADING TITLE
-=========================*/
-
-document.title="📖 Chishti Reader";
-
-/*=========================
-PREVENT RIGHT CLICK
-=========================*/
-
-document.addEventListener("contextmenu",(e)=>{
-
-e.preventDefault();
-
-});
-
-/*=========================
-DISABLE IMAGE DRAG
-=========================*/
-
-canvas.addEventListener("dragstart",(e)=>{
-
-e.preventDefault();
-
-});
-
-console.log("✅ Reader Part 4 Loaded");
