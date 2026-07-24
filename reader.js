@@ -549,13 +549,6 @@ document.addEventListener("keydown",(e)=>{
 });
 
 /*=========================
- BOOK REFERENCE
-=========================*/
-
-const book =
-document.querySelector(".book");
-
-/*=========================
  INITIAL COUNTER
 =========================*/
 
