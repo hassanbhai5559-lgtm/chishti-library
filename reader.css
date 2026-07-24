@@ -1,206 +1,128 @@
 /*=========================================
-CHISHTI READER
-reader.css
-PART 2
+ CHISHTI READER
+ PART 2
+ FOUNDATION
 =========================================*/
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-body{
+html,body{
 
-font-family:Poppins,sans-serif;
+    width:100%;
+    height:100%;
 
-background:#eef5ef;
+    overflow:hidden;
 
-overflow:hidden;
+    font-family:"Poppins",sans-serif;
 
-}
-
-/*=========================
-HEADER
-=========================*/
-
-.reader-header{
-
-height:70px;
-
-background:#0b5d3d;
-
-color:#fff;
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-padding:0 25px;
-
-box-shadow:0 5px 20px rgba(0,0,0,.2);
-
-z-index:999;
-
-position:fixed;
-
-top:0;
-
-left:0;
-
-right:0;
-
-}
-
-.logo{
-
-display:flex;
-
-align-items:center;
-
-gap:12px;
-
-}
-
-.logo img{
-
-width:42px;
-
-height:42px;
-
-border-radius:50%;
-
-}
-
-.logo h2{
-
-font-size:22px;
-
-font-weight:700;
-
-letter-spacing:1px;
+    background:#2b0000;
 
 }
 
 /*=========================
-CONTROLS
+BACKGROUND
 =========================*/
 
-.controls{
+.reader-background{
 
-display:flex;
+    position:fixed;
 
-align-items:center;
+    inset:0;
 
-gap:10px;
-
-}
-
-.controls button{
-
-width:42px;
-
-height:42px;
-
-border:none;
-
-border-radius:10px;
-
-background:#d4af37;
-
-color:#fff;
-
-font-size:18px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.controls button:hover{
-
-background:#b89424;
-
-transform:translateY(-2px);
-
-}
-
-#pageNumber{
-
-font-weight:600;
-
-min-width:120px;
-
-text-align:center;
+    background:
+    radial-gradient(circle at center,#5d0000 0%,#2b0000 55%,#140000 100%);
 
 }
 
 /*=========================
-LOADING
+READER
 =========================*/
 
-#loading{
+.reader{
 
-position:fixed;
+    position:relative;
 
-top:70px;
+    width:100%;
 
-left:0;
+    height:100vh;
 
-right:0;
+    display:flex;
 
-bottom:0;
+    justify-content:center;
 
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:22px;
-
-font-weight:600;
-
-color:#0b5d3d;
-
-background:#eef5ef;
-
-z-index:100;
+    align-items:center;
 
 }
 
 /*=========================
-VIEWER
+BOOK STAGE
 =========================*/
 
-#viewer{
+.book-stage{
 
-position:fixed;
+    position:relative;
 
-top:70px;
+    width:95%;
 
-left:0;
+    max-width:1450px;
 
-right:0;
+    height:92vh;
 
-bottom:0;
+    display:flex;
 
-overflow:auto;
+    justify-content:center;
 
-display:flex;
+    align-items:center;
 
-justify-content:center;
+}
 
-align-items:flex-start;
+/*=========================
+BOOK SHADOW
+=========================*/
 
-padding:25px;
+.book-shadow{
 
-background:#dfe8df;
+    position:absolute;
+
+    width:75%;
+
+    height:80%;
+
+    background:rgba(0,0,0,.45);
+
+    filter:blur(60px);
+
+    border-radius:40px;
+
+    z-index:1;
+
+}
+
+/*=========================
+BOOK
+=========================*/
+
+.book{
+
+    position:relative;
+
+    z-index:5;
+
+    background:#fdfaf2;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    box-shadow:
+
+    0 25px 70px rgba(0,0,0,.55),
+
+    0 0 25px rgba(212,175,55,.20);
 
 }
 
@@ -210,93 +132,45 @@ PDF CANVAS
 
 #pdfCanvas{
 
-background:#fff;
+    display:block;
 
-box-shadow:
+    max-width:100%;
 
-0 10px 40px rgba(0,0,0,.25);
+    max-height:88vh;
 
-border-radius:8px;
-
-max-width:100%;
-
-height:auto;
+    background:#fffef8;
 
 }
 
 /*=========================
-SCROLLBAR
-=========================*/
-
-::-webkit-scrollbar{
-
-width:10px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-background:#0b5d3d;
-
-border-radius:20px;
-
-}
-
-::-webkit-scrollbar-track{
-
-background:#d9e3d9;
-
-}
-
-/*=========================
-MOBILE
+RESPONSIVE
 =========================*/
 
 @media(max-width:768px){
 
-.reader-header{
+.book-stage{
 
-height:60px;
+    width:100%;
 
-padding:0 10px;
-
-}
-
-.logo h2{
-
-font-size:16px;
+    height:100vh;
 
 }
 
-.controls{
+.book{
 
-gap:5px;
+    width:100%;
 
-}
+    height:100%;
 
-.controls button{
-
-width:34px;
-
-height:34px;
-
-font-size:15px;
+    border-radius:0;
 
 }
 
-#pageNumber{
+#pdfCanvas{
 
-font-size:13px;
+    width:100%;
 
-min-width:70px;
-
-}
-
-#viewer{
-
-top:60px;
-
-padding:10px;
+    height:auto;
 
 }
 
