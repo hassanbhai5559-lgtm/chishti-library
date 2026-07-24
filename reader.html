@@ -5,69 +5,54 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Chishti Reader</title>
 
-<link rel="stylesheet" href="reader.css">
+<link rel="stylesheet"
+href="reader.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js"></script>
 
 </head>
 
 <body>
 
-<!-- ===========================
-HEADER
-=========================== -->
+<!-- BACKGROUND -->
 
-<header class="reader-header">
+<div class="reader-background"></div>
 
-<div class="logo">
+<!-- READER -->
 
-<img src="logo.png">
+<div class="reader">
 
-<h2>CHISHTI READER</h2>
+    <!-- Book Stage -->
 
-</div>
+    <div class="book-stage">
 
-<div class="controls">
+        <div class="book-shadow"></div>
 
-<button id="prevPage">◀</button>
+        <div class="book">
 
-<span id="pageNumber">
+            <canvas id="pdfCanvas"></canvas>
 
-Page 1 / 1
+        </div>
 
-</span>
-
-<button id="nextPage">▶</button>
-
-<button id="zoomOut">−</button>
-
-<button id="zoomIn">+</button>
-
-</div>
-
-</header>
-
-<!-- ===========================
-LOADING
-=========================== -->
-
-<div id="loading">
-
-Opening Chishti Reader...
-
-</div>
-
-<!-- ===========================
-PDF
-=========================== -->
-
-<div id="viewer">
-
-<canvas id="pdfCanvas"></canvas>
+    </div>
 
 </div>
 
