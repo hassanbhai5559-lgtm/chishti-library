@@ -175,3 +175,154 @@ RESPONSIVE
 }
 
 }
+/*=========================================
+PART 3
+REAL BOOK
+=========================================*/
+
+.book{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:92%;
+
+    max-width:1300px;
+
+    height:88vh;
+
+    background:#efe7d6;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+/*=========================
+PAGES
+=========================*/
+
+.page{
+
+    width:50%;
+
+    height:100%;
+
+    background:#fffdf7;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:relative;
+
+}
+
+.left-page{
+
+    border-right:1px solid rgba(0,0,0,.08);
+
+}
+
+.right-page{
+
+    border-left:1px solid rgba(0,0,0,.08);
+
+}
+
+/*=========================
+BOOK SPINE
+=========================*/
+
+.book-spine{
+
+    width:24px;
+
+    height:100%;
+
+    background:linear-gradient(
+
+        to right,
+
+        #3d2200,
+
+        #8b5a2b,
+
+        #3d2200
+
+    );
+
+    position:relative;
+
+}
+
+.spine-light{
+
+    position:absolute;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:2px;
+
+    height:100%;
+
+    background:rgba(255,255,255,.25);
+
+}
+
+/*=========================
+CANVAS
+=========================*/
+
+#leftCanvas,
+#rightCanvas{
+
+    width:100%;
+
+    height:100%;
+
+    display:block;
+
+    background:#fffdf8;
+
+}
+
+/*=========================
+MOBILE
+=========================*/
+
+@media(max-width:900px){
+
+.left-page{
+
+    display:none;
+
+}
+
+.book-spine{
+
+    display:none;
+
+}
+
+.right-page{
+
+    width:100%;
+
+}
+
+#rightCanvas{
+
+    width:100%;
+
+}
+
+}
