@@ -29,10 +29,10 @@ decodeURIComponent(urlParams.get("title") || "Chishti Library");
 =========================*/
 
 const leftCanvas =
-document.getElementById("leftPage");
+document.getElementById("leftCanvas");
 
 const rightCanvas =
-document.getElementById("rightPage");
+document.getElementById("rightCanvas");
 
 const leftCtx =
 leftCanvas.getContext("2d");
