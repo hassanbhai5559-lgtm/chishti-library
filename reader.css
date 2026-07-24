@@ -326,3 +326,71 @@ MOBILE
 }
 
 }
+
+
+/*=========================================
+PART 4
+BOOK FLIP
+=========================================*/
+
+.flip-next{
+
+    animation:flipNext .45s ease;
+
+}
+
+.flip-prev{
+
+    animation:flipPrev .45s ease;
+
+}
+
+@keyframes flipNext{
+
+    0%{
+
+        transform:perspective(1600px)
+        rotateY(0deg);
+
+    }
+
+    50%{
+
+        transform:perspective(1600px)
+        rotateY(-8deg);
+
+    }
+
+    100%{
+
+        transform:perspective(1600px)
+        rotateY(0deg);
+
+    }
+
+}
+
+@keyframes flipPrev{
+
+    0%{
+
+        transform:perspective(1600px)
+        rotateY(0deg);
+
+    }
+
+    50%{
+
+        transform:perspective(1600px)
+        rotateY(8deg);
+
+    }
+
+    100%{
+
+        transform:perspective(1600px)
+        rotateY(0deg);
+
+    }
+
+}
