@@ -321,27 +321,6 @@ document.addEventListener("keydown",(e)=>{
 
 });
 
-/*=========================
- BUTTONS
-=========================*/
-
-const nextBtn =
-document.getElementById("next");
-
-if(nextBtn){
-
-    nextBtn.onclick = nextPages;
-
-}
-
-const prevBtn =
-document.getElementById("prev");
-
-if(prevBtn){
-
-    prevBtn.onclick = previousPages;
-
-}
 
 /*=========================
  FIRST COUNTER
