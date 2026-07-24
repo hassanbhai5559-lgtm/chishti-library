@@ -1,8 +1,8 @@
 /*====================================================
- CHISHTI READER
+ CHISHTI READER ENGINE
  reader.js
  PART 1
- Foundation
+ Foundation + Load PDF
 ====================================================*/
 
 /*=========================
@@ -25,7 +25,7 @@ const bookTitle =
 decodeURIComponent(urlParams.get("title") || "Chishti Library");
 
 /*=========================
- ELEMENTS
+ CANVAS
 =========================*/
 
 const leftCanvas =
@@ -60,11 +60,44 @@ let pendingPage = null;
  CHECK BOOK
 =========================*/
 
-if(pdfURL===""){
+if (pdfURL === "") {
 
     alert("Book Not Found");
 
-    throw new Error("No PDF Selected.");
+    throw new Error("No PDF Selected");
+
+}
+
+/*=========================
+ LOAD PDF
+=========================*/
+
+async function loadPDF() {
+
+    try {
+
+        const loadingTask =
+        pdfjsLib.getDocument(pdfURL);
+
+        pdfDocument =
+        await loadingTask.promise;
+
+        totalPages =
+        pdfDocument.numPages;
+
+        console.log("PDF Loaded");
+
+        console.log("Total Pages :", totalPages);
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+        alert("Unable To Open Book");
+
+    }
 
 }
 
@@ -72,9 +105,336 @@ if(pdfURL===""){
  START
 =========================*/
 
-console.log("✅ CHISHTI READER");
-console.log("Book :",pdfURL);
-console.log("Title :",bookTitle);
-
 document.title = bookTitle;
+
+loadPDF();
+
+console.log("✅ CHISHTI READER ENGINE");
+console.log("Book :", pdfURL);
+console.log("Title :", bookTitle);
+
+/*====================================================
+ CHISHTI READER ENGINE
+ PART 2
+ Two Page Rendering
+====================================================*/
+
+/*=========================
+ RENDER LEFT PAGE
+=========================*/
+
+async function renderLeft(pageNumber){
+
+    if(pageNumber > totalPages){
+
+        leftCtx.clearRect(
+            0,
+            0,
+            leftCanvas.width,
+            leftCanvas.height
+        );
+
+        return;
+
+    }
+
+    const page =
+    await pdfDocument.getPage(pageNumber);
+
+    const viewport =
+    page.getViewport({
+        scale: zoom
+    });
+
+    leftCanvas.width =
+    viewport.width;
+
+    leftCanvas.height =
+    viewport.height;
+
+    await page.render({
+
+        canvasContext:leftCtx,
+
+        viewport:viewport
+
+    }).promise;
+
+}
+
+/*=========================
+ RENDER RIGHT PAGE
+=========================*/
+
+async function renderRight(pageNumber){
+
+    if(pageNumber > totalPages){
+
+        rightCtx.clearRect(
+            0,
+            0,
+            rightCanvas.width,
+            rightCanvas.height
+        );
+
+        return;
+
+    }
+
+    const page =
+    await pdfDocument.getPage(pageNumber);
+
+    const viewport =
+    page.getViewport({
+        scale: zoom
+    });
+
+    rightCanvas.width =
+    viewport.width;
+
+    rightCanvas.height =
+    viewport.height;
+
+    await page.render({
+
+        canvasContext:rightCtx,
+
+        viewport:viewport
+
+    }).promise;
+
+}
+
+/*=========================
+ RENDER BOOK
+=========================*/
+
+async function renderBook(){
+
+    if(rendering) return;
+
+    rendering = true;
+
+    await renderLeft(currentPage);
+
+    await renderRight(currentPage + 1);
+
+    rendering = false;
+
+}
+
+/*=========================
+ START BOOK
+=========================*/
+
+loadPDF().then(()=>{
+
+    renderBook();
+
+});
+
+/*====================================================
+ CHISHTI READER ENGINE
+ PART 3
+ Navigation + Page Counter
+====================================================*/
+
+/*=========================
+ PAGE COUNTER
+=========================*/
+
+function updatePageCounter(){
+
+    const counter =
+    document.getElementById("pageCounter");
+
+    if(counter){
+
+        counter.innerHTML =
+        currentPage +
+        " - " +
+        Math.min(currentPage + 1,totalPages) +
+        " / " +
+        totalPages;
+
+    }
+
+}
+
+/*=========================
+ NEXT
+=========================*/
+
+async function nextPages(){
+
+    if(currentPage + 2 > totalPages){
+
+        return;
+
+    }
+
+    currentPage += 2;
+
+    await renderBook();
+
+    updatePageCounter();
+
+}
+
+/*=========================
+ PREVIOUS
+=========================*/
+
+async function previousPages(){
+
+    if(currentPage <= 1){
+
+        return;
+
+    }
+
+    currentPage -= 2;
+
+    await renderBook();
+
+    updatePageCounter();
+
+}
+
+/*=========================
+ KEYBOARD
+=========================*/
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="ArrowRight"){
+
+        nextPages();
+
+    }
+
+    if(e.key==="ArrowLeft"){
+
+        previousPages();
+
+    }
+
+});
+
+/*=========================
+ BUTTONS
+=========================*/
+
+const nextBtn =
+document.getElementById("next");
+
+if(nextBtn){
+
+    nextBtn.onclick = nextPages;
+
+}
+
+const prevBtn =
+document.getElementById("prev");
+
+if(prevBtn){
+
+    prevBtn.onclick = previousPages;
+
+}
+
+/*=========================
+ FIRST COUNTER
+=========================*/
+
+updatePageCounter();
+
+console.log("✅ Navigation Ready");
+
+/*====================================================
+ CHISHTI READER ENGINE
+ PART 4
+ Book Animation
+====================================================*/
+
+/*=========================
+ BOOK ELEMENT
+=========================*/
+
+const book =
+document.querySelector(".book");
+
+/*=========================
+ PAGE FLIP
+=========================*/
+
+function flipNext(){
+
+    if(!book) return;
+
+    book.classList.remove("flip-next");
+
+    void book.offsetWidth;
+
+    book.classList.add("flip-next");
+
+}
+
+function flipPrevious(){
+
+    if(!book) return;
+
+    book.classList.remove("flip-prev");
+
+    void book.offsetWidth;
+
+    book.classList.add("flip-prev");
+
+}
+
+/*=========================
+ OVERRIDE BUTTONS
+=========================*/
+
+const oldNext = nextPages;
+
+nextPages = async function(){
+
+    flipNext();
+
+    await oldNext();
+
+};
+
+const oldPrev = previousPages;
+
+previousPages = async function(){
+
+    flipPrevious();
+
+    await oldPrev();
+
+};
+
+/*=========================
+ KEYBOARD
+=========================*/
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="ArrowRight"){
+
+        flipNext();
+
+    }
+
+    if(e.key==="ArrowLeft"){
+
+        flipPrevious();
+
+    }
+
+});
+
+console.log("✅ Book Animation Ready");
 
