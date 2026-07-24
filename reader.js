@@ -438,3 +438,152 @@ document.addEventListener("keydown",(e)=>{
 
 console.log("✅ Book Animation Ready");
 
+/*====================================================
+ CHISHTI READER
+ PART 6
+ NAVIGATION ENGINE
+====================================================*/
+
+/*=========================
+ NEXT SPREAD
+=========================*/
+
+function nextSpread(){
+
+    if(currentPage + 2 > totalPages) return;
+
+    currentPage += 2;
+
+    book.classList.remove("flip-prev");
+
+    void book.offsetWidth;
+
+    book.classList.add("flip-next");
+
+    renderSpread(currentPage);
+
+    updatePageCounter();
+
+}
+
+/*=========================
+ PREVIOUS SPREAD
+=========================*/
+
+function previousSpread(){
+
+    if(currentPage <= 1) return;
+
+    currentPage -= 2;
+
+    if(currentPage < 1)
+        currentPage = 1;
+
+    book.classList.remove("flip-next");
+
+    void book.offsetWidth;
+
+    book.classList.add("flip-prev");
+
+    renderSpread(currentPage);
+
+    updatePageCounter();
+
+}
+
+/*=========================
+ PAGE COUNTER
+=========================*/
+
+function updatePageCounter(){
+
+    const counter =
+    document.getElementById("pageCounter");
+
+    const total =
+    document.getElementById("totalPages");
+
+    if(counter){
+
+        let second =
+        currentPage + 1;
+
+        if(second > totalPages)
+            second = totalPages;
+
+        counter.innerHTML =
+        currentPage + " - " + second;
+
+    }
+
+    if(total){
+
+        total.innerHTML =
+        totalPages;
+
+    }
+
+}
+
+/*=========================
+ BUTTON EVENTS
+=========================*/
+
+const nextBtn =
+document.getElementById("nextPage");
+
+const prevBtn =
+document.getElementById("prevPage");
+
+if(nextBtn){
+
+    nextBtn.onclick =
+    nextSpread;
+
+}
+
+if(prevBtn){
+
+    prevBtn.onclick =
+    previousSpread;
+
+}
+
+/*=========================
+ KEYBOARD
+=========================*/
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="ArrowRight"){
+
+        nextSpread();
+
+    }
+
+    if(e.key==="ArrowLeft"){
+
+        previousSpread();
+
+    }
+
+});
+
+/*=========================
+ BOOK REFERENCE
+=========================*/
+
+const book =
+document.querySelector(".book");
+
+/*=========================
+ INITIAL COUNTER
+=========================*/
+
+setTimeout(()=>{
+
+    updatePageCounter();
+
+},500);
+
+console.log("✅ Navigation Ready");
