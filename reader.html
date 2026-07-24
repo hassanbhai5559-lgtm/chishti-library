@@ -6,12 +6,12 @@
 <meta charset="UTF-8">
 
 <meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+content="width=device-width,initial-scale=1.0">
 
 <title>Chishti Reader</title>
 
-<link rel="stylesheet"
-href="reader.css">
+<meta name="theme-color"
+content="#2b0000">
 
 <link rel="preconnect"
 href="https://fonts.googleapis.com">
@@ -26,192 +26,397 @@ rel="stylesheet">
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+<link rel="stylesheet"
+href="reader.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 </head>
 
 <body>
 
-<!-- BACKGROUND -->
+<!--==================================================
+BACKGROUND
+===================================================-->
 
-<div class="reader-background"></div>
+<div class="reader-background">
 
-<!-- READER -->
+    <div class="bg-gradient"></div>
+
+    <div class="bg-light"></div>
+
+</div>
+
+<!--==================================================
+MAIN READER
+===================================================-->
 
 <div class="reader">
 
-
-<!--=========================================
- CHISHTI READER TOOLBAR
- PART 1
-==========================================-->
+<!--==================================================
+TOP TOOLBAR
+===================================================-->
 
 <header class="reader-toolbar">
 
-    <!-- Left -->
+    <!-- LEFT -->
 
     <div class="toolbar-left">
 
-        <button id="menuBtn" class="tool-btn">
+        <button
+        id="menuBtn"
+        class="tool-btn">
+
             <i class="fas fa-bars"></i>
+
         </button>
 
-        <div class="reader-brand">
+        <div class="reader-logo">
 
-            <img src="logo.png" alt="Chishti">
-
-            <div>
-
-                <h2>CHISHTI READER</h2>
-
-                <span>Digital Islamic Library</span>
-
-            </div>
+            <img
+            src="logo.png"
+            alt="Chishti Library">
 
         </div>
 
-    </div>
+        <div class="reader-title">
 
-    <!-- Center -->
+            <h2>
 
-    <div class="toolbar-center">
+                CHISHTI READER
 
-        <div class="book-name">
+            </h2>
 
-            <i class="fas fa-book-open"></i>
+            <span>
 
-            <span id="bookTitle">
-                Loading...
+                Premium Digital Library
+
             </span>
 
         </div>
 
     </div>
 
-    <!-- Right -->
+    <!-- CENTER -->
+
+    <div class="toolbar-center">
+
+        <div class="current-book">
+
+            <i class="fas fa-book-open"></i>
+
+            <span
+            id="bookTitle">
+
+                Loading Book...
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
 
     <div class="toolbar-right">
 
-        <button id="bookmarkBtn" class="tool-btn" title="Bookmark">
+        <button
+        id="bookmarkBtn"
+        class="tool-btn">
+
             <i class="fas fa-bookmark"></i>
+
         </button>
 
-        <button id="searchBtn" class="tool-btn" title="Search">
+        <button
+        id="searchBtn"
+        class="tool-btn">
+
             <i class="fas fa-search"></i>
+
         </button>
 
-        <button id="themeBtn" class="tool-btn" title="Theme">
+        <button
+        id="themeBtn"
+        class="tool-btn">
+
             <i class="fas fa-moon"></i>
+
         </button>
 
-        <button id="settingBtn" class="tool-btn" title="Settings">
-            <i class="fas fa-cog"></i>
+        <button
+        id="settingsBtn"
+        class="tool-btn">
+
+            <i class="fas fa-gear"></i>
+
         </button>
 
     </div>
 
 </header>
- 
- <!--=========================================
-BOOK STAGE
-PART 3
-==========================================-->
 
-<div class="book-stage">
+<!--==================================================
+BOOK STAGE
+===================================================-->
+
+<main class="reader-stage">
+
+    <div class="stage-light"></div>
 
     <div class="book-shadow"></div>
 
-    <div class="book">
+    <section class="book-container">
 
-        <!-- Left Page -->
+        <div id="book" class="book">
 
-        <div class="page left-page">
+            <!--=========================
+            LEFT PAGE
+            =========================-->
 
-            <canvas id="leftCanvas"></canvas>
+            <div class="page left-page">
+
+                <div class="page-paper">
+
+                    <canvas
+                    id="leftCanvas"></canvas>
+
+                </div>
+
+            </div>
+
+            <!--=========================
+            BOOK SPINE
+            =========================-->
+
+            <div class="book-spine">
+
+                <div class="spine-highlight"></div>
+
+                <div class="spine-shadow"></div>
+
+            </div>
+
+            <!--=========================
+            RIGHT PAGE
+            =========================-->
+
+            <div class="page right-page">
+
+                <div class="page-paper">
+
+                    <canvas
+                    id="rightCanvas"></canvas>
+
+                </div>
+
+            </div>
+
+            <!--=========================
+            PAGE GLOW
+            =========================-->
+
+            <div class="page-glow"></div>
 
         </div>
 
-        <!-- Book Spine -->
+    </section>
 
-        <div class="book-spine">
+</main>
 
-            <div class="spine-light"></div>
-
-        </div>
-
-        <!-- Right Page -->
-
-        <div class="page right-page">
-
-            <canvas id="rightCanvas"></canvas>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!--=========================================
- CHISHTI READER
- BOTTOM TOOLBAR
- PART 3
-==========================================-->
+ <!--==================================================
+PREMIUM BOTTOM TOOLBAR
+===================================================-->
 
 <footer class="reader-bottom">
 
-    <button id="firstPage" class="bottom-btn">
-        <i class="fas fa-backward-fast"></i>
-    </button>
+    <!-- LEFT -->
 
-    <button id="prevPage" class="bottom-btn">
-        <i class="fas fa-chevron-left"></i>
-    </button>
+    <div class="bottom-left">
 
-    <div class="page-counter">
+        <button
+        id="firstPage"
+        class="bottom-btn"
+        title="First Page">
 
-        <span id="pageCounter">1 - 2</span>
+            <i class="fas fa-backward-fast"></i>
 
-        <small>of</small>
+        </button>
 
-        <span id="totalPages">0</span>
+        <button
+        id="prevPage"
+        class="bottom-btn"
+        title="Previous">
+
+            <i class="fas fa-chevron-left"></i>
+
+        </button>
 
     </div>
 
-    <button id="nextPage" class="bottom-btn">
-        <i class="fas fa-chevron-right"></i>
-    </button>
+    <!-- CENTER -->
 
-    <button id="lastPage" class="bottom-btn">
-        <i class="fas fa-forward-fast"></i>
-    </button>
+    <div class="bottom-center">
 
-    <div class="toolbar-divider"></div>
+        <div class="page-info">
 
-    <button id="zoomOut" class="bottom-btn">
-        <i class="fas fa-search-minus"></i>
-    </button>
+            <span id="pageCounter">
 
-    <button id="zoomIn" class="bottom-btn">
-        <i class="fas fa-search-plus"></i>
-    </button>
+                1 - 2
 
-    <button id="downloadBook" class="bottom-btn">
-        <i class="fas fa-download"></i>
-    </button>
+            </span>
 
-    <button id="printBook" class="bottom-btn">
-        <i class="fas fa-print"></i>
-    </button>
+            <span class="page-divider">
 
-    <button id="fullscreen" class="bottom-btn">
-        <i class="fas fa-expand"></i>
-    </button>
+                /
+
+            </span>
+
+            <span id="totalPages">
+
+                0
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="bottom-right">
+
+        <button
+        id="zoomOut"
+        class="bottom-btn"
+        title="Zoom Out">
+
+            <i class="fas fa-search-minus"></i>
+
+        </button>
+
+        <button
+        id="zoomIn"
+        class="bottom-btn"
+        title="Zoom In">
+
+            <i class="fas fa-search-plus"></i>
+
+        </button>
+
+        <button
+        id="downloadBtn"
+        class="bottom-btn"
+        title="Download">
+
+            <i class="fas fa-download"></i>
+
+        </button>
+
+        <button
+        id="printBtn"
+        class="bottom-btn"
+        title="Print">
+
+            <i class="fas fa-print"></i>
+
+        </button>
+
+        <button
+        id="fullscreenBtn"
+        class="bottom-btn"
+        title="Fullscreen">
+
+            <i class="fas fa-expand"></i>
+
+        </button>
+
+        <button
+        id="nextPage"
+        class="bottom-btn"
+        title="Next">
+
+            <i class="fas fa-chevron-right"></i>
+
+        </button>
+
+        <button
+        id="lastPage"
+        class="bottom-btn"
+        title="Last Page">
+
+            <i class="fas fa-forward-fast"></i>
+
+        </button>
+
+    </div>
 
 </footer>
- 
+
+<!--==================================================
+LEFT SIDEBAR
+(Future)
+===================================================-->
+
+<aside id="readerSidebar" class="reader-sidebar">
+
+    <div class="sidebar-header">
+
+        <h3>CHISHTI LIBRARY</h3>
+
+    </div>
+
+    <div class="sidebar-content">
+
+        <!-- Future -->
+
+    </div>
+
+</aside>
+
+<!--==================================================
+AI PANEL
+(Future)
+===================================================-->
+
+<aside id="readerAI" class="reader-ai">
+
+    <div class="ai-header">
+
+        <i class="fas fa-robot"></i>
+
+        <span>CHISHTI AI</span>
+
+    </div>
+
+    <div class="ai-content">
+
+        <!-- Future AI -->
+
+    </div>
+
+</aside>
+
+<!--==================================================
+MODALS
+===================================================-->
+
+<div id="readerModal"></div>
+
+<!--==================================================
+OVERLAY
+===================================================-->
+
+<div id="overlay"></div>
+
+</div>
+<!-- reader END -->
+
+<!--==================================================
+JAVASCRIPT
+===================================================-->
+
 <script src="reader.js"></script>
 
 </body>
-
-</html>
+</html> 
