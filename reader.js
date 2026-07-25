@@ -626,3 +626,89 @@ book.addEventListener("wheel",(e)=>{
 },{passive:false});
 
 console.log("✅ Reader v3 Ready");
+
+/*====================================================
+ SEARCH ENGINE
+ PART 2
+ POPUP CONTROLLER
+====================================================*/
+
+const searchBtn =
+document.getElementById("searchBtn");
+
+const searchOverlay =
+document.getElementById("searchOverlay");
+
+const closeSearch =
+document.getElementById("closeSearch");
+
+const searchInput =
+document.getElementById("searchInput");
+
+/*=========================
+OPEN
+=========================*/
+
+if(searchBtn){
+
+    searchBtn.onclick=function(){
+
+        searchOverlay.classList.add("active");
+
+        setTimeout(()=>{
+
+            searchInput.focus();
+
+        },120);
+
+    };
+
+}
+
+/*=========================
+CLOSE
+=========================*/
+
+if(closeSearch){
+
+    closeSearch.onclick=function(){
+
+        searchOverlay.classList.remove("active");
+
+    };
+
+}
+
+/*=========================
+CLICK OUTSIDE
+=========================*/
+
+if(searchOverlay){
+
+    searchOverlay.onclick=function(e){
+
+        if(e.target===searchOverlay){
+
+            searchOverlay.classList.remove("active");
+
+        }
+
+    };
+
+}
+
+/*=========================
+ESC KEY
+=========================*/
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key==="Escape"){
+
+        searchOverlay.classList.remove("active");
+
+    }
+
+});
+
+console.log("✅ Search Popup Ready");
