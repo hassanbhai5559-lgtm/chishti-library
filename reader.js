@@ -712,3 +712,92 @@ document.addEventListener("keydown",(e)=>{
 });
 
 console.log("✅ Search Popup Ready");
+
+
+/*====================================================
+ SEARCH ENGINE
+ PART 3
+ PDF TEXT INDEXER
+====================================================*/
+
+/*=========================
+SEARCH VARIABLES
+=========================*/
+
+let pdfTextIndex = [];
+
+/*=========================
+BUILD INDEX
+=========================*/
+
+async function buildSearchIndex(){
+
+    pdfTextIndex = [];
+
+    for(let pageNumber = 1; pageNumber <= totalPages; pageNumber++){
+
+        try{
+
+            const page =
+            await pdf.getPage(pageNumber);
+
+            const textContent =
+            await page.getTextContent();
+
+            let pageText = "";
+
+            textContent.items.forEach(item=>{
+
+                pageText +=
+                item.str + " ";
+
+            });
+
+            pdfTextIndex.push({
+
+                page:pageNumber,
+
+                text:pageText.toLowerCase()
+
+            });
+
+        }
+
+        catch(error){
+
+            console.error(
+
+                "Search Index Error Page :",
+
+                pageNumber
+
+            );
+
+        }
+
+    }
+
+    console.log(
+
+        "✅ Search Index Ready",
+
+        pdfTextIndex.length,
+
+        "Pages Indexed"
+
+    );
+
+}
+
+/*=========================
+START INDEX
+=========================*/
+
+initializeReader().then(async()=>{
+
+    await renderSpread();
+
+    await buildSearchIndex();
+
+});
+
