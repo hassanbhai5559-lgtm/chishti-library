@@ -1,31 +1,35 @@
 /*====================================================
- CHISHTI READER ENGINE v2
+ CHISHTI READER v3
  PART 1
- Foundation
+ FOUNDATION
 ====================================================*/
 
 /*=========================
- PDF.js Worker
+PDF.js Worker
 =========================*/
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 /*=========================
- URL PARAMETERS
+URL PARAMETERS
 =========================*/
 
-const urlParams = new URLSearchParams(window.location.search);
+const params =
+new URLSearchParams(window.location.search);
 
 const pdfURL =
-decodeURIComponent(urlParams.get("book") || "");
+decodeURIComponent(params.get("book") || "");
 
 const bookTitle =
-decodeURIComponent(urlParams.get("title") || "Chishti Library");
+decodeURIComponent(params.get("title") || "Chishti Library");
 
 /*=========================
- CANVAS
+DOM ELEMENTS
 =========================*/
+
+const book =
+document.getElementById("readerBook");
 
 const leftCanvas =
 document.getElementById("leftCanvas");
@@ -39,31 +43,20 @@ leftCanvas.getContext("2d");
 const rightCtx =
 rightCanvas.getContext("2d");
 
-/*=========================
- BOOK ELEMENT
-=========================*/
-
-const book =
-document.querySelector(".book");
-
-/*=========================
- TOOLBAR
-=========================*/
-
-const titleElement =
+const bookTitleElement =
 document.getElementById("bookTitle");
 
 const pageCounter =
 document.getElementById("pageCounter");
 
-const totalPageElement =
+const totalPagesElement =
 document.getElementById("totalPages");
 
 /*=========================
- PDF VARIABLES
+READER VARIABLES
 =========================*/
 
-let pdfDocument = null;
+let pdf = null;
 
 let totalPages = 0;
 
@@ -74,63 +67,62 @@ let zoom = 1.5;
 let rendering = false;
 
 /*=========================
- CHECK BOOK
-=========================*/
-
-if(!pdfURL){
-
-    alert("Book Not Found");
-
-    throw new Error("No PDF Selected");
-
-}
-
-/*=========================
- WINDOW TITLE
+WINDOW TITLE
 =========================*/
 
 document.title = bookTitle;
 
-if(titleElement){
+if(bookTitleElement){
 
-    titleElement.textContent =
+    bookTitleElement.textContent =
     bookTitle;
 
 }
 
-console.log("✅ CHISHTI READER ENGINE v2");
-console.log("Book :", pdfURL);
-console.log("Title :", bookTitle);
+/*=========================
+CHECK PDF
+=========================*/
 
-/*====================================================
- CHISHTI READER ENGINE v2
- PART 2
- PDF Loader
-====================================================*/
+if(!pdfURL){
+
+    alert("No Book Selected");
+
+    throw new Error("PDF URL Missing");
+
+}
 
 /*=========================
- LOAD PDF
+LOAD PDF
 =========================*/
 
 async function loadPDF(){
 
     try{
 
-        console.log("Loading PDF...");
-
-        const loadingTask =
+        const task =
         pdfjsLib.getDocument(pdfURL);
 
-        pdfDocument =
-        await loadingTask.promise;
+        pdf =
+        await task.promise;
 
         totalPages =
-        pdfDocument.numPages;
+        pdf.numPages;
 
-        console.log("PDF Loaded Successfully");
-        console.log("Total Pages :", totalPages);
+        if(totalPagesElement){
 
-        return true;
+            totalPagesElement.textContent =
+            totalPages;
+
+        }
+
+        console.log(
+            "PDF Loaded Successfully"
+        );
+
+        console.log(
+            "Pages :",
+            totalPages
+        );
 
     }
 
@@ -138,38 +130,34 @@ async function loadPDF(){
 
         console.error(error);
 
-        alert("Unable To Open PDF");
-
-        return false;
+        alert("Unable To Open PDF.");
 
     }
 
 }
 
 /*=========================
- INITIALIZE
+START READER
 =========================*/
 
 async function initializeReader(){
 
-    const loaded =
     await loadPDF();
-
-    if(!loaded)
-        return;
-
-    console.log("Reader Initialized");
 
 }
 
+initializeReader();
+
+console.log("✅ Reader v3 Initialized");
+
 /*====================================================
- CHISHTI READER ENGINE v2
- PART 3
- Two Page Renderer
+ CHISHTI READER v3
+ PART 2
+ PDF RENDER ENGINE
 ====================================================*/
 
 /*=========================
- RENDER SINGLE PAGE
+RENDER SINGLE PAGE
 =========================*/
 
 async function renderPage(pageNumber, canvas, context){
@@ -177,10 +165,13 @@ async function renderPage(pageNumber, canvas, context){
     if(pageNumber > totalPages){
 
         context.clearRect(
+
             0,
             0,
+
             canvas.width,
             canvas.height
+
         );
 
         return;
@@ -188,18 +179,40 @@ async function renderPage(pageNumber, canvas, context){
     }
 
     const page =
-    await pdfDocument.getPage(pageNumber);
+    await pdf.getPage(pageNumber);
 
     const viewport =
     page.getViewport({
+
         scale: zoom
+
     });
 
+    const outputScale =
+    window.devicePixelRatio || 1;
+
     canvas.width =
-    viewport.width;
+    Math.floor(viewport.width * outputScale);
 
     canvas.height =
-    viewport.height;
+    Math.floor(viewport.height * outputScale);
+
+    canvas.style.width =
+    viewport.width + "px";
+
+    canvas.style.height =
+    viewport.height + "px";
+
+    context.setTransform(
+
+        outputScale,
+        0,
+        0,
+        outputScale,
+        0,
+        0
+
+    );
 
     await page.render({
 
@@ -212,7 +225,7 @@ async function renderPage(pageNumber, canvas, context){
 }
 
 /*=========================
- RENDER CURRENT SPREAD
+RENDER CURRENT SPREAD
 =========================*/
 
 async function renderSpread(){
@@ -242,60 +255,120 @@ async function renderSpread(){
 
     );
 
-    rendering = false;
+    updatePageCounter();
 
-    console.log(
-        "Spread Rendered :",
-        currentPage,
-        "-",
-        currentPage + 1
-    );
+    rendering = false;
 
 }
 
 /*=========================
- START FIRST SPREAD
-=========================*/
-
-initializeReader().then(()=>{
-
-    renderSpread();
-
-});
-
-/*====================================================
- CHISHTI READER ENGINE v2
- PART 4
- Navigation Engine
-====================================================*/
-
-/*=========================
- PAGE COUNTER
+PAGE COUNTER
 =========================*/
 
 function updatePageCounter(){
 
-    if(pageCounter){
+    if(!pageCounter)
+        return;
 
-        const secondPage =
-        Math.min(currentPage + 1, totalPages);
+    let secondPage =
+    currentPage + 1;
 
-        pageCounter.textContent =
-        currentPage + " - " + secondPage;
+    if(secondPage > totalPages){
 
-    }
-
-    if(totalPageElement){
-
-        totalPageElement.textContent =
+        secondPage =
         totalPages;
 
     }
 
+    pageCounter.textContent =
+
+        currentPage +
+
+        " - " +
+
+        secondPage;
+
 }
 
 /*=========================
- NEXT SPREAD
+START FIRST RENDER
+=========================*/
+
+initializeReader().then(async()=>{
+
+    await renderSpread();
+
+});
+
+console.log("✅ Render Engine Ready");
+
+/*====================================================
+ CHISHTI READER v3
+ PART 3
+ NAVIGATION + ZOOM + TOOLS
+====================================================*/
+
+/*=========================
+BUTTONS
+=========================*/
+
+const firstPageBtn =
+document.getElementById("firstPage");
+
+const lastPageBtn =
+document.getElementById("lastPage");
+
+const nextPageBtn =
+document.getElementById("nextPage");
+
+const prevPageBtn =
+document.getElementById("prevPage");
+
+const zoomInBtn =
+document.getElementById("zoomIn");
+
+const zoomOutBtn =
+document.getElementById("zoomOut");
+
+const fullscreenBtn =
+document.getElementById("fullscreenBtn");
+
+const downloadBtn =
+document.getElementById("downloadBtn");
+
+const printBtn =
+document.getElementById("printBtn");
+
+/*=========================
+BOOK ANIMATION
+=========================*/
+
+function flipNext(){
+
+    if(!book) return;
+
+    book.classList.remove("flip-prev");
+
+    void book.offsetWidth;
+
+    book.classList.add("flip-next");
+
+}
+
+function flipPrevious(){
+
+    if(!book) return;
+
+    book.classList.remove("flip-next");
+
+    void book.offsetWidth;
+
+    book.classList.add("flip-prev");
+
+}
+
+/*=========================
+NEXT
 =========================*/
 
 async function nextSpread(){
@@ -307,24 +380,14 @@ async function nextSpread(){
 
     currentPage += 2;
 
-    if(book){
-
-        book.classList.remove("flip-prev");
-
-        void book.offsetWidth;
-
-        book.classList.add("flip-next");
-
-    }
+    flipNext();
 
     await renderSpread();
-
-    updatePageCounter();
 
 }
 
 /*=========================
- PREVIOUS SPREAD
+PREVIOUS
 =========================*/
 
 async function previousSpread(){
@@ -339,218 +402,227 @@ async function previousSpread(){
     if(currentPage < 1)
         currentPage = 1;
 
-    if(book){
-
-        book.classList.remove("flip-next");
-
-        void book.offsetWidth;
-
-        book.classList.add("flip-prev");
-
-    }
+    flipPrevious();
 
     await renderSpread();
 
-    updatePageCounter();
+}
+
+/*=========================
+FIRST
+=========================*/
+
+async function firstSpread(){
+
+    currentPage = 1;
+
+    await renderSpread();
 
 }
 
 /*=========================
- KEYBOARD
+LAST
 =========================*/
 
-document.addEventListener("keydown",(e)=>{
+async function lastSpread(){
 
-    if(e.key==="ArrowRight"){
+    if(totalPages % 2 === 0){
 
-        nextSpread();
+        currentPage = totalPages - 1;
+
+    }else{
+
+        currentPage = totalPages;
 
     }
 
-    if(e.key==="ArrowLeft"){
+    if(currentPage < 1)
+        currentPage = 1;
 
-        previousSpread();
-
-    }
-
-});
-
-/*=========================
- BUTTONS
-=========================*/
-
-const nextButton =
-document.getElementById("nextPage");
-
-const prevButton =
-document.getElementById("prevPage");
-
-if(nextButton){
-
-    nextButton.onclick =
-    nextSpread;
-
-}
-
-if(prevButton){
-
-    prevButton.onclick =
-    previousSpread;
+    await renderSpread();
 
 }
 
 /*=========================
- FIRST COUNTER
-=========================*/
-
-setTimeout(()=>{
-
-    updatePageCounter();
-
-},300);
-
-console.log("✅ Navigation Engine Ready");
-
-/*====================================================
- CHISHTI READER ENGINE v2
- PART 5
- Zoom Engine
-====================================================*/
-
-/*=========================
- MIN / MAX ZOOM
+ZOOM
 =========================*/
 
 const MIN_ZOOM = 0.8;
-
 const MAX_ZOOM = 3.0;
-
-const ZOOM_STEP = 0.20;
-
-/*=========================
- APPLY ZOOM
-=========================*/
-
-async function applyZoom(){
-
-    if(rendering) return;
-
-    await renderSpread();
-
-}
-
-/*=========================
- ZOOM IN
-=========================*/
+const STEP = 0.20;
 
 async function zoomIn(){
 
     if(zoom >= MAX_ZOOM)
         return;
 
-    zoom += ZOOM_STEP;
+    zoom += STEP;
 
-    await applyZoom();
+    await renderSpread();
 
 }
-
-/*=========================
- ZOOM OUT
-=========================*/
 
 async function zoomOut(){
 
     if(zoom <= MIN_ZOOM)
         return;
 
-    zoom -= ZOOM_STEP;
+    zoom -= STEP;
 
-    await applyZoom();
-
-}
-
-/*=========================
- TOOLBAR BUTTONS
-=========================*/
-
-const zoomInButton =
-document.getElementById("zoomIn");
-
-const zoomOutButton =
-document.getElementById("zoomOut");
-
-if(zoomInButton){
-
-    zoomInButton.onclick =
-    zoomIn;
-
-}
-
-if(zoomOutButton){
-
-    zoomOutButton.onclick =
-    zoomOut;
+    await renderSpread();
 
 }
 
 /*=========================
- MOUSE WHEEL
+FULLSCREEN
 =========================*/
 
-book.addEventListener("wheel",async(e)=>{
+function toggleFullscreen(){
 
-    e.preventDefault();
+    if(!document.fullscreenElement){
 
-    if(e.deltaY<0){
-
-        zoomIn();
+        document.documentElement.requestFullscreen();
 
     }else{
 
-        zoomOut();
+        document.exitFullscreen();
+
+    }
+
+}
+
+/*=========================
+DOWNLOAD
+=========================*/
+
+function downloadBook(){
+
+    window.open(pdfURL,"_blank");
+
+}
+
+/*=========================
+PRINT
+=========================*/
+
+function printBook(){
+
+    const frame =
+    window.open(pdfURL);
+
+    if(frame){
+
+        frame.onload = () => {
+
+            frame.print();
+
+        };
+
+    }
+
+}
+
+/*=========================
+BUTTON EVENTS
+=========================*/
+
+if(nextPageBtn)
+nextPageBtn.onclick = nextSpread;
+
+if(prevPageBtn)
+prevPageBtn.onclick = previousSpread;
+
+if(firstPageBtn)
+firstPageBtn.onclick = firstSpread;
+
+if(lastPageBtn)
+lastPageBtn.onclick = lastSpread;
+
+if(zoomInBtn)
+zoomInBtn.onclick = zoomIn;
+
+if(zoomOutBtn)
+zoomOutBtn.onclick = zoomOut;
+
+if(fullscreenBtn)
+fullscreenBtn.onclick = toggleFullscreen;
+
+if(downloadBtn)
+downloadBtn.onclick = downloadBook;
+
+if(printBtn)
+printBtn.onclick = printBook;
+
+/*=========================
+KEYBOARD
+=========================*/
+
+document.addEventListener("keydown",(e)=>{
+
+    switch(e.key){
+
+        case "ArrowRight":
+
+            nextSpread();
+            break;
+
+        case "ArrowLeft":
+
+            previousSpread();
+            break;
+
+        case "+":
+        case "=":
+
+            zoomIn();
+            break;
+
+        case "-":
+
+            zoomOut();
+            break;
+
+        case "Home":
+
+            firstSpread();
+            break;
+
+        case "End":
+
+            lastSpread();
+            break;
+
+        case "f":
+
+            toggleFullscreen();
+            break;
+
+    }
+
+});
+
+/*=========================
+MOUSE WHEEL
+=========================*/
+
+book.addEventListener("wheel",(e)=>{
+
+    if(e.ctrlKey){
+
+        e.preventDefault();
+
+        if(e.deltaY < 0){
+
+            zoomIn();
+
+        }else{
+
+            zoomOut();
+
+        }
 
     }
 
 },{passive:false});
 
-/*=========================
- DOUBLE CLICK
-=========================*/
-
-book.addEventListener("dblclick",async()=>{
-
-    if(zoom<2.5){
-
-        zoom=2.5;
-
-    }else{
-
-        zoom=1.5;
-
-    }
-
-    await applyZoom();
-
-});
-
-/*=========================
- KEYBOARD
-=========================*/
-
-document.addEventListener("keydown",(e)=>{
-
-    if(e.key==="+" || e.key==="="){
-
-        zoomIn();
-
-    }
-
-    if(e.key==="-"){
-
-        zoomOut();
-
-    }
-
-});
-
-console.log("✅ Zoom Engine Ready");
+console.log("✅ Reader v3 Ready");
