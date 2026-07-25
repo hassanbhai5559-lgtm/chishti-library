@@ -5,31 +5,36 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<title>Chishti Reader</title>
+<title>CHISHTI READER</title>
 
-<meta name="theme-color"
-content="#2b0000">
+<link
+rel="stylesheet"
+href="reader.css">
 
-<link rel="preconnect"
+<link
+rel="preconnect"
 href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
+<link
+rel="preconnect"
 href="https://fonts.gstatic.com"
 crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<link rel="stylesheet"
-href="reader.css">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
+</script>
 
 </head>
 
@@ -39,13 +44,7 @@ href="reader.css">
 BACKGROUND
 ===================================================-->
 
-<div class="reader-background">
-
-    <div class="bg-gradient"></div>
-
-    <div class="bg-light"></div>
-
-</div>
+<div class="reader-background"></div>
 
 <!--==================================================
 MAIN READER
@@ -54,26 +53,50 @@ MAIN READER
 <div class="reader">
 
 <!--==================================================
-TOP TOOLBAR
+PREMIUM TOOLBAR
 ===================================================-->
+
 <header class="reader-toolbar">
+
+    <!-- LEFT -->
 
     <div class="toolbar-left">
 
-        <button id="menuBtn" class="tool-btn">
+        <button
+        id="menuBtn"
+        class="tool-btn">
+
             <i class="fas fa-bars"></i>
+
         </button>
 
         <div class="reader-logo">
-            <img src="logo.png" alt="Chishti Library">
+
+            <img
+            src="logo.png"
+            alt="Chishti Library">
+
         </div>
 
         <div class="reader-title">
-            <h2>CHISHTI READER</h2>
-            <span>Premium Digital Library</span>
+
+            <h2>
+
+                CHISHTI READER
+
+            </h2>
+
+            <span>
+
+                Premium Digital Library
+
+            </span>
+
         </div>
 
     </div>
+
+    <!-- CENTER -->
 
     <div class="toolbar-center">
 
@@ -82,29 +105,49 @@ TOP TOOLBAR
             <i class="fas fa-book-open"></i>
 
             <span id="bookTitle">
+
                 Loading Book...
+
             </span>
 
         </div>
 
     </div>
 
+    <!-- RIGHT -->
+
     <div class="toolbar-right">
 
-        <button id="bookmarkBtn" class="tool-btn">
+        <button
+        id="bookmarkBtn"
+        class="tool-btn">
+
             <i class="fas fa-bookmark"></i>
+
         </button>
 
-        <button id="searchBtn" class="tool-btn">
+        <button
+        id="searchBtn"
+        class="tool-btn">
+
             <i class="fas fa-search"></i>
+
         </button>
 
-        <button id="themeBtn" class="tool-btn">
+        <button
+        id="themeBtn"
+        class="tool-btn">
+
             <i class="fas fa-moon"></i>
+
         </button>
 
-        <button id="settingsBtn" class="tool-btn">
+        <button
+        id="settingsBtn"
+        class="tool-btn">
+
             <i class="fas fa-gear"></i>
+
         </button>
 
     </div>
@@ -115,71 +158,80 @@ TOP TOOLBAR
 BOOK STAGE
 ===================================================-->
 
-<main class="reader-stage">
+<section class="book-stage">
 
-    <div class="stage-light"></div>
+    <!-- Book Shadow -->
 
     <div class="book-shadow"></div>
 
-    <section class="book-container">
+    <!-- Main Book -->
 
-        <div id="book" class="book">
+    <div
+    id="readerBook"
+    class="book">
 
-            <!--=========================
-            LEFT PAGE
-            =========================-->
+        <!--==============================
+        LEFT PAGE
+        ==============================-->
 
-            <div class="page left-page">
+        <div
+        class="page left-page">
 
-                <div class="page-paper">
+            <div class="page-surface">
 
-                    <canvas
-                    id="leftCanvas"></canvas>
-
-                </div>
-
-            </div>
-
-            <!--=========================
-            BOOK SPINE
-            =========================-->
-
-            <div class="book-spine">
-
-                <div class="spine-highlight"></div>
-
-                <div class="spine-shadow"></div>
+                <canvas
+                id="leftCanvas">
+                </canvas>
 
             </div>
-
-            <!--=========================
-            RIGHT PAGE
-            =========================-->
-
-            <div class="page right-page">
-
-                <div class="page-paper">
-
-                    <canvas
-                    id="rightCanvas"></canvas>
-
-                </div>
-
-            </div>
-
-            <!--=========================
-            PAGE GLOW
-            =========================-->
-
-            <div class="page-glow"></div>
 
         </div>
 
-    </section>
+        <!--==============================
+        BOOK SPINE
+        ==============================-->
 
-</main>
+        <div
+        class="book-spine">
 
- <!--==================================================
+            <div class="spine-shadow"></div>
+
+            <div class="spine-line"></div>
+
+            <div class="spine-light"></div>
+
+        </div>
+
+        <!--==============================
+        RIGHT PAGE
+        ==============================-->
+
+        <div
+        class="page right-page">
+
+            <div class="page-surface">
+
+                <canvas
+                id="rightCanvas">
+                </canvas>
+
+            </div>
+
+        </div>
+
+        <!--==============================
+        PAGE TURN EFFECT
+        ==============================-->
+
+        <div
+        class="page-flip-overlay">
+        </div>
+
+    </div>
+
+</section>
+
+<!--==================================================
 PREMIUM BOTTOM TOOLBAR
 ===================================================-->
 
@@ -187,11 +239,11 @@ PREMIUM BOTTOM TOOLBAR
 
     <!-- LEFT -->
 
-    <div class="bottom-left">
+    <div class="bottom-group">
 
         <button
         id="firstPage"
-        class="bottom-btn"
+        class="reader-btn"
         title="First Page">
 
             <i class="fas fa-backward-fast"></i>
@@ -200,7 +252,7 @@ PREMIUM BOTTOM TOOLBAR
 
         <button
         id="prevPage"
-        class="bottom-btn"
+        class="reader-btn"
         title="Previous">
 
             <i class="fas fa-chevron-left"></i>
@@ -211,39 +263,35 @@ PREMIUM BOTTOM TOOLBAR
 
     <!-- CENTER -->
 
-    <div class="bottom-center">
+    <div class="page-display">
 
-        <div class="page-info">
+        <span id="pageCounter">
 
-            <span id="pageCounter">
+            1 - 2
 
-                1 - 2
+        </span>
 
-            </span>
+        <span class="separator">
 
-            <span class="page-divider">
+            /
 
-                /
+        </span>
 
-            </span>
+        <span id="totalPages">
 
-            <span id="totalPages">
+            0
 
-                0
-
-            </span>
-
-        </div>
+        </span>
 
     </div>
 
     <!-- RIGHT -->
 
-    <div class="bottom-right">
+    <div class="bottom-group">
 
         <button
         id="zoomOut"
-        class="bottom-btn"
+        class="reader-btn"
         title="Zoom Out">
 
             <i class="fas fa-search-minus"></i>
@@ -252,7 +300,7 @@ PREMIUM BOTTOM TOOLBAR
 
         <button
         id="zoomIn"
-        class="bottom-btn"
+        class="reader-btn"
         title="Zoom In">
 
             <i class="fas fa-search-plus"></i>
@@ -261,7 +309,7 @@ PREMIUM BOTTOM TOOLBAR
 
         <button
         id="downloadBtn"
-        class="bottom-btn"
+        class="reader-btn"
         title="Download">
 
             <i class="fas fa-download"></i>
@@ -270,7 +318,7 @@ PREMIUM BOTTOM TOOLBAR
 
         <button
         id="printBtn"
-        class="bottom-btn"
+        class="reader-btn"
         title="Print">
 
             <i class="fas fa-print"></i>
@@ -279,7 +327,7 @@ PREMIUM BOTTOM TOOLBAR
 
         <button
         id="fullscreenBtn"
-        class="bottom-btn"
+        class="reader-btn"
         title="Fullscreen">
 
             <i class="fas fa-expand"></i>
@@ -288,7 +336,7 @@ PREMIUM BOTTOM TOOLBAR
 
         <button
         id="nextPage"
-        class="bottom-btn"
+        class="reader-btn"
         title="Next">
 
             <i class="fas fa-chevron-right"></i>
@@ -297,7 +345,7 @@ PREMIUM BOTTOM TOOLBAR
 
         <button
         id="lastPage"
-        class="bottom-btn"
+        class="reader-btn"
         title="Last Page">
 
             <i class="fas fa-forward-fast"></i>
@@ -308,70 +356,10 @@ PREMIUM BOTTOM TOOLBAR
 
 </footer>
 
-<!--==================================================
-LEFT SIDEBAR
-(Future)
-===================================================-->
-
-<aside id="readerSidebar" class="reader-sidebar">
-
-    <div class="sidebar-header">
-
-        <h3>CHISHTI LIBRARY</h3>
-
-    </div>
-
-    <div class="sidebar-content">
-
-        <!-- Future -->
-
-    </div>
-
-</aside>
-
-<!--==================================================
-AI PANEL
-(Future)
-===================================================-->
-
-<aside id="readerAI" class="reader-ai">
-
-    <div class="ai-header">
-
-        <i class="fas fa-robot"></i>
-
-        <span>CHISHTI AI</span>
-
-    </div>
-
-    <div class="ai-content">
-
-        <!-- Future AI -->
-
-    </div>
-
-</aside>
-
-<!--==================================================
-MODALS
-===================================================-->
-
-<div id="readerModal"></div>
-
-<!--==================================================
-OVERLAY
-===================================================-->
-
-<div id="overlay"></div>
-
 </div>
-<!-- reader END -->
-
-<!--==================================================
-JAVASCRIPT
-===================================================-->
+<!-- END READER -->
 
 <script src="reader.js"></script>
 
 </body>
-</html> 
+</html>    
