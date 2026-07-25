@@ -136,18 +136,6 @@ async function loadPDF(){
 
 }
 
-/*=========================
-START READER
-=========================*/
-
-async function initializeReader(){
-
-    await loadPDF();
-
-}
-
-initializeReader();
-
 console.log("✅ Reader v3 Initialized");
 
 /*====================================================
@@ -289,16 +277,6 @@ function updatePageCounter(){
         secondPage;
 
 }
-
-/*=========================
-START FIRST RENDER
-=========================*/
-
-initializeReader().then(async()=>{
-
-    await renderSpread();
-
-});
 
 console.log("✅ Render Engine Ready");
 
@@ -801,3 +779,136 @@ initializeReader().then(async()=>{
 
 });
 
+/*====================================================
+ SEARCH ENGINE
+ PART 4
+ SEARCH FUNCTION
+====================================================*/
+
+/*=========================
+ELEMENTS
+=========================*/
+
+const startSearch =
+document.getElementById("startSearch");
+
+const searchResults =
+document.getElementById("searchResults");
+
+/*=========================
+SEARCH
+=========================*/
+
+function searchBook(){
+
+    const keyword =
+    searchInput.value
+    .trim()
+    .toLowerCase();
+
+    searchResults.innerHTML = "";
+
+    if(keyword===""){
+
+        searchResults.innerHTML =
+        "<p>Type something to search...</p>";
+
+        return;
+
+    }
+
+    let found = 0;
+
+    pdfTextIndex.forEach(page=>{
+
+        if(page.text.includes(keyword)){
+
+            found++;
+
+            const item =
+            document.createElement("div");
+
+            item.className =
+            "search-item";
+
+            item.innerHTML =
+
+            "<strong>Page " +
+
+            page.page +
+
+            "</strong><br>" +
+
+            "<small>Keyword Found</small>";
+
+            item.onclick = async()=>{
+
+                currentPage =
+
+                page.page % 2 === 0 ?
+
+                page.page - 1 :
+
+                page.page;
+
+                if(currentPage < 1)
+                    currentPage = 1;
+
+                searchOverlay.classList.remove("active");
+
+                await renderSpread();
+
+            };
+
+            searchResults.appendChild(item);
+
+        }
+
+    });
+
+    if(found===0){
+
+        searchResults.innerHTML =
+
+        "<p>No Result Found.</p>";
+
+    }
+
+}
+
+/*=========================
+BUTTON
+=========================*/
+
+if(startSearch){
+
+    startSearch.onclick =
+    searchBook;
+
+}
+
+/*=========================
+ENTER
+=========================*/
+
+if(searchInput){
+
+    searchInput.addEventListener(
+
+        "keydown",
+
+        function(e){
+
+            if(e.key==="Enter"){
+
+                searchBook();
+
+            }
+
+        }
+
+    );
+
+}
+
+console.log("✅ Search Engine Ready");
