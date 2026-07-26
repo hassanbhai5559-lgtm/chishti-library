@@ -12,7 +12,7 @@ content="width=device-width,initial-scale=1.0">
 
 <title>Chishti Reader</title>
 
-<!-- CSS -->
+<!-- Reader CSS -->
 
 <link
 rel="stylesheet"
@@ -33,7 +33,7 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- Icons -->
+<!-- Font Awesome -->
 
 <link
 rel="stylesheet"
@@ -41,63 +41,61 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <!-- PDF.js -->
 
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
 </head>
 
 <body>
 
-<!--==================================================
+<!--==========================================
 BACKGROUND
-===================================================-->
+===========================================-->
 
 <div class="reader-background">
 
-    <div class="bg-overlay"></div>
+    <div class="background-overlay"></div>
 
-    <div class="bg-pattern"></div>
+    <div class="background-grid"></div>
 
 </div>
 
-<!--==================================================
+<!--==========================================
 PRELOADER
-===================================================-->
+===========================================-->
 
 <div id="preloader" class="preloader">
 
     <div class="loader-book">
 
-        <div class="loader-page"></div>
+        <span></span>
 
-        <div class="loader-page"></div>
+        <span></span>
 
-        <div class="loader-page"></div>
+        <span></span>
 
     </div>
 
-    <h2>
+    <h1>
 
         CHISHTI READER
 
-    </h2>
+    </h1>
 
-    <span>
+    <p>
 
-        Loading Book...
+        Preparing Premium Reader...
 
-    </span>
+    </p>
 
 </div>
 
-<!--==================================================
+<!--==========================================
 MAIN APPLICATION
-===================================================-->
+===========================================-->
 
 <div id="readerApp" class="reader-app">
 
- <!--==================================================
+<!--==================================================
 PREMIUM TOP TOOLBAR
 PART 2
 ===================================================-->
@@ -105,18 +103,23 @@ PART 2
 <header class="reader-toolbar">
 
     <!--==============================
-    LEFT
+    LEFT SECTION
     ==============================-->
 
     <div class="toolbar-left">
 
+        <!-- Menu -->
+
         <button
         id="menuBtn"
-        class="tool-btn">
+        class="tool-btn"
+        title="Menu">
 
             <i class="fas fa-bars"></i>
 
         </button>
+
+        <!-- Brand -->
 
         <div class="reader-brand">
 
@@ -124,7 +127,7 @@ PART 2
 
                 <img
                 src="logo.png"
-                alt="Chishti Library">
+                alt="Chishti Library Logo">
 
             </div>
 
@@ -169,10 +172,12 @@ PART 2
     </div>
 
     <!--==============================
-    RIGHT
+    RIGHT SECTION
     ==============================-->
 
     <div class="toolbar-right">
+
+        <!-- Bookmark -->
 
         <button
         id="bookmarkBtn"
@@ -183,6 +188,8 @@ PART 2
 
         </button>
 
+        <!-- Search -->
+
         <button
         id="searchBtn"
         class="tool-btn"
@@ -192,6 +199,8 @@ PART 2
 
         </button>
 
+        <!-- Theme -->
+
         <button
         id="themeBtn"
         class="tool-btn"
@@ -200,6 +209,8 @@ PART 2
             <i class="fas fa-moon"></i>
 
         </button>
+
+        <!-- Settings -->
 
         <button
         id="settingsBtn"
@@ -221,34 +232,36 @@ PART 3
 
 <main class="reader-stage">
 
-    <!-- Left Glow -->
+    <!--==============================
+    BACKGROUND GLOW
+    ==============================-->
 
-    <div class="book-glow left-glow"></div>
+    <div class="book-glow glow-left"></div>
 
-    <!-- Right Glow -->
+    <div class="book-glow glow-right"></div>
 
-    <div class="book-glow right-glow"></div>
-
-    <!-- Book Shadow -->
+    <!--==============================
+    BOOK SHADOW
+    ==============================-->
 
     <div class="book-shadow"></div>
 
     <!--==============================
-    BOOK
+    MAIN BOOK
     ==============================-->
 
     <section
     id="readerBook"
-    class="book">
+    class="reader-book">
 
-        <!--==============================
+        <!--==========================
         LEFT PAGE
-        ==============================-->
+        ==========================-->
 
         <article
-        class="page left-page">
+        class="book-page left-page">
 
-            <div class="page-surface">
+            <div class="page-layer">
 
                 <canvas
                 id="leftCanvas">
@@ -256,32 +269,32 @@ PART 3
 
             </div>
 
-            <div class="page-light"></div>
+            <div class="page-highlight"></div>
 
         </article>
 
-        <!--==============================
+        <!--==========================
         BOOK SPINE
-        ==============================-->
+        ==========================-->
 
         <div class="book-spine">
 
-            <div class="spine-shadow"></div>
+            <div class="spine-left-shadow"></div>
 
-            <div class="spine-highlight"></div>
+            <div class="spine-center-line"></div>
 
-            <div class="spine-line"></div>
+            <div class="spine-right-highlight"></div>
 
         </div>
 
-        <!--==============================
+        <!--==========================
         RIGHT PAGE
-        ==============================-->
+        ==========================-->
 
         <article
-        class="page right-page">
+        class="book-page right-page">
 
-            <div class="page-surface">
+            <div class="page-layer">
 
                 <canvas
                 id="rightCanvas">
@@ -289,7 +302,7 @@ PART 3
 
             </div>
 
-            <div class="page-light"></div>
+            <div class="page-highlight"></div>
 
         </article>
 
@@ -298,20 +311,20 @@ PART 3
 </main>
 
 <!--==================================================
-PREMIUM BOTTOM TOOLBAR
+PREMIUM BOTTOM NAVIGATION
 PART 4
 ===================================================-->
 
 <footer class="reader-bottom">
 
     <!--==============================
-    LEFT TOOLS
+    LEFT CONTROLS
     ==============================-->
 
-    <div class="bottom-group">
+    <div class="bottom-left">
 
         <button
-        id="firstPage"
+        id="firstPageBtn"
         class="reader-btn"
         title="First Page">
 
@@ -320,7 +333,7 @@ PART 4
         </button>
 
         <button
-        id="prevPage"
+        id="prevPageBtn"
         class="reader-btn"
         title="Previous Page">
 
@@ -334,38 +347,40 @@ PART 4
     PAGE COUNTER
     ==============================-->
 
-    <div class="page-display">
+    <div class="bottom-center">
 
-        <span
-        id="pageCounter">
+        <div class="page-counter">
 
-            1 - 2
+            <span id="currentPageDisplay">
 
-        </span>
+                1 - 2
 
-        <span class="page-divider">
+            </span>
 
-            /
+            <span class="divider">
 
-        </span>
+                /
 
-        <span
-        id="totalPages">
+            </span>
 
-            0
+            <span id="totalPagesDisplay">
 
-        </span>
+                0
+
+            </span>
+
+        </div>
 
     </div>
 
     <!--==============================
-    RIGHT TOOLS
+    RIGHT CONTROLS
     ==============================-->
 
-    <div class="bottom-group">
+    <div class="bottom-right">
 
         <button
-        id="zoomOut"
+        id="zoomOutBtn"
         class="reader-btn"
         title="Zoom Out">
 
@@ -374,7 +389,7 @@ PART 4
         </button>
 
         <button
-        id="zoomIn"
+        id="zoomInBtn"
         class="reader-btn"
         title="Zoom In">
 
@@ -383,7 +398,7 @@ PART 4
         </button>
 
         <button
-        id="downloadBtn"
+        id="downloadPdfBtn"
         class="reader-btn"
         title="Download PDF">
 
@@ -392,16 +407,16 @@ PART 4
         </button>
 
         <button
-        id="printBtn"
+        id="printPdfBtn"
         class="reader-btn"
-        title="Print Book">
+        title="Print">
 
             <i class="fas fa-print"></i>
 
         </button>
 
         <button
-        id="fullscreenBtn"
+        id="fullscreenReaderBtn"
         class="reader-btn"
         title="Fullscreen">
 
@@ -410,7 +425,7 @@ PART 4
         </button>
 
         <button
-        id="nextPage"
+        id="nextPageBtn"
         class="reader-btn"
         title="Next Page">
 
@@ -419,7 +434,7 @@ PART 4
         </button>
 
         <button
-        id="lastPage"
+        id="lastPageBtn"
         class="reader-btn"
         title="Last Page">
 
@@ -432,15 +447,15 @@ PART 4
 </footer>
 
 <!--==================================================
-PREMIUM SEARCH POPUP
+SEARCH WINDOW
 PART 5
 ===================================================-->
 
-<div id="searchOverlay" class="search-overlay">
+<div id="searchOverlay" class="overlay">
 
-    <div class="search-window">
+    <div class="popup-window search-window">
 
-        <div class="window-header">
+        <div class="popup-header">
 
             <h3>
 
@@ -451,8 +466,8 @@ PART 5
             </h3>
 
             <button
-            id="closeSearch"
-            class="window-close">
+            id="closeSearchBtn"
+            class="popup-close">
 
                 <i class="fas fa-times"></i>
 
@@ -460,25 +475,29 @@ PART 5
 
         </div>
 
-        <div class="search-input-box">
+        <div class="popup-body">
 
-            <input
-            id="searchInput"
-            type="text"
-            placeholder="Search inside this book...">
+            <div class="search-bar">
 
-            <button
-            id="startSearch">
+                <input
+                id="searchInput"
+                type="text"
+                placeholder="Search inside this book...">
 
-                <i class="fas fa-search"></i>
+                <button
+                id="startSearchBtn">
 
-            </button>
+                    <i class="fas fa-search"></i>
 
-        </div>
+                </button>
 
-        <div
-        id="searchResults"
-        class="search-results">
+            </div>
+
+            <div
+            id="searchResults"
+            class="search-results">
+
+            </div>
 
         </div>
 
@@ -487,14 +506,14 @@ PART 5
 </div>
 
 <!--==================================================
-PREMIUM SETTINGS
+SETTINGS WINDOW
 ===================================================-->
 
-<div id="settingsOverlay" class="settings-overlay">
+<div id="settingsOverlay" class="overlay">
 
-    <div class="settings-window">
+    <div class="popup-window settings-window">
 
-        <div class="window-header">
+        <div class="popup-header">
 
             <h3>
 
@@ -505,8 +524,8 @@ PREMIUM SETTINGS
             </h3>
 
             <button
-            id="closeSettings"
-            class="window-close">
+            id="closeSettingsBtn"
+            class="popup-close">
 
                 <i class="fas fa-times"></i>
 
@@ -514,9 +533,9 @@ PREMIUM SETTINGS
 
         </div>
 
-        <div class="settings-body">
+        <div class="popup-body">
 
-            <div class="setting-row">
+            <div class="setting-item">
 
                 <label>
 
@@ -526,35 +545,19 @@ PREMIUM SETTINGS
 
                 <select id="themeSelect">
 
-                    <option value="maroon">
+                    <option value="maroon">Maroon Gold</option>
 
-                        Maroon Gold
+                    <option value="dark">Dark</option>
 
-                    </option>
+                    <option value="light">Light</option>
 
-                    <option value="dark">
-
-                        Dark
-
-                    </option>
-
-                    <option value="light">
-
-                        Light
-
-                    </option>
-
-                    <option value="sepia">
-
-                        Sepia
-
-                    </option>
+                    <option value="sepia">Sepia</option>
 
                 </select>
 
             </div>
 
-            <div class="setting-row">
+            <div class="setting-item">
 
                 <label>
 
@@ -572,7 +575,7 @@ PREMIUM SETTINGS
 
             </div>
 
-            <div class="setting-row">
+            <div class="setting-item">
 
                 <label>
 
@@ -581,13 +584,13 @@ PREMIUM SETTINGS
                 </label>
 
                 <input
-                id="animationSwitch"
+                id="animationToggle"
                 type="checkbox"
                 checked>
 
             </div>
 
-            <div class="setting-row">
+            <div class="setting-item">
 
                 <label>
 
@@ -596,7 +599,7 @@ PREMIUM SETTINGS
                 </label>
 
                 <input
-                id="continueSwitch"
+                id="continueReadingToggle"
                 type="checkbox"
                 checked>
 
@@ -604,10 +607,10 @@ PREMIUM SETTINGS
 
         </div>
 
-        <div class="window-footer">
+        <div class="popup-footer">
 
             <button
-            id="saveSettings">
+            id="saveSettingsBtn">
 
                 Save Settings
 
@@ -620,14 +623,14 @@ PREMIUM SETTINGS
 </div>
 
 <!--==================================================
-BOOKMARK PANEL
+BOOKMARK WINDOW
 ===================================================-->
 
-<div id="bookmarkOverlay" class="bookmark-overlay">
+<div id="bookmarkOverlay" class="overlay">
 
-    <div class="bookmark-window">
+    <div class="popup-window bookmark-window">
 
-        <div class="window-header">
+        <div class="popup-header">
 
             <h3>
 
@@ -638,8 +641,8 @@ BOOKMARK PANEL
             </h3>
 
             <button
-            id="closeBookmark"
-            class="window-close">
+            id="closeBookmarkBtn"
+            class="popup-close">
 
                 <i class="fas fa-times"></i>
 
@@ -649,11 +652,11 @@ BOOKMARK PANEL
 
         <div
         id="bookmarkList"
-        class="bookmark-list">
+        class="popup-body">
 
-            <div class="empty-bookmark">
+            <div class="empty-state">
 
-                No Bookmarks
+                No bookmarks yet.
 
             </div>
 
@@ -664,7 +667,7 @@ BOOKMARK PANEL
 </div>
 
 <!--==================================================
-PREMIUM TOAST
+TOAST NOTIFICATION
 PART 6
 ===================================================-->
 
@@ -672,7 +675,7 @@ PART 6
 
     <i class="fas fa-circle-check"></i>
 
-    <span id="toastMessage">
+    <span id="toastText">
 
         Done
 
@@ -681,15 +684,12 @@ PART 6
 </div>
 
 <!--==================================================
-FLOATING LOADER
+LOADING BAR
 ===================================================-->
 
 <div id="loadingBar" class="loading-bar">
 
-    <div id="loadingProgress"
-    class="loading-progress">
-
-    </div>
+    <div id="loadingProgress" class="loading-progress"></div>
 
 </div>
 
@@ -697,16 +697,15 @@ FLOATING LOADER
 PDF LOADING SCREEN
 ===================================================-->
 
-<div id="pdfLoading"
-class="pdf-loading">
+<div id="pdfLoading" class="pdf-loading">
 
     <div class="pdf-loader">
 
-        <div class="loader-ring"></div>
+        <span></span>
 
-        <div class="loader-ring"></div>
+        <span></span>
 
-        <div class="loader-ring"></div>
+        <span></span>
 
     </div>
 
@@ -718,7 +717,7 @@ class="pdf-loading">
 
     <p>
 
-        Optimizing Pages
+        Optimizing pages for fast reading
 
     </p>
 
@@ -728,13 +727,10 @@ class="pdf-loading">
 SCREEN DIMMER
 ===================================================-->
 
-<div id="screenDimmer"
-class="screen-dimmer">
-
-</div>
+<div id="screenDimmer" class="screen-dimmer"></div>
 
 <!--==================================================
-JAVASCRIPT
+READER JAVASCRIPT
 ===================================================-->
 
 <script src="reader.js"></script>
@@ -742,6 +738,4 @@ JAVASCRIPT
 </div>
 
 </body>
-
 </html>    
-    
