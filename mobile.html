@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="
+width=device-width,
+initial-scale=1,
+maximum-scale=5,
+viewport-fit=cover">
+
+<title>Chishti Library Mobile</title>
+
+<meta
+name="theme-color"
+content="#4b0000">
+
+<meta
+name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta
+name="mobile-web-app-capable"
+content="yes">
+
+<meta
+name="apple-mobile-web-app-status-bar-style"
+content="black-translucent">
+
+<meta
+name="apple-mobile-web-app-title"
+content="Chishti Library">
+
+<meta
+name="format-detection"
+content="telephone=no">
+
+<link
+rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link
+rel="stylesheet"
+href="mobile.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+</head>
+
+<body data-theme="maroon">
+
+<!--========================================
+PRELOADER
+=========================================-->
+
+<div
+id="preloader"
+class="preloader">
+
+<div class="loader-book">
+
+<span></span>
+<span></span>
+<span></span>
+
+</div>
+
+<h1>
+
+CHISHTI LIBRARY
+
+</h1>
+
+<p>
+
+Preparing Mobile Library...
+
+</p>
+
+</div>
+
+<!--========================================
+APP
+=========================================-->
+
+<div
+id="mobileApp"
+class="mobile-app">
+
+<!--========================================
+STATUS BAR SAFE AREA
+=========================================-->
+
+<div class="safe-top"></div>
+
+<!--========================================
+MAIN CONTENT START
+=========================================-->
+
+<div
+id="mobileContent"
+class="mobile-content">
+
+<!--========================================
+MOBILE HEADER
+=========================================-->
+
+<header class="mobile-header">
+
+    <div class="header-top">
+
+        <div class="user-box">
+
+            <img
+            src="assets/images/logo.png"
+            class="app-logo"
+            alt="Logo">
+
+            <div>
+
+                <h2>
+
+                    Chishti Library
+
+                </h2>
+
+                <span>
+
+                    Digital Islamic Library
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <button
+        id="notificationBtn"
+        class="header-btn">
+
+            <i class="fas fa-bell"></i>
+
+        </button>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="mobile-search">
+
+        <i class="fas fa-search"></i>
+
+        <input
+        id="globalSearch"
+        type="text"
+        placeholder="Search books, authors, PDFs...">
+
+        <button
+        id="voiceSearch">
+
+            <i class="fas fa-microphone"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+<!--========================================
+QUICK ACTIONS
+=========================================-->
+
+<section class="quick-actions">
+
+    <button
+    id="libraryBtn"
+    class="quick-card">
+
+        <i class="fas fa-book"></i>
+
+        <span>
+
+            Library
+
+        </span>
+
+    </button>
+
+    <button
+    id="categoryBtn"
+    class="quick-card">
+
+        <i class="fas fa-layer-group"></i>
+
+        <span>
+
+            Categories
+
+        </span>
+
+    </button>
+
+    <button
+    id="favoriteBtn"
+    class="quick-card">
+
+        <i class="fas fa-heart"></i>
+
+        <span>
+
+            Favorites
+
+        </span>
+
+    </button>
+
+    <button
+    id="recentBtn"
+    class="quick-card">
+
+        <i class="fas fa-clock-rotate-left"></i>
+
+        <span>
+
+            Recent
+
+        </span>
+
+    </button>
+
+</section>
+
+<!--========================================
+FEATURED BOOKS
+=========================================-->
+
+<section class="section-title">
+
+    <h3>
+
+        Featured Books
+
+    </h3>
+
+    <button>
+
+        View All
+
+    </button>
+
+</section>
+
+<div
+id="featuredBooks"
+class="featured-slider">
+
+    <!-- JS Will Load -->
+
+</div>
+
+<!--========================================
+LATEST BOOKS
+=========================================-->
+
+<section class="section-title">
+
+    <h3>
+
+        Latest Books
+
+    </h3>
+
+    <button>
+
+        More
+
+    </button>
+
+</section>
+
+<div
+id="latestBooks"
+class="book-grid">
+
+    <!-- JS -->
+
+</div>
+
+<!--========================================
+CONTINUE READING
+=========================================-->
+
+<section class="section-title">
+
+    <h3>
+
+        Continue Reading
+
+    </h3>
+
+    <button id="continueAllBtn">
+
+        View All
+
+    </button>
+
+</section>
+
+<div
+id="continueReading"
+class="continue-reading-card">
+
+    <div class="continue-cover">
+
+        <img
+        id="continueCover"
+        src="assets/images/default-book.png"
+        alt="Book Cover">
+
+    </div>
+
+    <div class="continue-info">
+
+        <h4 id="continueTitle">
+
+            No Book Opened Yet
+
+        </h4>
+
+        <p id="continuePage">
+
+            Page 0 of 0
+
+        </p>
+
+        <div class="reading-progress">
+
+            <div
+            id="readingProgressBar"
+            class="progress-fill">
+
+            </div>
+
+        </div>
+
+        <button
+        id="continueBtn"
+        class="continue-btn">
+
+            <i class="fas fa-book-open"></i>
+
+            Continue Reading
+
+        </button>
+
+    </div>
+
+</div>
+
+<!--========================================
+CATEGORIES
+=========================================-->
+
+<section class="section-title">
+
+    <h3>
+
+        Categories
+
+    </h3>
+
+</section>
+
+<div
+id="categorySlider"
+class="category-slider">
+
+    <!-- JS -->
+
+</div>
+
+<!--========================================
+AUTHORS
+=========================================-->
+
+<section class="section-title">
+
+    <h3>
+
+        Featured Authors
+
+    </h3>
+
+</section>
+
+<div
+id="authorSlider"
+class="author-slider">
+
+    <!-- JS -->
+
+</div>
+
+<!--========================================
+LIBRARY STATUS
+=========================================-->
+
+<section class="section-title">
+
+    <h3>
+
+        Library Statistics
+
+    </h3>
+
+</section>
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <i class="fas fa-book-open"></i>
+
+        <h4
+        id="totalBooks">
+
+            0
+
+        </h4>
+
+        <span>
+
+            Books
+
+        </span>
+
+    </div>
+
+    <div class="stat-card">
+
+        <i class="fas fa-file-pdf"></i>
+
+        <h4
+        id="totalPDFs">
+
+            0
+
+        </h4>
+
+        <span>
+
+            PDFs
+
+        </span>
+
+    </div>
+
+    <div class="stat-card">
+
+        <i class="fas fa-bookmark"></i>
+
+        <h4
+        id="bookmarkCount">
+
+            0
+
+        </h4>
+
+        <span>
+
+            Bookmarks
+
+        </span>
+
+    </div>
+
+    <div class="stat-card">
+
+        <i class="fas fa-heart"></i>
+
+        <h4
+        id="favoriteCount">
+
+            0
+
+        </h4>
+
+        <span>
+
+            Favorites
+
+        </span>
+
+    </div>
+
+</div>
+
+<!--========================================
+RECENTLY ADDED
+=========================================-->
+
+<section class="section-title">
+
+    <h3>
+
+        Recently Added
+
+    </h3>
+
+    <button id="recentViewAll">
+
+        View All
+
+    </button>
+
+</section>
+
+<div
+id="recentBooks"
+class="book-grid">
+
+    <!-- JS -->
+
+</div>
+
+<!--========================================
+FLOATING READER BUTTON
+=========================================-->
+
+<button
+id="floatingReaderBtn"
+class="floating-reader">
+
+    <i class="fas fa-book-open"></i>
+
+</button>
+
+<!--========================================
+BOTTOM NAVIGATION
+=========================================-->
+
+<nav class="mobile-navbar">
+
+    <!-- HOME -->
+
+    <button
+    id="navHome"
+    class="nav-item active">
+
+        <i class="fas fa-house"></i>
+
+        <span>
+
+            Home
+
+        </span>
+
+    </button>
+
+    <!-- LIBRARY -->
+
+    <button
+    id="navLibrary"
+    class="nav-item">
+
+        <i class="fas fa-book"></i>
+
+        <span>
+
+            Library
+
+        </span>
+
+    </button>
+
+    <!-- SEARCH -->
+
+    <button
+    id="navSearch"
+    class="nav-item">
+
+        <i class="fas fa-search"></i>
+
+        <span>
+
+            Search
+
+        </span>
+
+    </button>
+
+    <!-- FAVORITES -->
+
+    <button
+    id="navFavorites"
+    class="nav-item">
+
+        <i class="fas fa-heart"></i>
+
+        <span>
+
+            Favorites
+
+        </span>
+
+    </button>
+
+    <!-- SETTINGS -->
+
+    <button
+    id="navSettings"
+    class="nav-item">
+
+        <i class="fas fa-gear"></i>
+
+        <span>
+
+            Settings
+
+        </span>
+
+    </button>
+
+</nav>
+
+<!--========================================
+GLOBAL LOADING
+=========================================-->
+
+<div
+id="loadingOverlay"
+class="loading-overlay">
+
+    <div class="loading-box">
+
+        <div class="loading-spinner">
+
+            <span></span>
+
+            <span></span>
+
+            <span></span>
+
+        </div>
+
+        <h3>
+
+            Loading...
+
+        </h3>
+
+        <p>
+
+            Please wait...
+
+        </p>
+
+    </div>
+
+</div>
+
+<!--========================================
+TOAST
+=========================================-->
+
+<div
+id="toast"
+class="toast">
+
+    <i
+    id="toastIcon"
+    class="fas fa-circle-check">
+
+    </i>
+
+    <span
+    id="toastText">
+
+        Ready
+
+    </span>
+
+</div>
+
+<!--========================================
+APP END
+=========================================-->
+
+</div>
+
+</div>
+
+ <!--==================================================
+GLOBAL SEARCH POPUP
+===================================================-->
+
+<div
+id="searchOverlay"
+class="popup-overlay">
+
+    <div class="popup-window">
+
+        <div class="popup-header">
+
+            <h3>
+
+                <i class="fas fa-search"></i>
+
+                Search Library
+
+            </h3>
+
+            <button
+            id="closeSearch">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+        <div class="popup-body">
+
+            <div class="popup-search">
+
+                <input
+                id="searchInput"
+                type="text"
+                placeholder="Search books, authors, PDFs...">
+
+                <button
+                id="startSearch">
+
+                    <i class="fas fa-search"></i>
+
+                </button>
+
+            </div>
+
+            <div
+            id="searchResults"
+            class="search-results">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--==================================================
+BOOKMARK POPUP
+===================================================-->
+
+<div
+id="bookmarkOverlay"
+class="popup-overlay">
+
+    <div class="popup-window">
+
+        <div class="popup-header">
+
+            <h3>
+
+                <i class="fas fa-bookmark"></i>
+
+                My Bookmarks
+
+            </h3>
+
+            <button
+            id="closeBookmark">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+        <div
+        id="bookmarkList"
+        class="popup-body">
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--==================================================
+SETTINGS POPUP
+===================================================-->
+
+<div
+id="settingsOverlay"
+class="popup-overlay">
+
+    <div class="popup-window">
+
+        <div class="popup-header">
+
+            <h3>
+
+                <i class="fas fa-gear"></i>
+
+                Settings
+
+            </h3>
+
+            <button
+            id="closeSettings">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+        <div class="popup-body">
+
+            <!-- THEME -->
+
+            <div class="setting-item">
+
+                <label>
+
+                    Theme
+
+                </label>
+
+                <select
+                id="themeSelect">
+
+                    <option value="maroon">
+
+                        Maroon
+
+                    </option>
+
+                    <option value="dark">
+
+                        Dark
+
+                    </option>
+
+                    <option value="light">
+
+                        Light
+
+                    </option>
+
+                    <option value="sepia">
+
+                        Sepia
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- ZOOM -->
+
+            <div class="setting-item">
+
+                <label>
+
+                    Default Zoom
+
+                </label>
+
+                <input
+                id="defaultZoom"
+                type="range"
+                min="0.8"
+                max="3"
+                step="0.1"
+                value="1.4">
+
+            </div>
+
+            <!-- ANIMATION -->
+
+            <div class="setting-item">
+
+                <label>
+
+                    Animations
+
+                </label>
+
+                <input
+                id="animationToggle"
+                type="checkbox"
+                checked>
+
+            </div>
+
+            <!-- CONTINUE -->
+
+            <div class="setting-item">
+
+                <label>
+
+                    Continue Reading
+
+                </label>
+
+                <input
+                id="continueReadingToggle"
+                type="checkbox"
+                checked>
+
+            </div>
+
+        </div>
+
+        <div class="popup-footer">
+
+            <button
+            id="saveSettings">
+
+                Save Settings
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--==================================================
+NOTIFICATION PANEL
+===================================================-->
+
+<div
+id="notificationPanel"
+class="popup-overlay">
+
+    <div class="popup-window">
+
+        <div class="popup-header">
+
+            <h3>
+
+                <i class="fas fa-bell"></i>
+
+                Notifications
+
+            </h3>
+
+            <button
+            id="closeNotification">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+        <div
+        id="notificationList"
+        class="popup-body">
+
+            <div class="empty-state">
+
+                No Notifications
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--==================================================
+FULL SCREEN PDF READER
+===================================================-->
+
+<div
+id="readerOverlay"
+class="reader-overlay">
+
+    <!-- TOP BAR -->
+
+    <header class="reader-header">
+
+        <button
+        id="readerBackBtn"
+        class="reader-tool">
+
+            <i class="fas fa-arrow-left"></i>
+
+        </button>
+
+        <div class="reader-title">
+
+            <h3 id="readerBookTitle">
+
+                Chishti Reader
+
+            </h3>
+
+            <span id="readerPageInfo">
+
+                Page 1 / 1
+
+            </span>
+
+        </div>
+
+        <button
+        id="readerMoreBtn"
+        class="reader-tool">
+
+            <i class="fas fa-ellipsis-vertical"></i>
+
+        </button>
+
+    </header>
+
+    <!-- PDF VIEW -->
+
+    <main
+    id="readerStage"
+    class="reader-stage">
+
+        <canvas
+        id="pdfCanvas">
+
+        </canvas>
+
+    </main>
+
+    <!-- READER BOTTOM -->
+
+    <footer class="reader-footer">
+
+        <button
+        id="prevPageBtn"
+        class="reader-action">
+
+            <i class="fas fa-chevron-left"></i>
+
+        </button>
+
+        <button
+        id="zoomOutBtn"
+        class="reader-action">
+
+            <i class="fas fa-minus"></i>
+
+        </button>
+
+        <div
+        id="pageCounter"
+        class="page-counter">
+
+            1 / 1
+
+        </div>
+
+        <button
+        id="zoomInBtn"
+        class="reader-action">
+
+            <i class="fas fa-plus"></i>
+
+        </button>
+
+        <button
+        id="nextPageBtn"
+        class="reader-action">
+
+            <i class="fas fa-chevron-right"></i>
+
+        </button>
+
+    </footer>
+
+</div>
+
+<!--==================================================
+IMAGE VIEWER
+===================================================-->
+
+<div
+id="imageViewer"
+class="image-viewer">
+
+    <button
+    id="closeImageViewer"
+    class="image-close">
+
+        <i class="fas fa-times"></i>
+
+    </button>
+
+    <img
+    id="viewerImage"
+    src=""
+    alt="Preview">
+
+</div>
+
+<!--==================================================
+GLOBAL DIMMER
+===================================================-->
+
+<div
+id="screenDimmer"
+class="screen-dimmer">
+
+</div>
+
+<!--==================================================
+SCRIPTS
+===================================================-->
+
+<script src="mobile.js"></script>
+
+</body>
+</html>
