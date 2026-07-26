@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -7,13 +8,17 @@
 
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0">
+content="width=device-width,initial-scale=1.0">
 
-<title>CHISHTI READER</title>
+<title>Chishti Reader</title>
+
+<!-- CSS -->
 
 <link
 rel="stylesheet"
 href="reader.css">
+
+<!-- Google Font -->
 
 <link
 rel="preconnect"
@@ -28,9 +33,13 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
+<!-- Icons -->
+
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<!-- PDF.js -->
 
 <script
 src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
@@ -44,21 +53,60 @@ src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
 BACKGROUND
 ===================================================-->
 
-<div class="reader-background"></div>
+<div class="reader-background">
+
+    <div class="bg-overlay"></div>
+
+    <div class="bg-pattern"></div>
+
+</div>
 
 <!--==================================================
-MAIN READER
+PRELOADER
 ===================================================-->
 
-<div class="reader">
+<div id="preloader" class="preloader">
+
+    <div class="loader-book">
+
+        <div class="loader-page"></div>
+
+        <div class="loader-page"></div>
+
+        <div class="loader-page"></div>
+
+    </div>
+
+    <h2>
+
+        CHISHTI READER
+
+    </h2>
+
+    <span>
+
+        Loading Book...
+
+    </span>
+
+</div>
 
 <!--==================================================
-PREMIUM TOOLBAR
+MAIN APPLICATION
+===================================================-->
+
+<div id="readerApp" class="reader-app">
+
+ <!--==================================================
+PREMIUM TOP TOOLBAR
+PART 2
 ===================================================-->
 
 <header class="reader-toolbar">
 
-    <!-- LEFT -->
+    <!--==============================
+    LEFT
+    ==============================-->
 
     <div class="toolbar-left">
 
@@ -70,33 +118,39 @@ PREMIUM TOOLBAR
 
         </button>
 
-        <div class="reader-logo">
+        <div class="reader-brand">
 
-            <img
-            src="logo.png"
-            alt="Chishti Library">
+            <div class="reader-logo">
 
-        </div>
+                <img
+                src="logo.png"
+                alt="Chishti Library">
 
-        <div class="reader-title">
+            </div>
 
-            <h2>
+            <div class="reader-title">
 
-                CHISHTI READER
+                <h2>
 
-            </h2>
+                    CHISHTI READER
 
-            <span>
+                </h2>
 
-                Premium Digital Library
+                <span>
 
-            </span>
+                    Premium Islamic Digital Library
+
+                </span>
+
+            </div>
 
         </div>
 
     </div>
 
-    <!-- CENTER -->
+    <!--==============================
+    CENTER
+    ==============================-->
 
     <div class="toolbar-center">
 
@@ -114,13 +168,16 @@ PREMIUM TOOLBAR
 
     </div>
 
-    <!-- RIGHT -->
+    <!--==============================
+    RIGHT
+    ==============================-->
 
     <div class="toolbar-right">
 
         <button
         id="bookmarkBtn"
-        class="tool-btn">
+        class="tool-btn"
+        title="Bookmark">
 
             <i class="fas fa-bookmark"></i>
 
@@ -128,7 +185,8 @@ PREMIUM TOOLBAR
 
         <button
         id="searchBtn"
-        class="tool-btn">
+        class="tool-btn"
+        title="Search">
 
             <i class="fas fa-search"></i>
 
@@ -136,7 +194,8 @@ PREMIUM TOOLBAR
 
         <button
         id="themeBtn"
-        class="tool-btn">
+        class="tool-btn"
+        title="Theme">
 
             <i class="fas fa-moon"></i>
 
@@ -144,7 +203,8 @@ PREMIUM TOOLBAR
 
         <button
         id="settingsBtn"
-        class="tool-btn">
+        class="tool-btn"
+        title="Settings">
 
             <i class="fas fa-gear"></i>
 
@@ -156,17 +216,28 @@ PREMIUM TOOLBAR
 
 <!--==================================================
 BOOK STAGE
+PART 3
 ===================================================-->
 
-<section class="book-stage">
+<main class="reader-stage">
+
+    <!-- Left Glow -->
+
+    <div class="book-glow left-glow"></div>
+
+    <!-- Right Glow -->
+
+    <div class="book-glow right-glow"></div>
 
     <!-- Book Shadow -->
 
     <div class="book-shadow"></div>
 
-    <!-- Main Book -->
+    <!--==============================
+    BOOK
+    ==============================-->
 
-    <div
+    <section
     id="readerBook"
     class="book">
 
@@ -174,7 +245,7 @@ BOOK STAGE
         LEFT PAGE
         ==============================-->
 
-        <div
+        <article
         class="page left-page">
 
             <div class="page-surface">
@@ -185,20 +256,21 @@ BOOK STAGE
 
             </div>
 
-        </div>
+            <div class="page-light"></div>
+
+        </article>
 
         <!--==============================
         BOOK SPINE
         ==============================-->
 
-        <div
-        class="book-spine">
+        <div class="book-spine">
 
             <div class="spine-shadow"></div>
 
-            <div class="spine-line"></div>
+            <div class="spine-highlight"></div>
 
-            <div class="spine-light"></div>
+            <div class="spine-line"></div>
 
         </div>
 
@@ -206,7 +278,7 @@ BOOK STAGE
         RIGHT PAGE
         ==============================-->
 
-        <div
+        <article
         class="page right-page">
 
             <div class="page-surface">
@@ -217,27 +289,24 @@ BOOK STAGE
 
             </div>
 
-        </div>
+            <div class="page-light"></div>
 
-        <!--==============================
-        PAGE TURN EFFECT
-        ==============================-->
+        </article>
 
-        <div
-        class="page-flip-overlay">
-        </div>
+    </section>
 
-    </div>
-
-</section>
+</main>
 
 <!--==================================================
 PREMIUM BOTTOM TOOLBAR
+PART 4
 ===================================================-->
 
 <footer class="reader-bottom">
 
-    <!-- LEFT -->
+    <!--==============================
+    LEFT TOOLS
+    ==============================-->
 
     <div class="bottom-group">
 
@@ -253,7 +322,7 @@ PREMIUM BOTTOM TOOLBAR
         <button
         id="prevPage"
         class="reader-btn"
-        title="Previous">
+        title="Previous Page">
 
             <i class="fas fa-chevron-left"></i>
 
@@ -261,23 +330,27 @@ PREMIUM BOTTOM TOOLBAR
 
     </div>
 
-    <!-- CENTER -->
+    <!--==============================
+    PAGE COUNTER
+    ==============================-->
 
     <div class="page-display">
 
-        <span id="pageCounter">
+        <span
+        id="pageCounter">
 
             1 - 2
 
         </span>
 
-        <span class="separator">
+        <span class="page-divider">
 
             /
 
         </span>
 
-        <span id="totalPages">
+        <span
+        id="totalPages">
 
             0
 
@@ -285,7 +358,9 @@ PREMIUM BOTTOM TOOLBAR
 
     </div>
 
-    <!-- RIGHT -->
+    <!--==============================
+    RIGHT TOOLS
+    ==============================-->
 
     <div class="bottom-group">
 
@@ -310,7 +385,7 @@ PREMIUM BOTTOM TOOLBAR
         <button
         id="downloadBtn"
         class="reader-btn"
-        title="Download">
+        title="Download PDF">
 
             <i class="fas fa-download"></i>
 
@@ -319,7 +394,7 @@ PREMIUM BOTTOM TOOLBAR
         <button
         id="printBtn"
         class="reader-btn"
-        title="Print">
+        title="Print Book">
 
             <i class="fas fa-print"></i>
 
@@ -337,7 +412,7 @@ PREMIUM BOTTOM TOOLBAR
         <button
         id="nextPage"
         class="reader-btn"
-        title="Next">
+        title="Next Page">
 
             <i class="fas fa-chevron-right"></i>
 
@@ -356,36 +431,44 @@ PREMIUM BOTTOM TOOLBAR
 
 </footer>
 
-</div>
-
-
- <!--====================================================
-SEARCH POPUP
-Paste Before </body>
-=====================================================-->
+<!--==================================================
+PREMIUM SEARCH POPUP
+PART 5
+===================================================-->
 
 <div id="searchOverlay" class="search-overlay">
 
-    <div class="search-box">
+    <div class="search-window">
 
-        <div class="search-header">
+        <div class="window-header">
 
-            <h3>Search Book</h3>
+            <h3>
 
-            <button id="closeSearch">
+                <i class="fas fa-search"></i>
+
+                Search Book
+
+            </h3>
+
+            <button
+            id="closeSearch"
+            class="window-close">
+
                 <i class="fas fa-times"></i>
+
             </button>
 
         </div>
 
-        <div class="search-input-area">
+        <div class="search-input-box">
 
             <input
-            type="text"
             id="searchInput"
+            type="text"
             placeholder="Search inside this book...">
 
-            <button id="startSearch">
+            <button
+            id="startSearch">
 
                 <i class="fas fa-search"></i>
 
@@ -401,10 +484,264 @@ Paste Before </body>
 
     </div>
 
-</div>   
-<!-- END READER -->
+</div>
+
+<!--==================================================
+PREMIUM SETTINGS
+===================================================-->
+
+<div id="settingsOverlay" class="settings-overlay">
+
+    <div class="settings-window">
+
+        <div class="window-header">
+
+            <h3>
+
+                <i class="fas fa-gear"></i>
+
+                Reader Settings
+
+            </h3>
+
+            <button
+            id="closeSettings"
+            class="window-close">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+        <div class="settings-body">
+
+            <div class="setting-row">
+
+                <label>
+
+                    Theme
+
+                </label>
+
+                <select id="themeSelect">
+
+                    <option value="maroon">
+
+                        Maroon Gold
+
+                    </option>
+
+                    <option value="dark">
+
+                        Dark
+
+                    </option>
+
+                    <option value="light">
+
+                        Light
+
+                    </option>
+
+                    <option value="sepia">
+
+                        Sepia
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="setting-row">
+
+                <label>
+
+                    Default Zoom
+
+                </label>
+
+                <input
+                id="defaultZoom"
+                type="range"
+                min="1"
+                max="3"
+                step="0.1"
+                value="1.5">
+
+            </div>
+
+            <div class="setting-row">
+
+                <label>
+
+                    Page Animation
+
+                </label>
+
+                <input
+                id="animationSwitch"
+                type="checkbox"
+                checked>
+
+            </div>
+
+            <div class="setting-row">
+
+                <label>
+
+                    Continue Reading
+
+                </label>
+
+                <input
+                id="continueSwitch"
+                type="checkbox"
+                checked>
+
+            </div>
+
+        </div>
+
+        <div class="window-footer">
+
+            <button
+            id="saveSettings">
+
+                Save Settings
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--==================================================
+BOOKMARK PANEL
+===================================================-->
+
+<div id="bookmarkOverlay" class="bookmark-overlay">
+
+    <div class="bookmark-window">
+
+        <div class="window-header">
+
+            <h3>
+
+                <i class="fas fa-bookmark"></i>
+
+                Bookmarks
+
+            </h3>
+
+            <button
+            id="closeBookmark"
+            class="window-close">
+
+                <i class="fas fa-times"></i>
+
+            </button>
+
+        </div>
+
+        <div
+        id="bookmarkList"
+        class="bookmark-list">
+
+            <div class="empty-bookmark">
+
+                No Bookmarks
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!--==================================================
+PREMIUM TOAST
+PART 6
+===================================================-->
+
+<div id="toast" class="toast">
+
+    <i class="fas fa-circle-check"></i>
+
+    <span id="toastMessage">
+
+        Done
+
+    </span>
+
+</div>
+
+<!--==================================================
+FLOATING LOADER
+===================================================-->
+
+<div id="loadingBar" class="loading-bar">
+
+    <div id="loadingProgress"
+    class="loading-progress">
+
+    </div>
+
+</div>
+
+<!--==================================================
+PDF LOADING SCREEN
+===================================================-->
+
+<div id="pdfLoading"
+class="pdf-loading">
+
+    <div class="pdf-loader">
+
+        <div class="loader-ring"></div>
+
+        <div class="loader-ring"></div>
+
+        <div class="loader-ring"></div>
+
+    </div>
+
+    <h2>
+
+        Preparing Book...
+
+    </h2>
+
+    <p>
+
+        Optimizing Pages
+
+    </p>
+
+</div>
+
+<!--==================================================
+SCREEN DIMMER
+===================================================-->
+
+<div id="screenDimmer"
+class="screen-dimmer">
+
+</div>
+
+<!--==================================================
+JAVASCRIPT
+===================================================-->
 
 <script src="reader.js"></script>
 
+</div>
+
 </body>
+
 </html>    
+    
