@@ -1,35 +1,37 @@
 /*====================================================
- CHISHTI READER v3
+ CHISHTI READER ENGINE v3
  PART 1
- FOUNDATION
+ FOUNDATION + FAST PDF ENGINE
 ====================================================*/
 
-/*=========================
-PDF.js Worker
-=========================*/
+/*==============================
+ PDF.js Worker
+==============================*/
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-/*=========================
-URL PARAMETERS
-=========================*/
+/*==============================
+ URL PARAMETERS
+==============================*/
 
-const params =
-new URLSearchParams(window.location.search);
+const params = new URLSearchParams(window.location.search);
 
-const pdfURL =
+const PDF_URL =
 decodeURIComponent(params.get("book") || "");
 
-const bookTitle =
+const BOOK_TITLE =
 decodeURIComponent(params.get("title") || "Chishti Library");
 
-/*=========================
-DOM ELEMENTS
-=========================*/
+/*==============================
+ DOCUMENT TITLE
+==============================*/
 
-const book =
-document.getElementById("readerBook");
+document.title = BOOK_TITLE;
+
+/*==============================
+ DOM
+==============================*/
 
 const leftCanvas =
 document.getElementById("leftCanvas");
@@ -43,7 +45,7 @@ leftCanvas.getContext("2d");
 const rightCtx =
 rightCanvas.getContext("2d");
 
-const bookTitleElement =
+const bookTitle =
 document.getElementById("bookTitle");
 
 const pageCounter =
@@ -52,9 +54,20 @@ document.getElementById("pageCounter");
 const totalPagesElement =
 document.getElementById("totalPages");
 
-/*=========================
-READER VARIABLES
-=========================*/
+/*==============================
+ TITLE
+==============================*/
+
+if(bookTitle){
+
+    bookTitle.textContent =
+    BOOK_TITLE;
+
+}
+
+/*==============================
+ PDF VARIABLES
+==============================*/
 
 let pdf = null;
 
@@ -62,45 +75,76 @@ let totalPages = 0;
 
 let currentPage = 1;
 
-let zoom = 1.5;
+let zoom = 1.45;
 
 let rendering = false;
 
-/*=========================
-WINDOW TITLE
-=========================*/
+/*==============================
+ CACHE
+==============================*/
 
-document.title = bookTitle;
+const pageCache =
+new Map();
 
-if(bookTitleElement){
+const textCache =
+new Map();
 
-    bookTitleElement.textContent =
-    bookTitle;
+/*==============================
+ SEARCH INDEX
+==============================*/
+
+const pdfTextIndex = [];
+
+/*==============================
+ SETTINGS
+==============================*/
+
+const SETTINGS = {
+
+    minZoom : 0.70,
+
+    maxZoom : 3.20,
+
+    zoomStep : 0.15,
+
+    renderScale : 2
+
+};
+
+/*==============================
+ CHECK PDF
+==============================*/
+
+if(!PDF_URL){
+
+    alert("Book Not Found");
+
+    throw new Error("No PDF Selected");
 
 }
 
-/*=========================
-CHECK PDF
-=========================*/
-
-if(!pdfURL){
-
-    alert("No Book Selected");
-
-    throw new Error("PDF URL Missing");
-
-}
-
-/*=========================
-LOAD PDF
-=========================*/
+/*==============================
+ LOAD PDF
+==============================*/
 
 async function loadPDF(){
 
     try{
 
         const task =
-        pdfjsLib.getDocument(pdfURL);
+        pdfjsLib.getDocument({
+
+            url:PDF_URL,
+
+            cMapPacked:true,
+
+            disableAutoFetch:false,
+
+            disableStream:false,
+
+            disableRange:false
+
+        });
 
         pdf =
         await task.promise;
@@ -116,48 +160,88 @@ async function loadPDF(){
         }
 
         console.log(
-            "PDF Loaded Successfully"
+
+            "PDF Loaded",
+
+            totalPages
+
         );
 
-        console.log(
-            "Pages :",
-            totalPages
-        );
+        return true;
 
     }
 
-    catch(error){
+    catch(err){
 
-        console.error(error);
+        console.error(err);
 
-        alert("Unable To Open PDF.");
+        alert("Unable To Open Book");
+
+        return false;
 
     }
 
 }
 
-console.log("✅ Reader v3 Initialized");
+console.log("✅ Reader Engine v3 Ready");
 
 /*====================================================
- CHISHTI READER v3
+ CHISHTI READER ENGINE v3
  PART 2
- PDF RENDER ENGINE
+ RENDER ENGINE
 ====================================================*/
 
-/*=========================
-RENDER SINGLE PAGE
-=========================*/
+/*==============================
+GET PAGE (CACHE)
+==============================*/
 
-async function renderPage(pageNumber, canvas, context){
+async function getPage(pageNumber){
 
-    if(pageNumber > totalPages){
+    if(pageCache.has(pageNumber)){
 
-        context.clearRect(
+        return pageCache.get(pageNumber);
+
+    }
+
+    const page =
+    await pdf.getPage(pageNumber);
+
+    pageCache.set(
+
+        pageNumber,
+
+        page
+
+    );
+
+    return page;
+
+}
+
+/*==============================
+RENDER PAGE
+==============================*/
+
+async function renderPage(
+
+    pageNumber,
+
+    canvas,
+
+    ctx
+
+){
+
+    if(pageNumber>totalPages){
+
+        ctx.clearRect(
 
             0,
+
             0,
 
             canvas.width,
+
             canvas.height
 
         );
@@ -167,23 +251,23 @@ async function renderPage(pageNumber, canvas, context){
     }
 
     const page =
-    await pdf.getPage(pageNumber);
+    await getPage(pageNumber);
 
     const viewport =
     page.getViewport({
 
-        scale: zoom
+        scale:zoom
 
     });
 
-    const outputScale =
+    const ratio =
     window.devicePixelRatio || 1;
 
     canvas.width =
-    Math.floor(viewport.width * outputScale);
+    viewport.width * ratio;
 
     canvas.height =
-    Math.floor(viewport.height * outputScale);
+    viewport.height * ratio;
 
     canvas.style.width =
     viewport.width + "px";
@@ -191,30 +275,35 @@ async function renderPage(pageNumber, canvas, context){
     canvas.style.height =
     viewport.height + "px";
 
-    context.setTransform(
+    ctx.setTransform(
 
-        outputScale,
+        ratio,
+
         0,
+
         0,
-        outputScale,
+
+        ratio,
+
         0,
+
         0
 
     );
 
     await page.render({
 
-        canvasContext: context,
+        canvasContext:ctx,
 
-        viewport: viewport
+        viewport
 
     }).promise;
 
 }
 
-/*=========================
-RENDER CURRENT SPREAD
-=========================*/
+/*==============================
+RENDER SPREAD
+==============================*/
 
 async function renderSpread(){
 
@@ -223,103 +312,159 @@ async function renderSpread(){
 
     rendering = true;
 
-    await renderPage(
+    await Promise.all([
 
-        currentPage,
+        renderPage(
 
-        leftCanvas,
+            currentPage,
 
-        leftCtx
+            leftCanvas,
 
-    );
+            leftCtx
 
-    await renderPage(
+        ),
 
-        currentPage + 1,
+        renderPage(
 
-        rightCanvas,
+            currentPage+1,
 
-        rightCtx
+            rightCanvas,
 
-    );
+            rightCtx
+
+        )
+
+    ]);
 
     updatePageCounter();
 
     rendering = false;
 
+    preloadNext();
+
 }
 
-/*=========================
+/*==============================
+PRELOAD NEXT PAGES
+==============================*/
+
+async function preloadNext(){
+
+    const p1 =
+    currentPage+2;
+
+    const p2 =
+    currentPage+3;
+
+    if(p1<=totalPages){
+
+        getPage(p1);
+
+    }
+
+    if(p2<=totalPages){
+
+        getPage(p2);
+
+    }
+
+}
+
+/*==============================
+PRELOAD PREVIOUS
+==============================*/
+
+async function preloadPrevious(){
+
+    const p1 =
+    currentPage-2;
+
+    const p2 =
+    currentPage-3;
+
+    if(p1>=1){
+
+        getPage(p1);
+
+    }
+
+    if(p2>=1){
+
+        getPage(p2);
+
+    }
+
+}
+
+/*==============================
+FIRST LOAD
+==============================*/
+
+async function startReader(){
+
+    const ok =
+    await loadPDF();
+
+    if(!ok)
+        return;
+
+    await renderSpread();
+
+    console.log(
+
+        "Fast Renderer Ready"
+
+    );
+
+}
+
+startReader();
+
+console.log("✅ Render Engine Ready");
+
+/*====================================================
+ CHISHTI READER ENGINE v3
+ PART 3
+ NAVIGATION ENGINE
+====================================================*/
+
+/*==============================
+BOOK
+==============================*/
+
+const book =
+document.querySelector(".book");
+
+/*==============================
 PAGE COUNTER
-=========================*/
+==============================*/
 
 function updatePageCounter(){
 
-    if(!pageCounter)
-        return;
+    if(!pageCounter) return;
 
-    let secondPage =
+    let rightPage =
     currentPage + 1;
 
-    if(secondPage > totalPages){
+    if(rightPage > totalPages){
 
-        secondPage =
-        totalPages;
+        rightPage = totalPages;
 
     }
 
     pageCounter.textContent =
 
-        currentPage +
+    currentPage +
 
-        " - " +
+    " - " +
 
-        secondPage;
+    rightPage;
 
 }
 
-console.log("✅ Render Engine Ready");
-
-/*====================================================
- CHISHTI READER v3
- PART 3
- NAVIGATION + ZOOM + TOOLS
-====================================================*/
-
-/*=========================
-BUTTONS
-=========================*/
-
-const firstPageBtn =
-document.getElementById("firstPage");
-
-const lastPageBtn =
-document.getElementById("lastPage");
-
-const nextPageBtn =
-document.getElementById("nextPage");
-
-const prevPageBtn =
-document.getElementById("prevPage");
-
-const zoomInBtn =
-document.getElementById("zoomIn");
-
-const zoomOutBtn =
-document.getElementById("zoomOut");
-
-const fullscreenBtn =
-document.getElementById("fullscreenBtn");
-
-const downloadBtn =
-document.getElementById("downloadBtn");
-
-const printBtn =
-document.getElementById("printBtn");
-
-/*=========================
-BOOK ANIMATION
-=========================*/
+/*==============================
+FLIP
+==============================*/
 
 function flipNext(){
 
@@ -345,13 +490,14 @@ function flipPrevious(){
 
 }
 
-/*=========================
+/*==============================
 NEXT
-=========================*/
+==============================*/
 
 async function nextSpread(){
 
-    if(rendering) return;
+    if(rendering)
+        return;
 
     if(currentPage + 2 > totalPages)
         return;
@@ -364,13 +510,14 @@ async function nextSpread(){
 
 }
 
-/*=========================
+/*==============================
 PREVIOUS
-=========================*/
+==============================*/
 
 async function previousSpread(){
 
-    if(rendering) return;
+    if(rendering)
+        return;
 
     if(currentPage <= 1)
         return;
@@ -386,9 +533,9 @@ async function previousSpread(){
 
 }
 
-/*=========================
+/*==============================
 FIRST
-=========================*/
+==============================*/
 
 async function firstSpread(){
 
@@ -398,19 +545,21 @@ async function firstSpread(){
 
 }
 
-/*=========================
+/*==============================
 LAST
-=========================*/
+==============================*/
 
 async function lastSpread(){
 
     if(totalPages % 2 === 0){
 
-        currentPage = totalPages - 1;
+        currentPage =
+        totalPages - 1;
 
     }else{
 
-        currentPage = totalPages;
+        currentPage =
+        totalPages;
 
     }
 
@@ -421,195 +570,690 @@ async function lastSpread(){
 
 }
 
-/*=========================
-ZOOM
-=========================*/
+/*==============================
+BUTTONS
+==============================*/
 
-const MIN_ZOOM = 0.8;
-const MAX_ZOOM = 3.0;
-const STEP = 0.20;
+const firstBtn =
+document.getElementById("firstPage");
 
-async function zoomIn(){
+const lastBtn =
+document.getElementById("lastPage");
 
-    if(zoom >= MAX_ZOOM)
-        return;
+const nextBtn =
+document.getElementById("nextPage");
 
-    zoom += STEP;
+const prevBtn =
+document.getElementById("prevPage");
 
-    await renderSpread();
+if(firstBtn)
+firstBtn.onclick =
+firstSpread;
 
-}
+if(lastBtn)
+lastBtn.onclick =
+lastSpread;
 
-async function zoomOut(){
+if(nextBtn)
+nextBtn.onclick =
+nextSpread;
 
-    if(zoom <= MIN_ZOOM)
-        return;
+if(prevBtn)
+prevBtn.onclick =
+previousSpread;
 
-    zoom -= STEP;
-
-    await renderSpread();
-
-}
-
-/*=========================
-FULLSCREEN
-=========================*/
-
-function toggleFullscreen(){
-
-    if(!document.fullscreenElement){
-
-        document.documentElement.requestFullscreen();
-
-    }else{
-
-        document.exitFullscreen();
-
-    }
-
-}
-
-/*=========================
-DOWNLOAD
-=========================*/
-
-function downloadBook(){
-
-    window.open(pdfURL,"_blank");
-
-}
-
-/*=========================
-PRINT
-=========================*/
-
-function printBook(){
-
-    const frame =
-    window.open(pdfURL);
-
-    if(frame){
-
-        frame.onload = () => {
-
-            frame.print();
-
-        };
-
-    }
-
-}
-
-/*=========================
-BUTTON EVENTS
-=========================*/
-
-if(nextPageBtn)
-nextPageBtn.onclick = nextSpread;
-
-if(prevPageBtn)
-prevPageBtn.onclick = previousSpread;
-
-if(firstPageBtn)
-firstPageBtn.onclick = firstSpread;
-
-if(lastPageBtn)
-lastPageBtn.onclick = lastSpread;
-
-if(zoomInBtn)
-zoomInBtn.onclick = zoomIn;
-
-if(zoomOutBtn)
-zoomOutBtn.onclick = zoomOut;
-
-if(fullscreenBtn)
-fullscreenBtn.onclick = toggleFullscreen;
-
-if(downloadBtn)
-downloadBtn.onclick = downloadBook;
-
-if(printBtn)
-printBtn.onclick = printBook;
-
-/*=========================
+/*==============================
 KEYBOARD
-=========================*/
+==============================*/
 
-document.addEventListener("keydown",(e)=>{
+document.addEventListener(
+
+"keydown",
+
+function(e){
 
     switch(e.key){
 
         case "ArrowRight":
 
             nextSpread();
-            break;
+
+        break;
 
         case "ArrowLeft":
 
             previousSpread();
-            break;
 
-        case "+":
-        case "=":
-
-            zoomIn();
-            break;
-
-        case "-":
-
-            zoomOut();
-            break;
+        break;
 
         case "Home":
 
             firstSpread();
-            break;
+
+        break;
 
         case "End":
 
             lastSpread();
-            break;
 
-        case "f":
-
-            toggleFullscreen();
-            break;
+        break;
 
     }
 
 });
 
-/*=========================
-MOUSE WHEEL
-=========================*/
+/*==============================
+PRELOAD
+==============================*/
 
-book.addEventListener("wheel",(e)=>{
+book.addEventListener(
 
-    if(e.ctrlKey){
+"mouseenter",
 
-        e.preventDefault();
+function(){
 
-        if(e.deltaY < 0){
+    preloadNext();
 
-            zoomIn();
+    preloadPrevious();
 
-        }else{
+});
 
-            zoomOut();
+/*==============================
+READY
+==============================*/
 
-        }
+console.log("✅ Navigation Ready");
+
+/*====================================================
+ CHISHTI READER ENGINE v3
+ PART 4
+ ZOOM ENGINE
+====================================================*/
+
+/*==============================
+BUTTONS
+==============================*/
+
+const zoomInBtn =
+document.getElementById("zoomIn");
+
+const zoomOutBtn =
+document.getElementById("zoomOut");
+
+/*==============================
+LIMITS
+==============================*/
+
+const MIN_ZOOM = 0.70;
+
+const MAX_ZOOM = 3.20;
+
+const ZOOM_STEP = 0.15;
+
+/*==============================
+APPLY ZOOM
+==============================*/
+
+async function applyZoom(){
+
+    if(rendering)
+        return;
+
+    await renderSpread();
+
+}
+
+/*==============================
+ZOOM IN
+==============================*/
+
+async function zoomIn(){
+
+    if(zoom >= MAX_ZOOM)
+        return;
+
+    zoom += ZOOM_STEP;
+
+    await applyZoom();
+
+}
+
+/*==============================
+ZOOM OUT
+==============================*/
+
+async function zoomOut(){
+
+    if(zoom <= MIN_ZOOM)
+        return;
+
+    zoom -= ZOOM_STEP;
+
+    await applyZoom();
+
+}
+
+/*==============================
+BUTTON EVENTS
+==============================*/
+
+if(zoomInBtn){
+
+    zoomInBtn.onclick =
+    zoomIn;
+
+}
+
+if(zoomOutBtn){
+
+    zoomOutBtn.onclick =
+    zoomOut;
+
+}
+
+/*==============================
+DOUBLE CLICK
+==============================*/
+
+if(book){
+
+book.addEventListener(
+
+"dblclick",
+
+async()=>{
+
+    if(zoom < 2.5){
+
+        zoom = 2.5;
+
+    }else{
+
+        zoom = 1.45;
 
     }
 
-},{passive:false});
+    await applyZoom();
 
-console.log("✅ Reader v3 Ready");
+});
+
+}
+
+/*==============================
+CTRL + WHEEL
+==============================*/
+
+if(book){
+
+book.addEventListener(
+
+"wheel",
+
+function(e){
+
+    if(!e.ctrlKey)
+        return;
+
+    e.preventDefault();
+
+    if(e.deltaY < 0){
+
+        zoomIn();
+
+    }else{
+
+        zoomOut();
+
+    }
+
+},
+
+{passive:false});
+
+}
+
+/*==============================
+KEYBOARD
+==============================*/
+
+document.addEventListener(
+
+"keydown",
+
+function(e){
+
+    switch(e.key){
+
+        case "+":
+
+        case "=":
+
+            zoomIn();
+
+        break;
+
+        case "-":
+
+            zoomOut();
+
+        break;
+
+        case "0":
+
+            zoom = 1.45;
+
+            applyZoom();
+
+        break;
+
+    }
+
+});
+
+/*==============================
+PINCH ZOOM READY
+==============================*/
+
+let touchDistance = 0;
+
+function getDistance(t1,t2){
+
+    const dx =
+    t1.clientX - t2.clientX;
+
+    const dy =
+    t1.clientY - t2.clientY;
+
+    return Math.sqrt(dx*dx + dy*dy);
+
+}
+
+if(book){
+
+book.addEventListener(
+
+"touchstart",
+
+function(e){
+
+    if(e.touches.length===2){
+
+        touchDistance =
+
+        getDistance(
+
+            e.touches[0],
+
+            e.touches[1]
+
+        );
+
+    }
+
+});
+
+book.addEventListener(
+
+"touchmove",
+
+function(e){
+
+    if(e.touches.length!==2)
+        return;
+
+    e.preventDefault();
+
+    const newDistance =
+
+    getDistance(
+
+        e.touches[0],
+
+        e.touches[1]
+
+    );
+
+    if(newDistance > touchDistance + 15){
+
+        zoomIn();
+
+        touchDistance = newDistance;
+
+    }
+
+    if(newDistance < touchDistance - 15){
+
+        zoomOut();
+
+        touchDistance = newDistance;
+
+    }
+
+},
+
+{passive:false});
+
+}
+
+console.log("✅ Zoom Engine Ready");
 
 /*====================================================
- SEARCH ENGINE
- PART 2
- POPUP CONTROLLER
+ CHISHTI READER ENGINE v3
+ PART 5
+ TOOLS + THEME + SETTINGS
 ====================================================*/
+
+/*==============================
+BUTTONS
+==============================*/
+
+const fullscreenBtn =
+document.getElementById("fullscreenBtn");
+
+const downloadBtn =
+document.getElementById("downloadBtn");
+
+const printBtn =
+document.getElementById("printBtn");
+
+const themeBtn =
+document.getElementById("themeBtn");
+
+const settingsBtn =
+document.getElementById("settingsBtn");
+
+/*==============================
+FULLSCREEN
+==============================*/
+
+async function toggleFullscreen(){
+
+    if(!document.fullscreenElement){
+
+        await document.documentElement.requestFullscreen();
+
+    }else{
+
+        await document.exitFullscreen();
+
+    }
+
+}
+
+if(fullscreenBtn){
+
+    fullscreenBtn.onclick =
+    toggleFullscreen;
+
+}
+
+/*==============================
+DOWNLOAD
+==============================*/
+
+function downloadBook(){
+
+    const a =
+    document.createElement("a");
+
+    a.href = PDF_URL;
+
+    a.download =
+
+    BOOK_TITLE + ".pdf";
+
+    document.body.appendChild(a);
+
+    a.click();
+
+    a.remove();
+
+}
+
+if(downloadBtn){
+
+    downloadBtn.onclick =
+    downloadBook;
+
+}
+
+/*==============================
+PRINT
+==============================*/
+
+function printBook(){
+
+    const frame =
+    window.open(PDF_URL);
+
+    if(!frame) return;
+
+    frame.onload = function(){
+
+        frame.focus();
+
+        frame.print();
+
+    };
+
+}
+
+if(printBtn){
+
+    printBtn.onclick =
+    printBook;
+
+}
+
+/*==============================
+THEME
+==============================*/
+
+const THEMES = [
+
+    "maroon",
+
+    "dark",
+
+    "light",
+
+    "sepia"
+
+];
+
+let currentTheme =
+
+localStorage.getItem(
+
+"chishti_theme"
+
+) || "maroon";
+
+applyTheme(currentTheme);
+
+function applyTheme(name){
+
+    document.body.setAttribute(
+
+        "data-theme",
+
+        name
+
+    );
+
+    localStorage.setItem(
+
+        "chishti_theme",
+
+        name
+
+    );
+
+    currentTheme = name;
+
+}
+
+function changeTheme(){
+
+    let index =
+
+    THEMES.indexOf(
+
+        currentTheme
+
+    );
+
+    index++;
+
+    if(index>=THEMES.length)
+
+        index=0;
+
+    applyTheme(
+
+        THEMES[index]
+
+    );
+
+}
+
+if(themeBtn){
+
+    themeBtn.onclick =
+    changeTheme;
+
+}
+
+/*==============================
+SETTINGS
+==============================*/
+
+function saveReaderState(){
+
+    const data={
+
+        page:currentPage,
+
+        zoom:zoom,
+
+        theme:currentTheme
+
+    };
+
+    localStorage.setItem(
+
+        "chishti_reader",
+
+        JSON.stringify(data)
+
+    );
+
+}
+
+function loadReaderState(){
+
+    const data=
+
+    localStorage.getItem(
+
+        "chishti_reader"
+
+    );
+
+    if(!data) return;
+
+    try{
+
+        const state=
+
+        JSON.parse(data);
+
+        if(state.page)
+
+            currentPage=
+
+            state.page;
+
+        if(state.zoom)
+
+            zoom=
+
+            state.zoom;
+
+        if(state.theme)
+
+            applyTheme(
+
+                state.theme
+
+            );
+
+    }
+
+    catch(e){
+
+        console.log(
+
+            "Reader Settings Reset"
+
+        );
+
+    }
+
+}
+
+loadReaderState();
+
+/*==============================
+AUTO SAVE
+==============================*/
+
+setInterval(
+
+saveReaderState,
+
+5000
+
+);
+
+/*==============================
+KEYBOARD
+==============================*/
+
+document.addEventListener(
+
+"keydown",
+
+function(e){
+
+    if(e.key==="F11"){
+
+        e.preventDefault();
+
+        toggleFullscreen();
+
+    }
+
+});
+
+console.log(
+
+"✅ Premium Tools Ready"
+
+);
+
+/*====================================================
+ CHISHTI READER ENGINE v3
+ PART 6
+ SEARCH + BOOKMARK + CONTINUE READING
+====================================================*/
+
+/*==============================
+ELEMENTS
+==============================*/
+
+const bookmarkBtn =
+document.getElementById("bookmarkBtn");
 
 const searchBtn =
 document.getElementById("searchBtn");
@@ -617,242 +1261,155 @@ document.getElementById("searchBtn");
 const searchOverlay =
 document.getElementById("searchOverlay");
 
-const closeSearch =
-document.getElementById("closeSearch");
-
 const searchInput =
 document.getElementById("searchInput");
-
-/*=========================
-OPEN
-=========================*/
-
-if(searchBtn){
-
-    searchBtn.onclick=function(){
-
-        searchOverlay.classList.add("active");
-
-        setTimeout(()=>{
-
-            searchInput.focus();
-
-        },120);
-
-    };
-
-}
-
-/*=========================
-CLOSE
-=========================*/
-
-if(closeSearch){
-
-    closeSearch.onclick=function(){
-
-        searchOverlay.classList.remove("active");
-
-    };
-
-}
-
-/*=========================
-CLICK OUTSIDE
-=========================*/
-
-if(searchOverlay){
-
-    searchOverlay.onclick=function(e){
-
-        if(e.target===searchOverlay){
-
-            searchOverlay.classList.remove("active");
-
-        }
-
-    };
-
-}
-
-/*=========================
-ESC KEY
-=========================*/
-
-document.addEventListener("keydown",(e)=>{
-
-    if(e.key==="Escape"){
-
-        searchOverlay.classList.remove("active");
-
-    }
-
-});
-
-console.log("✅ Search Popup Ready");
-
-
-/*====================================================
- SEARCH ENGINE
- PART 3
- PDF TEXT INDEXER
-====================================================*/
-
-/*=========================
-SEARCH VARIABLES
-=========================*/
-
-let pdfTextIndex = [];
-
-/*=========================
-BUILD INDEX
-=========================*/
-
-async function buildSearchIndex(){
-
-    pdfTextIndex = [];
-
-    for(let pageNumber = 1; pageNumber <= totalPages; pageNumber++){
-
-        try{
-
-            const page =
-            await pdf.getPage(pageNumber);
-
-            const textContent =
-            await page.getTextContent();
-
-            let pageText = "";
-
-            textContent.items.forEach(item=>{
-
-                pageText +=
-                item.str + " ";
-
-            });
-
-            pdfTextIndex.push({
-
-                page:pageNumber,
-
-                text:pageText.toLowerCase()
-
-            });
-
-        }
-
-        catch(error){
-
-            console.error(
-
-                "Search Index Error Page :",
-
-                pageNumber
-
-            );
-
-        }
-
-    }
-
-    console.log(
-
-        "✅ Search Index Ready",
-
-        pdfTextIndex.length,
-
-        "Pages Indexed"
-
-    );
-
-}
-
-/*=========================
-START INDEX
-=========================*/
-
-initializeReader().then(async()=>{
-
-    await renderSpread();
-
-    await buildSearchIndex();
-
-});
-
-/*====================================================
- SEARCH ENGINE
- PART 4
- SEARCH FUNCTION
-====================================================*/
-
-/*=========================
-ELEMENTS
-=========================*/
-
-const startSearch =
-document.getElementById("startSearch");
 
 const searchResults =
 document.getElementById("searchResults");
 
-/*=========================
-SEARCH
-=========================*/
+const startSearch =
+document.getElementById("startSearch");
+
+const closeSearch =
+document.getElementById("closeSearch");
+
+/*==============================
+SEARCH INDEX
+==============================*/
+
+let searchIndex=[];
+
+/*==============================
+BUILD SEARCH INDEX
+==============================*/
+
+async function buildSearchIndex(){
+
+    searchIndex=[];
+
+    for(let i=1;i<=totalPages;i++){
+
+        try{
+
+            const page=
+            await getPage(i);
+
+            const text=
+            await page.getTextContent();
+
+            let content="";
+
+            text.items.forEach(item=>{
+
+                content+=item.str+" ";
+
+            });
+
+            searchIndex.push({
+
+                page:i,
+
+                text:content.toLowerCase()
+
+            });
+
+        }
+
+        catch(err){
+
+            console.log("Index Skip",i);
+
+        }
+
+    }
+
+    console.log("Search Index Ready");
+
+}
+
+/*==============================
+OPEN SEARCH
+==============================*/
+
+if(searchBtn){
+
+searchBtn.onclick=function(){
+
+    searchOverlay.classList.add("active");
+
+    searchInput.focus();
+
+};
+
+}
+
+/*==============================
+CLOSE SEARCH
+==============================*/
+
+if(closeSearch){
+
+closeSearch.onclick=function(){
+
+    searchOverlay.classList.remove("active");
+
+};
+
+}
+
+/*==============================
+LIVE SEARCH
+==============================*/
 
 function searchBook(){
 
-    const keyword =
+    const keyword=
+
     searchInput.value
+
     .trim()
+
     .toLowerCase();
 
-    searchResults.innerHTML = "";
+    searchResults.innerHTML="";
 
     if(keyword===""){
-
-        searchResults.innerHTML =
-        "<p>Type something to search...</p>";
 
         return;
 
     }
 
-    let found = 0;
+    searchIndex.forEach(item=>{
 
-    pdfTextIndex.forEach(page=>{
+        if(item.text.includes(keyword)){
 
-        if(page.text.includes(keyword)){
+            const div=
 
-            found++;
-
-            const item =
             document.createElement("div");
 
-            item.className =
-            "search-item";
+            div.className="search-item";
 
-            item.innerHTML =
+            div.innerHTML=
 
-            "<strong>Page " +
+            "<strong>Page "
 
-            page.page +
+            +item.page+
 
-            "</strong><br>" +
+            "</strong>";
 
-            "<small>Keyword Found</small>";
+            div.onclick=async()=>{
 
-            item.onclick = async()=>{
+                currentPage=
 
-                currentPage =
+                item.page%2===0 ?
 
-                page.page % 2 === 0 ?
+                item.page-1 :
 
-                page.page - 1 :
+                item.page;
 
-                page.page;
+                if(currentPage<1)
 
-                if(currentPage < 1)
-                    currentPage = 1;
+                    currentPage=1;
 
                 searchOverlay.classList.remove("active");
 
@@ -860,55 +1417,87 @@ function searchBook(){
 
             };
 
-            searchResults.appendChild(item);
+            searchResults.appendChild(div);
 
         }
 
     });
 
-    if(found===0){
-
-        searchResults.innerHTML =
-
-        "<p>No Result Found.</p>";
-
-    }
-
 }
-
-/*=========================
-BUTTON
-=========================*/
 
 if(startSearch){
 
-    startSearch.onclick =
-    searchBook;
+startSearch.onclick=
+
+searchBook;
 
 }
-
-/*=========================
-ENTER
-=========================*/
 
 if(searchInput){
 
-    searchInput.addEventListener(
+searchInput.addEventListener(
 
-        "keydown",
+"keyup",
 
-        function(e){
+searchBook
 
-            if(e.key==="Enter"){
-
-                searchBook();
-
-            }
-
-        }
-
-    );
+);
 
 }
 
-console.log("✅ Search Engine Ready");
+/*==============================
+BOOKMARK
+==============================*/
+
+bookmarkBtn.onclick=function(){
+
+    localStorage.setItem(
+
+        "chishti_bookmark",
+
+        currentPage
+
+    );
+
+    alert(
+
+        "Bookmark Saved"
+
+    );
+
+};
+
+/*==============================
+CONTINUE READING
+==============================*/
+
+const saved=
+
+parseInt(
+
+localStorage.getItem(
+
+"chishti_bookmark"
+
+)
+
+);
+
+if(saved){
+
+currentPage=saved;
+
+}
+
+/*==============================
+START INDEX
+==============================*/
+
+setTimeout(()=>{
+
+    buildSearchIndex();
+
+},1500);
+
+console.log("✅ Reader Complete");
+
