@@ -120,16 +120,16 @@
     "likes": 0,
     "downloads": 0
   },
-  {
-    "id": 11,
-    "title": "Madinay Diyan Kaliyan",
-    "author": "Hazrat Allama Saim Chishti",
-    "category": "Naat",
-    "cover": "madinaydiankaliyan-cover.png",
-    "pdf": "madinaydiankaliyan.pdf",
-    "description": "Naatiya Collection by Hazrat Allama Saim Chishti.",
-    "views": 0,
-    "likes": 0,
-    "downloads": 0
-  }
+{
+  "id": 11,
+  "title": "Madinay Diyan Kaliyan",
+  "author": "Hazrat Allama Saim Chishti",
+  "category": "Naat",
+  "cover": "madinydiankalinyan-cover.png",
+  "pdf": "madinydiankalinyan.pdf",
+  "description": "Naatiya Collection by Hazrat Allama Saim Chishti.",
+  "views": 0,
+  "likes": 0,
+  "downloads": 0
+}
 ]
