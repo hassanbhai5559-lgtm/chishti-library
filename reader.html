@@ -1,1659 +1,305 @@
+<!-- ==========================================================
+     CHISHTI READER PRO v7
+     PART 1 OF 40
+     reader.html
+     Application Structure
+=========================================================== -->
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="maroon">
 
 <head>
 
-    <!-- ==========================================================
-         CHISHTI READER v6
-         reader.html
-         PART 1 OF 25
-         Foundation
-    =========================================================== -->
+<meta charset="UTF-8">
 
-    <meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CHISHTI READER PRO</title>
 
-    <meta
-        http-equiv="X-UA-Compatible"
-        content="IE=edge">
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
 
-    <meta
-        name="theme-color"
-        content="#2B0000">
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
 
-    <meta
-        name="color-scheme"
-        content="dark light">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
 
-    <meta
-        name="description"
-        content="Chishti Reader v6 - Premium Islamic Digital Library">
+<link rel="stylesheet"
+href="reader.css">
 
-    <meta
-        name="application-name"
-        content="Chishti Reader">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js"></script>
 
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes">
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent">
-
-    <meta
-        name="format-detection"
-        content="telephone=no">
-
-    <title>Chishti Reader v6</title>
-
-    <!-- Fonts -->
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    <!-- Icons -->
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-    <!-- Styles -->
-
-    <link
-        rel="stylesheet"
-        href="reader.css">
-
-    <!-- PDF.js -->
-
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
-        defer>
-    </script>
+<script defer
+src="reader.js"></script>
 
 </head>
 
-<body
-    id="readerApp"
-    class="reader-app"
-    data-theme="maroon">
+<body>
+
+<div id="readerApp"
+class="reader-app">
 
     <!-- Background -->
 
-    <div
-        class="background-system"
-        aria-hidden="true">
+    <div class="reader-background">
 
-        <div class="background-overlay"></div>
-        <div class="background-grid"></div>
-        <div class="background-gradient"></div>
-        <div class="background-noise"></div>
+        <div class="bg-glow glow-left"></div>
 
-    </div>
+        <div class="bg-glow glow-right"></div>
 
-    <!-- Book Transition -->
-
-    <div
-        id="bookTransition"
-        class="book-transition"
-        aria-hidden="true">
-
-        <div class="transition-backdrop"></div>
-        <div class="transition-book"></div>
+        <div class="bg-pattern"></div>
 
     </div>
 
-    <!-- Loader -->
+    <!-- Header -->
 
-    <div
-        id="appLoader"
-        class="app-loader"
-        role="status"
-        aria-live="polite">
+    <header class="reader-header">
 
-        <div class="loader-panel">
+        <div class="header-left">
 
             <img
-                src="logo.png"
-                alt="Chishti Reader Logo"
-                class="loader-logo">
+            src="assets/logo.png"
+            alt="Logo"
+            class="reader-logo">
 
-            <div
-                class="loader-book"
-                aria-hidden="true">
+            <div>
 
-                <span></span>
-                <span></span>
-                <span></span>
+                <h1>
 
-            </div>
+                    CHISHTI READER
 
-            <div class="loader-progress">
+                </h1>
 
-                <div
-                    id="loaderProgress"
-                    class="loader-progress-fill">
-                </div>
+                <span>
+
+                    Professional Islamic Reader
+
+                </span>
 
             </div>
-
-            <p id="loaderMessage">
-
-                Preparing Reader...
-
-            </p>
 
         </div>
 
-    </div>
+        <div class="header-center">
 
-    <!-- Application -->
+            <div class="search-box">
 
-    <div
-        id="appRoot"
-        class="app-root">
-                <!-- ==========================================================
-             CHISHTI READER v6
-             PART 2 OF 25
-             Header
-        =========================================================== -->
+                <i
+                class="ri-search-line"></i>
 
-        <header
-            id="appHeader"
-            class="app-header"
-            role="banner">
+                <input
 
-            <div class="header-left">
+                id="searchInput"
 
-                <button
-                    id="menuButton"
-                    class="header-button"
-                    type="button"
-                    aria-label="Open Menu">
+                type="text"
 
-                    <i class="fa-solid fa-bars"></i>
-
-                </button>
-
-                <a
-                    href="#"
-                    class="reader-brand"
-                    aria-label="Chishti Reader">
-
-                    <img
-                        src="logo.png"
-                        alt="Chishti Reader Logo"
-                        class="brand-logo">
-
-                    <div class="brand-content">
-
-                        <h1 class="brand-title">
-
-                            CHISHTI READER
-
-                        </h1>
-
-                        <span class="brand-subtitle">
-
-                            Premium Islamic Digital Library
-
-                        </span>
-
-                    </div>
-
-                </a>
+                placeholder="Search inside book...">
 
             </div>
 
-            <div class="header-center">
+        </div>
 
-                <div class="current-book">
+        <div class="header-right">
 
-                    <i
-                        class="fa-solid fa-book-open"
-                        aria-hidden="true"></i>
+            <button
 
-                    <span id="currentBookTitle">
+            id="themeButton"
 
-                        Loading Book...
+            class="icon-button"
 
-                    </span>
+            title="Theme">
 
-                </div>
+                🎨
+
+            </button>
+
+            <button
+
+            id="bookmarkButton"
+
+            class="icon-button"
+
+            title="Bookmarks">
+
+                🔖
+
+            </button>
+
+            <button
+
+            id="settingButton"
+
+            class="icon-button"
+
+            title="Settings">
+
+                ⚙
+
+            </button>
+
+            <button
+
+            id="fullscreenButton"
+
+            class="icon-button"
+
+            title="Fullscreen">
+
+                ⛶
+
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- Reader -->
+
+    <main
+    class="reader-stage">
+
+        <div
+        class="book-stage">
+
+            <!-- Book Shadow -->
+
+            <div
+            class="book-shadow">
 
             </div>
 
-            <div class="header-right">
+            <!-- Book -->
 
-                <button
-                    id="bookmarkButton"
-                    class="header-button"
-                    type="button"
-                    aria-label="Bookmarks">
+            <div
+            id="book"
 
-                    <i class="fa-solid fa-bookmark"></i>
+            class="real-book">
 
-                </button>
-
-                <button
-                    id="searchButton"
-                    class="header-button"
-                    type="button"
-                    aria-label="Search">
-
-                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                </button>
-
-                <button
-                    id="themeButton"
-                    class="header-button"
-                    type="button"
-                    aria-label="Theme">
-
-                    <i class="fa-solid fa-circle-half-stroke"></i>
-
-                </button>
-
-                <button
-                    id="settingsButton"
-                    class="header-button"
-                    type="button"
-                    aria-label="Settings">
-
-                    <i class="fa-solid fa-gear"></i>
-
-                </button>
-
-            </div>
-
-        </header>
-
-        <!-- Reader Stage -->
-
-        <main
-            id="readerStage"
-            class="reader-stage"
-            role="main">
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 3 OF 25
-                 Reader Workspace
-            =========================================================== -->
-
-            <section
-                id="readerWorkspace"
-                class="reader-workspace">
+                <!-- Left -->
 
                 <section
-                    id="readerEngine"
-                    class="reader-engine">
+                class="page page-left">
 
-                    <div
-                        class="reader-perspective">
+                    <canvas
 
-                        <div
-                            class="reader-lighting"
-                            aria-hidden="true">
+                    id="leftCanvas">
 
-                            <div class="ambient-light"></div>
-                            <div class="reader-glow"></div>
-
-                        </div>
-
-                        <div
-                            class="reader-shadow"
-                            aria-hidden="true">
-
-                                <div class="shadow-left"></div>
-                                <div class="shadow-center"></div>
-                                <div class="shadow-right"></div>
-
-                        </div>
-
-                        <div
-                            id="gestureLayer"
-                            class="gesture-layer"
-                            aria-hidden="true"></div>
-
-                        <section
-                            id="bookViewer"
-                            class="book-viewer"
-                            role="application"
-                            aria-label="PDF Reader">
-
-                            <div class="book-frame">
-
-                                <div
-                                    class="book-glow left-glow"
-                                    aria-hidden="true"></div>
-
-                                <div
-                                    class="book-glow right-glow"
-                                    aria-hidden="true"></div>
-
-                                <div
-                                    id="bookContainer"
-                                    class="book-container">
-                                                                        <!-- ==========================================================
-                                         CHISHTI READER v6
-                                         PART 4 OF 25
-                                         Book Pages
-                                    =========================================================== -->
-
-                                    <article
-                                        id="leftPage"
-                                        class="book-page page-left"
-                                        aria-label="Left Page">
-
-                                        <div
-                                            class="page-paper"
-                                            aria-hidden="true"></div>
-
-                                        <div class="page-content">
-
-                                            <canvas
-                                                id="leftPageCanvas">
-                                            </canvas>
-
-                                            <div
-                                                id="leftTextLayer"
-                                                class="text-layer">
-                                            </div>
-
-                                            <div
-                                                id="leftAnnotationLayer"
-                                                class="annotation-layer">
-                                            </div>
-
-                                        </div>
-
-                                    </article>
-
-                                    <div
-                                        class="book-spine"
-                                        aria-hidden="true">
-
-                                        <div class="spine-core"></div>
-
-                                    </div>
-
-                                    <article
-                                        id="rightPage"
-                                        class="book-page page-right"
-                                        aria-label="Right Page">
-
-                                        <div
-                                            class="page-paper"
-                                            aria-hidden="true"></div>
-
-                                        <div class="page-content">
-
-                                            <canvas
-                                                id="rightPageCanvas">
-                                            </canvas>
-
-                                            <div
-                                                id="rightTextLayer"
-                                                class="text-layer">
-                                            </div>
-
-                                            <div
-                                                id="rightAnnotationLayer"
-                                                class="annotation-layer">
-                                            </div>
-
-                                        </div>
-
-                                    </article>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    </div>
+                    </canvas>
 
                 </section>
 
-            </section>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 5 OF 25
-                 Bottom Navigation
-            =========================================================== -->
+                <!-- Spine -->
 
-            <footer
-                id="readerFooter"
-                class="reader-footer"
-                role="contentinfo">
-
-                <div class="footer-group">
-
-                    <button
-                        id="firstPageButton"
-                        class="reader-button"
-                        type="button"
-                        aria-label="First Page">
-
-                        <i class="fa-solid fa-backward-fast"></i>
-
-                    </button>
-
-                    <button
-                        id="previousPageButton"
-                        class="reader-button"
-                        type="button"
-                        aria-label="Previous Page">
-
-                        <i class="fa-solid fa-chevron-left"></i>
-
-                    </button>
+                <div
+                class="book-spine">
 
                 </div>
 
-                <div class="footer-group page-status">
-
-                    <span id="pageDisplay">
-
-                        <span id="currentPageNumber">1</span>
-                        /
-                        <span id="totalPageCount">0</span>
-
-                    </span>
-
-                    <form
-                        id="pageJumpForm"
-                        autocomplete="off">
-
-                        <input
-                            id="pageNumberInput"
-                            type="number"
-                            min="1"
-                            step="1"
-                            inputmode="numeric"
-                            placeholder="Page"
-                            aria-label="Go to Page">
-
-                        <button
-                            id="pageJumpButton"
-                            class="reader-button"
-                            type="submit"
-                            aria-label="Go">
-
-                            <i class="fa-solid fa-arrow-right"></i>
-
-                        </button>
-
-                    </form>
-
-                </div>
-
-                <div class="footer-group">
-
-                    <button
-                        id="zoomOutButton"
-                        class="reader-button"
-                        type="button"
-                        aria-label="Zoom Out">
-
-                        <i class="fa-solid fa-magnifying-glass-minus"></i>
-
-                    </button>
-
-                    <button
-                        id="zoomResetButton"
-                        class="reader-button"
-                        type="button"
-                        aria-label="Reset Zoom">
-
-                        <i class="fa-solid fa-expand"></i>
-
-                    </button>
-
-                    <button
-                        id="zoomInButton"
-                        class="reader-button"
-                        type="button"
-                        aria-label="Zoom In">
-
-                        <i class="fa-solid fa-magnifying-glass-plus"></i>
-
-                    </button>
-
-                    <button
-                        id="nextPageButton"
-                        class="reader-button"
-                        type="button"
-                        aria-label="Next Page">
-
-                        <i class="fa-solid fa-chevron-right"></i>
-
-                    </button>
-
-                    <button
-                        id="lastPageButton"
-                        class="reader-button"
-                        type="button"
-                        aria-label="Last Page">
-
-                        <i class="fa-solid fa-forward-fast"></i>
-
-                    </button>
-
-                </div>
-
-            </footer>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 6 OF 25
-                 Search Dialog
-            =========================================================== -->
-
-            <div
-                id="searchOverlay"
-                class="dialog-overlay"
-                hidden>
+                <!-- Right -->
 
                 <section
-                    id="searchDialog"
-                    class="dialog"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="searchDialogTitle">
+                class="page page-right">
 
-                    <header class="dialog-header">
+                    <canvas
 
-                        <h2 id="searchDialogTitle">
+                    id="rightCanvas">
 
-                            <i class="fa-solid fa-magnifying-glass"></i>
-
-                            Search Book
-
-                        </h2>
-
-                        <button
-                            id="closeSearchButton"
-                            class="dialog-close"
-                            type="button"
-                            aria-label="Close Search">
-
-                            <i class="fa-solid fa-xmark"></i>
-
-                        </button>
-
-                    </header>
-
-                    <div class="dialog-body">
-
-                        <form
-                            id="searchForm"
-                            autocomplete="off">
-
-                            <input
-                                id="searchInput"
-                                type="search"
-                                placeholder="Search inside this book..."
-                                spellcheck="false"
-                                aria-label="Search">
-
-                            <button
-                                id="searchSubmitButton"
-                                class="primary-button"
-                                type="submit">
-
-                                Search
-
-                            </button>
-
-                        </form>
-
-                        <div class="search-navigation">
-
-                            <button
-                                id="previousResultButton"
-                                class="reader-button"
-                                type="button"
-                                aria-label="Previous Result">
-
-                                <i class="fa-solid fa-chevron-up"></i>
-
-                            </button>
-
-                            <span id="searchResultCount">
-
-                                0 / 0
-
-                            </span>
-
-                            <button
-                                id="nextResultButton"
-                                class="reader-button"
-                                type="button"
-                                aria-label="Next Result">
-
-                                <i class="fa-solid fa-chevron-down"></i>
-
-                            </button>
-
-                        </div>
-
-                        <div
-                            id="searchResults"
-                            class="search-results"
-                            aria-live="polite">
-
-                        </div>
-
-                    </div>
+                    </canvas>
 
                 </section>
 
             </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 7 OF 25
-                 Bookmark Dialog
-            =========================================================== -->
 
-            <div
-                id="bookmarkOverlay"
-                class="dialog-overlay"
-                hidden>
+        </div>
 
-                <section
-                    id="bookmarkDialog"
-                    class="dialog"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="bookmarkDialogTitle">
+    </main>
 
-                    <header class="dialog-header">
+    <!-- Bottom Toolbar -->
 
-                        <h2 id="bookmarkDialogTitle">
+    <footer
+    class="reader-toolbar">
 
-                            <i class="fa-solid fa-bookmark"></i>
+        <button
+        id="firstPage">
 
-                            Bookmarks
+            ⏮
 
-                        </h2>
+        </button>
 
-                        <button
-                            id="closeBookmarkButton"
-                            class="dialog-close"
-                            type="button"
-                            aria-label="Close Bookmarks">
+        <button
+        id="previousPage">
 
-                            <i class="fa-solid fa-xmark"></i>
+            ◀
 
-                        </button>
+        </button>
 
-                    </header>
+        <div
+        class="page-box">
 
-                    <div
-                        id="bookmarkList"
-                        class="dialog-body">
+            <input
 
-                    </div>
+            id="pageNumber"
 
-                    <footer class="dialog-footer">
+            type="number"
 
-                        <button
-                            id="addBookmarkButton"
-                            class="primary-button"
-                            type="button">
+            value="1">
 
-                            <i class="fa-solid fa-bookmark"></i>
+            <span>
 
-                            <span>Add Current Page</span>
+                /
 
-                        </button>
+            </span>
 
-                        <button
-                            id="clearBookmarksButton"
-                            class="secondary-button"
-                            type="button">
+            <span
+            id="totalPages">
 
-                            <i class="fa-solid fa-trash"></i>
+                0
 
-                            <span>Clear All</span>
+            </span>
 
-                        </button>
+        </div>
 
-                    </footer>
+        <button
+        id="nextPage">
 
-                </section>
+            ▶
 
-            </div>v
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 8 OF 25
-                 Settings Dialog
-            =========================================================== -->
+        </button>
 
-            <div
-                id="settingsOverlay"
-                class="dialog-overlay"
-                hidden>
+        <button
+        id="lastPage">
 
-                <section
-                    id="settingsDialog"
-                    class="dialog"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="settingsDialogTitle">
+            ⏭
 
-                    <header class="dialog-header">
+        </button>
 
-                        <h2 id="settingsDialogTitle">
+        <button
+        id="zoomOut">
 
-                            <i class="fa-solid fa-gear"></i>
+            −
 
-                            Reader Settings
+        </button>
 
-                        </h2>
+        <button
+        id="zoomIn">
 
-                        <button
-                            id="closeSettingsButton"
-                            class="dialog-close"
-                            type="button"
-                            aria-label="Close Settings">
+            +
 
-                            <i class="fa-solid fa-xmark"></i>
+        </button>
 
-                        </button>
+        <button
+        id="rotateBook">
 
-                    </header>
+            ↻
 
-                    <div class="dialog-body">
+        </button>
 
-                        <div class="setting-item">
+    </footer>
 
-                            <label for="themeSelect">
-
-                                Theme
-
-                            </label>
-
-                            <select id="themeSelect">
-
-                                <option value="maroon">Maroon Gold</option>
-                                <option value="dark">Dark</option>
-                                <option value="light">Light</option>
-                                <option value="sepia">Sepia</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="setting-item">
-
-                            <label for="defaultZoom">
-
-                                Default Zoom
-
-                            </label>
-
-                            <select id="defaultZoom">
-
-                                <option value="fit-width">Fit Width</option>
-                                <option value="fit-page">Fit Page</option>
-                                <option value="100">100%</option>
-                                <option value="125">125%</option>
-                                <option value="150">150%</option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="setting-item">
-
-                            <label for="animationToggle">
-
-                                Enable Animations
-
-                            </label>
-
-                            <input
-                                id="animationToggle"
-                                type="checkbox"
-                                checked>
-
-                        </div>
-
-                        <div class="setting-item">
-
-                            <label for="continueReadingToggle">
-
-                                Continue Reading
-
-                            </label>
-
-                            <input
-                                id="continueReadingToggle"
-                                type="checkbox"
-                                checked>
-
-                        </div>
-
-                        <div class="setting-item">
-
-                            <label for="performanceModeToggle">
-
-                                Performance Mode
-
-                            </label>
-
-                            <input
-                                id="performanceModeToggle"
-                                type="checkbox">
-
-                        </div>
-
-                    </div>
-
-                    <footer class="dialog-footer">
-
-                        <button
-                            id="saveSettingsButton"
-                            class="primary-button"
-                            type="button">
-
-                            Save Settings
-
-                        </button>
-
-                    </footer>
-
-                </section>
-
-            </div>v
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 9 OF 25
-                 Status & Notification System
-            =========================================================== -->
-
-            <section
-                id="readerStatusBar"
-                class="reader-status-bar"
-                aria-label="Reader Status">
-
-                <div class="status-item">
-
-                    <span class="status-label">
-
-                        Zoom
-
-                    </span>
-
-                    <span id="zoomStatus">
-
-                        100%
-
-                    </span>
-
-                </div>
-
-                <div class="status-item">
-
-                    <span class="status-label">
-
-                        Page
-
-                    </span>
-
-                    <span id="pageStatus">
-
-                        Ready
-
-                    </span>
-
-                </div>
-
-                <div class="status-item">
-
-                    <span class="status-label">
-
-                        Render
-
-                    </span>
-
-                    <span id="renderStatus">
-
-                        Idle
-
-                    </span>
-
-                </div>
-
-            </section>
-
-            <aside
-                id="toastNotification"
-                class="toast-notification"
-                role="status"
-                aria-live="polite"
-                aria-atomic="true"
-                hidden>
-
-                <div class="toast-icon">
-
-                    <i
-                        id="toastIcon"
-                        class="fa-solid fa-circle-check"></i>
-
-                </div>
-
-                <div class="toast-content">
-
-                    <h3 id="toastTitle">
-
-                        Success
-
-                    </h3>
-
-                    <p id="toastMessage">
-
-                        Operation completed successfully.
-
-                    </p>
-
-                </div>
-
-                <button
-                    id="closeToastButton"
-                    class="toast-close"
-                    type="button"
-                    aria-label="Close Notification">
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-            </aside>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 10 OF 25
-                 Loader & Error System
-            =========================================================== -->
-
-            <div
-                id="appLoading"
-                class="app-loading"
-                role="status"
-                aria-live="polite"
-                hidden>
-
-                <div class="loading-card">
-
-                    <img
-                        src="logo.png"
-                        alt="Chishti Reader"
-                        class="loading-logo">
-
-                    <div
-                        class="loading-animation"
-                        aria-hidden="true">
-
-                        <span></span>
-                        <span></span>
-                        <span></span>
-
-                    </div>
-
-                    <div class="loading-progress">
-
-                        <div
-                            id="loadingProgressBar"
-                            class="loading-progress-fill">
-                        </div>
-
-                    </div>
-
-                    <p id="loadingText">
-
-                        Loading Reader...
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <section
-                id="errorDialog"
-                class="error-dialog"
-                role="alertdialog"
-                aria-labelledby="errorTitle"
-                hidden>
-
-                <div class="error-card">
-
-                    <div class="error-icon">
-
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-
-                    </div>
-
-                    <h2 id="errorTitle">
-
-                        Something Went Wrong
-
-                    </h2>
-
-                    <p id="errorMessage">
-
-                        Unable to load the requested document.
-
-                    </p>
-
-                    <div class="error-actions">
-
-                        <button
-                            id="retryButton"
-                            class="primary-button"
-                            type="button">
-
-                            Retry
-
-                        </button>
-
-                        <button
-                            id="closeErrorButton"
-                            class="secondary-button"
-                            type="button">
-
-                            Close
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </section>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 11 OF 25
-                 Accessibility & Live Regions
-            =========================================================== -->
-
-            <div
-                id="readerAnnouncement"
-                class="visually-hidden"
-                aria-live="polite"
-                aria-atomic="true">
-            </div>
-
-            <div
-                id="readerAlert"
-                class="visually-hidden"
-                aria-live="assertive"
-                aria-atomic="true">
-            </div>
-
-            <div
-                id="readerBusyState"
-                class="visually-hidden"
-                aria-live="polite">
-
-                Ready
-
-            </div>
-
-            <div
-                id="keyboardHelp"
-                class="visually-hidden">
-
-                Arrow keys navigate pages.
-                Plus and minus control zoom.
-                Escape closes open dialogs.
-
-            </div>
-
-            <noscript>
-
-                <section
-                    class="noscript-warning">
-
-                    <h2>
-
-                        JavaScript Required
-
-                    </h2>
-
-                    <p>
-
-                        Chishti Reader requires JavaScript to provide the complete reading experience.
-
-                    </p>
-
-                </section>
-
-            </noscript>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 12 OF 25
-                 Runtime Containers
-            =========================================================== -->
-
-            <div
-                id="runtimeRoot"
-                hidden
-                aria-hidden="true">
-
-                <input
-                    id="currentBookId"
-                    type="hidden"
-                    value="">
-
-                <input
-                    id="currentPageIndex"
-                    type="hidden"
-                    value="1">
-
-                <input
-                    id="currentZoomLevel"
-                    type="hidden"
-                    value="1">
-
-                <input
-                    id="currentTheme"
-                    type="hidden"
-                    value="maroon">
-
-                <input
-                    id="currentViewMode"
-                    type="hidden"
-                    value="double">
-
-            </div>
-
-            <div
-                id="pdfRenderRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="textLayerRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="annotationLayerRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="searchHighlightRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="modalRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="portalRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 13 OF 25
-                 Application Data Layer
-            =========================================================== -->
-
-            <template id="bookmarkItemTemplate">
-
-                <article class="bookmark-item">
-
-                    <button
-                        class="bookmark-link"
-                        type="button">
-
-                        <span class="bookmark-title"></span>
-
-                        <span class="bookmark-page"></span>
-
-                    </button>
-
-                </article>
-
-            </template>
-
-            <template id="searchResultTemplate">
-
-                <article class="search-result">
-
-                    <button
-                        class="search-result-link"
-                        type="button">
-
-                        <h3 class="search-result-title"></h3>
-
-                        <p class="search-result-snippet"></p>
-
-                        <span class="search-result-page"></span>
-
-                    </button>
-
-                </article>
-
-            </template>
-
-            <template id="toastTemplate">
-
-                <div class="toast">
-
-                    <i class="toast-icon fa-solid fa-circle-info"></i>
-
-                    <div class="toast-body">
-
-                        <h4 class="toast-heading"></h4>
-
-                        <p class="toast-text"></p>
-
-                    </div>
-
-                </div>
-
-            </template>
-
-            <template id="pageThumbnailTemplate">
-
-                <button
-                    class="page-thumbnail"
-                    type="button">
-
-                    <canvas class="thumbnail-canvas"></canvas>
-
-                    <span class="thumbnail-label"></span>
-
-                </button>
-
-            </template>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 14 OF 25
-                 Bootstrap Containers
-            =========================================================== -->
-
-            <div
-                id="overlayRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="floatingUiRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="contextMenuRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="tooltipRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="dropdownRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="imageCacheRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="workerRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-
-            <div
-                id="eventRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 15 OF 25
-                 Application State
-            =========================================================== -->
-
-            <template id="appStateTemplate">
-
-                <input
-                    id="stateDocumentLoaded"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="stateRendering"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="stateSearching"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="stateFullscreen"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="stateSidebarOpen"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="stateActiveDialog"
-                    type="hidden"
-                    value="">
-
-                <input
-                    id="stateCurrentRotation"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="stateCurrentSpread"
-                    type="hidden"
-                    value="double">
-
-            </template>
-
-            <div
-                id="appStateRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 16 OF 25
-                 Reader Preferences
-            =========================================================== -->
-
-            <template id="readerPreferencesTemplate">
-
-                <input
-                    id="prefTheme"
-                    type="hidden"
-                    value="maroon">
-
-                <input
-                    id="prefZoom"
-                    type="hidden"
-                    value="fit-width">
-
-                <input
-                    id="prefViewMode"
-                    type="hidden"
-                    value="double">
-
-                <input
-                    id="prefAnimation"
-                    type="hidden"
-                    value="true">
-
-                <input
-                    id="prefAutoResume"
-                    type="hidden"
-                    value="true">
-
-                <input
-                    id="prefPerformanceMode"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="prefSidebar"
-                    type="hidden"
-                    value="closed">
-
-                <input
-                    id="prefLanguage"
-                    type="hidden"
-                    value="en">
-
-            </template>
-
-            <div
-                id="preferencesRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 17 OF 25
-                 Reader Session
-            =========================================================== -->
-
-            <template id="readerSessionTemplate">
-
-                <input
-                    id="sessionId"
-                    type="hidden"
-                    value="">
-
-                <input
-                    id="sessionBookId"
-                    type="hidden"
-                    value="">
-
-                <input
-                    id="sessionCurrentPage"
-                    type="hidden"
-                    value="1">
-
-                <input
-                    id="sessionZoomLevel"
-                    type="hidden"
-                    value="1">
-
-                <input
-                    id="sessionScrollPosition"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="sessionRotation"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="sessionViewMode"
-                    type="hidden"
-                    value="double">
-
-                <input
-                    id="sessionLastOpened"
-                    type="hidden"
-                    value="">
-
-            </template>
-
-            <div
-                id="sessionRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 18 OF 25
-                 Reader Cache
-            =========================================================== -->
-
-            <template id="readerCacheTemplate">
-
-                <input
-                    id="cacheDocumentReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="cachePageCount"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="cacheRenderedPages"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="cacheThumbnailCount"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="cacheBookmarkCount"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="cacheSearchCount"
-                    type="hidden"
-                    value="0">
-
-                <input
-                    id="cacheVersion"
-                    type="hidden"
-                    value="1">
-
-            </template>
-
-            <div
-                id="cacheRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 19 OF 25
-                 Reader Services
-            =========================================================== -->
-
-            <template id="serviceRegistryTemplate">
-
-                <input
-                    id="pdfServiceReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="renderServiceReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="searchServiceReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="bookmarkServiceReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="storageServiceReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="themeServiceReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="eventServiceReady"
-                    type="hidden"
-                    value="false">
-
-                <input
-                    id="applicationReady"
-                    type="hidden"
-                    value="false">
-
-            </template>
-
-            <div
-                id="serviceRoot"
-                hidden
-                aria-hidden="true">
-            </div>
-                        <!-- ==========================================================
-                 CHISHTI READER v6
-                 PART 20 OF 25
-                 Application Bootstrap
-            =========================================================== -->
-
-        </main>
-
-    </div>
-    <!-- End .reader-shell -->
-
-    <script
-        src="reader.js"
-        defer>
-    </script>
-
-    <script>
-
-        (() => {
-
-            "use strict";
-
-            document.addEventListener(
-                "DOMContentLoaded",
-                () => {
-
-                    document.documentElement.classList.add("reader-ready");
-
-                },
-                {
-                    once: true
-                }
-            );
-
-        })();
-
-    </script>
+</div>
 
 </body>
 
