@@ -1,204 +1,325 @@
 /* ==========================================================
-   CHISHTI READER v6
+   CHISHTI READER PRO v7
+   PART 2 OF 40
    reader.css
-   PART 1 OF 25
-   Foundation
+   Root + Layout + Background
 ========================================================== */
+
+/* ===========================
+   Root
+=========================== */
+
+:root{
+
+    --maroon:#4b0000;
+
+    --maroon-dark:#2f0000;
+
+    --gold:#d4af37;
+
+    --gold-light:#f3d77c;
+
+    --white:#ffffff;
+
+    --paper:#faf7f1;
+
+    --page:#fffdf8;
+
+    --text:#181818;
+
+    --border:rgba(255,255,255,.08);
+
+    --shadow:
+
+        0 25px 60px rgba(0,0,0,.45);
+
+    --radius:18px;
+
+    --speed:.35s;
+
+}
 
 /* ===========================
    Reset
 =========================== */
 
-*,
-*::before,
-*::after{
+*{
+
     margin:0;
+
     padding:0;
+
     box-sizing:border-box;
-}
-
-/* ===========================
-   Root Variables
-=========================== */
-
-:root{
-
-    --color-primary:#5b0000;
-    --color-secondary:#8d5a00;
-    --color-accent:#d4af37;
-
-    --color-bg:#120909;
-    --color-surface:#1c1010;
-    --color-surface-light:#281818;
-
-    --color-text:#f5f5f5;
-    --color-text-muted:#bcbcbc;
-    --color-border:rgba(255,255,255,.08);
-
-    --shadow-sm:0 2px 8px rgba(0,0,0,.20);
-    --shadow-md:0 10px 30px rgba(0,0,0,.35);
-    --shadow-lg:0 20px 50px rgba(0,0,0,.50);
-
-    --radius-sm:.5rem;
-    --radius-md:1rem;
-    --radius-lg:1.5rem;
-
-    --header-height:72px;
-    --footer-height:76px;
-
-    --transition-fast:.2s ease;
-    --transition-normal:.3s ease;
-    --transition-slow:.5s ease;
-
-    --font-family:"Poppins",sans-serif;
 
 }
-
-/* ===========================
-   Base
-=========================== */
 
 html{
 
-    font-size:16px;
     scroll-behavior:smooth;
 
 }
 
 body{
 
-    min-height:100vh;
+    font-family:"Poppins",sans-serif;
 
-    font-family:var(--font-family);
+    background:var(--maroon);
 
-    color:var(--color-text);
-
-    background:var(--color-bg);
+    color:var(--white);
 
     overflow:hidden;
 
-    -webkit-font-smoothing:antialiased;
-
-    text-rendering:optimizeLegibility;
-
 }
 
 /* ===========================
-   Media
+   App
 =========================== */
 
-img{
-
-    display:block;
-    max-width:100%;
-    height:auto;
-
-}
-
-canvas{
-
-    display:block;
-
-}
-
-button,
-input,
-select{
-
-    font:inherit;
-    outline:none;
-    border:none;
-
-}
-
-button{
-
-    cursor:pointer;
-    background:none;
-
-}
-
-a{
-
-    color:inherit;
-    text-decoration:none;
-
-}
-
-ul,
-ol{
-
-    list-style:none;
-
-}
-
-/* ===========================
-   Accessibility
-=========================== */
-
-.visually-hidden{
-
-    position:absolute;
-
-    width:1px;
-    height:1px;
-
-    margin:-1px;
-
-    overflow:hidden;
-
-    clip:rect(0,0,0,0);
-
-    white-space:nowrap;
-
-    border:0;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 2 OF 25
-   Application Layout
-========================================================== */
-
-/* ===========================
-   Body
-=========================== */
-
-body.reader-app{
+.reader-app{
 
     position:relative;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    width:100vw;
 
-    width:100%;
-    min-height:100vh;
-
-    overflow:hidden;
-
-}
-
-/* ===========================
-   Reader Shell
-=========================== */
-
-.reader-shell{
-
-    position:relative;
-
-    display:flex;
-    flex-direction:column;
-
-    width:100%;
     height:100vh;
 
     overflow:hidden;
 
-    isolation:isolate;
+}
+
+/* ===========================
+   Background
+=========================== */
+
+.reader-background{
+
+    position:absolute;
+
+    inset:0;
+
+    z-index:-2;
+
+    overflow:hidden;
 
 }
+
+.bg-pattern{
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+
+        radial-gradient(
+
+            rgba(255,255,255,.025),
+
+            transparent 70%
+
+        );
+
+}
+
+.bg-glow{
+
+    position:absolute;
+
+    width:650px;
+
+    height:650px;
+
+    border-radius:50%;
+
+    filter:blur(120px);
+
+    opacity:.18;
+
+}
+
+.glow-left{
+
+    top:-200px;
+
+    left:-200px;
+
+    background:var(--gold);
+
+}
+
+.glow-right{
+
+    bottom:-250px;
+
+    right:-150px;
+
+    background:#ffae00;
+
+}
+
+/* ===========================
+   Header
+=========================== */
+
+.reader-header{
+
+    height:82px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    background:rgba(20,0,0,.92);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.header-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+}
+
+.reader-logo{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    object-fit:cover;
+
+    box-shadow:
+
+        0 0 25px rgba(212,175,55,.4);
+
+}
+
+.header-left h1{
+
+    font-size:28px;
+
+    color:var(--white);
+
+    font-weight:800;
+
+}
+
+.header-left span{
+
+    color:var(--gold-light);
+
+    font-size:13px;
+
+}
+
+.header-center{
+
+    width:42%;
+
+}
+
+.search-box{
+
+    display:flex;
+
+    align-items:center;
+
+    background:#ffffff;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    height:54px;
+
+}
+
+.search-box input{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    padding:0 18px;
+
+    font-size:15px;
+
+    background:transparent;
+
+}
+
+.search-box i{
+
+    padding-left:20px;
+
+    color:#555;
+
+}
+
+.header-right{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.icon-button{
+
+    width:48px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
+
+    color:#fff;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    transition:all var(--speed);
+
+}
+
+.icon-button:hover{
+
+    background:var(--gold);
+
+    color:#222;
+
+    transform:translateY(-3px);
+
+}
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 3 OF 40
+   reader.css
+   Book Stage + Real Book Design
+========================================================== */
 
 /* ===========================
    Reader Stage
@@ -208,557 +329,189 @@ body.reader-app{
 
     position:relative;
 
-    flex:1;
+    width:100%;
+
+    height:calc(100vh - 162px);
 
     display:flex;
+
     justify-content:center;
+
     align-items:center;
 
     overflow:hidden;
 
-    padding:1rem;
+    perspective:2600px;
 
 }
 
 /* ===========================
-   Background System
+   Book Stage
 =========================== */
 
-.background-system{
-
-    position:fixed;
-
-    inset:0;
-
-    overflow:hidden;
-
-    pointer-events:none;
-
-    z-index:-10;
-
-}
-
-.background-overlay,
-.background-grid,
-.background-gradient,
-.background-noise,
-.background-glow{
-
-    position:absolute;
-
-    inset:0;
-
-}
-
-.background-overlay{
-
-    background:
-        linear-gradient(
-            180deg,
-            rgba(0,0,0,.25),
-            rgba(0,0,0,.55)
-        );
-
-}
-
-.background-grid{
-
-    background-image:
-
-        linear-gradient(
-            rgba(255,255,255,.03) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.03) 1px,
-            transparent 1px
-        );
-
-    background-size:40px 40px;
-
-    opacity:.30;
-
-}
-
-.background-gradient{
-
-    background:
-
-        radial-gradient(
-            circle at top,
-            rgba(212,175,55,.18),
-            transparent 55%
-        ),
-
-        radial-gradient(
-            circle at bottom,
-            rgba(91,0,0,.35),
-            transparent 60%
-        );
-
-}
-
-.background-noise{
-
-    opacity:.04;
-
-}
-
-.background-glow{
-
-    filter:blur(120px);
-
-    opacity:.35;
-
-}
-
-.glow-left{
-
-    left:-15%;
-    width:40%;
-    background:rgba(212,175,55,.25);
-
-}
-
-.glow-right{
-
-    right:-15%;
-    width:40%;
-    background:rgba(120,0,0,.28);
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 3 OF 25
-   Header
-========================================================== */
-
-/* ===========================
-   Header
-=========================== */
-
-.app-header{
+.book-stage{
 
     position:relative;
 
     display:flex;
-    justify-content:space-between;
+
+    justify-content:center;
+
     align-items:center;
 
     width:100%;
-    height:var(--header-height);
 
-    padding:0 1.5rem;
-
-    background:rgba(28,16,16,.88);
-
-    backdrop-filter:blur(18px);
-
-    border-bottom:1px solid var(--color-border);
-
-    box-shadow:var(--shadow-sm);
-
-    z-index:100;
+    height:100%;
 
 }
 
 /* ===========================
-   Header Sections
+   Book Shadow
 =========================== */
 
-.header-left,
-.header-center,
-.header-right{
+.book-shadow{
 
-    display:flex;
-    align-items:center;
-    gap:1rem;
+    position:absolute;
 
-}
+    width:860px;
 
-.header-center{
+    height:70px;
 
-    flex:1;
-    justify-content:center;
-
-}
-
-.header-right{
-
-    justify-content:flex-end;
-
-}
-
-/* ===========================
-   Brand
-=========================== */
-
-.reader-brand{
-
-    display:flex;
-    align-items:center;
-    gap:.75rem;
-
-}
-
-.brand-logo{
-
-    width:48px;
-    height:48px;
-
-    object-fit:contain;
-
-}
-
-.brand-content{
-
-    display:flex;
-    flex-direction:column;
-
-}
-
-.brand-title{
-
-    font-size:1rem;
-    font-weight:700;
-    letter-spacing:.08em;
-
-    color:var(--color-accent);
-
-}
-
-.brand-subtitle{
-
-    font-size:.72rem;
-
-    color:var(--color-text-muted);
-
-}
-
-/* ===========================
-   Current Book
-=========================== */
-
-.current-book{
-
-    display:flex;
-    align-items:center;
-    gap:.6rem;
-
-    color:var(--color-text);
-
-    font-weight:500;
-
-}
-
-/* ===========================
-   Header Buttons
-=========================== */
-
-.header-button{
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:44px;
-    height:44px;
-
-    color:var(--color-text);
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
+    bottom:80px;
 
     border-radius:50%;
+
+    background:
+
+        rgba(0,0,0,.55);
+
+    filter:blur(35px);
+
+    transform:scale(.92);
+
+    animation:
+
+        bookShadow 4s ease-in-out infinite;
+
+}
+
+/* ===========================
+   Real Book
+=========================== */
+
+.real-book{
+
+    position:relative;
+
+    display:flex;
+
+    width:920px;
+
+    height:620px;
+
+    border-radius:10px;
+
+    transform-style:preserve-3d;
+
+    animation:
+
+        bookEntrance .9s ease;
 
     transition:
-        background var(--transition-fast),
-        color var(--transition-fast),
-        transform var(--transition-fast);
+
+        transform .45s ease;
 
 }
-
-.header-button:hover{
-
-    background:var(--color-primary);
-
-    color:var(--color-accent);
-
-}
-
-.header-button:active{
-
-    transform:scale(.95);
-
-}
-
-.header-button i{
-
-    font-size:1rem;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 4 OF 25
-   Reader Workspace & Book
-========================================================== */
 
 /* ===========================
-   Reader Workspace
+   Book Hover
 =========================== */
 
-.reader-workspace{
+.real-book:hover{
 
-    position:relative;
+    transform:
 
-    flex:1;
+        rotateX(2deg)
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+        rotateY(-2deg)
 
-    overflow:hidden;
-
-    padding:2rem;
+        translateY(-4px);
 
 }
 
 /* ===========================
-   Reader Engine
-=========================== */
-
-.reader-engine{
-
-    position:relative;
-
-    width:100%;
-    height:100%;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    perspective:2200px;
-
-}
-
-/* ===========================
-   Perspective
-=========================== */
-
-.reader-perspective{
-
-    position:relative;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:100%;
-    height:100%;
-
-}
-
-/* ===========================
-   Book Viewer
-=========================== */
-
-.book-viewer{
-
-    position:relative;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:min(1200px,100%);
-    height:100%;
-
-}
-
-/* ===========================
-   Book Frame
-=========================== */
-
-.book-frame{
-
-    position:relative;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:100%;
-    max-width:1100px;
-
-}
-
-/* ===========================
-   Book Container
-=========================== */
-
-.book-container{
-
-    position:relative;
-
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
-
-    align-items:stretch;
-
-    width:100%;
-    max-width:1000px;
-    aspect-ratio:1.55;
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-lg);
-
-    overflow:hidden;
-
-    box-shadow:var(--shadow-lg);
-
-}
-
-/* ===========================
-   Book Glow
-=========================== */
-
-.book-glow{
-
-    position:absolute;
-
-    top:50%;
-
-    width:220px;
-    height:220px;
-
-    border-radius:50%;
-
-    filter:blur(90px);
-
-    opacity:.25;
-
-    transform:translateY(-50%);
-
-    pointer-events:none;
-
-}
-
-.left-glow{
-
-    left:-80px;
-
-    background:var(--color-accent);
-
-}
-
-.right-glow{
-
-    right:-80px;
-
-    background:var(--color-primary);
-
-}
-
-/* ===========================
-   Gesture Layer
-=========================== */
-
-.gesture-layer{
-
-    position:absolute;
-
-    inset:0;
-
-    z-index:20;
-
-    touch-action:none;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 5 OF 25
-   Book Pages
-========================================================== */
-
-/* ===========================
-   Book Pages
-=========================== */
-
-.book-page{
-
-    position:relative;
-
-    overflow:hidden;
-
-    background:#fdfaf3;
-
-    user-select:none;
-
-}
-
-/* ===========================
-   Left Page
-=========================== */
-
-.page-left{
-
-    border-right:1px solid rgba(0,0,0,.08);
-
-}
-
-/* ===========================
-   Right Page
-=========================== */
-
-.page-right{
-
-    border-left:1px solid rgba(0,0,0,.05);
-
-}
-
-/* ===========================
-   Spine
+   Book Spine
 =========================== */
 
 .book-spine{
 
     position:relative;
 
-    width:24px;
+    width:30px;
 
     background:
+
         linear-gradient(
-            90deg,
-            #2a1818,
-            #4a2a2a,
-            #2a1818
+
+            to right,
+
+            #2b0000,
+
+            #5a1111,
+
+            #240000
+
         );
 
     box-shadow:
-        inset 0 0 12px rgba(0,0,0,.45);
+
+        inset 3px 0 8px rgba(255,255,255,.08),
+
+        inset -5px 0 10px rgba(0,0,0,.45);
+
+    z-index:5;
 
 }
 
 /* ===========================
-   Page Canvas
+   Book Pages
 =========================== */
 
-.page-canvas{
+.page{
 
-    display:block;
+    position:relative;
 
-    width:100%;
-    height:100%;
+    flex:1;
+
+    background:
+
+        var(--page);
+
+    overflow:hidden;
+
+    box-shadow:
+
+        inset 0 0 25px rgba(0,0,0,.08);
+
+}
+
+/* Left */
+
+.page-left{
+
+    border-radius:
+
+        8px 0 0 8px;
+
+}
+
+/* Right */
+
+.page-right{
+
+    border-radius:
+
+        0 8px 8px 0;
 
 }
 
@@ -766,2893 +519,85 @@ body.reader-app{
    Paper Texture
 =========================== */
 
-.page-paper{
+.page::before{
+
+    content:"";
 
     position:absolute;
 
     inset:0;
-
-    pointer-events:none;
 
     background:
-        linear-gradient(
-            rgba(255,255,255,.15),
-            rgba(0,0,0,.02)
+
+        radial-gradient(
+
+            rgba(0,0,0,.015),
+
+            transparent 75%
+
         );
 
+    pointer-events:none;
+
 }
 
 /* ===========================
-   Page Highlight
+   Inner Shadows
 =========================== */
 
-.page-highlight{
+.page-left::after{
+
+    content:"";
 
     position:absolute;
 
-    inset:0;
+    right:0;
 
-    pointer-events:none;
+    top:0;
 
-    background:
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.18),
-            transparent 28%
-        );
-
-}
-
-/* ===========================
-   Page Reflection
-=========================== */
-
-.page-reflection{
-
-    position:absolute;
-
-    inset:0;
-
-    pointer-events:none;
-
-    opacity:.35;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.12),
-            transparent 45%
-        );
-
-}
-
-/* ===========================
-   Flip Layer
-=========================== */
-
-.page-flip-layer{
-
-    position:absolute;
-
-    inset:0;
-
-    pointer-events:none;
-
-    z-index:15;
-
-}
-
-/* ===========================
-   Render Layer
-=========================== */
-
-.page-render-layer{
-
-    position:relative;
-
-    width:100%;
-    height:100%;
-
-    overflow:hidden;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 6 OF 25
-   Reader Footer & Controls
-========================================================== */
-
-/* ===========================
-   Reader Footer
-=========================== */
-
-.reader-footer{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:1rem;
-
-    width:100%;
-    min-height:var(--footer-height);
-
-    padding:0 1.5rem;
-
-    background:rgba(28,16,16,.92);
-
-    backdrop-filter:blur(16px);
-
-    border-top:1px solid var(--color-border);
-
-    box-shadow:0 -4px 20px rgba(0,0,0,.20);
-
-}
-
-/* ===========================
-   Footer Groups
-=========================== */
-
-.footer-group{
-
-    display:flex;
-    align-items:center;
-    gap:.75rem;
-
-}
-
-.footer-status{
-
-    flex:1;
-
-    justify-content:center;
-
-}
-
-/* ===========================
-   Reader Controls
-=========================== */
-
-.reader-control{
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:44px;
-    height:44px;
-
-    color:var(--color-text);
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
-
-    border-radius:50%;
-
-    transition:
-        background var(--transition-fast),
-        color var(--transition-fast),
-        transform var(--transition-fast);
-
-}
-
-.reader-control:hover{
-
-    color:var(--color-accent);
-
-    background:var(--color-primary);
-
-}
-
-.reader-control:active{
-
-    transform:scale(.95);
-
-}
-
-.reader-control:disabled{
-
-    opacity:.45;
-
-    cursor:not-allowed;
-
-}
-
-/* ===========================
-   Page Counter
-=========================== */
-
-.page-counter{
-
-    display:flex;
-    align-items:center;
-    gap:.4rem;
-
-    font-size:.95rem;
-    font-weight:600;
-
-    color:var(--color-text);
-
-}
-
-/* ===========================
-   Page Navigation
-=========================== */
-
-.page-navigation-form{
-
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-
-}
-
-.page-navigation-form input{
-
-    width:80px;
-    height:40px;
-
-    padding:0 .75rem;
-
-    color:var(--color-text);
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-sm);
-
-    text-align:center;
-
-}
-
-.page-navigation-form input:focus{
-
-    border-color:var(--color-accent);
-
-}
-
-/* ===========================
-   Compact Control
-=========================== */
-
-.compact-control{
-
-    width:40px;
-    height:40px;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 7 OF 25
-   Dialog System
-========================================================== */
-
-/* ===========================
-   Overlay
-=========================== */
-
-.dialog-overlay{
-
-    position:fixed;
-
-    inset:0;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    padding:2rem;
-
-    background:rgba(0,0,0,.65);
-
-    backdrop-filter:blur(10px);
-
-    z-index:1000;
-
-}
-
-/* ===========================
-   Dialog
-=========================== */
-
-.dialog{
-
-    width:100%;
-    max-width:620px;
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-lg);
-
-    box-shadow:var(--shadow-lg);
-
-    overflow:hidden;
-
-    animation:dialogFade .25s ease;
-
-}
-
-/* ===========================
-   Dialog Header
-=========================== */
-
-.dialog-header{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    padding:1rem 1.5rem;
-
-    background:var(--color-primary);
-
-    color:var(--color-text);
-
-}
-
-.dialog-header h2{
-
-    display:flex;
-    align-items:center;
-    gap:.75rem;
-
-    font-size:1.05rem;
-
-    font-weight:600;
-
-}
-
-/* ===========================
-   Close Button
-=========================== */
-
-.dialog-close{
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:40px;
-    height:40px;
-
-    color:var(--color-text);
-
-    border-radius:50%;
-
-    transition:
-        background var(--transition-fast),
-        transform var(--transition-fast);
-
-}
-
-.dialog-close:hover{
-
-    background:rgba(255,255,255,.12);
-
-}
-
-.dialog-close:active{
-
-    transform:scale(.95);
-
-}
-
-/* ===========================
-   Dialog Body
-=========================== */
-
-.dialog-body{
-
-    display:flex;
-    flex-direction:column;
-    gap:1rem;
-
-    padding:1.5rem;
-
-}
-
-/* ===========================
-   Dialog Footer
-=========================== */
-
-.dialog-footer{
-
-    display:flex;
-    justify-content:flex-end;
-    gap:.75rem;
-
-    padding:1rem 1.5rem;
-
-    border-top:1px solid var(--color-border);
-
-}
-
-/* ===========================
-   Primary Button
-=========================== */
-
-.primary-button{
-
-    padding:.75rem 1.5rem;
-
-    color:#fff;
-
-    background:var(--color-primary);
-
-    border-radius:var(--radius-sm);
-
-    font-weight:600;
-
-    transition:
-        background var(--transition-fast),
-        transform var(--transition-fast);
-
-}
-
-.primary-button:hover{
-
-    background:#720000;
-
-}
-
-.primary-button:active{
-
-    transform:scale(.98);
-
-}
-
-/* ===========================
-   Dialog Animation
-=========================== */
-
-@keyframes dialogFade{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(18px) scale(.96);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0) scale(1);
-
-    }
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 8 OF 25
-   Search, Bookmark & Settings
-========================================================== */
-
-/* ===========================
-   Search Form
-=========================== */
-
-.search-form{
-
-    display:flex;
-    align-items:center;
-    gap:.75rem;
-
-}
-
-.search-form input{
-
-    flex:1;
-
-    height:48px;
-
-    padding:0 1rem;
-
-    color:var(--color-text);
-
-    background:var(--color-bg);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-md);
-
-}
-
-.search-form input:focus{
-
-    border-color:var(--color-accent);
-
-}
-
-/* ===========================
-   Dialog Actions
-=========================== */
-
-.dialog-action{
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:48px;
-    height:48px;
-
-    color:var(--color-text);
-
-    background:var(--color-primary);
-
-    border-radius:var(--radius-md);
-
-    transition:
-        background var(--transition-fast),
-        transform var(--transition-fast);
-
-}
-
-.dialog-action:hover{
-
-    background:#720000;
-
-}
-
-.dialog-action:active{
-
-    transform:scale(.96);
-
-}
-
-/* ===========================
-   Search Results
-=========================== */
-
-.search-results{
-
-    display:flex;
-    flex-direction:column;
-    gap:.75rem;
-
-    max-height:360px;
-
-    overflow-y:auto;
-
-}
-
-.search-result{
-
-    padding:1rem;
-
-    background:var(--color-bg);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-sm);
-
-}
-
-/* ===========================
-   Bookmark List
-=========================== */
-
-.bookmark-list{
-
-    display:flex;
-    flex-direction:column;
-    gap:.75rem;
-
-    max-height:400px;
-
-    overflow-y:auto;
-
-}
-
-.bookmark-item{
-
-    padding:1rem;
-
-    background:var(--color-bg);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-sm);
-
-}
-
-/* ===========================
-   Settings
-=========================== */
-
-.setting-item{
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-
-    gap:1rem;
-
-    padding:.9rem 0;
-
-}
-
-.setting-item label{
-
-    font-weight:500;
-
-    color:var(--color-text);
-
-}
-
-.setting-item select{
-
-    min-width:170px;
-
-    padding:.65rem .9rem;
-
-    color:var(--color-text);
-
-    background:var(--color-bg);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-sm);
-
-}
-
-.setting-item input[type="checkbox"]{
-
-    width:20px;
-    height:20px;
-
-    accent-color:var(--color-accent);
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 9 OF 25
-   Status, Toast & Loader
-========================================================== */
-
-/* ===========================
-   Status Bar
-=========================== */
-
-.reader-status-bar{
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    gap:2rem;
-
-    padding:.85rem 1.5rem;
-
-    background:rgba(18,9,9,.88);
-
-    border-top:1px solid var(--color-border);
-
-}
-
-.status-item{
-
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-
-}
-
-.status-label{
-
-    color:var(--color-text-muted);
-
-    font-size:.85rem;
-
-}
-
-.status-item span:last-child{
-
-    font-weight:600;
-
-    color:var(--color-accent);
-
-}
-
-/* ===========================
-   Toast Notification
-=========================== */
-
-.toast-notification{
-
-    position:fixed;
-
-    right:2rem;
-    bottom:2rem;
-
-    display:flex;
-    align-items:center;
-    gap:1rem;
-
-    min-width:320px;
-
-    padding:1rem 1.25rem;
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-md);
-
-    box-shadow:var(--shadow-lg);
-
-    z-index:2000;
-
-}
-
-.toast-icon{
-
-    font-size:1.4rem;
-
-    color:var(--color-accent);
-
-}
-
-.toast-content{
-
-    flex:1;
-
-}
-
-.toast-title{
-
-    font-weight:600;
-
-    margin-bottom:.25rem;
-
-}
-
-.toast-message{
-
-    color:var(--color-text-muted);
-
-    font-size:.9rem;
-
-}
-
-.toast-close{
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:36px;
-    height:36px;
-
-    border-radius:50%;
-
-    color:var(--color-text);
-
-}
-
-/* ===========================
-   Loader
-=========================== */
-
-.app-loading{
-
-    position:fixed;
-
-    inset:0;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    background:rgba(10,10,10,.88);
-
-    backdrop-filter:blur(12px);
-
-    z-index:3000;
-
-}
-
-.loading-card{
-
-    width:320px;
-
-    text-align:center;
-
-}
-
-.loading-logo{
-
-    width:80px;
-
-    margin:0 auto 1.5rem;
-
-}
-
-.loading-animation{
-
-    display:flex;
-    justify-content:center;
-    gap:.5rem;
-
-    margin-bottom:1.5rem;
-
-}
-
-.loading-animation span{
-
-    width:12px;
-    height:12px;
-
-    border-radius:50%;
-
-    background:var(--color-accent);
-
-    animation:loaderPulse 1s infinite ease-in-out;
-
-}
-
-.loading-animation span:nth-child(2){
-
-    animation-delay:.15s;
-
-}
-
-.loading-animation span:nth-child(3){
-
-    animation-delay:.3s;
-
-}
-
-.loading-progress{
-
-    width:100%;
-    height:8px;
-
-    overflow:hidden;
-
-    background:rgba(255,255,255,.08);
-
-    border-radius:999px;
-
-}
-
-.loading-progress-fill{
-
-    width:0;
+    width:26px;
 
     height:100%;
-
-    background:var(--color-accent);
-
-    transition:width .3s ease;
-
-}
-
-.loading-text{
-
-    margin-top:1rem;
-
-    color:var(--color-text-muted);
-
-}
-
-/* ===========================
-   Animation
-=========================== */
-
-@keyframes loaderPulse{
-
-    0%,100%{
-
-        transform:scale(.8);
-
-        opacity:.4;
-
-    }
-
-    50%{
-
-        transform:scale(1.2);
-
-        opacity:1;
-
-    }
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 10 OF 25
-   Error Dialog & Utility Layers
-========================================================== */
-
-/* ===========================
-   Error Dialog
-=========================== */
-
-.error-dialog{
-
-    position:fixed;
-
-    inset:0;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    padding:2rem;
-
-    background:rgba(0,0,0,.75);
-
-    backdrop-filter:blur(10px);
-
-    z-index:2500;
-
-}
-
-.error-card{
-
-    width:100%;
-    max-width:480px;
-
-    padding:2rem;
-
-    text-align:center;
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-lg);
-
-    box-shadow:var(--shadow-lg);
-
-}
-
-.error-icon{
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:72px;
-    height:72px;
-
-    margin:0 auto 1.5rem;
-
-    font-size:2rem;
-
-    color:#ffb84d;
-
-    background:rgba(255,184,77,.12);
-
-    border-radius:50%;
-
-}
-
-.error-card h2{
-
-    margin-bottom:.75rem;
-
-    color:var(--color-text);
-
-    font-size:1.35rem;
-
-}
-
-.error-card p{
-
-    margin-bottom:2rem;
-
-    color:var(--color-text-muted);
-
-    line-height:1.6;
-
-}
-
-.error-actions{
-
-    display:flex;
-    justify-content:center;
-    gap:1rem;
-
-    flex-wrap:wrap;
-
-}
-
-/* ===========================
-   Secondary Button
-=========================== */
-
-.secondary-button{
-
-    padding:.75rem 1.5rem;
-
-    color:var(--color-text);
-
-    background:transparent;
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-sm);
-
-    transition:
-        background var(--transition-fast),
-        border-color var(--transition-fast),
-        transform var(--transition-fast);
-
-}
-
-.secondary-button:hover{
-
-    background:rgba(255,255,255,.08);
-
-    border-color:var(--color-accent);
-
-}
-
-.secondary-button:active{
-
-    transform:scale(.98);
-
-}
-
-/* ===========================
-   Hidden Elements
-=========================== */
-
-[hidden]{
-
-    display:none !important;
-
-}
-
-/* ===========================
-   Utility States
-=========================== */
-
-.is-hidden{
-
-    display:none !important;
-
-}
-
-.is-disabled{
-
-    pointer-events:none;
-
-    opacity:.5;
-
-}
-
-.is-loading{
-
-    cursor:progress;
-
-}
-
-.is-active{
-
-    outline:2px solid var(--color-accent);
-
-    outline-offset:2px;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 11 OF 25
-   Responsive Design
-========================================================== */
-
-/* ===========================
-   Large Desktop
-=========================== */
-
-@media (max-width:1400px){
-
-    .book-container{
-
-        max-width:900px;
-
-    }
-
-}
-
-/* ===========================
-   Desktop
-=========================== */
-
-@media (max-width:1200px){
-
-    .app-header,
-    .reader-footer{
-
-        padding:0 1rem;
-
-    }
-
-    .book-container{
-
-        max-width:820px;
-
-    }
-
-    .reader-status-bar{
-
-        gap:1.25rem;
-
-    }
-
-}
-
-/* ===========================
-   Tablet
-=========================== */
-
-@media (max-width:992px){
-
-    .brand-subtitle{
-
-        display:none;
-
-    }
-
-    .reader-workspace{
-
-        padding:1rem;
-
-    }
-
-    .book-container{
-
-        max-width:700px;
-
-    }
-
-    .reader-footer{
-
-        flex-wrap:wrap;
-
-        justify-content:center;
-
-        padding:1rem;
-
-        gap:1rem;
-
-    }
-
-    .footer-status{
-
-        order:-1;
-
-        width:100%;
-
-    }
-
-}
-
-/* ===========================
-   Mobile
-=========================== */
-
-@media (max-width:768px){
-
-    .app-header{
-
-        height:64px;
-
-        padding:0 .75rem;
-
-    }
-
-    .brand-content{
-
-        display:none;
-
-    }
-
-    .header-right{
-
-        gap:.5rem;
-
-    }
-
-    .header-button{
-
-        width:40px;
-        height:40px;
-
-    }
-
-    .reader-workspace{
-
-        padding:.5rem;
-
-    }
-
-    .book-container{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .book-spine,
-    .page-left{
-
-        display:none;
-
-    }
-
-    .reader-status-bar{
-
-        flex-wrap:wrap;
-
-        gap:.75rem;
-
-        padding:.75rem;
-
-    }
-
-    .dialog{
-
-        max-width:100%;
-
-    }
-
-    .toast-notification{
-
-        left:1rem;
-        right:1rem;
-        bottom:1rem;
-
-        min-width:auto;
-
-    }
-
-}
-
-/* ===========================
-   Small Mobile
-=========================== */
-
-@media (max-width:480px){
-
-    html{
-
-        font-size:15px;
-
-    }
-
-    .reader-footer{
-
-        padding:.75rem .5rem;
-
-    }
-
-    .footer-group{
-
-        gap:.5rem;
-
-    }
-
-    .reader-control{
-
-        width:40px;
-        height:40px;
-
-    }
-
-    .page-navigation-form input{
-
-        width:64px;
-
-    }
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 12 OF 25
-   Animations
-========================================================== */
-
-/* ===========================
-   Fade In
-=========================== */
-
-@keyframes fadeIn{
-
-    from{
-
-        opacity:0;
-
-    }
-
-    to{
-
-        opacity:1;
-
-    }
-
-}
-
-/* ===========================
-   Fade Up
-=========================== */
-
-@keyframes fadeUp{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(20px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-/* ===========================
-   Scale In
-=========================== */
-
-@keyframes scaleIn{
-
-    from{
-
-        opacity:0;
-
-        transform:scale(.92);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:scale(1);
-
-    }
-
-}
-
-/* ===========================
-   Book Float
-=========================== */
-
-@keyframes bookFloat{
-
-    0%,
-    100%{
-
-        transform:translateY(0);
-
-    }
-
-    50%{
-
-        transform:translateY(-8px);
-
-    }
-
-}
-
-/* ===========================
-   Glow Pulse
-=========================== */
-
-@keyframes glowPulse{
-
-    0%,
-    100%{
-
-        opacity:.25;
-
-        filter:blur(90px);
-
-    }
-
-    50%{
-
-        opacity:.45;
-
-        filter:blur(120px);
-
-    }
-
-}
-
-/* ===========================
-   Rotate
-=========================== */
-
-@keyframes rotate360{
-
-    from{
-
-        transform:rotate(0deg);
-
-    }
-
-    to{
-
-        transform:rotate(360deg);
-
-    }
-
-}
-
-/* ===========================
-   Slide Left
-=========================== */
-
-@keyframes slideLeft{
-
-    from{
-
-        transform:translateX(100%);
-
-    }
-
-    to{
-
-        transform:translateX(0);
-
-    }
-
-}
-
-/* ===========================
-   Slide Right
-=========================== */
-
-@keyframes slideRight{
-
-    from{
-
-        transform:translateX(-100%);
-
-    }
-
-    to{
-
-        transform:translateX(0);
-
-    }
-
-}
-
-/* ===========================
-   Utility Classes
-=========================== */
-
-.fade-in{
-
-    animation:fadeIn .35s ease forwards;
-
-}
-
-.fade-up{
-
-    animation:fadeUp .35s ease forwards;
-
-}
-
-.scale-in{
-
-    animation:scaleIn .30s ease forwards;
-
-}
-
-.book-floating{
-
-    animation:bookFloat 5s ease-in-out infinite;
-
-}
-
-.glow-animation{
-
-    animation:glowPulse 4s ease-in-out infinite;
-
-}
-
-.rotate{
-
-    animation:rotate360 1.2s linear infinite;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 13 OF 25
-   Scrollbars & Form Controls
-========================================================== */
-
-/* ===========================
-   Scrollbar
-=========================== */
-
-::-webkit-scrollbar{
-
-    width:10px;
-    height:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:var(--color-bg);
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:var(--color-primary);
-
-    border-radius:999px;
-
-    border:2px solid var(--color-bg);
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:var(--color-accent);
-
-}
-
-/* Firefox */
-
-*{
-
-    scrollbar-width:thin;
-
-    scrollbar-color:var(--color-primary) var(--color-bg);
-
-}
-
-/* ===========================
-   Inputs
-=========================== */
-
-input,
-select,
-textarea{
-
-    width:100%;
-
-    color:var(--color-text);
-
-    background:var(--color-surface);
-
-    border:1px solid var(--color-border);
-
-    border-radius:var(--radius-sm);
-
-    transition:
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
-
-}
-
-input,
-select{
-
-    height:44px;
-
-    padding:0 .9rem;
-
-}
-
-textarea{
-
-    min-height:120px;
-
-    padding:.9rem;
-
-    resize:vertical;
-
-}
-
-input:focus,
-select:focus,
-textarea:focus{
-
-    border-color:var(--color-accent);
-
-    box-shadow:
-        0 0 0 3px rgba(212,175,55,.18);
-
-}
-
-/* ===========================
-   Placeholder
-=========================== */
-
-::placeholder{
-
-    color:var(--color-text-muted);
-
-    opacity:.8;
-
-}
-
-/* ===========================
-   Selection
-=========================== */
-
-::selection{
-
-    color:#ffffff;
-
-    background:var(--color-primary);
-
-}
-
-/* ===========================
-   Focus Visible
-=========================== */
-
-:focus-visible{
-
-    outline:2px solid var(--color-accent);
-
-    outline-offset:2px;
-
-}
-
-/* ===========================
-   Disabled
-=========================== */
-
-:disabled{
-
-    opacity:.6;
-
-    cursor:not-allowed;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 14 OF 25
-   Theme System
-========================================================== */
-
-/* ===========================
-   Maroon Theme
-=========================== */
-
-[data-theme="maroon"]{
-
-    --color-primary:#5b0000;
-    --color-secondary:#8d5a00;
-    --color-accent:#d4af37;
-
-    --color-bg:#120909;
-    --color-surface:#1c1010;
-    --color-surface-light:#281818;
-
-    color-scheme:dark;
-
-}
-
-/* ===========================
-   Dark Theme
-=========================== */
-
-[data-theme="dark"]{
-
-    --color-primary:#1f2937;
-    --color-secondary:#374151;
-    --color-accent:#60a5fa;
-
-    --color-bg:#0f172a;
-    --color-surface:#1e293b;
-    --color-surface-light:#334155;
-
-    color-scheme:dark;
-
-}
-
-/* ===========================
-   Light Theme
-=========================== */
-
-[data-theme="light"]{
-
-    --color-primary:#d4af37;
-    --color-secondary:#f3e6b2;
-    --color-accent:#8d5a00;
-
-    --color-bg:#f5f5f5;
-    --color-surface:#ffffff;
-    --color-surface-light:#ececec;
-
-    --color-text:#1b1b1b;
-    --color-text-muted:#666666;
-    --color-border:rgba(0,0,0,.12);
-
-    color-scheme:light;
-
-}
-
-/* ===========================
-   Sepia Theme
-=========================== */
-
-[data-theme="sepia"]{
-
-    --color-primary:#7b4b22;
-    --color-secondary:#cba86b;
-    --color-accent:#8b5e34;
-
-    --color-bg:#f1e7d0;
-    --color-surface:#f8f2e5;
-    --color-surface-light:#ece1ca;
-
-    --color-text:#3d2d1f;
-    --color-text-muted:#78624d;
-    --color-border:rgba(61,45,31,.15);
-
-    color-scheme:light;
-
-}
-
-/* ===========================
-   Theme Transition
-=========================== */
-
-body,
-.reader-shell,
-.app-header,
-.reader-footer,
-.dialog,
-.book-container,
-.reader-control,
-.header-button,
-.primary-button,
-.secondary-button{
-
-    transition:
-
-        background-color .25s ease,
-        color .25s ease,
-        border-color .25s ease,
-        box-shadow .25s ease;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 15 OF 25
-   Print & Reduced Motion
-========================================================== */
-
-/* ===========================
-   Print
-=========================== */
-
-@media print{
-
-    body{
-
-        background:#ffffff;
-
-        color:#000000;
-
-        overflow:visible;
-
-    }
-
-    .app-header,
-    .reader-footer,
-    .reader-status-bar,
-    .dialog-overlay,
-    .toast-notification,
-    .app-loading,
-    .background-system{
-
-        display:none !important;
-
-    }
-
-    .reader-shell,
-    .reader-stage,
-    .reader-workspace,
-    .book-container{
-
-        width:100%;
-
-        height:auto;
-
-        margin:0;
-
-        padding:0;
-
-        background:#ffffff;
-
-        box-shadow:none;
-
-        border:none;
-
-    }
-
-    .book-page{
-
-        background:#ffffff;
-
-    }
-
-    canvas{
-
-        max-width:100%;
-
-        height:auto;
-
-    }
-
-}
-
-/* ===========================
-   Reduced Motion
-=========================== */
-
-@media (prefers-reduced-motion:reduce){
-
-    html{
-
-        scroll-behavior:auto;
-
-    }
-
-    *,
-    *::before,
-    *::after{
-
-        animation:none !important;
-
-        transition:none !important;
-
-    }
-
-}
-
-/* ===========================
-   High Contrast
-=========================== */
-
-@media (prefers-contrast:more){
-
-    :root{
-
-        --color-border:#ffffff;
-
-    }
-
-    .header-button,
-    .reader-control,
-    .primary-button,
-    .secondary-button,
-    .dialog,
-    .book-container{
-
-        border-width:2px;
-
-    }
-
-}
-
-/* ===========================
-   Landscape Mobile
-=========================== */
-
-@media (max-height:600px) and (orientation:landscape){
-
-    .app-header{
-
-        height:56px;
-
-    }
-
-    .reader-footer{
-
-        min-height:60px;
-
-    }
-
-    .reader-workspace{
-
-        padding:.5rem;
-
-    }
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 16 OF 25
-   Utility Classes
-========================================================== */
-
-/* ===========================
-   Display
-=========================== */
-
-.d-none{
-
-    display:none !important;
-
-}
-
-.d-block{
-
-    display:block !important;
-
-}
-
-.d-flex{
-
-    display:flex !important;
-
-}
-
-.d-grid{
-
-    display:grid !important;
-
-}
-
-.flex-center{
-
-    display:flex;
-
-    justify-content:center;
-    align-items:center;
-
-}
-
-/* ===========================
-   Position
-=========================== */
-
-.position-relative{
-
-    position:relative;
-
-}
-
-.position-absolute{
-
-    position:absolute;
-
-}
-
-.position-fixed{
-
-    position:fixed;
-
-}
-
-/* ===========================
-   Width & Height
-=========================== */
-
-.w-100{
-
-    width:100%;
-
-}
-
-.h-100{
-
-    height:100%;
-
-}
-
-.vh-100{
-
-    min-height:100vh;
-
-}
-
-/* ===========================
-   Overflow
-=========================== */
-
-.overflow-hidden{
-
-    overflow:hidden;
-
-}
-
-.overflow-auto{
-
-    overflow:auto;
-
-}
-
-/* ===========================
-   Text
-=========================== */
-
-.text-center{
-
-    text-align:center;
-
-}
-
-.text-left{
-
-    text-align:left;
-
-}
-
-.text-right{
-
-    text-align:right;
-
-}
-
-.text-muted{
-
-    color:var(--color-text-muted);
-
-}
-
-.text-accent{
-
-    color:var(--color-accent);
-
-}
-
-/* ===========================
-   Border Radius
-=========================== */
-
-.rounded-sm{
-
-    border-radius:var(--radius-sm);
-
-}
-
-.rounded-md{
-
-    border-radius:var(--radius-md);
-
-}
-
-.rounded-lg{
-
-    border-radius:var(--radius-lg);
-
-}
-
-.rounded-circle{
-
-    border-radius:50%;
-
-}
-
-/* ===========================
-   Shadow
-=========================== */
-
-.shadow-sm{
-
-    box-shadow:var(--shadow-sm);
-
-}
-
-.shadow-md{
-
-    box-shadow:var(--shadow-md);
-
-}
-
-.shadow-lg{
-
-    box-shadow:var(--shadow-lg);
-
-}
-
-/* ===========================
-   State
-=========================== */
-
-.pointer{
-
-    cursor:pointer;
-
-}
-
-.no-select{
-
-    user-select:none;
-
-}
-
-.no-pointer{
-
-    pointer-events:none;
-
-}
-
-.opacity-0{
-
-    opacity:0;
-
-}
-
-.opacity-100{
-
-    opacity:1;
-
-}
-
-.transition{
-
-    transition:all var(--transition-normal);
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 17 OF 25
-   Reader States
-========================================================== */
-
-/* ===========================
-   Application States
-=========================== */
-
-.reader-ready{
-
-    visibility:visible;
-
-    opacity:1;
-
-}
-
-.reader-loading{
-
-    cursor:progress;
-
-}
-
-.reader-busy{
-
-    pointer-events:none;
-
-}
-
-.reader-error{
-
-    filter:grayscale(.15);
-
-}
-
-/* ===========================
-   Book States
-=========================== */
-
-.book-container.is-open{
-
-    transform:scale(1);
-
-}
-
-.book-container.is-closing{
-
-    opacity:.75;
-
-}
-
-.book-container.is-flipping{
-
-    pointer-events:none;
-
-}
-
-.book-container.is-rendering{
-
-    cursor:wait;
-
-}
-
-/* ===========================
-   Page States
-=========================== */
-
-.book-page.is-active{
-
-    z-index:2;
-
-}
-
-.book-page.is-hidden{
-
-    display:none;
-
-}
-
-.book-page.is-rendered{
-
-    opacity:1;
-
-}
-
-.book-page.is-selected{
-
-    outline:2px solid var(--color-accent);
-
-    outline-offset:-2px;
-
-}
-
-/* ===========================
-   Navigation States
-=========================== */
-
-.reader-control.is-active,
-.header-button.is-active{
-
-    color:var(--color-accent);
-
-    background:var(--color-primary);
-
-    border-color:var(--color-accent);
-
-}
-
-.reader-control.is-disabled,
-.header-button.is-disabled{
-
-    opacity:.45;
-
-    pointer-events:none;
-
-}
-
-/* ===========================
-   Dialog States
-=========================== */
-
-.dialog-overlay.is-open{
-
-    display:flex;
-
-}
-
-.dialog-overlay.is-closing{
-
-    opacity:0;
-
-    pointer-events:none;
-
-}
-
-/* ===========================
-   Search States
-=========================== */
-
-.search-result.is-match{
-
-    border-color:var(--color-accent);
-
-    background:rgba(212,175,55,.08);
-
-}
-
-.search-result.is-current{
-
-    background:rgba(212,175,55,.16);
-
-}
-
-/* ===========================
-   Bookmark States
-=========================== */
-
-.bookmark-item.is-active{
-
-    border-color:var(--color-accent);
-
-}
-
-.bookmark-item.is-selected{
-
-    background:rgba(212,175,55,.08);
-
-}
-
-/* ===========================
-   Visibility
-=========================== */
-
-.is-visible{
-
-    visibility:visible;
-
-    opacity:1;
-
-}
-
-.is-invisible{
-
-    visibility:hidden;
-
-    opacity:0;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 18 OF 25
-   PDF Viewer
-========================================================== */
-
-/* ===========================
-   PDF Viewport
-=========================== */
-
-.pdf-viewport{
-
-    position:relative;
-
-    width:100%;
-    height:100%;
-
-    overflow:hidden;
-
-}
-
-/* ===========================
-   PDF Canvas
-=========================== */
-
-.pdf-canvas{
-
-    display:block;
-
-    max-width:100%;
-    max-height:100%;
-
-    margin:auto;
-
-    image-rendering:auto;
-
-    transform-origin:center;
-
-}
-
-/* ===========================
-   Render Surface
-=========================== */
-
-.pdf-surface{
-
-    position:relative;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    width:100%;
-    height:100%;
-
-    overflow:hidden;
-
-}
-
-/* ===========================
-   Text Layer
-=========================== */
-
-.pdf-text-layer{
-
-    position:absolute;
-
-    inset:0;
-
-    overflow:hidden;
-
-    pointer-events:auto;
-
-    user-select:text;
-
-}
-
-/* ===========================
-   Annotation Layer
-=========================== */
-
-.pdf-annotation-layer{
-
-    position:absolute;
-
-    inset:0;
-
-    pointer-events:auto;
-
-}
-
-/* ===========================
-   Highlight Layer
-=========================== */
-
-.pdf-highlight-layer{
-
-    position:absolute;
-
-    inset:0;
-
-    pointer-events:none;
-
-}
-
-.pdf-highlight{
-
-    position:absolute;
-
-    background:rgba(255,235,59,.35);
-
-    border-radius:2px;
-
-}
-
-/* ===========================
-   Selection
-=========================== */
-
-.pdf-selection{
-
-    background:rgba(212,175,55,.28);
-
-}
-
-/* ===========================
-   Loading State
-=========================== */
-
-.pdf-rendering{
-
-    opacity:.75;
-
-    cursor:progress;
-
-}
-
-.pdf-ready{
-
-    opacity:1;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 19 OF 25
-   Page Flip Effects
-========================================================== */
-
-/* ===========================
-   Flip Container
-=========================== */
-
-.flip-container{
-
-    position:relative;
-
-    width:100%;
-    height:100%;
-
-    perspective:2400px;
-
-    overflow:hidden;
-
-}
-
-/* ===========================
-   Flip Page
-=========================== */
-
-.flip-page{
-
-    position:absolute;
-
-    inset:0;
-
-    transform-origin:left center;
-
-    transform-style:preserve-3d;
-
-    backface-visibility:hidden;
-
-    will-change:transform;
-
-}
-
-/* ===========================
-   Front Face
-=========================== */
-
-.flip-front{
-
-    position:absolute;
-
-    inset:0;
-
-    background:#fdfaf3;
-
-    backface-visibility:hidden;
-
-}
-
-/* ===========================
-   Back Face
-=========================== */
-
-.flip-back{
-
-    position:absolute;
-
-    inset:0;
-
-    background:#f6f1e8;
-
-    transform:rotateY(180deg);
-
-    backface-visibility:hidden;
-
-}
-
-/* ===========================
-   Shadow
-=========================== */
-
-.flip-shadow{
-
-    position:absolute;
-
-    inset:0;
-
-    pointer-events:none;
-
-    opacity:0;
 
     background:
 
         linear-gradient(
-            90deg,
-            rgba(0,0,0,.30),
-            transparent 45%
+
+            to left,
+
+            rgba(0,0,0,.12),
+
+            transparent
+
         );
 
 }
 
-/* ===========================
-   Flip States
-=========================== */
+.page-right::after{
 
-.flip-page.is-flipping{
+    content:"";
 
-    animation:pageFlip .7s ease-in-out forwards;
+    position:absolute;
 
-}
+    left:0;
 
-.flip-shadow.is-active{
+    top:0;
 
-    opacity:1;
-
-}
-
-/* ===========================
-   Flip Direction
-=========================== */
-
-.flip-next{
-
-    transform-origin:right center;
-
-}
-
-.flip-previous{
-
-    transform-origin:left center;
-
-}
-
-/* ===========================
-   Animation
-=========================== */
-
-@keyframes pageFlip{
-
-    0%{
-
-        transform:rotateY(0deg);
-
-    }
-
-    100%{
-
-        transform:rotateY(-180deg);
-
-    }
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 20 OF 25
-   Zoom & View Modes
-========================================================== */
-
-/* ===========================
-   Zoom Container
-=========================== */
-
-.zoom-container{
-
-    position:relative;
-
-    width:100%;
-    height:100%;
-
-    overflow:auto;
-
-    transform-origin:center center;
-
-}
-
-/* ===========================
-   Zoom Levels
-=========================== */
-
-.zoom-50{
-
-    transform:scale(.5);
-
-}
-
-.zoom-75{
-
-    transform:scale(.75);
-
-}
-
-.zoom-100{
-
-    transform:scale(1);
-
-}
-
-.zoom-125{
-
-    transform:scale(1.25);
-
-}
-
-.zoom-150{
-
-    transform:scale(1.5);
-
-}
-
-.zoom-200{
-
-    transform:scale(2);
-
-}
-
-/* ===========================
-   View Modes
-=========================== */
-
-.view-single{
-
-    display:block;
-
-}
-
-.view-double{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:0;
-
-}
-
-.view-cover{
-
-    display:flex;
-
-    justify-content:center;
-
-}
-
-/* ===========================
-   Rotation
-=========================== */
-
-.rotate-0{
-
-    transform:rotate(0deg);
-
-}
-
-.rotate-90{
-
-    transform:rotate(90deg);
-
-}
-
-.rotate-180{
-
-    transform:rotate(180deg);
-
-}
-
-.rotate-270{
-
-    transform:rotate(270deg);
-
-}
-
-/* ===========================
-   Fit Modes
-=========================== */
-
-.fit-width canvas{
-
-    width:100%;
-
-    height:auto;
-
-}
-
-.fit-height canvas{
-
-    width:auto;
+    width:26px;
 
     height:100%;
 
-}
+    background:
 
-.fit-page canvas{
+        linear-gradient(
 
-    max-width:100%;
+            to right,
 
-    max-height:100%;
+            rgba(0,0,0,.12),
 
-}
+            transparent
 
-/* ===========================
-   Smooth Transform
-=========================== */
-
-.zoom-container,
-.book-container,
-.pdf-canvas{
-
-    transition:
-
-        transform .25s ease,
-        opacity .25s ease;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 21 OF 25
-   Dark Mode & Browser Support
-========================================================== */
-
-/* ===========================
-   Browser Defaults
-=========================== */
-
-html{
-
-    color-scheme:dark light;
-
-}
-
-body{
-
-    accent-color:var(--color-accent);
-
-    caret-color:var(--color-accent);
-
-}
-
-/* ===========================
-   Autofill
-=========================== */
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus{
-
-    -webkit-text-fill-color:var(--color-text);
-
-    -webkit-box-shadow:
-        0 0 0 1000px var(--color-surface) inset;
-
-    transition:background-color 9999s;
-
-}
-
-/* ===========================
-   Native Controls
-=========================== */
-
-select{
-
-    appearance:none;
-
-    -webkit-appearance:none;
-
-    -moz-appearance:none;
-
-}
-
-button{
-
-    -webkit-tap-highlight-color:transparent;
-
-}
-
-input[type="search"]{
-
-    -webkit-appearance:none;
-
-}
-
-input[type="number"]{
-
-    appearance:textfield;
-
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button{
-
-    -webkit-appearance:none;
-
-    margin:0;
-
-}
-
-/* ===========================
-   Images
-=========================== */
-
-img{
-
-    user-select:none;
-
-    -webkit-user-drag:none;
+        );
 
 }
 
@@ -3660,719 +605,628 @@ img{
    Canvas
 =========================== */
 
-canvas{
+.page canvas{
 
-    image-rendering:auto;
+    width:100%;
 
-    touch-action:none;
-
-}
-
-/* ===========================
-   Safe Area Support
-=========================== */
-
-.app-header{
-
-    padding-top:max(0px,env(safe-area-inset-top));
-
-}
-
-.reader-footer{
-
-    padding-bottom:max(0px,env(safe-area-inset-bottom));
-
-}
-
-/* ===========================
-   GPU Optimization
-=========================== */
-
-.book-container,
-.book-page,
-.pdf-canvas,
-.dialog,
-.toast-notification{
-
-    backface-visibility:hidden;
-
-    transform:translateZ(0);
-
-    will-change:transform;
-
-}
-
-/* ===========================
-   Smooth Rendering
-=========================== */
-
-.reader-shell{
-
-    isolation:isolate;
-
-    contain:layout style;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 22 OF 25
-   Performance Optimizations
-========================================================== */
-
-/* ===========================
-   Hardware Acceleration
-=========================== */
-
-.book-container,
-.book-page,
-.page-render-layer,
-.pdf-canvas,
-.flip-page,
-.dialog,
-.toast-notification{
-
-    transform:translateZ(0);
-
-    backface-visibility:hidden;
-
-    will-change:transform;
-
-}
-
-/* ===========================
-   Containment
-=========================== */
-
-.reader-shell{
-
-    contain:layout style;
-
-}
-
-.reader-workspace{
-
-    contain:layout paint;
-
-}
-
-.book-container{
-
-    contain:layout paint size;
-
-}
-
-.book-page{
-
-    contain:layout paint;
-
-}
-
-/* ===========================
-   Rendering
-=========================== */
-
-.page-render-layer{
-
-    overflow:hidden;
-
-}
-
-canvas{
+    height:100%;
 
     display:block;
 
-    max-width:100%;
-
-    height:auto;
+    background:#fff;
 
 }
 
 /* ===========================
-   Visibility Optimization
+   Entrance Animation
 =========================== */
 
-.lazy-render{
+@keyframes bookEntrance{
 
-    content-visibility:auto;
+    0%{
 
-    contain-intrinsic-size:800px 1100px;
+        opacity:0;
 
-}
+        transform:
 
-.skip-render{
+            scale(.55)
 
-    visibility:hidden;
+            rotateX(25deg);
+
+    }
+
+    100%{
+
+        opacity:1;
+
+        transform:
+
+            scale(1)
+
+            rotateX(0);
+
+    }
 
 }
 
 /* ===========================
-   Interaction
+   Shadow Animation
 =========================== */
 
-.no-animation *{
+@keyframes bookShadow{
 
-    animation:none !important;
+    0%,
+    100%{
 
-    transition:none !important;
+        transform:
+
+            scale(.9);
+
+        opacity:.45;
+
+    }
+
+    50%{
+
+        transform:
+
+            scale(1);
+
+        opacity:.65;
+
+    }
 
 }
-
-.disable-pointer{
-
-    pointer-events:none;
-
-}
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 4 OF 40
+   reader.css
+   Bottom Toolbar
+========================================================== */
 
 /* ===========================
-   Resize
+   Reader Toolbar
 =========================== */
 
-.resize-lock{
+.reader-toolbar{
 
-    overflow:hidden;
+    position:absolute;
 
-}
+    left:50%;
 
-.resize-active{
+    bottom:22px;
 
-    cursor:ew-resize;
+    transform:translateX(-50%);
 
-}
+    display:flex;
 
-/* ===========================
-   Layer Utilities
-=========================== */
+    align-items:center;
 
-.layer-base{
+    gap:14px;
 
-    z-index:1;
+    padding:14px 24px;
 
-}
+    background:rgba(35,0,0,.92);
 
-.layer-overlay{
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:60px;
+
+    box-shadow:
+
+        0 18px 45px rgba(0,0,0,.45);
 
     z-index:100;
 
 }
 
-.layer-modal{
-
-    z-index:1000;
-
-}
-
-.layer-toast{
-
-    z-index:2000;
-
-}
-
-.layer-loader{
-
-    z-index:3000;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 23 OF 25
-   Helper Classes
-========================================================== */
-
 /* ===========================
-   Spacing
+   Toolbar Buttons
 =========================== */
 
-.m-0{margin:0!important;}
-.mt-1{margin-top:.5rem!important;}
-.mt-2{margin-top:1rem!important;}
-.mt-3{margin-top:1.5rem!important;}
+.reader-toolbar button{
 
-.mb-1{margin-bottom:.5rem!important;}
-.mb-2{margin-bottom:1rem!important;}
-.mb-3{margin-bottom:1.5rem!important;}
+    width:52px;
 
-.p-0{padding:0!important;}
-.p-1{padding:.5rem!important;}
-.p-2{padding:1rem!important;}
-.p-3{padding:1.5rem!important;}
+    height:52px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
+
+    color:#ffffff;
+
+    font-size:20px;
+
+    cursor:pointer;
+
+    transition:
+
+        transform .30s,
+
+        background .30s,
+
+        color .30s,
+
+        box-shadow .30s;
+
+}
+
+.reader-toolbar button:hover{
+
+    background:var(--gold);
+
+    color:#2d0000;
+
+    transform:
+
+        translateY(-4px)
+
+        scale(1.06);
+
+    box-shadow:
+
+        0 10px 25px rgba(212,175,55,.35);
+
+}
+
+.reader-toolbar button:active{
+
+    transform:scale(.95);
+
+}
 
 /* ===========================
-   Flex Helpers
+   Page Box
 =========================== */
 
-.flex{
+.page-box{
 
     display:flex;
 
-}
-
-.flex-column{
-
-    flex-direction:column;
-
-}
-
-.flex-wrap{
-
-    flex-wrap:wrap;
-
-}
-
-.justify-start{
-
-    justify-content:flex-start;
-
-}
-
-.justify-center{
-
-    justify-content:center;
-
-}
-
-.justify-between{
-
-    justify-content:space-between;
-
-}
-
-.align-start{
-
-    align-items:flex-start;
-
-}
-
-.align-center{
-
     align-items:center;
 
-}
+    gap:10px;
 
-.align-end{
+    padding:0 18px;
 
-    align-items:flex-end;
+    height:52px;
 
-}
+    border-radius:999px;
 
-.gap-1{
-
-    gap:.5rem;
+    background:rgba(255,255,255,.08);
 
 }
 
-.gap-2{
+.page-box input{
 
-    gap:1rem;
+    width:65px;
 
-}
+    border:none;
 
-.gap-3{
+    outline:none;
 
-    gap:1.5rem;
+    text-align:center;
 
-}
+    font-size:18px;
 
-/* ===========================
-   Width Helpers
-=========================== */
+    font-weight:600;
 
-.w-auto{
-
-    width:auto;
-
-}
-
-.w-50{
-
-    width:50%;
-
-}
-
-.w-75{
-
-    width:75%;
-
-}
-
-.max-w-100{
-
-    max-width:100%;
-
-}
-
-/* ===========================
-   Height Helpers
-=========================== */
-
-.h-auto{
-
-    height:auto;
-
-}
-
-.min-h-100{
-
-    min-height:100%;
-
-}
-
-/* ===========================
-   Border Helpers
-=========================== */
-
-.border{
-
-    border:1px solid var(--color-border);
-
-}
-
-.border-top{
-
-    border-top:1px solid var(--color-border);
-
-}
-
-.border-bottom{
-
-    border-bottom:1px solid var(--color-border);
-
-}
-
-/* ===========================
-   Background Helpers
-=========================== */
-
-.bg-primary{
-
-    background:var(--color-primary);
-
-}
-
-.bg-surface{
-
-    background:var(--color-surface);
-
-}
-
-.bg-transparent{
+    color:#fff;
 
     background:transparent;
 
 }
 
+.page-box span{
+
+    color:var(--gold-light);
+
+    font-size:17px;
+
+    font-weight:600;
+
+}
+
 /* ===========================
-   Cursor Helpers
+   Remove Spinner
 =========================== */
 
-.cursor-pointer{
+.page-box input::-webkit-inner-spin-button,
+
+.page-box input::-webkit-outer-spin-button{
+
+    -webkit-appearance:none;
+
+    margin:0;
+
+}
+
+.page-box input[type=number]{
+
+    appearance:textfield;
+
+}
+
+/* ===========================
+   Toolbar Divider
+=========================== */
+
+.toolbar-divider{
+
+    width:1px;
+
+    height:34px;
+
+    background:
+
+        rgba(255,255,255,.10);
+
+}
+
+/* ===========================
+   Floating Effect
+=========================== */
+
+.reader-toolbar{
+
+    animation:
+
+        toolbarFloat 5s ease-in-out infinite;
+
+}
+
+@keyframes toolbarFloat{
+
+    0%,
+    100%{
+
+        transform:
+
+            translateX(-50%)
+
+            translateY(0);
+
+    }
+
+    50%{
+
+        transform:
+
+            translateX(-50%)
+
+            translateY(-4px);
+
+    }
+
+}
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 5 OF 40
+   reader.css
+   Search Panel + Theme Panel + Settings Panel
+========================================================== */
+
+/* ===========================
+   Side Panels
+=========================== */
+
+.reader-panel{
+
+    position:fixed;
+
+    top:82px;
+
+    right:-420px;
+
+    width:400px;
+
+    height:calc(100vh - 82px);
+
+    background:rgba(35,0,0,.97);
+
+    backdrop-filter:blur(22px);
+
+    border-left:1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+
+        -12px 0 35px rgba(0,0,0,.35);
+
+    transition:right .35s ease;
+
+    z-index:1000;
+
+    overflow:auto;
+
+}
+
+.reader-panel.active{
+
+    right:0;
+
+}
+
+/* ===========================
+   Panel Header
+=========================== */
+
+.panel-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:22px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.panel-header h2{
+
+    font-size:22px;
+
+    color:var(--gold);
+
+    font-weight:700;
+
+}
+
+.panel-close{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.08);
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+}
+
+/* ===========================
+   Panel Body
+=========================== */
+
+.panel-body{
+
+    padding:22px;
+
+}
+
+/* ===========================
+   Search
+=========================== */
+
+.search-input{
+
+    width:100%;
+
+    height:52px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:12px;
+
+    padding:0 18px;
+
+    font-size:15px;
+
+    background:#fff;
+
+    color:#222;
+
+}
+
+.search-actions{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:18px;
+
+}
+
+.search-actions button{
+
+    flex:1;
+
+    height:46px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--gold);
+
+    color:#2b0000;
+
+    font-weight:600;
 
     cursor:pointer;
 
 }
 
-.cursor-default{
+.search-results{
 
-    cursor:default;
+    margin-top:20px;
 
-}
+    display:flex;
 
-.cursor-wait{
+    flex-direction:column;
 
-    cursor:wait;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 24 OF 25
-   Final Utilities
-========================================================== */
-
-/* ===========================
-   Visibility
-=========================== */
-
-.hidden{
-
-    display:none !important;
+    gap:12px;
 
 }
 
-.invisible{
+.search-item{
 
-    visibility:hidden !important;
+    padding:14px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.06);
+
+    cursor:pointer;
+
+    transition:.3s;
 
 }
 
-.visible{
+.search-item:hover{
 
-    visibility:visible !important;
+    background:rgba(212,175,55,.18);
 
 }
 
 /* ===========================
-   Opacity
+   Theme Cards
 =========================== */
 
-.opacity-25{
+.theme-grid{
 
-    opacity:.25;
+    display:grid;
 
-}
+    grid-template-columns:repeat(2,1fr);
 
-.opacity-50{
-
-    opacity:.50;
+    gap:15px;
 
 }
 
-.opacity-75{
+.theme-card{
 
-    opacity:.75;
+    height:90px;
+
+    border-radius:16px;
+
+    cursor:pointer;
+
+    border:2px solid transparent;
+
+    transition:.3s;
 
 }
 
-.opacity-100{
+.theme-card:hover{
 
-    opacity:1;
+    transform:translateY(-4px);
+
+    border-color:var(--gold);
+
+}
+
+.theme-maroon{
+
+    background:#4b0000;
+
+}
+
+.theme-dark{
+
+    background:#181818;
+
+}
+
+.theme-light{
+
+    background:#ffffff;
+
+}
+
+.theme-sepia{
+
+    background:#e7d5b4;
+
+}
+
+.theme-green{
+
+    background:#0d4f38;
+
+}
+
+.theme-night{
+
+    background:#06111d;
 
 }
 
 /* ===========================
-   Pointer Events
+   Settings
 =========================== */
 
-.pointer-none{
+.setting-group{
 
-    pointer-events:none;
-
-}
-
-.pointer-auto{
-
-    pointer-events:auto;
+    margin-bottom:26px;
 
 }
 
-/* ===========================
-   User Select
-=========================== */
+.setting-title{
 
-.select-none{
+    color:var(--gold);
 
-    user-select:none;
+    font-size:16px;
 
-}
+    margin-bottom:12px;
 
-.select-text{
-
-    user-select:text;
+    font-weight:600;
 
 }
 
-.select-all{
+.setting-item{
 
-    user-select:all;
+    display:flex;
 
-}
+    align-items:center;
 
-/* ===========================
-   Overflow
-=========================== */
+    justify-content:space-between;
 
-.overflow-x-auto{
+    padding:14px 0;
 
-    overflow-x:auto;
+    border-bottom:1px solid rgba(255,255,255,.06);
 
-}
-
-.overflow-y-auto{
-
-    overflow-y:auto;
+    color:#fff;
 
 }
 
-.overflow-visible{
+.setting-item input{
 
-    overflow:visible;
+    width:20px;
 
-}
+    height:20px;
 
-/* ===========================
-   Object Fit
-=========================== */
-
-.object-cover{
-
-    object-fit:cover;
+    accent-color:var(--gold);
 
 }
 
-.object-contain{
+.setting-item select{
 
-    object-fit:contain;
+    height:38px;
 
-}
-
-/* ===========================
-   Transition
-=========================== */
-
-.transition-fast{
-
-    transition:all .20s ease;
-
-}
-
-.transition-normal{
-
-    transition:all .30s ease;
-
-}
-
-.transition-slow{
-
-    transition:all .50s ease;
-
-}
-
-/* ===========================
-   Transform
-=========================== */
-
-.scale-100{
-
-    transform:scale(1);
-
-}
-
-.scale-105{
-
-    transform:scale(1.05);
-
-}
-
-.scale-110{
-
-    transform:scale(1.10);
-
-}
-
-/* ===========================
-   End Marker
-=========================== */
-
-.reader-css-ready{
-
-    display:block;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.css
-   PART 25 OF 25
-   End of Stylesheet
-========================================================== */
-
-/* ===========================
-   Reader Ready
-=========================== */
-
-html.reader-ready,
-body.reader-ready{
-
-    width:100%;
-    height:100%;
-
-}
-
-body.reader-ready{
-
-    overflow:hidden;
-
-    background:var(--color-bg);
-
-}
-
-/* ===========================
-   Runtime Flags
-=========================== */
-
-.reader-initialized{
-
-    visibility:visible;
-
-}
-
-.reader-destroyed{
-
-    display:none !important;
-
-}
-
-.reader-debug{
-
-    outline:2px dashed var(--color-accent);
-
-}
-
-/* ===========================
-   Browser Optimizations
-=========================== */
-
-*{
-
-    -webkit-tap-highlight-color:transparent;
-
-}
-
-img,
-canvas{
-
-    user-select:none;
-
-    -webkit-user-select:none;
-
-    -webkit-user-drag:none;
-
-}
-
-button{
-
-    touch-action:manipulation;
-
-}
-
-/* ===========================
-   Focus
-=========================== */
-
-:focus:not(:focus-visible){
+    border:none;
 
     outline:none;
 
+    border-radius:8px;
+
+    padding:0 10px;
+
 }
-
-/* ===========================
-   End
-=========================== */
-
-/*
-
-CHISHTI READER v6
-
-reader.css
-
-Status : Production Ready
-Parts  : 25 / 25
-Duplicate CSS : None
-Responsive : Yes
-Accessible : Yes
-Optimized : Yes
-Clean Structure : Yes
-
-End Of File
-
-*/
