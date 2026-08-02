@@ -1,55 +1,71 @@
 /* ==========================================================
-   CHISHTI READER v6
+   CHISHTI READER PRO v7
+   PART 9 OF 40
    reader.js
-   PART 1 OF 25
-   Foundation
+   Application Foundation
 ========================================================== */
 
 "use strict";
 
 /* ==========================================================
-   Configuration
+   Reader Configuration
 ========================================================== */
 
-const APP_CONFIG = Object.freeze({
+const READER_CONFIG = Object.freeze({
 
-    name: "CHISHTI READER",
+    appName:"CHISHTI READER",
 
-    version: "6.0.0",
+    version:"7.0.0",
 
-    build: "production"
+    defaultTheme:"maroon",
+
+    defaultView:"double",
+
+    defaultZoom:1,
+
+    animationDuration:800,
+
+    watermark:"www.chishtilibrary.com"
 
 });
 
 /* ==========================================================
-   Application State
+   Global State
 ========================================================== */
 
-const APP_STATE = {
+const APP = {
 
-    initialized: false,
+    initialized:false,
 
-    loading: false,
+    pdf:null,
 
-    pdf: null,
+    pdfUrl:null,
 
-    currentPage: 1,
+    currentPage:1,
 
-    totalPages: 0,
+    totalPages:0,
 
-    zoom: 1,
+    zoom:1,
 
-    rotation: 0,
+    rotation:0,
 
-    theme: "maroon",
+    theme:"maroon",
 
-    viewMode: "single",
+    view:"double",
 
-    bookmarks: [],
+    fullscreen:false,
 
-    searchResults: [],
+    loading:false,
 
-    activeSearchIndex: -1
+    rendering:false,
+
+    searchResults:[],
+
+    bookmarks:[],
+
+    toc:[],
+
+    history:[]
 
 };
 
@@ -57,44 +73,131 @@ const APP_STATE = {
    DOM Cache
 ========================================================== */
 
-const DOM = {};
+const UI = {};
+
+/* ==========================================================
+   Cache Elements
+========================================================== */
+
+function cacheElements(){
+
+    UI.app =
+
+        document.getElementById(
+
+            "readerApp"
+
+        );
+
+    UI.book =
+
+        document.getElementById(
+
+            "book"
+
+        );
+
+    UI.leftCanvas =
+
+        document.getElementById(
+
+            "leftCanvas"
+
+        );
+
+    UI.rightCanvas =
+
+        document.getElementById(
+
+            "rightCanvas"
+
+        );
+
+    UI.searchInput =
+
+        document.getElementById(
+
+            "searchInput"
+
+        );
+
+    UI.pageNumber =
+
+        document.getElementById(
+
+            "pageNumber"
+
+        );
+
+    UI.totalPages =
+
+        document.getElementById(
+
+            "totalPages"
+
+        );
+
+    UI.toolbar =
+
+        document.querySelector(
+
+            ".reader-toolbar"
+
+        );
+
+}
 
 /* ==========================================================
    Helpers
 ========================================================== */
 
-const $ = (selector, scope = document) =>
-    scope.querySelector(selector);
+const $ = selector =>
 
-const $$ = (selector, scope = document) =>
-    [...scope.querySelectorAll(selector)];
+    document.querySelector(
 
-const byId = (id) =>
-    document.getElementById(id);
+        selector
+
+    );
+
+const $$ = selector =>
+
+    [
+
+        ...document.querySelectorAll(
+
+            selector
+
+        )
+
+    ];
 
 /* ==========================================================
-   DOM Initialization
+   Clamp
 ========================================================== */
 
-function cacheDomElements() {
+function clamp(
 
-    DOM.app = byId("readerApp");
+    value,
 
-    DOM.loader = byId("appLoader");
+    min,
 
-    DOM.reader = byId("readerShell");
+    max
 
-    DOM.leftCanvas = byId("leftPageCanvas");
+){
 
-    DOM.rightCanvas = byId("rightPageCanvas");
+    return Math.min(
 
-    DOM.pageInput = byId("pageInput");
+        Math.max(
 
-    DOM.pageLabel = byId("pageIndicator");
+            value,
 
-    DOM.zoomLabel = byId("zoomLabel");
+            min
 
-    DOM.toast = byId("toast");
+        ),
+
+        max
+
+    );
 
 }
 
@@ -106,886 +209,229 @@ document.addEventListener(
 
     "DOMContentLoaded",
 
-    () => {
+    () =>{
 
-        cacheDomElements();
+        cacheElements();
 
     },
 
     {
 
-        once: true
-
-    }
- /* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 2 OF 25
-   Utilities
-========================================================== */
-
-/* ==========================================================
-   Type Checks
-========================================================== */
-
-const isFunction = value =>
-    typeof value === "function";
-
-const isString = value =>
-    typeof value === "string";
-
-const isNumber = value =>
-    typeof value === "number" &&
-    Number.isFinite(value);
-
-const isElement = value =>
-    value instanceof HTMLElement;
-
-/* ==========================================================
-   Safe DOM
-========================================================== */
-
-function show(element) {
-
-    if (!isElement(element)) return;
-
-    element.hidden = false;
-
-}
-
-function hide(element) {
-
-    if (!isElement(element)) return;
-
-    element.hidden = true;
-
-}
-
-function toggle(element, state) {
-
-    state ? show(element) : hide(element);
-
-}
-
-/* ==========================================================
-   Classes
-========================================================== */
-
-function addClass(element, className) {
-
-    if (!isElement(element)) return;
-
-    element.classList.add(className);
-
-}
-
-function removeClass(element, className) {
-
-    if (!isElement(element)) return;
-
-    element.classList.remove(className);
-
-}
-
-function hasClass(element, className) {
-
-    if (!isElement(element)) return false;
-
-    return element.classList.contains(className);
-
-}
-
-/* ==========================================================
-   Text
-========================================================== */
-
-function setText(element, value) {
-
-    if (!isElement(element)) return;
-
-    element.textContent = String(value);
-
-}
-
-/* ==========================================================
-   Clamp
-========================================================== */
-
-function clamp(value, min, max) {
-
-    return Math.min(
-
-        Math.max(value, min),
-
-        max
-
-    );
-
-}
-
-/* ==========================================================
-   Delay
-========================================================== */
-
-function wait(ms) {
-
-    return new Promise(resolve => {
-
-        setTimeout(resolve, ms);
-
-    });
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 3 OF 25
-   Storage Manager
-========================================================== */
-
-/* ==========================================================
-   Storage Keys
-========================================================== */
-
-const STORAGE = Object.freeze({
-
-    SETTINGS: "reader_settings",
-
-    SESSION: "reader_session",
-
-    BOOKMARKS: "reader_bookmarks"
-
-});
-
-/* ==========================================================
-   Local Storage
-========================================================== */
-
-function saveStorage(key, value) {
-
-    try {
-
-        localStorage.setItem(
-
-            key,
-
-            JSON.stringify(value)
-
-        );
-
-        return true;
-
-    }
-
-    catch {
-
-        return false;
-
-    }
-
-}
-
-function loadStorage(key, fallback = null) {
-
-    try {
-
-        const value = localStorage.getItem(key);
-
-        return value
-            ? JSON.parse(value)
-            : fallback;
-
-    }
-
-    catch {
-
-        return fallback;
-
-    }
-
-}
-
-function removeStorage(key) {
-
-    localStorage.removeItem(key);
-
-}
-
-function clearStorage() {
-
-    Object.values(STORAGE).forEach(removeStorage);
-
-}
-
-/* ==========================================================
-   Settings
-========================================================== */
-
-function saveSettings() {
-
-    saveStorage(
-
-        STORAGE.SETTINGS,
-
-        {
-
-            theme: APP_STATE.theme,
-
-            zoom: APP_STATE.zoom,
-
-            viewMode: APP_STATE.viewMode
-
-        }
-
-    );
-
-}
-
-function loadSettings() {
-
-    const settings = loadStorage(
-
-        STORAGE.SETTINGS,
-
-        {}
-
-    );
-
-    APP_STATE.theme =
-
-        settings.theme ?? APP_STATE.theme;
-
-    APP_STATE.zoom =
-
-        settings.zoom ?? APP_STATE.zoom;
-
-    APP_STATE.viewMode =
-
-        settings.viewMode ?? APP_STATE.viewMode;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 4 OF 25
-   Event Manager
-========================================================== */
-
-/* ==========================================================
-   Event Registry
-========================================================== */
-
-const EVENTS = new Map();
-
-/* ==========================================================
-   Add Event
-========================================================== */
-
-function on(target, event, handler, options = {}) {
-
-    if (!target || typeof handler !== "function") {
-
-        return;
-
-    }
-
-    target.addEventListener(
-
-        event,
-
-        handler,
-
-        options
-
-    );
-
-    EVENTS.set(handler, {
-
-        target,
-
-        event,
-
-        options
-
-    });
-
-}
-
-/* ==========================================================
-   Remove Event
-========================================================== */
-
-function off(handler) {
-
-    const item = EVENTS.get(handler);
-
-    if (!item) {
-
-        return;
-
-    }
-
-    item.target.removeEventListener(
-
-        item.event,
-
-        handler,
-
-        item.options
-
-    );
-
-    EVENTS.delete(handler);
-
-}
-
-/* ==========================================================
-   Dispatch Event
-========================================================== */
-
-function emit(name, detail = {}) {
-
-    document.dispatchEvent(
-
-        new CustomEvent(name, {
-
-            detail
-
-        })
-
-    );
-
-}
-
-/* ==========================================================
-   Listen Event
-========================================================== */
-
-function listen(name, callback) {
-
-    on(
-
-        document,
-
-        name,
-
-        callback
-
-    );
-
-}
-
-/* ==========================================================
-   Remove All
-========================================================== */
-
-function clearEvents() {
-
-    [...EVENTS.keys()].forEach(
-
-        off
-
-    );
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 5 OF 25
-   Loader Manager
-========================================================== */
-
-/* ==========================================================
-   Loader State
-========================================================== */
-
-const LOADER = {
-
-    visible:false,
-
-    progress:0
-
-};
-
-/* ==========================================================
-   Show Loader
-========================================================== */
-
-function showLoader(message = "Loading...") {
-
-    LOADER.visible = true;
-
-    if (!DOM.loader) return;
-
-    show(DOM.loader);
-
-    const text =
-
-        DOM.loader.querySelector(".loading-text");
-
-    if (text) {
-
-        text.textContent = message;
-
-    }
-
-}
-
-/* ==========================================================
-   Hide Loader
-========================================================== */
-
-function hideLoader() {
-
-    LOADER.visible = false;
-
-    if (!DOM.loader) return;
-
-    hide(DOM.loader);
-
-}
-
-/* ==========================================================
-   Progress
-========================================================== */
-
-function updateLoaderProgress(value) {
-
-    LOADER.progress = clamp(
-
-        value,
-
-        0,
-
-        100
-
-    );
-
-    const bar =
-
-        document.querySelector(
-
-            ".loading-progress-fill"
-
-        );
-
-    if (bar) {
-
-        bar.style.width =
-
-            `${LOADER.progress}%`;
-
-    }
-
-}
-
-/* ==========================================================
-   Loading Sequence
-========================================================== */
-
-async function loadingSequence(task) {
-
-    try {
-
-        showLoader();
-
-        updateLoaderProgress(20);
-
-        const result = await task();
-
-        updateLoaderProgress(100);
-
-        await wait(300);
-
-        hideLoader();
-
-        return result;
-
-    }
-
-    catch(error) {
-
-        hideLoader();
-
-        throw error;
-
-    }
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 6 OF 25
-   Toast Notification System
-========================================================== */
-
-/* ==========================================================
-   Toast State
-========================================================== */
-
-const TOAST = {
-
-    timer:null,
-
-    duration:3500
-
-};
-
-/* ==========================================================
-   Show Toast
-========================================================== */
-
-function showToast(
-
-    message,
-
-    type = "info"
-
-){
-
-    if (!DOM.toast) return;
-
-
-    const title =
-
-        DOM.toast.querySelector(
-
-            ".toast-title"
-
-        );
-
-
-    const content =
-
-        DOM.toast.querySelector(
-
-            ".toast-message"
-
-        );
-
-
-    const icon =
-
-        DOM.toast.querySelector(
-
-            ".toast-icon"
-
-        );
-
-
-    if(content){
-
-        content.textContent = message;
-
-    }
-
-
-    if(title){
-
-        title.textContent =
-
-            type.toUpperCase();
-
-    }
-
-
-    if(icon){
-
-        const icons = {
-
-            success:"✓",
-
-            error:"✕",
-
-            warning:"!",
-
-            info:"i"
-
-        };
-
-
-        icon.textContent =
-
-            icons[type] || icons.info;
-
-    }
-
-
-    show(DOM.toast);
-
-
-    removeClass(
-
-        DOM.toast,
-
-        "is-hidden"
-
-    );
-
-
-    clearTimeout(
-
-        TOAST.timer
-
-    );
-
-
-    TOAST.timer = setTimeout(
-
-        hideToast,
-
-        TOAST.duration
-
-    );
-
-}
-
-/* ==========================================================
-   Hide Toast
-========================================================== */
-
-function hideToast(){
-
-    if(!DOM.toast) return;
-
-
-    hide(DOM.toast);
-
-
-    addClass(
-
-        DOM.toast,
-
-        "is-hidden"
-
-    );
-
-}
-
-/* ==========================================================
-   Toast Types
-========================================================== */
-
-function toastSuccess(message){
-
-    showToast(
-
-        message,
-
-        "success"
-
-    );
-
-}
-
-
-function toastError(message){
-
-    showToast(
-
-        message,
-
-        "error"
-
-    );
-
-}
-
-
-function toastWarning(message){
-
-    showToast(
-
-        message,
-
-        "warning"
-
-    );
-
-}
-
-
-function toastInfo(message){
-
-    showToast(
-
-        message,
-
-        "info"
-
-    );
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 7 OF 25
-   Theme Manager
-========================================================== */
-
-/* ==========================================================
-   Theme Apply
-========================================================== */
-
-function applyTheme(theme){
-
-    if(!theme){
-
-        return;
-
-    }
-
-
-    document.documentElement.dataset.theme = theme;
-
-
-    APP_STATE.theme = theme;
-
-
-    saveSettings();
-
-
-    emit(
-
-        "themeChanged",
-
-        {
-
-            theme
-
-        }
-
-    );
-
-}
-
-/* ==========================================================
-   Theme Switch
-========================================================== */
-
-function switchTheme(theme){
-
-    const themes = [
-
-        "maroon",
-
-        "dark",
-
-        "light",
-
-        "sepia"
-
-    ];
-
-
-    if(!themes.includes(theme)){
-
-        return;
-
-    }
-
-
-    applyTheme(theme);
-
-}
-
-/* ==========================================================
-   Load Theme
-========================================================== */
-
-function loadTheme(){
-
-    const saved = loadStorage(
-
-        STORAGE.SETTINGS,
-
-        {}
-
-    );
-
-
-    applyTheme(
-
-        saved.theme || "maroon"
-
-    );
-
-}
-
-/* ==========================================================
-   Toggle Theme
-========================================================== */
-
-function toggleTheme(){
-
-    const themes = [
-
-        "maroon",
-
-        "dark",
-
-        "light",
-
-        "sepia"
-
-    ];
-
-
-    const index = themes.indexOf(
-
-        APP_STATE.theme
-
-    );
-
-
-    const next = themes[
-
-        (index + 1) % themes.length
-
-    ];
-
-
-    switchTheme(next);
-
-}
-
-/* ==========================================================
-   Theme Events
-========================================================== */
-
-listen(
-
-    "changeTheme",
-
-    event => {
-
-        switchTheme(
-
-            event.detail.theme
-
-        );
+        once:true
 
     }
 
 );
 /* ==========================================================
-   CHISHTI READER v6
+   CHISHTI READER PRO v7
+   PART 10 OF 40
    reader.js
-   PART 8 OF 25
-   PDF Manager
+   Book Opening Animation
 ========================================================== */
 
 /* ==========================================================
-   PDF State
+   Animation State
 ========================================================== */
 
-const PDF_MANAGER = {
+const BOOK_ANIMATION = {
+
+    opened:false,
+
+    opening:false,
+
+    duration:900
+
+};
+
+/* ==========================================================
+   Open Book
+========================================================== */
+
+async function openBook(){
+
+    if(
+
+        BOOK_ANIMATION.opening ||
+
+        BOOK_ANIMATION.opened
+
+    ){
+
+        return;
+
+    }
+
+    BOOK_ANIMATION.opening = true;
+
+    UI.book.classList.remove(
+
+        "closed"
+
+    );
+
+    UI.book.classList.add(
+
+        "opening"
+
+    );
+
+    await new Promise(
+
+        resolve =>
+
+        setTimeout(
+
+            resolve,
+
+            BOOK_ANIMATION.duration
+
+        )
+
+    );
+
+    UI.book.classList.remove(
+
+        "opening"
+
+    );
+
+    UI.book.classList.add(
+
+        "open"
+
+    );
+
+    BOOK_ANIMATION.opened = true;
+
+    BOOK_ANIMATION.opening = false;
+
+}
+
+/* ==========================================================
+   Close Book
+========================================================== */
+
+function closeBook(){
+
+    UI.book.classList.remove(
+
+        "open"
+
+    );
+
+    UI.book.classList.remove(
+
+        "opening"
+
+    );
+
+    UI.book.classList.add(
+
+        "closed"
+
+    );
+
+    BOOK_ANIMATION.opened = false;
+
+}
+
+/* ==========================================================
+   Toggle Book
+========================================================== */
+
+function toggleBook(){
+
+    if(
+
+        BOOK_ANIMATION.opened
+
+    ){
+
+        closeBook();
+
+    }
+
+    else{
+
+        openBook();
+
+    }
+
+}
+
+/* ==========================================================
+   Book Click
+========================================================== */
+
+function enableBookAnimation(){
+
+    if(
+
+        !UI.book
+
+    ){
+
+        return;
+
+    }
+
+    UI.book.classList.add(
+
+        "closed"
+
+    );
+
+    UI.book.addEventListener(
+
+        "click",
+
+        openBook
+
+    );
+
+}
+
+/* ==========================================================
+   Auto Start
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () =>{
+
+        enableBookAnimation();
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 11 OF 40
+   reader.js
+   PDF Loader & Renderer
+========================================================== */
+
+/* ==========================================================
+   PDF Manager
+========================================================== */
+
+const PDF = {
 
     document:null,
 
     loading:false,
 
-    url:null
+    renderScale:2,
+
+    renderTask:null
 
 };
 
@@ -995,441 +441,405 @@ const PDF_MANAGER = {
 
 async function loadPDF(url){
 
-    if(!url){
-
-        throw new Error(
-
-            "PDF URL missing"
-
-        );
-
-    }
-
-
     try{
 
-        PDF_MANAGER.loading = true;
+        PDF.loading = true;
 
+        APP.loading = true;
 
-        showLoader(
+        APP.pdfUrl = url;
 
-            "Opening book..."
+        const task =
 
-        );
+            pdfjsLib.getDocument({
 
+                url:url
 
-        updateLoaderProgress(
+            });
 
-            30
+        PDF.document =
 
-        );
+            await task.promise;
 
+        APP.pdf =
 
-        const loadingTask =
+            PDF.document;
 
-            pdfjsLib.getDocument(url);
+        APP.totalPages =
 
+            PDF.document.numPages;
 
-        PDF_MANAGER.document =
+        UI.totalPages.textContent =
 
-            await loadingTask.promise;
+            APP.totalPages;
 
+        APP.currentPage = 1;
 
-        PDF_MANAGER.url = url;
-
-
-        APP_STATE.pdf =
-
-            PDF_MANAGER.document;
-
-
-        APP_STATE.totalPages =
-
-            PDF_MANAGER.document.numPages;
-
-
-        updateLoaderProgress(
-
-            100
-
-        );
-
-
-        emit(
-
-            "pdfReady",
-
-            {
-
-                pages:APP_STATE.totalPages
-
-            }
-
-        );
-
-
-        toastSuccess(
-
-            "Book loaded successfully"
-
-        );
-
-
-        return PDF_MANAGER.document;
-
+        await renderSpread();
 
     }
 
     catch(error){
 
-        toastError(
+        console.error(
 
-            "Unable to load PDF"
+            error
 
         );
-
-
-        throw error;
 
     }
 
     finally{
 
-        PDF_MANAGER.loading = false;
+        PDF.loading = false;
 
-
-        hideLoader();
+        APP.loading = false;
 
     }
 
 }
 
 /* ==========================================================
-   Get Page
+   Get PDF Page
 ========================================================== */
 
-async function getPDFPage(pageNumber){
+async function getPage(number){
 
-    if(!PDF_MANAGER.document){
+    if(
+
+        !PDF.document
+
+    ){
 
         return null;
 
     }
 
+    return await
 
-    const page =
+    PDF.document.getPage(
 
-        await PDF_MANAGER.document.getPage(
-
-            pageNumber
-
-        );
-
-
-    return page;
-
-}
-
-/* ==========================================================
-   Close PDF
-========================================================== */
-
-function closePDF(){
-
-    PDF_MANAGER.document = null;
-
-    PDF_MANAGER.url = null;
-
-
-    APP_STATE.pdf = null;
-
-    APP_STATE.totalPages = 0;
-
-    APP_STATE.currentPage = 1;
-
-
-    emit(
-
-        "pdfClosed"
+        number
 
     );
 
 }
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 9 OF 25
-   Page Renderer
-========================================================== */
 
 /* ==========================================================
-   Renderer State
+   Render Canvas
 ========================================================== */
 
-const RENDERER = {
+async function renderCanvas(
 
-    scale:1.5,
-
-    rendering:false,
-
-    cache:new Map()
-
-};
-
-/* ==========================================================
-   Render Page
-========================================================== */
-
-async function renderPage(
-
-    pageNumber,
+    page,
 
     canvas
 
 ){
 
-    if(!canvas){
+    if(
+
+        !page ||
+
+        !canvas
+
+    ){
 
         return;
 
     }
 
+    const viewport =
 
-    const page =
+        page.getViewport({
 
-        await getPDFPage(
+            scale:
 
-            pageNumber
+            PDF.renderScale *
+
+            APP.zoom
+
+        });
+
+    canvas.width =
+
+        viewport.width;
+
+    canvas.height =
+
+        viewport.height;
+
+    const context =
+
+        canvas.getContext(
+
+            "2d"
 
         );
 
+    if(
 
-    if(!page){
+        PDF.renderTask
 
-        return;
+    ){
+
+        PDF.renderTask.cancel();
 
     }
 
+    PDF.renderTask =
 
-    try{
-
-        RENDERER.rendering = true;
-
-
-        const viewport =
-
-            page.getViewport({
-
-                scale:
-
-                    RENDERER.scale
-
-            });
-
-
-        const context =
-
-            canvas.getContext(
-
-                "2d"
-
-            );
-
-
-        canvas.width =
-
-            viewport.width;
-
-
-        canvas.height =
-
-            viewport.height;
-
-
-        const renderContext = {
+        page.render({
 
             canvasContext:
 
-                context,
+            context,
 
             viewport
 
-        };
+        });
 
+    await
 
-        await page.render(
-
-            renderContext
-
-        ).promise;
-
-
-        RENDERER.cache.set(
-
-            pageNumber,
-
-            canvas.toDataURL()
-
-        );
-
-
-        emit(
-
-            "pageRendered",
-
-            {
-
-                page:pageNumber
-
-            }
-
-        );
-
-
-    }
-
-    catch(error){
-
-        toastError(
-
-            "Page rendering failed"
-
-        );
-
-
-        console.error(error);
-
-    }
-
-    finally{
-
-        RENDERER.rendering = false;
-
-    }
+    PDF.renderTask.promise;
 
 }
 
 /* ==========================================================
-   Render Current Page
+   Render Left & Right Pages
 ========================================================== */
 
-async function renderCurrentPage(){
+async function renderSpread(){
 
-    const page =
+    if(
 
-        APP_STATE.currentPage;
+        !PDF.document
 
-
-    await renderPage(
-
-        page,
-
-        DOM.rightCanvas
-
-    );
-
-
-    updatePageIndicator();
-
-}
-
-/* ==========================================================
-   Clear Cache
-========================================================== */
-
-function clearRenderCache(){
-
-    RENDERER.cache.clear();
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 10 OF 25
-   Page Navigation
-========================================================== */
-
-/* ==========================================================
-   Navigation State
-========================================================== */
-
-const NAVIGATION = {
-
-    history:[],
-
-    index:0
-
-};
-
-/* ==========================================================
-   Update Indicator
-========================================================== */
-
-function updatePageIndicator(){
-
-    if(DOM.pageLabel){
-
-        DOM.pageLabel.textContent =
-
-            `${APP_STATE.currentPage} / ${APP_STATE.totalPages}`;
-
-    }
-
-
-    if(DOM.pageInput){
-
-        DOM.pageInput.value =
-
-            APP_STATE.currentPage;
-
-    }
-
-}
-
-/* ==========================================================
-   Go To Page
-========================================================== */
-
-async function goToPage(pageNumber){
-
-    if(!APP_STATE.totalPages){
+    ){
 
         return;
 
     }
 
+    const leftPageNumber =
 
-    const page = clamp(
+        APP.view === "double"
 
-        Number(pageNumber),
+        ?
 
-        1,
+        Math.max(
 
-        APP_STATE.totalPages
+            1,
+
+            APP.currentPage
+
+        )
+
+        :
+
+        APP.currentPage;
+
+    const rightPageNumber =
+
+        APP.view === "double"
+
+        ?
+
+        Math.min(
+
+            APP.totalPages,
+
+            APP.currentPage + 1
+
+        )
+
+        :
+
+        APP.currentPage;
+
+    const leftPage =
+
+        await getPage(
+
+            leftPageNumber
+
+        );
+
+    await renderCanvas(
+
+        leftPage,
+
+        UI.leftCanvas
 
     );
 
+    if(
 
-    APP_STATE.currentPage = page;
+        APP.view === "double"
 
+    ){
 
-    NAVIGATION.history.push(page);
+        const rightPage =
 
+            await getPage(
 
-    await renderCurrentPage();
+                rightPageNumber
 
+            );
 
-    emit(
+        await renderCanvas(
 
-        "pageChanged",
+            rightPage,
 
-        {
+            UI.rightCanvas
 
-            page
+        );
+
+    }
+
+    UI.pageNumber.value =
+
+        APP.currentPage;
+
+}
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 12 OF 40
+   reader.js
+   Page Navigation & Real Flip Animation
+========================================================== */
+
+/* ==========================================================
+   Flip Animation
+========================================================== */
+
+async function flipPage(direction){
+
+    if(
+
+        APP.rendering ||
+
+        !UI.book
+
+    ){
+
+        return;
+
+    }
+
+    APP.rendering = true;
+
+    const target =
+
+        direction === "next"
+
+        ?
+
+        document.querySelector(
+
+            ".page-right"
+
+        )
+
+        :
+
+        document.querySelector(
+
+            ".page-left"
+
+        );
+
+    if(target){
+
+        target.classList.add(
+
+            "flipping"
+
+        );
+
+    }
+
+    await new Promise(
+
+        resolve =>
+
+        setTimeout(
+
+            resolve,
+
+            450
+
+        )
+
+    );
+
+    if(
+
+        direction === "next"
+
+    ){
+
+        if(
+
+            APP.view === "double"
+
+        ){
+
+            APP.currentPage += 2;
 
         }
 
+        else{
+
+            APP.currentPage++;
+
+        }
+
+    }
+
+    else{
+
+        if(
+
+            APP.view === "double"
+
+        ){
+
+            APP.currentPage -= 2;
+
+        }
+
+        else{
+
+            APP.currentPage--;
+
+        }
+
+    }
+
+    APP.currentPage = clamp(
+
+        APP.currentPage,
+
+        1,
+
+        APP.totalPages
+
     );
+
+    await renderSpread();
+
+    if(target){
+
+        target.classList.remove(
+
+            "flipping"
+
+        );
+
+    }
+
+    APP.rendering = false;
 
 }
 
@@ -1437,23 +847,25 @@ async function goToPage(pageNumber){
    Next Page
 ========================================================== */
 
-function nextPage(){
+async function nextPage(){
 
     if(
 
-        APP_STATE.currentPage <
+        APP.currentPage >=
 
-        APP_STATE.totalPages
+        APP.totalPages
 
     ){
 
-        return goToPage(
-
-            APP_STATE.currentPage + 1
-
-        );
+        return;
 
     }
+
+    await flipPage(
+
+        "next"
+
+    );
 
 }
 
@@ -1461,809 +873,225 @@ function nextPage(){
    Previous Page
 ========================================================== */
 
-function previousPage(){
+async function previousPage(){
 
     if(
 
-        APP_STATE.currentPage > 1
+        APP.currentPage <= 1
 
     ){
 
-        return goToPage(
-
-            APP_STATE.currentPage - 1
-
-        );
+        return;
 
     }
 
-}
+    await flipPage(
 
-/* ==========================================================
-   First Page
-========================================================== */
-
-function firstPage(){
-
-    return goToPage(1);
-
-}
-
-/* ==========================================================
-   Last Page
-========================================================== */
-
-function lastPage(){
-
-    return goToPage(
-
-        APP_STATE.totalPages
+        "previous"
 
     );
 
 }
+
+/* ==========================================================
+   Go To Page
+========================================================== */
+
+async function goToPage(page){
+
+    page = clamp(
+
+        Number(page),
+
+        1,
+
+        APP.totalPages
+
+    );
+
+    APP.currentPage = page;
+
+    await renderSpread();
+
+}
+
+/* ==========================================================
+   Toolbar Events
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        document
+
+        .getElementById(
+
+            "nextPage"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            nextPage
+
+        );
+
+        document
+
+        .getElementById(
+
+            "previousPage"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            previousPage
+
+        );
+
+        document
+
+        .getElementById(
+
+            "pageNumber"
+
+        )
+
+        .addEventListener(
+
+            "change",
+
+            event=>{
+
+                goToPage(
+
+                    event.target.value
+
+                );
+
+            }
+
+        );
+
+    },
+
+    {
+
+        once:true
+
+    }
+
 );
 /* ==========================================================
-   CHISHTI READER v6
+   CHISHTI READER PRO v7
+   PART 13 OF 40
    reader.js
-   PART 11 OF 25
-   Zoom Manager
-========================================================== */
-
-/* ==========================================================
-   Zoom State
-========================================================== */
-
-const ZOOM_MANAGER = {
-
-    min:0.5,
-
-    max:3,
-
-    step:0.25
-
-};
-
-/* ==========================================================
-   Apply Zoom
-========================================================== */
-
-function applyZoom(value){
-
-    const zoom = clamp(
-
-        Number(value),
-
-        ZOOM_MANAGER.min,
-
-        ZOOM_MANAGER.max
-
-    );
-
-
-    APP_STATE.zoom = zoom;
-
-
-    const container =
-
-        document.querySelector(
-
-            ".zoom-container"
-
-        );
-
-
-    if(container){
-
-        container.style.transform =
-
-            `scale(${zoom})`;
-
-    }
-
-
-    if(DOM.zoomLabel){
-
-        DOM.zoomLabel.textContent =
-
-            `${Math.round(zoom * 100)}%`;
-
-    }
-
-
-    saveSettings();
-
-
-    emit(
-
-        "zoomChanged",
-
-        {
-
-            zoom
-
-        }
-
-    );
-
-}
-
-/* ==========================================================
-   Zoom In
-========================================================== */
-
-function zoomIn(){
-
-    applyZoom(
-
-        APP_STATE.zoom +
-
-        ZOOM_MANAGER.step
-
-    );
-
-}
-
-/* ==========================================================
-   Zoom Out
-========================================================== */
-
-function zoomOut(){
-
-    applyZoom(
-
-        APP_STATE.zoom -
-
-        ZOOM_MANAGER.step
-
-    );
-
-}
-
-/* ==========================================================
-   Reset Zoom
-========================================================== */
-
-function resetZoom(){
-
-    applyZoom(1);
-
-}
-
-/* ==========================================================
-   Fit Page
-========================================================== */
-
-function fitPage(){
-
-    const container =
-
-        document.querySelector(
-
-            ".zoom-container"
-
-        );
-
-
-    if(container){
-
-        container.style.transform =
-
-            "scale(1)";
-
-    }
-
-
-    APP_STATE.zoom = 1;
-
-
-    emit(
-
-        "fitPage"
-
-    );
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 12 OF 25
-   View Mode Manager
-========================================================== */
-
-/* ==========================================================
-   View Modes
-========================================================== */
-
-const VIEW_MODES = Object.freeze({
-
-    SINGLE:"single",
-
-    DOUBLE:"double",
-
-    COVER:"cover"
-
-});
-
-
-/* ==========================================================
-   Apply View Mode
-========================================================== */
-
-function applyViewMode(mode){
-
-    if(!Object.values(VIEW_MODES).includes(mode)){
-
-        return;
-
-    }
-
-
-    APP_STATE.viewMode = mode;
-
-
-    const reader =
-
-        document.querySelector(
-
-            ".book-container"
-
-        );
-
-
-    if(reader){
-
-        reader.classList.remove(
-
-            "view-single",
-
-            "view-double",
-
-            "view-cover"
-
-        );
-
-
-        reader.classList.add(
-
-            `view-${mode}`
-
-        );
-
-    }
-
-
-    saveSettings();
-
-
-    emit(
-
-        "viewModeChanged",
-
-        {
-
-            mode
-
-        }
-
-    );
-
-}
-
-
-/* ==========================================================
-   Single Page
-========================================================== */
-
-function setSingleView(){
-
-    applyViewMode(
-
-        VIEW_MODES.SINGLE
-
-    );
-
-}
-
-
-/* ==========================================================
-   Double Page
-========================================================== */
-
-function setDoubleView(){
-
-    applyViewMode(
-
-        VIEW_MODES.DOUBLE
-
-    );
-
-}
-
-
-/* ==========================================================
-   Cover View
-========================================================== */
-
-function setCoverView(){
-
-    applyViewMode(
-
-        VIEW_MODES.COVER
-
-    );
-
-}
-
-
-/* ==========================================================
-   Toggle View
-========================================================== */
-
-function toggleViewMode(){
-
-    const modes =
-
-        Object.values(
-
-            VIEW_MODES
-
-        );
-
-
-    const current =
-
-        modes.indexOf(
-
-            APP_STATE.viewMode
-
-        );
-
-
-    const next =
-
-        modes[
-
-            (current + 1) %
-
-            modes.length
-
-        ];
-
-
-    applyViewMode(next);
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 13 OF 25
-   Rotation Manager
-========================================================== */
-
-/* ==========================================================
-   Rotation State
-========================================================== */
-
-const ROTATION_MANAGER = {
-
-    step:90,
-
-    min:0,
-
-    max:270
-
-};
-
-
-/* ==========================================================
-   Apply Rotation
-========================================================== */
-
-function applyRotation(angle){
-
-    const rotation =
-
-        ((Number(angle) % 360) + 360) % 360;
-
-
-    APP_STATE.rotation = rotation;
-
-
-    const pages = $$(
-        ".pdf-canvas, .page-canvas"
-    );
-
-
-    pages.forEach(canvas => {
-
-        canvas.style.transform =
-
-            `rotate(${rotation}deg)`;
-
-    });
-
-
-    emit(
-
-        "rotationChanged",
-
-        {
-
-            rotation
-
-        }
-
-    );
-
-}
-
-
-/* ==========================================================
-   Rotate Right
-========================================================== */
-
-function rotateRight(){
-
-    applyRotation(
-
-        APP_STATE.rotation +
-
-        ROTATION_MANAGER.step
-
-    );
-
-}
-
-
-/* ==========================================================
-   Rotate Left
-========================================================== */
-
-function rotateLeft(){
-
-    applyRotation(
-
-        APP_STATE.rotation -
-
-        ROTATION_MANAGER.step
-
-    );
-
-}
-
-
-/* ==========================================================
-   Reset Rotation
-========================================================== */
-
-function resetRotation(){
-
-    applyRotation(0);
-
-}
-
-
-/* ==========================================================
-   Orientation Helper
-========================================================== */
-
-function getOrientation(){
-
-    return APP_STATE.rotation === 90 ||
-
-           APP_STATE.rotation === 270
-
-        ? "portrait"
-
-        : "landscape";
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 14 OF 25
-   Bookmark Manager
-========================================================== */
-
-/* ==========================================================
-   Bookmark State
-========================================================== */
-
-const BOOKMARK_MANAGER = {
-
-    items: []
-
-};
-
-
-/* ==========================================================
-   Load Bookmarks
-========================================================== */
-
-function loadBookmarks(){
-
-    BOOKMARK_MANAGER.items =
-
-        loadStorage(
-
-            STORAGE.BOOKMARKS,
-
-            []
-
-        );
-
-
-    APP_STATE.bookmarks =
-
-        BOOKMARK_MANAGER.items;
-
-}
-
-
-/* ==========================================================
-   Save Bookmarks
-========================================================== */
-
-function saveBookmarks(){
-
-    saveStorage(
-
-        STORAGE.BOOKMARKS,
-
-        BOOKMARK_MANAGER.items
-
-    );
-
-
-    APP_STATE.bookmarks =
-
-        BOOKMARK_MANAGER.items;
-
-}
-
-
-/* ==========================================================
-   Add Bookmark
-========================================================== */
-
-function addBookmark(page = APP_STATE.currentPage){
-
-    const exists =
-
-        BOOKMARK_MANAGER.items.some(
-
-            item => item.page === page
-
-        );
-
-
-    if(exists){
-
-        toastInfo(
-
-            "Bookmark already exists"
-
-        );
-
-        return;
-
-    }
-
-
-    const bookmark = {
-
-        id:Date.now(),
-
-        page,
-
-        created:new Date().toISOString()
-
-    };
-
-
-    BOOKMARK_MANAGER.items.push(
-
-        bookmark
-
-    );
-
-
-    saveBookmarks();
-
-
-    toastSuccess(
-
-        "Bookmark added"
-
-    );
-
-
-    emit(
-
-        "bookmarkAdded",
-
-        bookmark
-
-    );
-
-}
-
-
-/* ==========================================================
-   Remove Bookmark
-========================================================== */
-
-function removeBookmark(id){
-
-    BOOKMARK_MANAGER.items =
-
-        BOOKMARK_MANAGER.items.filter(
-
-            item => item.id !== id
-
-        );
-
-
-    saveBookmarks();
-
-
-    emit(
-
-        "bookmarkRemoved",
-
-        {
-
-            id
-
-        }
-
-    );
-
-}
-
-
-/* ==========================================================
-   Check Bookmark
-========================================================== */
-
-function isBookmarked(page){
-
-    return BOOKMARK_MANAGER.items.some(
-
-        item => item.page === page
-
-    );
-
-}
-
-
-/* ==========================================================
-   Get Bookmarks
-========================================================== */
-
-function getBookmarks(){
-
-    return BOOKMARK_MANAGER.items;
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 15 OF 25
-   Search Manager
+   Search Engine (Ctrl + F Style)
 ========================================================== */
 
 /* ==========================================================
    Search State
 ========================================================== */
 
-const SEARCH_MANAGER = {
+const SEARCH = {
 
     query:"",
 
     results:[],
 
-    currentIndex:-1
+    current:0,
+
+    busy:false
 
 };
-
-
-/* ==========================================================
-   Extract Text
-========================================================== */
-
-async function extractPageText(pageNumber){
-
-    const page =
-
-        await getPDFPage(
-
-            pageNumber
-
-        );
-
-
-    if(!page){
-
-        return "";
-
-    }
-
-
-    const content =
-
-        await page.getTextContent();
-
-
-    return content.items
-
-        .map(
-
-            item => item.str
-
-        )
-
-        .join(" ");
-
-}
-
 
 /* ==========================================================
    Search PDF
 ========================================================== */
 
-async function searchPDF(query){
+async function searchBook(text){
 
-    if(!query){
+    if(
 
-        return [];
+        !PDF.document ||
+
+        !text
+
+    ){
+
+        return;
 
     }
 
+    SEARCH.busy = true;
 
-    SEARCH_MANAGER.query =
+    SEARCH.query =
 
-        query.toLowerCase();
+        text.trim().toLowerCase();
 
+    SEARCH.results = [];
 
-    SEARCH_MANAGER.results = [];
-
+    SEARCH.current = 0;
 
     for(
 
         let page = 1;
 
-        page <= APP_STATE.totalPages;
+        page <= APP.totalPages;
 
         page++
 
     ){
 
-        const text =
+        const pdfPage =
 
-            await extractPageText(page);
+            await PDF.document.getPage(
 
+                page
+
+            );
+
+        const content =
+
+            await pdfPage.getTextContent();
+
+        const pageText =
+
+            content.items
+
+            .map(
+
+                item => item.str
+
+            )
+
+            .join(" ")
+
+            .toLowerCase();
 
         if(
 
-            text
+            pageText.includes(
 
-            .toLowerCase()
-
-            .includes(
-
-                SEARCH_MANAGER.query
+                SEARCH.query
 
             )
 
         ){
 
-            SEARCH_MANAGER.results.push({
+            SEARCH.results.push({
 
                 page,
 
-                text
+                text:pageText
 
             });
 
@@ -2271,50 +1099,33 @@ async function searchPDF(query){
 
     }
 
-
-    SEARCH_MANAGER.currentIndex =
-
-        SEARCH_MANAGER.results.length
-
-        ? 0
-
-        : -1;
-
-
-    APP_STATE.searchResults =
-
-        SEARCH_MANAGER.results;
-
-
-    emit(
-
-        "searchComplete",
-
-        {
-
-            results:
-
-                SEARCH_MANAGER.results
-
-        }
-
-    );
-
-
-    return SEARCH_MANAGER.results;
-
-}
-
-
-/* ==========================================================
-   Next Result
-========================================================== */
-
-function nextSearchResult(){
+    SEARCH.busy = false;
 
     if(
 
-        !SEARCH_MANAGER.results.length
+        SEARCH.results.length
+
+    ){
+
+        openSearchResult(
+
+            0
+
+        );
+
+    }
+
+}
+
+/* ==========================================================
+   Open Search Result
+========================================================== */
+
+async function openSearchResult(index){
+
+    if(
+
+        !SEARCH.results.length
 
     ){
 
@@ -2322,71 +1133,1367 @@ function nextSearchResult(){
 
     }
 
+    SEARCH.current =
 
-    SEARCH_MANAGER.currentIndex =
+        clamp(
 
-        (
+            index,
 
-            SEARCH_MANAGER.currentIndex + 1
+            0,
 
-        )
+            SEARCH.results.length - 1
 
-        %
-
-        SEARCH_MANAGER.results.length;
-
+        );
 
     const result =
 
-        SEARCH_MANAGER.results[
+        SEARCH.results[
 
-            SEARCH_MANAGER.currentIndex
+            SEARCH.current
 
         ];
 
-
-    goToPage(
+    await goToPage(
 
         result.page
 
     );
 
+    highlightSearch();
+
 }
 
-
 /* ==========================================================
-   Clear Search
+   Next Result
 ========================================================== */
 
-function clearSearch(){
+function nextResult(){
 
-    SEARCH_MANAGER.query = "";
+    if(
 
-    SEARCH_MANAGER.results = [];
+        !SEARCH.results.length
 
-    SEARCH_MANAGER.currentIndex = -1;
+    ){
 
+        return;
 
-    APP_STATE.searchResults = [];
+    }
+
+    openSearchResult(
+
+        (SEARCH.current + 1)
+
+        %
+
+        SEARCH.results.length
+
+    );
 
 }
+
 /* ==========================================================
-   CHISHTI READER v6
+   Previous Result
+========================================================== */
+
+function previousResult(){
+
+    if(
+
+        !SEARCH.results.length
+
+    ){
+
+        return;
+
+    }
+
+    openSearchResult(
+
+        (
+
+            SEARCH.current -
+
+            1 +
+
+            SEARCH.results.length
+
+        )
+
+        %
+
+        SEARCH.results.length
+
+    );
+
+}
+
+/* ==========================================================
+   Highlight
+========================================================== */
+
+function highlightSearch(){
+
+    console.log(
+
+        "Highlight:",
+
+        SEARCH.query
+
+    );
+
+}
+
+/* ==========================================================
+   Search Events
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        UI.searchInput.addEventListener(
+
+            "keydown",
+
+            event=>{
+
+                if(
+
+                    event.key === "Enter"
+
+                ){
+
+                    searchBook(
+
+                        event.target.value
+
+                    );
+
+                }
+
+            }
+
+        );
+
+        document.addEventListener(
+
+            "keydown",
+
+            event=>{
+
+                if(
+
+                    event.ctrlKey &&
+
+                    event.key === "f"
+
+                ){
+
+                    event.preventDefault();
+
+                    UI.searchInput.focus();
+
+                    UI.searchInput.select();
+
+                }
+
+            }
+
+        );
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 14 OF 40
    reader.js
-   PART 16 OF 25
-   Fullscreen Manager
+   Theme Manager
 ========================================================== */
 
 /* ==========================================================
-   Fullscreen State
+   Themes
 ========================================================== */
 
-const FULLSCREEN_MANAGER = {
+const THEMES = Object.freeze({
 
-    active:false
+    MAROON:"maroon",
+
+    DARK:"dark",
+
+    LIGHT:"light",
+
+    SEPIA:"sepia",
+
+    GREEN:"green",
+
+    NIGHT:"night"
+
+});
+
+/* ==========================================================
+   Theme Colors
+========================================================== */
+
+const THEME_COLORS = {
+
+    maroon:"#4b0000",
+
+    dark:"#181818",
+
+    light:"#ffffff",
+
+    sepia:"#e7d5b4",
+
+    green:"#0d4f38",
+
+    night:"#06111d"
 
 };
 
+/* ==========================================================
+   Apply Theme
+========================================================== */
+
+function applyTheme(theme){
+
+    if(
+
+        !THEMES[
+
+            theme.toUpperCase()
+
+        ]
+
+    ){
+
+        return;
+
+    }
+
+    APP.theme = theme;
+
+    document.documentElement
+
+        .setAttribute(
+
+            "data-theme",
+
+            theme
+
+        );
+
+    localStorage.setItem(
+
+        "chishti_theme",
+
+        theme
+
+    );
+
+    updateThemeButtons();
+
+}
+
+/* ==========================================================
+   Toggle Theme
+========================================================== */
+
+function toggleTheme(){
+
+    const list =
+
+        Object.values(
+
+            THEMES
+
+        );
+
+    const current =
+
+        list.indexOf(
+
+            APP.theme
+
+        );
+
+    const next =
+
+        list[
+
+            (
+
+                current + 1
+
+            )
+
+            %
+
+            list.length
+
+        ];
+
+    applyTheme(
+
+        next
+
+    );
+
+}
+
+/* ==========================================================
+   Restore Theme
+========================================================== */
+
+function loadTheme(){
+
+    const saved =
+
+        localStorage.getItem(
+
+            "chishti_theme"
+
+        );
+
+    if(saved){
+
+        applyTheme(
+
+            saved
+
+        );
+
+    }
+
+}
+
+/* ==========================================================
+   Active Theme UI
+========================================================== */
+
+function updateThemeButtons(){
+
+    document
+
+    .querySelectorAll(
+
+        ".theme-card"
+
+    )
+
+    .forEach(card=>{
+
+        card.classList.remove(
+
+            "active"
+
+        );
+
+        if(
+
+            card.dataset.theme ===
+
+            APP.theme
+
+        ){
+
+            card.classList.add(
+
+                "active"
+
+            );
+
+        }
+
+    });
+
+}
+
+/* ==========================================================
+   Theme Events
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        loadTheme();
+
+        document
+
+        .querySelectorAll(
+
+            ".theme-card"
+
+        )
+
+        .forEach(card=>{
+
+            card.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    applyTheme(
+
+                        card.dataset.theme
+
+                    );
+
+                }
+
+            );
+
+        });
+
+        document
+
+        .getElementById(
+
+            "themeButton"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            toggleTheme
+
+        );
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 15 OF 40
+   reader.js
+   Settings Manager
+========================================================== */
+
+/* ==========================================================
+   Default Settings
+========================================================== */
+
+const SETTINGS = {
+
+    viewMode:"double",
+
+    flipAnimation:true,
+
+    pageShadow:true,
+
+    watermark:true,
+
+    pageNumber:true,
+
+    sound:false,
+
+    rememberPage:true,
+
+    autoSave:true,
+
+    direction:"ltr",
+
+    zoom:100
+
+};
+
+/* ==========================================================
+   Load Settings
+========================================================== */
+
+function loadSettings(){
+
+    const saved =
+
+        localStorage.getItem(
+
+            "chishti_settings"
+
+        );
+
+    if(saved){
+
+        Object.assign(
+
+            SETTINGS,
+
+            JSON.parse(saved)
+
+        );
+
+    }
+
+    applySettings();
+
+}
+
+/* ==========================================================
+   Save Settings
+========================================================== */
+
+function saveSettings(){
+
+    localStorage.setItem(
+
+        "chishti_settings",
+
+        JSON.stringify(
+
+            SETTINGS
+
+        )
+
+    );
+
+}
+
+/* ==========================================================
+   Apply Settings
+========================================================== */
+
+function applySettings(){
+
+    APP.view =
+
+        SETTINGS.viewMode;
+
+    APP.zoom =
+
+        SETTINGS.zoom / 100;
+
+    document.body.classList.toggle(
+
+        "single-page-mode",
+
+        SETTINGS.viewMode ===
+
+        "single"
+
+    );
+
+    document.body.classList.toggle(
+
+        "double-page-mode",
+
+        SETTINGS.viewMode ===
+
+        "double"
+
+    );
+
+    document.body.classList.toggle(
+
+        "hide-watermark",
+
+        !SETTINGS.watermark
+
+    );
+
+    document.body.classList.toggle(
+
+        "hide-page-number",
+
+        !SETTINGS.pageNumber
+
+    );
+
+}
+
+/* ==========================================================
+   Update Setting
+========================================================== */
+
+function updateSetting(
+
+    key,
+
+    value
+
+){
+
+    SETTINGS[key] = value;
+
+    applySettings();
+
+    saveSettings();
+
+}
+
+/* ==========================================================
+   Reset Settings
+========================================================== */
+
+function resetSettings(){
+
+    Object.assign(
+
+        SETTINGS,
+
+        {
+
+            viewMode:"double",
+
+            flipAnimation:true,
+
+            pageShadow:true,
+
+            watermark:true,
+
+            pageNumber:true,
+
+            sound:false,
+
+            rememberPage:true,
+
+            autoSave:true,
+
+            direction:"ltr",
+
+            zoom:100
+
+        }
+
+    );
+
+    applySettings();
+
+    saveSettings();
+
+}
+
+/* ==========================================================
+   Toggle View Mode
+========================================================== */
+
+function toggleViewMode(){
+
+    updateSetting(
+
+        "viewMode",
+
+        SETTINGS.viewMode ===
+
+        "double"
+
+        ?
+
+        "single"
+
+        :
+
+        "double"
+
+    );
+
+    renderSpread();
+
+}
+
+/* ==========================================================
+   Initialize
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        loadSettings();
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 16 OF 40
+   reader.js
+   Bookmark Manager
+========================================================== */
+
+/* ==========================================================
+   Bookmark State
+========================================================== */
+
+const BOOKMARKS = [];
+
+/* ==========================================================
+   Load Bookmarks
+========================================================== */
+
+function loadBookmarks(){
+
+    const saved =
+
+        localStorage.getItem(
+
+            "chishti_bookmarks"
+
+        );
+
+    if(saved){
+
+        BOOKMARKS.push(
+
+            ...JSON.parse(saved)
+
+        );
+
+    }
+
+}
+
+/* ==========================================================
+   Save Bookmarks
+========================================================== */
+
+function saveBookmarks(){
+
+    localStorage.setItem(
+
+        "chishti_bookmarks",
+
+        JSON.stringify(
+
+            BOOKMARKS
+
+        )
+
+    );
+
+}
+
+/* ==========================================================
+   Add Bookmark
+========================================================== */
+
+function addBookmark(){
+
+    const exists =
+
+        BOOKMARKS.some(
+
+            item =>
+
+            item.page ===
+
+            APP.currentPage
+
+        );
+
+    if(exists){
+
+        return;
+
+    }
+
+    BOOKMARKS.push({
+
+        page:
+
+        APP.currentPage,
+
+        title:
+
+        "Page " +
+
+        APP.currentPage,
+
+        date:
+
+        new Date()
+
+        .toISOString()
+
+    });
+
+    saveBookmarks();
+
+    renderBookmarks();
+
+}
+
+/* ==========================================================
+   Remove Bookmark
+========================================================== */
+
+function removeBookmark(page){
+
+    const index =
+
+        BOOKMARKS.findIndex(
+
+            item =>
+
+            item.page === page
+
+        );
+
+    if(index >= 0){
+
+        BOOKMARKS.splice(
+
+            index,
+
+            1
+
+        );
+
+        saveBookmarks();
+
+        renderBookmarks();
+
+    }
+
+}
+
+/* ==========================================================
+   Render Bookmarks
+========================================================== */
+
+function renderBookmarks(){
+
+    const container =
+
+        document.getElementById(
+
+            "bookmarkList"
+
+        );
+
+    if(!container){
+
+        return;
+
+    }
+
+    container.innerHTML = "";
+
+    BOOKMARKS.forEach(
+
+        bookmark=>{
+
+            const item =
+
+                document.createElement(
+
+                    "div"
+
+                );
+
+            item.className =
+
+                "bookmark-item";
+
+            item.innerHTML =
+
+            `
+
+            <span>
+
+                📑 ${bookmark.title}
+
+            </span>
+
+            <button
+
+            data-page="${bookmark.page}">
+
+                Open
+
+            </button>
+
+            `;
+
+            item.querySelector(
+
+                "button"
+
+            )
+
+            .addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    goToPage(
+
+                        bookmark.page
+
+                    );
+
+                }
+
+            );
+
+            container.appendChild(
+
+                item
+
+            );
+
+        }
+
+    );
+
+}
+
+/* ==========================================================
+   Toggle Bookmark
+========================================================== */
+
+function toggleBookmark(){
+
+    const exists =
+
+        BOOKMARKS.some(
+
+            item =>
+
+            item.page ===
+
+            APP.currentPage
+
+        );
+
+    if(exists){
+
+        removeBookmark(
+
+            APP.currentPage
+
+        );
+
+    }
+
+    else{
+
+        addBookmark();
+
+    }
+
+}
+
+/* ==========================================================
+   Bookmark Events
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        loadBookmarks();
+
+        renderBookmarks();
+
+        document
+
+        .getElementById(
+
+            "bookmarkButton"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            toggleBookmark
+
+        );
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 17 OF 40
+   reader.js
+   Zoom Manager
+========================================================== */
+
+/* ==========================================================
+   Zoom Configuration
+========================================================== */
+
+const ZOOM = {
+
+    min:0.50,
+
+    max:3.00,
+
+    step:0.10
+
+};
+
+/* ==========================================================
+   Apply Zoom
+========================================================== */
+
+async function applyZoom(){
+
+    if(
+
+        !PDF.document
+
+    ){
+
+        return;
+
+    }
+
+    APP.zoom = clamp(
+
+        APP.zoom,
+
+        ZOOM.min,
+
+        ZOOM.max
+
+    );
+
+    await renderSpread();
+
+    updateZoomIndicator();
+
+}
+
+/* ==========================================================
+   Zoom In
+========================================================== */
+
+async function zoomIn(){
+
+    APP.zoom +=
+
+        ZOOM.step;
+
+    await applyZoom();
+
+}
+
+/* ==========================================================
+   Zoom Out
+========================================================== */
+
+async function zoomOut(){
+
+    APP.zoom -=
+
+        ZOOM.step;
+
+    await applyZoom();
+
+}
+
+/* ==========================================================
+   Reset Zoom
+========================================================== */
+
+async function resetZoom(){
+
+    APP.zoom = 1;
+
+    await applyZoom();
+
+}
+
+/* ==========================================================
+   Fit Width
+========================================================== */
+
+async function fitWidth(){
+
+    APP.zoom = 1.20;
+
+    await applyZoom();
+
+}
+
+/* ==========================================================
+   Fit Page
+========================================================== */
+
+async function fitPage(){
+
+    APP.zoom = 1;
+
+    await applyZoom();
+
+}
+
+/* ==========================================================
+   Zoom Indicator
+========================================================== */
+
+function updateZoomIndicator(){
+
+    const element =
+
+        document.getElementById(
+
+            "zoomValue"
+
+        );
+
+    if(
+
+        element
+
+    ){
+
+        element.textContent =
+
+            Math.round(
+
+                APP.zoom * 100
+
+            ) + "%";
+
+    }
+
+}
+
+/* ==========================================================
+   Mouse Wheel Zoom
+========================================================== */
+
+function enableWheelZoom(){
+
+    const stage =
+
+        document.querySelector(
+
+            ".reader-stage"
+
+        );
+
+    if(
+
+        !stage
+
+    ){
+
+        return;
+
+    }
+
+    stage.addEventListener(
+
+        "wheel",
+
+        event=>{
+
+            if(
+
+                !event.ctrlKey
+
+            ){
+
+                return;
+
+            }
+
+            event.preventDefault();
+
+            if(
+
+                event.deltaY < 0
+
+            ){
+
+                zoomIn();
+
+            }
+
+            else{
+
+                zoomOut();
+
+            }
+
+        },
+
+        {
+
+            passive:false
+
+        }
+
+    );
+
+}
+
+/* ==========================================================
+   Toolbar Buttons
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        document
+
+        .getElementById(
+
+            "zoomIn"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            zoomIn
+
+        );
+
+        document
+
+        .getElementById(
+
+            "zoomOut"
+
+        )
+
+        .addEventListener(
+
+            "click",
+
+            zoomOut
+
+        );
+
+        enableWheelZoom();
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 18 OF 40
+   reader.js
+   Fullscreen + Rotation Manager
+========================================================== */
+
+/* ==========================================================
+   Rotation
+========================================================== */
+
+const ROTATION = {
+
+    angle:0
+
+};
+
+/* ==========================================================
+   Apply Rotation
+========================================================== */
+
+async function applyRotation(){
+
+    if(
+
+        !UI.book
+
+    ){
+
+        return;
+
+    }
+
+    UI.book.style.transform =
+
+        `rotate(${ROTATION.angle}deg)`;
+
+}
+
+/* ==========================================================
+   Rotate Right
+========================================================== */
+
+function rotateRight(){
+
+    ROTATION.angle += 90;
+
+    if(
+
+        ROTATION.angle >= 360
+
+    ){
+
+        ROTATION.angle = 0;
+
+    }
+
+    applyRotation();
+
+}
+
+/* ==========================================================
+   Rotate Left
+========================================================== */
+
+function rotateLeft(){
+
+    ROTATION.angle -= 90;
+
+    if(
+
+        ROTATION.angle < 0
+
+    ){
+
+        ROTATION.angle = 270;
+
+    }
+
+    applyRotation();
+
+}
 
 /* ==========================================================
    Enter Fullscreen
@@ -2394,67 +2501,25 @@ const FULLSCREEN_MANAGER = {
 
 async function enterFullscreen(){
 
-    const element =
+    if(
 
-        DOM.app ||
+        document.fullscreenElement
 
-        document.documentElement;
+    ){
 
-
-    try{
-
-        if(element.requestFullscreen){
-
-            await element.requestFullscreen();
-
-        }
-
-        else if(element.webkitRequestFullscreen){
-
-            element.webkitRequestFullscreen();
-
-        }
-
-
-        FULLSCREEN_MANAGER.active = true;
-
-
-        addClass(
-
-            document.body,
-
-            "fullscreen-mode"
-
-        );
-
-
-        emit(
-
-            "fullscreenChanged",
-
-            {
-
-                active:true
-
-            }
-
-        );
-
+        return;
 
     }
 
-    catch(error){
+    await document
 
-        toastError(
+    .documentElement
 
-            "Fullscreen not available"
+    .requestFullscreen();
 
-        );
-
-    }
+    APP.fullscreen = true;
 
 }
-
 
 /* ==========================================================
    Exit Fullscreen
@@ -2462,56 +2527,23 @@ async function enterFullscreen(){
 
 async function exitFullscreen(){
 
-    try{
+    if(
 
-        if(document.exitFullscreen){
+        !document.fullscreenElement
 
-            await document.exitFullscreen();
+    ){
 
-        }
-
-        else if(document.webkitExitFullscreen){
-
-            document.webkitExitFullscreen();
-
-        }
-
-
-        FULLSCREEN_MANAGER.active = false;
-
-
-        removeClass(
-
-            document.body,
-
-            "fullscreen-mode"
-
-        );
-
-
-        emit(
-
-            "fullscreenChanged",
-
-            {
-
-                active:false
-
-            }
-
-        );
-
+        return;
 
     }
 
-    catch(error){
+    await document
 
-        console.error(error);
+    .exitFullscreen();
 
-    }
+    APP.fullscreen = false;
 
 }
-
 
 /* ==========================================================
    Toggle Fullscreen
@@ -2525,27 +2557,29 @@ function toggleFullscreen(){
 
     ){
 
-        return exitFullscreen();
+        exitFullscreen();
 
     }
 
+    else{
 
-    return enterFullscreen();
+        enterFullscreen();
+
+    }
 
 }
 
-
 /* ==========================================================
-   Fullscreen Listener
+   Fullscreen Change
 ========================================================== */
 
 document.addEventListener(
 
     "fullscreenchange",
 
-    () => {
+    ()=>{
 
-        FULLSCREEN_MANAGER.active =
+        APP.fullscreen =
 
             Boolean(
 
@@ -2556,696 +2590,70 @@ document.addEventListener(
     }
 
 );
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 17 OF 25
-   Keyboard Controls
-========================================================== */
 
 /* ==========================================================
-   Keyboard State
+   Toolbar Events
 ========================================================== */
 
-const KEYBOARD_MANAGER = {
+document.addEventListener(
 
-    enabled:true
+    "DOMContentLoaded",
 
-};
+    ()=>{
 
+        document
 
-/* ==========================================================
-   Key Actions
-========================================================== */
+        .getElementById(
 
-function handleKeyboard(event){
+            "fullscreenButton"
 
-    if(!KEYBOARD_MANAGER.enabled){
+        )
 
-        return;
+        .addEventListener(
 
-    }
+            "click",
 
+            toggleFullscreen
 
-    const key = event.key;
+        );
 
+        document
 
-    switch(key){
+        .getElementById(
 
+            "rotateBook"
 
-        case "ArrowRight":
+        )
 
-            nextPage();
+        .addEventListener(
 
-            break;
+            "click",
 
+            rotateRight
 
-        case "ArrowLeft":
+        );
 
-            previousPage();
+    },
 
-            break;
+    {
 
-
-        case "+":
-
-        case "=":
-
-            zoomIn();
-
-            break;
-
-
-        case "-":
-
-            zoomOut();
-
-            break;
-
-
-        case "0":
-
-            resetZoom();
-
-            break;
-
-
-        case "f":
-
-        case "F":
-
-            toggleFullscreen();
-
-            break;
-
-
-        case "b":
-
-        case "B":
-
-            addBookmark();
-
-            break;
-
-
-        case "Escape":
-
-            closeDialogs();
-
-            break;
-
-
-    }
-
-}
-
-
-/* ==========================================================
-   Enable Keyboard
-========================================================== */
-
-function enableKeyboard(){
-
-    KEYBOARD_MANAGER.enabled = true;
-
-}
-
-
-/* ==========================================================
-   Disable Keyboard
-========================================================== */
-
-function disableKeyboard(){
-
-    KEYBOARD_MANAGER.enabled = false;
-
-}
-
-
-/* ==========================================================
-   Register Keyboard
-========================================================== */
-
-on(
-
-    document,
-
-    "keydown",
-
-    handleKeyboard
-
-);
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 18 OF 25
-   Dialog Manager
-========================================================== */
-
-/* ==========================================================
-   Dialog State
-========================================================== */
-
-const DIALOG_MANAGER = {
-
-    active:null
-
-};
-
-
-/* ==========================================================
-   Open Dialog
-========================================================== */
-
-function openDialog(id){
-
-    const dialog =
-
-        byId(id);
-
-
-    if(!dialog){
-
-        return;
-
-    }
-
-
-    closeDialogs();
-
-
-    show(dialog);
-
-
-    DIALOG_MANAGER.active = id;
-
-
-    addClass(
-
-        dialog,
-
-        "is-open"
-
-    );
-
-
-    emit(
-
-        "dialogOpened",
-
-        {
-
-            id
-
-        }
-
-    );
-
-}
-
-
-/* ==========================================================
-   Close Dialog
-========================================================== */
-
-function closeDialog(id){
-
-    const dialog =
-
-        byId(id);
-
-
-    if(!dialog){
-
-        return;
-
-    }
-
-
-    hide(dialog);
-
-
-    removeClass(
-
-        dialog,
-
-        "is-open"
-
-    );
-
-
-    if(
-
-        DIALOG_MANAGER.active === id
-
-    ){
-
-        DIALOG_MANAGER.active = null;
-
-    }
-
-
-    emit(
-
-        "dialogClosed",
-
-        {
-
-            id
-
-        }
-
-    );
-
-}
-
-
-/* ==========================================================
-   Close All
-========================================================== */
-
-function closeDialogs(){
-
-    const dialogs = $$(
-        ".dialog-overlay, .error-dialog"
-    );
-
-
-    dialogs.forEach(
-
-        dialog => {
-
-            hide(dialog);
-
-
-            removeClass(
-
-                dialog,
-
-                "is-open"
-
-            );
-
-        }
-
-    );
-
-
-    DIALOG_MANAGER.active = null;
-
-}
-
-
-/* ==========================================================
-   Toggle Dialog
-========================================================== */
-
-function toggleDialog(id){
-
-    if(
-
-        DIALOG_MANAGER.active === id
-
-    ){
-
-        closeDialog(id);
-
-    }
-
-    else{
-
-        openDialog(id);
-
-    }
-
-}
-
-
-/* ==========================================================
-   Dialog Events
-========================================================== */
-
-on(
-
-    document,
-
-    "click",
-
-    event => {
-
-        if(
-
-            event.target.classList.contains(
-
-                "dialog-overlay"
-
-            )
-
-        ){
-
-            closeDialogs();
-
-        }
+        once:true
 
     }
 
 );
 /* ==========================================================
-   CHISHTI READER v6
+   CHISHTI READER PRO v7
+   PART 19 OF 40
    reader.js
-   PART 19 OF 25
-   Session Manager
-========================================================== */
-
-/* ==========================================================
-   Session State
-========================================================== */
-
-const SESSION_MANAGER = {
-
-    active:false,
-
-    data:{}
-
-};
-
-
-/* ==========================================================
-   Create Session
-========================================================== */
-
-function createSession(){
-
-    SESSION_MANAGER.data = {
-
-        id:Date.now(),
-
-        page:APP_STATE.currentPage,
-
-        zoom:APP_STATE.zoom,
-
-        rotation:APP_STATE.rotation,
-
-        theme:APP_STATE.theme,
-
-        viewMode:APP_STATE.viewMode,
-
-        updated:new Date().toISOString()
-
-    };
-
-
-    SESSION_MANAGER.active = true;
-
-
-    saveStorage(
-
-        STORAGE.SESSION,
-
-        SESSION_MANAGER.data
-
-    );
-
-}
-
-
-/* ==========================================================
-   Save Session
-========================================================== */
-
-function saveSession(){
-
-    SESSION_MANAGER.data = {
-
-        ...SESSION_MANAGER.data,
-
-        page:APP_STATE.currentPage,
-
-        zoom:APP_STATE.zoom,
-
-        rotation:APP_STATE.rotation,
-
-        theme:APP_STATE.theme,
-
-        viewMode:APP_STATE.viewMode,
-
-        updated:new Date().toISOString()
-
-    };
-
-
-    saveStorage(
-
-        STORAGE.SESSION,
-
-        SESSION_MANAGER.data
-
-    );
-
-}
-
-
-/* ==========================================================
-   Restore Session
-========================================================== */
-
-function restoreSession(){
-
-    const session =
-
-        loadStorage(
-
-            STORAGE.SESSION,
-
-            null
-
-        );
-
-
-    if(!session){
-
-        return;
-
-    }
-
-
-    SESSION_MANAGER.data = session;
-
-
-    APP_STATE.currentPage =
-
-        session.page || 1;
-
-
-    APP_STATE.zoom =
-
-        session.zoom || 1;
-
-
-    APP_STATE.rotation =
-
-        session.rotation || 0;
-
-
-    APP_STATE.theme =
-
-        session.theme || "maroon";
-
-
-    APP_STATE.viewMode =
-
-        session.viewMode || "single";
-
-
-    SESSION_MANAGER.active = true;
-
-
-    emit(
-
-        "sessionRestored",
-
-        session
-
-    );
-
-}
-
-
-/* ==========================================================
-   End Session
-========================================================== */
-
-function endSession(){
-
-    saveSession();
-
-
-    SESSION_MANAGER.active = false;
-
-
-    emit(
-
-        "sessionEnded"
-
-    );
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 20 OF 25
-   Resize Manager
-========================================================== */
-
-/* ==========================================================
-   Resize State
-========================================================== */
-
-const RESIZE_MANAGER = {
-
-    width:0,
-
-    height:0,
-
-    observer:null
-
-};
-
-
-/* ==========================================================
-   Update Size
-========================================================== */
-
-function updateReaderSize(){
-
-    const reader =
-
-        DOM.reader;
-
-
-    if(!reader){
-
-        return;
-
-    }
-
-
-    RESIZE_MANAGER.width =
-
-        reader.clientWidth;
-
-
-    RESIZE_MANAGER.height =
-
-        reader.clientHeight;
-
-
-    emit(
-
-        "readerResized",
-
-        {
-
-            width:
-
-                RESIZE_MANAGER.width,
-
-            height:
-
-                RESIZE_MANAGER.height
-
-        }
-
-    );
-
-}
-
-
-/* ==========================================================
-   Resize Observer
-========================================================== */
-
-function initResizeObserver(){
-
-    if(!window.ResizeObserver){
-
-        return;
-
-    }
-
-
-    RESIZE_MANAGER.observer =
-
-        new ResizeObserver(
-
-            () => {
-
-                updateReaderSize();
-
-            }
-
-        );
-
-
-    if(DOM.reader){
-
-        RESIZE_MANAGER.observer.observe(
-
-            DOM.reader
-
-        );
-
-    }
-
-}
-
-
-/* ==========================================================
-   Window Resize
-========================================================== */
-
-on(
-
-    window,
-
-    "resize",
-
-    updateReaderSize
-
-);
-
-
-/* ==========================================================
-   Destroy Observer
-========================================================== */
-
-function destroyResizeObserver(){
-
-    if(
-
-        RESIZE_MANAGER.observer
-
-    ){
-
-        RESIZE_MANAGER.observer.disconnect();
-
-        RESIZE_MANAGER.observer = null;
-
-    }
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 21 OF 25
-   Touch & Gesture Manager
+   Touch Gestures + Keyboard Shortcuts
 ========================================================== */
 
 /* ==========================================================
    Touch State
 ========================================================== */
 
-const TOUCH_MANAGER = {
+const TOUCH = {
 
     startX:0,
 
@@ -3255,87 +2663,81 @@ const TOUCH_MANAGER = {
 
     endY:0,
 
-    threshold:50
+    threshold:60
 
 };
-
 
 /* ==========================================================
    Touch Start
 ========================================================== */
 
-function handleTouchStart(event){
+function touchStart(event){
 
     const touch =
 
         event.touches[0];
 
-
-    TOUCH_MANAGER.startX =
+    TOUCH.startX =
 
         touch.clientX;
 
-
-    TOUCH_MANAGER.startY =
+    TOUCH.startY =
 
         touch.clientY;
 
 }
-
 
 /* ==========================================================
    Touch End
 ========================================================== */
 
-function handleTouchEnd(event){
+function touchEnd(event){
 
     const touch =
 
         event.changedTouches[0];
 
-
-    TOUCH_MANAGER.endX =
+    TOUCH.endX =
 
         touch.clientX;
 
-
-    TOUCH_MANAGER.endY =
+    TOUCH.endY =
 
         touch.clientY;
 
-
-    handleSwipe();
+    detectSwipe();
 
 }
 
-
 /* ==========================================================
-   Swipe Detection
+   Detect Swipe
 ========================================================== */
 
-function handleSwipe(){
+function detectSwipe(){
 
     const diffX =
 
-        TOUCH_MANAGER.endX -
+        TOUCH.endX -
 
-        TOUCH_MANAGER.startX;
-
+        TOUCH.startX;
 
     const diffY =
 
-        TOUCH_MANAGER.endY -
+        Math.abs(
 
-        TOUCH_MANAGER.startY;
+            TOUCH.endY -
 
+            TOUCH.startY
+
+        );
 
     if(
 
         Math.abs(diffX)
 
-        <
+        < TOUCH.threshold ||
 
-        TOUCH_MANAGER.threshold
+        diffY > 120
 
     ){
 
@@ -3343,424 +2745,431 @@ function handleSwipe(){
 
     }
 
+    if(diffX < 0){
 
-    if(
+        nextPage();
 
-        Math.abs(diffX)
+    }
 
-        >
+    else{
 
-        Math.abs(diffY)
+        previousPage();
 
-    ){
+    }
 
-        if(diffX < 0){
+}
+
+/* ==========================================================
+   Keyboard Shortcuts
+========================================================== */
+
+function keyboardHandler(event){
+
+    switch(event.key){
+
+        case "ArrowRight":
 
             nextPage();
 
-        }
+            break;
 
-        else{
+        case "ArrowLeft":
 
             previousPage();
 
-        }
+            break;
+
+        case "+":
+
+        case "=":
+
+            zoomIn();
+
+            break;
+
+        case "-":
+
+            zoomOut();
+
+            break;
+
+        case "0":
+
+            resetZoom();
+
+            break;
+
+        case "f":
+
+        case "F":
+
+            toggleFullscreen();
+
+            break;
+
+        case "b":
+
+        case "B":
+
+            toggleBookmark();
+
+            break;
+
+        case "r":
+
+        case "R":
+
+            rotateRight();
+
+            break;
+
+        case "Escape":
+
+            exitFullscreen();
+
+            break;
 
     }
 
 }
 
-
 /* ==========================================================
-   Register Touch
+   Register Events
 ========================================================== */
 
-function initTouchControls(){
+function registerInputEvents(){
 
-    const area =
-
-        document.querySelector(
-
-            ".gesture-layer"
-
-        );
-
-
-    if(!area){
-
-        return;
-
-    }
-
-
-    on(
-
-        area,
-
-        "touchstart",
-
-        handleTouchStart,
-
-        {
-
-            passive:true
-
-        }
-
-    );
-
-
-    on(
-
-        area,
-
-        "touchend",
-
-        handleTouchEnd,
-
-        {
-
-            passive:true
-
-        }
-
-    );
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 22 OF 25
-   Button & UI Events
-========================================================== */
-
-/* ==========================================================
-   Bind UI Events
-========================================================== */
-
-function bindUIEvents(){
-
-
-    const nextButton =
+    const stage =
 
         document.querySelector(
 
-            "[data-action='next']"
+            ".reader-stage"
 
         );
 
+    if(stage){
 
-    const previousButton =
+        stage.addEventListener(
 
-        document.querySelector(
+            "touchstart",
 
-            "[data-action='previous']"
+            touchStart,
 
-        );
+            {
 
+                passive:true
 
-    const zoomInButton =
-
-        document.querySelector(
-
-            "[data-action='zoom-in']"
+            }
 
         );
 
+        stage.addEventListener(
 
-    const zoomOutButton =
+            "touchend",
 
-        document.querySelector(
+            touchEnd,
 
-            "[data-action='zoom-out']"
+            {
 
-        );
+                passive:true
 
-
-    const fullscreenButton =
-
-        document.querySelector(
-
-            "[data-action='fullscreen']"
-
-        );
-
-
-    const themeButton =
-
-        document.querySelector(
-
-            "[data-action='theme']"
-
-        );
-
-
-    if(nextButton){
-
-        on(
-
-            nextButton,
-
-            "click",
-
-            nextPage
+            }
 
         );
 
     }
 
+    document.addEventListener(
 
-    if(previousButton){
+        "keydown",
 
-        on(
-
-            previousButton,
-
-            "click",
-
-            previousPage
-
-        );
-
-    }
-
-
-    if(zoomInButton){
-
-        on(
-
-            zoomInButton,
-
-            "click",
-
-            zoomIn
-
-        );
-
-    }
-
-
-    if(zoomOutButton){
-
-        on(
-
-            zoomOutButton,
-
-            "click",
-
-            zoomOut
-
-        );
-
-    }
-
-
-    if(fullscreenButton){
-
-        on(
-
-            fullscreenButton,
-
-            "click",
-
-            toggleFullscreen
-
-        );
-
-    }
-
-
-    if(themeButton){
-
-        on(
-
-            themeButton,
-
-            "click",
-
-            toggleTheme
-
-        );
-
-    }
-
-}
-
-
-/* ==========================================================
-   Page Input
-========================================================== */
-
-function bindPageInput(){
-
-    if(!DOM.pageInput){
-
-        return;
-
-    }
-
-
-    on(
-
-        DOM.pageInput,
-
-        "change",
-
-        event => {
-
-            goToPage(
-
-                event.target.value
-
-            );
-
-        }
+        keyboardHandler
 
     );
 
 }
 
-
 /* ==========================================================
-   Initialize Events
-========================================================== */
-
-function initEvents(){
-
-    bindUIEvents();
-
-    bindPageInput();
-
-}
-/* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 23 OF 25
-   Application Initializer
-========================================================== */
-
-/* ==========================================================
-   Initialize Application
-========================================================== */
-
-async function initializeReader(){
-
-    if(APP_STATE.initialized){
-
-        return;
-
-    }
-
-
-    try{
-
-        showLoader(
-
-            "Starting reader..."
-
-        );
-
-
-        cacheDomElements();
-
-
-        loadSettings();
-
-
-        loadTheme();
-
-
-        loadBookmarks();
-
-
-        restoreSession();
-
-
-        initResizeObserver();
-
-
-        initTouchControls();
-
-
-        applyZoom(
-
-            APP_STATE.zoom
-
-        );
-
-
-        applyViewMode(
-
-            APP_STATE.viewMode
-
-        );
-
-
-        applyRotation(
-
-            APP_STATE.rotation
-
-        );
-
-
-        createSession();
-
-
-        updatePageIndicator();
-
-
-        APP_STATE.initialized = true;
-
-
-        hideLoader();
-
-
-        emit(
-
-            "readerReady"
-
-        );
-
-
-        toastSuccess(
-
-            "Reader ready"
-
-        );
-
-
-    }
-
-    catch(error){
-
-        hideLoader();
-
-
-        toastError(
-
-            "Reader initialization failed"
-
-        );
-
-
-        console.error(error);
-
-    }
-
-}
-
-
-/* ==========================================================
-   Auto Start
+   Initialize
 ========================================================== */
 
 document.addEventListener(
 
     "DOMContentLoaded",
 
-    () => {
+    registerInputEvents,
 
-        initializeReader();
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 20 OF 40
+   reader.js
+   Session Manager + Reading Progress
+========================================================== */
+
+/* ==========================================================
+   Session Keys
+========================================================== */
+
+const SESSION = {
+
+    key:"chishti_reader_session"
+
+};
+
+/* ==========================================================
+   Save Session
+========================================================== */
+
+function saveSession(){
+
+    const session = {
+
+        page:
+
+            APP.currentPage,
+
+        zoom:
+
+            APP.zoom,
+
+        theme:
+
+            APP.theme,
+
+        view:
+
+            APP.view,
+
+        rotation:
+
+            ROTATION.angle,
+
+        bookmarks:
+
+            BOOKMARKS,
+
+        lastRead:
+
+            Date.now()
+
+    };
+
+    localStorage.setItem(
+
+        SESSION.key,
+
+        JSON.stringify(
+
+            session
+
+        )
+
+    );
+
+}
+
+/* ==========================================================
+   Restore Session
+========================================================== */
+
+function restoreSession(){
+
+    const data =
+
+        localStorage.getItem(
+
+            SESSION.key
+
+        );
+
+    if(
+
+        !data
+
+    ){
+
+        return;
+
+    }
+
+    const session =
+
+        JSON.parse(
+
+            data
+
+        );
+
+    APP.currentPage =
+
+        session.page || 1;
+
+    APP.zoom =
+
+        session.zoom || 1;
+
+    APP.theme =
+
+        session.theme ||
+
+        READER_CONFIG.defaultTheme;
+
+    APP.view =
+
+        session.view ||
+
+        READER_CONFIG.defaultView;
+
+    ROTATION.angle =
+
+        session.rotation || 0;
+
+    if(
+
+        Array.isArray(
+
+            session.bookmarks
+
+        )
+
+    ){
+
+        BOOKMARKS.length = 0;
+
+        BOOKMARKS.push(
+
+            ...session.bookmarks
+
+        );
+
+    }
+
+}
+
+/* ==========================================================
+   Reading Progress
+========================================================== */
+
+function updateReadingProgress(){
+
+    if(
+
+        !APP.totalPages
+
+    ){
+
+        return;
+
+    }
+
+    const progress =
+
+        (
+
+            APP.currentPage /
+
+            APP.totalPages
+
+        ) * 100;
+
+    const bar =
+
+        document.querySelector(
+
+            ".reading-progress-bar"
+
+        );
+
+    const percent =
+
+        document.querySelector(
+
+            ".reading-percent"
+
+        );
+
+    if(bar){
+
+        bar.style.width =
+
+            progress + "%";
+
+    }
+
+    if(percent){
+
+        percent.textContent =
+
+            Math.round(
+
+                progress
+
+            ) + "%";
+
+    }
+
+}
+
+/* ==========================================================
+   Auto Save
+========================================================== */
+
+setInterval(
+
+    ()=>{
+
+        if(
+
+            SETTINGS.autoSave
+
+        ){
+
+            saveSession();
+
+        }
+
+    },
+
+    10000
+
+);
+
+/* ==========================================================
+   Before Exit
+========================================================== */
+
+window.addEventListener(
+
+    "beforeunload",
+
+    ()=>{
+
+        saveSession();
+
+    }
+
+);
+
+/* ==========================================================
+   Initialize
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        restoreSession();
+
+        updateReadingProgress();
 
     },
 
@@ -3772,65 +3181,59 @@ document.addEventListener(
 
 );
 /* ==========================================================
-   CHISHTI READER v6
+   CHISHTI READER PRO v7
+   PART 21 OF 40
    reader.js
-   PART 24 OF 25
-   Cleanup & Destroy Manager
+   Table of Contents (TOC) + Thumbnail Sidebar
 ========================================================== */
 
 /* ==========================================================
-   Destroy Application
+   TOC Manager
 ========================================================== */
 
-function destroyReader(){
+const TOC = {
+
+    items:[],
+
+    loaded:false
+
+};
+
+/* ==========================================================
+   Load Outline
+========================================================== */
+
+async function loadTableOfContents(){
+
+    if(
+
+        !PDF.document
+
+    ){
+
+        return;
+
+    }
 
     try{
 
+        const outline =
 
-        saveSession();
+            await PDF.document.getOutline();
 
+        TOC.items =
 
-        saveSettings();
+            outline || [];
 
+        TOC.loaded = true;
 
-        saveBookmarks();
-
-
-        clearEvents();
-
-
-        destroyResizeObserver();
-
-
-        closePDF();
-
-
-        clearRenderCache();
-
-
-        closeDialogs();
-
-
-        APP_STATE.initialized = false;
-
-
-        APP_STATE.loading = false;
-
-
-        emit(
-
-            "readerDestroyed"
-
-        );
-
+        renderTOC();
 
     }
 
     catch(error){
 
         console.error(
-
-            "Destroy failed:",
 
             error
 
@@ -3840,140 +3243,291 @@ function destroyReader(){
 
 }
 
-
 /* ==========================================================
-   Reset Application
+   Render TOC
 ========================================================== */
 
-function resetReader(){
+function renderTOC(){
 
-    destroyReader();
+    const container =
 
+        document.getElementById(
 
-    clearStorage();
+            "tocList"
 
+        );
 
-    APP_STATE.currentPage = 1;
+    if(
 
-    APP_STATE.totalPages = 0;
+        !container
 
-    APP_STATE.zoom = 1;
+    ){
 
-    APP_STATE.rotation = 0;
+        return;
 
-    APP_STATE.theme = "maroon";
+    }
 
-    APP_STATE.viewMode = "single";
+    container.innerHTML = "";
 
+    TOC.items.forEach(
 
-    toastInfo(
+        (item,index)=>{
 
-        "Reader reset"
+            const row =
 
-    );
+                document.createElement(
 
+                    "div"
 
-    emit(
+                );
 
-        "readerReset"
+            row.className =
+
+                "toc-item";
+
+            row.innerHTML =
+
+            `
+
+            <span>
+
+                ${item.title}
+
+            </span>
+
+            `;
+
+            row.addEventListener(
+
+                "click",
+
+                ()=>{
+
+                    openTOCItem(
+
+                        index
+
+                    );
+
+                }
+
+            );
+
+            container.appendChild(
+
+                row
+
+            );
+
+        }
 
     );
 
 }
 
-
 /* ==========================================================
-   Before Close
+   Open TOC Item
 ========================================================== */
 
-window.addEventListener(
+async function openTOCItem(index){
 
-    "beforeunload",
+    const item =
 
-    () => {
+        TOC.items[index];
 
-        saveSession();
+    if(
+
+        !item ||
+
+        !item.dest
+
+    ){
+
+        return;
 
     }
 
-);
+    const destination =
+
+        await PDF.document.getDestination(
+
+            item.dest
+
+        );
+
+    const reference =
+
+        destination[0];
+
+    const page =
+
+        await PDF.document.getPageIndex(
+
+            reference
+
+        );
+
+    goToPage(
+
+        page + 1
+
+    );
+
+}
+
 /* ==========================================================
-   CHISHTI READER v6
-   reader.js
-   PART 25 OF 25
-   Final Export & API
+   Thumbnail Sidebar
 ========================================================== */
 
+async function loadThumbnails(){
+
+    const container =
+
+        document.getElementById(
+
+            "thumbnailList"
+
+        );
+
+    if(
+
+        !container ||
+
+        !PDF.document
+
+    ){
+
+        return;
+
+    }
+
+    container.innerHTML = "";
+
+    for(
+
+        let page = 1;
+
+        page <= APP.totalPages;
+
+        page++
+
+    ){
+
+        const thumb =
+
+            document.createElement(
+
+                "canvas"
+
+            );
+
+        thumb.className =
+
+            "thumbnail";
+
+        thumb.dataset.page =
+
+            page;
+
+        container.appendChild(
+
+            thumb
+
+        );
+
+        renderThumbnail(
+
+            page,
+
+            thumb
+
+        );
+
+    }
+
+}
+
 /* ==========================================================
-   Public Reader API
+   Render Thumbnail
 ========================================================== */
 
-const ChishtiReader = {
+async function renderThumbnail(
 
-    init: initializeReader,
+    pageNumber,
 
-    load: loadPDF,
+    canvas
 
-    close: closePDF,
+){
 
-    next: nextPage,
+    const page =
 
-    previous: previousPage,
+        await PDF.document.getPage(
 
-    goTo: goToPage,
+            pageNumber
 
-    zoomIn,
+        );
 
-    zoomOut,
+    const viewport =
 
-    resetZoom,
+        page.getViewport({
 
-    rotateLeft,
+            scale:0.25
 
-    rotateRight,
+        });
 
-    fullscreen: toggleFullscreen,
+    canvas.width =
 
-    theme: switchTheme,
+        viewport.width;
 
-    search: searchPDF,
+    canvas.height =
 
-    bookmark: addBookmark,
+        viewport.height;
 
-    removeBookmark,
+    await page.render({
 
-    getBookmarks,
+        canvasContext:
 
-    destroy: destroyReader,
+        canvas.getContext(
 
-    reset: resetReader
+            "2d"
 
-};
+        ),
 
+        viewport
+
+    }).promise;
+
+    canvas.addEventListener(
+
+        "click",
+
+        ()=>{
+
+            goToPage(
+
+                pageNumber
+
+            );
+
+        }
+
+    );
+
+}
 
 /* ==========================================================
-   Global Export
-========================================================== */
-
-window.ChishtiReader = ChishtiReader;
-
-
-/* ==========================================================
-   Final Startup Hook
+   Initialize
 ========================================================== */
 
 document.addEventListener(
 
     "DOMContentLoaded",
 
-    () => {
+    ()=>{
 
+        loadTableOfContents();
 
-        initEvents();
-
-
-        initializeReader();
-
+        loadThumbnails();
 
     },
 
@@ -3984,17 +3538,1141 @@ document.addEventListener(
     }
 
 );
-
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 22 OF 40
+   reader.js
+   Panels Manager (Search, Theme, Settings, TOC, Bookmarks)
+========================================================== */
 
 /* ==========================================================
-   CHISHTI READER v6
-
-   reader.js
-
-   Status : Production Ready
-   Parts  : 25 / 25
-   Modules: Complete
-   API    : Exported
-
-   End Of File
+   Panel Manager
 ========================================================== */
+
+const PANELS = {
+
+    active:null
+
+};
+
+/* ==========================================================
+   Open Panel
+========================================================== */
+
+function openPanel(id){
+
+    closePanels();
+
+    const panel =
+
+        document.getElementById(
+
+            id
+
+        );
+
+    if(
+
+        !panel
+
+    ){
+
+        return;
+
+    }
+
+    panel.classList.add(
+
+        "active"
+
+    );
+
+    PANELS.active = id;
+
+}
+
+/* ==========================================================
+   Close Panel
+========================================================== */
+
+function closePanel(id){
+
+    const panel =
+
+        document.getElementById(
+
+            id
+
+        );
+
+    if(
+
+        !panel
+
+    ){
+
+        return;
+
+    }
+
+    panel.classList.remove(
+
+        "active"
+
+    );
+
+    if(
+
+        PANELS.active === id
+
+    ){
+
+        PANELS.active = null;
+
+    }
+
+}
+
+/* ==========================================================
+   Close All Panels
+========================================================== */
+
+function closePanels(){
+
+    document
+
+    .querySelectorAll(
+
+        ".reader-panel"
+
+    )
+
+    .forEach(
+
+        panel=>{
+
+            panel.classList.remove(
+
+                "active"
+
+            );
+
+        }
+
+    );
+
+    PANELS.active = null;
+
+}
+
+/* ==========================================================
+   Toggle Panel
+========================================================== */
+
+function togglePanel(id){
+
+    if(
+
+        PANELS.active === id
+
+    ){
+
+        closePanel(id);
+
+    }
+
+    else{
+
+        openPanel(id);
+
+    }
+
+}
+
+/* ==========================================================
+   Escape Key
+========================================================== */
+
+document.addEventListener(
+
+    "keydown",
+
+    event=>{
+
+        if(
+
+            event.key ===
+
+            "Escape"
+
+        ){
+
+            closePanels();
+
+        }
+
+    }
+
+);
+
+/* ==========================================================
+   Click Outside
+========================================================== */
+
+document.addEventListener(
+
+    "click",
+
+    event=>{
+
+        if(
+
+            event.target.classList.contains(
+
+                "reader-panel"
+
+            )
+
+        ){
+
+            closePanels();
+
+        }
+
+    }
+
+);
+
+/* ==========================================================
+   Toolbar Buttons
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    ()=>{
+
+        document
+
+        .getElementById(
+
+            "settingButton"
+
+        )
+
+        ?.addEventListener(
+
+            "click",
+
+            ()=>{
+
+                togglePanel(
+
+                    "settingsPanel"
+
+                );
+
+            }
+
+        );
+
+        document
+
+        .getElementById(
+
+            "themeButton"
+
+        )
+
+        ?.addEventListener(
+
+            "click",
+
+            ()=>{
+
+                togglePanel(
+
+                    "themePanel"
+
+                );
+
+            }
+
+        );
+
+        document
+
+        .getElementById(
+
+            "bookmarkButton"
+
+        )
+
+        ?.addEventListener(
+
+            "click",
+
+            ()=>{
+
+                togglePanel(
+
+                    "bookmarkPanel"
+
+                );
+
+            }
+
+        );
+
+        document
+
+        .getElementById(
+
+            "searchInput"
+
+        )
+
+        ?.addEventListener(
+
+            "focus",
+
+            ()=>{
+
+                openPanel(
+
+                    "searchPanel"
+
+                );
+
+            }
+
+        );
+
+        document
+
+        .getElementById(
+
+            "tocButton"
+
+        )
+
+        ?.addEventListener(
+
+            "click",
+
+            ()=>{
+
+                togglePanel(
+
+                    "tocPanel"
+
+                );
+
+            }
+
+        );
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 23 OF 40
+   reader.js
+   Loading Screen + Notifications + Error Manager
+========================================================== */
+
+/* ==========================================================
+   Loader Manager
+========================================================== */
+
+const LOADER = {
+
+    visible:false
+
+};
+
+/* ==========================================================
+   Show Loader
+========================================================== */
+
+function showLoader(
+
+    message="Loading Book..."
+
+){
+
+    let loader =
+
+        document.getElementById(
+
+            "readerLoader"
+
+        );
+
+    if(!loader){
+
+        loader =
+
+            document.createElement(
+
+                "div"
+
+            );
+
+        loader.id =
+
+            "readerLoader";
+
+        loader.innerHTML =
+
+        `
+
+        <div class="loader-box">
+
+            <div class="loader-book">
+
+                <div class="loader-page"></div>
+
+                <div class="loader-page"></div>
+
+                <div class="loader-page"></div>
+
+            </div>
+
+            <h3 id="loaderText">
+
+                ${message}
+
+            </h3>
+
+        </div>
+
+        `;
+
+        document.body.appendChild(
+
+            loader
+
+        );
+
+    }
+
+    document.getElementById(
+
+        "loaderText"
+
+    ).textContent = message;
+
+    loader.classList.add(
+
+        "show"
+
+    );
+
+    LOADER.visible = true;
+
+}
+
+/* ==========================================================
+   Hide Loader
+========================================================== */
+
+function hideLoader(){
+
+    const loader =
+
+        document.getElementById(
+
+            "readerLoader"
+
+        );
+
+    if(loader){
+
+        loader.classList.remove(
+
+            "show"
+
+        );
+
+    }
+
+    LOADER.visible = false;
+
+}
+
+/* ==========================================================
+   Toast Notification
+========================================================== */
+
+function showToast(
+
+    message,
+
+    type="success"
+
+){
+
+    const toast =
+
+        document.createElement(
+
+            "div"
+
+        );
+
+    toast.className =
+
+        `toast ${type}`;
+
+    toast.textContent =
+
+        message;
+
+    document.body.appendChild(
+
+        toast
+
+    );
+
+    requestAnimationFrame(
+
+        ()=>{
+
+            toast.classList.add(
+
+                "show"
+
+            );
+
+        }
+
+    );
+
+    setTimeout(
+
+        ()=>{
+
+            toast.classList.remove(
+
+                "show"
+
+            );
+
+            setTimeout(
+
+                ()=>{
+
+                    toast.remove();
+
+                },
+
+                300
+
+            );
+
+        },
+
+        2500
+
+    );
+
+}
+
+/* ==========================================================
+   Notifications
+========================================================== */
+
+function success(message){
+
+    showToast(
+
+        message,
+
+        "success"
+
+    );
+
+}
+
+function warning(message){
+
+    showToast(
+
+        message,
+
+        "warning"
+
+    );
+
+}
+
+function error(message){
+
+    showToast(
+
+        message,
+
+        "error"
+
+    );
+
+}
+
+/* ==========================================================
+   Global Error Handler
+========================================================== */
+
+window.addEventListener(
+
+    "error",
+
+    event=>{
+
+        console.error(
+
+            event.error
+
+        );
+
+        error(
+
+            "Unexpected error occurred."
+
+        );
+
+    }
+
+);
+
+/* ==========================================================
+   Promise Error
+========================================================== */
+
+window.addEventListener(
+
+    "unhandledrejection",
+
+    event=>{
+
+        console.error(
+
+            event.reason
+
+        );
+
+        error(
+
+            "Operation failed."
+
+        );
+
+    }
+
+);
+
+/* ==========================================================
+   PDF Loading Events
+========================================================== */
+
+document.addEventListener(
+
+    "pdfLoading",
+
+    ()=>{
+
+        showLoader(
+
+            "Opening Book..."
+
+        );
+
+    }
+
+);
+
+document.addEventListener(
+
+    "pdfLoaded",
+
+    ()=>{
+
+        hideLoader();
+
+        success(
+
+            "Book Loaded Successfully"
+
+        );
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 24 OF 40
+   reader.js
+   Application Initializer + Startup Manager
+========================================================== */
+
+/* ==========================================================
+   Initialize Reader
+========================================================== */
+
+async function initializeReader(){
+
+    if(
+
+        APP.initialized
+
+    ){
+
+        return;
+
+    }
+
+    try{
+
+        showLoader(
+
+            "Initializing Chishti Reader..."
+
+        );
+
+        cacheElements();
+
+        loadSettings();
+
+        loadTheme();
+
+        loadBookmarks();
+
+        restoreSession();
+
+        registerInputEvents();
+
+        updateReadingProgress();
+
+        enableBookAnimation();
+
+        applyRotation();
+
+        applyZoom();
+
+        APP.initialized = true;
+
+        hideLoader();
+
+        success(
+
+            "CHISHTI READER Ready"
+
+        );
+
+    }
+
+    catch(ex){
+
+        console.error(
+
+            ex
+
+        );
+
+        hideLoader();
+
+        error(
+
+            "Reader initialization failed."
+
+        );
+
+    }
+
+}
+
+/* ==========================================================
+   Load Book
+========================================================== */
+
+async function openReader(pdfUrl){
+
+    if(
+
+        !pdfUrl
+
+    ){
+
+        warning(
+
+            "No PDF selected."
+
+        );
+
+        return;
+
+    }
+
+    try{
+
+        showLoader(
+
+            "Opening Book..."
+
+        );
+
+        await loadPDF(
+
+            pdfUrl
+
+        );
+
+        await openBook();
+
+        await renderSpread();
+
+        updateReadingProgress();
+
+        hideLoader();
+
+        success(
+
+            "Book Ready"
+
+        );
+
+    }
+
+    catch(ex){
+
+        console.error(
+
+            ex
+
+        );
+
+        hideLoader();
+
+        error(
+
+            "Unable to open PDF."
+
+        );
+
+    }
+
+}
+
+/* ==========================================================
+   Refresh Reader
+========================================================== */
+
+async function refreshReader(){
+
+    if(
+
+        !APP.pdf
+
+    ){
+
+        return;
+
+    }
+
+    await renderSpread();
+
+    updateReadingProgress();
+
+}
+
+/* ==========================================================
+   Destroy Reader
+========================================================== */
+
+function destroyReader(){
+
+    saveSession();
+
+    saveBookmarks();
+
+    saveSettings();
+
+    APP.pdf = null;
+
+    APP.initialized = false;
+
+    APP.loading = false;
+
+    APP.rendering = false;
+
+}
+
+/* ==========================================================
+   Visibility Change
+========================================================== */
+
+document.addEventListener(
+
+    "visibilitychange",
+
+    ()=>{
+
+        if(
+
+            document.hidden
+
+        ){
+
+            saveSession();
+
+        }
+
+    }
+
+);
+
+/* ==========================================================
+   Startup
+========================================================== */
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    async ()=>{
+
+        await initializeReader();
+
+    },
+
+    {
+
+        once:true
+
+    }
+
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   PART 25 OF 40
+   reader.js
+   Public API + Global Export
+========================================================== */
+
+/* ==========================================================
+   Public API
+========================================================== */
+
+const ChishtiReader = {
+
+    /* Initialization */
+
+    init:
+
+        initializeReader,
+
+    open:
+
+        openReader,
+
+    destroy:
+
+        destroyReader,
+
+    refresh:
+
+        refreshReader,
+
+    /* PDF */
+
+    load:
+
+        loadPDF,
+
+    /* Navigation */
+
+    next:
+
+        nextPage,
+
+    previous:
+
+        previousPage,
+
+    goto:
+
+        goToPage,
+
+    first(){
+
+        goToPage(1);
+
+    },
+
+    last(){
+
+        goToPage(
+
+            APP.totalPages
+
+        );
+
+    },
+
+    /* Zoom */
+
+    zoomIn,
+
+    zoomOut,
+
+    resetZoom,
+
+    fitPage,
+
+    fitWidth,
+
+    /* Rotation */
+
+    rotateLeft,
+
+    rotateRight,
+
+    /* Fullscreen */
+
+    fullscreen:
+
+        toggleFullscreen,
+
+    /* Search */
+
+    search:
+
+        searchBook,
+
+    nextResult,
+
+    previousResult,
+
+    /* Bookmark */
+
+    bookmark:
+
+        toggleBookmark,
+
+    bookmarks:
+
+        BOOKMARKS,
+
+    /* Theme */
+
+    theme:
+
+        applyTheme,
+
+    /* Settings */
+
+    settings:
+
+        SETTINGS,
+
+    updateSetting,
+
+    resetSettings,
+
+    /* Panels */
+
+    openPanel,
+
+    closePanel,
+
+    togglePanel,
+
+    /* Session */
+
+    save:
+
+        saveSession,
+
+    restore:
+
+        restoreSession
+
+};
+
+/* ==========================================================
+   Global Export
+========================================================== */
+
+window.ChishtiReader =
+
+    Object.freeze(
+
+        ChishtiReader
+
+    );
+
+/* ==========================================================
+   Console Banner
+========================================================== */
+
+console.log(
+
+`%c
+╔══════════════════════════════════════════════╗
+║         CHISHTI READER PRO v7               ║
+║     Professional Islamic PDF Reader         ║
+╚══════════════════════════════════════════════╝
+`,
+
+"color:#d4af37;font-weight:bold;font-size:14px;"
+
+);
+
+console.log(
+
+"Version :",
+
+READER_CONFIG.version
+
+);
+
+console.log(
+
+"Theme :",
+
+APP.theme
+
+);
+
+console.log(
+
+"Ready ✔"
+
+/* ==========================================================
+   END OF PART 25
+   Remaining Parts:
+   26. Theme CSS (All 6 Themes)
+   27. Loader CSS
+   28. Toast CSS
+   29. Search Highlight Engine
+   30. Real Page Curl Engine
+   31. Book Shelf UI
+   32. Library Cards Animation
+   33. PDF Watermark Engine
+   34. Lazy Loading Engine
+   35. Performance Optimizer
+   36. Accessibility
+   37. Print & Download
+   38. Advanced Mobile Gestures
+   39. Final Integration
+   40. Production Build
+========================================================== */
+);
