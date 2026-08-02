@@ -249,62 +249,19 @@ const BOOK_ANIMATION = {
 
 async function openBook(){
 
-    if(
+  async function openBook(){
 
-        BOOK_ANIMATION.opening ||
+    UI.book.classList.add("closed");
 
-        BOOK_ANIMATION.opened
+    await new Promise(r => setTimeout(r, 100));
 
-    ){
+    UI.book.classList.remove("closed");
+    UI.book.classList.add("opening");
 
-        return;
+    await new Promise(r => setTimeout(r, 1200));
 
-    }
-
-    BOOK_ANIMATION.opening = true;
-
-    UI.book.classList.remove(
-
-        "closed"
-
-    );
-
-    UI.book.classList.add(
-
-        "opening"
-
-    );
-
-    await new Promise(
-
-        resolve =>
-
-        setTimeout(
-
-            resolve,
-
-            BOOK_ANIMATION.duration
-
-        )
-
-    );
-
-    UI.book.classList.remove(
-
-        "opening"
-
-    );
-
-    UI.book.classList.add(
-
-        "open"
-
-    );
-
-    BOOK_ANIMATION.opened = true;
-
-    BOOK_ANIMATION.opening = false;
-
+    UI.book.classList.remove("opening");
+    UI.book.classList.add("open");
 }
 
 /* ==========================================================
@@ -4675,4 +4632,43 @@ console.log(
    39. Final Integration
    40. Production Build
 ========================================================== */
+);
+/* ==========================================================
+   CHISHTI READER PRO v7
+   FINAL FIX
+   Auto Open Book From URL
+========================================================== */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js";
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        // Initialize reader
+        await initializeReader();
+
+        // Get book from URL
+        const params = new URLSearchParams(
+            window.location.search
+        );
+
+        const book = params.get("book");
+
+        if(book){
+
+            // PDFs are inside books folder
+            const pdfPath = `books/${book}`;
+
+            console.log("Opening:", pdfPath);
+
+            await openReader(pdfPath);
+        }
+        else{
+
+            warning("No book specified in URL");
+        }
+    },
+    { once:true }
 );
