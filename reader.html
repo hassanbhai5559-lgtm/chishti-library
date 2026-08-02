@@ -1,9 +1,8 @@
 <!-- ==========================================================
-     CHISHTI READER PRO v7
+     CHISHTI BOOK READER v1
      PART 1 OF 40
      reader.html
-     Application Structure
-=========================================================== -->
+========================================================== -->
 
 <!DOCTYPE html>
 <html lang="en" data-theme="maroon">
@@ -12,83 +11,134 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
 
-<title>CHISHTI READER PRO</title>
+<title>
+CHISHTI BOOK READER
+</title>
 
-<link rel="preconnect"
+<link
+rel="preconnect"
 href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
+<link
+rel="preconnect"
 href="https://fonts.gstatic.com"
 crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<link rel="stylesheet"
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+
+<link
+rel="stylesheet"
 href="reader.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js"></script>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.min.js">
+</script>
 
-<script defer
-src="reader.js"></script>
+<script
+defer
+src="reader.js">
+</script>
 
 </head>
 
 <body>
 
-<div id="readerApp"
-class="reader-app">
+<div
+id="app"
+class="app">
 
     <!-- Background -->
 
-    <div class="reader-background">
+    <div class="background">
 
-        <div class="bg-glow glow-left"></div>
+        <div class="bg-left"></div>
 
-        <div class="bg-glow glow-right"></div>
+        <div class="bg-right"></div>
 
         <div class="bg-pattern"></div>
 
     </div>
 
+    <!-- Loader -->
+
+    <div
+    id="loader"
+    class="loader">
+
+        <div class="loader-book">
+
+            <div></div>
+
+            <div></div>
+
+            <div></div>
+
+        </div>
+
+        <h2>
+
+            CHISHTI BOOK READER
+
+        </h2>
+
+    </div>
+
     <!-- Header -->
 
-    <header class="reader-header">
+    <header
+    class="header">
 
-        <div class="header-left">
+        <div
+        class="header-left">
 
             <img
-            src="logo.png"
-            alt="Logo.png"
-            class="reader-logo.png">
+
+            id="logo"
+
+            class="logo"
+
+            src="assets/logo.png"
+
+            alt="Logo">
 
             <div>
 
                 <h1>
 
-                    CHISHTI READER
+                    CHISHTI BOOK READER
 
                 </h1>
 
-                <span>
+                <p>
 
-                    chishti book Reader
+                    Professional Islamic Digital Library
 
-                </span>
+                </p>
 
             </div>
 
         </div>
 
-        <div class="header-center">
+        <div
+        class="header-center">
 
-            <div class="search-box">
+            <div
+            class="search">
 
                 <i
-                class="ri-search-line"></i>
+                class="ri-search-line">
+
+                </i>
 
                 <input
 
@@ -102,53 +152,46 @@ class="reader-app">
 
         </div>
 
-        <div class="header-right">
+        <div
+        class="header-right">
 
             <button
+            id="bookmarkButton">
 
-            id="themeButton"
+                <i
+                class="ri-bookmark-line">
 
-            class="icon-button"
-
-            title="Theme">
-
-                🎨
+                </i>
 
             </button>
 
             <button
+            id="themeButton">
 
-            id="bookmarkButton"
+                <i
+                class="ri-palette-line">
 
-            class="icon-button"
-
-            title="Bookmarks">
-
-                🔖
+                </i>
 
             </button>
 
             <button
+            id="settingButton">
 
-            id="settingButton"
+                <i
+                class="ri-settings-3-line">
 
-            class="icon-button"
-
-            title="Settings">
-
-                ⚙
+                </i>
 
             </button>
 
             <button
+            id="fullscreenButton">
 
-            id="fullscreenButton"
+                <i
+                class="ri-fullscreen-line">
 
-            class="icon-button"
-
-            title="Fullscreen">
-
-                ⛶
+                </i>
 
             </button>
 
@@ -159,57 +202,55 @@ class="reader-app">
     <!-- Reader -->
 
     <main
-    class="reader-stage">
+    class="reader">
 
         <div
+        id="bookStage"
         class="book-stage">
-
-            <!-- Book Shadow -->
 
             <div
             class="book-shadow">
 
             </div>
 
-            <!-- Book -->
-
             <div
             id="book"
+            class="book closed">
 
-            class="real-book">
+                <div
+                class="cover front-cover">
 
-                <!-- Left -->
+                </div>
 
                 <section
-                class="page page-left">
+                class="page left-page">
 
                     <canvas
-
                     id="leftCanvas">
 
                     </canvas>
 
                 </section>
 
-                <!-- Spine -->
-
                 <div
-                class="book-spine">
+                class="spine">
 
                 </div>
 
-                <!-- Right -->
-
                 <section
-                class="page page-right">
+                class="page right-page">
 
                     <canvas
-
                     id="rightCanvas">
 
                     </canvas>
 
                 </section>
+
+                <div
+                class="cover back-cover">
+
+                </div>
 
             </div>
 
@@ -217,31 +258,31 @@ class="reader-app">
 
     </main>
 
-    <!-- Bottom Toolbar -->
+    <!-- Bottom Bar -->
 
     <footer
-    class="reader-toolbar">
+    class="toolbar">
 
         <button
         id="firstPage">
 
-            ⏮
+            <i class="ri-skip-left-fill"></i>
 
         </button>
 
         <button
         id="previousPage">
 
-            ◀
+            <i class="ri-arrow-left-s-line"></i>
 
         </button>
 
         <div
-        class="page-box">
+        class="page-counter">
 
             <input
 
-            id="pageNumber"
+            id="pageInput"
 
             type="number"
 
@@ -265,39 +306,105 @@ class="reader-app">
         <button
         id="nextPage">
 
-            ▶
+            <i class="ri-arrow-right-s-line"></i>
 
         </button>
 
         <button
         id="lastPage">
 
-            ⏭
+            <i class="ri-skip-right-fill"></i>
 
         </button>
 
         <button
         id="zoomOut">
 
-            −
+            <i class="ri-subtract-line"></i>
 
         </button>
+
+        <span
+        id="zoomValue">
+
+            100%
+
+        </span>
 
         <button
         id="zoomIn">
 
-            +
+            <i class="ri-add-line"></i>
 
         </button>
 
         <button
         id="rotateBook">
 
-            ↻
+            <i class="ri-refresh-line"></i>
 
         </button>
 
     </footer>
+
+    <!-- Panels -->
+
+    <aside
+    id="searchPanel"
+    class="panel">
+
+        <div
+        id="searchResults">
+
+        </div>
+
+    </aside>
+
+    <aside
+    id="themePanel"
+    class="panel">
+
+    </aside>
+
+    <aside
+    id="settingsPanel"
+    class="panel">
+
+    </aside>
+
+    <aside
+    id="bookmarkPanel"
+    class="panel">
+
+        <div
+        id="bookmarkList">
+
+        </div>
+
+    </aside>
+
+    <aside
+    id="tocPanel"
+    class="panel">
+
+        <div
+        id="tocList">
+
+        </div>
+
+        <div
+        id="thumbnailList">
+
+        </div>
+
+    </aside>
+
+    <!-- Toast -->
+
+    <div
+    id="toastContainer">
+
+    </div>
 
 </div>
 
