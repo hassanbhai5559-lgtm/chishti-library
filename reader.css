@@ -401,4 +401,820 @@ transform:
 
 translateY(-2px);
 
-} wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+}
+/* ==========================================================
+   CHISHTI BOOK READER v1
+   PART 3 OF 40
+   reader.css
+   Book Stage + Real 3D Book
+========================================================== */
+
+/* ==========================================================
+   READER
+========================================================== */
+
+.reader{
+
+flex:1;
+
+position:relative;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+overflow:hidden;
+
+padding:40px;
+
+}
+
+/* ==========================================================
+   BOOK STAGE
+========================================================== */
+
+.book-stage{
+
+position:relative;
+
+width:100%;
+
+height:100%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+perspective:3000px;
+
+perspective-origin:center;
+
+}
+
+/* ==========================================================
+   BOOK SHADOW
+========================================================== */
+
+.book-shadow{
+
+position:absolute;
+
+width:760px;
+
+height:90px;
+
+left:50%;
+
+bottom:55px;
+
+transform:
+
+translateX(-50%);
+
+background:
+
+radial-gradient(
+
+ellipse,
+
+rgba(0,0,0,.45),
+
+transparent 72%
+
+);
+
+filter:blur(28px);
+
+transition:.6s;
+
+z-index:0;
+
+}
+
+/* ==========================================================
+   BOOK
+========================================================== */
+
+.book{
+
+position:relative;
+
+width:var(--book-width);
+
+height:var(--book-height);
+
+display:flex;
+
+transform-style:
+
+preserve-3d;
+
+transition:
+
+transform .8s ease,
+
+opacity .5s;
+
+z-index:5;
+
+}
+
+/* ==========================================================
+   CLOSED
+========================================================== */
+
+.book.closed{
+
+transform:
+
+translateY(120px)
+
+scale(.65)
+
+rotateY(-45deg);
+
+opacity:0;
+
+}
+
+/* ==========================================================
+   OPENING
+========================================================== */
+
+.book.opening{
+
+animation:
+
+bookOpen
+
+1.2s ease forwards;
+
+}
+
+/* ==========================================================
+   OPEN
+========================================================== */
+
+.book.open{
+
+transform:
+
+translateY(0)
+
+rotateY(0)
+
+scale(1);
+
+opacity:1;
+
+}
+
+/* ==========================================================
+   PAGES
+========================================================== */
+
+.page{
+
+position:relative;
+
+width:50%;
+
+height:100%;
+
+overflow:hidden;
+
+background:
+
+var(--paper);
+
+box-shadow:
+
+inset 0 0 25px
+
+rgba(0,0,0,.08);
+
+}
+
+.left-page{
+
+border-radius:
+
+12px 0 0 12px;
+
+}
+
+.right-page{
+
+border-radius:
+
+0 12px 12px 0;
+
+}
+
+/* ==========================================================
+   CANVAS
+========================================================== */
+
+.page canvas{
+
+display:block;
+
+width:100%;
+
+height:100%;
+
+background:white;
+
+}
+
+/* ==========================================================
+   SPINE
+========================================================== */
+
+.spine{
+
+width:34px;
+
+height:100%;
+
+background:
+
+linear-gradient(
+
+90deg,
+
+#4c0f0f,
+
+#7a1a1a,
+
+#4c0f0f
+
+);
+
+box-shadow:
+
+inset 0 0 18px
+
+rgba(255,255,255,.15),
+
+0 0 20px
+
+rgba(0,0,0,.3);
+
+z-index:20;
+
+}
+
+/* ==========================================================
+   COVERS
+========================================================== */
+
+.cover{
+
+position:absolute;
+
+top:0;
+
+width:50%;
+
+height:100%;
+
+background:
+
+linear-gradient(
+
+135deg,
+
+#7b1515,
+
+#3b0707
+
+);
+
+box-shadow:
+
+0 15px 35px
+
+rgba(0,0,0,.35);
+
+transition:1s;
+
+backface-visibility:hidden;
+
+}
+
+.front-cover{
+
+left:0;
+
+border-radius:
+
+12px 0 0 12px;
+
+transform-origin:left;
+
+}
+
+.back-cover{
+
+right:0;
+
+border-radius:
+
+0 12px 12px 0;
+
+}
+
+/* ==========================================================
+   OPEN COVER
+========================================================== */
+
+.book.open
+
+.front-cover{
+
+transform:
+
+rotateY(-175deg);
+
+}
+
+/* ==========================================================
+   ANIMATION
+========================================================== */
+
+@keyframes bookOpen{
+
+0%{
+
+transform:
+
+translateY(120px)
+
+scale(.65)
+
+rotateY(-40deg);
+
+opacity:0;
+
+}
+
+50%{
+
+transform:
+
+translateY(-20px)
+
+scale(1.05)
+
+rotateY(12deg);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:
+
+translateY(0)
+
+scale(1)
+
+rotateY(0);
+
+opacity:1;
+
+}
+
+}
+/* ==========================================================
+   CHISHTI BOOK READER v1
+   PART 4 OF 40
+   reader.css
+   Bottom Toolbar + Panels + Responsive
+========================================================== */
+
+/* ==========================================================
+   TOOLBAR
+========================================================== */
+
+.toolbar{
+
+height:var(--toolbar-height);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:14px;
+
+padding:0 20px;
+
+background:
+
+rgba(35,8,8,.88);
+
+backdrop-filter:
+
+blur(20px);
+
+border-top:
+
+1px solid
+
+rgba(255,255,255,.08);
+
+}
+
+.toolbar button{
+
+width:48px;
+
+height:48px;
+
+border:none;
+
+outline:none;
+
+cursor:pointer;
+
+border-radius:50%;
+
+background:
+
+rgba(255,255,255,.08);
+
+color:#fff;
+
+font-size:20px;
+
+transition:
+
+var(--transition);
+
+}
+
+.toolbar button:hover{
+
+background:
+
+var(--gold);
+
+color:#222;
+
+transform:
+
+translateY(-2px);
+
+}
+
+.page-counter{
+
+height:48px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:10px;
+
+padding:0 18px;
+
+background:
+
+rgba(255,255,255,.08);
+
+border-radius:50px;
+
+color:#fff;
+
+min-width:140px;
+
+}
+
+.page-counter input{
+
+width:52px;
+
+border:none;
+
+outline:none;
+
+background:none;
+
+text-align:center;
+
+font-size:15px;
+
+font-weight:600;
+
+color:#fff;
+
+}
+
+#zoomValue{
+
+min-width:60px;
+
+text-align:center;
+
+font-size:14px;
+
+font-weight:600;
+
+color:#fff;
+
+}
+
+/* ==========================================================
+   PANELS
+========================================================== */
+
+.panel{
+
+position:fixed;
+
+top:90px;
+
+right:-420px;
+
+width:380px;
+
+height:calc(100vh - 180px);
+
+background:
+
+#fff;
+
+border-radius:
+
+20px 0 0 20px;
+
+box-shadow:
+
+-10px 0 40px
+
+rgba(0,0,0,.25);
+
+transition:.35s;
+
+overflow:auto;
+
+z-index:999;
+
+padding:22px;
+
+}
+
+.panel.active{
+
+right:0;
+
+}
+
+.panel::-webkit-scrollbar{
+
+width:8px;
+
+}
+
+.panel::-webkit-scrollbar-thumb{
+
+background:#b6b6b6;
+
+border-radius:20px;
+
+}
+
+.panel h2{
+
+font-size:22px;
+
+margin-bottom:18px;
+
+color:var(--primary);
+
+}
+
+.panel button{
+
+width:100%;
+
+padding:14px;
+
+margin-bottom:12px;
+
+border:none;
+
+border-radius:12px;
+
+background:#f3f3f3;
+
+cursor:pointer;
+
+font-size:15px;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.panel button:hover{
+
+background:var(--gold);
+
+color:#222;
+
+}
+
+.panel label{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+margin-bottom:18px;
+
+font-size:15px;
+
+font-weight:500;
+
+}
+
+.panel input[type="checkbox"]{
+
+width:18px;
+
+height:18px;
+
+accent-color:var(--primary);
+
+}
+
+/* ==========================================================
+   TOAST
+========================================================== */
+
+#toastContainer{
+
+position:fixed;
+
+top:95px;
+
+right:25px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+z-index:9999;
+
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width:1100px){
+
+:root{
+
+--book-width:760px;
+
+--book-height:540px;
+
+}
+
+}
+
+@media(max-width:900px){
+
+.header-center{
+
+display:none;
+
+}
+
+:root{
+
+--book-width:95vw;
+
+--book-height:70vh;
+
+}
+
+.book{
+
+width:95vw;
+
+}
+
+.panel{
+
+width:100%;
+
+right:-100%;
+
+border-radius:0;
+
+}
+
+.panel.active{
+
+right:0;
+
+}
+
+}
+
+@media(max-width:700px){
+
+.left-page{
+
+display:none;
+
+}
+
+.spine{
+
+display:none;
+
+}
+
+.right-page{
+
+width:100%;
+
+border-radius:14px;
+
+}
+
+.front-cover,
+
+.back-cover{
+
+display:none;
+
+}
+
+.toolbar{
+
+gap:8px;
+
+padding:0 8px;
+
+}
+
+.toolbar button{
+
+width:42px;
+
+height:42px;
+
+font-size:18px;
+
+}
+
+.page-counter{
+
+min-width:110px;
+
+padding:0 12px;
+
+}
+
+.logo{
+
+width:44px;
+
+height:44px;
+
+}
+
+.header-left h1{
+
+font-size:18px;
+
+}
+
+.header-left p{
+
+display:none;
+
+}
+
+}
