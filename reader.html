@@ -1,7 +1,7 @@
 <!-- ==========================================================
      CHISHTI BOOK READER v1
-     PART 1 OF 40
      reader.html
+     PART 1 OF 5
 ========================================================== -->
 
 <!DOCTYPE html>
@@ -15,9 +15,17 @@
 name="viewport"
 content="width=device-width,initial-scale=1.0">
 
+<meta
+name="theme-color"
+content="#5b0b18">
+
 <title>
 CHISHTI BOOK READER
 </title>
+
+<link
+rel="icon"
+href="assets/logo.png">
 
 <link
 rel="preconnect"
@@ -33,21 +41,28 @@ href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;
 rel="stylesheet">
 
 <link
-rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css">
+href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+rel="stylesheet">
 
 <link
 rel="stylesheet"
 href="reader.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
-<script>
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
 </script>
 
-<script src="reader.js"></script>
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc=
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+</script>
+
+<script
+defer
+src="reader.js">
+</script>
 
 </head>
 
@@ -57,357 +72,1539 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 id="app"
 class="app">
 
-    <!-- Background -->
+<!-- ==========================================================
+     BACKGROUND
+========================================================== -->
 
-    <div class="background">
+<div
+class="background">
 
-        <div class="bg-left"></div>
+<div class="bg-left"></div>
 
-        <div class="bg-right"></div>
+<div class="bg-right"></div>
 
-        <div class="bg-pattern"></div>
+<div class="bg-pattern"></div>
 
-    </div>
+<div class="bg-glow bg-glow-left"></div>
 
-    <!-- Loader -->
+<div class="bg-glow bg-glow-right"></div>
 
-    <div
-    id="loader"
-    class="loader">
+</div>
 
-        <div class="loader-book">
+<!-- ==========================================================
+     LOADER
+========================================================== -->
 
-            <div></div>
+<div
+id="loader"
+class="loader">
 
-            <div></div>
+<div
+class="loader-content">
 
-            <div></div>
+<div
+class="loader-book">
 
-        </div>
+<span></span>
 
-        <h2>
+<span></span>
 
-            CHISHTI BOOK READER
+<span></span>
 
-        </h2>
+</div>
 
-    </div>
+<img
 
-    <!-- Header -->
+src="assets/logo.png"
 
-    <header
-    class="header">
+class="loader-logo"
 
-        <div
-        class="header-left">
+alt="Logo">
 
-            <img
+<h2>
 
-            id="logo"
+CHISHTI BOOK READER
 
-            class="logo"
+</h2>
 
-            src="assets/logo.png"
+<p>
 
-            alt="Logo">
+Islamic Digital Library
 
-            <div>
+</p>
 
-                <h1>
+</div>
 
-                    CHISHTI BOOK READER
+</div>
 
-                </h1>
+<!-- ==========================================================
+     HEADER
+========================================================== -->
 
-                <p>
+<header
+class="header"
+id="readerHeader">
 
-                  Islamic Digital Library
+<div
+class="header-left">
 
-                </p>
+<img
 
-            </div>
+id="logo"
 
-        </div>
+class="logo"
 
-        <div
-        class="header-center">
+src="assets/logo.png"
 
-            <div
-            class="search">
+alt="CHISHTI BOOK READER">
 
-                <i
-                class="ri-search-line">
+<div
+class="title-box">
 
-                </i>
+<h1
+id="readerTitle">
 
-                <input
+CHISHTI BOOK READER
 
-                id="searchInput"
+</h1>
 
-                type="text"
+<p
+id="readerSubtitle">
 
-                placeholder="Search inside book...">
+Islamic Digital Library
 
-            </div>
+</p>
 
-        </div>
+</div>
 
-        <div
-        class="header-right">
+</div>
 
-            <button
-            id="bookmarkButton">
+<!-- ==========================================================
+     SEARCH
+========================================================== -->
 
-                <i
-                class="ri-bookmark-line">
+<div
+class="header-center">
 
-                </i>
+<div
+class="search-box">
 
-            </button>
+<i
+class="ri-search-line">
 
-            <button
-            id="themeButton">
+</i>
 
-                <i
-                class="ri-palette-line">
+<input
 
-                </i>
+id="searchInput"
 
-            </button>
+type="search"
 
-            <button
-            id="settingButton">
+autocomplete="off"
 
-                <i
-                class="ri-settings-3-line">
+spellcheck="false"
 
-                </i>
+placeholder="Search inside book...">
 
-            </button>
+<button
 
-            <button
-            id="fullscreenButton">
+id="searchButton"
 
-                <i
-                class="ri-fullscreen-line">
+type="button">
 
-                </i>
+<i
+class="ri-search-line">
 
-            </button>
+</i>
 
-        </div>
+</button>
 
-    </header>
+</div>
 
-    <!-- Reader -->
+</div>
 
-    <main
-    class="reader">
+<!-- ==========================================================
+     HEADER ACTIONS
+========================================================== -->
 
-        <div
-        id="bookStage"
-        class="book-stage">
+<div
+class="header-right">
 
-            <div
-            class="book-shadow">
+<button
 
-            </div>
+id="bookmarkButton"
 
-            <div
-            id="book"
-            class="book closed">
+class="icon-btn"
 
-                <div
-                class="cover front-cover">
+title="Bookmarks">
 
-                </div>
+<i class="ri-bookmark-line"></i>
 
-                <section
-                class="page left-page">
+</button>
 
-                    <canvas
-                    id="leftCanvas">
+<button
 
-                    </canvas>
+id="favoriteBook"
 
-                </section>
+class="icon-btn"
 
-                <div
-                class="spine">
+title="Favorite">
 
-                </div>
+<i class="ri-heart-line"></i>
 
-                <section
-                class="page right-page">
+</button>
 
-                    <canvas
-                    id="rightCanvas">
+<button
 
-                    </canvas>
+id="themeButton"
 
-                </section>
+class="icon-btn"
 
-                <div
-                class="cover back-cover">
+title="Theme">
 
-                </div>
+<i class="ri-palette-line"></i>
 
-            </div>
+</button>
 
-        </div>
+<button
 
-    </main>
+id="settingButton"
 
-    <!-- Bottom Bar -->
+class="icon-btn"
 
-    <footer
-    class="toolbar">
+title="Settings">
 
-        <button
-        id="firstPage">
+<i class="ri-settings-3-line"></i>
 
-            <i class="ri-skip-left-fill"></i>
+</button>
 
-        </button>
+<button
 
-        <button
-        id="previousPage">
+id="fullscreenButton"
 
-            <i class="ri-arrow-left-s-line"></i>
+class="icon-btn"
 
-        </button>
+title="Fullscreen">
 
-        <div
-        class="page-counter">
+<i class="ri-fullscreen-line"></i>
 
-            <input
+</button>
 
-            id="pageInput"
+</div>
 
-            type="number"
+</header>
 
-            value="1">
+<!-- ==========================================================
+     PART 2 STARTS WITH MAIN READER
+========================================================== -->
+<!-- ==========================================================
+     CHISHTI BOOK READER v1
+     reader.html
+     PART 2 OF 5
+     MAIN READER + BOOK + TOOLBAR
+========================================================== -->
 
-            <span>
+<!-- ==========================================================
+     MAIN READER
+========================================================== -->
 
-                /
+<main
+id="reader"
+class="reader">
 
-            </span>
+<div
+id="bookStage"
+class="book-stage">
 
-            <span
-            id="totalPages">
+<div
+class="book-shadow">
 
-                0
+</div>
 
-            </span>
+<div
+id="book"
+class="book closed">
 
-        </div>
+<!-- FRONT COVER -->
 
-        <button
-        id="nextPage">
+<div
+class="cover front-cover">
 
-            <i class="ri-arrow-right-s-line"></i>
+<div
+class="cover-content">
 
-        </button>
+<img
 
-        <button
-        id="lastPage">
+id="coverLogo"
 
-            <i class="ri-skip-right-fill"></i>
+src="assets/logo.png"
 
-        </button>
+class="cover-logo"
 
-        <button
-        id="zoomOut">
+alt="Logo">
 
-            <i class="ri-subtract-line"></i>
+<h2
+id="coverTitle">
 
-        </button>
+CHISHTI BOOK READER
 
-        <span
-        id="zoomValue">
+</h2>
 
-            100%
+<p
+id="coverAuthor">
 
-        </span>
+Islamic Digital Library
 
-        <button
-        id="zoomIn">
+</p>
 
-            <i class="ri-add-line"></i>
+</div>
 
-        </button>
+</div>
 
-        <button
-        id="rotateBook">
+<!-- LEFT PAGE -->
 
-            <i class="ri-refresh-line"></i>
+<section
+class="page left-page">
 
-        </button>
+<div
+class="page-paper">
 
-    </footer>
+<canvas
 
-    <!-- Panels -->
+id="leftCanvas">
 
-    <aside
-    id="searchPanel"
-    class="panel">
+</canvas>
 
-        <div
-        id="searchResults">
+<div
+class="page-gradient page-gradient-left">
 
-        </div>
+</div>
 
-    </aside>
+<div
+class="page-number left-number">
 
-    <aside
-    id="themePanel"
-    class="panel">
+<span
+id="leftPageNumber">
 
-    </aside>
+</span>
 
-    <aside
-    id="settingsPanel"
-    class="panel">
+</div>
 
-    </aside>
+</div>
 
-    <aside
-    id="bookmarkPanel"
-    class="panel">
+</section>
 
-        <div
-        id="bookmarkList">
+<!-- BOOK SPINE -->
 
-        </div>
+<div
+class="book-spine">
 
-    </aside>
+<div
+class="spine-line"></div>
 
-    <aside
-    id="tocPanel"
-    class="panel">
+<div
+class="spine-line"></div>
 
-        <div
-        id="tocList">
+<div
+class="spine-line"></div>
 
-        </div>
+</div>
 
-        <div
-        id="thumbnailList">
+<!-- RIGHT PAGE -->
 
-        </div>
+<section
+class="page right-page">
 
-    </aside>
+<div
+class="page-paper">
 
-    <!-- Toast -->
+<canvas
 
-    <div
-    id="toastContainer">
+id="rightCanvas">
 
-    </div>
+</canvas>
+
+<div
+class="page-gradient page-gradient-right">
+
+</div>
+
+<div
+class="page-number right-number">
+
+<span
+id="rightPageNumber">
+
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- BACK COVER -->
+
+<div
+class="cover back-cover">
+
+<div
+class="cover-content">
+
+<img
+
+src="assets/logo.png"
+
+class="cover-logo"
+
+alt="Logo">
+
+<h3>
+
+CHISHTI LIBRARY
+
+</h3>
+
+<p>
+
+www.chishtilibrary.com
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<!-- ==========================================================
+     BOTTOM TOOLBAR
+========================================================== -->
+
+<footer
+class="toolbar"
+id="toolbar">
+
+<button
+
+id="firstPage"
+
+class="tool-btn"
+
+title="First Page">
+
+<i
+class="ri-skip-left-fill">
+
+</i>
+
+</button>
+
+<button
+
+id="previousPage"
+
+class="tool-btn"
+
+title="Previous Page">
+
+<i
+class="ri-arrow-left-s-line">
+
+</i>
+
+</button>
+
+<div
+class="page-counter">
+
+<input
+
+id="pageNumber"
+
+type="number"
+
+min="1"
+
+value="1">
+
+<span>
+
+/
+
+</span>
+
+<span
+id="totalPages">
+
+0
+
+</span>
+
+</div>
+
+<button
+
+id="nextPage"
+
+class="tool-btn"
+
+title="Next Page">
+
+<i
+class="ri-arrow-right-s-line">
+
+</i>
+
+</button>
+
+<button
+
+id="lastPage"
+
+class="tool-btn"
+
+title="Last Page">
+
+<i
+class="ri-skip-right-fill">
+
+</i>
+
+</button>
+
+<div
+class="toolbar-divider">
+
+</div>
+
+<button
+
+id="zoomOut"
+
+class="tool-btn"
+
+title="Zoom Out">
+
+<i
+class="ri-subtract-line">
+
+</i>
+
+</button>
+
+<span
+id="zoomValue">
+
+100%
+
+</span>
+
+<button
+
+id="zoomIn"
+
+class="tool-btn"
+
+title="Zoom In">
+
+<i
+class="ri-add-line">
+
+</i>
+
+</button>
+
+<button
+
+id="rotateBook"
+
+class="tool-btn"
+
+title="Rotate">
+
+<i
+class="ri-refresh-line">
+
+</i>
+
+</button>
+
+<div
+class="toolbar-divider">
+
+</div>
+
+<button
+
+id="singlePageButton"
+
+class="tool-btn"
+
+title="Single Page">
+
+<i
+class="ri-layout-left-line">
+
+</i>
+
+</button>
+
+<button
+
+id="doublePageButton"
+
+class="tool-btn"
+
+title="Double Page">
+
+<i
+class="ri-layout-column-line">
+
+</i>
+
+</button>
+
+<button
+
+id="autoScrollButton"
+
+class="tool-btn"
+
+title="Auto Scroll">
+
+<i
+class="ri-play-circle-line">
+
+</i>
+
+</button>
+
+<button
+
+id="printBook"
+
+class="tool-btn"
+
+title="Print">
+
+<i
+class="ri-printer-line">
+
+</i>
+
+</button>
+
+<button
+
+id="downloadBook"
+
+class="tool-btn"
+
+title="Download">
+
+<i
+class="ri-download-2-line">
+
+</i>
+
+</button>
+
+<button
+
+id="shareBook"
+
+class="tool-btn"
+
+title="Share">
+
+<i
+class="ri-share-line">
+
+</i>
+
+</button>
+
+<button
+
+id="installReader"
+
+class="tool-btn"
+
+title="Install App"
+
+style="display:none;">
+
+<i
+class="ri-install-line">
+
+</i>
+
+</button>
+
+</footer>
+
+<!-- ==========================================================
+     PART 3
+     PANELS (Search / Theme / Settings / TOC / Bookmark)
+========================================================== -->
+<!-- ==========================================================
+     CHISHTI BOOK READER v1
+     reader.html
+     PART 3 OF 5
+     PANELS
+========================================================== -->
+
+<!-- ==========================================================
+     SEARCH PANEL
+========================================================== -->
+
+<aside
+id="searchPanel"
+class="panel search-panel">
+
+<div
+class="panel-header">
+
+<h3>
+
+<i class="ri-search-line"></i>
+
+Search Results
+
+</h3>
+
+<button
+class="panel-close"
+data-close="searchPanel">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div
+id="searchResults"
+class="panel-body">
+
+<div
+class="empty-state">
+
+<i class="ri-file-search-line"></i>
+
+<p>
+
+Search inside the current book...
+
+</p>
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ==========================================================
+     THEME PANEL
+========================================================== -->
+
+<aside
+id="themePanel"
+class="panel theme-panel">
+
+<div
+class="panel-header">
+
+<h3>
+
+<i class="ri-palette-line"></i>
+
+Themes
+
+</h3>
+
+<button
+class="panel-close"
+data-close="themePanel">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div
+class="panel-body">
+
+<div
+id="themeList"
+class="theme-grid">
+
+<button
+class="theme-card"
+data-theme="maroon">
+
+<span
+class="theme-color maroon">
+
+</span>
+
+Maroon
+
+</button>
+
+<button
+class="theme-card"
+data-theme="emerald">
+
+<span
+class="theme-color emerald">
+
+</span>
+
+Emerald
+
+</button>
+
+<button
+class="theme-card"
+data-theme="royal">
+
+<span
+class="theme-color royal">
+
+</span>
+
+Royal
+
+</button>
+
+<button
+class="theme-card"
+data-theme="coffee">
+
+<span
+class="theme-color coffee">
+
+</span>
+
+Coffee
+
+</button>
+
+<button
+class="theme-card"
+data-theme="midnight">
+
+<span
+class="theme-color midnight">
+
+</span>
+
+Midnight
+
+</button>
+
+<button
+class="theme-card"
+data-theme="light">
+
+<span
+class="theme-color light">
+
+</span>
+
+Light
+
+</button>
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ==========================================================
+     SETTINGS PANEL
+========================================================== -->
+
+<aside
+id="settingsPanel"
+class="panel settings-panel">
+
+<div
+class="panel-header">
+
+<h3>
+
+<i class="ri-settings-3-line"></i>
+
+Reader Settings
+
+</h3>
+
+<button
+class="panel-close"
+data-close="settingsPanel">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div
+class="panel-body">
+
+<div
+class="setting-item">
+
+<label>
+
+Brightness
+
+</label>
+
+<input
+id="brightnessSlider"
+type="range"
+min="40"
+max="150"
+value="100">
+
+<span
+id="brightnessValue">
+
+100%
+
+</span>
+
+</div>
+
+<div
+class="setting-item">
+
+<label>
+
+Eye Comfort
+
+</label>
+
+<input
+id="eyeComfortSwitch"
+type="checkbox">
+
+</div>
+
+<div
+class="setting-item">
+
+<label>
+
+Single Page Mode
+
+</label>
+
+<input
+id="singlePageSwitch"
+type="checkbox">
+
+</div>
+
+<div
+class="setting-item">
+
+<label>
+
+Page Watermark
+
+</label>
+
+<input
+id="watermarkSwitch"
+type="checkbox"
+checked>
+
+</div>
+
+<div
+class="setting-item">
+
+<label>
+
+Page Animation
+
+</label>
+
+<input
+id="animationSwitch"
+type="checkbox"
+checked>
+
+</div>
+
+<div
+class="setting-item">
+
+<label>
+
+Reader Sound
+
+</label>
+
+<input
+id="soundSwitch"
+type="checkbox"
+checked>
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ==========================================================
+     BOOKMARK PANEL
+========================================================== -->
+
+<aside
+id="bookmarkPanel"
+class="panel bookmark-panel">
+
+<div
+class="panel-header">
+
+<h3>
+
+<i class="ri-bookmark-fill"></i>
+
+Bookmarks
+
+</h3>
+
+<button
+class="panel-close"
+data-close="bookmarkPanel">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div
+id="bookmarkList"
+class="panel-body">
+
+<div
+class="empty-state">
+
+<i class="ri-bookmark-line"></i>
+
+<p>
+
+No bookmarks added.
+
+</p>
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ==========================================================
+     TABLE OF CONTENTS PANEL
+========================================================== -->
+
+<aside
+id="tocPanel"
+class="panel toc-panel">
+
+<div
+class="panel-header">
+
+<h3>
+
+<i class="ri-list-check-3"></i>
+
+Contents
+
+</h3>
+
+<button
+class="panel-close"
+data-close="tocPanel">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div
+class="panel-body">
+
+<div
+id="tocList"
+class="toc-list">
+
+</div>
+
+<hr>
+
+<div
+id="thumbnailList"
+class="thumbnail-list">
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ==========================================================
+     PART 4
+     NOTES + READING STATS + MINI MAP + TOAST
+========================================================== -->
+<!-- ==========================================================
+     CHISHTI BOOK READER v1
+     reader.html
+     PART 4 OF 5
+     NOTES + READING + MINI MAP + TOAST
+========================================================== -->
+
+<!-- ==========================================================
+     NOTES PANEL
+========================================================== -->
+
+<aside
+id="notesPanel"
+class="panel notes-panel">
+
+<div
+class="panel-header">
+
+<h3>
+
+<i class="ri-sticky-note-line"></i>
+
+Reader Notes
+
+</h3>
+
+<button
+class="panel-close"
+data-close="notesPanel">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div
+class="panel-body">
+
+<button
+id="addNote"
+class="primary-btn">
+
+<i class="ri-add-line"></i>
+
+Add Note
+
+</button>
+
+<div
+id="notesList">
+
+</div>
+
+</div>
+
+</aside>
+
+<!-- ==========================================================
+     READING STATUS
+========================================================== -->
+
+<div
+class="reading-status">
+
+<div
+class="progress-card">
+
+<div
+id="progressRing"
+class="progress-ring">
+
+<div
+id="progressLabel">
+
+0%
+
+</div>
+
+</div>
+
+<div
+class="progress-info">
+
+<h4>
+
+Reading Progress
+
+</h4>
+
+<p
+id="readingClock">
+
+0 min
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ==========================================================
+     MINI MAP
+========================================================== -->
+
+<div
+id="miniMapContainer"
+class="mini-map-container">
+
+<div
+class="mini-map-header">
+
+<i
+class="ri-map-pin-line">
+
+</i>
+
+<span>
+
+Quick Navigation
+
+</span>
+
+</div>
+
+<div
+id="miniMap"
+class="mini-map">
+
+</div>
+
+</div>
+
+<!-- ==========================================================
+     PAGE SLIDER
+========================================================== -->
+
+<div
+class="page-slider-wrapper">
+
+<input
+
+id="pageSlider"
+
+type="range"
+
+min="1"
+
+max="1"
+
+value="1">
+
+<div
+class="page-slider-info">
+
+<span>
+
+Page
+
+</span>
+
+<strong
+id="sliderPage">
+
+1
+
+</strong>
+
+</div>
+
+</div>
+
+<!-- ==========================================================
+     LOADING OVERLAY
+========================================================== -->
+
+<div
+id="loadingOverlay"
+class="loading-overlay">
+
+<div
+class="loading-box">
+
+<div
+class="loading-spinner">
+
+</div>
+
+<h3>
+
+Loading Book...
+
+</h3>
+
+<p>
+
+Please wait...
+
+</p>
+
+</div>
+
+</div>
+
+<!-- ==========================================================
+     TOAST CONTAINER
+========================================================== -->
+
+<div
+id="toastContainer"
+class="toast-container">
+
+</div>
+
+<!-- ==========================================================
+     CONTEXT MENU
+========================================================== -->
+
+<div
+id="contextMenu"
+class="context-menu">
+
+<button
+id="highlightPage">
+
+<i class="ri-brush-line"></i>
+
+Highlight Page
+
+</button>
+
+<button
+id="favoriteBookMenu">
+
+<i class="ri-heart-line"></i>
+
+Favorite
+
+</button>
+
+<button
+id="copyPageLink">
+
+<i class="ri-links-line"></i>
+
+Copy Link
+
+</button>
+
+<button
+id="printCurrentPage">
+
+<i class="ri-printer-line"></i>
+
+Print
+
+</button>
+
+</div>
+
+<!-- ==========================================================
+     FLOATING ACTION BUTTONS
+========================================================== -->
+
+<div
+class="floating-actions">
+
+<button
+id="scrollTopButton"
+class="fab">
+
+<i
+class="ri-arrow-up-line">
+
+</i>
+
+</button>
+
+<button
+id="scrollBottomButton"
+class="fab">
+
+<i
+class="ri-arrow-down-line">
+
+</i>
+
+</button>
+
+</div>
+
+<!-- ==========================================================
+     PART 5
+     Closing HTML
+========================================================== -->
+<!-- ==========================================================
+     CHISHTI BOOK READER v1
+     reader.html
+     PART 5 OF 5
+     END OF DOCUMENT
+========================================================== -->
+
+<!-- ==========================================================
+     HIDDEN DATA
+========================================================== -->
+
+<input
+id="selectedText"
+type="hidden">
+
+<input
+id="currentBookId"
+type="hidden">
+
+<input
+id="currentTheme"
+type="hidden">
+
+<!-- ==========================================================
+     AUDIO
+========================================================== -->
+
+<audio
+id="pageFlipAudio"
+preload="auto">
+
+<source
+src="assets/sounds/page-flip.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<audio
+id="bookOpenAudio"
+preload="auto">
+
+<source
+src="assets/sounds/book-open.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<audio
+id="bookCloseAudio"
+preload="auto">
+
+<source
+src="assets/sounds/book-close.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<!-- ==========================================================
+     OFFLINE STATUS
+========================================================== -->
+
+<div
+id="offlineBanner"
+class="offline-banner">
+
+<i
+class="ri-wifi-off-line">
+
+</i>
+
+<span>
+
+Offline Mode
+
+</span>
+
+</div>
+
+<!-- ==========================================================
+     ERROR BOX
+========================================================== -->
+
+<div
+id="errorBox"
+class="error-box">
+
+<div
+class="error-content">
+
+<i
+class="ri-error-warning-line">
+
+</i>
+
+<h3>
+
+Unable to Load Book
+
+</h3>
+
+<p
+id="errorMessage">
+
+Unknown Error
+
+</p>
+
+<button
+id="reloadReader">
+
+Reload
+
+</button>
+
+</div>
+
+</div>
+
+<!-- ==========================================================
+     VERSION
+========================================================== -->
+
+<div
+id="readerVersion"
+class="reader-version">
+
+CHISHTI BOOK READER v1.0
+
+</div>
+
+<!-- ==========================================================
+     APP END
+========================================================== -->
 
 </div>
 
 </body>
 
-</html>
+</html>     
