@@ -9,33 +9,36 @@
 name="viewport"
 content="width=device-width,initial-scale=1.0">
 
-<meta
-name="theme-color"
-content="#3b0016">
-
-<meta
-name="description"
-content="Chishti Library Reader">
-
-<title>Chishti Reader</title>
+<title>Chishti Library Reader</title>
 
 <link
 rel="preconnect"
-href="https://cdnjs.cloudflare.com">
+href="https://fonts.googleapis.com">
+
+<link
+rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
 
 <link
 rel="stylesheet"
-href="reader.css">
+href="assets/css/reader.css">
 
-<link
-rel="icon"
-href="assets/favicon.png">
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js">
+</script>
 
 </head>
 
 <body>
 
-<!--========== PRELOADER ==========-->
+<!--==================================================
+                    PRELOADER
+===================================================-->
 
 <div id="preloader">
 
@@ -51,7 +54,7 @@ href="assets/favicon.png">
 
 <p>
 
-Preparing Book...
+Opening Book...
 
 </p>
 
@@ -59,7 +62,9 @@ Preparing Book...
 
 </div>
 
-<!--========== BOOK OPEN ANIMATION ==========-->
+<!--==================================================
+                OPENING ANIMATION
+===================================================-->
 
 <div id="openingAnimation">
 
@@ -75,23 +80,27 @@ Preparing Book...
 
 </div>
 
-<!--========== MAIN READER ==========-->
+<!--==================================================
+                    READER
+===================================================-->
 
 <div id="reader">
 
-<!--========== HEADER ==========-->
+<!--==================================================
+                HEADER
+===================================================-->
 
 <header id="readerHeader">
 
 <div id="readerLogo">
 
 <img
-src="assets/logo.png"
+src="assets/images/logo.png"
 alt="Logo">
 
 <h1>
 
-CHISHTI READER
+CHISHTI LIBRARY
 
 </h1>
 
@@ -101,39 +110,61 @@ CHISHTI READER
 
 <h2 id="bookTitle">
 
-Loading...
+Loading Book...
 
 </h2>
 
-<p id="bookAuthor"></p>
+<p id="bookAuthor">
+
+</p>
 
 </div>
 
 <div id="headerButtons">
 
 <button
-id="bookmarkBtn">
+id="bookmarkBtn"
+title="Bookmark">
 
-★
-
-</button>
-
-<button
-id="themeBtn">
-
-☾
+⭐
 
 </button>
 
 <button
-id="settingBtn">
+id="searchBtn"
+title="Search">
+
+🔍
+
+</button>
+
+<button
+id="themeBtn"
+title="Theme">
+
+🌙
+
+</button>
+
+<button
+id="settingBtn"
+title="Settings">
 
 ⚙
 
 </button>
 
 <button
-id="closeBtn">
+id="fullScreenBtn"
+title="Fullscreen">
+
+⛶
+
+</button>
+
+<button
+id="closeBtn"
+title="Close">
 
 ✕
 
@@ -143,17 +174,28 @@ id="closeBtn">
 
 </header>
 
-<!--========== TOOLBAR TOP ==========-->
+<!--==================================================
+            HTML PART 1 END
+===================================================-->
+<!--==================================================
+                TOP TOOLBAR
+===================================================-->
 
-<nav id="toolbarTop">
+<div id="toolbarTop">
 
-<button id="firstPageBtn">
+<div id="navigationGroup">
+
+<button
+id="firstPageBtn"
+title="First Page">
 
 ⏮
 
 </button>
 
-<button id="previousBtn">
+<button
+id="previousBtn"
+title="Previous Page">
 
 ◀
 
@@ -165,74 +207,125 @@ id="closeBtn">
 
 </div>
 
-<button id="nextBtn">
+<button
+id="nextBtn"
+title="Next Page">
 
 ▶
 
 </button>
 
-<button id="lastPageBtn">
+<button
+id="lastPageBtn"
+title="Last Page">
 
 ⏭
 
 </button>
 
-<button id="zoomOutBtn">
+</div>
+
+<div id="zoomGroup">
+
+<button
+id="zoomOutBtn"
+title="Zoom Out">
 
 －
 
 </button>
 
-<button id="zoomInBtn">
+<div id="zoomIndicator">
+
+100%
+
+</div>
+
+<button
+id="zoomInBtn"
+title="Zoom In">
 
 ＋
 
 </button>
 
-<button id="fullScreenBtn">
+<button
+id="fitPageBtn"
+title="Fit Page">
 
-⛶
+Fit
 
 </button>
 
-</nav>
+<button
+id="fitWidthBtn"
+title="Fit Width">
 
-<!--========== TOOLBAR BOTTOM ==========-->
+Width
 
-<nav id="toolbarBottom">
-
-<div id="searchBox">
-
-<input
-
-type="search"
-
-id="searchInput"
-
-placeholder="Search Entire Book">
+</button>
 
 <button
-id="searchBtn">
+id="resetZoomBtn"
+title="Reset Zoom">
 
-Search
+100%
 
 </button>
 
 </div>
 
-<div id="viewModes">
+</div>
+
+<!--==================================================
+            SECOND TOOLBAR
+===================================================-->
+
+<div id="toolbarBottom">
+
+<div id="searchContainer">
+
+<input
+type="text"
+id="searchKeyword"
+placeholder="Search in complete book...">
+
+<button
+id="searchBookBtn">
+
+Search
+
+</button>
+
+<button
+id="previousSearchBtn">
+
+▲
+
+</button>
+
+<button
+id="nextSearchBtn">
+
+▼
+
+</button>
+
+</div>
+
+<div id="readerModes">
 
 <button
 id="singleModeBtn">
 
-Single
+1 Page
 
 </button>
 
 <button
 id="doubleModeBtn">
 
-Double
+2 Pages
 
 </button>
 
@@ -245,25 +338,48 @@ Auto
 
 </div>
 
-</nav>
+</div>
 
-<!--========== READER BODY ==========-->
+<!--==================================================
+                READER BODY
+===================================================-->
 
-<main id="readerBody">
+<div id="readerBody">
+<!--==================================================
+                BOOK VIEWPORT
+===================================================-->
 
 <div id="bookViewport">
 
-<div id="pageShadow"></div>
+<div id="canvasWrapper">
+
+<div id="bookShadow"></div>
+
+<div id="pageFlipContainer">
+
+<div id="pageFront">
+
+<canvas
+id="leftCanvas">
+</canvas>
+
+</div>
+
+<div id="pageBack">
+
+<canvas
+id="rightCanvas">
+</canvas>
+
+</div>
+
+</div>
 
 <div id="pageCurve"></div>
 
-<div id="canvasWrapper">
+<div id="pageShadow"></div>
 
-<canvas id="leftCanvas"></canvas>
-
-<canvas id="rightCanvas"></canvas>
-
-</div>
+<div id="pageGlow"></div>
 
 <div id="watermark">
 
@@ -271,24 +387,81 @@ CHISHTI LIBRARY
 
 </div>
 
+<div id="floatingPageNumber">
+
+1
+
 </div>
 
-</main>
+</div>
 
-<!--========== HTML PART 1 END ==========-->
- <!--========== SEARCH PANEL ==========-->
+</div>
 
-<aside id="searchPanel">
+<!--==================================================
+            MOBILE NAVIGATION
+===================================================-->
+
+<div id="mobileNavigation">
+
+<button
+id="mobilePrevBtn">
+
+◀ Previous
+
+</button>
+
+<div id="mobilePageCounter">
+
+<span id="mobileCurrentPage">
+
+1
+
+</span>
+
+/
+
+<span id="mobileTotalPages">
+
+1
+
+</span>
+
+</div>
+
+<button
+id="mobileNextBtn">
+
+Next ▶
+
+</button>
+
+</div>
+
+<!--==================================================
+                READER OVERLAY
+===================================================-->
+
+<div id="readerOverlay"></div>
+
+<!--==================================================
+                HTML PART 3 END
+===================================================-->
+<!--==================================================
+                SEARCH PANEL
+===================================================-->
+
+<aside id="searchPanel" class="sidePanel">
 
 <div class="panelHeader">
 
 <h3>
 
-Search
+Search Book
 
 </h3>
 
-<button id="closeSearchPanelBtn">
+<button
+id="closeSearchPanelBtn">
 
 ✕
 
@@ -299,25 +472,61 @@ Search
 <div class="panelBody">
 
 <input
-type="search"
-id="searchKeyword"
-placeholder="Search word...">
+type="text"
+id="searchInput"
+placeholder="Type any word...">
 
-<button id="searchBookBtn">
+<button
+id="searchNowBtn">
 
-Search Book
+Search
 
 </button>
 
-<div id="searchResults"></div>
+<div id="searchResults">
+
+</div>
 
 </div>
 
 </aside>
 
-<!--========== SETTINGS PANEL ==========-->
+<!--==================================================
+                BOOKMARK PANEL
+===================================================-->
 
-<aside id="settingsPanel">
+<aside id="bookmarkPanel" class="sidePanel">
+
+<div class="panelHeader">
+
+<h3>
+
+Bookmarks
+
+</h3>
+
+<button
+id="closeBookmarkBtn">
+
+✕
+
+</button>
+
+</div>
+
+<div
+class="panelBody"
+id="bookmarkList">
+
+</div>
+
+</aside>
+
+<!--==================================================
+                SETTINGS PANEL
+===================================================-->
+
+<aside id="settingsPanel" class="sidePanel">
 
 <div class="panelHeader">
 
@@ -327,7 +536,8 @@ Reader Settings
 
 </h3>
 
-<button id="closeSettingsBtn">
+<button
+id="closeSettingsBtn">
 
 ✕
 
@@ -336,70 +546,6 @@ Reader Settings
 </div>
 
 <div class="panelBody">
-
-<div class="settingItem">
-
-<label>
-
-Reading Mode
-
-</label>
-
-<select id="readingMode">
-
-<option value="auto">
-
-Auto
-
-</option>
-
-<option value="single">
-
-Single Page
-
-</option>
-
-<option value="double">
-
-Double Page
-
-</option>
-
-</select>
-
-</div>
-
-<div class="settingItem">
-
-<label>
-
-Theme
-
-</label>
-
-<select id="themeSelect">
-
-<option value="dark">
-
-Dark
-
-</option>
-
-<option value="light">
-
-Light
-
-</option>
-
-<option value="gold">
-
-Golden
-
-</option>
-
-</select>
-
-</div>
 
 <div class="settingItem">
 
@@ -446,23 +592,87 @@ checked>
 
 </div>
 
+<div class="settingItem">
+
+<label>
+
+Theme
+
+</label>
+
+<select id="themeSelect">
+
+<option value="dark">
+
+Dark
+
+</option>
+
+<option value="light">
+
+Light
+
+</option>
+
+</select>
+
+</div>
+
+<div class="settingItem">
+
+<label>
+
+Reading Mode
+
+</label>
+
+<select id="readingMode">
+
+<option value="auto">
+
+Auto
+
+</option>
+
+<option value="single">
+
+Single Page
+
+</option>
+
+<option value="double">
+
+Double Page
+
+</option>
+
+</select>
+
+</div>
+
 </div>
 
 </aside>
 
-<!--========== BOOKMARK PANEL ==========-->
+<!--==================================================
+                HTML PART 4 END
+===================================================-->
+<!--==================================================
+                TABLE OF CONTENTS
+===================================================-->
 
-<aside id="bookmarkPanel">
+<aside id="tocPanel" class="sidePanel">
 
 <div class="panelHeader">
 
 <h3>
 
-Bookmarks
+Table Of Contents
 
 </h3>
 
-<button id="closeBookmarkBtn">
+<button
+id="closeTocBtn">
 
 ✕
 
@@ -470,31 +680,34 @@ Bookmarks
 
 </div>
 
-<div class="panelBody">
-
-<button id="addBookmarkBtn">
-
-Add Bookmark
-
-</button>
-
-<div id="bookmarkList"></div>
+<div
+class="panelBody"
+id="tocList">
 
 </div>
 
 </aside>
 
-<!--========== THUMBNAIL SIDEBAR ==========-->
+<!--==================================================
+                THUMBNAIL SIDEBAR
+===================================================-->
 
 <aside id="thumbnailSidebar">
 
-<div class="sidebarHeader">
+<div id="thumbnailHeader">
 
 <h3>
 
 Pages
 
 </h3>
+
+<button
+id="closeThumbnailBtn">
+
+✕
+
+</button>
 
 </div>
 
@@ -504,76 +717,27 @@ Pages
 
 </aside>
 
-<!--========== TABLE OF CONTENTS ==========-->
-
-<aside id="tocPanel">
-
-<div class="panelHeader">
-
-<h3>
-
-Contents
-
-</h3>
-
-<button id="closeTocBtn">
-
-✕
-
-</button>
-
-</div>
-
-<div id="tocContainer">
-
-</div>
-
-</aside>
-
-<!--========== HTML PART 2 END ==========-->
-<!--========== MOBILE CONTROLS ==========-->
-
-<div id="mobileControls">
-
-<button id="mobilePrevBtn">
-
-◀
-
-</button>
-
-<div id="mobilePageCounter">
-
-1 / 1
-
-</div>
-
-<button id="mobileNextBtn">
-
-▶
-
-</button>
-
-</div>
-
-<!--========== LOADING SCREEN ==========-->
+<!--==================================================
+                LOADING SCREEN
+===================================================-->
 
 <div id="loadingScreen">
 
-<div id="loadingContent">
+<div class="loadingCard">
 
-<div id="loadingSpinner"></div>
+<div class="loadingBook">
 
-<h2>
+<div class="loadingCover"></div>
+
+<div class="loadingPages"></div>
+
+</div>
+
+<h3 id="loadingStatus">
 
 Loading Book...
 
-</h2>
-
-<p id="loadingStatus">
-
-Preparing pages...
-
-</p>
+</h3>
 
 <div id="loadingProgress">
 
@@ -585,11 +749,13 @@ Preparing pages...
 
 </div>
 
-<!--========== ERROR SCREEN ==========-->
+<!--==================================================
+                ERROR SCREEN
+===================================================-->
 
 <div id="errorScreen">
 
-<div id="errorContent">
+<div class="errorCard">
 
 <h2>
 
@@ -599,19 +765,21 @@ Unable To Open Book
 
 <p id="errorMessage">
 
-Please try again.
+Unknown Error
 
 </p>
 
-<button id="reloadBookBtn">
+<button
+id="reloadBookBtn">
 
 Reload
 
 </button>
 
-<button id="goHomeBtn">
+<button
+id="goHomeBtn">
 
-Library
+Home
 
 </button>
 
@@ -619,39 +787,9 @@ Library
 
 </div>
 
-<!--========== READER OVERLAY ==========-->
-
-<div id="readerOverlay"></div>
-
-<!--========== PAGE TURN LAYERS ==========-->
-
-<div id="pageFlipLayer">
-
-<div id="pageFront"></div>
-
-<div id="pageBack"></div>
-
-<div id="pageGlow"></div>
-
-</div>
-
-<!--========== PAGE NUMBER FLOAT ==========-->
-
-<div id="floatingPageNumber">
-
-1
-
-</div>
-
-<!--========== ZOOM INDICATOR ==========-->
-
-<div id="zoomIndicator">
-
-100%
-
-</div>
-
-<!--========== NOTIFICATION ==========-->
+<!--==================================================
+                TOAST
+===================================================-->
 
 <div id="readerToast">
 
@@ -663,108 +801,8 @@ Ready
 
 </div>
 
-<!--========== HTML PART 3 END ==========-->
-<!--========== PRINT LAYER ==========-->
-
-<div id="printContainer"></div>
-
-<!--========== DOWNLOAD LAYER ==========-->
-
-<div id="downloadContainer"></div>
-
-<!--========== HIDDEN ELEMENTS ==========-->
-
-<input
-type="file"
-id="pdfFileInput"
-hidden>
-
-<input
-type="text"
-id="hiddenSearchInput"
-hidden>
-
-<!--========== AUDIO ==========-->
-
-<audio
-id="pageFlipSound"
-preload="auto">
-
-<source
-src="assets/audio/page-flip.mp3"
-type="audio/mpeg">
-
-</audio>
-
-<audio
-id="buttonClickSound"
-preload="auto">
-
-<source
-src="assets/audio/click.mp3"
-type="audio/mpeg">
-
-</audio>
-
-<!--========== SVG FILTERS ==========-->
-
-<svg
-width="0"
-height="0"
-style="position:absolute">
-
-<defs>
-
-<filter id="pageShadowFilter">
-
-<feDropShadow
-dx="0"
-dy="10"
-stdDeviation="15"/>
-
-</filter>
-
-<filter id="glowFilter">
-
-<feGaussianBlur
-stdDeviation="8"
-result="blur"/>
-
-<feMerge>
-
-<feMergeNode in="blur"/>
-
-<feMergeNode in="SourceGraphic"/>
-
-</feMerge>
-
-</filter>
-
-</defs>
-
-</svg>
-
-<!--========== SCRIPT LIBRARIES ==========-->
-
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js"></script>
-
-<script>
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.js";
-
-</script>
-
-<script
-src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
-
-<!--========== MAIN SCRIPT ==========-->
-
-<script src="reader.js"></script>
-
 </div>
 
 </body>
 
-</html>  
+</html>
