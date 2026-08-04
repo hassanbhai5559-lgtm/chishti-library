@@ -1,84 +1,770 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<meta
+name="theme-color"
+content="#3b0016">
+
+<meta
+name="description"
+content="Chishti Library Reader">
 
 <title>Chishti Reader</title>
 
-<link rel="stylesheet" href="reader.css">
+<link
+rel="preconnect"
+href="https://cdnjs.cloudflare.com">
+
+<link
+rel="stylesheet"
+href="reader.css">
+
+<link
+rel="icon"
+href="assets/favicon.png">
 
 </head>
 
 <body>
 
+<!--========== PRELOADER ==========-->
+
+<div id="preloader">
+
+<div class="loader">
+
+<div class="loaderBook">
+
+<div class="loaderFront"></div>
+
+<div class="loaderPages"></div>
+
+</div>
+
+<p>
+
+Preparing Book...
+
+</p>
+
+</div>
+
+</div>
+
+<!--========== BOOK OPEN ANIMATION ==========-->
+
+<div id="openingAnimation">
+
+<div class="openingGlow"></div>
+
+<div class="openingBook">
+
+<div class="openingCover"></div>
+
+<div class="openingPage"></div>
+
+</div>
+
+</div>
+
+<!--========== MAIN READER ==========-->
+
 <div id="reader">
 
-<header class="topbar">
+<!--========== HEADER ==========-->
 
-<div class="logo">
-📖 CHISHTI READER
+<header id="readerHeader">
+
+<div id="readerLogo">
+
+<img
+src="assets/logo.png"
+alt="Logo">
+
+<h1>
+
+CHISHTI READER
+
+</h1>
+
 </div>
 
-<div class="book-title">
+<div id="bookInfo">
+
+<h2 id="bookTitle">
+
 Loading...
+
+</h2>
+
+<p id="bookAuthor"></p>
+
 </div>
 
-<div class="actions">
+<div id="headerButtons">
 
-<button id="bookmarkBtn">★</button>
+<button
+id="bookmarkBtn">
 
-<button id="settingBtn">⚙</button>
+★
 
-<button id="closeBtn">✕</button>
+</button>
+
+<button
+id="themeBtn">
+
+☾
+
+</button>
+
+<button
+id="settingBtn">
+
+⚙
+
+</button>
+
+<button
+id="closeBtn">
+
+✕
+
+</button>
 
 </div>
 
 </header>
 
+<!--========== TOOLBAR TOP ==========-->
 
-<nav class="toolbar">
+<nav id="toolbarTop">
 
-<button id="prevPage">◀</button>
+<button id="firstPageBtn">
 
-<div id="pageInfo">
+⏮
+
+</button>
+
+<button id="previousBtn">
+
+◀
+
+</button>
+
+<div id="pageCounter">
 
 1 / 1
 
 </div>
 
-<button id="nextPage">▶</button>
+<button id="nextBtn">
 
-<input
-type="text"
-id="searchBox"
-placeholder="Search">
+▶
 
-<button id="zoomOut">−</button>
+</button>
 
-<button id="zoomIn">+</button>
+<button id="lastPageBtn">
+
+⏭
+
+</button>
+
+<button id="zoomOutBtn">
+
+－
+
+</button>
+
+<button id="zoomInBtn">
+
+＋
+
+</button>
+
+<button id="fullScreenBtn">
+
+⛶
+
+</button>
 
 </nav>
 
+<!--========== TOOLBAR BOTTOM ==========-->
 
-<main id="viewer">
+<nav id="toolbarBottom">
 
-<div id="book">
+<div id="searchBox">
 
-<canvas id="pageCanvas"></canvas>
+<input
+
+type="search"
+
+id="searchInput"
+
+placeholder="Search Entire Book">
+
+<button
+id="searchBtn">
+
+Search
+
+</button>
+
+</div>
+
+<div id="viewModes">
+
+<button
+id="singleModeBtn">
+
+Single
+
+</button>
+
+<button
+id="doubleModeBtn">
+
+Double
+
+</button>
+
+<button
+id="autoModeBtn">
+
+Auto
+
+</button>
+
+</div>
+
+</nav>
+
+<!--========== READER BODY ==========-->
+
+<main id="readerBody">
+
+<div id="bookViewport">
+
+<div id="pageShadow"></div>
+
+<div id="pageCurve"></div>
+
+<div id="canvasWrapper">
+
+<canvas id="leftCanvas"></canvas>
+
+<canvas id="rightCanvas"></canvas>
+
+</div>
 
 <div id="watermark">
+
 CHISHTI LIBRARY
+
 </div>
 
 </div>
 
 </main>
 
+<!--========== HTML PART 1 END ==========-->
+ <!--========== SEARCH PANEL ==========-->
+
+<aside id="searchPanel">
+
+<div class="panelHeader">
+
+<h3>
+
+Search
+
+</h3>
+
+<button id="closeSearchPanelBtn">
+
+✕
+
+</button>
+
 </div>
+
+<div class="panelBody">
+
+<input
+type="search"
+id="searchKeyword"
+placeholder="Search word...">
+
+<button id="searchBookBtn">
+
+Search Book
+
+</button>
+
+<div id="searchResults"></div>
+
+</div>
+
+</aside>
+
+<!--========== SETTINGS PANEL ==========-->
+
+<aside id="settingsPanel">
+
+<div class="panelHeader">
+
+<h3>
+
+Reader Settings
+
+</h3>
+
+<button id="closeSettingsBtn">
+
+✕
+
+</button>
+
+</div>
+
+<div class="panelBody">
+
+<div class="settingItem">
+
+<label>
+
+Reading Mode
+
+</label>
+
+<select id="readingMode">
+
+<option value="auto">
+
+Auto
+
+</option>
+
+<option value="single">
+
+Single Page
+
+</option>
+
+<option value="double">
+
+Double Page
+
+</option>
+
+</select>
+
+</div>
+
+<div class="settingItem">
+
+<label>
+
+Theme
+
+</label>
+
+<select id="themeSelect">
+
+<option value="dark">
+
+Dark
+
+</option>
+
+<option value="light">
+
+Light
+
+</option>
+
+<option value="gold">
+
+Golden
+
+</option>
+
+</select>
+
+</div>
+
+<div class="settingItem">
+
+<label>
+
+Page Animation
+
+</label>
+
+<input
+type="checkbox"
+id="pageAnimation"
+checked>
+
+</div>
+
+<div class="settingItem">
+
+<label>
+
+Page Shadow
+
+</label>
+
+<input
+type="checkbox"
+id="pageShadowSwitch"
+checked>
+
+</div>
+
+<div class="settingItem">
+
+<label>
+
+Watermark
+
+</label>
+
+<input
+type="checkbox"
+id="watermarkSwitch"
+checked>
+
+</div>
+
+</div>
+
+</aside>
+
+<!--========== BOOKMARK PANEL ==========-->
+
+<aside id="bookmarkPanel">
+
+<div class="panelHeader">
+
+<h3>
+
+Bookmarks
+
+</h3>
+
+<button id="closeBookmarkBtn">
+
+✕
+
+</button>
+
+</div>
+
+<div class="panelBody">
+
+<button id="addBookmarkBtn">
+
+Add Bookmark
+
+</button>
+
+<div id="bookmarkList"></div>
+
+</div>
+
+</aside>
+
+<!--========== THUMBNAIL SIDEBAR ==========-->
+
+<aside id="thumbnailSidebar">
+
+<div class="sidebarHeader">
+
+<h3>
+
+Pages
+
+</h3>
+
+</div>
+
+<div id="thumbnailContainer">
+
+</div>
+
+</aside>
+
+<!--========== TABLE OF CONTENTS ==========-->
+
+<aside id="tocPanel">
+
+<div class="panelHeader">
+
+<h3>
+
+Contents
+
+</h3>
+
+<button id="closeTocBtn">
+
+✕
+
+</button>
+
+</div>
+
+<div id="tocContainer">
+
+</div>
+
+</aside>
+
+<!--========== HTML PART 2 END ==========-->
+<!--========== MOBILE CONTROLS ==========-->
+
+<div id="mobileControls">
+
+<button id="mobilePrevBtn">
+
+◀
+
+</button>
+
+<div id="mobilePageCounter">
+
+1 / 1
+
+</div>
+
+<button id="mobileNextBtn">
+
+▶
+
+</button>
+
+</div>
+
+<!--========== LOADING SCREEN ==========-->
+
+<div id="loadingScreen">
+
+<div id="loadingContent">
+
+<div id="loadingSpinner"></div>
+
+<h2>
+
+Loading Book...
+
+</h2>
+
+<p id="loadingStatus">
+
+Preparing pages...
+
+</p>
+
+<div id="loadingProgress">
+
+<div id="loadingBar"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<!--========== ERROR SCREEN ==========-->
+
+<div id="errorScreen">
+
+<div id="errorContent">
+
+<h2>
+
+Unable To Open Book
+
+</h2>
+
+<p id="errorMessage">
+
+Please try again.
+
+</p>
+
+<button id="reloadBookBtn">
+
+Reload
+
+</button>
+
+<button id="goHomeBtn">
+
+Library
+
+</button>
+
+</div>
+
+</div>
+
+<!--========== READER OVERLAY ==========-->
+
+<div id="readerOverlay"></div>
+
+<!--========== PAGE TURN LAYERS ==========-->
+
+<div id="pageFlipLayer">
+
+<div id="pageFront"></div>
+
+<div id="pageBack"></div>
+
+<div id="pageGlow"></div>
+
+</div>
+
+<!--========== PAGE NUMBER FLOAT ==========-->
+
+<div id="floatingPageNumber">
+
+1
+
+</div>
+
+<!--========== ZOOM INDICATOR ==========-->
+
+<div id="zoomIndicator">
+
+100%
+
+</div>
+
+<!--========== NOTIFICATION ==========-->
+
+<div id="readerToast">
+
+<span id="toastMessage">
+
+Ready
+
+</span>
+
+</div>
+
+<!--========== HTML PART 3 END ==========-->
+<!--========== PRINT LAYER ==========-->
+
+<div id="printContainer"></div>
+
+<!--========== DOWNLOAD LAYER ==========-->
+
+<div id="downloadContainer"></div>
+
+<!--========== HIDDEN ELEMENTS ==========-->
+
+<input
+type="file"
+id="pdfFileInput"
+hidden>
+
+<input
+type="text"
+id="hiddenSearchInput"
+hidden>
+
+<!--========== AUDIO ==========-->
+
+<audio
+id="pageFlipSound"
+preload="auto">
+
+<source
+src="assets/audio/page-flip.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<audio
+id="buttonClickSound"
+preload="auto">
+
+<source
+src="assets/audio/click.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<!--========== SVG FILTERS ==========-->
+
+<svg
+width="0"
+height="0"
+style="position:absolute">
+
+<defs>
+
+<filter id="pageShadowFilter">
+
+<feDropShadow
+dx="0"
+dy="10"
+stdDeviation="15"/>
+
+</filter>
+
+<filter id="glowFilter">
+
+<feGaussianBlur
+stdDeviation="8"
+result="blur"/>
+
+<feMerge>
+
+<feMergeNode in="blur"/>
+
+<feMergeNode in="SourceGraphic"/>
+
+</feMerge>
+
+</filter>
+
+</defs>
+
+</svg>
+
+<!--========== SCRIPT LIBRARIES ==========-->
+
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js"></script>
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.js";
+
+</script>
+
+<script
+src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
+
+<!--========== MAIN SCRIPT ==========-->
 
 <script src="reader.js"></script>
 
+</div>
+
 </body>
-</html>
+
+</html>  
