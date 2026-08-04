@@ -1,5 +1,7 @@
 /*==================================================
-                JAVASCRIPT PART 1
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 1
+            CORE + PDF INITIALIZATION
 ==================================================*/
 
 "use strict";
@@ -15,376 +17,170 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
                 READER OBJECT
 ==================================================*/
 
-const Reader={};
+const Reader = {
 
-/*==================================================
-                READER STATE
-==================================================*/
+    /*------------------------------
+        PDF
+    ------------------------------*/
 
-Reader.pdf=null;
+    pdf: null,
 
-Reader.currentPage=1;
+    bookUrl: "",
 
-Reader.totalPages=0;
+    totalPages: 0,
 
-Reader.scale=1.4;
+    currentPage: 1,
 
-Reader.rotation=0;
+    /*------------------------------
+        Canvas
+    ------------------------------*/
 
-Reader.isLoading=false;
+    leftCanvas: null,
 
-Reader.isRendering=false;
+    rightCanvas: null,
 
-Reader.isSearching=false;
+    leftContext: null,
 
-Reader.isMobile=false;
+    rightContext: null,
 
-Reader.isSingleMode=false;
+    /*------------------------------
+        Zoom
+    ------------------------------*/
 
-Reader.isDoubleMode=true;
+    zoom: 1,
 
-Reader.pageCache=new Map();
+    minZoom: 0.60,
 
-Reader.bookmarks=[];
+    maxZoom: 3,
 
-Reader.searchIndex=[];
+    zoomStep: 0.20,
 
-/*==================================================
-                URL
-==================================================*/
+    /*------------------------------
+        View
+    ------------------------------*/
 
-Reader.url=new URL(window.location.href);
+    singleMode: false,
 
-Reader.bookPath=
-Reader.url.searchParams.get("book")||"";
+    doubleMode: true,
+
+    mobileMode: false,
+
+    /*------------------------------
+        Cache
+    ------------------------------*/
+
+    pageCache: new Map(),
+
+    renderQueue: [],
+
+    rendering: false,
+
+    /*------------------------------
+        Search
+    ------------------------------*/
+
+    searchIndex: [],
+
+    searchResults: [],
+
+    /*------------------------------
+        Bookmark
+    ------------------------------*/
+
+    bookmarks: [],
+
+    /*------------------------------
+        UI
+    ------------------------------*/
+
+    initialized: false,
+
+    animationRunning: false
+
+};
 
 /*==================================================
                 DOM
 ==================================================*/
 
-Reader.dom={
+Reader.dom = {};
 
-preloader:
-document.getElementById("preloader"),
+/*==================================================
+                GET ELEMENT
+==================================================*/
 
-openingAnimation:
-document.getElementById("openingAnimation"),
+Reader.$ = function(id){
 
-reader:
-document.getElementById("reader"),
-
-readerHeader:
-document.getElementById("readerHeader"),
-
-toolbarTop:
-document.getElementById("toolbarTop"),
-
-toolbarBottom:
-document.getElementById("toolbarBottom"),
-
-readerBody:
-document.getElementById("readerBody"),
-
-bookViewport:
-document.getElementById("bookViewport"),
-
-canvasWrapper:
-document.getElementById("canvasWrapper"),
-
-leftCanvas:
-document.getElementById("leftCanvas"),
-
-rightCanvas:
-document.getElementById("rightCanvas"),
-
-pageShadow:
-document.getElementById("pageShadow"),
-
-pageCurve:
-document.getElementById("pageCurve"),
-
-watermark:
-document.getElementById("watermark"),
-
-bookTitle:
-document.getElementById("bookTitle"),
-
-bookAuthor:
-document.getElementById("bookAuthor"),
-
-pageCounter:
-document.getElementById("pageCounter"),
-
-floatingPageNumber:
-document.getElementById("floatingPageNumber"),
-
-zoomIndicator:
-document.getElementById("zoomIndicator"),
-
-readerOverlay:
-document.getElementById("readerOverlay"),
-
-loadingScreen:
-document.getElementById("loadingScreen"),
-
-loadingStatus:
-document.getElementById("loadingStatus"),
-
-loadingBar:
-document.getElementById("loadingBar"),
-
-errorScreen:
-document.getElementById("errorScreen"),
-
-errorMessage:
-document.getElementById("errorMessage"),
-
-readerToast:
-document.getElementById("readerToast"),
-
-toastMessage:
-document.getElementById("toastMessage"),
-
-searchPanel:
-document.getElementById("searchPanel"),
-
-settingsPanel:
-document.getElementById("settingsPanel"),
-
-bookmarkPanel:
-document.getElementById("bookmarkPanel"),
-
-thumbnailSidebar:
-document.getElementById("thumbnailSidebar"),
-
-tocPanel:
-document.getElementById("tocPanel")
+    return document.getElementById(id);
 
 };
 
 /*==================================================
-                BUTTONS
+                CACHE DOM
 ==================================================*/
 
-Reader.btn={
+Reader.cacheDOM = function(){
 
-bookmark:
-document.getElementById("bookmarkBtn"),
+    Reader.dom.reader =
+    Reader.$("reader");
 
-theme:
-document.getElementById("themeBtn"),
+    Reader.dom.preloader =
+    Reader.$("preloader");
 
-settings:
-document.getElementById("settingBtn"),
+    Reader.dom.loadingScreen =
+    Reader.$("loadingScreen");
 
-close:
-document.getElementById("closeBtn"),
+    Reader.dom.errorScreen =
+    Reader.$("errorScreen");
 
-first:
-document.getElementById("firstPageBtn"),
+    Reader.dom.readerBody =
+    Reader.$("readerBody");
 
-previous:
-document.getElementById("previousBtn"),
+    Reader.dom.bookViewport =
+    Reader.$("bookViewport");
 
-next:
-document.getElementById("nextBtn"),
+    Reader.dom.canvasWrapper =
+    Reader.$("canvasWrapper");
 
-last:
-document.getElementById("lastPageBtn"),
+    Reader.leftCanvas =
+    Reader.$("leftCanvas");
 
-zoomIn:
-document.getElementById("zoomInBtn"),
+    Reader.rightCanvas =
+    Reader.$("rightCanvas");
 
-zoomOut:
-document.getElementById("zoomOutBtn"),
+    Reader.leftContext =
+    Reader.leftCanvas.getContext(
+        "2d",
+        {
+            alpha:false
+        }
+    );
 
-fullscreen:
-document.getElementById("fullScreenBtn"),
+    Reader.rightContext =
+    Reader.rightCanvas.getContext(
+        "2d",
+        {
+            alpha:false
+        }
+    );
 
-search:
-document.getElementById("searchBtn"),
+    Reader.dom.pageCounter =
+    Reader.$("pageCounter");
 
-single:
-document.getElementById("singleModeBtn"),
+    Reader.dom.zoomIndicator =
+    Reader.$("zoomIndicator");
 
-double:
-document.getElementById("doubleModeBtn"),
+    Reader.dom.loadingBar =
+    Reader.$("loadingBar");
 
-auto:
-document.getElementById("autoModeBtn"),
+    Reader.dom.loadingStatus =
+    Reader.$("loadingStatus");
 
-mobilePrevious:
-document.getElementById("mobilePrevBtn"),
+    Reader.dom.bookTitle =
+    Reader.$("bookTitle");
 
-mobileNext:
-document.getElementById("mobileNextBtn")
-
-};
-
-/*==================================================
-                INPUTS
-==================================================*/
-
-Reader.input={
-
-search:
-document.getElementById("searchInput"),
-
-searchKeyword:
-document.getElementById("searchKeyword"),
-
-readingMode:
-document.getElementById("readingMode"),
-
-theme:
-document.getElementById("themeSelect"),
-
-pageAnimation:
-document.getElementById("pageAnimation"),
-
-pageShadow:
-document.getElementById("pageShadowSwitch"),
-
-watermark:
-document.getElementById("watermarkSwitch")
-
-};
-
-/*==================================================
-                CANVAS
-==================================================*/
-
-Reader.ctxLeft=
-Reader.dom.leftCanvas.getContext("2d");
-
-Reader.ctxRight=
-Reader.dom.rightCanvas.getContext("2d");
-
-/*==================================================
-                HELPERS
-==================================================*/
-
-Reader.isPhone=function(){
-
-return window.innerWidth<=991;
-
-};
-
-Reader.updatePageCounter=function(){
-
-Reader.dom.pageCounter.textContent=
-
-Reader.currentPage+
-
-" / "+
-
-Reader.totalPages;
-
-};
-
-Reader.showToast=function(message){
-
-Reader.dom.toastMessage.textContent=
-message;
-
-Reader.dom.readerToast.classList.add("show");
-
-clearTimeout(Reader.toastTimer);
-
-Reader.toastTimer=setTimeout(function(){
-
-Reader.dom.readerToast.classList.remove("show");
-
-},2000);
-
-};
-
-/*==================================================
-                JAVASCRIPT PART 1 END
-==================================================*/
-/*==================================================
-                JAVASCRIPT PART 2
-==================================================*/
-
-/*==================================================
-                LOADING
-==================================================*/
-
-Reader.showLoading=function(text="Loading Book..."){
-
-Reader.isLoading=true;
-
-Reader.dom.loadingStatus.textContent=text;
-
-Reader.dom.loadingBar.style.width="0%";
-
-Reader.dom.loadingScreen.style.display="flex";
-
-};
-
-Reader.hideLoading=function(){
-
-Reader.isLoading=false;
-
-Reader.dom.loadingBar.style.width="100%";
-
-setTimeout(function(){
-
-Reader.dom.loadingScreen.style.display="none";
-
-},300);
-
-};
-
-/*==================================================
-                ERROR
-==================================================*/
-
-Reader.showError=function(message){
-
-Reader.dom.errorMessage.textContent=message;
-
-Reader.dom.errorScreen.style.display="flex";
-
-};
-
-Reader.hideError=function(){
-
-Reader.dom.errorScreen.style.display="none";
-
-};
-
-/*==================================================
-                PAGE COUNTER
-==================================================*/
-
-Reader.updatePageCounter=function(){
-
-Reader.dom.pageCounter.textContent=
-
-Reader.currentPage+
-
-" / "+
-
-Reader.totalPages;
-
-if(Reader.dom.floatingPageNumber){
-
-Reader.dom.floatingPageNumber.textContent=
-
-Reader.currentPage;
-
-Reader.dom.floatingPageNumber.style.opacity="1";
-
-clearTimeout(Reader.pageTimer);
-
-Reader.pageTimer=setTimeout(function(){
-
-Reader.dom.floatingPageNumber.style.opacity="0";
-
-},1200);
-
-}
+    Reader.dom.bookAuthor =
+    Reader.$("bookAuthor");
 
 };
 
@@ -392,200 +188,113 @@ Reader.dom.floatingPageNumber.style.opacity="0";
                 DEVICE
 ==================================================*/
 
-Reader.detectDevice=function(){
+Reader.detectDevice = function(){
 
-Reader.isMobile=
+    Reader.mobileMode =
+    window.innerWidth <= 991;
 
-window.innerWidth<=991;
+    if(Reader.mobileMode){
 
-if(Reader.isMobile){
+        Reader.singleMode = true;
 
-Reader.isSingleMode=true;
+        Reader.doubleMode = false;
 
-Reader.isDoubleMode=false;
+    }
 
-}else{
+    else{
 
-if(!Reader.isSingleMode){
+        Reader.singleMode = false;
 
-Reader.isDoubleMode=true;
+        Reader.doubleMode = true;
 
-}
-
-}
-
-};
-
-window.addEventListener(
-
-"resize",
-
-Reader.detectDevice
-
-);
-
-/*==================================================
-                CACHE
-==================================================*/
-
-Reader.clearCache=function(){
-
-Reader.pageCache.clear();
+    }
 
 };
 
 /*==================================================
-                PANEL
+                START
 ==================================================*/
 
-Reader.openPanel=function(panel){
+Reader.start = function(){
 
-Reader.closePanels();
+    Reader.cacheDOM();
 
-panel.classList.add("active");
-
-Reader.dom.readerOverlay.classList.add("active");
-
-};
-
-Reader.closePanels=function(){
-
-Reader.dom.searchPanel.classList.remove("active");
-
-Reader.dom.settingsPanel.classList.remove("active");
-
-Reader.dom.bookmarkPanel.classList.remove("active");
-
-Reader.dom.thumbnailSidebar.classList.remove("active");
-
-Reader.dom.tocPanel.classList.remove("active");
-
-Reader.dom.readerOverlay.classList.remove("active");
+    Reader.detectDevice();
 
 };
 
 /*==================================================
-                BUTTON PANEL EVENTS
-==================================================*/
-
-Reader.btn.search.addEventListener(
-
-"click",
-
-function(){
-
-Reader.openPanel(
-
-Reader.dom.searchPanel
-
-);
-
-}
-
-);
-
-Reader.btn.settings.addEventListener(
-
-"click",
-
-function(){
-
-Reader.openPanel(
-
-Reader.dom.settingsPanel
-
-);
-
-}
-
-);
-
-Reader.btn.bookmark.addEventListener(
-
-"dblclick",
-
-function(){
-
-Reader.openPanel(
-
-Reader.dom.bookmarkPanel
-
-);
-
-}
-
-);
-
-Reader.dom.readerOverlay.addEventListener(
-
-"click",
-
-Reader.closePanels
-
-);
-
-document
-
-.getElementById("closeSearchPanelBtn")
-
-.addEventListener(
-
-"click",
-
-Reader.closePanels
-
-);
-
-document
-
-.getElementById("closeSettingsBtn")
-
-.addEventListener(
-
-"click",
-
-Reader.closePanels
-
-);
-
-document
-
-.getElementById("closeBookmarkBtn")
-
-.addEventListener(
-
-"click",
-
-Reader.closePanels
-
-);
-
-document
-
-.getElementById("closeTocBtn")
-
-.addEventListener(
-
-"click",
-
-Reader.closePanels
-
-);
-
-/*==================================================
-                INITIALIZE
-==================================================*/
-
-Reader.detectDevice();
-
-Reader.hideError();
-
-/*==================================================
-                JAVASCRIPT PART 2 END
+            JAVASCRIPT PART 1 END
 ==================================================*/
 /*==================================================
-                JAVASCRIPT PART 3
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 2
+            PDF LOADER + RENDER ENGINE
 ==================================================*/
+
+/*==================================================
+                BOOK URL
+==================================================*/
+
+Reader.setBook=function(url){
+
+Reader.bookUrl=url;
+
+};
+
+/*==================================================
+                SHOW LOADING
+==================================================*/
+
+Reader.showLoading=function(text){
+
+Reader.dom.loadingScreen.style.display="flex";
+
+Reader.dom.loadingStatus.textContent=
+
+text||"Loading Book...";
+
+Reader.dom.loadingBar.style.width="0%";
+
+};
+
+/*==================================================
+                HIDE LOADING
+==================================================*/
+
+Reader.hideLoading=function(){
+
+Reader.dom.loadingScreen.style.display="none";
+
+};
+
+/*==================================================
+                SHOW ERROR
+==================================================*/
+
+Reader.showError=function(message){
+
+Reader.hideLoading();
+
+Reader.dom.errorScreen.style.display="flex";
+
+Reader.$("errorMessage").textContent=
+
+message;
+
+};
+
+/*==================================================
+                UPDATE PROGRESS
+==================================================*/
+
+Reader.updateProgress=function(percent){
+
+Reader.dom.loadingBar.style.width=
+
+percent+"%";
+
+};
 
 /*==================================================
                 LOAD PDF
@@ -593,27 +302,49 @@ Reader.hideError();
 
 Reader.loadPDF=async function(){
 
-if(!Reader.bookPath){
-
-Reader.showError("Book Not Found.");
-
-return;
-
-}
-
 try{
 
-Reader.showLoading("Opening Book...");
+Reader.showLoading(
+
+"Loading PDF..."
+
+);
 
 const loadingTask=
 
 pdfjsLib.getDocument({
 
-url:Reader.bookPath,
+url:Reader.bookUrl,
+
+enableXfa:false,
+
+useSystemFonts:true,
+
+isEvalSupported:true,
 
 cMapPacked:true
 
 });
+
+loadingTask.onProgress=function(progress){
+
+if(progress.total){
+
+const percent=
+
+Math.round(
+
+(progress.loaded/
+
+progress.total)*100
+
+);
+
+Reader.updateProgress(percent);
+
+}
+
+};
 
 Reader.pdf=
 
@@ -623,13 +354,23 @@ Reader.totalPages=
 
 Reader.pdf.numPages;
 
-await Reader.loadMetadata();
+Reader.currentPage=1;
 
-Reader.updatePageCounter();
+Reader.dom.pageCounter.textContent=
+
+Reader.currentPage+
+
+" / "+
+
+Reader.totalPages;
+
+Reader.updateProgress(100);
+
+setTimeout(function(){
 
 Reader.hideLoading();
 
-Reader.showToast("Book Loaded");
+},300);
 
 }
 
@@ -637,51 +378,11 @@ catch(error){
 
 console.error(error);
 
-Reader.hideLoading();
-
 Reader.showError(
 
-"Unable To Open PDF."
+"Unable To Load PDF"
 
 );
-
-}
-
-};
-
-/*==================================================
-                PDF METADATA
-==================================================*/
-
-Reader.loadMetadata=async function(){
-
-try{
-
-const metadata=
-
-await Reader.pdf.getMetadata();
-
-Reader.dom.bookTitle.textContent=
-
-metadata.info.Title||
-
-"Untitled Book";
-
-Reader.dom.bookAuthor.textContent=
-
-metadata.info.Author||
-
-"";
-
-}
-
-catch(error){
-
-Reader.dom.bookTitle.textContent=
-
-"Untitled Book";
-
-Reader.dom.bookAuthor.textContent="";
 
 }
 
@@ -695,275 +396,41 @@ Reader.getPage=async function(pageNumber){
 
 if(
 
-pageNumber<1 ||
-
-pageNumber>Reader.totalPages
-
-){
-
-return null;
-
-}
-
-return await Reader.pdf.getPage(pageNumber);
-
-};
-
-/*==================================================
-                VIEWPORT
-==================================================*/
-
-Reader.getViewport=function(page){
-
-return page.getViewport({
-
-scale:Reader.scale,
-
-rotation:Reader.rotation
-
-});
-
-};
-
-/*==================================================
-                RESIZE CANVAS
-==================================================*/
-
-Reader.resizeCanvas=function(
-
-canvas,
-
-viewport
-
-){
-
-canvas.width=
-
-viewport.width;
-
-canvas.height=
-
-viewport.height;
-
-canvas.style.width=
-
-viewport.width+"px";
-
-canvas.style.height=
-
-viewport.height+"px";
-
-};
-
-/*==================================================
-                PRELOAD NEXT PAGE
-==================================================*/
-
-Reader.preloadPage=async function(pageNumber){
-
-if(
-
-pageNumber<1 ||
-
-pageNumber>Reader.totalPages
-
-){
-
-return;
-
-}
-
-if(
-
 Reader.pageCache.has(pageNumber)
 
 ){
 
-return;
+return Reader.pageCache.get(pageNumber);
 
 }
-
-try{
 
 const page=
 
-await Reader.getPage(pageNumber);
-
-const viewport=
-
-Reader.getViewport(page);
-
-const canvas=
-
-document.createElement("canvas");
-
-canvas.width=
-
-viewport.width;
-
-canvas.height=
-
-viewport.height;
-
-await page.render({
-
-canvasContext:
-
-canvas.getContext("2d"),
-
-viewport
-
-}).promise;
-
-Reader.pageCache.set(
-
-pageNumber,
-
-canvas
-
-);
-
-}
-
-catch(error){
-
-console.warn(
-
-"Preload Failed",
+await Reader.pdf.getPage(
 
 pageNumber
 
 );
 
-}
+Reader.pageCache.set(
+
+pageNumber,
+
+page
+
+);
+
+return page;
 
 };
 
 /*==================================================
-                START PDF
+                RENDER CANVAS
 ==================================================*/
 
-window.addEventListener(
+Reader.renderCanvas=
 
-"load",
-
-function(){
-
-Reader.loadPDF();
-
-}
-
-/*==================================================
-                JAVASCRIPT PART 3 END
-==================================================*/
-/*==================================================
-                JAVASCRIPT PART 4
-                PDF RENDER ENGINE
-==================================================*/
-
-/*==================================================
-                RENDER CURRENT PAGE(S)
-==================================================*/
-
-Reader.renderCurrentPages=async function(){
-
-if(!Reader.pdf) return;
-
-if(Reader.isRendering) return;
-
-Reader.isRendering=true;
-
-try{
-
-await Reader.renderPage(
-
-Reader.currentPage,
-
-Reader.dom.leftCanvas,
-
-Reader.ctxLeft
-
-);
-
-if(
-
-Reader.isDoubleMode &&
-!Reader.isMobile &&
-Reader.currentPage<Reader.totalPages
-
-){
-
-Reader.dom.rightCanvas.style.display="block";
-
-await Reader.renderPage(
-
-Reader.currentPage+1,
-
-Reader.dom.rightCanvas,
-
-Reader.ctxRight
-
-);
-
-}else{
-
-Reader.dom.rightCanvas.style.display="none";
-
-Reader.ctxRight.clearRect(
-
-0,
-
-0,
-
-Reader.dom.rightCanvas.width,
-
-Reader.dom.rightCanvas.height
-
-);
-
-}
-
-Reader.updatePageCounter();
-
-Reader.preloadPage(
-
-Reader.currentPage+1
-
-);
-
-Reader.preloadPage(
-
-Reader.currentPage+2
-
-);
-
-}
-
-catch(error){
-
-console.error(error);
-
-Reader.showError(
-
-"Page Rendering Failed."
-
-);
-
-}
-
-finally{
-
-Reader.isRendering=false;
-
-}
-
-};
-
-/*==================================================
-                RENDER SINGLE PAGE
-==================================================*/
-
-Reader.renderPage=async function(
+async function(
 
 pageNumber,
 
@@ -973,89 +440,29 @@ context
 
 ){
 
-if(
-
-pageNumber<1 ||
-
-pageNumber>Reader.totalPages
-
-){
-
-return;
-
-}
-
-if(
-
-Reader.pageCache.has(pageNumber)
-
-){
-
-const cache=
-
-Reader.pageCache.get(pageNumber);
-
-canvas.width=
-
-cache.width;
-
-canvas.height=
-
-cache.height;
-
-context.clearRect(
-
-0,
-
-0,
-
-canvas.width,
-
-canvas.height
-
-);
-
-context.drawImage(
-
-cache,
-
-0,
-
-0
-
-);
-
-return;
-
-}
-
 const page=
 
-await Reader.getPage(pageNumber);
+await Reader.getPage(
+
+pageNumber
+
+);
 
 const viewport=
 
-Reader.getViewport(page);
+page.getViewport({
 
-Reader.resizeCanvas(
+scale:Reader.zoom
 
-canvas,
+});
 
-viewport
+canvas.width=
 
-);
+viewport.width;
 
-context.clearRect(
+canvas.height=
 
-0,
-
-0,
-
-canvas.width,
-
-canvas.height
-
-);
+viewport.height;
 
 await page.render({
 
@@ -1065,170 +472,117 @@ viewport:viewport
 
 }).promise;
 
-const cache=
+};
 
-document.createElement("canvas");
+/*==================================================
+                UPDATE PAGE COUNTER
+==================================================*/
 
-cache.width=
+Reader.updatePageCounter=
 
-canvas.width;
+function(){
 
-cache.height=
+Reader.dom.pageCounter.textContent=
 
-canvas.height;
+Reader.currentPage+
 
-cache
+" / "+
 
-.getContext("2d")
-
-.drawImage(
-
-canvas,
-
-0,
-
-0
-
-);
-
-Reader.pageCache.set(
-
-pageNumber,
-
-cache
-
-);
-
-if(
-
-Reader.pageCache.size>20
-
-){
-
-const firstKey=
-
-Reader.pageCache
-
-.keys()
-
-.next()
-
-.value;
-
-Reader.pageCache.delete(firstKey);
-
-}
+Reader.totalPages;
 
 };
 
 /*==================================================
-                WATERMARK
+                RENDER CURRENT PAGE
 ==================================================*/
 
-Reader.updateWatermark=function(){
-
-if(
-
-Reader.dom.watermark
-
-){
-
-Reader.dom.watermark.textContent=
-
-"CHISHTI LIBRARY";
-
-}
-
-};
-
-/*==================================================
-                PAGE SHADOW
-==================================================*/
-
-Reader.updateShadow=function(){
-
-if(
-
-Reader.input.pageShadow &&
-
-Reader.input.pageShadow.checked
-
-){
-
-Reader.dom.pageShadow.style.display="block";
-
-Reader.dom.pageCurve.style.display="block";
-
-}else{
-
-Reader.dom.pageShadow.style.display="none";
-
-Reader.dom.pageCurve.style.display="none";
-
-}
-
-};
-
-/*==================================================
-                AFTER PDF LOAD
-==================================================*/
-
-Reader.afterLoad=async function(){
-
-await Reader.renderCurrentPages();
-
-Reader.updateWatermark();
-
-Reader.updateShadow();
-
-Reader.showToast(
-
-"Ready To Read"
-
-);
-
-};
-
-/*==================================================
-                MODIFY LOAD PDF
-==================================================*/
-
-Reader.startReader=async function(){
-
-await Reader.loadPDF();
-
-if(
-
-Reader.pdf
-
-){
-
-await Reader.afterLoad();
-
-}
-
-};
-
-/*==================================================
-                START
-==================================================*/
-
-window.addEventListener(
-
-"load",
+Reader.renderCurrentPages=
 
 async function(){
 
-await Reader.startReader();
+if(
 
-});
+Reader.rendering
+
+){
+
+return;
+
+}
+
+Reader.rendering=true;
+
+try{
+
+await Reader.renderCanvas(
+
+Reader.currentPage,
+
+Reader.leftCanvas,
+
+Reader.leftContext
+
+);
+
+if(
+
+Reader.doubleMode &&
+
+Reader.currentPage<
+
+Reader.totalPages
+
+){
+
+await Reader.renderCanvas(
+
+Reader.currentPage+1,
+
+Reader.rightCanvas,
+
+Reader.rightContext
+
+);
+
+}
+
+else{
+
+Reader.rightContext.clearRect(
+
+0,
+
+0,
+
+Reader.rightCanvas.width,
+
+Reader.rightCanvas.height
+
+);
+
+}
+
+Reader.updatePageCounter();
+
+}
+
+catch(error){
+
+console.error(error);
+
+}
+
+Reader.rendering=false;
+
+};
 
 /*==================================================
-                JAVASCRIPT PART 4 END
+            JAVASCRIPT PART 2 END
 ==================================================*/
 /*==================================================
-                JAVASCRIPT PART 5
-                PAGE NAVIGATION
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 3
+            NAVIGATION + PAGE FLIP
 ==================================================*/
 
 /*==================================================
@@ -1237,21 +591,23 @@ await Reader.startReader();
 
 Reader.nextPage=async function(){
 
-if(!Reader.pdf) return;
+if(Reader.rendering){
 
-if(Reader.isRendering) return;
+return;
+
+}
 
 const step=
 
-(
+Reader.doubleMode
 
-Reader.isDoubleMode &&
+?
 
-!Reader.isMobile
+2
 
-)
+:
 
-?2:1;
+1;
 
 if(
 
@@ -1261,13 +617,21 @@ Reader.totalPages
 
 ){
 
-Reader.showToast(
+return;
 
-"Last Page"
+}
+
+if(
+
+Reader.animationEnabled
+
+){
+
+await Reader.playFlip(
+
+"next"
 
 );
-
-return;
 
 }
 
@@ -1275,7 +639,7 @@ Reader.currentPage+=step;
 
 await Reader.renderCurrentPages();
 
-Reader.saveCurrentPage();
+Reader.saveReadingProgress();
 
 };
 
@@ -1285,21 +649,23 @@ Reader.saveCurrentPage();
 
 Reader.previousPage=async function(){
 
-if(!Reader.pdf) return;
+if(Reader.rendering){
 
-if(Reader.isRendering) return;
+return;
+
+}
 
 const step=
 
-(
+Reader.doubleMode
 
-Reader.isDoubleMode &&
+?
 
-!Reader.isMobile
+2
 
-)
+:
 
-?2:1;
+1;
 
 if(
 
@@ -1307,13 +673,21 @@ Reader.currentPage-step<1
 
 ){
 
-Reader.showToast(
+return;
 
-"First Page"
+}
+
+if(
+
+Reader.animationEnabled
+
+){
+
+await Reader.playFlip(
+
+"previous"
 
 );
-
-return;
 
 }
 
@@ -1321,7 +695,7 @@ Reader.currentPage-=step;
 
 await Reader.renderCurrentPages();
 
-Reader.saveCurrentPage();
+Reader.saveReadingProgress();
 
 };
 
@@ -1329,15 +703,15 @@ Reader.saveCurrentPage();
                 FIRST PAGE
 ==================================================*/
 
-Reader.firstPage=async function(){
+Reader.firstPage=
 
-if(!Reader.pdf) return;
+async function(){
 
 Reader.currentPage=1;
 
 await Reader.renderCurrentPages();
 
-Reader.saveCurrentPage();
+Reader.saveReadingProgress();
 
 };
 
@@ -1345,15 +719,13 @@ Reader.saveCurrentPage();
                 LAST PAGE
 ==================================================*/
 
-Reader.lastPage=async function(){
+Reader.lastPage=
 
-if(!Reader.pdf) return;
+async function(){
 
 if(
 
-Reader.isDoubleMode &&
-
-!Reader.isMobile
+Reader.doubleMode
 
 ){
 
@@ -1381,159 +753,69 @@ Reader.totalPages;
 
 await Reader.renderCurrentPages();
 
-Reader.saveCurrentPage();
+Reader.saveReadingProgress();
 
 };
 
 /*==================================================
-                GO TO PAGE
+                PAGE FLIP
 ==================================================*/
 
-Reader.goToPage=async function(page){
+Reader.playFlip=
 
-page=parseInt(page);
+function(direction){
 
-if(
+return new Promise(
 
-isNaN(page) ||
+function(resolve){
 
-page<1 ||
+const wrapper=
 
-page>Reader.totalPages
+Reader.dom.canvasWrapper;
 
-){
+wrapper.classList.remove(
 
-Reader.showToast(
+"page-flip-next",
 
-"Invalid Page"
+"page-flip-prev"
 
 );
 
-return;
+void wrapper.offsetWidth;
+
+wrapper.classList.add(
+
+direction==="next"
+
+?
+
+"page-flip-next"
+
+:
+
+"page-flip-prev"
+
+);
+
+setTimeout(function(){
+
+wrapper.classList.remove(
+
+"page-flip-next",
+
+"page-flip-prev"
+
+);
+
+resolve();
+
+},450);
 
 }
 
-Reader.currentPage=page;
-
-await Reader.renderCurrentPages();
-
-Reader.saveCurrentPage();
+);
 
 };
-
-/*==================================================
-                SAVE LAST PAGE
-==================================================*/
-
-Reader.saveCurrentPage=function(){
-
-localStorage.setItem(
-
-"reader-last-page-"+
-
-Reader.bookPath,
-
-Reader.currentPage
-
-);
-
-};
-
-/*==================================================
-                RESTORE LAST PAGE
-==================================================*/
-
-Reader.restoreLastPage=async function(){
-
-const page=
-
-parseInt(
-
-localStorage.getItem(
-
-"reader-last-page-"+
-
-Reader.bookPath
-
-)
-
-);
-
-if(
-
-!isNaN(page) &&
-
-page>=1 &&
-
-page<=Reader.totalPages
-
-){
-
-Reader.currentPage=page;
-
-}
-
-};
-
-/*==================================================
-                BUTTON EVENTS
-==================================================*/
-
-Reader.btn.next.addEventListener(
-
-"click",
-
-Reader.nextPage
-
-);
-
-Reader.btn.previous.addEventListener(
-
-"click",
-
-Reader.previousPage
-
-);
-
-Reader.btn.first.addEventListener(
-
-"click",
-
-Reader.firstPage
-
-);
-
-Reader.btn.last.addEventListener(
-
-"click",
-
-Reader.lastPage
-
-);
-
-if(Reader.btn.mobileNext){
-
-Reader.btn.mobileNext.addEventListener(
-
-"click",
-
-Reader.nextPage
-
-);
-
-}
-
-if(Reader.btn.mobilePrevious){
-
-Reader.btn.mobilePrevious.addEventListener(
-
-"click",
-
-Reader.previousPage
-
-);
-
-}
 
 /*==================================================
                 KEYBOARD
@@ -1543,17 +825,19 @@ document.addEventListener(
 
 "keydown",
 
-async function(e){
+async function(event){
 
-if(e.target.tagName==="INPUT") return;
+if(event.target.tagName==="INPUT"){
 
-switch(e.key){
+return;
+
+}
+
+switch(event.key){
 
 case "ArrowRight":
 
-case "PageDown":
-
-e.preventDefault();
+event.preventDefault();
 
 await Reader.nextPage();
 
@@ -1561,9 +845,7 @@ break;
 
 case "ArrowLeft":
 
-case "PageUp":
-
-e.preventDefault();
+event.preventDefault();
 
 await Reader.previousPage();
 
@@ -1571,7 +853,7 @@ break;
 
 case "Home":
 
-e.preventDefault();
+event.preventDefault();
 
 await Reader.firstPage();
 
@@ -1579,7 +861,7 @@ break;
 
 case "End":
 
-e.preventDefault();
+event.preventDefault();
 
 await Reader.lastPage();
 
@@ -1590,104 +872,123 @@ break;
 });
 
 /*==================================================
-                MOUSE WHEEL
+                BUTTON EVENTS
 ==================================================*/
 
-Reader.dom.bookViewport.addEventListener(
+Reader.bindNavigation=function(){
 
-"wheel",
+Reader.$("nextBtn")
 
-async function(e){
+.addEventListener(
 
-if(e.ctrlKey) return;
+"click",
 
-if(Reader.isRendering) return;
-
-if(e.deltaY>80){
-
-await Reader.nextPage();
-
-}
-
-else if(e.deltaY<-80){
-
-await Reader.previousPage();
-
-}
-
-},
-
-{
-
-passive:true
-
-}
+Reader.nextPage
 
 );
 
-/*==================================================
-                JAVASCRIPT PART 5 END
-==================================================*/
-/*==================================================
-                JAVASCRIPT PART 6
-                ZOOM ENGINE
-==================================================*/
+Reader.$("previousBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.previousPage
+
+);
+
+Reader.$("firstPageBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.firstPage
+
+);
+
+Reader.$("lastPageBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.lastPage
+
+);
+
+Reader.$("mobileNextBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.nextPage
+
+);
+
+Reader.$("mobilePrevBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.previousPage
+
+);
+
+};
 
 /*==================================================
-                ZOOM SETTINGS
+                START
 ==================================================*/
 
-Reader.minZoom=0.50;
+window.addEventListener(
 
-Reader.maxZoom=4.00;
+"load",
 
-Reader.zoomStep=0.20;
+function(){
+
+Reader.bindNavigation();
+
+});
 
 /*==================================================
-                APPLY ZOOM
+            JAVASCRIPT PART 3 END
+==================================================*/
+/*==================================================
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 4
+            ZOOM + FIT PAGE + FIT WIDTH
 ==================================================*/
 
-Reader.applyZoom=async function(){
+/*==================================================
+                UPDATE ZOOM UI
+==================================================*/
 
-if(!Reader.pdf) return;
-
-if(Reader.scale<Reader.minZoom){
-
-Reader.scale=Reader.minZoom;
-
-}
-
-if(Reader.scale>Reader.maxZoom){
-
-Reader.scale=Reader.maxZoom;
-
-}
+Reader.updateZoomIndicator=function(){
 
 Reader.dom.zoomIndicator.textContent=
 
 Math.round(
 
-Reader.scale*100
+Reader.zoom*100
 
 )+"%";
 
-Reader.dom.zoomIndicator.style.opacity="1";
+};
 
-clearTimeout(
+/*==================================================
+                APPLY ZOOM
+==================================================*/
 
-Reader.zoomTimer
+Reader.applyZoom=
 
-);
-
-Reader.zoomTimer=setTimeout(function(){
-
-Reader.dom.zoomIndicator.style.opacity="0";
-
-},1200);
-
-Reader.clearCache();
+async function(){
 
 await Reader.renderCurrentPages();
+
+Reader.updateZoomIndicator();
 
 };
 
@@ -1695,11 +996,39 @@ await Reader.renderCurrentPages();
                 ZOOM IN
 ==================================================*/
 
-Reader.zoomIn=async function(){
+Reader.zoomIn=
 
-if(Reader.isRendering) return;
+async function(){
 
-Reader.scale+=Reader.zoomStep;
+if(
+
+Reader.zoom>=
+
+Reader.maxZoom
+
+){
+
+return;
+
+}
+
+Reader.zoom+=
+
+Reader.zoomStep;
+
+if(
+
+Reader.zoom>
+
+Reader.maxZoom
+
+){
+
+Reader.zoom=
+
+Reader.maxZoom;
+
+}
 
 await Reader.applyZoom();
 
@@ -1709,103 +1038,39 @@ await Reader.applyZoom();
                 ZOOM OUT
 ==================================================*/
 
-Reader.zoomOut=async function(){
+Reader.zoomOut=
 
-if(Reader.isRendering) return;
+async function(){
 
-Reader.scale-=Reader.zoomStep;
+if(
 
-await Reader.applyZoom();
+Reader.zoom<=
 
-};
+Reader.minZoom
 
-/*==================================================
-                FIT PAGE
-==================================================*/
+){
 
-Reader.fitPage=async function(){
+return;
 
-const page=
+}
 
-await Reader.getPage(
+Reader.zoom-=
 
-Reader.currentPage
+Reader.zoomStep;
 
-);
+if(
 
-if(!page) return;
+Reader.zoom<
 
-const viewport=
+Reader.minZoom
 
-page.getViewport({
+){
 
-scale:1
+Reader.zoom=
 
-});
+Reader.minZoom;
 
-const area=
-
-Reader.dom.bookViewport;
-
-const widthScale=
-
-(area.clientWidth-80)/
-
-viewport.width;
-
-const heightScale=
-
-(area.clientHeight-80)/
-
-viewport.height;
-
-Reader.scale=
-
-Math.min(
-
-widthScale,
-
-heightScale
-
-);
-
-await Reader.applyZoom();
-
-};
-
-/*==================================================
-                FIT WIDTH
-==================================================*/
-
-Reader.fitWidth=async function(){
-
-const page=
-
-await Reader.getPage(
-
-Reader.currentPage
-
-);
-
-if(!page) return;
-
-const viewport=
-
-page.getViewport({
-
-scale:1
-
-});
-
-Reader.scale=
-
-(
-
-Reader.dom.bookViewport.clientWidth-60
-
-)/
-
-viewport.width;
+}
 
 await Reader.applyZoom();
 
@@ -1815,85 +1080,155 @@ await Reader.applyZoom();
                 RESET ZOOM
 ==================================================*/
 
-Reader.resetZoom=async function(){
+Reader.resetZoom=
 
-Reader.scale=1.4;
+async function(){
+
+Reader.zoom=1;
 
 await Reader.applyZoom();
 
 };
 
 /*==================================================
-                BUTTON EVENTS
+                FIT WIDTH
 ==================================================*/
 
-Reader.btn.zoomIn.addEventListener(
+Reader.fitWidth=
 
-"click",
+async function(){
 
-Reader.zoomIn
+const container=
 
-);
+Reader.dom.bookViewport.clientWidth;
 
-Reader.btn.zoomOut.addEventListener(
+const canvas=
 
-"click",
+Reader.leftCanvas.width||800;
 
-Reader.zoomOut
+Reader.zoom=
 
-);
+(container*0.92)/canvas;
 
-document
+if(
 
-.getElementById("fitPageBtn")
+Reader.zoom>
 
-.addEventListener(
+Reader.maxZoom
 
-"click",
+){
 
-Reader.fitPage
+Reader.zoom=
 
-);
+Reader.maxZoom;
 
-document
+}
 
-.getElementById("fitWidthBtn")
+await Reader.applyZoom();
 
-.addEventListener(
-
-"click",
-
-Reader.fitWidth
-
-);
-
-document
-
-.getElementById("resetZoomBtn")
-
-.addEventListener(
-
-"click",
-
-Reader.resetZoom
-
-);
+};
 
 /*==================================================
-                CTRL + MOUSE WHEEL
+                FIT PAGE
+==================================================*/
+
+Reader.fitPage=
+
+async function(){
+
+const width=
+
+Reader.dom.bookViewport.clientWidth;
+
+const height=
+
+Reader.dom.bookViewport.clientHeight;
+
+const pageWidth=
+
+Reader.leftCanvas.width||800;
+
+const pageHeight=
+
+Reader.leftCanvas.height||1100;
+
+const scaleX=
+
+(width*0.88)/pageWidth;
+
+const scaleY=
+
+(height*0.90)/pageHeight;
+
+Reader.zoom=
+
+Math.min(
+
+scaleX,
+
+scaleY
+
+);
+
+if(
+
+Reader.zoom>
+
+Reader.maxZoom
+
+){
+
+Reader.zoom=
+
+Reader.maxZoom;
+
+}
+
+if(
+
+Reader.zoom<
+
+Reader.minZoom
+
+){
+
+Reader.zoom=
+
+Reader.minZoom;
+
+}
+
+await Reader.applyZoom();
+
+};
+
+/*==================================================
+                MOUSE WHEEL ZOOM
 ==================================================*/
 
 Reader.dom.bookViewport.addEventListener(
 
 "wheel",
 
-async function(e){
+async function(event){
 
-if(!e.ctrlKey) return;
+if(
 
-e.preventDefault();
+!event.ctrlKey
 
-if(e.deltaY<0){
+){
+
+return;
+
+}
+
+event.preventDefault();
+
+if(
+
+event.deltaY<0
+
+){
 
 await Reader.zoomIn();
 
@@ -1916,124 +1251,111 @@ passive:false
 );
 
 /*==================================================
-                KEYBOARD SHORTCUTS
+                BUTTON EVENTS
 ==================================================*/
 
-document.addEventListener(
+Reader.bindZoom=function(){
 
-"keydown",
+Reader.$("zoomInBtn")
 
-async function(e){
+.addEventListener(
 
-if(e.target.tagName==="INPUT") return;
+"click",
 
-if(
+Reader.zoomIn
 
-e.ctrlKey &&
+);
 
-(e.key==="+" || e.key==="=")
+Reader.$("zoomOutBtn")
 
-){
+.addEventListener(
 
-e.preventDefault();
+"click",
 
-await Reader.zoomIn();
+Reader.zoomOut
 
-}
+);
 
-if(
+Reader.$("fitPageBtn")
 
-e.ctrlKey &&
+.addEventListener(
 
-e.key==="-"
+"click",
 
-){
+Reader.fitPage
 
-e.preventDefault();
+);
 
-await Reader.zoomOut();
+Reader.$("fitWidthBtn")
 
-}
+.addEventListener(
 
-if(
+"click",
 
-e.ctrlKey &&
+Reader.fitWidth
 
-e.key==="0"
+);
 
-){
+Reader.$("resetZoomBtn")
 
-e.preventDefault();
+.addEventListener(
 
-await Reader.resetZoom();
+"click",
 
-}
+Reader.resetZoom
 
-if(
+);
 
-e.key==="f" &&
+};
 
-!e.ctrlKey
+/*==================================================
+                START
+==================================================*/
 
-){
+window.addEventListener(
 
-await Reader.fitPage();
+"load",
 
-}
+function(){
 
-if(
+Reader.bindZoom();
 
-e.key==="w" &&
-
-!e.ctrlKey
-
-){
-
-await Reader.fitWidth();
-
-}
+Reader.updateZoomIndicator();
 
 });
 
 /*==================================================
-                JAVASCRIPT PART 6 END
+            JAVASCRIPT PART 4 END
 ==================================================*/
 /*==================================================
-                JAVASCRIPT PART 7
-                FULL BOOK SEARCH ENGINE
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 5
+            SEARCH ENGINE (FULL BOOK)
 ==================================================*/
 
 /*==================================================
-                SEARCH VARIABLES
+                VARIABLES
 ==================================================*/
 
-Reader.searchDatabase=[];
+Reader.searchText=[];
 
 Reader.searchResults=[];
 
-Reader.searchPointer=0;
-
-Reader.searchBuilt=false;
+Reader.searchIndex=0;
 
 /*==================================================
-                BUILD SEARCH DATABASE
+                BUILD SEARCH INDEX
 ==================================================*/
 
-Reader.buildSearchDatabase=async function(){
-
-if(Reader.searchBuilt){
-
-return;
-
-}
+Reader.buildSearchIndex=async function(){
 
 Reader.showLoading(
 
-"Creating Search Index..."
+"Building Search Index..."
 
 );
 
-Reader.searchDatabase=[];
+Reader.searchText=[];
 
 for(
 
@@ -2061,13 +1383,17 @@ const content=
 
 text.items
 
-.map(item=>item.str)
+.map(
+
+item=>item.str
+
+)
 
 .join(" ")
 
 .toLowerCase();
 
-Reader.searchDatabase.push({
+Reader.searchText.push({
 
 page:pageNumber,
 
@@ -2075,83 +1401,91 @@ text:content
 
 });
 
-Reader.dom.loadingBar.style.width=
+Reader.updateProgress(
 
-Math.floor(
+Math.round(
 
 (pageNumber/
 
-Reader.totalPages)*100
+Reader.totalPages)
 
-)+"%";
+*100
+
+)
+
+);
 
 }
-
-Reader.searchBuilt=true;
 
 Reader.hideLoading();
 
 };
 
 /*==================================================
-                SEARCH BOOK
+                SEARCH
 ==================================================*/
 
-Reader.searchBook=async function(){
+Reader.searchBook=function(){
 
 const keyword=
 
-Reader.input.searchKeyword.value
+Reader.$(
+
+"searchInput"
+
+)
+
+.value
 
 .trim()
 
 .toLowerCase();
 
-const resultBox=
+Reader.searchResults=[];
 
-document.getElementById(
+Reader.searchIndex=0;
+
+const container=
+
+Reader.$(
 
 "searchResults"
 
 );
 
-resultBox.innerHTML="";
-
-Reader.searchResults=[];
-
-Reader.searchPointer=0;
+container.innerHTML="";
 
 if(keyword===""){
-
-Reader.showToast(
-
-"Enter Search Word"
-
-);
 
 return;
 
 }
 
-if(!Reader.searchBuilt){
+Reader.searchText.forEach(
 
-await Reader.buildSearchDatabase();
-
-}
-
-Reader.searchDatabase.forEach(page=>{
+function(page){
 
 if(
 
-page.text.includes(keyword)
+page.text.includes(
+
+keyword
+
+)
 
 ){
 
-Reader.searchResults.push(page.page);
+Reader.searchResults.push(
+
+page.page
+
+);
 
 }
 
-});
+}
+
+);
 
 if(
 
@@ -2159,41 +1493,43 @@ Reader.searchResults.length===0
 
 ){
 
-resultBox.innerHTML=
+container.innerHTML=
 
-"<div class='searchEmpty'>No Results Found</div>";
-
-Reader.showToast(
-
-"No Result"
-
-);
+"<div class='searchEmpty'>No Result Found</div>";
 
 return;
 
 }
 
-Reader.searchResults.forEach(page=>{
+Reader.searchResults.forEach(
 
-const item=
+function(page){
 
-document.createElement("button");
+const button=
 
-item.className=
+document.createElement(
+
+"button"
+
+);
+
+button.className=
 
 "searchResult";
 
-item.textContent=
+button.textContent=
 
 "Page "+page;
 
-item.addEventListener(
+button.addEventListener(
 
 "click",
 
 async function(){
 
-Reader.currentPage=page;
+Reader.currentPage=
+
+page;
 
 await Reader.renderCurrentPages();
 
@@ -2203,22 +1539,20 @@ Reader.closePanels();
 
 );
 
-resultBox.appendChild(item);
+container.appendChild(
 
-});
+button
 
-Reader.showToast(
+);
 
-Reader.searchResults.length+
-
-" Result(s) Found"
+}
 
 );
 
 };
 
 /*==================================================
-                NEXT SEARCH RESULT
+                NEXT RESULT
 ==================================================*/
 
 Reader.nextSearchResult=
@@ -2235,17 +1569,17 @@ return;
 
 }
 
-Reader.searchPointer++;
+Reader.searchIndex++;
 
 if(
 
-Reader.searchPointer>=
+Reader.searchIndex>=
 
 Reader.searchResults.length
 
 ){
 
-Reader.searchPointer=0;
+Reader.searchIndex=0;
 
 }
 
@@ -2253,7 +1587,7 @@ Reader.currentPage=
 
 Reader.searchResults[
 
-Reader.searchPointer
+Reader.searchIndex
 
 ];
 
@@ -2262,7 +1596,7 @@ await Reader.renderCurrentPages();
 };
 
 /*==================================================
-                PREVIOUS SEARCH RESULT
+                PREVIOUS RESULT
 ==================================================*/
 
 Reader.previousSearchResult=
@@ -2279,15 +1613,15 @@ return;
 
 }
 
-Reader.searchPointer--;
+Reader.searchIndex--;
 
 if(
 
-Reader.searchPointer<0
+Reader.searchIndex<0
 
 ){
 
-Reader.searchPointer=
+Reader.searchIndex=
 
 Reader.searchResults.length-1;
 
@@ -2297,7 +1631,7 @@ Reader.currentPage=
 
 Reader.searchResults[
 
-Reader.searchPointer
+Reader.searchIndex
 
 ];
 
@@ -2306,30 +1640,16 @@ await Reader.renderCurrentPages();
 };
 
 /*==================================================
-                EVENTS
+                BUTTON EVENTS
 ==================================================*/
 
-Reader.btn.search.addEventListener(
+Reader.bindSearch=function(){
 
-"click",
+Reader.$(
 
-function(){
+"searchNowBtn"
 
-Reader.openPanel(
-
-Reader.dom.searchPanel
-
-);
-
-Reader.input.searchKeyword.focus();
-
-}
-
-);
-
-document
-
-.getElementById("searchBookBtn")
+)
 
 .addEventListener(
 
@@ -2339,17 +1659,63 @@ Reader.searchBook
 
 );
 
-Reader.input.searchKeyword
+Reader.$(
+
+"searchBookBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+Reader.searchBook
+
+);
+
+Reader.$(
+
+"nextSearchBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+Reader.nextSearchResult
+
+);
+
+Reader.$(
+
+"previousSearchBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+Reader.previousSearchResult
+
+);
+
+Reader.$(
+
+"searchInput"
+
+)
 
 .addEventListener(
 
 "keydown",
 
-function(e){
+function(event){
 
 if(
 
-e.key==="Enter"
+event.key==="Enter"
 
 ){
 
@@ -2361,115 +1727,38 @@ Reader.searchBook();
 
 );
 
-document
-
-.getElementById("nextSearchBtn")
-
-.addEventListener(
-
-"click",
-
-Reader.nextSearchResult
-
-);
-
-document
-
-.getElementById("previousSearchBtn")
-
-.addEventListener(
-
-"click",
-
-Reader.previousSearchResult
-
-);
+};
 
 /*==================================================
-                CTRL + F
+                START
 ==================================================*/
 
-document.addEventListener(
+window.addEventListener(
 
-"keydown",
+"load",
 
-function(e){
+async function(){
 
-if(
-
-e.ctrlKey &&
-
-e.key.toLowerCase()==="f"
-
-){
-
-e.preventDefault();
-
-Reader.openPanel(
-
-Reader.dom.searchPanel
-
-);
-
-Reader.input.searchKeyword.focus();
-
-}
+Reader.bindSearch();
 
 });
 
 /*==================================================
-                JAVASCRIPT PART 7 END
+            JAVASCRIPT PART 5 END
 ==================================================*/
 /*==================================================
-                JAVASCRIPT PART 8
-                BOOKMARKS & READING PROGRESS
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 6
+            BOOKMARKS + READING PROGRESS
 ==================================================*/
 
 /*==================================================
-                BOOKMARK VARIABLES
+                STORAGE KEYS
 ==================================================*/
 
-Reader.bookmarks=[];
+Reader.bookmarkKey="chishti_reader_bookmarks";
 
-Reader.bookmarkKey=
-
-"chishti-bookmarks";
-
-Reader.lastPageKey=
-
-"chishti-last-page";
-
-/*==================================================
-                STORAGE KEY
-==================================================*/
-
-Reader.getStorageKey=function(){
-
-return Reader.bookmarkKey+
-
-"-"+
-
-btoa(
-
-Reader.bookPath
-
-);
-
-};
-
-Reader.getLastPageKey=function(){
-
-return Reader.lastPageKey+
-
-"-"+
-
-btoa(
-
-Reader.bookPath
-
-);
-
-};
+Reader.progressKey="chishti_reader_progress";
 
 /*==================================================
                 LOAD BOOKMARKS
@@ -2481,11 +1770,17 @@ const data=
 
 localStorage.getItem(
 
-Reader.getStorageKey()
+Reader.bookmarkKey
 
 );
 
-if(data){
+if(!data){
+
+Reader.bookmarks=[];
+
+return;
+
+}
 
 try{
 
@@ -2495,11 +1790,9 @@ JSON.parse(data);
 
 }
 
-catch{
+catch(error){
 
 Reader.bookmarks=[];
-
-}
 
 }
 
@@ -2515,7 +1808,7 @@ Reader.saveBookmarks=function(){
 
 localStorage.setItem(
 
-Reader.getStorageKey(),
+Reader.bookmarkKey,
 
 JSON.stringify(
 
@@ -2533,15 +1826,13 @@ Reader.bookmarks
 
 Reader.addBookmark=function(){
 
-const page=
-
-Reader.currentPage;
-
 const exists=
 
 Reader.bookmarks.find(
 
-item=>item.page===page
+item=>item.page===
+
+Reader.currentPage
 
 );
 
@@ -2559,17 +1850,19 @@ return;
 
 Reader.bookmarks.push({
 
-page:page,
+page:
+
+Reader.currentPage,
 
 title:
 
-Reader.dom.bookTitle.textContent,
+"Page "+
 
-date:
+Reader.currentPage,
 
-new Date()
+created:
 
-.toLocaleString()
+Date.now()
 
 });
 
@@ -2601,19 +1894,15 @@ Reader.bookmarks=
 
 Reader.bookmarks.filter(
 
-item=>item.page!==page
+item=>
+
+item.page!==page
 
 );
 
 Reader.saveBookmarks();
 
 Reader.renderBookmarks();
-
-Reader.showToast(
-
-"Bookmark Removed"
-
-);
 
 };
 
@@ -2625,13 +1914,17 @@ Reader.renderBookmarks=function(){
 
 const list=
 
-document.getElementById(
+Reader.$(
 
 "bookmarkList"
 
 );
 
-if(!list) return;
+if(!list){
+
+return;
+
+}
 
 list.innerHTML="";
 
@@ -2649,11 +1942,17 @@ return;
 
 }
 
-Reader.bookmarks.forEach(item=>{
+Reader.bookmarks.forEach(
+
+function(item){
 
 const row=
 
-document.createElement("div");
+document.createElement(
+
+"div"
+
+);
 
 row.className=
 
@@ -2661,7 +1960,11 @@ row.className=
 
 const open=
 
-document.createElement("button");
+document.createElement(
+
+"button"
+
+);
 
 open.className=
 
@@ -2669,7 +1972,9 @@ open.className=
 
 open.textContent=
 
-"Page "+item.page;
+"Page "+
+
+item.page;
 
 open.addEventListener(
 
@@ -2691,7 +1996,11 @@ Reader.closePanels();
 
 const remove=
 
-document.createElement("button");
+document.createElement(
+
+"button"
+
+);
 
 remove.className=
 
@@ -2715,25 +2024,41 @@ item.page
 
 );
 
-row.appendChild(open);
+row.appendChild(
 
-row.appendChild(remove);
+open
 
-list.appendChild(row);
+);
 
-});
+row.appendChild(
+
+remove
+
+);
+
+list.appendChild(
+
+row
+
+);
+
+}
+
+);
 
 };
 
 /*==================================================
-                SAVE LAST PAGE
+                SAVE PROGRESS
 ==================================================*/
 
-Reader.saveReadingProgress=function(){
+Reader.saveReadingProgress=
+
+function(){
 
 localStorage.setItem(
 
-Reader.getLastPageKey(),
+Reader.progressKey,
 
 Reader.currentPage
 
@@ -2742,12 +2067,12 @@ Reader.currentPage
 };
 
 /*==================================================
-                RESTORE LAST PAGE
+                RESTORE PROGRESS
 ==================================================*/
 
 Reader.restoreReadingProgress=
 
-function(){
+async function(){
 
 const page=
 
@@ -2755,7 +2080,7 @@ parseInt(
 
 localStorage.getItem(
 
-Reader.getLastPageKey()
+Reader.progressKey
 
 )
 
@@ -2763,17 +2088,73 @@ Reader.getLastPageKey()
 
 if(
 
-!isNaN(page) &&
-
-page>=1 &&
-
-page<=Reader.totalPages
+isNaN(page)
 
 ){
 
-Reader.currentPage=page;
+return;
 
 }
+
+if(
+
+page<1 ||
+
+page>
+
+Reader.totalPages
+
+){
+
+return;
+
+}
+
+Reader.currentPage=
+
+page;
+
+await Reader.renderCurrentPages();
+
+};
+
+/*==================================================
+                CLEAR PROGRESS
+==================================================*/
+
+Reader.clearProgress=
+
+function(){
+
+localStorage.removeItem(
+
+Reader.progressKey
+
+);
+
+};
+
+/*==================================================
+                BUTTON EVENTS
+==================================================*/
+
+Reader.bindBookmarks=
+
+function(){
+
+Reader.$(
+
+"bookmarkBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+Reader.addBookmark
+
+);
 
 };
 
@@ -2789,40 +2170,447 @@ function(){
 
 Reader.saveReadingProgress();
 
-}
-
-);
-
-document.addEventListener(
-
-"visibilitychange",
-
-function(){
-
-if(document.hidden){
-
-Reader.saveReadingProgress();
-
-}
+Reader.saveBookmarks();
 
 }
 
 );
 
 /*==================================================
-                BUTTON EVENTS
+                START
 ==================================================*/
 
-Reader.btn.bookmark.addEventListener(
+window.addEventListener(
+
+"load",
+
+async function(){
+
+Reader.bindBookmarks();
+
+Reader.loadBookmarks();
+
+await Reader.restoreReadingProgress();
+
+});
+
+/*==================================================
+            JAVASCRIPT PART 6 END
+==================================================*/
+/*==================================================
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 7
+            SETTINGS + PANELS + UI
+==================================================*/
+
+/*==================================================
+                UI STATE
+==================================================*/
+
+Reader.activePanel=null;
+
+Reader.animationEnabled=true;
+
+Reader.theme="dark";
+
+/*==================================================
+                OPEN PANEL
+==================================================*/
+
+Reader.openPanel=function(panelId){
+
+const panel=
+
+typeof panelId==="string"
+
+?
+
+Reader.$(panelId)
+
+:
+
+panelId;
+
+if(!panel){
+
+return;
+
+}
+
+Reader.closePanels();
+
+panel.classList.add("active");
+
+Reader.$("readerOverlay")
+
+.classList.add("active");
+
+Reader.activePanel=panel;
+
+};
+
+/*==================================================
+                CLOSE PANELS
+==================================================*/
+
+Reader.closePanels=function(){
+
+document
+
+.querySelectorAll(".sidePanel")
+
+.forEach(function(panel){
+
+panel.classList.remove("active");
+
+});
+
+Reader.$("readerOverlay")
+
+.classList.remove("active");
+
+Reader.activePanel=null;
+
+};
+
+/*==================================================
+                TOAST
+==================================================*/
+
+Reader.showToast=function(message){
+
+const toast=
+
+Reader.$("readerToast");
+
+const text=
+
+Reader.$("toastMessage");
+
+text.textContent=message;
+
+toast.classList.add("show");
+
+clearTimeout(
+
+Reader.toastTimer
+
+);
+
+Reader.toastTimer=
+
+setTimeout(function(){
+
+toast.classList.remove("show");
+
+},2500);
+
+};
+
+/*==================================================
+                THEME
+==================================================*/
+
+Reader.toggleTheme=function(){
+
+document.body.classList.toggle(
+
+"lightTheme"
+
+);
+
+Reader.theme=
+
+document.body.classList.contains(
+
+"lightTheme"
+
+)
+
+?
+
+"light"
+
+:
+
+"dark";
+
+localStorage.setItem(
+
+"readerTheme",
+
+Reader.theme
+
+);
+
+};
+
+Reader.restoreTheme=function(){
+
+const theme=
+
+localStorage.getItem(
+
+"readerTheme"
+
+);
+
+if(theme==="light"){
+
+document.body.classList.add(
+
+"lightTheme"
+
+);
+
+Reader.theme="light";
+
+}
+
+};
+
+/*==================================================
+                PAGE ANIMATION
+==================================================*/
+
+Reader.toggleAnimation=function(){
+
+Reader.animationEnabled=
+
+Reader.$(
+
+"pageAnimation"
+
+).checked;
+
+};
+
+/*==================================================
+                WATERMARK
+==================================================*/
+
+Reader.toggleWatermark=function(){
+
+Reader.$(
+
+"watermark"
+
+).style.display=
+
+Reader.$(
+
+"watermarkSwitch"
+
+).checked
+
+?
+
+"block"
+
+:
+
+"none";
+
+};
+
+/*==================================================
+                PAGE SHADOW
+==================================================*/
+
+Reader.toggleShadow=function(){
+
+Reader.$(
+
+"pageShadow"
+
+).style.display=
+
+Reader.$(
+
+"pageShadowSwitch"
+
+).checked
+
+?
+
+"block"
+
+:
+
+"none";
+
+};
+
+/*==================================================
+                SETTINGS
+==================================================*/
+
+Reader.applyReadingMode=
+
+async function(){
+
+const mode=
+
+Reader.$(
+
+"readingMode"
+
+).value;
+
+if(mode==="single"){
+
+Reader.singleMode=true;
+
+Reader.doubleMode=false;
+
+}
+
+else if(mode==="double"){
+
+Reader.singleMode=false;
+
+Reader.doubleMode=true;
+
+}
+
+else{
+
+Reader.detectDevice();
+
+}
+
+await Reader.renderCurrentPages();
+
+};
+
+/*==================================================
+                EVENTS
+==================================================*/
+
+Reader.bindPanels=function(){
+
+Reader.$("searchBtn")
+
+.addEventListener(
 
 "click",
 
-Reader.addBookmark
+()=>Reader.openPanel(
+
+"searchPanel"
+
+)
 
 );
 
+Reader.$("settingBtn")
+
+.addEventListener(
+
+"click",
+
+()=>Reader.openPanel(
+
+"settingsPanel"
+
+)
+
+);
+
+Reader.$("readerOverlay")
+
+.addEventListener(
+
+"click",
+
+Reader.closePanels
+
+);
+
+Reader.$("closeSearchPanelBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.closePanels
+
+);
+
+Reader.$("closeBookmarkBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.closePanels
+
+);
+
+Reader.$("closeSettingsBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.closePanels
+
+);
+
+Reader.$("themeBtn")
+
+.addEventListener(
+
+"click",
+
+Reader.toggleTheme
+
+);
+
+Reader.$("pageAnimation")
+
+.addEventListener(
+
+"change",
+
+Reader.toggleAnimation
+
+);
+
+Reader.$("watermarkSwitch")
+
+.addEventListener(
+
+"change",
+
+Reader.toggleWatermark
+
+);
+
+Reader.$("pageShadowSwitch")
+
+.addEventListener(
+
+"change",
+
+Reader.toggleShadow
+
+);
+
+Reader.$("readingMode")
+
+.addEventListener(
+
+"change",
+
+Reader.applyReadingMode
+
+);
+
+};
+
 /*==================================================
-                STARTUP
+                START
 ==================================================*/
 
 window.addEventListener(
@@ -2831,75 +2619,26 @@ window.addEventListener(
 
 function(){
 
-Reader.loadBookmarks();
+Reader.bindPanels();
 
-Reader.restoreReadingProgress();
+Reader.restoreTheme();
+
+Reader.toggleAnimation();
+
+Reader.toggleWatermark();
+
+Reader.toggleShadow();
 
 });
 
 /*==================================================
-                JAVASCRIPT PART 8 END
+            JAVASCRIPT PART 7 END
 ==================================================*/
 /*==================================================
-                JAVASCRIPT PART 9
-                SETTINGS • VIEW MODE • FULLSCREEN
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 8
+            MOBILE + FULLSCREEN + SHORTCUTS
 ==================================================*/
-
-/*==================================================
-                READING MODE
-==================================================*/
-
-Reader.setSingleMode=async function(){
-
-Reader.isSingleMode=true;
-
-Reader.isDoubleMode=false;
-
-Reader.clearCache();
-
-await Reader.renderCurrentPages();
-
-Reader.showToast(
-
-"Single Page Mode"
-
-);
-
-};
-
-Reader.setDoubleMode=async function(){
-
-Reader.isSingleMode=false;
-
-Reader.isDoubleMode=true;
-
-Reader.clearCache();
-
-await Reader.renderCurrentPages();
-
-Reader.showToast(
-
-"Double Page Mode"
-
-);
-
-};
-
-Reader.setAutoMode=async function(){
-
-if(window.innerWidth<=991){
-
-await Reader.setSingleMode();
-
-}
-
-else{
-
-await Reader.setDoubleMode();
-
-}
-
-};
 
 /*==================================================
                 FULLSCREEN
@@ -2911,7 +2650,7 @@ try{
 
 if(!document.fullscreenElement){
 
-await document.documentElement.requestFullscreen();
+await Reader.$("reader").requestFullscreen();
 
 Reader.showToast(
 
@@ -2944,216 +2683,228 @@ console.error(error);
 };
 
 /*==================================================
-                THEME
+                MOBILE MODE
 ==================================================*/
 
-Reader.currentTheme="dark";
+Reader.updateMobileLayout=
 
-Reader.toggleTheme=function(){
+async function(){
 
-document.body.classList.toggle(
+const mobile=
 
-"lightTheme"
+window.innerWidth<=991;
 
-);
+if(mobile!==Reader.mobileMode){
 
-Reader.currentTheme=
+Reader.mobileMode=mobile;
 
-document.body.classList.contains(
+if(mobile){
 
-"lightTheme"
+Reader.singleMode=true;
 
-)
-
-?
-
-"light"
-
-:
-
-"dark";
-
-localStorage.setItem(
-
-"reader-theme",
-
-Reader.currentTheme
-
-);
-
-};
-
-Reader.restoreTheme=function(){
-
-const theme=
-
-localStorage.getItem(
-
-"reader-theme"
-
-);
-
-if(theme==="light"){
-
-document.body.classList.add(
-
-"lightTheme"
-
-);
-
-Reader.currentTheme="light";
-
-}
-
-};
-
-/*==================================================
-                PAGE SHADOW
-==================================================*/
-
-Reader.togglePageShadow=function(){
-
-if(!Reader.input.pageShadow) return;
-
-if(
-
-Reader.input.pageShadow.checked
-
-){
-
-Reader.dom.pageShadow.style.display="block";
-
-Reader.dom.pageCurve.style.display="block";
+Reader.doubleMode=false;
 
 }
 
 else{
 
-Reader.dom.pageShadow.style.display="none";
+const mode=
 
-Reader.dom.pageCurve.style.display="none";
+Reader.$("readingMode").value;
+
+if(mode==="double"){
+
+Reader.singleMode=false;
+
+Reader.doubleMode=true;
+
+}
+
+else if(mode==="single"){
+
+Reader.singleMode=true;
+
+Reader.doubleMode=false;
+
+}
+
+else{
+
+Reader.detectDevice();
+
+}
+
+}
+
+await Reader.renderCurrentPages();
 
 }
 
 };
 
 /*==================================================
-                WATERMARK
+                TOUCH SWIPE
 ==================================================*/
 
-Reader.toggleWatermark=function(){
+Reader.touchStartX=0;
 
-if(!Reader.input.watermark) return;
+Reader.touchEndX=0;
 
-Reader.dom.watermark.style.display=
+Reader.$("bookViewport")
 
-Reader.input.watermark.checked
+.addEventListener(
 
-?
+"touchstart",
 
-"block"
+function(event){
 
-:
+Reader.touchStartX=
 
-"none";
+event.changedTouches[0].clientX;
 
-};
+},
+
+{
+
+passive:true
+
+}
+
+);
+
+Reader.$("bookViewport")
+
+.addEventListener(
+
+"touchend",
+
+async function(event){
+
+Reader.touchEndX=
+
+event.changedTouches[0].clientX;
+
+const distance=
+
+Reader.touchEndX-
+
+Reader.touchStartX;
+
+if(distance>80){
+
+await Reader.previousPage();
+
+}
+
+else if(distance<-80){
+
+await Reader.nextPage();
+
+}
+
+},
+
+{
+
+passive:true
+
+}
+
+);
 
 /*==================================================
-                PAGE ANIMATION
+                KEYBOARD SHORTCUTS
 ==================================================*/
 
-Reader.animationEnabled=true;
+document.addEventListener(
 
-Reader.toggleAnimation=function(){
+"keydown",
 
-if(!Reader.input.pageAnimation) return;
+async function(event){
 
-Reader.animationEnabled=
+if(
 
-Reader.input.pageAnimation.checked;
+event.target.tagName==="INPUT"
 
-};
+){
 
-/*==================================================
-                SETTINGS EVENTS
-==================================================*/
-
-Reader.btn.single.addEventListener(
-
-"click",
-
-Reader.setSingleMode
-
-);
-
-Reader.btn.double.addEventListener(
-
-"click",
-
-Reader.setDoubleMode
-
-);
-
-Reader.btn.auto.addEventListener(
-
-"click",
-
-Reader.setAutoMode
-
-);
-
-Reader.btn.fullscreen.addEventListener(
-
-"click",
-
-Reader.toggleFullscreen
-
-);
-
-Reader.btn.theme.addEventListener(
-
-"click",
-
-Reader.toggleTheme
-
-);
-
-if(Reader.input.pageShadow){
-
-Reader.input.pageShadow.addEventListener(
-
-"change",
-
-Reader.togglePageShadow
-
-);
+return;
 
 }
 
-if(Reader.input.watermark){
+if(event.ctrlKey){
 
-Reader.input.watermark.addEventListener(
+switch(event.key.toLowerCase()){
 
-"change",
+case "=":
 
-Reader.toggleWatermark
+event.preventDefault();
+
+await Reader.zoomIn();
+
+break;
+
+case "-":
+
+event.preventDefault();
+
+await Reader.zoomOut();
+
+break;
+
+case "0":
+
+event.preventDefault();
+
+await Reader.resetZoom();
+
+break;
+
+case "f":
+
+event.preventDefault();
+
+Reader.openPanel(
+
+"searchPanel"
 
 );
 
+Reader.$("searchInput").focus();
+
+break;
+
+case "b":
+
+event.preventDefault();
+
+Reader.addBookmark();
+
+break;
+
 }
 
-if(Reader.input.pageAnimation){
+}
 
-Reader.input.pageAnimation.addEventListener(
+switch(event.key){
 
-"change",
+case "Escape":
 
-Reader.toggleAnimation
+Reader.closePanels();
 
-);
+break;
+
+case "F11":
+
+event.preventDefault();
+
+await Reader.toggleFullscreen();
+
+break;
 
 }
+
+});
 
 /*==================================================
                 WINDOW EVENTS
@@ -3163,21 +2914,7 @@ window.addEventListener(
 
 "resize",
 
-async function(){
-
-if(
-
-Reader.isSingleMode ||
-
-Reader.isDoubleMode
-
-){
-
-await Reader.setAutoMode();
-
-}
-
-}
+Reader.updateMobileLayout
 
 );
 
@@ -3203,288 +2940,24 @@ document.fullscreenElement
 
 }
 
-);
-
 /*==================================================
-                STARTUP
+                BUTTON EVENTS
 ==================================================*/
-
-window.addEventListener(
-
-"load",
-
-function(){
-
-Reader.restoreTheme();
-
-Reader.togglePageShadow();
-
-Reader.toggleWatermark();
-
-Reader.toggleAnimation();
-
-});
-
-/*==================================================
-                JAVASCRIPT PART 9 END
-==================================================*/
-/*==================================================
-                JAVASCRIPT PART 10
-        PAGE FLIP • OPEN ANIMATION • MOBILE
-==================================================*/
-
-/*==================================================
-                VARIABLES
-==================================================*/
-
-Reader.animationDuration=450;
-
-Reader.animationEnabled=true;
-
-/*==================================================
-                OPEN READER ANIMATION
-==================================================*/
-
-Reader.playOpeningAnimation=async function(){
-
-if(!Reader.dom.openingAnimation){
-
-return;
-
-}
-
-Reader.dom.openingAnimation.style.display="flex";
-
-Reader.dom.openingAnimation.style.opacity="1";
-
-const glow=
-
-document.getElementById("pageGlow");
-
-if(glow){
-
-glow.style.opacity="1";
-
-}
-
-await new Promise(function(resolve){
-
-setTimeout(resolve,2000);
-
-});
-
-if(glow){
-
-glow.style.opacity="0";
-
-}
-
-Reader.dom.openingAnimation.style.opacity="0";
-
-await new Promise(function(resolve){
-
-setTimeout(resolve,400);
-
-});
-
-Reader.dom.openingAnimation.style.display="none";
-
-};
-
-/*==================================================
-                PAGE FLIP
-==================================================*/
-
-Reader.pageFlip=async function(direction){
-
-if(!Reader.animationEnabled){
-
-return;
-
-}
-
-const front=
-
-document.getElementById("pageFront");
-
-const back=
-
-document.getElementById("pageBack");
-
-if(!front || !back){
-
-return;
-
-}
-
-front.style.transition=
-
-"transform .45s ease";
-
-back.style.transition=
-
-"transform .45s ease";
-
-if(direction==="next"){
-
-front.style.transform=
-
-"rotateY(-180deg)";
-
-back.style.transform=
-
-"rotateY(0deg)";
-
-}
-
-else{
-
-front.style.transform=
-
-"rotateY(180deg)";
-
-back.style.transform=
-
-"rotateY(0deg)";
-
-}
-
-await new Promise(function(resolve){
-
-setTimeout(
-
-resolve,
-
-Reader.animationDuration
 
 );
 
-});
+Reader.$("fullScreenBtn")
 
-front.style.transition="none";
-
-back.style.transition="none";
-
-front.style.transform="rotateY(0deg)";
-
-back.style.transform="rotateY(180deg)";
-
-};
-
-/*==================================================
-                TOUCH SWIPE
-==================================================*/
-
-Reader.touchStartX=0;
-
-Reader.touchEndX=0;
-
-Reader.dom.bookViewport.addEventListener(
-
-"touchstart",
-
-function(e){
-
-Reader.touchStartX=
-
-e.changedTouches[0].clientX;
-
-},
-
-{
-
-passive:true
-
-}
-
-);
-
-Reader.dom.bookViewport.addEventListener(
-
-"touchend",
-
-async function(e){
-
-Reader.touchEndX=
-
-e.changedTouches[0].clientX;
-
-const distance=
-
-Reader.touchEndX-
-
-Reader.touchStartX;
-
-if(distance>80){
-
-await Reader.previousPage();
-
-}
-
-if(distance<-80){
-
-await Reader.nextPage();
-
-}
-
-},
-
-{
-
-passive:true
-
-}
-
-);
-
-/*==================================================
-                ESC KEY
-==================================================*/
-
-document.addEventListener(
-
-"keydown",
-
-async function(e){
-
-if(e.key!=="Escape"){
-
-return;
-
-}
-
-if(document.fullscreenElement){
-
-await document.exitFullscreen();
-
-return;
-
-}
-
-Reader.closePanels();
-
-});
-
-/*==================================================
-                CLOSE READER
-==================================================*/
-
-Reader.closeReader=function(){
-
-window.history.back();
-
-};
-
-Reader.btn.close.addEventListener(
+.addEventListener(
 
 "click",
 
-Reader.closeReader
+Reader.toggleFullscreen
 
 );
 
 /*==================================================
-                OPENING
+                START
 ==================================================*/
 
 window.addEventListener(
@@ -3493,63 +2966,76 @@ window.addEventListener(
 
 async function(){
 
-await Reader.playOpeningAnimation();
+await Reader.updateMobileLayout();
 
 });
 
 /*==================================================
-                JAVASCRIPT PART 10 END
+            JAVASCRIPT PART 8 END
 ==================================================*/
 /*==================================================
-                JAVASCRIPT PART 11
-        THUMBNAILS • TABLE OF CONTENTS • NAVIGATION
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 9
+            THUMBNAILS + TABLE OF CONTENTS
 ==================================================*/
 
 /*==================================================
-                THUMBNAIL SYSTEM
+                THUMBNAILS
 ==================================================*/
 
-Reader.thumbnailPages=[];
+Reader.thumbnailCache=[];
+
+/*==================================================
+                CREATE THUMBNAILS
+==================================================*/
 
 Reader.createThumbnails=async function(){
 
 const container=
 
-document.getElementById(
+Reader.$("thumbnailContainer");
 
-"thumbnailContainer"
+if(!container){
 
-);
+return;
 
-if(!container) return;
+}
 
 container.innerHTML="";
 
 for(
 
-let i=1;
+let pageNumber=1;
 
-i<=Reader.totalPages;
+pageNumber<=Reader.totalPages;
 
-i++
+pageNumber++
 
 ){
 
 const page=
 
-await Reader.getPage(i);
+await Reader.pdf.getPage(
+
+pageNumber
+
+);
 
 const viewport=
 
 page.getViewport({
 
-scale:0.25
+scale:.20
 
 });
 
 const canvas=
 
-document.createElement("canvas");
+document.createElement(
+
+"canvas"
+
+);
 
 canvas.width=
 
@@ -3559,31 +3045,49 @@ canvas.height=
 
 viewport.height;
 
+const context=
+
+canvas.getContext(
+
+"2d",
+
+{
+
+alpha:false
+
+}
+
+);
+
 await page.render({
 
-canvasContext:
-
-canvas.getContext("2d"),
+canvasContext:context,
 
 viewport:viewport
 
 }).promise;
 
-
 const item=
 
-document.createElement("div");
+document.createElement(
+
+"div"
+
+);
 
 item.className=
 
-"thumbnail";
+"thumbnailItem";
 
+item.dataset.page=
 
-item.dataset.page=i;
+pageNumber;
 
+item.appendChild(
 
-item.appendChild(canvas);
+canvas
 
+);
 
 item.addEventListener(
 
@@ -3591,9 +3095,17 @@ item.addEventListener(
 
 async function(){
 
-Reader.currentPage=i;
+Reader.currentPage=
+
+parseInt(
+
+this.dataset.page
+
+);
 
 await Reader.renderCurrentPages();
+
+Reader.highlightThumbnail();
 
 Reader.closePanels();
 
@@ -3601,173 +3113,175 @@ Reader.closePanels();
 
 );
 
+container.appendChild(
 
-container.appendChild(item);
+item
 
-
-Reader.thumbnailPages.push(item);
+);
 
 }
 
-};
+Reader.highlightThumbnail();
 
+};
 
 /*==================================================
                 ACTIVE THUMBNAIL
 ==================================================*/
 
-Reader.updateThumbnail=function(){
+Reader.highlightThumbnail=
 
-Reader.thumbnailPages.forEach(
+function(){
 
-thumb=>{
+document
 
-thumb.classList.remove(
+.querySelectorAll(
 
-"active"
+".thumbnailItem"
 
-);
+)
 
+.forEach(function(item){
 
-if(
+item.style.borderColor=
 
-parseInt(thumb.dataset.page)
+parseInt(
 
-===Reader.currentPage
+item.dataset.page
 
-){
+)===Reader.currentPage
 
-thumb.classList.add(
+?
 
-"active"
+"var(--primary)"
 
-);
+:
 
-}
+"transparent";
 
-}
-
-);
+});
 
 };
-
 
 /*==================================================
                 TABLE OF CONTENTS
 ==================================================*/
 
-Reader.loadTOC=async function(){
+Reader.buildTOC=
 
-const container=
+async function(){
 
-document.getElementById(
+const list=
 
-"tocContainer"
+Reader.$(
+
+"tocList"
 
 );
 
+if(!list){
 
-if(!container) return;
+return;
 
+}
 
-container.innerHTML="";
-
-
-try{
-
+list.innerHTML="";
 
 const outline=
 
 await Reader.pdf.getOutline();
 
+if(
 
-if(!outline){
+!outline ||
 
-container.innerHTML=
+outline.length===0
 
-"<p>No Contents</p>";
+){
+
+list.innerHTML=
+
+"<div class='searchEmpty'>No Table Of Contents</div>";
 
 return;
 
 }
 
-
 for(
 
-const item of outline
+const chapter
+
+of outline
 
 ){
 
+const item=
 
-const row=
+document.createElement(
 
-document.createElement("div");
+"div"
 
+);
 
-row.className=
+item.className=
 
 "tocItem";
 
+item.textContent=
 
-row.textContent=
+chapter.title;
 
-item.title;
-
-
-row.addEventListener(
+item.addEventListener(
 
 "click",
 
 async function(){
 
+if(
+
+chapter.dest
+
+){
 
 const destination=
 
 await Reader.pdf.getDestination(
 
-item.dest
+chapter.dest
 
 );
 
+const reference=
 
-const pageIndex=
+destination[0];
+
+const page=
 
 await Reader.pdf.getPageIndex(
 
-destination[0]
+reference
 
 );
-
 
 Reader.currentPage=
 
-pageIndex+1;
-
+page+1;
 
 await Reader.renderCurrentPages();
 
+Reader.highlightThumbnail();
 
 Reader.closePanels();
 
-
-});
-
-
-container.appendChild(row);
-
+}
 
 }
 
+);
 
-}
+list.appendChild(
 
-catch(error){
-
-console.warn(
-
-"TOC Error",
-
-error
+item
 
 );
 
@@ -3775,1350 +3289,424 @@ error
 
 };
 
-
 /*==================================================
-                OPEN SIDEBARS
+                SIDEBAR
 ==================================================*/
 
-Reader.openThumbnail=function(){
+Reader.openThumbnailSidebar=
 
-Reader.closePanels();
+function(){
 
+Reader.$(
 
-Reader.dom.thumbnailSidebar
+"thumbnailSidebar"
 
-.classList
+)
 
-.add("active");
+.classList.add(
 
+"active"
 
-Reader.dom.readerOverlay
+);
 
-.classList
+Reader.$(
 
-.add("active");
+"readerOverlay"
 
+)
 
-};
+.classList.add(
 
+"active"
 
-Reader.openTOC=function(){
-
-Reader.closePanels();
-
-
-Reader.dom.tocPanel
-
-.classList
-
-.add("active");
-
-
-Reader.dom.readerOverlay
-
-.classList
-
-.add("active");
-
+);
 
 };
 
+Reader.closeThumbnailSidebar=
+
+function(){
+
+Reader.$(
+
+"thumbnailSidebar"
+
+)
+
+.classList.remove(
+
+"active"
+
+);
+
+};
 
 /*==================================================
                 EVENTS
 ==================================================*/
 
-
-const thumbnailBtn=
-
-document.getElementById(
-
-"thumbnailBtn"
-
-);
-
-
-if(thumbnailBtn){
-
-
-thumbnailBtn.addEventListener(
-
-"click",
-
-Reader.openThumbnail
-
-);
-
-
-}
-
-
-
-const tocBtn=
-
-document.getElementById(
-
-"tocBtn"
-
-);
-
-
-if(tocBtn){
-
-
-tocBtn.addEventListener(
-
-"click",
-
-Reader.openTOC
-
-);
-
-
-}
-
-
-/*==================================================
-                UPDATE AFTER PAGE CHANGE
-==================================================*/
-
-
-const oldRender=
-
-Reader.renderCurrentPages;
-
-
-Reader.renderCurrentPages=
-
-async function(){
-
-
-await oldRender();
-
-
-Reader.updateThumbnail();
-
-
-};
-
-
-/*==================================================
-                START LOAD
-==================================================*/
-
-
-window.addEventListener(
-
-"load",
-
-async function(){
-
-
-if(Reader.pdf){
-
-
-await Reader.createThumbnails();
-
-
-await Reader.loadTOC();
-
-
-}
-
-
-});
-
-
-/*==================================================
-                JAVASCRIPT PART 11 END
-==================================================*/
-/*==================================================
-                JAVASCRIPT PART 12
-        MOBILE RESPONSIVE • GESTURES • TOUCH
-==================================================*/
-
-/*==================================================
-                MOBILE MODE CHECK
-==================================================*/
-
-Reader.checkMobileMode=function(){
-
-Reader.isMobile=
-
-window.innerWidth<=991;
-
-if(Reader.isMobile){
-
-Reader.isSingleMode=true;
-
-Reader.isDoubleMode=false;
-
-}
-
-else{
-
-if(
-
-!Reader.isSingleMode
-
-){
-
-Reader.isDoubleMode=true;
-
-}
-
-}
-
-};
-
-
-/*==================================================
-                MOBILE VIEW UPDATE
-==================================================*/
-
-Reader.updateMobileView=function(){
-
-if(!Reader.dom.rightCanvas){
-
-return;
-
-}
-
-if(Reader.isMobile){
-
-Reader.dom.rightCanvas.style.display="none";
-
-Reader.isSingleMode=true;
-
-Reader.isDoubleMode=false;
-
-}
-
-else{
-
-Reader.dom.rightCanvas.style.display="block";
-
-}
-
-};
-
-
-/*==================================================
-                TOUCH VARIABLES
-==================================================*/
-
-Reader.touch={
-
-startX:0,
-
-startY:0,
-
-endX:0,
-
-endY:0,
-
-startTime:0
-
-};
-
-
-/*==================================================
-                TOUCH START
-==================================================*/
-
-Reader.dom.bookViewport.addEventListener(
-
-"touchstart",
-
-function(e){
-
-const touch=
-
-e.changedTouches[0];
-
-Reader.touch.startX=
-
-touch.clientX;
-
-Reader.touch.startY=
-
-touch.clientY;
-
-Reader.touch.startTime=
-
-Date.now();
-
-},
-
-{
-
-passive:true
-
-}
-
-);
-
-
-/*==================================================
-                TOUCH END
-==================================================*/
-
-Reader.dom.bookViewport.addEventListener(
-
-"touchend",
-
-async function(e){
-
-const touch=
-
-e.changedTouches[0];
-
-Reader.touch.endX=
-
-touch.clientX;
-
-Reader.touch.endY=
-
-touch.clientY;
-
-
-const distanceX=
-
-Reader.touch.endX-
-
-Reader.touch.startX;
-
-
-const distanceY=
-
-Reader.touch.endY-
-
-Reader.touch.startY;
-
-
-const time=
-
-Date.now()-
-
-Reader.touch.startTime;
-
-
-/*
-    PAGE SWIPE
-*/
-
-if(
-
-Math.abs(distanceX)>80 &&
-
-Math.abs(distanceY)<80 &&
-
-time<600
-
-){
-
-if(distanceX<0){
-
-await Reader.pageFlip("next");
-
-await Reader.nextPage();
-
-}
-
-else{
-
-await Reader.pageFlip("previous");
-
-await Reader.previousPage();
-
-}
-
-}
-
-
-/*
-    TAP CONTROLS
-*/
-
-else if(
-
-Math.abs(distanceX)<20 &&
-
-Math.abs(distanceY)<20
-
-){
-
-const width=
-
-window.innerWidth;
-
-const x=
-
-touch.clientX;
-
-
-if(x<width*0.35){
-
-await Reader.previousPage();
-
-}
-
-
-if(x>width*0.65){
-
-await Reader.nextPage();
-
-}
-
-}
-
-
-},
-
-{
-
-passive:true
-
-}
-
-);
-
-
-/*==================================================
-                DOUBLE TAP ZOOM
-==================================================*/
-
-Reader.lastTap=0;
-
-
-Reader.dom.bookViewport.addEventListener(
-
-"touchend",
-
-async function(){
-
-const now=
-
-Date.now();
-
-
-if(
-
-now-Reader.lastTap<300
-
-){
-
-if(
-
-Reader.scale>1
-
-){
-
-await Reader.resetZoom();
-
-}
-
-else{
-
-Reader.scale=2;
-
-await Reader.applyZoom();
-
-}
-
-}
-
-
-Reader.lastTap=now;
-
-
-},
-
-{
-
-passive:true
-
-}
-
-);
-
-
-/*==================================================
-                MOBILE ORIENTATION
-==================================================*/
-
-window.addEventListener(
-
-"orientationchange",
-
-async function(){
-
-setTimeout(async function(){
-
-Reader.checkMobileMode();
-
-Reader.updateMobileView();
-
-await Reader.renderCurrentPages();
-
-},300);
-
-});
-
-
-/*==================================================
-                RESIZE EVENT
-==================================================*/
-
-window.addEventListener(
-
-"resize",
-
-async function(){
-
-Reader.checkMobileMode();
-
-Reader.updateMobileView();
-
-});
-
-
-/*==================================================
-                MOBILE PAGE SELECT
-==================================================*/
-
-Reader.mobileGotoPage=function(page){
-
-page=parseInt(page);
-
-if(
-
-isNaN(page)
-
-){
-
-return;
-
-}
-
-Reader.goToPage(page);
-
-};
-
-
-/*==================================================
-                MOBILE INIT
-==================================================*/
-
-window.addEventListener(
-
-"load",
+Reader.bindSidebar=
 
 function(){
 
-Reader.checkMobileMode();
+Reader.$(
 
-Reader.updateMobileView();
+"closeThumbnailBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+Reader.closeThumbnailSidebar
+
+);
+
+Reader.$(
+
+"closeTocBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+Reader.closePanels
+
+);
+
+};
+
+/*==================================================
+                START
+==================================================*/
+
+window.addEventListener(
+
+"load",
+
+async function(){
+
+Reader.bindSidebar();
 
 });
 
-
 /*==================================================
-                JAVASCRIPT PART 12 END
+            JAVASCRIPT PART 9 END
 ==================================================*/
 /*==================================================
-                JAVASCRIPT PART 13
-        PERFORMANCE • CACHE • LAZY LOADING
+            CHISHTI LIBRARY READER
+            JAVASCRIPT PART 10
+            APPLICATION STARTUP + FINAL EVENTS
 ==================================================*/
 
 /*==================================================
-                PERFORMANCE SETTINGS
+                START READER
 ==================================================*/
 
-Reader.performance={
-
-maxCachePages:25,
-
-preloadDistance:3,
-
-renderQueue:[],
-
-isBusy:false
-
-};
-
-
-/*==================================================
-                SMART CACHE MANAGER
-==================================================*/
-
-Reader.addToCache=function(pageNumber,canvas){
-
-if(
-
-Reader.pageCache.has(pageNumber)
-
-){
-
-return;
-
-}
-
-Reader.pageCache.set(
-
-pageNumber,
-
-canvas
-
-);
-
-
-/* Remove old pages */
-
-if(
-
-Reader.pageCache.size >
-
-Reader.performance.maxCachePages
-
-){
-
-const oldPage=
-
-Reader.pageCache
-
-.keys()
-
-.next()
-
-.value;
-
-
-Reader.pageCache.delete(
-
-oldPage
-
-);
-
-}
-
-};
-
-
-/*==================================================
-                CLEAR OLD CACHE
-==================================================*/
-
-Reader.optimizeCache=function(){
-
-const keepPages=[];
-
-
-for(
-
-let i=-Reader.performance.preloadDistance;
-
-i<=Reader.performance.preloadDistance;
-
-i++
-
-){
-
-const page=
-
-Reader.currentPage+i;
-
-
-if(
-
-page>0 &&
-
-page<=Reader.totalPages
-
-){
-
-keepPages.push(page);
-
-}
-
-}
-
-
-Reader.pageCache.forEach(
-
-function(value,key){
-
-if(
-
-!keepPages.includes(key)
-
-){
-
-Reader.pageCache.delete(key);
-
-}
-
-}
-
-);
-
-};
-
-
-/*==================================================
-                LAZY PRELOAD
-==================================================*/
-
-Reader.lazyLoadPages=async function(){
-
-if(!Reader.pdf){
-
-return;
-
-}
-
-
-for(
-
-let i=1;
-
-i<=Reader.performance.preloadDistance;
-
-i++
-
-){
-
-const next=
-
-Reader.currentPage+i;
-
-const previous=
-
-Reader.currentPage-i;
-
-
-if(
-
-next<=Reader.totalPages
-
-){
-
-await Reader.preloadPage(next);
-
-}
-
-
-if(
-
-previous>=1
-
-){
-
-await Reader.preloadPage(previous);
-
-}
-
-}
-
-
-Reader.optimizeCache();
-
-};
-
-
-/*==================================================
-                RENDER QUEUE
-==================================================*/
-
-Reader.addRenderTask=function(task){
-
-Reader.performance.renderQueue.push(task);
-
-Reader.processRenderQueue();
-
-};
-
-
-Reader.processRenderQueue=async function(){
-
-if(
-
-Reader.performance.isBusy
-
-){
-
-return;
-
-}
-
-
-Reader.performance.isBusy=true;
-
-
-while(
-
-Reader.performance.renderQueue.length
-
-){
-
-const task=
-
-Reader.performance.renderQueue.shift();
-
+Reader.startReader=async function(bookUrl){
 
 try{
 
-await task();
+Reader.setBook(bookUrl);
+
+Reader.start();
+
+await Reader.loadPDF();
+
+await Reader.renderCurrentPages();
+
+await Reader.buildSearchIndex();
+
+await Reader.createThumbnails();
+
+await Reader.buildTOC();
+
+Reader.restoreReadingProgress();
+
+Reader.hideLoading();
+
+Reader.showToast(
+
+"Book Loaded Successfully"
+
+);
 
 }
 
 catch(error){
 
-console.error(
+console.error(error);
 
-"Render Queue Error",
+Reader.showError(
 
-error
-
-);
-
-}
-
-}
-
-
-Reader.performance.isBusy=false;
-
-};
-
-
-/*==================================================
-                MEMORY CLEANER
-==================================================*/
-
-Reader.cleanMemory=function(){
-
-if(
-
-performance.memory
-
-){
-
-console.log(
-
-"Memory:",
-
-performance.memory.usedJSHeapSize
+error.message
 
 );
 
 }
 
+};
 
-Reader.optimizeCache();
+/*==================================================
+                UPDATE MOBILE COUNTER
+==================================================*/
+
+Reader.updateMobileCounter=function(){
+
+const current=
+
+Reader.$(
+
+"mobileCurrentPage"
+
+);
+
+const total=
+
+Reader.$(
+
+"mobileTotalPages"
+
+);
+
+if(current){
+
+current.textContent=
+
+Reader.currentPage;
+
+}
+
+if(total){
+
+total.textContent=
+
+Reader.totalPages;
+
+}
 
 };
 
-
 /*==================================================
-                VISIBILITY OPTIMIZATION
+                UPDATE UI
 ==================================================*/
 
-document.addEventListener(
+Reader.refreshUI=function(){
 
-"visibilitychange",
+Reader.updatePageCounter();
 
-function(){
+Reader.updateZoomIndicator();
 
+Reader.updateMobileCounter();
 
-if(document.hidden){
+Reader.highlightThumbnail();
+
+};
+
+/*==================================================
+                AFTER PAGE CHANGE
+==================================================*/
+
+Reader.afterPageChange=
+
+async function(){
+
+Reader.refreshUI();
 
 Reader.saveReadingProgress();
 
-Reader.optimizeCache();
-
-}
-
-else{
-
-Reader.lazyLoadPages();
-
-}
-
-
-}
-
-);
-
-
-/*==================================================
-                IDLE PRELOAD
-==================================================*/
-
-if(
-
-window.requestIdleCallback
-
-){
-
-requestIdleCallback(
-
-function(){
-
-Reader.lazyLoadPages();
-
-}
-
-);
-
-}
-
-else{
-
-setTimeout(
-
-function(){
-
-Reader.lazyLoadPages();
-
-},
-
-1000
-
-);
-
-}
-
-
-/*==================================================
-                PERIODIC CLEAN
-==================================================*/
-
-setInterval(
-
-function(){
-
-Reader.cleanMemory();
-
-},
-
-60000
-
-);
-
-
-/*==================================================
-                JAVASCRIPT PART 13 END
-==================================================*/
-/*==================================================
-                JAVASCRIPT PART 14
-        KEYBOARD • BROWSER SUPPORT • SAFETY
-==================================================*/
-
-/*==================================================
-                KEYBOARD SHORTCUT SYSTEM
-==================================================*/
-
-Reader.keyboardEnabled=true;
-
-Reader.handleKeyboard=function(e){
-
-if(!Reader.keyboardEnabled){
-
-return;
-
-}
-
-
-/* Ignore typing areas */
-
-if(
-
-e.target.tagName==="INPUT" ||
-
-e.target.tagName==="TEXTAREA" ||
-
-e.target.isContentEditable
-
-){
-
-return;
-
-}
-
-
-/* PAGE CONTROL */
-
-switch(e.key){
-
-
-case "ArrowRight":
-
-case "PageDown":
-
-Reader.nextPage();
-
-break;
-
-
-case "ArrowLeft":
-
-case "PageUp":
-
-Reader.previousPage();
-
-break;
-
-
-case "Home":
-
-Reader.firstPage();
-
-break;
-
-
-case "End":
-
-Reader.lastPage();
-
-break;
-
-
-
-/* ZOOM */
-
-case "+":
-
-if(e.ctrlKey){
-
-e.preventDefault();
-
-Reader.zoomIn();
-
-}
-
-break;
-
-
-case "-":
-
-if(e.ctrlKey){
-
-e.preventDefault();
-
-Reader.zoomOut();
-
-}
-
-break;
-
-
-case "0":
-
-if(e.ctrlKey){
-
-e.preventDefault();
-
-Reader.resetZoom();
-
-}
-
-break;
-
-
-
-/* FULLSCREEN */
-
-case "f":
-
-if(e.ctrlKey){
-
-e.preventDefault();
-
-Reader.toggleFullscreen();
-
-}
-
-break;
-
-
-
-/* SEARCH */
-
-case "f":
-
-break;
-
-
-}
-
 };
 
-
-document.addEventListener(
-
-"keydown",
-
-Reader.handleKeyboard
-
-);
-
-
 /*==================================================
-                BROWSER BACK CONTROL
+                RELOAD
 ==================================================*/
 
-Reader.preventAccidentalExit=function(){
+Reader.reloadBook=
 
-history.pushState(
-
-{
-
-reader:true
-
-},
-
-""
-
-);
-
-
-window.addEventListener(
-
-"popstate",
-
-function(){
-
-if(
-
-Reader.pdf
-
-){
-
-const confirmClose=
-
-confirm(
-
-"Exit Reader?"
-
-);
-
-
-if(confirmClose){
-
-history.back();
-
-}
-
-else{
-
-history.pushState(
-
-{
-
-reader:true
-
-},
-
-""
-
-);
-
-}
-
-}
-
-}
-
-);
-
-};
-
-
-/*==================================================
-                COPY PROTECTION
-==================================================*/
-
-
-Reader.enableProtection=function(){
-
-document.addEventListener(
-
-"dragstart",
-
-function(e){
-
-e.preventDefault();
-
-}
-
-);
-
-
-document.addEventListener(
-
-"contextmenu",
-
-function(e){
-
-e.preventDefault();
-
-}
-
-);
-
-};
-
-
-/*==================================================
-                NETWORK CHECK
-==================================================*/
-
-Reader.checkConnection=function(){
-
-if(
-
-navigator.onLine
-
-){
-
-return true;
-
-}
-
-else{
-
-Reader.showToast(
-
-"No Internet Connection"
-
-);
-
-return false;
-
-}
-
-};
-
-
-window.addEventListener(
-
-"offline",
-
-function(){
-
-Reader.showToast(
-
-"Connection Lost"
-
-);
-
-});
-
-
-window.addEventListener(
-
-"online",
-
-function(){
-
-Reader.showToast(
-
-"Connection Restored"
-
-);
-
-});
-
-
-/*==================================================
-                BROWSER DETECTION
-==================================================*/
-
-Reader.browser={
-
-chrome:false,
-
-firefox:false,
-
-edge:false,
-
-safari:false
-
-};
-
-
-Reader.detectBrowser=function(){
-
-const agent=
-
-navigator.userAgent.toLowerCase();
-
-
-Reader.browser.chrome=
-
-agent.includes("chrome");
-
-
-Reader.browser.firefox=
-
-agent.includes("firefox");
-
-
-Reader.browser.edge=
-
-agent.includes("edg");
-
-
-Reader.browser.safari=
-
-agent.includes("safari")
-
-&&
-
-!Reader.browser.chrome;
-
-
-};
-
-
-Reader.detectBrowser();
-
-
-/*==================================================
-                PERFORMANCE
-==================================================*/
-
-Reader.optimize=function(){
-
-
-/* reduce cache on mobile */
-
-if(
-
-Reader.isMobile
-
-){
+async function(){
 
 Reader.pageCache.clear();
 
-}
+Reader.searchText=[];
 
+Reader.searchResults=[];
 
-/* hardware acceleration */
+await Reader.loadPDF();
 
-Reader.dom.canvasWrapper.style.transform=
+await Reader.renderCurrentPages();
 
-"translateZ(0)";
+await Reader.buildSearchIndex();
 
+await Reader.createThumbnails();
+
+await Reader.buildTOC();
 
 };
 
-
 /*==================================================
-                ERROR HANDLING
+                CLOSE ERROR
 ==================================================*/
 
+Reader.$(
+
+"reloadBookBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+Reader.reloadBook
+
+);
+
+Reader.$(
+
+"goHomeBtn"
+
+)
+
+.addEventListener(
+
+"click",
+
+function(){
+
+window.location.href="/";
+
+}
+
+);
+
+/*==================================================
+                AUTO UPDATE
+==================================================*/
+
+const oldNext=
+
+Reader.nextPage;
+
+Reader.nextPage=
+
+async function(){
+
+await oldNext();
+
+await Reader.afterPageChange();
+
+};
+
+const oldPrevious=
+
+Reader.previousPage;
+
+Reader.previousPage=
+
+async function(){
+
+await oldPrevious();
+
+await Reader.afterPageChange();
+
+};
+
+const oldFirst=
+
+Reader.firstPage;
+
+Reader.firstPage=
+
+async function(){
+
+await oldFirst();
+
+await Reader.afterPageChange();
+
+};
+
+const oldLast=
+
+Reader.lastPage;
+
+Reader.lastPage=
+
+async function(){
+
+await oldLast();
+
+await Reader.afterPageChange();
+
+};
+
+/*==================================================
+                INITIALIZE
+==================================================*/
+
+window.addEventListener(
+
+"DOMContentLoaded",
+
+async function(){
+
+try{
+
+const pdfUrl=
+
+document.body.dataset.pdf ||
+
+new URLSearchParams(
+
+window.location.search
+
+).get(
+
+"book"
+
+);
+
+if(!pdfUrl){
+
+Reader.showError(
+
+"No PDF Selected"
+
+);
+
+return;
+
+}
+
+await Reader.startReader(
+
+pdfUrl
+
+);
+
+Reader.initialized=true;
+
+}
+
+catch(error){
+
+console.error(error);
+
+Reader.showError(
+
+"Reader Initialization Failed"
+
+);
+
+}
+
+});
+
+/*==================================================
+                FINAL CHECK
+==================================================*/
 
 window.addEventListener(
 
@@ -5128,14 +3716,17 @@ function(event){
 
 console.error(
 
-"Reader Error:",
-
 event.error
 
 );
 
-});
+Reader.showToast(
 
+"Unexpected Error"
+
+);
+
+});
 
 window.addEventListener(
 
@@ -5145,408 +3736,15 @@ function(event){
 
 console.error(
 
-"Promise Error:",
-
 event.reason
 
 );
 
-});
-
-
-/*==================================================
-                INITIALIZE SECURITY
-==================================================*/
-
-
-window.addEventListener(
-
-"load",
-
-function(){
-
-Reader.preventAccidentalExit();
-
-Reader.enableProtection();
-
-Reader.optimize();
-
-});
-
-
-/*==================================================
-                JAVASCRIPT PART 14 END
-==================================================*/
-/*==================================================
-                JAVASCRIPT PART 15
-        FINAL CONNECTION • VALIDATION • START
-==================================================*/
-
-/*==================================================
-        CONNECT ALL BUTTONS SAFELY
-==================================================*/
-
-Reader.connectButton=function(id,action){
-
-const button=
-
-document.getElementById(id);
-
-if(button && typeof action==="function"){
-
-button.addEventListener(
-
-"click",
-
-action
-
-);
-
-}
-
-};
-
-/*==================================================
-                BUTTON CONNECTIONS
-==================================================*/
-
-Reader.connectAllButtons=function(){
-
-Reader.connectButton(
-
-"nextBtn",
-
-Reader.nextPage
-
-);
-
-Reader.connectButton(
-
-"previousBtn",
-
-Reader.previousPage
-
-);
-
-Reader.connectButton(
-
-"firstPageBtn",
-
-Reader.firstPage
-
-);
-
-Reader.connectButton(
-
-"lastPageBtn",
-
-Reader.lastPage
-
-);
-
-Reader.connectButton(
-
-"zoomInBtn",
-
-Reader.zoomIn
-
-);
-
-Reader.connectButton(
-
-"zoomOutBtn",
-
-Reader.zoomOut
-
-);
-
-Reader.connectButton(
-
-"fullScreenBtn",
-
-Reader.toggleFullscreen
-
-);
-
-Reader.connectButton(
-
-"themeBtn",
-
-Reader.toggleTheme
-
-);
-
-Reader.connectButton(
-
-"bookmarkBtn",
-
-Reader.addBookmark
-
-);
-
-Reader.connectButton(
-
-"searchBtn",
-
-function(){
-
-Reader.openPanel(
-
-Reader.dom.searchPanel
-
-);
-
-}
-
-);
-
-Reader.connectButton(
-
-"settingBtn",
-
-function(){
-
-Reader.openPanel(
-
-Reader.dom.settingsPanel
-
-);
-
-}
-
-);
-
-Reader.connectButton(
-
-"singleModeBtn",
-
-Reader.setSingleMode
-
-);
-
-Reader.connectButton(
-
-"doubleModeBtn",
-
-Reader.setDoubleMode
-
-);
-
-Reader.connectButton(
-
-"autoModeBtn",
-
-Reader.setAutoMode
-
-);
-
-Reader.connectButton(
-
-"closeBtn",
-
-Reader.closeReader
-
-);
-
-};
-
-/*==================================================
-                CHECK HTML ELEMENTS
-==================================================*/
-
-Reader.checkHTML=function(){
-
-const required=[
-
-"reader",
-
-"bookViewport",
-
-"leftCanvas",
-
-"rightCanvas",
-
-"pageCounter",
-
-"nextBtn",
-
-"previousBtn",
-
-"zoomInBtn",
-
-"zoomOutBtn",
-
-"searchPanel",
-
-"settingsPanel",
-
-"bookmarkPanel"
-
-];
-
-let missing=[];
-
-required.forEach(function(id){
-
-if(!document.getElementById(id)){
-
-missing.push(id);
-
-}
-
-});
-
-if(missing.length){
-
-console.warn(
-
-"Missing HTML IDs:",
-
-missing
-
-);
-
-return false;
-
-}
-
-return true;
-
-};
-
-/*==================================================
-                CHECK PDF.JS
-==================================================*/
-
-Reader.checkLibrary=function(){
-
-if(typeof pdfjsLib==="undefined"){
-
-Reader.showError(
-
-"PDF Library Not Loaded"
-
-);
-
-return false;
-
-}
-
-return true;
-
-};
-
-/*==================================================
-                FINAL INIT
-==================================================*/
-
-Reader.init=async function(){
-
-try{
-
-if(!Reader.checkHTML()){
-
-return;
-
-}
-
-if(!Reader.checkLibrary()){
-
-return;
-
-}
-
-Reader.detectDevice();
-
-Reader.restoreTheme();
-
-Reader.connectAllButtons();
-
-Reader.loadBookmarks();
-
-await Reader.startReader();
-
-Reader.restoreReadingProgress();
-
-await Reader.renderCurrentPages();
-
-Reader.updateWatermark();
-
-Reader.updateShadow();
-
 Reader.showToast(
 
-"Chishti Reader Ready"
+"Promise Rejected"
 
 );
-
-console.log(
-
-"Chishti Library Reader Loaded Successfully"
-
-);
-
-}
-
-catch(error){
-
-console.error(
-
-"Reader Error:",
-
-error
-
-);
-
-Reader.showError(
-
-"Reader Failed To Start"
-
-);
-
-}
-
-};
-
-/*==================================================
-                AUTO START
-==================================================*/
-
-if(
-
-document.readyState==="loading"
-
-){
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-Reader.init
-
-);
-
-}
-
-else{
-
-Reader.init();
-
-}
-
-/*==================================================
-                CLEANUP
-==================================================*/
-
-window.addEventListener(
-
-"beforeunload",
-
-function(){
-
-Reader.saveCurrentPage();
-
-Reader.saveBookmarks();
 
 });
 
