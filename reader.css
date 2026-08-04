@@ -1,50 +1,17 @@
 /*==================================================
+                CHISHTI LIBRARY READER
                 CSS PART 1
 ==================================================*/
 
-:root{
-
---primary:#3b0016;
---secondary:#5d0d2b;
---accent:#d4af37;
-
---background:#140009;
---surface:#22000f;
-
---page:#fffdf8;
---text:#f5f5f5;
---muted:#b7b7b7;
-
---border:rgba(255,255,255,.08);
-
---shadow:
-0 15px 40px rgba(0,0,0,.45);
-
---radius:14px;
-
---header-height:72px;
-
---toolbar-height:58px;
-
---transition:.30s ease;
-
---font:
-"Segoe UI",
-Tahoma,
-sans-serif;
-
-}
-
-/*========== RESET ==========*/
+/*==================================================
+                RESET
+==================================================*/
 
 *{
-
 margin:0;
-
 padding:0;
-
 box-sizing:border-box;
-
+-webkit-tap-highlight-color:transparent;
 }
 
 html{
@@ -55,111 +22,63 @@ scroll-behavior:smooth;
 
 body{
 
-width:100%;
+font-family:"Poppins",sans-serif;
 
-height:100vh;
+background:#0f1117;
+
+color:#ffffff;
 
 overflow:hidden;
 
-background:var(--background);
+width:100vw;
 
-color:var(--text);
-
-font-family:var(--font);
+height:100vh;
 
 }
 
-/*========== BUTTONS ==========*/
+/*==================================================
+                ROOT COLORS
+==================================================*/
 
-button{
+:root{
 
-border:none;
+--primary:#d4af37;
 
-outline:none;
+--primary-light:#f6dc78;
 
-cursor:pointer;
+--background:#0f1117;
 
-background:none;
+--background-2:#181c25;
 
-color:inherit;
+--background-3:#242b38;
 
-font:inherit;
+--border:#343b4d;
 
-transition:var(--transition);
+--white:#ffffff;
 
-}
+--black:#000000;
 
-button:disabled{
+--text:#ffffff;
 
-opacity:.45;
+--text-light:#c6c8cf;
 
-pointer-events:none;
+--danger:#ff4444;
 
-}
+--success:#28c76f;
 
-/*========== INPUT ==========*/
+--shadow:
+0 15px 40px
+rgba(0,0,0,.45);
 
-input,
+--radius:14px;
 
-select{
-
-border:none;
-
-outline:none;
-
-font:inherit;
-
-background:none;
-
-color:inherit;
+--transition:.30s ease;
 
 }
 
-/*========== LINKS ==========*/
-
-a{
-
-text-decoration:none;
-
-color:inherit;
-
-}
-
-/*========== LISTS ==========*/
-
-ul,
-
-ol{
-
-list-style:none;
-
-}
-
-/*========== IMAGES ==========*/
-
-img{
-
-display:block;
-
-max-width:100%;
-
-user-select:none;
-
--webkit-user-drag:none;
-
-}
-
-/*========== CANVAS ==========*/
-
-canvas{
-
-display:block;
-
-user-select:none;
-
-}
-
-/*========== SCROLLBAR ==========*/
+/*==================================================
+                SCROLLBAR
+==================================================*/
 
 ::-webkit-scrollbar{
 
@@ -171,68 +90,96 @@ height:8px;
 
 ::-webkit-scrollbar-track{
 
-background:#1b000b;
+background:#111;
 
 }
 
 ::-webkit-scrollbar-thumb{
 
-background:var(--secondary);
+background:var(--primary);
 
-border-radius:100px;
+border-radius:20px;
 
 }
 
 ::-webkit-scrollbar-thumb:hover{
 
-background:var(--accent);
-
-}
-
-/*========== SELECTION ==========*/
-
-::selection{
-
-background:var(--accent);
-
-color:#000;
-
-}
-
-/*========== HIDDEN ==========*/
-
-.hidden{
-
-display:none!important;
-
-}
-
-/*========== FLEX ==========*/
-
-.flex{
-
-display:flex;
-
-}
-
-.center{
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
+background:var(--primary-light);
 
 }
 
 /*==================================================
-                CSS PART 1 END
-==================================================*/
-/*==================================================
-                CSS PART 2
+                BUTTON
 ==================================================*/
 
-/*========== PRELOADER ==========*/
+button{
+
+border:none;
+
+outline:none;
+
+cursor:pointer;
+
+font-family:inherit;
+
+transition:var(--transition);
+
+}
+
+button:disabled{
+
+opacity:.55;
+
+cursor:not-allowed;
+
+}
+
+/*==================================================
+                INPUT
+==================================================*/
+
+input,
+select{
+
+outline:none;
+
+border:none;
+
+font-family:inherit;
+
+}
+
+/*==================================================
+                LINKS
+==================================================*/
+
+a{
+
+text-decoration:none;
+
+color:inherit;
+
+}
+
+/*==================================================
+                IMAGES
+==================================================*/
+
+img{
+
+display:block;
+
+max-width:100%;
+
+user-select:none;
+
+pointer-events:none;
+
+}
+
+/*==================================================
+                PRELOADER
+==================================================*/
 
 #preloader{
 
@@ -240,21 +187,15 @@ position:fixed;
 
 inset:0;
 
-z-index:99999;
-
 display:flex;
 
 align-items:center;
 
 justify-content:center;
 
-background:linear-gradient(
-180deg,
-#140009,
-#2a0012,
-#140009);
+background:#0f1117;
 
-transition:.5s;
+z-index:999999;
 
 }
 
@@ -266,9 +207,25 @@ flex-direction:column;
 
 align-items:center;
 
-gap:30px;
+gap:24px;
 
 }
+
+.loader p{
+
+font-size:18px;
+
+font-weight:600;
+
+color:var(--primary);
+
+letter-spacing:1px;
+
+}
+
+/*==================================================
+                LOADER BOOK
+==================================================*/
 
 .loaderBook{
 
@@ -278,9 +235,7 @@ width:90px;
 
 height:70px;
 
-transform-style:preserve-3d;
-
-animation:loaderFloat 2s ease-in-out infinite;
+perspective:1000px;
 
 }
 
@@ -290,15 +245,22 @@ position:absolute;
 
 inset:0;
 
-border-radius:6px;
-
 background:linear-gradient(
 135deg,
-#6d1436,
-#3b0016);
+#d4af37,
+#8a6d0a
+);
 
-box-shadow:
-0 15px 40px rgba(0,0,0,.45);
+border-radius:4px;
+
+transform-origin:left;
+
+animation:
+loaderCover
+1.5s
+infinite;
+
+box-shadow:var(--shadow);
 
 }
 
@@ -306,35 +268,57 @@ box-shadow:
 
 position:absolute;
 
-top:5px;
+left:8px;
 
-right:-6px;
+top:6px;
 
-width:84px;
+width:75px;
 
-height:60px;
+height:58px;
 
-background:#fffdf8;
+background:#fff;
 
-border-radius:4px;
-
-animation:loaderPages .8s linear infinite;
+border-radius:3px;
 
 }
 
-.loader p{
+/*==================================================
+                ANIMATION
+==================================================*/
 
-font-size:15px;
+@keyframes loaderCover{
 
-letter-spacing:2px;
+0%{
 
-color:var(--accent);
-
-text-transform:uppercase;
+transform:rotateY(0deg);
 
 }
 
-/*========== OPENING ANIMATION ==========*/
+50%{
+
+transform:rotateY(-150deg);
+
+}
+
+100%{
+
+transform:rotateY(0deg);
+
+}
+
+}
+
+/*==================================================
+                CSS PART 1 END
+==================================================*/
+/*==================================================
+                CHISHTI LIBRARY READER
+                CSS PART 2
+==================================================*/
+
+/*==================================================
+                OPENING ANIMATION
+==================================================*/
 
 #openingAnimation{
 
@@ -348,13 +332,23 @@ align-items:center;
 
 justify-content:center;
 
-pointer-events:none;
+background:#0f1117;
+
+z-index:999998;
 
 opacity:0;
 
-z-index:9990;
+visibility:hidden;
 
-overflow:hidden;
+transition:.5s;
+
+}
+
+#openingAnimation.active{
+
+opacity:1;
+
+visibility:visible;
 
 }
 
@@ -362,20 +356,48 @@ overflow:hidden;
 
 position:absolute;
 
-width:220px;
+width:320px;
 
-height:220px;
+height:320px;
 
 border-radius:50%;
 
-background:radial-gradient(
-circle,
+background:radial-gradient(circle,
 rgba(255,255,255,.95),
-rgba(255,255,255,0));
+rgba(255,255,255,.45),
+transparent 75%);
 
-filter:blur(12px);
+filter:blur(20px);
+
+animation:openingGlow 2s ease;
+
+}
+
+@keyframes openingGlow{
+
+0%{
+
+transform:scale(.2);
 
 opacity:0;
+
+}
+
+50%{
+
+transform:scale(1);
+
+opacity:1;
+
+}
+
+100%{
+
+transform:scale(1.6);
+
+opacity:0;
+
+}
 
 }
 
@@ -383,11 +405,11 @@ opacity:0;
 
 position:relative;
 
-width:220px;
+width:240px;
 
-height:300px;
+height:320px;
 
-transform-style:preserve-3d;
+perspective:1800px;
 
 }
 
@@ -397,15 +419,20 @@ position:absolute;
 
 inset:0;
 
-border-radius:10px;
-
 background:linear-gradient(
 135deg,
-#6a1234,
-#2d000f);
+#d4af37,
+#8b6914
+);
+
+border-radius:10px;
+
+transform-origin:left;
 
 box-shadow:
-0 30px 60px rgba(0,0,0,.55);
+0 25px 70px rgba(0,0,0,.55);
+
+animation:coverOpen 2s ease forwards;
 
 }
 
@@ -413,45 +440,21 @@ box-shadow:
 
 position:absolute;
 
+left:10px;
+
 top:8px;
 
-left:8px;
+width:220px;
 
-right:8px;
+height:304px;
 
-bottom:8px;
-
-background:#fffdf8;
+background:#ffffff;
 
 border-radius:6px;
 
 }
 
-/*========== ANIMATIONS ==========*/
-
-@keyframes loaderFloat{
-
-0%{
-
-transform:translateY(0);
-
-}
-
-50%{
-
-transform:translateY(-10px);
-
-}
-
-100%{
-
-transform:translateY(0);
-
-}
-
-}
-
-@keyframes loaderPages{
+@keyframes coverOpen{
 
 0%{
 
@@ -459,28 +462,17 @@ transform:rotateY(0deg);
 
 }
 
-50%{
-
-transform:rotateY(-20deg);
-
-}
-
 100%{
 
-transform:rotateY(0deg);
+transform:rotateY(-160deg);
 
 }
 
 }
 
 /*==================================================
-                CSS PART 2 END
+                MAIN READER
 ==================================================*/
-/*==================================================
-                CSS PART 3
-==================================================*/
-
-/*========== MAIN READER ==========*/
 
 #reader{
 
@@ -492,17 +484,23 @@ display:flex;
 
 flex-direction:column;
 
-background:var(--background);
+background:linear-gradient(
+180deg,
+#0f1117,
+#171b24
+);
 
 overflow:hidden;
 
 }
 
-/*========== HEADER ==========*/
+/*==================================================
+                HEADER
+==================================================*/
 
 #readerHeader{
 
-height:var(--header-height);
+height:72px;
 
 display:flex;
 
@@ -512,14 +510,11 @@ justify-content:space-between;
 
 padding:0 20px;
 
-background:linear-gradient(
-180deg,
-#4b001e,
-#2b000f);
+background:rgba(18,22,30,.92);
+
+backdrop-filter:blur(14px);
 
 border-bottom:1px solid var(--border);
-
-box-shadow:var(--shadow);
 
 z-index:100;
 
@@ -531,15 +526,15 @@ display:flex;
 
 align-items:center;
 
-gap:12px;
+gap:14px;
 
 }
 
 #readerLogo img{
 
-width:46px;
+width:42px;
 
-height:46px;
+height:42px;
 
 object-fit:contain;
 
@@ -551,27 +546,19 @@ font-size:18px;
 
 font-weight:700;
 
-letter-spacing:1px;
+color:var(--primary);
 
-color:var(--accent);
-
-white-space:nowrap;
+letter-spacing:.5px;
 
 }
 
 #bookInfo{
 
-display:flex;
-
-flex-direction:column;
-
-justify-content:center;
-
-overflow:hidden;
-
 flex:1;
 
 padding:0 30px;
+
+overflow:hidden;
 
 }
 
@@ -591,17 +578,11 @@ text-overflow:ellipsis;
 
 #bookAuthor{
 
+margin-top:4px;
+
 font-size:13px;
 
-color:var(--muted);
-
-margin-top:3px;
-
-white-space:nowrap;
-
-overflow:hidden;
-
-text-overflow:ellipsis;
+color:var(--text-light);
 
 }
 
@@ -617,39 +598,17 @@ gap:10px;
 
 #headerButtons button{
 
-width:42px;
+width:44px;
 
-height:42px;
+height:44px;
 
 border-radius:10px;
 
-background:#350013;
+background:#232a38;
 
-border:1px solid var(--border);
+color:#fff;
 
 font-size:18px;
-
-transition:var(--transition);
-
-}
-
-#headerButtons button:hover{
-
-background:var(--accent);
-
-color:#111;
-
-transform:translateY(-2px);
-
-box-shadow:0 10px 20px rgba(0,0,0,.35);
-
-}
-
-/*========== TOOLBARS ==========*/
-
-#toolbarTop,
-
-#toolbarBottom{
 
 display:flex;
 
@@ -657,57 +616,311 @@ align-items:center;
 
 justify-content:center;
 
-gap:14px;
+transition:.25s;
 
-padding:10px 18px;
+}
 
-background:#1d000c;
+#headerButtons button:hover{
+
+background:var(--primary);
+
+color:#111;
+
+transform:translateY(-2px);
+
+box-shadow:
+0 8px 18px rgba(212,175,55,.35);
+
+}
+
+/*==================================================
+                CSS PART 2 END
+==================================================*/
+/*==================================================
+                CHISHTI LIBRARY READER
+                CSS PART 3
+==================================================*/
+
+/*==================================================
+                TOP TOOLBAR
+==================================================*/
+
+#toolbarTop{
+
+height:60px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 20px;
+
+background:#171c26;
 
 border-bottom:1px solid var(--border);
+
+gap:20px;
 
 z-index:90;
 
 }
 
-#toolbarTop button,
+#navigationGroup,
+#zoomGroup{
 
-#toolbarBottom button{
+display:flex;
 
-height:42px;
+align-items:center;
 
-padding:0 18px;
-
-border-radius:10px;
-
-background:#320012;
-
-border:1px solid var(--border);
-
-font-size:15px;
-
-transition:var(--transition);
+gap:10px;
 
 }
 
-#toolbarTop button:hover,
+#navigationGroup button,
+#zoomGroup button{
 
-#toolbarBottom button:hover{
+height:42px;
 
-background:var(--accent);
+min-width:42px;
+
+padding:0 16px;
+
+border-radius:10px;
+
+background:#232a38;
+
+color:#ffffff;
+
+font-size:15px;
+
+font-weight:600;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+transition:.25s;
+
+}
+
+#navigationGroup button:hover,
+#zoomGroup button:hover{
+
+background:var(--primary);
 
 color:#111;
+
+transform:translateY(-2px);
+
+box-shadow:
+
+0 8px 18px
+
+rgba(212,175,55,.30);
 
 }
 
 #pageCounter{
 
-min-width:90px;
+min-width:110px;
 
-text-align:center;
+height:42px;
 
-font-weight:700;
+display:flex;
 
-color:var(--accent);
+align-items:center;
+
+justify-content:center;
+
+padding:0 18px;
+
+background:#10141c;
+
+border:1px solid var(--border);
+
+border-radius:10px;
+
+font-size:15px;
+
+font-weight:600;
+
+color:var(--primary);
+
+letter-spacing:.5px;
+
+}
+
+#zoomIndicator{
+
+min-width:75px;
+
+height:42px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:#10141c;
+
+border:1px solid var(--border);
+
+border-radius:10px;
+
+font-size:14px;
+
+font-weight:600;
+
+color:#ffffff;
+
+}
+
+/*==================================================
+                SECOND TOOLBAR
+==================================================*/
+
+#toolbarBottom{
+
+height:58px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 20px;
+
+background:#1b202b;
+
+border-bottom:1px solid var(--border);
+
+gap:20px;
+
+z-index:85;
+
+}
+
+#searchContainer{
+
+flex:1;
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+#searchKeyword{
+
+flex:1;
+
+height:44px;
+
+padding:0 16px;
+
+background:#10141c;
+
+border:1px solid var(--border);
+
+border-radius:10px;
+
+font-size:14px;
+
+color:#ffffff;
+
+transition:.25s;
+
+}
+
+#searchKeyword::placeholder{
+
+color:#7d8595;
+
+}
+
+#searchKeyword:focus{
+
+border-color:var(--primary);
+
+box-shadow:
+
+0 0 0 3px
+
+rgba(212,175,55,.18);
+
+}
+
+#searchContainer button{
+
+height:44px;
+
+padding:0 18px;
+
+border-radius:10px;
+
+background:#232a38;
+
+color:#ffffff;
+
+font-size:14px;
+
+font-weight:600;
+
+transition:.25s;
+
+}
+
+#searchContainer button:hover{
+
+background:var(--primary);
+
+color:#111111;
+
+}
+
+#readerModes{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+}
+
+#readerModes button{
+
+height:44px;
+
+padding:0 18px;
+
+border-radius:10px;
+
+background:#232a38;
+
+color:#ffffff;
+
+font-size:14px;
+
+font-weight:600;
+
+transition:.25s;
+
+}
+
+#readerModes button:hover{
+
+background:var(--primary);
+
+color:#111111;
 
 }
 
@@ -715,10 +928,13 @@ color:var(--accent);
                 CSS PART 3 END
 ==================================================*/
 /*==================================================
+                CHISHTI LIBRARY READER
                 CSS PART 4
 ==================================================*/
 
-/*========== READER BODY ==========*/
+/*==================================================
+                READER BODY
+==================================================*/
 
 #readerBody{
 
@@ -735,16 +951,46 @@ justify-content:center;
 overflow:hidden;
 
 background:
-radial-gradient(circle at center,
-#2b0013 0%,
-#18000a 55%,
-#0e0005 100%);
+radial-gradient(
+circle at center,
+#202633 0%,
+#161b24 45%,
+#0f1117 100%
+);
 
 }
 
-/*========== BOOK VIEWPORT ==========*/
+/*==================================================
+                BOOK VIEWPORT
+==================================================*/
 
 #bookViewport{
+
+position:relative;
+
+width:100%;
+
+height:100%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+overflow:hidden;
+
+padding:40px;
+
+perspective:2500px;
+
+}
+
+/*==================================================
+                CANVAS WRAPPER
+==================================================*/
+
+#canvasWrapper{
 
 position:relative;
 
@@ -754,23 +1000,321 @@ align-items:center;
 
 justify-content:center;
 
-width:100%;
+gap:10px;
 
-height:100%;
+transform-style:preserve-3d;
 
-padding:40px;
-
-overflow:hidden;
-
-perspective:2500px;
+transition:
+transform .35s ease,
+box-shadow .35s ease;
 
 }
 
-/*========== CANVAS WRAPPER ==========*/
+/*==================================================
+                PAGE FLIP CONTAINER
+==================================================*/
 
-#canvasWrapper{
+#pageFlipContainer{
 
 position:relative;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:10px;
+
+transform-style:preserve-3d;
+
+}
+
+/*==================================================
+                PDF CANVAS
+==================================================*/
+
+#leftCanvas,
+#rightCanvas{
+
+display:block;
+
+background:#ffffff;
+
+border-radius:6px;
+
+box-shadow:
+
+0 18px 50px
+rgba(0,0,0,.45);
+
+backface-visibility:hidden;
+
+transform-origin:center;
+
+transition:
+
+transform .35s ease,
+box-shadow .35s ease;
+
+user-select:none;
+
+}
+
+/*==================================================
+                PAGE FRONT
+==================================================*/
+
+#pageFront{
+
+position:relative;
+
+transform-origin:left center;
+
+transform-style:preserve-3d;
+
+z-index:5;
+
+}
+
+/*==================================================
+                PAGE BACK
+==================================================*/
+
+#pageBack{
+
+position:relative;
+
+transform-origin:right center;
+
+transform:
+
+rotateY(180deg);
+
+transform-style:preserve-3d;
+
+z-index:4;
+
+}
+
+/*==================================================
+                PAGE CURVE
+==================================================*/
+
+#pageCurve{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+width:55px;
+
+height:88%;
+
+transform:
+translate(-50%,-50%);
+
+background:
+
+linear-gradient(
+90deg,
+rgba(0,0,0,.18),
+rgba(255,255,255,.10),
+rgba(0,0,0,.18)
+);
+
+filter:blur(8px);
+
+pointer-events:none;
+
+z-index:15;
+
+}
+
+/*==================================================
+                PAGE SHADOW
+==================================================*/
+
+#pageShadow{
+
+position:absolute;
+
+left:50%;
+
+bottom:18px;
+
+transform:translateX(-50%);
+
+width:72%;
+
+height:40px;
+
+border-radius:50%;
+
+background:
+
+rgba(0,0,0,.45);
+
+filter:blur(22px);
+
+pointer-events:none;
+
+z-index:1;
+
+}
+
+/*==================================================
+                PAGE GLOW
+==================================================*/
+
+#pageGlow{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+width:500px;
+
+height:500px;
+
+transform:
+translate(-50%,-50%);
+
+background:
+
+radial-gradient(
+
+circle,
+
+rgba(255,255,255,.50),
+
+rgba(255,255,255,.18),
+
+transparent 72%
+
+);
+
+opacity:0;
+
+pointer-events:none;
+
+filter:blur(30px);
+
+transition:opacity .45s ease;
+
+z-index:2;
+
+}
+
+/*==================================================
+                WATERMARK
+==================================================*/
+
+#watermark{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+transform:
+
+translate(-50%,-50%)
+
+rotate(-35deg);
+
+font-size:44px;
+
+font-weight:700;
+
+letter-spacing:5px;
+
+color:
+
+rgba(120,120,120,.10);
+
+pointer-events:none;
+
+user-select:none;
+
+white-space:nowrap;
+
+z-index:20;
+
+}
+
+/*==================================================
+                FLOATING PAGE NUMBER
+==================================================*/
+
+#floatingPageNumber{
+
+position:absolute;
+
+right:25px;
+
+bottom:25px;
+
+width:58px;
+
+height:58px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+border-radius:50%;
+
+background:
+
+rgba(0,0,0,.65);
+
+backdrop-filter:blur(10px);
+
+color:#ffffff;
+
+font-size:18px;
+
+font-weight:700;
+
+opacity:0;
+
+transition:.30s;
+
+z-index:30;
+
+}
+
+/*==================================================
+                CSS PART 4 END
+==================================================*/
+/*==================================================
+                CHISHTI LIBRARY READER
+                CSS PART 5
+==================================================*/
+
+/*==================================================
+                MOBILE NAVIGATION
+==================================================*/
+
+#mobileNavigation{
+
+display:none;
+
+position:fixed;
+
+left:50%;
+
+bottom:20px;
+
+transform:translateX(-50%);
 
 display:flex;
 
@@ -780,266 +1324,149 @@ justify-content:center;
 
 gap:18px;
 
-z-index:20;
+padding:12px 18px;
 
-transition:var(--transition);
+background:rgba(18,22,30,.92);
 
-transform-style:preserve-3d;
+backdrop-filter:blur(14px);
+
+border:1px solid var(--border);
+
+border-radius:50px;
+
+box-shadow:var(--shadow);
+
+z-index:250;
 
 }
 
-/*========== PDF CANVAS ==========*/
+#mobileNavigation button{
 
-#leftCanvas,
+min-width:120px;
 
-#rightCanvas{
+height:46px;
 
-background:var(--page);
+padding:0 20px;
 
-border-radius:8px;
+border-radius:30px;
 
-box-shadow:
+background:#232a38;
 
-0 20px 60px rgba(0,0,0,.45),
+color:#ffffff;
 
-0 0 0 1px rgba(0,0,0,.08);
+font-size:14px;
+
+font-weight:600;
+
+transition:.25s;
+
+}
+
+#mobileNavigation button:hover{
+
+background:var(--primary);
+
+color:#111111;
+
+}
+
+#mobilePageCounter{
+
+min-width:90px;
+
+text-align:center;
+
+font-size:15px;
+
+font-weight:600;
+
+color:var(--primary);
+
+}
+
+/*==================================================
+                OVERLAY
+==================================================*/
+
+#readerOverlay{
+
+position:fixed;
+
+inset:0;
+
+background:rgba(0,0,0,.55);
+
+backdrop-filter:blur(3px);
+
+opacity:0;
+
+visibility:hidden;
+
+transition:.30s;
+
+z-index:500;
+
+}
+
+#readerOverlay.active{
+
+opacity:1;
+
+visibility:visible;
+
+}
+
+/*==================================================
+                SIDE PANELS
+==================================================*/
+
+.sidePanel{
+
+position:fixed;
+
+top:0;
+
+right:-430px;
+
+width:430px;
 
 max-width:100%;
 
-max-height:100%;
-
-transition:
-
-transform .35s ease,
-
-box-shadow .35s ease;
-
-}
-
-/*========== PAGE SHADOW ==========*/
-
-#pageShadow{
-
-position:absolute;
-
-width:78%;
-
-height:82%;
-
-border-radius:20px;
-
-background:
-
-radial-gradient(
-
-ellipse at center,
-
-rgba(0,0,0,.28),
-
-rgba(0,0,0,0)
-
-);
-
-filter:blur(28px);
-
-pointer-events:none;
-
-z-index:5;
-
-}
-
-/*========== PAGE CURVE ==========*/
-
-#pageCurve{
-
-position:absolute;
-
-width:72%;
-
-height:88%;
-
-border-radius:12px;
-
-box-shadow:
-
-inset 0 0 30px rgba(0,0,0,.08),
-
-inset -12px 0 18px rgba(0,0,0,.05),
-
-inset 12px 0 18px rgba(0,0,0,.05);
-
-pointer-events:none;
-
-z-index:25;
-
-}
-
-/*========== WATERMARK ==========*/
-
-#watermark{
-
-position:absolute;
-
-top:50%;
-
-left:50%;
-
-transform:translate(-50%,-50%);
-
-font-size:52px;
-
-font-weight:700;
-
-letter-spacing:10px;
-
-color:rgba(120,120,120,.08);
-
-white-space:nowrap;
-
-pointer-events:none;
-
-user-select:none;
-
-z-index:30;
-
-text-transform:uppercase;
-
-}
-
-/*========== PAGE HOVER ==========*/
-
-#canvasWrapper:hover #leftCanvas,
-
-#canvasWrapper:hover #rightCanvas{
-
-transform:scale(1.01);
-
-box-shadow:
-
-0 25px 70px rgba(0,0,0,.55),
-
-0 0 0 1px rgba(0,0,0,.08);
-
-}
-
-/*==================================================
-                CSS PART 4 END
-==================================================*/
-/*==================================================
-                CSS PART 5
-==================================================*/
-
-/*========== SEARCH PANEL ==========*/
-
-#searchPanel{
-
-position:absolute;
-
-top:0;
-
-right:-380px;
-
-width:380px;
-
-height:100%;
+height:100vh;
 
 display:flex;
 
 flex-direction:column;
 
-background:#1b000c;
+background:#171c26;
 
 border-left:1px solid var(--border);
 
-box-shadow:-20px 0 40px rgba(0,0,0,.35);
+box-shadow:
+
+-12px 0 40px
+
+rgba(0,0,0,.45);
 
 transition:right .35s ease;
 
-z-index:500;
+z-index:700;
 
 }
 
-#searchPanel.active{
+.sidePanel.active{
 
 right:0;
 
 }
 
-/*========== SETTINGS PANEL ==========*/
-
-#settingsPanel{
-
-position:absolute;
-
-top:0;
-
-left:-360px;
-
-width:360px;
-
-height:100%;
-
-display:flex;
-
-flex-direction:column;
-
-background:#1b000c;
-
-border-right:1px solid var(--border);
-
-box-shadow:20px 0 40px rgba(0,0,0,.35);
-
-transition:left .35s ease;
-
-z-index:500;
-
-}
-
-#settingsPanel.active{
-
-left:0;
-
-}
-
-/*========== BOOKMARK PANEL ==========*/
-
-#bookmarkPanel{
-
-position:absolute;
-
-right:-340px;
-
-top:0;
-
-width:340px;
-
-height:100%;
-
-display:flex;
-
-flex-direction:column;
-
-background:#1b000c;
-
-border-left:1px solid var(--border);
-
-transition:right .35s ease;
-
-z-index:500;
-
-}
-
-#bookmarkPanel.active{
-
-right:0;
-
-}
-
-/*========== PANEL HEADER ==========*/
+/*==================================================
+                PANEL HEADER
+==================================================*/
 
 .panelHeader{
 
-height:64px;
+height:70px;
 
 display:flex;
 
@@ -1049,9 +1476,9 @@ justify-content:space-between;
 
 padding:0 20px;
 
-background:#330013;
-
 border-bottom:1px solid var(--border);
+
+background:#1f2531;
 
 }
 
@@ -1061,93 +1488,101 @@ font-size:18px;
 
 font-weight:600;
 
-color:var(--accent);
+color:var(--primary);
 
 }
 
 .panelHeader button{
 
-width:38px;
+width:42px;
 
-height:38px;
+height:42px;
 
-border-radius:8px;
+border-radius:10px;
 
-background:#47001b;
+background:#232a38;
 
-border:1px solid var(--border);
+color:#ffffff;
+
+font-size:18px;
+
+transition:.25s;
 
 }
 
 .panelHeader button:hover{
 
-background:var(--accent);
-
-color:#111;
+background:var(--danger);
 
 }
 
-/*========== PANEL BODY ==========*/
+/*==================================================
+                PANEL BODY
+==================================================*/
 
 .panelBody{
 
 flex:1;
 
+overflow:auto;
+
 padding:20px;
 
-overflow-y:auto;
+display:flex;
+
+flex-direction:column;
+
+gap:16px;
 
 }
 
-.panelBody input,
+/*==================================================
+                SEARCH
+==================================================*/
 
-.panelBody select{
+#searchInput{
 
 width:100%;
 
 height:46px;
 
-padding:0 14px;
-
-margin-bottom:16px;
+padding:0 16px;
 
 border-radius:10px;
 
-background:#2d0012;
+background:#10141c;
 
 border:1px solid var(--border);
 
+color:#ffffff;
+
+font-size:14px;
+
 }
 
-.panelBody button{
+#searchInput:focus{
 
-width:100%;
+border-color:var(--primary);
+
+}
+
+#searchNowBtn{
 
 height:46px;
 
 border-radius:10px;
 
-background:#47001b;
+background:var(--primary);
 
-border:1px solid var(--border);
+color:#111111;
 
-margin-bottom:14px;
+font-weight:600;
 
-}
-
-.panelBody button:hover{
-
-background:var(--accent);
-
-color:#111;
+font-size:15px;
 
 }
 
-/*========== SEARCH RESULTS ==========*/
-
-#searchResults,
-
-#bookmarkList{
+#searchResults{
 
 display:flex;
 
@@ -1155,7 +1590,7 @@ flex-direction:column;
 
 gap:10px;
 
-margin-top:15px;
+margin-top:12px;
 
 }
 
@@ -1163,34 +1598,253 @@ margin-top:15px;
                 CSS PART 5 END
 ==================================================*/
 /*==================================================
+                CHISHTI LIBRARY READER
                 CSS PART 6
 ==================================================*/
 
-/*========== THUMBNAIL SIDEBAR ==========*/
+/*==================================================
+                BOOKMARK PANEL
+==================================================*/
 
-#thumbnailSidebar{
-
-position:absolute;
-
-left:-180px;
-
-top:0;
-
-width:180px;
-
-height:100%;
+#bookmarkList{
 
 display:flex;
 
 flex-direction:column;
 
-background:#180009;
+gap:12px;
+
+}
+
+.bookmarkItem{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:14px;
+
+background:#202633;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+transition:.30s;
+
+}
+
+.bookmarkItem:hover{
+
+border-color:var(--primary);
+
+transform:translateY(-2px);
+
+}
+
+.bookmarkOpen{
+
+flex:1;
+
+height:42px;
+
+padding:0 16px;
+
+border-radius:8px;
+
+background:#2b3242;
+
+color:#ffffff;
+
+text-align:left;
+
+font-size:14px;
+
+font-weight:600;
+
+}
+
+.bookmarkOpen:hover{
+
+background:var(--primary);
+
+color:#111111;
+
+}
+
+.bookmarkDelete{
+
+width:42px;
+
+height:42px;
+
+margin-left:10px;
+
+border-radius:8px;
+
+background:#3a2020;
+
+color:#ff6464;
+
+font-size:18px;
+
+}
+
+.bookmarkDelete:hover{
+
+background:#ff4444;
+
+color:#ffffff;
+
+}
+
+.bookmarkEmpty{
+
+padding:40px 20px;
+
+text-align:center;
+
+font-size:15px;
+
+color:#9ca3af;
+
+}
+
+/*==================================================
+                SETTINGS PANEL
+==================================================*/
+
+.settingItem{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+gap:20px;
+
+padding:16px;
+
+background:#202633;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+}
+
+.settingItem label{
+
+font-size:15px;
+
+font-weight:500;
+
+color:#ffffff;
+
+}
+
+.settingItem input[type="checkbox"]{
+
+width:22px;
+
+height:22px;
+
+accent-color:var(--primary);
+
+cursor:pointer;
+
+}
+
+.settingItem select{
+
+min-width:150px;
+
+height:42px;
+
+padding:0 12px;
+
+border-radius:8px;
+
+background:#10141c;
+
+border:1px solid var(--border);
+
+color:#ffffff;
+
+}
+
+/*==================================================
+                TOC PANEL
+==================================================*/
+
+#tocList{
+
+display:flex;
+
+flex-direction:column;
+
+gap:10px;
+
+}
+
+.tocItem{
+
+padding:14px 16px;
+
+background:#202633;
+
+border-radius:10px;
+
+border:1px solid var(--border);
+
+cursor:pointer;
+
+transition:.30s;
+
+font-size:14px;
+
+font-weight:500;
+
+}
+
+.tocItem:hover{
+
+background:var(--primary);
+
+color:#111111;
+
+}
+
+/*==================================================
+                THUMBNAIL SIDEBAR
+==================================================*/
+
+#thumbnailSidebar{
+
+position:fixed;
+
+left:-260px;
+
+top:0;
+
+width:260px;
+
+height:100vh;
+
+display:flex;
+
+flex-direction:column;
+
+background:#171c26;
 
 border-right:1px solid var(--border);
 
 transition:left .35s ease;
 
-z-index:450;
+z-index:700;
 
 }
 
@@ -1200,25 +1854,47 @@ left:0;
 
 }
 
-.sidebarHeader{
+#thumbnailHeader{
 
-height:60px;
+height:70px;
 
 display:flex;
 
 align-items:center;
 
-justify-content:center;
+justify-content:space-between;
 
-font-size:17px;
-
-font-weight:600;
-
-color:var(--accent);
+padding:0 18px;
 
 border-bottom:1px solid var(--border);
 
-background:#300012;
+}
+
+#thumbnailHeader h3{
+
+font-size:18px;
+
+color:var(--primary);
+
+}
+
+#closeThumbnailBtn{
+
+width:40px;
+
+height:40px;
+
+border-radius:10px;
+
+background:#232a38;
+
+color:#ffffff;
+
+}
+
+#closeThumbnailBtn:hover{
+
+background:var(--danger);
 
 }
 
@@ -1228,191 +1904,49 @@ flex:1;
 
 overflow-y:auto;
 
-padding:12px;
+padding:15px;
 
 display:flex;
 
 flex-direction:column;
 
-gap:14px;
+gap:15px;
 
 }
 
-.thumbnail{
+.thumbnailItem{
 
-width:100%;
+padding:8px;
 
-aspect-ratio:3/4;
-
-border-radius:8px;
-
-overflow:hidden;
-
-background:#ffffff;
-
-cursor:pointer;
+background:#202633;
 
 border:2px solid transparent;
 
-transition:var(--transition);
-
-}
-
-.thumbnail canvas,
-
-.thumbnail img{
-
-width:100%;
-
-height:100%;
-
-display:block;
-
-object-fit:cover;
-
-}
-
-.thumbnail:hover{
-
-border-color:var(--accent);
-
-transform:translateY(-2px);
-
-}
-
-.thumbnail.active{
-
-border-color:var(--accent);
-
-box-shadow:0 0 15px rgba(212,175,55,.35);
-
-}
-
-/*========== TABLE OF CONTENTS ==========*/
-
-#tocPanel{
-
-position:absolute;
-
-left:-340px;
-
-top:0;
-
-width:340px;
-
-height:100%;
-
-display:flex;
-
-flex-direction:column;
-
-background:#180009;
-
-border-right:1px solid var(--border);
-
-transition:left .35s ease;
-
-z-index:460;
-
-}
-
-#tocPanel.active{
-
-left:180px;
-
-}
-
-#tocContainer{
-
-flex:1;
-
-overflow-y:auto;
-
-padding:18px;
-
-}
-
-.tocItem{
-
-padding:12px 14px;
-
-margin-bottom:8px;
-
-border-radius:8px;
+border-radius:10px;
 
 cursor:pointer;
 
-background:#24000e;
-
-border:1px solid transparent;
-
-transition:var(--transition);
+transition:.30s;
 
 }
 
-.tocItem:hover{
+.thumbnailItem:hover{
 
-background:#3b0016;
-
-border-color:var(--accent);
+border-color:var(--primary);
 
 }
 
-.tocItem.active{
+.thumbnailItem canvas{
 
-background:var(--accent);
+display:block;
 
-color:#111;
+width:100%;
 
-font-weight:600;
+height:auto;
 
-}
+border-radius:6px;
 
-/*========== FLOATING INDICATORS ==========*/
-
-#floatingPageNumber,
-
-#zoomIndicator{
-
-position:absolute;
-
-left:50%;
-
-transform:translateX(-50%);
-
-padding:10px 18px;
-
-border-radius:30px;
-
-background:rgba(0,0,0,.78);
-
-backdrop-filter:blur(8px);
-
-color:#fff;
-
-font-size:15px;
-
-font-weight:600;
-
-opacity:0;
-
-pointer-events:none;
-
-transition:opacity .3s ease;
-
-z-index:900;
-
-}
-
-#floatingPageNumber{
-
-bottom:40px;
-
-}
-
-#zoomIndicator{
-
-top:140px;
+background:#ffffff;
 
 }
 
@@ -1420,283 +1954,177 @@ top:140px;
                 CSS PART 6 END
 ==================================================*/
 /*==================================================
+                CHISHTI LIBRARY READER
                 CSS PART 7
 ==================================================*/
 
-/*========== MOBILE (991px) ==========*/
+/*==================================================
+                LOADING SCREEN
+==================================================*/
 
-@media (max-width:991px){
+#loadingScreen{
 
-#readerHeader{
+position:fixed;
 
-padding:0 14px;
-
-height:64px;
-
-}
-
-#readerLogo h1{
+inset:0;
 
 display:none;
 
-}
+align-items:center;
 
-#bookInfo{
+justify-content:center;
 
-padding:0 12px;
+background:rgba(10,12,18,.96);
 
-}
+backdrop-filter:blur(12px);
 
-#bookTitle{
-
-font-size:15px;
+z-index:999990;
 
 }
 
-#bookAuthor{
+.loadingCard{
 
-font-size:11px;
+width:420px;
 
-}
+max-width:92%;
 
-#toolbarTop{
+padding:40px;
 
-flex-wrap:wrap;
+background:#171c26;
 
-gap:8px;
+border:1px solid var(--border);
 
-padding:10px;
+border-radius:20px;
 
-}
+box-shadow:0 30px 80px rgba(0,0,0,.55);
 
-#toolbarBottom{
+display:flex;
 
 flex-direction:column;
 
-gap:10px;
+align-items:center;
 
-padding:12px;
+gap:25px;
 
 }
 
-#searchBox{
+.loadingBook{
+
+position:relative;
+
+width:110px;
+
+height:80px;
+
+perspective:1200px;
+
+}
+
+.loadingCover{
+
+position:absolute;
+
+inset:0;
+
+background:linear-gradient(
+135deg,
+#d4af37,
+#8c6c12
+);
+
+border-radius:6px;
+
+transform-origin:left;
+
+animation:loadingBook 1.4s infinite;
+
+}
+
+.loadingPages{
+
+position:absolute;
+
+left:8px;
+
+top:7px;
+
+width:92px;
+
+height:66px;
+
+background:#ffffff;
+
+border-radius:4px;
+
+}
+
+@keyframes loadingBook{
+
+0%{
+
+transform:rotateY(0deg);
+
+}
+
+50%{
+
+transform:rotateY(-155deg);
+
+}
+
+100%{
+
+transform:rotateY(0deg);
+
+}
+
+}
+
+#loadingStatus{
+
+font-size:18px;
+
+font-weight:600;
+
+color:var(--primary);
+
+text-align:center;
+
+}
+
+#loadingProgress{
 
 width:100%;
 
-display:flex;
+height:10px;
 
-gap:8px;
+background:#0d1118;
 
-}
+border-radius:20px;
 
-#searchInput{
-
-flex:1;
+overflow:hidden;
 
 }
 
-#viewModes{
+#loadingBar{
 
-width:100%;
+width:0%;
 
-display:flex;
+height:100%;
 
-gap:8px;
+background:linear-gradient(
+90deg,
+#d4af37,
+#f5dc84
+);
 
-}
-
-#viewModes button{
-
-flex:1;
-
-}
-
-#bookViewport{
-
-padding:20px;
-
-}
-
-#canvasWrapper{
-
-gap:10px;
-
-}
-
-#rightCanvas{
-
-display:none;
-
-}
-
-#leftCanvas{
-
-width:100%;
-
-height:auto;
-
-max-width:100%;
-
-}
-
-#watermark{
-
-font-size:28px;
-
-letter-spacing:4px;
-
-}
-
-#mobileControls{
-
-display:flex;
-
-}
-
-#thumbnailSidebar,
-
-#tocPanel{
-
-display:none;
-
-}
-
-}
-
-/*========== MOBILE (600px) ==========*/
-
-@media (max-width:600px){
-
-#headerButtons{
-
-gap:6px;
-
-}
-
-#headerButtons button{
-
-width:38px;
-
-height:38px;
-
-font-size:15px;
-
-}
-
-#toolbarTop button,
-
-#toolbarBottom button{
-
-height:40px;
-
-padding:0 12px;
-
-font-size:13px;
-
-}
-
-#pageCounter{
-
-font-size:14px;
-
-min-width:70px;
-
-}
-
-#bookViewport{
-
-padding:10px;
-
-}
-
-#pageShadow{
-
-width:96%;
-
-height:88%;
-
-}
-
-#pageCurve{
-
-width:94%;
-
-height:90%;
-
-}
-
-#watermark{
-
-font-size:22px;
-
-letter-spacing:3px;
-
-}
-
-}
-
-/*========== LARGE SCREEN ==========*/
-
-@media (min-width:1400px){
-
-#bookViewport{
-
-padding:50px;
-
-}
-
-#leftCanvas,
-
-#rightCanvas{
-
-max-height:92vh;
-
-}
-
-}
-
-/*========== LANDSCAPE MOBILE ==========*/
-
-@media (max-height:550px){
-
-#readerHeader{
-
-height:58px;
-
-}
-
-#toolbarTop,
-
-#toolbarBottom{
-
-padding:6px;
-
-}
-
-#bookViewport{
-
-padding:8px;
-
-}
-
-#watermark{
-
-font-size:20px;
-
-}
+transition:width .30s linear;
 
 }
 
 /*==================================================
-                CSS PART 7 END
+                ERROR SCREEN
 ==================================================*/
-/*==================================================
-                CSS PART 8
-==================================================*/
-
-/*========== LOADING SCREEN ==========*/
-
-#loadingScreen,
 
 #errorScreen{
 
@@ -1710,136 +2138,91 @@ align-items:center;
 
 justify-content:center;
 
-background:rgba(8,0,4,.92);
+background:rgba(10,10,10,.95);
 
-backdrop-filter:blur(8px);
+backdrop-filter:blur(10px);
 
-z-index:9999;
+z-index:999991;
 
 }
 
-#loadingContent,
+.errorCard{
 
-#errorContent{
+width:460px;
 
-width:min(90%,420px);
+max-width:92%;
 
-padding:35px;
+padding:40px;
+
+background:#181c25;
+
+border:1px solid #422;
 
 border-radius:18px;
 
-background:#22000f;
-
-border:1px solid var(--border);
-
 text-align:center;
 
-box-shadow:var(--shadow);
+box-shadow:0 25px 70px rgba(0,0,0,.55);
 
 }
 
-#loadingSpinner{
+.errorCard h2{
 
-width:70px;
+font-size:26px;
 
-height:70px;
+color:#ff5757;
 
-margin:0 auto 25px;
-
-border:5px solid rgba(255,255,255,.08);
-
-border-top:5px solid var(--accent);
-
-border-radius:50%;
-
-animation:spin .8s linear infinite;
-
-}
-
-#loadingStatus{
-
-margin-top:10px;
-
-color:var(--muted);
-
-font-size:14px;
-
-}
-
-#loadingProgress{
-
-width:100%;
-
-height:8px;
-
-margin-top:20px;
-
-background:#320012;
-
-border-radius:20px;
-
-overflow:hidden;
-
-}
-
-#loadingBar{
-
-width:0;
-
-height:100%;
-
-background:linear-gradient(
-90deg,
-#d4af37,
-#ffe48a);
-
-transition:width .25s linear;
-
-}
-
-#errorContent h2{
-
-margin-bottom:15px;
-
-color:#ffb2b2;
+margin-bottom:14px;
 
 }
 
 #errorMessage{
 
-margin-bottom:25px;
+font-size:15px;
 
-color:var(--muted);
+line-height:1.7;
+
+color:#c9ced8;
+
+margin-bottom:28px;
 
 }
 
-#errorContent button{
+.errorCard button{
 
-width:100%;
+height:48px;
 
-height:46px;
+min-width:130px;
 
-margin-bottom:12px;
+padding:0 22px;
+
+margin:5px;
 
 border-radius:10px;
 
-background:#420018;
+background:var(--primary);
 
-border:1px solid var(--border);
+color:#111111;
 
-transition:var(--transition);
+font-size:15px;
 
-}
+font-weight:600;
 
-#errorContent button:hover{
-
-background:var(--accent);
-
-color:#111;
+transition:.30s;
 
 }
 
-/*========== TOAST ==========*/
+.errorCard button:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 12px 25px rgba(212,175,55,.30);
+
+}
+
+/*==================================================
+                TOAST MESSAGE
+==================================================*/
 
 #readerToast{
 
@@ -1847,149 +2230,536 @@ position:fixed;
 
 left:50%;
 
-bottom:30px;
+bottom:35px;
 
 transform:translateX(-50%) translateY(120px);
 
+min-width:220px;
+
+max-width:90%;
+
 padding:14px 24px;
 
-border-radius:40px;
+background:#202633;
 
-background:rgba(20,0,9,.92);
+border:1px solid var(--primary);
 
-border:1px solid var(--border);
+border-radius:50px;
 
-color:#fff;
+display:flex;
 
-font-size:14px;
+align-items:center;
 
-transition:.35s ease;
+justify-content:center;
 
-z-index:99999;
+box-shadow:0 18px 45px rgba(0,0,0,.45);
+
+opacity:0;
+
+transition:.35s;
+
+z-index:999995;
 
 }
 
 #readerToast.show{
 
+opacity:1;
+
 transform:translateX(-50%) translateY(0);
 
 }
 
-/*========== OVERLAY ==========*/
+#toastMessage{
 
-#readerOverlay{
+font-size:15px;
 
-position:fixed;
+font-weight:600;
 
-inset:0;
+color:#ffffff;
 
-background:rgba(0,0,0,.45);
-
-backdrop-filter:blur(3px);
-
-opacity:0;
-
-visibility:hidden;
-
-transition:.3s ease;
-
-z-index:300;
+text-align:center;
 
 }
 
-#readerOverlay.active{
+/*==================================================
+                SEARCH RESULTS
+==================================================*/
 
-opacity:1;
+.searchResult{
 
-visibility:visible;
+width:100%;
+
+padding:14px 16px;
+
+border:none;
+
+border-radius:10px;
+
+background:#232a38;
+
+color:#ffffff;
+
+font-size:14px;
+
+font-weight:600;
+
+text-align:left;
+
+cursor:pointer;
+
+transition:.25s;
 
 }
 
-/*========== PAGE FLIP LAYER ==========*/
+.searchResult:hover{
 
-#pageFlipLayer{
+background:var(--primary);
 
-position:absolute;
-
-inset:0;
-
-pointer-events:none;
-
-z-index:60;
-
-perspective:2500px;
+color:#111111;
 
 }
+
+.searchEmpty{
+
+padding:35px 15px;
+
+text-align:center;
+
+font-size:15px;
+
+color:#9ca3af;
+
+}
+
+/*==================================================
+                CSS PART 7 END
+==================================================*/
+/*==================================================
+                CHISHTI LIBRARY READER
+                CSS PART 8
+                RESPONSIVE • PAGE FLIP • END
+==================================================*/
+
+/*==================================================
+                PAGE FLIP EFFECT
+==================================================*/
 
 #pageFront,
-
 #pageBack{
-
-position:absolute;
-
-top:50%;
-
-left:50%;
-
-width:48%;
-
-height:88%;
-
-transform-origin:left center;
-
-border-radius:8px;
 
 backface-visibility:hidden;
 
-}
+transform-style:preserve-3d;
 
-#pageFront{
+will-change:transform;
 
-background:#fffdf8;
+transition:
 
-}
-
-#pageBack{
-
-background:#f4f1ea;
-
-transform:rotateY(180deg);
+transform .45s cubic-bezier(.22,.61,.36,1);
 
 }
 
-#pageGlow{
+.page-flip-next{
 
-position:absolute;
+animation:
 
-top:50%;
+flipNext
 
-left:50%;
-
-width:200px;
-
-height:200px;
-
-transform:translate(-50%,-50%);
-
-background:radial-gradient(circle,
-rgba(255,255,255,.65),
-rgba(255,255,255,0));
-
-opacity:0;
-
-filter:blur(15px);
-
-pointer-events:none;
+.45s forwards;
 
 }
 
-/*========== ANIMATIONS ==========*/
+.page-flip-prev{
 
-@keyframes spin{
+animation:
 
-to{
+flipPrev
 
-transform:rotate(360deg);
+.45s forwards;
+
+}
+
+@keyframes flipNext{
+
+0%{
+
+transform:
+
+perspective(2400px)
+
+rotateY(0deg);
+
+}
+
+100%{
+
+transform:
+
+perspective(2400px)
+
+rotateY(-180deg);
+
+}
+
+}
+
+@keyframes flipPrev{
+
+0%{
+
+transform:
+
+perspective(2400px)
+
+rotateY(0deg);
+
+}
+
+100%{
+
+transform:
+
+perspective(2400px)
+
+rotateY(180deg);
+
+}
+
+}
+
+/*==================================================
+                ACTIVE STATES
+==================================================*/
+
+button:active{
+
+transform:
+
+scale(.96);
+
+}
+
+.activeButton{
+
+background:
+
+var(--primary)!important;
+
+color:
+
+#111!important;
+
+}
+
+/*==================================================
+                LIGHT THEME
+==================================================*/
+
+body.lightTheme{
+
+background:#ececec;
+
+color:#111;
+
+}
+
+body.lightTheme #reader{
+
+background:#ececec;
+
+}
+
+body.lightTheme
+#readerHeader,
+
+body.lightTheme
+#toolbarTop,
+
+body.lightTheme
+#toolbarBottom{
+
+background:#ffffff;
+
+color:#111;
+
+border-color:#d8d8d8;
+
+}
+
+body.lightTheme
+#pageCounter,
+
+body.lightTheme
+#zoomIndicator,
+
+body.lightTheme
+#searchKeyword,
+
+body.lightTheme
+.sidePanel,
+
+body.lightTheme
+.settingItem,
+
+body.lightTheme
+.bookmarkItem{
+
+background:#ffffff;
+
+color:#111;
+
+border-color:#dddddd;
+
+}
+
+body.lightTheme button{
+
+color:#111;
+
+}
+
+/*==================================================
+                TABLET
+==================================================*/
+
+@media (max-width:1200px){
+
+#readerHeader{
+
+padding:0 15px;
+
+}
+
+#toolbarTop,
+
+#toolbarBottom{
+
+padding:0 15px;
+
+}
+
+#canvasWrapper{
+
+transform:scale(.95);
+
+}
+
+}
+
+/*==================================================
+                MOBILE
+==================================================*/
+
+@media (max-width:991px){
+
+#toolbarTop{
+
+flex-direction:column;
+
+height:auto;
+
+padding:12px;
+
+gap:12px;
+
+}
+
+#toolbarBottom{
+
+flex-direction:column;
+
+height:auto;
+
+padding:12px;
+
+gap:12px;
+
+}
+
+#navigationGroup,
+
+#zoomGroup,
+
+#readerModes{
+
+width:100%;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
+}
+
+#searchContainer{
+
+width:100%;
+
+}
+
+#bookViewport{
+
+padding:15px;
+
+}
+
+#rightCanvas{
+
+display:none!important;
+
+}
+
+#canvasWrapper{
+
+gap:0;
+
+}
+
+#mobileNavigation{
+
+display:flex;
+
+}
+
+#headerButtons{
+
+gap:6px;
+
+}
+
+#headerButtons button{
+
+width:40px;
+
+height:40px;
+
+}
+
+#bookInfo{
+
+display:none;
+
+}
+
+#watermark{
+
+font-size:28px;
+
+}
+
+.sidePanel{
+
+width:100%;
+
+right:-100%;
+
+}
+
+.sidePanel.active{
+
+right:0;
+
+}
+
+}
+
+/*==================================================
+                SMALL MOBILE
+==================================================*/
+
+@media (max-width:600px){
+
+#pageCounter{
+
+min-width:90px;
+
+font-size:13px;
+
+}
+
+#zoomIndicator{
+
+min-width:60px;
+
+font-size:13px;
+
+}
+
+#navigationGroup button,
+
+#zoomGroup button,
+
+#readerModes button{
+
+height:38px;
+
+padding:0 12px;
+
+font-size:13px;
+
+}
+
+#mobileNavigation{
+
+left:10px;
+
+right:10px;
+
+bottom:12px;
+
+transform:none;
+
+border-radius:14px;
+
+justify-content:space-between;
+
+}
+
+#mobileNavigation button{
+
+min-width:auto;
+
+flex:1;
+
+}
+
+.loadingCard,
+
+.errorCard{
+
+padding:25px;
+
+}
+
+}
+
+/*==================================================
+                PRINT
+==================================================*/
+
+@media print{
+
+#readerHeader,
+
+#toolbarTop,
+
+#toolbarBottom,
+
+#mobileNavigation,
+
+.sidePanel,
+
+#readerToast,
+
+#readerOverlay{
+
+display:none!important;
+
+}
+
+body{
+
+background:#ffffff;
 
 }
 
