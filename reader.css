@@ -1,17 +1,29 @@
 /*==================================================
-                CHISHTI LIBRARY READER
+            CHISHTI LIBRARY READER
                 CSS PART 1
+        RESET + VARIABLES + GLOBAL
 ==================================================*/
 
 /*==================================================
-                RESET
+                    RESET
 ==================================================*/
 
 *{
+
 margin:0;
+
 padding:0;
+
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+
+}
+
+*::before,
+
+*::after{
+
+box-sizing:border-box;
+
 }
 
 html{
@@ -24,92 +36,66 @@ body{
 
 font-family:"Poppins",sans-serif;
 
-background:#0f1117;
+background:#111827;
 
 color:#ffffff;
 
 overflow:hidden;
 
-width:100vw;
+width:100%;
 
 height:100vh;
+
+-webkit-font-smoothing:antialiased;
+
+-moz-osx-font-smoothing:grayscale;
 
 }
 
 /*==================================================
-                ROOT COLORS
+                ROOT VARIABLES
 ==================================================*/
 
 :root{
 
---primary:#d4af37;
+--primary:#2563eb;
 
---primary-light:#f6dc78;
+--primaryHover:#1d4ed8;
 
---background:#0f1117;
+--secondary:#0f172a;
 
---background-2:#181c25;
+--background:#111827;
 
---background-3:#242b38;
+--surface:#1f2937;
 
---border:#343b4d;
+--surfaceLight:#374151;
 
---white:#ffffff;
-
---black:#000000;
+--border:#334155;
 
 --text:#ffffff;
 
---text-light:#c6c8cf;
+--textLight:#cbd5e1;
 
---danger:#ff4444;
+--success:#22c55e;
 
---success:#28c76f;
+--warning:#f59e0b;
 
---shadow:
-0 15px 40px
-rgba(0,0,0,.45);
+--danger:#ef4444;
+
+--shadow:0 12px 35px rgba(0,0,0,.35);
 
 --radius:14px;
 
 --transition:.30s ease;
 
-}
+--headerHeight:72px;
 
-/*==================================================
-                SCROLLBAR
-==================================================*/
-
-::-webkit-scrollbar{
-
-width:8px;
-
-height:8px;
-
-}
-
-::-webkit-scrollbar-track{
-
-background:#111;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-background:var(--primary);
-
-border-radius:20px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-background:var(--primary-light);
+--toolbarHeight:60px;
 
 }
 
 /*==================================================
-                BUTTON
+                COMMON ELEMENTS
 ==================================================*/
 
 button{
@@ -128,24 +114,41 @@ transition:var(--transition);
 
 button:disabled{
 
-opacity:.55;
+opacity:.5;
 
 cursor:not-allowed;
 
 }
 
-/*==================================================
-                INPUT
-==================================================*/
-
 input,
+
+textarea,
+
 select{
+
+font-family:inherit;
 
 outline:none;
 
 border:none;
 
-font-family:inherit;
+}
+
+img{
+
+display:block;
+
+max-width:100%;
+
+}
+
+canvas{
+
+display:block;
+
+user-select:none;
+
+-webkit-user-select:none;
 
 }
 
@@ -162,18 +165,46 @@ color:inherit;
 }
 
 /*==================================================
-                IMAGES
+                SCROLLBAR
 ==================================================*/
 
-img{
+::-webkit-scrollbar{
 
-display:block;
+width:10px;
 
-max-width:100%;
+height:10px;
 
-user-select:none;
+}
 
-pointer-events:none;
+::-webkit-scrollbar-track{
+
+background:#1f2937;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#475569;
+
+border-radius:50px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+background:#64748b;
+
+}
+
+/*==================================================
+                SELECTION
+==================================================*/
+
+::selection{
+
+background:#2563eb;
+
+color:#ffffff;
 
 }
 
@@ -185,7 +216,13 @@ pointer-events:none;
 
 position:fixed;
 
-inset:0;
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
 
 display:flex;
 
@@ -193,9 +230,11 @@ align-items:center;
 
 justify-content:center;
 
-background:#0f1117;
+background:#111827;
 
-z-index:999999;
+z-index:99999;
+
+transition:.4s;
 
 }
 
@@ -211,22 +250,6 @@ gap:24px;
 
 }
 
-.loader p{
-
-font-size:18px;
-
-font-weight:600;
-
-color:var(--primary);
-
-letter-spacing:1px;
-
-}
-
-/*==================================================
-                LOADER BOOK
-==================================================*/
-
 .loaderBook{
 
 position:relative;
@@ -235,7 +258,7 @@ width:90px;
 
 height:70px;
 
-perspective:1000px;
+perspective:800px;
 
 }
 
@@ -245,22 +268,13 @@ position:absolute;
 
 inset:0;
 
-background:linear-gradient(
-135deg,
-#d4af37,
-#8a6d0a
-);
+background:var(--primary);
 
-border-radius:4px;
+border-radius:8px;
 
 transform-origin:left;
 
-animation:
-loaderCover
-1.5s
-infinite;
-
-box-shadow:var(--shadow);
+animation:bookCover 1.8s infinite;
 
 }
 
@@ -268,56 +282,34 @@ box-shadow:var(--shadow);
 
 position:absolute;
 
+top:4px;
+
 left:8px;
 
-top:6px;
+right:8px;
 
-width:75px;
+bottom:4px;
 
-height:58px;
+background:#ffffff;
 
-background:#fff;
+border-radius:5px;
 
-border-radius:3px;
+}
+
+.loader p{
+
+font-size:16px;
+
+font-weight:500;
+
+color:#ffffff;
+
+letter-spacing:.5px;
 
 }
 
 /*==================================================
-                ANIMATION
-==================================================*/
-
-@keyframes loaderCover{
-
-0%{
-
-transform:rotateY(0deg);
-
-}
-
-50%{
-
-transform:rotateY(-150deg);
-
-}
-
-100%{
-
-transform:rotateY(0deg);
-
-}
-
-}
-
-/*==================================================
-                CSS PART 1 END
-==================================================*/
-/*==================================================
-                CHISHTI LIBRARY READER
-                CSS PART 2
-==================================================*/
-
-/*==================================================
-                OPENING ANIMATION
+                OPENING SCREEN
 ==================================================*/
 
 #openingAnimation{
@@ -326,29 +318,17 @@ position:fixed;
 
 inset:0;
 
-display:flex;
+display:none;
 
 align-items:center;
 
 justify-content:center;
 
-background:#0f1117;
+background:#111827;
 
-z-index:999998;
+z-index:99998;
 
-opacity:0;
-
-visibility:hidden;
-
-transition:.5s;
-
-}
-
-#openingAnimation.active{
-
-opacity:1;
-
-visibility:visible;
+overflow:hidden;
 
 }
 
@@ -362,42 +342,9 @@ height:320px;
 
 border-radius:50%;
 
-background:radial-gradient(circle,
-rgba(255,255,255,.95),
-rgba(255,255,255,.45),
-transparent 75%);
+background:rgba(37,99,235,.25);
 
-filter:blur(20px);
-
-animation:openingGlow 2s ease;
-
-}
-
-@keyframes openingGlow{
-
-0%{
-
-transform:scale(.2);
-
-opacity:0;
-
-}
-
-50%{
-
-transform:scale(1);
-
-opacity:1;
-
-}
-
-100%{
-
-transform:scale(1.6);
-
-opacity:0;
-
-}
+filter:blur(70px);
 
 }
 
@@ -405,11 +352,9 @@ opacity:0;
 
 position:relative;
 
-width:240px;
+width:180px;
 
-height:320px;
-
-perspective:1800px;
+height:220px;
 
 }
 
@@ -419,20 +364,11 @@ position:absolute;
 
 inset:0;
 
-background:linear-gradient(
-135deg,
-#d4af37,
-#8b6914
-);
+background:var(--primary);
 
 border-radius:10px;
 
-transform-origin:left;
-
-box-shadow:
-0 25px 70px rgba(0,0,0,.55);
-
-animation:coverOpen 2s ease forwards;
+box-shadow:var(--shadow);
 
 }
 
@@ -440,13 +376,13 @@ animation:coverOpen 2s ease forwards;
 
 position:absolute;
 
-left:10px;
-
 top:8px;
 
-width:220px;
+left:10px;
 
-height:304px;
+right:10px;
+
+bottom:8px;
 
 background:#ffffff;
 
@@ -454,21 +390,14 @@ border-radius:6px;
 
 }
 
-@keyframes coverOpen{
-
-0%{
-
-transform:rotateY(0deg);
-
-}
-
-100%{
-
-transform:rotateY(-160deg);
-
-}
-
-}
+/*==================================================
+                CSS PART 1 END
+==================================================*/
+/*==================================================
+            CHISHTI LIBRARY READER
+                CSS PART 2
+        MAIN LAYOUT + HEADER + TOOLBAR
+==================================================*/
 
 /*==================================================
                 MAIN READER
@@ -476,19 +405,17 @@ transform:rotateY(-160deg);
 
 #reader{
 
-position:fixed;
+position:relative;
 
-inset:0;
+width:100%;
+
+height:100vh;
 
 display:flex;
 
 flex-direction:column;
 
-background:linear-gradient(
-180deg,
-#0f1117,
-#171b24
-);
+background:var(--background);
 
 overflow:hidden;
 
@@ -500,7 +427,7 @@ overflow:hidden;
 
 #readerHeader{
 
-height:72px;
+height:var(--headerHeight);
 
 display:flex;
 
@@ -508,13 +435,13 @@ align-items:center;
 
 justify-content:space-between;
 
-padding:0 20px;
+padding:0 24px;
 
-background:rgba(18,22,30,.92);
-
-backdrop-filter:blur(14px);
+background:var(--surface);
 
 border-bottom:1px solid var(--border);
+
+box-shadow:var(--shadow);
 
 z-index:100;
 
@@ -530,11 +457,11 @@ gap:14px;
 
 }
 
-#readerLogo img{
+#logoImage{
 
-width:42px;
+width:46px;
 
-height:42px;
+height:46px;
 
 object-fit:contain;
 
@@ -542,21 +469,27 @@ object-fit:contain;
 
 #readerLogo h1{
 
-font-size:18px;
+font-size:22px;
 
 font-weight:700;
 
-color:var(--primary);
-
 letter-spacing:.5px;
+
+color:var(--text);
 
 }
 
 #bookInfo{
 
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
 flex:1;
 
-padding:0 30px;
+margin-left:30px;
 
 overflow:hidden;
 
@@ -578,11 +511,17 @@ text-overflow:ellipsis;
 
 #bookAuthor{
 
-margin-top:4px;
-
 font-size:13px;
 
-color:var(--text-light);
+margin-top:4px;
+
+color:var(--textLight);
+
+white-space:nowrap;
+
+overflow:hidden;
+
+text-overflow:ellipsis;
 
 }
 
@@ -598,17 +537,9 @@ gap:10px;
 
 #headerButtons button{
 
-width:44px;
+width:42px;
 
-height:44px;
-
-border-radius:10px;
-
-background:#232a38;
-
-color:#fff;
-
-font-size:18px;
+height:42px;
 
 display:flex;
 
@@ -616,7 +547,15 @@ align-items:center;
 
 justify-content:center;
 
-transition:.25s;
+background:var(--surfaceLight);
+
+color:var(--text);
+
+border-radius:10px;
+
+font-size:18px;
+
+transition:var(--transition);
 
 }
 
@@ -624,22 +563,9 @@ transition:.25s;
 
 background:var(--primary);
 
-color:#111;
-
 transform:translateY(-2px);
 
-box-shadow:
-0 8px 18px rgba(212,175,55,.35);
-
 }
-
-/*==================================================
-                CSS PART 2 END
-==================================================*/
-/*==================================================
-                CHISHTI LIBRARY READER
-                CSS PART 3
-==================================================*/
 
 /*==================================================
                 TOP TOOLBAR
@@ -647,7 +573,7 @@ box-shadow:
 
 #toolbarTop{
 
-height:60px;
+height:var(--toolbarHeight);
 
 display:flex;
 
@@ -657,17 +583,14 @@ justify-content:space-between;
 
 padding:0 20px;
 
-background:#171c26;
+background:#172033;
 
 border-bottom:1px solid var(--border);
-
-gap:20px;
-
-z-index:90;
 
 }
 
 #navigationGroup,
+
 #zoomGroup{
 
 display:flex;
@@ -679,23 +602,14 @@ gap:10px;
 }
 
 #navigationGroup button,
-#zoomGroup button{
 
-height:42px;
+#zoomGroup button{
 
 min-width:42px;
 
-padding:0 16px;
+height:40px;
 
-border-radius:10px;
-
-background:#232a38;
-
-color:#ffffff;
-
-font-size:15px;
-
-font-weight:600;
+padding:0 14px;
 
 display:flex;
 
@@ -703,62 +617,33 @@ align-items:center;
 
 justify-content:center;
 
-transition:.25s;
+background:var(--surface);
+
+color:var(--text);
+
+border-radius:10px;
+
+font-size:15px;
+
+transition:var(--transition);
 
 }
 
 #navigationGroup button:hover,
+
 #zoomGroup button:hover{
 
 background:var(--primary);
 
-color:#111;
-
-transform:translateY(-2px);
-
-box-shadow:
-
-0 8px 18px
-
-rgba(212,175,55,.30);
-
 }
 
-#pageCounter{
-
-min-width:110px;
-
-height:42px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-padding:0 18px;
-
-background:#10141c;
-
-border:1px solid var(--border);
-
-border-radius:10px;
-
-font-size:15px;
-
-font-weight:600;
-
-color:var(--primary);
-
-letter-spacing:.5px;
-
-}
+#pageCounter,
 
 #zoomIndicator{
 
-min-width:75px;
+min-width:90px;
 
-height:42px;
+height:40px;
 
 display:flex;
 
@@ -766,19 +651,28 @@ align-items:center;
 
 justify-content:center;
 
-background:#10141c;
+padding:0 16px;
+
+background:#0f172a;
 
 border:1px solid var(--border);
 
 border-radius:10px;
 
-font-size:14px;
-
 font-weight:600;
 
-color:#ffffff;
+font-size:14px;
 
 }
+
+/*==================================================
+                CSS PART 2 END
+==================================================*/
+/*==================================================
+            CHISHTI LIBRARY READER
+                CSS PART 3
+        SECOND TOOLBAR + READER BODY
+==================================================*/
 
 /*==================================================
                 SECOND TOOLBAR
@@ -786,7 +680,7 @@ color:#ffffff;
 
 #toolbarBottom{
 
-height:58px;
+height:60px;
 
 display:flex;
 
@@ -796,19 +690,15 @@ justify-content:space-between;
 
 padding:0 20px;
 
-background:#1b202b;
+background:var(--surface);
 
 border-bottom:1px solid var(--border);
 
 gap:20px;
 
-z-index:85;
-
 }
 
 #searchContainer{
-
-flex:1;
 
 display:flex;
 
@@ -816,17 +706,21 @@ align-items:center;
 
 gap:10px;
 
+flex:1;
+
 }
 
 #searchKeyword{
 
 flex:1;
 
-height:44px;
+height:42px;
 
 padding:0 16px;
 
-background:#10141c;
+background:#0f172a;
+
+color:var(--text);
 
 border:1px solid var(--border);
 
@@ -834,15 +728,7 @@ border-radius:10px;
 
 font-size:14px;
 
-color:#ffffff;
-
-transition:.25s;
-
-}
-
-#searchKeyword::placeholder{
-
-color:#7d8595;
+transition:var(--transition);
 
 }
 
@@ -850,39 +736,37 @@ color:#7d8595;
 
 border-color:var(--primary);
 
-box-shadow:
+box-shadow:0 0 0 3px rgba(37,99,235,.15);
 
-0 0 0 3px
+}
 
-rgba(212,175,55,.18);
+#searchKeyword::placeholder{
+
+color:var(--textLight);
 
 }
 
 #searchContainer button{
 
-height:44px;
+height:42px;
 
 padding:0 18px;
 
+background:var(--surfaceLight);
+
+color:var(--text);
+
 border-radius:10px;
-
-background:#232a38;
-
-color:#ffffff;
 
 font-size:14px;
 
-font-weight:600;
-
-transition:.25s;
+transition:var(--transition);
 
 }
 
 #searchContainer button:hover{
 
 background:var(--primary);
-
-color:#111111;
 
 }
 
@@ -898,39 +782,33 @@ gap:10px;
 
 #readerModes button{
 
-height:44px;
+height:42px;
 
 padding:0 18px;
 
+background:#0f172a;
+
+color:var(--text);
+
+border:1px solid var(--border);
+
 border-radius:10px;
-
-background:#232a38;
-
-color:#ffffff;
 
 font-size:14px;
 
-font-weight:600;
-
-transition:.25s;
+transition:var(--transition);
 
 }
 
-#readerModes button:hover{
+#readerModes button:hover,
+
+#readerModes button.active{
 
 background:var(--primary);
 
-color:#111111;
+border-color:var(--primary);
 
 }
-
-/*==================================================
-                CSS PART 3 END
-==================================================*/
-/*==================================================
-                CHISHTI LIBRARY READER
-                CSS PART 4
-==================================================*/
 
 /*==================================================
                 READER BODY
@@ -938,9 +816,9 @@ color:#111111;
 
 #readerBody{
 
-flex:1;
-
 position:relative;
+
+flex:1;
 
 display:flex;
 
@@ -950,12 +828,14 @@ justify-content:center;
 
 overflow:hidden;
 
-background:
-radial-gradient(
-circle at center,
-#202633 0%,
-#161b24 45%,
-#0f1117 100%
+background:linear-gradient(
+
+180deg,
+
+#111827,
+
+#0b1220
+
 );
 
 }
@@ -982,8 +862,6 @@ overflow:hidden;
 
 padding:40px;
 
-perspective:2500px;
-
 }
 
 /*==================================================
@@ -1000,219 +878,117 @@ align-items:center;
 
 justify-content:center;
 
-gap:10px;
+background:#ffffff;
 
-transform-style:preserve-3d;
+border-radius:12px;
 
-transition:
-transform .35s ease,
-box-shadow .35s ease;
+overflow:hidden;
 
-}
+box-shadow:
 
-/*==================================================
-                PAGE FLIP CONTAINER
-==================================================*/
+0 20px 50px rgba(0,0,0,.45);
 
-#pageFlipContainer{
-
-position:relative;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-gap:10px;
-
-transform-style:preserve-3d;
+transition:transform .25s ease;
 
 }
 
-/*==================================================
-                PDF CANVAS
-==================================================*/
+#canvasWrapper:hover{
+
+transform:translateY(-2px);
+
+}
 
 #leftCanvas,
+
 #rightCanvas{
 
 display:block;
 
 background:#ffffff;
 
-border-radius:6px;
+max-width:100%;
+
+max-height:100%;
+
+}
+
+/*==================================================
+                PAGE EFFECTS
+==================================================*/
+
+#bookShadow{
+
+position:absolute;
+
+inset:0;
+
+pointer-events:none;
 
 box-shadow:
 
-0 18px 50px
-rgba(0,0,0,.45);
-
-backface-visibility:hidden;
-
-transform-origin:center;
-
-transition:
-
-transform .35s ease,
-box-shadow .35s ease;
-
-user-select:none;
+inset 0 0 35px rgba(0,0,0,.18);
 
 }
-
-/*==================================================
-                PAGE FRONT
-==================================================*/
-
-#pageFront{
-
-position:relative;
-
-transform-origin:left center;
-
-transform-style:preserve-3d;
-
-z-index:5;
-
-}
-
-/*==================================================
-                PAGE BACK
-==================================================*/
-
-#pageBack{
-
-position:relative;
-
-transform-origin:right center;
-
-transform:
-
-rotateY(180deg);
-
-transform-style:preserve-3d;
-
-z-index:4;
-
-}
-
-/*==================================================
-                PAGE CURVE
-==================================================*/
 
 #pageCurve{
 
 position:absolute;
 
-left:50%;
+top:0;
 
-top:50%;
+right:0;
 
-width:55px;
+width:40px;
 
-height:88%;
+height:100%;
 
-transform:
-translate(-50%,-50%);
+background:linear-gradient(
 
-background:
+to left,
 
-linear-gradient(
-90deg,
-rgba(0,0,0,.18),
-rgba(255,255,255,.10),
-rgba(0,0,0,.18)
+rgba(0,0,0,.12),
+
+transparent
+
 );
-
-filter:blur(8px);
 
 pointer-events:none;
 
-z-index:15;
-
 }
-
-/*==================================================
-                PAGE SHADOW
-==================================================*/
 
 #pageShadow{
 
 position:absolute;
 
-left:50%;
-
-bottom:18px;
-
-transform:translateX(-50%);
-
-width:72%;
-
-height:40px;
-
-border-radius:50%;
-
-background:
-
-rgba(0,0,0,.45);
-
-filter:blur(22px);
+inset:0;
 
 pointer-events:none;
 
-z-index:1;
+box-shadow:
+
+inset 0 0 60px rgba(0,0,0,.08);
 
 }
-
-/*==================================================
-                PAGE GLOW
-==================================================*/
 
 #pageGlow{
 
 position:absolute;
 
-left:50%;
-
-top:50%;
-
-width:500px;
-
-height:500px;
-
-transform:
-translate(-50%,-50%);
-
-background:
-
-radial-gradient(
-
-circle,
-
-rgba(255,255,255,.50),
-
-rgba(255,255,255,.18),
-
-transparent 72%
-
-);
-
-opacity:0;
+inset:0;
 
 pointer-events:none;
 
-filter:blur(30px);
+background:radial-gradient(
 
-transition:opacity .45s ease;
+circle,
 
-z-index:2;
+rgba(255,255,255,.08),
+
+transparent 70%
+
+);
 
 }
-
-/*==================================================
-                WATERMARK
-==================================================*/
 
 #watermark{
 
@@ -1222,82 +998,53 @@ left:50%;
 
 top:50%;
 
-transform:
+transform:translate(-50%,-50%) rotate(-30deg);
 
-translate(-50%,-50%)
-
-rotate(-35deg);
-
-font-size:44px;
+font-size:42px;
 
 font-weight:700;
 
-letter-spacing:5px;
+letter-spacing:6px;
 
-color:
-
-rgba(120,120,120,.10);
+color:rgba(0,0,0,.05);
 
 pointer-events:none;
 
 user-select:none;
 
-white-space:nowrap;
-
-z-index:20;
-
 }
-
-/*==================================================
-                FLOATING PAGE NUMBER
-==================================================*/
 
 #floatingPageNumber{
 
 position:absolute;
 
-right:25px;
+bottom:18px;
 
-bottom:25px;
+right:20px;
 
-width:58px;
+padding:8px 16px;
 
-height:58px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-border-radius:50%;
-
-background:
-
-rgba(0,0,0,.65);
-
-backdrop-filter:blur(10px);
+background:rgba(17,24,39,.92);
 
 color:#ffffff;
 
-font-size:18px;
+border-radius:20px;
 
-font-weight:700;
+font-size:13px;
 
-opacity:0;
+font-weight:600;
 
-transition:.30s;
-
-z-index:30;
+box-shadow:var(--shadow);
 
 }
 
 /*==================================================
-                CSS PART 4 END
+                CSS PART 3 END
 ==================================================*/
 /*==================================================
-                CHISHTI LIBRARY READER
-                CSS PART 5
+            CHISHTI LIBRARY READER
+                CSS PART 4
+        MOBILE NAVIGATION + SIDE PANELS
 ==================================================*/
 
 /*==================================================
@@ -1308,13 +1055,47 @@ z-index:30;
 
 display:none;
 
-position:fixed;
+align-items:center;
 
-left:50%;
+justify-content:space-between;
 
-bottom:20px;
+gap:15px;
 
-transform:translateX(-50%);
+padding:15px 20px;
+
+background:var(--surface);
+
+border-top:1px solid var(--border);
+
+}
+
+#mobileNavigation button{
+
+height:42px;
+
+padding:0 18px;
+
+background:var(--primary);
+
+color:#ffffff;
+
+border-radius:10px;
+
+font-size:14px;
+
+font-weight:600;
+
+transition:var(--transition);
+
+}
+
+#mobileNavigation button:hover{
+
+background:var(--primaryHover);
+
+}
+
+#mobilePageCounter{
 
 display:flex;
 
@@ -1322,77 +1103,35 @@ align-items:center;
 
 justify-content:center;
 
-gap:18px;
+min-width:100px;
 
-padding:12px 18px;
+height:42px;
 
-background:rgba(18,22,30,.92);
-
-backdrop-filter:blur(14px);
+background:#0f172a;
 
 border:1px solid var(--border);
 
-border-radius:50px;
-
-box-shadow:var(--shadow);
-
-z-index:250;
-
-}
-
-#mobileNavigation button{
-
-min-width:120px;
-
-height:46px;
-
-padding:0 20px;
-
-border-radius:30px;
-
-background:#232a38;
-
-color:#ffffff;
-
-font-size:14px;
+border-radius:10px;
 
 font-weight:600;
-
-transition:.25s;
-
-}
-
-#mobileNavigation button:hover{
-
-background:var(--primary);
-
-color:#111111;
-
-}
-
-#mobilePageCounter{
-
-min-width:90px;
-
-text-align:center;
-
-font-size:15px;
-
-font-weight:600;
-
-color:var(--primary);
 
 }
 
 /*==================================================
-                OVERLAY
+                READER OVERLAY
 ==================================================*/
 
 #readerOverlay{
 
 position:fixed;
 
-inset:0;
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
 
 background:rgba(0,0,0,.55);
 
@@ -1402,9 +1141,9 @@ opacity:0;
 
 visibility:hidden;
 
-transition:.30s;
+transition:var(--transition);
 
-z-index:500;
+z-index:900;
 
 }
 
@@ -1426,9 +1165,9 @@ position:fixed;
 
 top:0;
 
-right:-430px;
+right:-420px;
 
-width:430px;
+width:400px;
 
 max-width:100%;
 
@@ -1438,19 +1177,15 @@ display:flex;
 
 flex-direction:column;
 
-background:#171c26;
+background:var(--surface);
 
 border-left:1px solid var(--border);
 
-box-shadow:
+box-shadow:-8px 0 30px rgba(0,0,0,.35);
 
--12px 0 40px
+transition:.35s ease;
 
-rgba(0,0,0,.45);
-
-transition:right .35s ease;
-
-z-index:700;
+z-index:1000;
 
 }
 
@@ -1466,19 +1201,17 @@ right:0;
 
 .panelHeader{
 
-height:70px;
-
 display:flex;
 
 align-items:center;
 
 justify-content:space-between;
 
-padding:0 20px;
+padding:18px 20px;
+
+background:#172033;
 
 border-bottom:1px solid var(--border);
-
-background:#1f2531;
 
 }
 
@@ -1488,25 +1221,31 @@ font-size:18px;
 
 font-weight:600;
 
-color:var(--primary);
+color:var(--text);
 
 }
 
 .panelHeader button{
 
-width:42px;
+width:38px;
 
-height:42px;
+height:38px;
 
-border-radius:10px;
+display:flex;
 
-background:#232a38;
+align-items:center;
 
-color:#ffffff;
+justify-content:center;
+
+background:var(--surfaceLight);
+
+color:var(--text);
+
+border-radius:8px;
 
 font-size:18px;
 
-transition:.25s;
+transition:var(--transition);
 
 }
 
@@ -1524,63 +1263,73 @@ background:var(--danger);
 
 flex:1;
 
-overflow:auto;
-
 padding:20px;
 
-display:flex;
-
-flex-direction:column;
-
-gap:16px;
+overflow-y:auto;
 
 }
 
-/*==================================================
-                SEARCH
-==================================================*/
+.panelBody input,
 
-#searchInput{
+.panelBody textarea,
+
+.panelBody select{
 
 width:100%;
 
-height:46px;
+padding:12px 15px;
 
-padding:0 16px;
+margin-bottom:15px;
 
-border-radius:10px;
+background:#0f172a;
 
-background:#10141c;
+color:var(--text);
 
 border:1px solid var(--border);
 
-color:#ffffff;
+border-radius:10px;
 
 font-size:14px;
 
 }
 
-#searchInput:focus{
+.panelBody textarea{
 
-border-color:var(--primary);
+resize:vertical;
+
+min-height:120px;
 
 }
 
-#searchNowBtn{
+.panelBody button{
 
-height:46px;
+width:100%;
 
-border-radius:10px;
+height:45px;
 
 background:var(--primary);
 
-color:#111111;
+color:#ffffff;
 
-font-weight:600;
+border-radius:10px;
 
 font-size:15px;
 
+font-weight:600;
+
+transition:var(--transition);
+
 }
+
+.panelBody button:hover{
+
+background:var(--primaryHover);
+
+}
+
+/*==================================================
+                SEARCH RESULTS
+==================================================*/
 
 #searchResults{
 
@@ -1590,20 +1339,34 @@ flex-direction:column;
 
 gap:10px;
 
-margin-top:12px;
+margin-top:15px;
+
+}
+
+.searchResult{
+
+padding:12px;
+
+background:#0f172a;
+
+border:1px solid var(--border);
+
+border-radius:10px;
+
+cursor:pointer;
+
+transition:var(--transition);
+
+}
+
+.searchResult:hover{
+
+background:var(--primary);
 
 }
 
 /*==================================================
-                CSS PART 5 END
-==================================================*/
-/*==================================================
-                CHISHTI LIBRARY READER
-                CSS PART 6
-==================================================*/
-
-/*==================================================
-                BOOKMARK PANEL
+                BOOKMARK LIST
 ==================================================*/
 
 #bookmarkList{
@@ -1618,166 +1381,35 @@ gap:12px;
 
 .bookmarkItem{
 
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
 padding:14px;
 
-background:#202633;
+background:#0f172a;
 
-border:1px solid var(--border);
+border-radius:10px;
 
-border-radius:12px;
+cursor:pointer;
 
-transition:.30s;
+transition:var(--transition);
 
 }
 
 .bookmarkItem:hover{
 
-border-color:var(--primary);
-
-transform:translateY(-2px);
-
-}
-
-.bookmarkOpen{
-
-flex:1;
-
-height:42px;
-
-padding:0 16px;
-
-border-radius:8px;
-
-background:#2b3242;
-
-color:#ffffff;
-
-text-align:left;
-
-font-size:14px;
-
-font-weight:600;
-
-}
-
-.bookmarkOpen:hover{
-
 background:var(--primary);
 
-color:#111111;
-
-}
-
-.bookmarkDelete{
-
-width:42px;
-
-height:42px;
-
-margin-left:10px;
-
-border-radius:8px;
-
-background:#3a2020;
-
-color:#ff6464;
-
-font-size:18px;
-
-}
-
-.bookmarkDelete:hover{
-
-background:#ff4444;
-
-color:#ffffff;
-
-}
-
-.bookmarkEmpty{
-
-padding:40px 20px;
-
-text-align:center;
-
-font-size:15px;
-
-color:#9ca3af;
-
 }
 
 /*==================================================
-                SETTINGS PANEL
+                CSS PART 4 END
+==================================================*/
+/*==================================================
+            CHISHTI LIBRARY READER
+                CSS PART 5
+        TOC + THUMBNAILS + LOADING + ERROR
 ==================================================*/
 
-.settingItem{
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-gap:20px;
-
-padding:16px;
-
-background:#202633;
-
-border:1px solid var(--border);
-
-border-radius:12px;
-
-}
-
-.settingItem label{
-
-font-size:15px;
-
-font-weight:500;
-
-color:#ffffff;
-
-}
-
-.settingItem input[type="checkbox"]{
-
-width:22px;
-
-height:22px;
-
-accent-color:var(--primary);
-
-cursor:pointer;
-
-}
-
-.settingItem select{
-
-min-width:150px;
-
-height:42px;
-
-padding:0 12px;
-
-border-radius:8px;
-
-background:#10141c;
-
-border:1px solid var(--border);
-
-color:#ffffff;
-
-}
-
 /*==================================================
-                TOC PANEL
+            TABLE OF CONTENTS
 ==================================================*/
 
 #tocList{
@@ -1794,15 +1426,15 @@ gap:10px;
 
 padding:14px 16px;
 
-background:#202633;
-
-border-radius:10px;
+background:#0f172a;
 
 border:1px solid var(--border);
 
+border-radius:10px;
+
 cursor:pointer;
 
-transition:.30s;
+transition:var(--transition);
 
 font-size:14px;
 
@@ -1814,37 +1446,45 @@ font-weight:500;
 
 background:var(--primary);
 
-color:#111111;
+transform:translateX(4px);
+
+}
+
+.tocItem.active{
+
+background:var(--primary);
+
+border-color:var(--primary);
 
 }
 
 /*==================================================
-                THUMBNAIL SIDEBAR
+            THUMBNAIL SIDEBAR
 ==================================================*/
 
 #thumbnailSidebar{
 
 position:fixed;
 
-left:-260px;
+left:-230px;
 
 top:0;
 
-width:260px;
+width:220px;
 
 height:100vh;
+
+background:var(--surface);
+
+border-right:1px solid var(--border);
 
 display:flex;
 
 flex-direction:column;
 
-background:#171c26;
+transition:.35s ease;
 
-border-right:1px solid var(--border);
-
-transition:left .35s ease;
-
-z-index:700;
+z-index:1000;
 
 }
 
@@ -1856,7 +1496,7 @@ left:0;
 
 #thumbnailHeader{
 
-height:70px;
+height:65px;
 
 display:flex;
 
@@ -1864,35 +1504,37 @@ align-items:center;
 
 justify-content:space-between;
 
-padding:0 18px;
+padding:0 16px;
 
 border-bottom:1px solid var(--border);
+
+background:#172033;
 
 }
 
 #thumbnailHeader h3{
 
-font-size:18px;
+font-size:17px;
 
-color:var(--primary);
-
-}
-
-#closeThumbnailBtn{
-
-width:40px;
-
-height:40px;
-
-border-radius:10px;
-
-background:#232a38;
-
-color:#ffffff;
+font-weight:600;
 
 }
 
-#closeThumbnailBtn:hover{
+#thumbnailHeader button{
+
+width:36px;
+
+height:36px;
+
+border-radius:8px;
+
+background:var(--surfaceLight);
+
+color:#fff;
+
+}
+
+#thumbnailHeader button:hover{
 
 background:var(--danger);
 
@@ -1914,52 +1556,62 @@ gap:15px;
 
 }
 
-.thumbnailItem{
+.thumbnail{
 
-padding:8px;
-
-background:#202633;
+background:#0f172a;
 
 border:2px solid transparent;
 
 border-radius:10px;
 
+padding:8px;
+
 cursor:pointer;
 
-transition:.30s;
+transition:var(--transition);
 
 }
 
-.thumbnailItem:hover{
+.thumbnail:hover{
 
 border-color:var(--primary);
 
 }
 
-.thumbnailItem canvas{
+.thumbnail.active{
 
-display:block;
+border-color:var(--primary);
+
+background:#1e3a8a;
+
+}
+
+.thumbnail canvas{
 
 width:100%;
 
 height:auto;
 
+display:block;
+
 border-radius:6px;
 
-background:#ffffff;
+}
+
+.thumbnailNumber{
+
+margin-top:8px;
+
+text-align:center;
+
+font-size:13px;
+
+font-weight:600;
 
 }
 
 /*==================================================
-                CSS PART 6 END
-==================================================*/
-/*==================================================
-                CHISHTI LIBRARY READER
-                CSS PART 7
-==================================================*/
-
-/*==================================================
-                LOADING SCREEN
+            LOADING SCREEN
 ==================================================*/
 
 #loadingScreen{
@@ -1974,49 +1626,45 @@ align-items:center;
 
 justify-content:center;
 
-background:rgba(10,12,18,.96);
+background:rgba(17,24,39,.96);
 
-backdrop-filter:blur(12px);
+backdrop-filter:blur(6px);
 
-z-index:999990;
+z-index:9999;
+
+}
+
+#loadingScreen.active{
+
+display:flex;
 
 }
 
 .loadingCard{
 
-width:420px;
+width:340px;
 
-max-width:92%;
+padding:35px;
 
-padding:40px;
+background:var(--surface);
 
-background:#171c26;
+border-radius:18px;
 
-border:1px solid var(--border);
+text-align:center;
 
-border-radius:20px;
-
-box-shadow:0 30px 80px rgba(0,0,0,.55);
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
-gap:25px;
+box-shadow:var(--shadow);
 
 }
 
 .loadingBook{
 
+width:90px;
+
+height:70px;
+
+margin:auto;
+
 position:relative;
-
-width:110px;
-
-height:80px;
-
-perspective:1200px;
 
 }
 
@@ -2026,17 +1674,11 @@ position:absolute;
 
 inset:0;
 
-background:linear-gradient(
-135deg,
-#d4af37,
-#8c6c12
-);
+background:var(--primary);
 
-border-radius:6px;
+border-radius:8px;
 
-transform-origin:left;
-
-animation:loadingBook 1.4s infinite;
+animation:bookCover 1.6s infinite;
 
 }
 
@@ -2044,51 +1686,27 @@ animation:loadingBook 1.4s infinite;
 
 position:absolute;
 
+top:5px;
+
 left:8px;
 
-top:7px;
+right:8px;
 
-width:92px;
+bottom:5px;
 
-height:66px;
+background:#fff;
 
-background:#ffffff;
-
-border-radius:4px;
-
-}
-
-@keyframes loadingBook{
-
-0%{
-
-transform:rotateY(0deg);
-
-}
-
-50%{
-
-transform:rotateY(-155deg);
-
-}
-
-100%{
-
-transform:rotateY(0deg);
-
-}
+border-radius:5px;
 
 }
 
 #loadingStatus{
 
+margin-top:25px;
+
 font-size:18px;
 
 font-weight:600;
-
-color:var(--primary);
-
-text-align:center;
 
 }
 
@@ -2098,9 +1716,11 @@ width:100%;
 
 height:10px;
 
-background:#0d1118;
+margin-top:22px;
 
-border-radius:20px;
+background:#0f172a;
+
+border-radius:50px;
 
 overflow:hidden;
 
@@ -2113,17 +1733,21 @@ width:0%;
 height:100%;
 
 background:linear-gradient(
+
 90deg,
-#d4af37,
-#f5dc84
+
+var(--primary),
+
+#60a5fa
+
 );
 
-transition:width .30s linear;
+transition:width .3s linear;
 
 }
 
 /*==================================================
-                ERROR SCREEN
+            ERROR SCREEN
 ==================================================*/
 
 #errorScreen{
@@ -2138,293 +1762,669 @@ align-items:center;
 
 justify-content:center;
 
-background:rgba(10,10,10,.95);
+background:rgba(0,0,0,.85);
 
-backdrop-filter:blur(10px);
+z-index:99999;
 
-z-index:999991;
+}
+
+#errorScreen.active{
+
+display:flex;
 
 }
 
 .errorCard{
 
-width:460px;
+width:420px;
 
 max-width:92%;
 
-padding:40px;
+padding:35px;
 
-background:#181c25;
-
-border:1px solid #422;
+background:var(--surface);
 
 border-radius:18px;
 
 text-align:center;
 
-box-shadow:0 25px 70px rgba(0,0,0,.55);
+box-shadow:var(--shadow);
 
 }
 
 .errorCard h2{
 
-font-size:26px;
+font-size:28px;
 
-color:#ff5757;
+margin-bottom:15px;
 
-margin-bottom:14px;
+color:var(--danger);
 
 }
 
 #errorMessage{
 
+margin-bottom:25px;
+
+color:var(--textLight);
+
+line-height:1.7;
+
+}
+
+.errorButtons{
+
+display:flex;
+
+gap:15px;
+
+justify-content:center;
+
+}
+
+.errorButtons button{
+
+padding:12px 22px;
+
+border-radius:10px;
+
+font-size:15px;
+
+font-weight:600;
+
+color:#fff;
+
+background:var(--primary);
+
+}
+
+.errorButtons button:last-child{
+
+background:var(--danger);
+
+}
+
+.errorButtons button:hover{
+
+opacity:.9;
+
+}
+
+/*==================================================
+                CSS PART 5 END
+==================================================*/
+/*==================================================
+            CHISHTI LIBRARY READER
+                CSS PART 6
+        BOOK INFO + COMMENTS + STATS + FOOTER
+==================================================*/
+
+/*==================================================
+                BOOK INFO PANEL
+==================================================*/
+
+#bookCover{
+
+width:180px;
+
+height:250px;
+
+margin:0 auto 20px;
+
+display:block;
+
+object-fit:cover;
+
+border-radius:12px;
+
+box-shadow:var(--shadow);
+
+background:#0f172a;
+
+}
+
+#infoBookTitle{
+
+font-size:22px;
+
+font-weight:700;
+
+margin-bottom:20px;
+
+text-align:center;
+
+line-height:1.4;
+
+}
+
+#bookInfoPanel p{
+
+margin-bottom:14px;
+
 font-size:15px;
 
 line-height:1.7;
 
-color:#c9ced8;
-
-margin-bottom:28px;
+color:var(--textLight);
 
 }
 
-.errorCard button{
+#bookInfoPanel strong{
 
-height:48px;
-
-min-width:130px;
-
-padding:0 22px;
-
-margin:5px;
-
-border-radius:10px;
-
-background:var(--primary);
-
-color:#111111;
-
-font-size:15px;
-
-font-weight:600;
-
-transition:.30s;
-
-}
-
-.errorCard button:hover{
-
-transform:translateY(-2px);
-
-box-shadow:0 12px 25px rgba(212,175,55,.30);
+color:var(--text);
 
 }
 
 /*==================================================
-                TOAST MESSAGE
+                READER STATISTICS
 ==================================================*/
 
-#readerToast{
+#readerStatistics{
 
-position:fixed;
+display:grid;
 
-left:50%;
+grid-template-columns:repeat(4,1fr);
 
-bottom:35px;
+gap:18px;
 
-transform:translateX(-50%) translateY(120px);
+padding:20px;
 
-min-width:220px;
+background:var(--surface);
 
-max-width:90%;
-
-padding:14px 24px;
-
-background:#202633;
-
-border:1px solid var(--primary);
-
-border-radius:50px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-box-shadow:0 18px 45px rgba(0,0,0,.45);
-
-opacity:0;
-
-transition:.35s;
-
-z-index:999995;
+border-top:1px solid var(--border);
 
 }
 
-#readerToast.show{
+.statCard{
 
-opacity:1;
+background:#0f172a;
 
-transform:translateX(-50%) translateY(0);
+border:1px solid var(--border);
 
-}
+border-radius:14px;
 
-#toastMessage{
-
-font-size:15px;
-
-font-weight:600;
-
-color:#ffffff;
+padding:20px;
 
 text-align:center;
 
+transition:var(--transition);
+
+}
+
+.statCard:hover{
+
+transform:translateY(-3px);
+
+border-color:var(--primary);
+
+}
+
+.statValue{
+
+font-size:28px;
+
+font-weight:700;
+
+color:var(--primary);
+
+margin-bottom:8px;
+
+}
+
+.statTitle{
+
+font-size:14px;
+
+color:var(--textLight);
+
 }
 
 /*==================================================
-                SEARCH RESULTS
+                ACTION BUTTONS
 ==================================================*/
 
-.searchResult{
+#readerActions{
+
+display:flex;
+
+justify-content:center;
+
+gap:16px;
+
+padding:22px;
+
+background:var(--background);
+
+flex-wrap:wrap;
+
+}
+
+#readerActions button{
+
+min-width:150px;
+
+height:48px;
+
+padding:0 20px;
+
+background:var(--primary);
+
+color:#ffffff;
+
+border-radius:12px;
+
+font-size:15px;
+
+font-weight:600;
+
+transition:var(--transition);
+
+}
+
+#readerActions button:hover{
+
+background:var(--primaryHover);
+
+transform:translateY(-2px);
+
+}
+
+/*==================================================
+                COMMENT SECTION
+==================================================*/
+
+#commentSection{
+
+padding:25px;
+
+background:var(--surface);
+
+border-top:1px solid var(--border);
+
+}
+
+#commentSection h2{
+
+font-size:24px;
+
+margin-bottom:20px;
+
+}
+
+#commentList{
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+margin-bottom:25px;
+
+}
+
+.commentItem{
+
+padding:18px;
+
+background:#0f172a;
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+}
+
+.commentUser{
+
+font-weight:600;
+
+margin-bottom:8px;
+
+}
+
+.commentDate{
+
+font-size:12px;
+
+color:var(--textLight);
+
+margin-bottom:10px;
+
+}
+
+.commentText{
+
+line-height:1.7;
+
+color:var(--textLight);
+
+}
+
+#commentForm{
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+#commentForm input,
+
+#commentForm textarea{
 
 width:100%;
 
 padding:14px 16px;
 
-border:none;
+background:#0f172a;
+
+border:1px solid var(--border);
 
 border-radius:10px;
-
-background:#232a38;
 
 color:#ffffff;
 
 font-size:14px;
 
-font-weight:600;
+}
 
-text-align:left;
+#commentForm textarea{
 
-cursor:pointer;
+min-height:130px;
 
-transition:.25s;
+resize:vertical;
 
 }
 
-.searchResult:hover{
+#submitCommentBtn{
+
+width:180px;
+
+height:48px;
 
 background:var(--primary);
 
-color:#111111;
+color:#ffffff;
 
-}
-
-.searchEmpty{
-
-padding:35px 15px;
-
-text-align:center;
+border-radius:10px;
 
 font-size:15px;
 
-color:#9ca3af;
+font-weight:600;
+
+}
+
+#submitCommentBtn:hover{
+
+background:var(--primaryHover);
 
 }
 
 /*==================================================
-                CSS PART 7 END
+                READING PROGRESS
+==================================================*/
+
+#readingProgressBox{
+
+padding:22px;
+
+background:var(--surface);
+
+border-top:1px solid var(--border);
+
+}
+
+#progressTitle{
+
+font-size:18px;
+
+font-weight:600;
+
+margin-bottom:14px;
+
+}
+
+#progressBar{
+
+width:100%;
+
+height:12px;
+
+background:#0f172a;
+
+border-radius:50px;
+
+overflow:hidden;
+
+}
+
+#progressFill{
+
+width:0%;
+
+height:100%;
+
+background:linear-gradient(
+
+90deg,
+
+var(--primary),
+
+#60a5fa
+
+);
+
+transition:width .3s linear;
+
+}
+
+#progressPercent{
+
+margin-top:12px;
+
+font-size:14px;
+
+font-weight:600;
+
+text-align:right;
+
+}
+
+/*==================================================
+                READER FOOTER
+==================================================*/
+
+#readerFooter{
+
+height:55px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:0 20px;
+
+background:#172033;
+
+border-top:1px solid var(--border);
+
+font-size:14px;
+
+color:var(--textLight);
+
+}
+
+#footerLeft,
+
+#footerCenter,
+
+#footerRight{
+
+display:flex;
+
+align-items:center;
+
+}
+
+/*==================================================
+                CSS PART 6 END
 ==================================================*/
 /*==================================================
-                CHISHTI LIBRARY READER
-                CSS PART 8
-                RESPONSIVE • PAGE FLIP • END
+            CHISHTI LIBRARY READER
+                CSS PART 7
+        ANIMATIONS + RESPONSIVE + UTILITIES
 ==================================================*/
 
 /*==================================================
-                PAGE FLIP EFFECT
+                BOOK ANIMATIONS
 ==================================================*/
 
-#pageFront,
-#pageBack{
-
-backface-visibility:hidden;
-
-transform-style:preserve-3d;
-
-will-change:transform;
-
-transition:
-
-transform .45s cubic-bezier(.22,.61,.36,1);
-
-}
-
-.page-flip-next{
-
-animation:
-
-flipNext
-
-.45s forwards;
-
-}
-
-.page-flip-prev{
-
-animation:
-
-flipPrev
-
-.45s forwards;
-
-}
-
-@keyframes flipNext{
+@keyframes bookCover{
 
 0%{
 
-transform:
+transform:rotateY(0deg);
 
-perspective(2400px)
+}
 
-rotateY(0deg);
+50%{
+
+transform:rotateY(-35deg);
 
 }
 
 100%{
 
-transform:
-
-perspective(2400px)
-
-rotateY(-180deg);
+transform:rotateY(0deg);
 
 }
 
 }
 
-@keyframes flipPrev{
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+transform:translateY(15px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+@keyframes slideRight{
+
+from{
+
+opacity:0;
+
+transform:translateX(30px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateX(0);
+
+}
+
+}
+
+@keyframes pulse{
 
 0%{
 
-transform:
+transform:scale(1);
 
-perspective(2400px)
+}
 
-rotateY(0deg);
+50%{
+
+transform:scale(1.05);
 
 }
 
 100%{
 
-transform:
-
-perspective(2400px)
-
-rotateY(180deg);
+transform:scale(1);
 
 }
+
+}
+
+@keyframes spin{
+
+from{
+
+transform:rotate(0deg);
+
+}
+
+to{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+@keyframes shimmer{
+
+0%{
+
+background-position:-300px 0;
+
+}
+
+100%{
+
+background-position:300px 0;
+
+}
+
+}
+
+/*==================================================
+                TRANSITIONS
+==================================================*/
+
+.fadeIn{
+
+animation:fadeIn .35s ease;
+
+}
+
+.slideRight{
+
+animation:slideRight .35s ease;
+
+}
+
+.pulse{
+
+animation:pulse 1.5s infinite;
+
+}
+
+.rotate{
+
+animation:spin 1s linear infinite;
 
 }
 
@@ -2432,126 +2432,73 @@ rotateY(180deg);
                 ACTIVE STATES
 ==================================================*/
 
+.active{
+
+opacity:1;
+
+visibility:visible;
+
+}
+
+.hidden{
+
+display:none !important;
+
+}
+
+.disabled{
+
+opacity:.5;
+
+pointer-events:none;
+
+}
+
+/*==================================================
+                BUTTON EFFECTS
+==================================================*/
+
 button:active{
 
-transform:
-
-scale(.96);
+transform:scale(.96);
 
 }
 
-.activeButton{
+button:focus-visible{
 
-background:
+outline:2px solid var(--primary);
 
-var(--primary)!important;
-
-color:
-
-#111!important;
+outline-offset:2px;
 
 }
 
 /*==================================================
-                LIGHT THEME
+                RESPONSIVE
 ==================================================*/
 
-body.lightTheme{
+@media(max-width:1200px){
 
-background:#ececec;
+#readerStatistics{
 
-color:#111;
-
-}
-
-body.lightTheme #reader{
-
-background:#ececec;
+grid-template-columns:repeat(2,1fr);
 
 }
 
-body.lightTheme
-#readerHeader,
+.sidePanel{
 
-body.lightTheme
-#toolbarTop,
-
-body.lightTheme
-#toolbarBottom{
-
-background:#ffffff;
-
-color:#111;
-
-border-color:#d8d8d8;
+width:360px;
 
 }
 
-body.lightTheme
-#pageCounter,
-
-body.lightTheme
-#zoomIndicator,
-
-body.lightTheme
-#searchKeyword,
-
-body.lightTheme
-.sidePanel,
-
-body.lightTheme
-.settingItem,
-
-body.lightTheme
-.bookmarkItem{
-
-background:#ffffff;
-
-color:#111;
-
-border-color:#dddddd;
-
 }
 
-body.lightTheme button{
-
-color:#111;
-
-}
-
-/*==================================================
-                TABLET
-==================================================*/
-
-@media (max-width:1200px){
+@media(max-width:992px){
 
 #readerHeader{
 
 padding:0 15px;
 
 }
-
-#toolbarTop,
-
-#toolbarBottom{
-
-padding:0 15px;
-
-}
-
-#canvasWrapper{
-
-transform:scale(.95);
-
-}
-
-}
-
-/*==================================================
-                MOBILE
-==================================================*/
-
-@media (max-width:991px){
 
 #toolbarTop{
 
@@ -2573,8 +2520,6 @@ height:auto;
 
 padding:12px;
 
-gap:12px;
-
 }
 
 #navigationGroup,
@@ -2583,55 +2528,19 @@ gap:12px;
 
 #readerModes{
 
-width:100%;
+flex-wrap:wrap;
 
 justify-content:center;
 
-flex-wrap:wrap;
+}
 
 }
 
-#searchContainer{
+@media(max-width:768px){
 
-width:100%;
+#readerLogo h1{
 
-}
-
-#bookViewport{
-
-padding:15px;
-
-}
-
-#rightCanvas{
-
-display:none!important;
-
-}
-
-#canvasWrapper{
-
-gap:0;
-
-}
-
-#mobileNavigation{
-
-display:flex;
-
-}
-
-#headerButtons{
-
-gap:6px;
-
-}
-
-#headerButtons button{
-
-width:40px;
-
-height:40px;
+display:none;
 
 }
 
@@ -2641,9 +2550,35 @@ display:none;
 
 }
 
-#watermark{
+#toolbarTop,
 
-font-size:28px;
+#toolbarBottom{
+
+display:none;
+
+}
+
+#mobileNavigation{
+
+display:flex;
+
+}
+
+#readerStatistics{
+
+grid-template-columns:1fr;
+
+}
+
+#readerActions{
+
+flex-direction:column;
+
+}
+
+#readerActions button{
+
+width:100%;
 
 }
 
@@ -2655,86 +2590,60 @@ right:-100%;
 
 }
 
-.sidePanel.active{
+#thumbnailSidebar{
 
-right:0;
+display:none;
+
+}
+
+#readerFooter{
+
+flex-direction:column;
+
+justify-content:center;
+
+gap:4px;
+
+height:auto;
+
+padding:10px;
+
+}
+
+}
+
+@media(max-width:480px){
+
+#bookViewport{
+
+padding:10px;
+
+}
+
+#canvasWrapper{
+
+width:100%;
+
+}
+
+#bookCover{
+
+width:140px;
+
+height:200px;
+
+}
+
+.statValue{
+
+font-size:22px;
 
 }
 
 }
 
 /*==================================================
-                SMALL MOBILE
-==================================================*/
-
-@media (max-width:600px){
-
-#pageCounter{
-
-min-width:90px;
-
-font-size:13px;
-
-}
-
-#zoomIndicator{
-
-min-width:60px;
-
-font-size:13px;
-
-}
-
-#navigationGroup button,
-
-#zoomGroup button,
-
-#readerModes button{
-
-height:38px;
-
-padding:0 12px;
-
-font-size:13px;
-
-}
-
-#mobileNavigation{
-
-left:10px;
-
-right:10px;
-
-bottom:12px;
-
-transform:none;
-
-border-radius:14px;
-
-justify-content:space-between;
-
-}
-
-#mobileNavigation button{
-
-min-width:auto;
-
-flex:1;
-
-}
-
-.loadingCard,
-
-.errorCard{
-
-padding:25px;
-
-}
-
-}
-
-/*==================================================
-                PRINT
+                PRINT MODE
 ==================================================*/
 
 @media print{
@@ -2747,13 +2656,17 @@ padding:25px;
 
 #mobileNavigation,
 
+#readerFooter,
+
 .sidePanel,
 
-#readerToast,
+#readerActions,
 
-#readerOverlay{
+#readerStatistics,
 
-display:none!important;
+#commentSection{
+
+display:none !important;
 
 }
 
@@ -2762,6 +2675,383 @@ body{
 background:#ffffff;
 
 }
+
+#readerBody{
+
+height:auto;
+
+}
+
+}
+
+/*==================================================
+                CSS PART 7 END
+==================================================*/
+/*==================================================
+            CHISHTI LIBRARY READER
+                CSS PART 8
+        THEMES + EFFECTS + FINAL
+==================================================*/
+
+/*==================================================
+                LIGHT THEME
+==================================================*/
+
+body.light{
+
+--background:#f8fafc;
+
+--surface:#ffffff;
+
+--surfaceLight:#e2e8f0;
+
+--border:#d1d5db;
+
+--text:#111827;
+
+--textLight:#475569;
+
+background:var(--background);
+
+color:var(--text);
+
+}
+
+body.light #readerBody{
+
+background:linear-gradient(
+
+180deg,
+
+#f8fafc,
+
+#e5e7eb
+
+);
+
+}
+
+body.light #canvasWrapper{
+
+background:#ffffff;
+
+}
+
+body.light #watermark{
+
+color:rgba(0,0,0,.04);
+
+}
+
+body.light #readerHeader,
+
+body.light #toolbarTop,
+
+body.light #toolbarBottom,
+
+body.light #readerFooter{
+
+background:#ffffff;
+
+}
+
+/*==================================================
+                PAGE FLIP
+==================================================*/
+
+#pageFlipContainer{
+
+position:relative;
+
+transform-style:preserve-3d;
+
+transition:transform .45s ease;
+
+}
+
+.flipNext{
+
+animation:flipNext .45s ease;
+
+}
+
+.flipPrevious{
+
+animation:flipPrevious .45s ease;
+
+}
+
+@keyframes flipNext{
+
+0%{
+
+transform:rotateY(0deg);
+
+}
+
+100%{
+
+transform:rotateY(-180deg);
+
+}
+
+}
+
+@keyframes flipPrevious{
+
+0%{
+
+transform:rotateY(0deg);
+
+}
+
+100%{
+
+transform:rotateY(180deg);
+
+}
+
+}
+
+/*==================================================
+                GLASS EFFECT
+==================================================*/
+
+.glass{
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(12px);
+
+-webkit-backdrop-filter:blur(12px);
+
+border:1px solid rgba(255,255,255,.15);
+
+}
+
+/*==================================================
+                LOADER
+==================================================*/
+
+.loaderPages,
+
+.loadingPages{
+
+animation:pagePulse 1.5s infinite;
+
+}
+
+@keyframes pagePulse{
+
+0%{
+
+opacity:1;
+
+}
+
+50%{
+
+opacity:.55;
+
+}
+
+100%{
+
+opacity:1;
+
+}
+
+}
+
+/*==================================================
+                TOAST
+==================================================*/
+
+#readerToast{
+
+position:fixed;
+
+left:50%;
+
+bottom:30px;
+
+transform:translateX(-50%);
+
+padding:12px 20px;
+
+background:#111827;
+
+color:#ffffff;
+
+border-radius:50px;
+
+font-size:14px;
+
+font-weight:600;
+
+box-shadow:var(--shadow);
+
+opacity:0;
+
+visibility:hidden;
+
+transition:.3s;
+
+z-index:999999;
+
+}
+
+#readerToast.show{
+
+opacity:1;
+
+visibility:visible;
+
+bottom:45px;
+
+}
+
+/*==================================================
+                UTILITIES
+==================================================*/
+
+.textCenter{
+
+text-align:center;
+
+}
+
+.textLeft{
+
+text-align:left;
+
+}
+
+.textRight{
+
+text-align:right;
+
+}
+
+.flex{
+
+display:flex;
+
+}
+
+.flexCenter{
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+}
+
+.flexBetween{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+}
+
+.w100{
+
+width:100%;
+
+}
+
+.h100{
+
+height:100%;
+
+}
+
+.round{
+
+border-radius:50%;
+
+}
+
+.shadow{
+
+box-shadow:var(--shadow);
+
+}
+
+.border{
+
+border:1px solid var(--border);
+
+}
+
+.hide{
+
+display:none !important;
+
+}
+
+.show{
+
+display:block !important;
+
+}
+
+/*==================================================
+                PERFORMANCE
+==================================================*/
+
+canvas,
+
+button,
+
+.sidePanel,
+
+#canvasWrapper{
+
+will-change:transform;
+
+}
+
+button,
+
+input,
+
+select,
+
+textarea{
+
+transition:
+
+background .25s,
+
+color .25s,
+
+border-color .25s,
+
+transform .25s;
+
+}
+
+/*==================================================
+                ACCESSIBILITY
+==================================================*/
+
+button:focus-visible,
+
+input:focus-visible,
+
+select:focus-visible,
+
+textarea:focus-visible{
+
+outline:2px solid var(--primary);
+
+outline-offset:2px;
 
 }
 
