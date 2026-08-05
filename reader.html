@@ -7,9 +7,13 @@
 
 <meta
 name="viewport"
-content="width=device-width,initial-scale=1.0">
+content="width=device-width, initial-scale=1.0">
 
 <title>Chishti Library Reader</title>
+
+<!--==============================
+            GOOGLE FONT
+===============================-->
 
 <link
 rel="preconnect"
@@ -24,14 +28,25 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
 rel="stylesheet">
 
-<link rel="stylesheet" href="assets/css/reader.css">
+<!--==============================
+              PDF.JS
+===============================-->
+
 <script
 src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js">
 </script>
 
+<!--==============================
+            READER CSS
+===============================-->
+
+<link
+rel="stylesheet"
+href="reader.css">
+
 </head>
 
-<body>
+<body data-pdf="">
 
 <!--==================================================
                     PRELOADER
@@ -43,9 +58,13 @@ src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js">
 
 <div class="loaderBook">
 
-<div class="loaderFront"></div>
+<div class="loaderFront">
 
-<div class="loaderPages"></div>
+</div>
+
+<div class="loaderPages">
+
+</div>
 
 </div>
 
@@ -65,26 +84,32 @@ Opening Book...
 
 <div id="openingAnimation">
 
-<div class="openingGlow"></div>
+<div class="openingGlow">
+
+</div>
 
 <div class="openingBook">
 
-<div class="openingCover"></div>
+<div class="openingCover">
 
-<div class="openingPage"></div>
+</div>
+
+<div class="openingPage">
+
+</div>
 
 </div>
 
 </div>
 
 <!--==================================================
-                    READER
+                    MAIN READER
 ===================================================-->
 
 <div id="reader">
 
 <!--==================================================
-                HEADER
+                    HEADER
 ===================================================-->
 
 <header id="readerHeader">
@@ -92,8 +117,9 @@ Opening Book...
 <div id="readerLogo">
 
 <img
-src="assets/images/logo.png"
-alt="Logo">
+id="logoImage"
+src="logo.png"
+alt="Chishti Library">
 
 <h1>
 
@@ -112,6 +138,8 @@ Loading Book...
 </h2>
 
 <p id="bookAuthor">
+
+Author
 
 </p>
 
@@ -172,9 +200,6 @@ title="Close">
 </header>
 
 <!--==================================================
-            HTML PART 1 END
-===================================================-->
-<!--==================================================
                 TOP TOOLBAR
 ===================================================-->
 
@@ -183,16 +208,14 @@ title="Close">
 <div id="navigationGroup">
 
 <button
-id="firstPageBtn"
-title="First Page">
+id="firstPageBtn">
 
 ⏮
 
 </button>
 
 <button
-id="previousBtn"
-title="Previous Page">
+id="previousBtn">
 
 ◀
 
@@ -205,16 +228,14 @@ title="Previous Page">
 </div>
 
 <button
-id="nextBtn"
-title="Next Page">
+id="nextBtn">
 
 ▶
 
 </button>
 
 <button
-id="lastPageBtn"
-title="Last Page">
+id="lastPageBtn">
 
 ⏭
 
@@ -225,8 +246,7 @@ title="Last Page">
 <div id="zoomGroup">
 
 <button
-id="zoomOutBtn"
-title="Zoom Out">
+id="zoomOutBtn">
 
 －
 
@@ -239,32 +259,28 @@ title="Zoom Out">
 </div>
 
 <button
-id="zoomInBtn"
-title="Zoom In">
+id="zoomInBtn">
 
 ＋
 
 </button>
 
 <button
-id="fitPageBtn"
-title="Fit Page">
+id="fitPageBtn">
 
 Fit
 
 </button>
 
 <button
-id="fitWidthBtn"
-title="Fit Width">
+id="fitWidthBtn">
 
 Width
 
 </button>
 
 <button
-id="resetZoomBtn"
-title="Reset Zoom">
+id="resetZoomBtn">
 
 100%
 
@@ -275,7 +291,10 @@ title="Reset Zoom">
 </div>
 
 <!--==================================================
-            SECOND TOOLBAR
+            HTML PART 1 END
+===================================================-->
+<!--==================================================
+                SECOND TOOLBAR
 ===================================================-->
 
 <div id="toolbarBottom">
@@ -342,6 +361,7 @@ Auto
 ===================================================-->
 
 <div id="readerBody">
+
 <!--==================================================
                 BOOK VIEWPORT
 ===================================================-->
@@ -350,7 +370,9 @@ Auto
 
 <div id="canvasWrapper">
 
-<div id="bookShadow"></div>
+<div id="bookShadow">
+
+</div>
 
 <div id="pageFlipContainer">
 
@@ -358,6 +380,7 @@ Auto
 
 <canvas
 id="leftCanvas">
+
 </canvas>
 
 </div>
@@ -366,17 +389,24 @@ id="leftCanvas">
 
 <canvas
 id="rightCanvas">
+
 </canvas>
 
 </div>
 
 </div>
 
-<div id="pageCurve"></div>
+<div id="pageCurve">
 
-<div id="pageShadow"></div>
+</div>
 
-<div id="pageGlow"></div>
+<div id="pageShadow">
+
+</div>
+
+<div id="pageGlow">
+
+</div>
 
 <div id="watermark">
 
@@ -395,7 +425,7 @@ CHISHTI LIBRARY
 </div>
 
 <!--==================================================
-            MOBILE NAVIGATION
+                MOBILE NAVIGATION
 ===================================================-->
 
 <div id="mobileNavigation">
@@ -438,16 +468,20 @@ Next ▶
                 READER OVERLAY
 ===================================================-->
 
-<div id="readerOverlay"></div>
+<div id="readerOverlay">
+
+</div>
 
 <!--==================================================
-                HTML PART 3 END
+            HTML PART 2 END
 ===================================================-->
 <!--==================================================
                 SEARCH PANEL
 ===================================================-->
 
-<aside id="searchPanel" class="sidePanel">
+<aside
+id="searchPanel"
+class="sidePanel">
 
 <div class="panelHeader">
 
@@ -492,7 +526,9 @@ Search
                 BOOKMARK PANEL
 ===================================================-->
 
-<aside id="bookmarkPanel" class="sidePanel">
+<aside
+id="bookmarkPanel"
+class="sidePanel">
 
 <div class="panelHeader">
 
@@ -512,8 +548,8 @@ id="closeBookmarkBtn">
 </div>
 
 <div
-class="panelBody"
-id="bookmarkList">
+id="bookmarkList"
+class="panelBody">
 
 </div>
 
@@ -523,7 +559,9 @@ id="bookmarkList">
                 SETTINGS PANEL
 ===================================================-->
 
-<aside id="settingsPanel" class="sidePanel">
+<aside
+id="settingsPanel"
+class="sidePanel">
 
 <div class="panelHeader">
 
@@ -652,13 +690,15 @@ Double Page
 </aside>
 
 <!--==================================================
-                HTML PART 4 END
+                HTML PART 3 END
 ===================================================-->
 <!--==================================================
-                TABLE OF CONTENTS
+                TABLE OF CONTENTS PANEL
 ===================================================-->
 
-<aside id="tocPanel" class="sidePanel">
+<aside
+id="tocPanel"
+class="sidePanel">
 
 <div class="panelHeader">
 
@@ -678,8 +718,8 @@ id="closeTocBtn">
 </div>
 
 <div
-class="panelBody"
-id="tocList">
+id="tocList"
+class="panelBody">
 
 </div>
 
@@ -689,7 +729,8 @@ id="tocList">
                 THUMBNAIL SIDEBAR
 ===================================================-->
 
-<aside id="thumbnailSidebar">
+<aside
+id="thumbnailSidebar">
 
 <div id="thumbnailHeader">
 
@@ -724,9 +765,13 @@ id="closeThumbnailBtn">
 
 <div class="loadingBook">
 
-<div class="loadingCover"></div>
+<div class="loadingCover">
 
-<div class="loadingPages"></div>
+</div>
+
+<div class="loadingPages">
+
+</div>
 
 </div>
 
@@ -738,7 +783,9 @@ Loading Book...
 
 <div id="loadingProgress">
 
-<div id="loadingBar"></div>
+<div id="loadingBar">
+
+</div>
 
 </div>
 
@@ -766,6 +813,8 @@ Unknown Error
 
 </p>
 
+<div class="errorButtons">
+
 <button
 id="reloadBookBtn">
 
@@ -779,6 +828,8 @@ id="goHomeBtn">
 Home
 
 </button>
+
+</div>
 
 </div>
 
@@ -798,8 +849,381 @@ Ready
 
 </div>
 
+<!--==================================================
+                BOOK INFORMATION PANEL
+===================================================-->
+
+<aside
+id="bookInfoPanel"
+class="sidePanel">
+
+<div class="panelHeader">
+
+<h3>
+
+Book Information
+
+</h3>
+
+<button
+id="closeBookInfoBtn">
+
+✕
+
+</button>
+
 </div>
+
+<div class="panelBody">
+
+<img
+id="bookCover"
+src="cover-placeholder.png"
+alt="Book Cover">
+
+<h2 id="infoBookTitle">
+
+Loading...
+
+</h2>
+
+<p>
+
+<strong>Author:</strong>
+
+<span id="infoAuthor">
+
+Unknown
+
+</span>
+
+</p>
+
+<p>
+
+<strong>Language:</strong>
+
+<span id="infoLanguage">
+
+Unknown
+
+</span>
+
+</p>
+
+<p>
+
+<strong>Category:</strong>
+
+<span id="infoCategory">
+
+Unknown
+
+</span>
+
+</p>
+
+<p>
+
+<strong>Pages:</strong>
+
+<span id="infoPages">
+
+0
+
+</span>
+
+</p>
+
+</div>
+
+</aside>
+
+<!--==================================================
+                HTML PART 4 END
+===================================================-->
+<!--==================================================
+                READER STATISTICS
+===================================================-->
+
+<section id="readerStatistics">
+
+<div class="statCard">
+
+<div
+class="statValue"
+id="bookViews">
+
+0
+
+</div>
+
+<div class="statTitle">
+
+Views
+
+</div>
+
+</div>
+
+<div class="statCard">
+
+<div
+class="statValue"
+id="bookLikes">
+
+0
+
+</div>
+
+<div class="statTitle">
+
+Likes
+
+</div>
+
+</div>
+
+<div class="statCard">
+
+<div
+class="statValue"
+id="bookComments">
+
+0
+
+</div>
+
+<div class="statTitle">
+
+Comments
+
+</div>
+
+</div>
+
+<div class="statCard">
+
+<div
+class="statValue"
+id="bookBookmarks">
+
+0
+
+</div>
+
+<div class="statTitle">
+
+Bookmarks
+
+</div>
+
+</div>
+
+</section>
+
+<!--==================================================
+                SOCIAL ACTIONS
+===================================================-->
+
+<section id="readerActions">
+
+<button
+id="likeBookBtn">
+
+❤️ Like
+
+</button>
+
+<button
+id="shareBookBtn">
+
+📤 Share
+
+</button>
+
+<button
+id="commentBookBtn">
+
+💬 Comment
+
+</button>
+
+<button
+id="downloadBookBtn">
+
+⬇ Download
+
+</button>
+
+</section>
+
+<!--==================================================
+                COMMENT SECTION
+===================================================-->
+
+<section id="commentSection">
+
+<h2>
+
+Comments
+
+</h2>
+
+<div id="commentList">
+
+</div>
+
+<div id="commentForm">
+
+<input
+type="text"
+id="commentName"
+placeholder="Your Name">
+
+<textarea
+id="commentMessage"
+placeholder="Write your comment...">
+
+</textarea>
+
+<button
+id="submitCommentBtn">
+
+Post Comment
+
+</button>
+
+</div>
+
+</section>
+
+<!--==================================================
+                READING PROGRESS
+===================================================-->
+
+<section id="readingProgressBox">
+
+<div id="progressTitle">
+
+Reading Progress
+
+</div>
+
+<div id="progressBar">
+
+<div id="progressFill">
+
+</div>
+
+</div>
+
+<div id="progressPercent">
+
+0%
+
+</div>
+
+</section>
+
+<!--==================================================
+                HIDDEN INPUTS
+===================================================-->
+
+<input
+type="file"
+id="pdfFileInput"
+accept=".pdf"
+hidden>
+
+<input
+type="file"
+id="coverImageInput"
+accept="image/*"
+hidden>
+
+<!--==================================================
+                HTML PART 5 END
+===================================================-->  
+<!--==================================================
+                DEBUG CONTAINER
+===================================================-->
+
+<div
+id="debugConsole"
+hidden>
+
+</div>
+
+<!--==================================================
+                READER FOOTER
+===================================================-->
+
+<footer id="readerFooter">
+
+<div id="footerLeft">
+
+<span id="footerBookName">
+
+CHISHTI LIBRARY
+
+</span>
+
+</div>
+
+<div id="footerCenter">
+
+<span id="footerCurrentPage">
+
+1
+
+</span>
+
+/
+
+<span id="footerTotalPages">
+
+1
+
+</span>
+
+</div>
+
+<div id="footerRight">
+
+<span id="footerZoom">
+
+100%
+
+</span>
+
+</div>
+
+</footer>
+
+</div>
+
+<!--==================================================
+            PDF.JS WORKER
+===================================================-->
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc=
+
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.js";
+
+</script>
+
+<!--==================================================
+                READER JAVASCRIPT
+===================================================-->
+
+<script
+src="reader.js">
+
+</script>
 
 </body>
 
-</html>
+</html>  
