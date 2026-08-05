@@ -7,13 +7,9 @@
 
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0">
+content="width=device-width,initial-scale=1.0">
 
-<title>Chishti Library Reader</title>
-
-<!--==============================
-            GOOGLE FONT
-===============================-->
+<title>Chishti Library Reader V2</title>
 
 <link
 rel="preconnect"
@@ -25,101 +21,45 @@ href="https://fonts.gstatic.com"
 crossorigin>
 
 <link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
-
-<!--==============================
-              PDF.JS
-===============================-->
-
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.js">
-</script>
-
-<!--==============================
-            READER CSS
-===============================-->
 
 <link
 rel="stylesheet"
-href="reader.css">
+href="assets/css/reader.css">
+
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
+</script>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc=
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+</script>
 
 </head>
 
-<body data-pdf="">
+<body>
 
-<!--==================================================
-                    PRELOADER
-===================================================-->
+<!--==========================================
+            BOOK OPENING SCREEN
+===========================================-->
 
-<div id="preloader">
+<div id="openingScreen">
 
-<div class="loader">
+<div id="openingGlow"></div>
 
-<div class="loaderBook">
+<div id="openingBook">
 
-<div class="loaderFront">
+<div id="bookCoverFront">
 
-</div>
-
-<div class="loaderPages">
-
-</div>
-
-</div>
-
-<p>
-
-Opening Book...
-
-</p>
-
-</div>
-
-</div>
-
-<!--==================================================
-                OPENING ANIMATION
-===================================================-->
-
-<div id="openingAnimation">
-
-<div class="openingGlow">
-
-</div>
-
-<div class="openingBook">
-
-<div class="openingCover">
-
-</div>
-
-<div class="openingPage">
-
-</div>
-
-</div>
-
-</div>
-
-<!--==================================================
-                    MAIN READER
-===================================================-->
-
-<div id="reader">
-
-<!--==================================================
-                    HEADER
-===================================================-->
-
-<header id="readerHeader">
-
-<div id="readerLogo">
+<div id="coverLogo">
 
 <img
-id="logoImage"
-src="logo.png"
+src="assets/images/logo.png"
 alt="Chishti Library">
+
+</div>
 
 <h1>
 
@@ -127,9 +67,42 @@ CHISHTI LIBRARY
 
 </h1>
 
+<p>
+
+Digital Islamic Library
+
+</p>
+
 </div>
 
-<div id="bookInfo">
+<div id="bookPaperStack"></div>
+
+<div id="bookShadow"></div>
+
+</div>
+
+</div>
+
+<!--==========================================
+                READER
+===========================================-->
+
+<div id="reader">
+
+<!--==========================================
+                HEADER
+===========================================-->
+
+<header id="readerHeader">
+
+<div id="headerLeft">
+
+<img
+id="libraryLogo"
+src="assets/images/logo.png"
+alt="Logo">
+
+<div>
 
 <h2 id="bookTitle">
 
@@ -145,51 +118,41 @@ Author
 
 </div>
 
-<div id="headerButtons">
+</div>
 
-<button
-id="bookmarkBtn"
-title="Bookmark">
+<div id="headerRight">
 
-⭐
-
-</button>
-
-<button
-id="searchBtn"
-title="Search">
+<button id="btnSearch">
 
 🔍
 
 </button>
 
-<button
-id="themeBtn"
-title="Theme">
+<button id="btnBookmark">
+
+⭐
+
+</button>
+
+<button id="btnTheme">
 
 🌙
 
 </button>
 
-<button
-id="settingBtn"
-title="Settings">
+<button id="btnSettings">
 
 ⚙
 
 </button>
 
-<button
-id="fullScreenBtn"
-title="Fullscreen">
+<button id="btnFullscreen">
 
 ⛶
 
 </button>
 
-<button
-id="closeBtn"
-title="Close">
+<button id="btnClose">
 
 ✕
 
@@ -199,255 +162,142 @@ title="Close">
 
 </header>
 
-<!--==================================================
-                TOP TOOLBAR
-===================================================-->
+<!--==========================================
+            HTML PART 1 END
+===========================================-->
+<!--==========================================
+            READER BODY
+===========================================-->
 
-<div id="toolbarTop">
+<main id="readerBody">
 
-<div id="navigationGroup">
+<div id="bookStage">
+
+<div id="bookLight"></div>
+
+<div id="bookContainer">
+
+<!--==========================================
+            LEFT PAGE
+===========================================-->
+
+<div
+class="bookPage leftPage"
+id="leftPage">
+
+<canvas
+id="leftCanvas">
+</canvas>
+
+<div class="pageGradient"></div>
+
+<div class="pageTexture"></div>
+
+</div>
+
+<!--==========================================
+            BOOK SPINE
+===========================================-->
+
+<div id="bookSpine">
+
+<div id="spineShadow"></div>
+
+</div>
+
+<!--==========================================
+            RIGHT PAGE
+===========================================-->
+
+<div
+class="bookPage rightPage"
+id="rightPage">
+
+<canvas
+id="rightCanvas">
+</canvas>
+
+<div class="pageGradient"></div>
+
+<div class="pageTexture"></div>
+
+</div>
+
+<!--==========================================
+        REAL PAGE FLIP LAYER
+===========================================-->
+
+<div id="pageFlipLayer">
+
+<div id="flipFront">
+
+<canvas
+id="flipCanvas">
+</canvas>
+
+</div>
+
+<div id="flipBack">
+
+<canvas
+id="flipBackCanvas">
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+<!--==========================================
+        PAGE GLOW & SHADOW
+===========================================-->
+
+<div id="pageShadow"></div>
+
+<div id="pageReflection"></div>
+
+<div id="pageGlow"></div>
+
+</div>
+
+</main>
+
+<!--==========================================
+            HTML PART 2 END
+===========================================-->
+<!--==========================================
+        PAGE COUNTER + ACTION BAR
+===========================================-->
+
+<section id="readerBottomBar">
+
+<div id="pageCounterContainer">
 
 <button
-id="firstPageBtn">
+id="btnPrevPage"
+class="navButton"
+title="Previous Page">
 
-⏮
-
-</button>
-
-<button
-id="previousBtn">
-
-◀
+❮
 
 </button>
 
 <div id="pageCounter">
 
-1 / 1
-
-</div>
-
-<button
-id="nextBtn">
-
-▶
-
-</button>
-
-<button
-id="lastPageBtn">
-
-⏭
-
-</button>
-
-</div>
-
-<div id="zoomGroup">
-
-<button
-id="zoomOutBtn">
-
-－
-
-</button>
-
-<div id="zoomIndicator">
-
-100%
-
-</div>
-
-<button
-id="zoomInBtn">
-
-＋
-
-</button>
-
-<button
-id="fitPageBtn">
-
-Fit
-
-</button>
-
-<button
-id="fitWidthBtn">
-
-Width
-
-</button>
-
-<button
-id="resetZoomBtn">
-
-100%
-
-</button>
-
-</div>
-
-</div>
-
-<!--==================================================
-            HTML PART 1 END
-===================================================-->
-<!--==================================================
-                SECOND TOOLBAR
-===================================================-->
-
-<div id="toolbarBottom">
-
-<div id="searchContainer">
-
-<input
-type="text"
-id="searchKeyword"
-placeholder="Search in complete book...">
-
-<button
-id="searchBookBtn">
-
-Search
-
-</button>
-
-<button
-id="previousSearchBtn">
-
-▲
-
-</button>
-
-<button
-id="nextSearchBtn">
-
-▼
-
-</button>
-
-</div>
-
-<div id="readerModes">
-
-<button
-id="singleModeBtn">
-
-1 Page
-
-</button>
-
-<button
-id="doubleModeBtn">
-
-2 Pages
-
-</button>
-
-<button
-id="autoModeBtn">
-
-Auto
-
-</button>
-
-</div>
-
-</div>
-
-<!--==================================================
-                READER BODY
-===================================================-->
-
-<div id="readerBody">
-
-<!--==================================================
-                BOOK VIEWPORT
-===================================================-->
-
-<div id="bookViewport">
-
-<div id="canvasWrapper">
-
-<div id="bookShadow">
-
-</div>
-
-<div id="pageFlipContainer">
-
-<div id="pageFront">
-
-<canvas
-id="leftCanvas">
-
-</canvas>
-
-</div>
-
-<div id="pageBack">
-
-<canvas
-id="rightCanvas">
-
-</canvas>
-
-</div>
-
-</div>
-
-<div id="pageCurve">
-
-</div>
-
-<div id="pageShadow">
-
-</div>
-
-<div id="pageGlow">
-
-</div>
-
-<div id="watermark">
-
-CHISHTI LIBRARY
-
-</div>
-
-<div id="floatingPageNumber">
-
-1
-
-</div>
-
-</div>
-
-</div>
-
-<!--==================================================
-                MOBILE NAVIGATION
-===================================================-->
-
-<div id="mobileNavigation">
-
-<button
-id="mobilePrevBtn">
-
-◀ Previous
-
-</button>
-
-<div id="mobilePageCounter">
-
-<span id="mobileCurrentPage">
+<span id="currentPage">
 
 1
 
 </span>
+
+<span class="counterDivider">
 
 /
 
-<span id="mobileTotalPages">
+</span>
+
+<span id="totalPages">
 
 1
 
@@ -456,43 +306,129 @@ id="mobilePrevBtn">
 </div>
 
 <button
-id="mobileNextBtn">
+id="btnNextPage"
+class="navButton"
+title="Next Page">
 
-Next ▶
+❯
 
 </button>
 
 </div>
 
-<!--==================================================
-                READER OVERLAY
-===================================================-->
+<div id="bookActions">
 
-<div id="readerOverlay">
+<button
+id="btnLike"
+class="actionButton">
+
+<span class="actionIcon">
+
+❤️
+
+</span>
+
+<span class="actionText">
+
+Like
+
+</span>
+
+<span
+id="likeCount"
+class="actionCount">
+
+0
+
+</span>
+
+</button>
+
+<button
+id="btnShare"
+class="actionButton">
+
+<span class="actionIcon">
+
+🔗
+
+</span>
+
+<span class="actionText">
+
+Share
+
+</span>
+
+</button>
+
+<button
+id="btnBookmarkHistory"
+class="actionButton">
+
+<span class="actionIcon">
+
+⭐
+
+</span>
+
+<span class="actionText">
+
+Bookmarks
+
+</span>
+
+</button>
+
+<button
+id="btnComments"
+class="actionButton">
+
+<span class="actionIcon">
+
+💬
+
+</span>
+
+<span class="actionText">
+
+Comments
+
+</span>
+
+<span
+id="commentCount"
+class="actionCount">
+
+0
+
+</span>
+
+</button>
 
 </div>
 
-<!--==================================================
-            HTML PART 2 END
-===================================================-->
-<!--==================================================
-                SEARCH PANEL
-===================================================-->
+</section>
 
-<aside
-id="searchPanel"
-class="sidePanel">
+<!--==========================================
+        HTML PART 3 END
+===========================================-->
+<!--==========================================
+        BOOKMARK HISTORY PANEL
+===========================================-->
+
+<aside id="bookmarkPanel" class="sidePanel">
 
 <div class="panelHeader">
 
-<h3>
+<h2>
 
-Search Book
+Bookmarks
 
-</h3>
+</h2>
 
 <button
-id="closeSearchPanelBtn">
+id="closeBookmarkPanel">
 
 ✕
 
@@ -500,15 +436,104 @@ id="closeSearchPanelBtn">
 
 </div>
 
-<div class="panelBody">
+<div
+id="bookmarkList"
+class="panelContent">
+
+<!-- JavaScript -->
+
+</div>
+
+</aside>
+
+<!--==========================================
+        COMMENTS PANEL
+===========================================-->
+
+<aside id="commentPanel" class="sidePanel">
+
+<div class="panelHeader">
+
+<h2>
+
+Comments
+
+</h2>
+
+<button
+id="closeCommentPanel">
+
+✕
+
+</button>
+
+</div>
+
+<div class="panelContent">
+
+<div id="commentForm">
 
 <input
 type="text"
-id="searchInput"
-placeholder="Type any word...">
+id="commentName"
+placeholder="Your Name">
+
+<textarea
+id="commentMessage"
+placeholder="Write your comment...">
+</textarea>
 
 <button
-id="searchNowBtn">
+id="submitComment">
+
+Post Comment
+
+</button>
+
+</div>
+
+<div id="commentList">
+
+<!-- Firebase Comments -->
+
+</div>
+
+</div>
+
+</aside>
+
+<!--==========================================
+        SEARCH PANEL
+===========================================-->
+
+<aside id="searchPanel" class="sidePanel">
+
+<div class="panelHeader">
+
+<h2>
+
+Search Book
+
+</h2>
+
+<button
+id="closeSearchPanel">
+
+✕
+
+</button>
+
+</div>
+
+<div class="panelContent">
+
+<input
+type="search"
+id="searchInput"
+placeholder="Search in book...">
+
+<button
+id="searchButton">
 
 Search
 
@@ -522,57 +547,25 @@ Search
 
 </aside>
 
-<!--==================================================
-                BOOKMARK PANEL
-===================================================-->
+<!--==========================================
+        HTML PART 4 END
+===========================================-->
+<!--==========================================
+            SETTINGS PANEL
+===========================================-->
 
-<aside
-id="bookmarkPanel"
-class="sidePanel">
-
-<div class="panelHeader">
-
-<h3>
-
-Bookmarks
-
-</h3>
-
-<button
-id="closeBookmarkBtn">
-
-✕
-
-</button>
-
-</div>
-
-<div
-id="bookmarkList"
-class="panelBody">
-
-</div>
-
-</aside>
-
-<!--==================================================
-                SETTINGS PANEL
-===================================================-->
-
-<aside
-id="settingsPanel"
-class="sidePanel">
+<aside id="settingsPanel" class="sidePanel">
 
 <div class="panelHeader">
 
-<h3>
+<h2>
 
 Reader Settings
 
-</h3>
+</h2>
 
 <button
-id="closeSettingsBtn">
+id="closeSettingsPanel">
 
 ✕
 
@@ -580,19 +573,89 @@ id="closeSettingsBtn">
 
 </div>
 
-<div class="panelBody">
+<div class="panelContent">
 
 <div class="settingItem">
 
 <label>
 
-Page Animation
+Theme
+
+</label>
+
+<select id="themeSelector">
+
+<option value="dark">
+
+Dark Blue
+
+</option>
+
+<option value="light">
+
+Light
+
+</option>
+
+<option value="maroon">
+
+Maroon & Gold
+
+</option>
+
+<option value="gold">
+
+Gold & Maroon
+
+</option>
+
+</select>
+
+</div>
+
+<div class="settingItem">
+
+<label>
+
+Reading Mode
+
+</label>
+
+<select id="readingMode">
+
+<option value="single">
+
+Single Page
+
+</option>
+
+<option value="double">
+
+Double Page
+
+</option>
+
+<option value="auto">
+
+Auto
+
+</option>
+
+</select>
+
+</div>
+
+<div class="settingItem">
+
+<label>
+
+Page Flip Animation
 
 </label>
 
 <input
 type="checkbox"
-id="pageAnimation"
+id="flipAnimation"
 checked>
 
 </div>
@@ -607,7 +670,7 @@ Page Shadow
 
 <input
 type="checkbox"
-id="pageShadowSwitch"
+id="pageShadow"
 checked>
 
 </div>
@@ -627,179 +690,90 @@ checked>
 
 </div>
 
-<div class="settingItem">
-
-<label>
-
-Theme
-
-</label>
-
-<select id="themeSelect">
-
-<option value="dark">
-
-Dark
-
-</option>
-
-<option value="light">
-
-Light
-
-</option>
-
-</select>
-
-</div>
-
-<div class="settingItem">
-
-<label>
-
-Reading Mode
-
-</label>
-
-<select id="readingMode">
-
-<option value="auto">
-
-Auto
-
-</option>
-
-<option value="single">
-
-Single Page
-
-</option>
-
-<option value="double">
-
-Double Page
-
-</option>
-
-</select>
-
-</div>
-
 </div>
 
 </aside>
 
-<!--==================================================
-                HTML PART 3 END
-===================================================-->
-<!--==================================================
-                TABLE OF CONTENTS PANEL
-===================================================-->
+<!--==========================================
+            READER OVERLAY
+===========================================-->
 
-<aside
-id="tocPanel"
-class="sidePanel">
-
-<div class="panelHeader">
-
-<h3>
-
-Table Of Contents
-
-</h3>
-
-<button
-id="closeTocBtn">
-
-✕
-
-</button>
+<div id="readerOverlay">
 
 </div>
 
-<div
-id="tocList"
-class="panelBody">
+<!--==========================================
+            LOADING STATUS
+===========================================-->
+
+<div id="loadingStatus">
+
+<div id="loadingSpinner">
 
 </div>
 
-</aside>
+<p id="loadingText">
 
-<!--==================================================
-                THUMBNAIL SIDEBAR
-===================================================-->
+Opening Book...
 
-<aside
-id="thumbnailSidebar">
-
-<div id="thumbnailHeader">
-
-<h3>
-
-Pages
-
-</h3>
-
-<button
-id="closeThumbnailBtn">
-
-✕
-
-</button>
+</p>
 
 </div>
 
-<div id="thumbnailContainer">
+<!--==========================================
+            HTML PART 5 END
+===========================================-->
+<!--==========================================
+            FIREBASE COMMENTS
+===========================================-->
+
+<section id="commentsSection">
+
+<div id="commentsHeader">
+
+<h2>
+
+Reader Discussion
+
+</h2>
+
+<span id="totalComments">
+
+0 Comments
+
+</span>
 
 </div>
 
-</aside>
+<div id="firebaseComments">
 
-<!--==================================================
-                LOADING SCREEN
-===================================================-->
-
-<div id="loadingScreen">
-
-<div class="loadingCard">
-
-<div class="loadingBook">
-
-<div class="loadingCover">
+<!-- Firebase Comments -->
 
 </div>
 
-<div class="loadingPages">
+</section>
+
+<!--==========================================
+            READER TOAST
+===========================================-->
+
+<div id="toast">
+
+<span id="toastText">
+
+Ready
+
+</span>
 
 </div>
 
-</div>
-
-<h3 id="loadingStatus">
-
-Loading Book...
-
-</h3>
-
-<div id="loadingProgress">
-
-<div id="loadingBar">
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!--==================================================
-                ERROR SCREEN
-===================================================-->
+<!--==========================================
+            ERROR SCREEN
+===========================================-->
 
 <div id="errorScreen">
 
-<div class="errorCard">
+<div id="errorCard">
 
 <h2>
 
@@ -813,19 +787,15 @@ Unknown Error
 
 </p>
 
-<div class="errorButtons">
+<button id="reloadBook">
 
-<button
-id="reloadBookBtn">
-
-Reload
+Reload Book
 
 </button>
 
-<button
-id="goHomeBtn">
+<button id="goHome">
 
-Home
+Back To Library
 
 </button>
 
@@ -833,339 +803,17 @@ Home
 
 </div>
 
-</div>
-
-<!--==================================================
-                TOAST
-===================================================-->
-
-<div id="readerToast">
-
-<span id="toastMessage">
-
-Ready
-
-</span>
-
-</div>
-
-<!--==================================================
-                BOOK INFORMATION PANEL
-===================================================-->
-
-<aside
-id="bookInfoPanel"
-class="sidePanel">
-
-<div class="panelHeader">
-
-<h3>
-
-Book Information
-
-</h3>
-
-<button
-id="closeBookInfoBtn">
-
-✕
-
-</button>
-
-</div>
-
-<div class="panelBody">
-
-<img
-id="bookCover"
-src="cover-placeholder.png"
-alt="Book Cover">
-
-<h2 id="infoBookTitle">
-
-Loading...
-
-</h2>
-
-<p>
-
-<strong>Author:</strong>
-
-<span id="infoAuthor">
-
-Unknown
-
-</span>
-
-</p>
-
-<p>
-
-<strong>Language:</strong>
-
-<span id="infoLanguage">
-
-Unknown
-
-</span>
-
-</p>
-
-<p>
-
-<strong>Category:</strong>
-
-<span id="infoCategory">
-
-Unknown
-
-</span>
-
-</p>
-
-<p>
-
-<strong>Pages:</strong>
-
-<span id="infoPages">
-
-0
-
-</span>
-
-</p>
-
-</div>
-
-</aside>
-
-<!--==================================================
-                HTML PART 4 END
-===================================================-->
-<!--==================================================
-                READER STATISTICS
-===================================================-->
-
-<section id="readerStatistics">
-
-<div class="statCard">
-
-<div
-class="statValue"
-id="bookViews">
-
-0
-
-</div>
-
-<div class="statTitle">
-
-Views
-
-</div>
-
-</div>
-
-<div class="statCard">
-
-<div
-class="statValue"
-id="bookLikes">
-
-0
-
-</div>
-
-<div class="statTitle">
-
-Likes
-
-</div>
-
-</div>
-
-<div class="statCard">
-
-<div
-class="statValue"
-id="bookComments">
-
-0
-
-</div>
-
-<div class="statTitle">
-
-Comments
-
-</div>
-
-</div>
-
-<div class="statCard">
-
-<div
-class="statValue"
-id="bookBookmarks">
-
-0
-
-</div>
-
-<div class="statTitle">
-
-Bookmarks
-
-</div>
-
-</div>
-
-</section>
-
-<!--==================================================
-                SOCIAL ACTIONS
-===================================================-->
-
-<section id="readerActions">
-
-<button
-id="likeBookBtn">
-
-❤️ Like
-
-</button>
-
-<button
-id="shareBookBtn">
-
-📤 Share
-
-</button>
-
-<button
-id="commentBookBtn">
-
-💬 Comment
-
-</button>
-
-<button
-id="downloadBookBtn">
-
-⬇ Download
-
-</button>
-
-</section>
-
-<!--==================================================
-                COMMENT SECTION
-===================================================-->
-
-<section id="commentSection">
-
-<h2>
-
-Comments
-
-</h2>
-
-<div id="commentList">
-
-</div>
-
-<div id="commentForm">
-
-<input
-type="text"
-id="commentName"
-placeholder="Your Name">
-
-<textarea
-id="commentMessage"
-placeholder="Write your comment...">
-
-</textarea>
-
-<button
-id="submitCommentBtn">
-
-Post Comment
-
-</button>
-
-</div>
-
-</section>
-
-<!--==================================================
-                READING PROGRESS
-===================================================-->
-
-<section id="readingProgressBox">
-
-<div id="progressTitle">
-
-Reading Progress
-
-</div>
-
-<div id="progressBar">
-
-<div id="progressFill">
-
-</div>
-
-</div>
-
-<div id="progressPercent">
-
-0%
-
-</div>
-
-</section>
-
-<!--==================================================
-                HIDDEN INPUTS
-===================================================-->
-
-<input
-type="file"
-id="pdfFileInput"
-accept=".pdf"
-hidden>
-
-<input
-type="file"
-id="coverImageInput"
-accept="image/*"
-hidden>
-
-<!--==================================================
-                HTML PART 5 END
-===================================================-->  
-<!--==================================================
-                DEBUG CONTAINER
-===================================================-->
-
-<div
-id="debugConsole"
-hidden>
-
-</div>
-
-<!--==================================================
-                READER FOOTER
-===================================================-->
+<!--==========================================
+            FOOTER
+===========================================-->
 
 <footer id="readerFooter">
 
 <div id="footerLeft">
 
-<span id="footerBookName">
+<span>
 
-CHISHTI LIBRARY
+© Chishti Library
 
 </span>
 
@@ -1173,17 +821,9 @@ CHISHTI LIBRARY
 
 <div id="footerCenter">
 
-<span id="footerCurrentPage">
+<span id="footerPage">
 
-1
-
-</span>
-
-/
-
-<span id="footerTotalPages">
-
-1
+1 / 1
 
 </span>
 
@@ -1203,21 +843,14 @@ CHISHTI LIBRARY
 
 </div>
 
-<!--==================================================
-            PDF.JS WORKER
-===================================================-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<!--==========================================
+            READER SCRIPT
+===========================================-->
 
-<script>
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+<script
+src="assets/js/reader.js">
 </script>
-<!--==================================================
-                READER JAVASCRIPT
-===================================================-->
-            
-<script src="reader.js"></script>
 
 </body>
 
-</html>  
+</html>            
