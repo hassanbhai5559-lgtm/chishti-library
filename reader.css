@@ -5587,3 +5587,11 @@ color:rgba(93,16,35,.25);
             CSS PART 14 END
             COMPLETE CSS (14/14)
 ==================================================*/
+body{
+    background:red !important;
+}
+
+h1{
+    color:yellow !important;
+    font-size:60px !important;
+}
