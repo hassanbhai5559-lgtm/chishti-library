@@ -1,423 +1,229 @@
 /*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 1
-            CORE + INITIALIZATION
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 1
+        GLOBAL VARIABLES + INITIALIZATION
 ==================================================*/
 
 "use strict";
 
 /*==================================================
-                    READER
+                PDF.JS
+==================================================*/
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+/*==================================================
+                GLOBAL OBJECT
 ==================================================*/
 
 const Reader={
 
-version:"1.0.0",
-
 pdf:null,
 
-pdfUrl:null,
+bookUrl:null,
 
-totalPages:0,
+bookTitle:"",
+
+bookAuthor:"",
 
 currentPage:1,
 
-scale:1,
+totalPages:0,
+
+zoom:1,
 
 rotation:0,
 
-fitMode:"fit",
-
 theme:"dark",
 
-readingMode:"single",
+pageRendering:false,
 
-fullscreen:false,
-
-searchResults:[],
-
-searchIndex:0,
+pendingPage:null,
 
 bookmarks:[],
 
 comments:[],
 
-isRendering:false,
+likes:0,
 
-isLoading:false,
+fullscreen:false,
 
-cache:new Map(),
+searchResults:[],
 
-elements:{}
+toc:[],
+
+thumbnails:[],
+
+history:[],
+
+watermark:"CHISHTI LIBRARY",
 
 };
 
 /*==================================================
-                SHORTCUTS
+                ELEMENTS
 ==================================================*/
 
-Reader.$=function(id){
+const DOM={
 
-return document.getElementById(id);
+viewer:
 
-};
+document.getElementById("bookViewer"),
 
-Reader.$$=function(selector){
+leftCanvas:
 
-return document.querySelector(selector);
+document.getElementById("leftCanvas"),
 
-};
+rightCanvas:
 
-Reader.$all=function(selector){
+document.getElementById("rightCanvas"),
 
-return document.querySelectorAll(selector);
+leftContext:
+
+document.getElementById("leftCanvas")?.getContext("2d"),
+
+rightContext:
+
+document.getElementById("rightCanvas")?.getContext("2d"),
+
+pageCounter:
+
+document.getElementById("currentPage"),
+
+totalPages:
+
+document.getElementById("totalPages"),
+
+bookTitle:
+
+document.getElementById("bookTitle"),
+
+bookAuthor:
+
+document.getElementById("bookAuthor"),
+
+loading:
+
+document.getElementById("loadingScreen"),
+
+opening:
+
+document.getElementById("openingScreen"),
+
+toast:
+
+document.getElementById("toast"),
+
+progress:
+
+document.getElementById("loadingBar"),
+
+reader:
+
+document.getElementById("reader"),
 
 };
 
 /*==================================================
-            CACHE HTML ELEMENTS
+            LOCAL STORAGE KEYS
 ==================================================*/
 
-Reader.cacheElements=function(){
+const STORAGE={
 
-const ids=[
+BOOKMARKS:
 
-"reader",
+"chishtiBookmarks",
 
-"preloader",
+THEME:
 
-"openingAnimation",
+"chishtiTheme",
 
-"readerHeader",
+LASTPAGE:
 
-"bookTitle",
+"chishtiLastPage",
 
-"bookAuthor",
+LIKES:
 
-"pageCounter",
+"chishtiLikes",
 
-"zoomIndicator",
+HISTORY:
 
-"leftCanvas",
+"chishtiHistory",
 
-"rightCanvas",
+COMMENTS:
 
-"readerBody",
-
-"bookViewport",
-
-"canvasWrapper",
-
-"loadingScreen",
-
-"loadingBar",
-
-"loadingStatus",
-
-"readerToast",
-
-"toastMessage",
-
-"readerOverlay",
-
-"errorScreen",
-
-"errorMessage",
-
-"bookmarkPanel",
-
-"searchPanel",
-
-"settingsPanel",
-
-"tocPanel",
-
-"thumbnailSidebar"
-
-];
-
-ids.forEach(id=>{
-
-Reader.elements[id]=Reader.$(id);
-
-});
+"chishtiComments",
 
 };
 
 /*==================================================
-                SHOW TOAST
-==================================================*/
-
-Reader.toast=function(message){
-
-const toast=Reader.elements.readerToast;
-
-const text=Reader.$("toastMessage");
-
-if(!toast||!text)return;
-
-text.textContent=message;
-
-toast.classList.add("show");
-
-clearTimeout(Reader.toastTimer);
-
-Reader.toastTimer=setTimeout(()=>{
-
-toast.classList.remove("show");
-
-},2500);
-
-};
-
-/*==================================================
-            SHOW / HIDE LOADER
-==================================================*/
-
-Reader.showLoader=function(text="Loading..."){
-
-const loader=Reader.elements.loadingScreen;
-
-const status=Reader.$("loadingStatus");
-
-if(loader){
-
-loader.classList.add("active");
-
-}
-
-if(status){
-
-status.textContent=text;
-
-}
-
-};
-
-Reader.hideLoader=function(){
-
-const loader=Reader.elements.loadingScreen;
-
-if(loader){
-
-loader.classList.remove("active");
-
-}
-
-};
-
-/*==================================================
-                UPDATE PROGRESS
-==================================================*/
-
-Reader.setProgress=function(value){
-
-const bar=Reader.$("loadingBar");
-
-if(bar){
-
-bar.style.width=value+"%";
-
-}
-
-};
-
-/*==================================================
-            APPLICATION START
-==================================================*/
-
-Reader.start=function(){
-
-Reader.cacheElements();
-
-Reader.bindGlobalEvents();
-
-Reader.restoreSettings();
-
-Reader.detectTheme();
-
-Reader.hidePreloader();
-
-Reader.toast("Reader Ready");
-
-console.log(
-
-"Chishti Library Reader Started"
-
-);
-
-};
-
-/*==================================================
-            PRELOADER
-==================================================*/
-
-Reader.hidePreloader=function(){
-
-setTimeout(()=>{
-
-const preloader=Reader.elements.preloader;
-
-if(preloader){
-
-preloader.style.opacity="0";
-
-setTimeout(()=>{
-
-preloader.remove();
-
-},400);
-
-}
-
-},500);
-
-};
-
-/*==================================================
-            DOM READY
+            INITIALIZATION
 ==================================================*/
 
 document.addEventListener(
 
 "DOMContentLoaded",
 
-function(){
+()=>{
 
-Reader.start();
-
-}
-
-);
-
-/*==================================================
-            JS PART 1 END
-==================================================*/
-/*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 2
-            EVENTS + UI CONTROLS
-==================================================*/
-
-/*==================================================
-                EVENT BINDING
-==================================================*/
-
-Reader.bindGlobalEvents=function(){
-
-const clickEvents={
-
-previousBtn:()=>Reader.previousPage(),
-
-nextBtn:()=>Reader.nextPage(),
-
-firstPageBtn:()=>Reader.firstPage(),
-
-lastPageBtn:()=>Reader.lastPage(),
-
-zoomInBtn:()=>Reader.zoomIn(),
-
-zoomOutBtn:()=>Reader.zoomOut(),
-
-resetZoomBtn:()=>Reader.resetZoom(),
-
-fitPageBtn:()=>Reader.fitPage(),
-
-fitWidthBtn:()=>Reader.fitWidth(),
-
-themeBtn:()=>Reader.toggleTheme(),
-
-fullScreenBtn:()=>Reader.toggleFullscreen(),
-
-bookmarkBtn:()=>Reader.addBookmark(),
-
-searchBtn:()=>Reader.togglePanel("searchPanel"),
-
-settingBtn:()=>Reader.togglePanel("settingsPanel"),
-
-closeBtn:()=>Reader.closeReader(),
-
-mobilePrevBtn:()=>Reader.previousPage(),
-
-mobileNextBtn:()=>Reader.nextPage(),
-
-closeSearchPanelBtn:()=>Reader.closePanel("searchPanel"),
-
-closeBookmarkBtn:()=>Reader.closePanel("bookmarkPanel"),
-
-closeSettingsBtn:()=>Reader.closePanel("settingsPanel"),
-
-closeTocBtn:()=>Reader.closePanel("tocPanel"),
-
-closeThumbnailBtn:()=>Reader.closePanel("thumbnailSidebar"),
-
-reloadBookBtn:()=>location.reload(),
-
-goHomeBtn:()=>window.location.href="index.html"
-
-};
-
-Object.keys(clickEvents).forEach(id=>{
-
-const element=Reader.$(id);
-
-if(element){
-
-element.addEventListener(
-
-"click",
-
-clickEvents[id]
-
-);
-
-}
-
-});
-
-/*==================================================
-            SEARCH EVENTS
-==================================================*/
-
-const searchInput=Reader.$("searchKeyword");
-
-if(searchInput){
-
-searchInput.addEventListener(
-
-"keydown",
-
-event=>{
-
-if(event.key==="Enter"){
-
-Reader.search(
-
-searchInput.value
-
-);
-
-}
+initializeReader();
 
 }
 
 );
 
+/*==================================================
+            INITIALIZE READER
+==================================================*/
+
+function initializeReader(){
+
+loadTheme();
+
+loadBookmarks();
+
+loadHistory();
+
+bindEvents();
+
+showOpeningAnimation();
+
 }
 
 /*==================================================
-            WINDOW EVENTS
+            OPENING ANIMATION
 ==================================================*/
+
+function showOpeningAnimation(){
+
+if(!DOM.opening)return;
+
+setTimeout(()=>{
+
+DOM.opening.classList.add("fadeOut");
+
+setTimeout(()=>{
+
+DOM.opening.style.display="none";
+
+},800);
+
+},2200);
+
+}
+
+/*==================================================
+            EVENT BINDING
+==================================================*/
+
+function bindEvents(){
 
 window.addEventListener(
 
 "resize",
 
-()=>{
-
-Reader.updateLayout();
-
-}
+handleResize
 
 );
 
@@ -425,248 +231,122 @@ document.addEventListener(
 
 "keydown",
 
-Reader.keyboardShortcuts
+keyboardControls
 
 );
 
-};
+}
 
 /*==================================================
-                PANEL SYSTEM
+            WINDOW RESIZE
 ==================================================*/
 
-Reader.togglePanel=function(panelId){
+function handleResize(){
 
-const panel=Reader.$(panelId);
+if(Reader.pdf){
 
-const overlay=Reader.$("readerOverlay");
-
-if(!panel)return;
-
-const opened=
-
-panel.classList.contains("active");
-
-Reader.closeAllPanels();
-
-if(!opened){
-
-panel.classList.add("active");
-
-if(overlay){
-
-overlay.classList.add("active");
+renderCurrentPages();
 
 }
 
 }
-
-};
-
-Reader.closePanel=function(panelId){
-
-const panel=Reader.$(panelId);
-
-if(panel){
-
-panel.classList.remove("active");
-
-}
-
-const overlay=Reader.$("readerOverlay");
-
-if(overlay){
-
-overlay.classList.remove("active");
-
-}
-
-};
-
-Reader.closeAllPanels=function(){
-
-document
-
-.querySelectorAll(".sidePanel")
-
-.forEach(panel=>{
-
-panel.classList.remove("active");
-
-});
-
-const thumb=Reader.$("thumbnailSidebar");
-
-if(thumb){
-
-thumb.classList.remove("active");
-
-}
-
-const overlay=Reader.$("readerOverlay");
-
-if(overlay){
-
-overlay.classList.remove("active");
-
-}
-
-};
 
 /*==================================================
-            KEYBOARD SHORTCUTS
+            KEYBOARD
 ==================================================*/
 
-Reader.keyboardShortcuts=function(event){
+function keyboardControls(e){
 
-switch(event.key){
+switch(e.key){
 
-case"ArrowRight":
+case "ArrowRight":
 
-Reader.nextPage();
-
-break;
-
-case"ArrowLeft":
-
-Reader.previousPage();
+nextPage();
 
 break;
 
-case"+":
+case "ArrowLeft":
 
-Reader.zoomIn();
-
-break;
-
-case"-":
-
-Reader.zoomOut();
+previousPage();
 
 break;
 
-case"0":
+case "+":
 
-Reader.resetZoom();
-
-break;
-
-case"f":
-
-Reader.toggleFullscreen();
+zoomIn();
 
 break;
 
-case"Escape":
+case "-":
 
-Reader.closeAllPanels();
+zoomOut();
+
+break;
+
+case "f":
+
+toggleFullscreen();
 
 break;
 
 }
 
-};
-
-/*==================================================
-            LAYOUT UPDATE
-==================================================*/
-
-Reader.updateLayout=function(){
-
-const zoom=
-
-Reader.$("zoomIndicator");
-
-if(zoom){
-
-zoom.textContent=
-
-Math.round(
-
-Reader.scale*100
-
-)+"%";
-
 }
 
-};
-
 /*==================================================
-                JS PART 2 END
+            PART 1 END
 ==================================================*/
 /*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 3
-            PDF LOADER + RENDER ENGINE
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 2
+        PDF LOADING ENGINE
 ==================================================*/
 
 /*==================================================
-                LOAD PDF
+            OPEN PDF
 ==================================================*/
 
-Reader.loadPDF=async function(pdfUrl){
+async function openBook(url,title="",author=""){
 
 try{
 
-Reader.showLoader("Opening Book...");
+showLoader();
 
-Reader.setProgress(10);
+Reader.bookUrl=url;
 
-Reader.pdfUrl=pdfUrl;
+Reader.bookTitle=title;
 
-const loadingTask=
+Reader.bookAuthor=author;
 
-pdfjsLib.getDocument({
+DOM.bookTitle.textContent=title||"Untitled Book";
 
-url:pdfUrl,
-
-enableXfa:true,
-
-useSystemFonts:true
-
-});
-
-loadingTask.onProgress=function(progress){
-
-if(progress.total){
-
-const percent=
-
-Math.floor(
-
-(progress.loaded/progress.total)*100
-
-);
-
-Reader.setProgress(percent);
-
-}
-
-};
+DOM.bookAuthor.textContent=author||"Unknown Author";
 
 Reader.pdf=
 
-await loadingTask.promise;
+await pdfjsLib.getDocument({
+
+url:url,
+
+cMapPacked:true,
+
+enableXfa:true
+
+}).promise;
 
 Reader.totalPages=
 
 Reader.pdf.numPages;
 
-Reader.currentPage=1;
+updatePageCounter();
 
-Reader.updatePageCounter();
+restoreLastPage();
 
-Reader.updateBookInfo();
+await renderCurrentPages();
 
-await Reader.renderPage(
+hideLoader();
 
-Reader.currentPage
-
-);
-
-Reader.hideLoader();
-
-Reader.toast("Book Loaded");
+showToast("Book Loaded Successfully");
 
 }
 
@@ -674,57 +354,115 @@ catch(error){
 
 console.error(error);
 
-Reader.showError(
+hideLoader();
 
-"Unable to load PDF."
+showToast("Unable to Load PDF");
+
+}
+
+}
+
+/*==================================================
+            FILE INPUT
+==================================================*/
+
+async function openLocalBook(file){
+
+const fileReader=
+
+new FileReader();
+
+fileReader.onload=
+
+async function(e){
+
+await openBook(
+
+e.target.result,
+
+file.name,
+
+"Local Book"
+
+);
+
+};
+
+fileReader.readAsDataURL(file);
+
+}
+
+/*==================================================
+            RENDER CURRENT
+==================================================*/
+
+async function renderCurrentPages(){
+
+await renderPage(
+
+Reader.currentPage,
+
+DOM.rightCanvas,
+
+DOM.rightContext
+
+);
+
+if(
+
+Reader.currentPage>1
+
+){
+
+await renderPage(
+
+Reader.currentPage-1,
+
+DOM.leftCanvas,
+
+DOM.leftContext
 
 );
 
 }
 
-};
+}
 
 /*==================================================
-                RENDER PAGE
+            RENDER PAGE
 ==================================================*/
 
-Reader.renderPage=async function(pageNumber){
+async function renderPage(
 
-if(
+pageNumber,
 
-Reader.isRendering||
+canvas,
 
-!Reader.pdf
+context
 
 ){
 
-return;
+if(
 
-}
+pageNumber<1||
 
-Reader.isRendering=true;
+pageNumber>
 
-try{
+Reader.totalPages
+
+)return;
+
+Reader.pageRendering=true;
 
 const page=
 
 await Reader.pdf.getPage(pageNumber);
 
-const canvas=
-
-Reader.$("leftCanvas");
-
-const context=
-
-canvas.getContext("2d");
-
 const viewport=
 
 page.getViewport({
 
-scale:Reader.scale,
-
-rotation:Reader.rotation
+scale:Reader.zoom
 
 });
 
@@ -744,436 +482,397 @@ viewport:viewport
 
 }).promise;
 
-Reader.updatePageCounter();
+drawWatermark(context,canvas);
 
-Reader.updateProgress();
+Reader.pageRendering=false;
 
-}
+if(
 
-catch(error){
+Reader.pendingPage!==null
 
-console.error(error);
+){
 
-Reader.showError(
+const pending=
 
-"Unable to render page."
+Reader.pendingPage;
+
+Reader.pendingPage=null;
+
+renderPage(
+
+pending,
+
+canvas,
+
+context
 
 );
 
 }
 
-Reader.isRendering=false;
-
-};
-
-/*==================================================
-            UPDATE PAGE COUNTER
-==================================================*/
-
-Reader.updatePageCounter=function(){
-
-const counter=
-
-Reader.$("pageCounter");
-
-const floating=
-
-Reader.$("floatingPageNumber");
-
-const mobileCurrent=
-
-Reader.$("mobileCurrentPage");
-
-const mobileTotal=
-
-Reader.$("mobileTotalPages");
-
-if(counter){
-
-counter.textContent=
-
-Reader.currentPage+
-
-" / "+
-
-Reader.totalPages;
-
 }
 
-if(floating){
-
-floating.textContent=
-
-Reader.currentPage;
-
-}
-
-if(mobileCurrent){
-
-mobileCurrent.textContent=
-
-Reader.currentPage;
-
-}
-
-if(mobileTotal){
-
-mobileTotal.textContent=
-
-Reader.totalPages;
-
-}
-
-};
-
 /*==================================================
-            UPDATE BOOK INFO
+            QUEUE PAGE
 ==================================================*/
 
-Reader.updateBookInfo=async function(){
-
-if(!Reader.pdf)return;
-
-const metadata=
-
-await Reader.pdf.getMetadata()
-
-.catch(()=>null);
-
-const title=
-
-metadata?.info?.Title||
-
-"Untitled Book";
-
-const author=
-
-metadata?.info?.Author||
-
-"Unknown Author";
-
-Reader.$("bookTitle").textContent=
-
-title;
-
-Reader.$("bookAuthor").textContent=
-
-author;
-
-};
-
-/*==================================================
-                SHOW ERROR
-==================================================*/
-
-Reader.showError=function(message){
-
-const screen=
-
-Reader.$("errorScreen");
-
-const text=
-
-Reader.$("errorMessage");
-
-if(text){
-
-text.textContent=message;
-
-}
-
-if(screen){
-
-screen.classList.add("active");
-
-}
-
-};
-
-/*==================================================
-                JS PART 3 END
-==================================================*/
-/*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 4
-        PAGE NAVIGATION + ZOOM CONTROLS
-==================================================*/
-
-/*==================================================
-                NEXT PAGE
-==================================================*/
-
-Reader.nextPage=async function(){
+function queueRender(page){
 
 if(
 
-!Reader.pdf||
-
-Reader.currentPage>=Reader.totalPages||
-
-Reader.isRendering
+Reader.pageRendering
 
 ){
 
-return;
+Reader.pendingPage=page;
+
+}else{
+
+renderCurrentPages();
 
 }
+
+}
+
+/*==================================================
+            LOADER
+==================================================*/
+
+function showLoader(){
+
+if(DOM.loading)
+
+DOM.loading.style.display="flex";
+
+}
+
+function hideLoader(){
+
+if(DOM.loading)
+
+DOM.loading.style.display="none";
+
+}
+
+/*==================================================
+            PART 2 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 3
+        PAGE NAVIGATION ENGINE
+==================================================*/
+
+/*==================================================
+            NEXT PAGE
+==================================================*/
+
+async function nextPage(){
+
+if(
+
+Reader.currentPage>=Reader.totalPages
+
+)return;
 
 Reader.currentPage++;
 
-await Reader.renderPage(
+saveLastPage();
 
-Reader.currentPage
+updatePageCounter();
 
-);
+updateReadingProgress();
 
-};
+await playPageFlip("next");
 
-/*==================================================
-                PREVIOUS PAGE
-==================================================*/
-
-Reader.previousPage=async function(){
-
-if(
-
-!Reader.pdf||
-
-Reader.currentPage<=1||
-
-Reader.isRendering
-
-){
-
-return;
+queueRender();
 
 }
 
+/*==================================================
+            PREVIOUS PAGE
+==================================================*/
+
+async function previousPage(){
+
+if(
+
+Reader.currentPage<=1
+
+)return;
+
 Reader.currentPage--;
 
-await Reader.renderPage(
+saveLastPage();
 
-Reader.currentPage
+updatePageCounter();
 
-);
+updateReadingProgress();
 
-};
+await playPageFlip("previous");
 
-/*==================================================
-                FIRST PAGE
-==================================================*/
+queueRender();
 
-Reader.firstPage=async function(){
-
-if(!Reader.pdf)return;
-
-Reader.currentPage=1;
-
-await Reader.renderPage(
-
-Reader.currentPage
-
-);
-
-};
+}
 
 /*==================================================
-                LAST PAGE
+            GO TO PAGE
 ==================================================*/
 
-Reader.lastPage=async function(){
-
-if(!Reader.pdf)return;
-
-Reader.currentPage=
-
-Reader.totalPages;
-
-await Reader.renderPage(
-
-Reader.currentPage
-
-);
-
-};
-
-/*==================================================
-                GO TO PAGE
-==================================================*/
-
-Reader.goToPage=async function(page){
+async function goToPage(page){
 
 page=parseInt(page);
 
 if(
 
-isNaN(page)||
+isNaN(page)
+
+)return;
+
+if(
 
 page<1||
 
 page>Reader.totalPages
 
-){
-
-return;
-
-}
+)return;
 
 Reader.currentPage=page;
 
-await Reader.renderPage(
+saveLastPage();
 
-Reader.currentPage
+updatePageCounter();
 
-);
+updateReadingProgress();
 
-};
+await playPageFlip();
 
-/*==================================================
-                ZOOM IN
-==================================================*/
-
-Reader.zoomIn=async function(){
-
-if(
-
-Reader.scale>=5
-
-){
-
-return;
+queueRender();
 
 }
 
-Reader.scale+=0.1;
-
-Reader.scale=
-
-Number(
-
-Reader.scale.toFixed(2)
-
-);
-
-Reader.updateZoom();
-
-await Reader.renderPage(
-
-Reader.currentPage
-
-);
-
-};
-
 /*==================================================
-                ZOOM OUT
+            UPDATE PAGE COUNTER
 ==================================================*/
 
-Reader.zoomOut=async function(){
+function updatePageCounter(){
 
-if(
+if(DOM.pageCounter)
 
-Reader.scale<=0.5
+DOM.pageCounter.textContent=
 
-){
+Reader.currentPage;
 
-return;
+if(DOM.totalPages)
+
+DOM.totalPages.textContent=
+
+Reader.totalPages;
 
 }
 
-Reader.scale-=0.1;
-
-Reader.scale=
-
-Number(
-
-Reader.scale.toFixed(2)
-
-);
-
-Reader.updateZoom();
-
-await Reader.renderPage(
-
-Reader.currentPage
-
-);
-
-};
-
 /*==================================================
-                RESET ZOOM
+            PAGE FLIP
 ==================================================*/
 
-Reader.resetZoom=async function(){
+async function playPageFlip(direction="next"){
 
-Reader.scale=1;
+const layer=
 
-Reader.fitMode="manual";
+document.getElementById(
 
-Reader.updateZoom();
-
-await Reader.renderPage(
-
-Reader.currentPage
+"pageFlipLayer"
 
 );
 
-};
+if(!layer)return;
 
-/*==================================================
-                FIT PAGE
-==================================================*/
+layer.style.display="block";
 
-Reader.fitPage=async function(){
+layer.classList.remove(
 
-Reader.fitMode="page";
+"pageFlipNext",
 
-Reader.scale=1;
-
-Reader.updateZoom();
-
-await Reader.renderPage(
-
-Reader.currentPage
+"pageFlipPrevious"
 
 );
 
-};
+if(direction==="next"){
 
-/*==================================================
-                FIT WIDTH
-==================================================*/
+layer.classList.add(
 
-Reader.fitWidth=async function(){
-
-Reader.fitMode="width";
-
-Reader.scale=1.35;
-
-Reader.updateZoom();
-
-await Reader.renderPage(
-
-Reader.currentPage
+"pageFlipNext"
 
 );
 
-};
+}else{
+
+layer.classList.add(
+
+"pageFlipPrevious"
+
+);
+
+}
+
+await new Promise(resolve=>{
+
+setTimeout(resolve,850);
+
+});
+
+layer.style.display="none";
+
+}
 
 /*==================================================
-                UPDATE ZOOM
+            READING PROGRESS
 ==================================================*/
 
-Reader.updateZoom=function(){
+function updateReadingProgress(){
+
+const progress=
+
+document.getElementById(
+
+"readingProgressFill"
+
+);
+
+const percent=
+
+((Reader.currentPage/
+
+Reader.totalPages)*100)||0;
+
+if(progress){
+
+progress.style.width=
+
+percent+"%";
+
+}
+
+}
+
+/*==================================================
+            FIRST PAGE
+==================================================*/
+
+function firstPage(){
+
+goToPage(1);
+
+}
+
+/*==================================================
+            LAST PAGE
+==================================================*/
+
+function lastPage(){
+
+goToPage(
+
+Reader.totalPages
+
+);
+
+}
+
+/*==================================================
+            PART 3 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 4
+        ZOOM + ROTATION + FULLSCREEN
+==================================================*/
+
+/*==================================================
+            ZOOM IN
+==================================================*/
+
+function zoomIn(){
+
+if(Reader.zoom>=3)return;
+
+Reader.zoom+=0.10;
+
+updateZoomIndicator();
+
+queueRender();
+
+showToast(
+
+"Zoom : "+
+
+Math.round(Reader.zoom*100)+
+
+"%"
+
+);
+
+}
+
+/*==================================================
+            ZOOM OUT
+==================================================*/
+
+function zoomOut(){
+
+if(Reader.zoom<=0.50)return;
+
+Reader.zoom-=0.10;
+
+updateZoomIndicator();
+
+queueRender();
+
+showToast(
+
+"Zoom : "+
+
+Math.round(Reader.zoom*100)+
+
+"%"
+
+);
+
+}
+
+/*==================================================
+            RESET ZOOM
+==================================================*/
+
+function resetZoom(){
+
+Reader.zoom=1;
+
+updateZoomIndicator();
+
+queueRender();
+
+showToast(
+
+"Zoom Reset"
+
+);
+
+}
+
+/*==================================================
+            UPDATE ZOOM
+==================================================*/
+
+function updateZoomIndicator(){
 
 const zoom=
 
-Reader.$("zoomIndicator");
+document.getElementById(
 
-const footer=
+"zoomIndicator"
 
-Reader.$("footerZoom");
+);
 
 if(zoom){
 
@@ -1181,166 +880,99 @@ zoom.textContent=
 
 Math.round(
 
-Reader.scale*100
+Reader.zoom*100
 
 )+"%";
 
 }
 
-if(footer){
+}
 
-footer.textContent=
+/*==================================================
+            ROTATE RIGHT
+==================================================*/
 
-Math.round(
+function rotateRight(){
 
-Reader.scale*100
+Reader.rotation+=90;
 
-)+"%";
+if(
+
+Reader.rotation>=360
+
+){
+
+Reader.rotation=0;
 
 }
 
-};
+applyRotation();
 
-/*==================================================
-                JS PART 4 END
-==================================================*/
-/*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 5
-        THEME + FULLSCREEN + READING MODES
-==================================================*/
+showToast(
 
-/*==================================================
-                TOGGLE THEME
-==================================================*/
-
-Reader.toggleTheme=function(){
-
-const body=document.body;
-
-if(body.classList.contains("light")){
-
-body.classList.remove("light");
-
-Reader.theme="dark";
-
-localStorage.setItem(
-
-"readerTheme",
-
-"dark"
+"Rotate Right"
 
 );
 
-const btn=Reader.$("themeBtn");
-
-if(btn){
-
-btn.textContent="🌙";
-
 }
-
-Reader.toast("Dark Theme");
-
-}
-
-else{
-
-body.classList.add("light");
-
-Reader.theme="light";
-
-localStorage.setItem(
-
-"readerTheme",
-
-"light"
-
-);
-
-const btn=Reader.$("themeBtn");
-
-if(btn){
-
-btn.textContent="☀";
-
-}
-
-Reader.toast("Light Theme");
-
-}
-
-};
 
 /*==================================================
-                DETECT THEME
+            ROTATE LEFT
 ==================================================*/
 
-Reader.detectTheme=function(){
+function rotateLeft(){
 
-const saved=
+Reader.rotation-=90;
 
-localStorage.getItem(
+if(
 
-"readerTheme"
+Reader.rotation<0
 
-);
+){
 
-if(saved==="light"){
-
-document.body.classList.add(
-
-"light"
-
-);
-
-Reader.theme="light";
-
-const btn=Reader.$("themeBtn");
-
-if(btn){
-
-btn.textContent="☀";
+Reader.rotation=270;
 
 }
 
-}
+applyRotation();
 
-};
+showToast(
+
+"Rotate Left"
+
+);
+
+}
 
 /*==================================================
-            RESTORE SETTINGS
+            APPLY ROTATION
 ==================================================*/
 
-Reader.restoreSettings=function(){
+function applyRotation(){
 
-Reader.detectTheme();
+const pages=
 
-const mode=
+document.querySelectorAll(
 
-localStorage.getItem(
-
-"readingMode"
+".bookPage canvas"
 
 );
 
-if(mode){
+pages.forEach(canvas=>{
 
-Reader.readingMode=mode;
+canvas.style.transform=
+
+`rotate(${Reader.rotation}deg)`;
+
+});
 
 }
 
-};
-
 /*==================================================
-            TOGGLE FULLSCREEN
+            FULLSCREEN
 ==================================================*/
 
-Reader.toggleFullscreen=
-
-async function(){
-
-try{
+function toggleFullscreen(){
 
 if(
 
@@ -1348,31 +980,25 @@ if(
 
 ){
 
-await document
-
-.documentElement
+document.documentElement
 
 .requestFullscreen();
 
 Reader.fullscreen=true;
 
-Reader.toast(
+showToast(
 
 "Fullscreen Enabled"
 
 );
 
-}
+}else{
 
-else{
-
-await document
-
-.exitFullscreen();
+document.exitFullscreen();
 
 Reader.fullscreen=false;
 
-Reader.toast(
+showToast(
 
 "Fullscreen Disabled"
 
@@ -1382,232 +1008,92 @@ Reader.toast(
 
 }
 
-catch(error){
-
-console.error(error);
-
-}
-
-};
-
 /*==================================================
-            READING MODES
+            FULLSCREEN EVENT
 ==================================================*/
 
-Reader.setReadingMode=
+document.addEventListener(
 
-function(mode){
+"fullscreenchange",
 
-Reader.readingMode=mode;
+()=>{
 
-localStorage.setItem(
+Reader.fullscreen=
 
-"readingMode",
-
-mode
-
-);
-
-const buttons=[
-
-"singleModeBtn",
-
-"doubleModeBtn",
-
-"autoModeBtn"
-
-];
-
-buttons.forEach(id=>{
-
-const button=
-
-Reader.$(id);
-
-if(button){
-
-button.classList.remove(
-
-"active"
-
-);
-
-}
+!!document.fullscreenElement;
 
 });
 
-switch(mode){
+/*==================================================
+            FIT WIDTH
+==================================================*/
 
-case"single":
+function fitWidth(){
 
-Reader.$(
+Reader.zoom=1.35;
 
-"singleModeBtn"
+updateZoomIndicator();
 
-)?.classList.add(
-
-"active"
-
-);
-
-break;
-
-case"double":
-
-Reader.$(
-
-"doubleModeBtn"
-
-)?.classList.add(
-
-"active"
-
-);
-
-break;
-
-default:
-
-Reader.$(
-
-"autoModeBtn"
-
-)?.classList.add(
-
-"active"
-
-);
+queueRender();
 
 }
 
-Reader.toast(
-
-mode+
-
-" mode enabled"
-
-);
-
-};
-
 /*==================================================
-            BUTTON EVENTS
+            FIT PAGE
 ==================================================*/
 
-Reader.$(
+function fitPage(){
 
-"singleModeBtn"
+Reader.zoom=1;
 
-)?.addEventListener(
+updateZoomIndicator();
 
-"click",
-
-()=>{
-
-Reader.setReadingMode(
-
-"single"
-
-);
+queueRender();
 
 }
 
+/*==================================================
+            PART 4 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 5
+        BOOKMARK SYSTEM
+==================================================*/
+
+/*==================================================
+            LOAD BOOKMARKS
+==================================================*/
+
+function loadBookmarks(){
+
+const data=
+
+localStorage.getItem(
+
+STORAGE.BOOKMARKS
+
 );
 
-Reader.$(
+Reader.bookmarks=
 
-"doubleModeBtn"
+data?
 
-)?.addEventListener(
+JSON.parse(data):[];
 
-"click",
-
-()=>{
-
-Reader.setReadingMode(
-
-"double"
-
-);
+renderBookmarks();
 
 }
 
-);
-
-Reader.$(
-
-"autoModeBtn"
-
-)?.addEventListener(
-
-"click",
-
-()=>{
-
-Reader.setReadingMode(
-
-"auto"
-
-);
-
-}
-
-);
-
 /*==================================================
-                CLOSE READER
+            SAVE BOOKMARKS
 ==================================================*/
 
-Reader.closeReader=function(){
-
-history.back();
-
-};
-
-/*==================================================
-                JS PART 5 END
-==================================================*/
-/*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 6
-        BOOKMARKS + SEARCH + PROGRESS
-==================================================*/
-
-/*==================================================
-                BOOKMARKS
-==================================================*/
-
-Reader.addBookmark=function(){
-
-const page=Reader.currentPage;
-
-if(
-
-Reader.bookmarks.includes(page)
-
-){
-
-Reader.toast(
-
-"Bookmark already exists"
-
-);
-
-return;
-
-}
-
-Reader.bookmarks.push(page);
-
-Reader.bookmarks.sort(
-
-(a,b)=>a-b
-
-);
+function saveBookmarks(){
 
 localStorage.setItem(
 
-"readerBookmarks",
+STORAGE.BOOKMARKS,
 
 JSON.stringify(
 
@@ -1617,57 +1103,113 @@ Reader.bookmarks
 
 );
 
-Reader.renderBookmarks();
+}
 
-Reader.toast(
+/*==================================================
+            ADD BOOKMARK
+==================================================*/
 
-"Bookmark Added"
+function addBookmark(){
+
+const exists=
+
+Reader.bookmarks.find(
+
+item=>
+
+item.page===
+
+Reader.currentPage
 
 );
 
-};
+if(exists){
 
-Reader.loadBookmarks=function(){
+showToast(
 
-const data=
-
-localStorage.getItem(
-
-"readerBookmarks"
+"Bookmark Already Exists"
 
 );
 
-if(data){
+return;
 
-try{
+}
+
+Reader.bookmarks.push({
+
+page:
+
+Reader.currentPage,
+
+title:
+
+Reader.bookTitle,
+
+date:
+
+new Date()
+
+.toLocaleString()
+
+});
+
+saveBookmarks();
+
+renderBookmarks();
+
+showToast(
+
+"Bookmark Saved"
+
+);
+
+}
+
+/*==================================================
+            REMOVE BOOKMARK
+==================================================*/
+
+function removeBookmark(page){
 
 Reader.bookmarks=
 
-JSON.parse(data);
+Reader.bookmarks.filter(
+
+item=>
+
+item.page!==page
+
+);
+
+saveBookmarks();
+
+renderBookmarks();
+
+showToast(
+
+"Bookmark Removed"
+
+);
 
 }
 
-catch{
+/*==================================================
+            RENDER BOOKMARKS
+==================================================*/
 
-Reader.bookmarks=[];
+function renderBookmarks(){
 
-}
+const container=
 
-}
+document.getElementById(
 
-Reader.renderBookmarks();
+"bookmarkContainer"
 
-};
+);
 
-Reader.renderBookmarks=function(){
+if(!container)return;
 
-const list=
-
-Reader.$("bookmarkList");
-
-if(!list)return;
-
-list.innerHTML="";
+container.innerHTML="";
 
 if(
 
@@ -1675,39 +1217,75 @@ Reader.bookmarks.length===0
 
 ){
 
-list.innerHTML=
+container.innerHTML=
 
-"<p>No bookmarks found.</p>";
+"<p>No Bookmarks Yet</p>";
 
 return;
 
 }
 
-Reader.bookmarks.forEach(page=>{
+Reader.bookmarks.forEach(
 
-const item=
+bookmark=>{
 
-document.createElement("div");
+const card=
 
-item.className=
+document.createElement(
 
-"bookmarkItem";
+"div"
 
-item.textContent=
+);
 
-"Page "+page;
+card.className=
 
-item.addEventListener(
+"bookmarkCard";
 
-"click",
+card.innerHTML=
 
-()=>{
+`
 
-Reader.goToPage(page);
+<div>
 
-Reader.closePanel(
+<h4>
 
-"bookmarkPanel"
+Page ${bookmark.page}
+
+</h4>
+
+<p>
+
+${bookmark.date}
+
+</p>
+
+</div>
+
+<div>
+
+<button
+
+onclick="goToBookmark(${bookmark.page})">
+
+Open
+
+</button>
+
+<button
+
+onclick="removeBookmark(${bookmark.page})">
+
+Delete
+
+</button>
+
+</div>
+
+`;
+
+container.appendChild(
+
+card
 
 );
 
@@ -1715,47 +1293,565 @@ Reader.closePanel(
 
 );
 
-list.appendChild(item);
-
-});
-
-};
+}
 
 /*==================================================
-                SEARCH
+            OPEN BOOKMARK
 ==================================================*/
 
-Reader.search=
+function goToBookmark(page){
 
-async function(keyword){
+goToPage(page);
+
+showToast(
+
+"Opened Bookmark"
+
+);
+
+}
+
+/*==================================================
+            TOGGLE BOOKMARK
+==================================================*/
+
+function toggleBookmark(){
+
+const exists=
+
+Reader.bookmarks.find(
+
+b=>
+
+b.page===
+
+Reader.currentPage
+
+);
+
+if(exists){
+
+removeBookmark(
+
+Reader.currentPage
+
+);
+
+}else{
+
+addBookmark();
+
+}
+
+}
+
+/*==================================================
+            CLEAR BOOKMARKS
+==================================================*/
+
+function clearBookmarks(){
 
 if(
 
-!keyword||
+!confirm(
 
-!Reader.pdf
+"Delete all bookmarks?"
 
-){
+)
 
-return;
+)return;
+
+Reader.bookmarks=[];
+
+saveBookmarks();
+
+renderBookmarks();
+
+showToast(
+
+"Bookmarks Cleared"
+
+);
 
 }
 
-keyword=
+/*==================================================
+            LAST PAGE
+==================================================*/
 
-keyword.trim()
+function saveLastPage(){
 
-.toLowerCase();
+localStorage.setItem(
 
-Reader.searchResults=[];
+STORAGE.LASTPAGE,
 
-Reader.searchIndex=0;
-
-Reader.showLoader(
-
-"Searching..."
+Reader.currentPage
 
 );
+
+}
+
+/*==================================================
+            RESTORE LAST PAGE
+==================================================*/
+
+function restoreLastPage(){
+
+const page=
+
+parseInt(
+
+localStorage.getItem(
+
+STORAGE.LASTPAGE
+
+)
+
+);
+
+if(
+
+!isNaN(page)
+
+){
+
+Reader.currentPage=page;
+
+}
+
+}
+
+/*==================================================
+            PART 5 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 6
+        THEME MANAGEMENT SYSTEM
+==================================================*/
+
+/*==================================================
+            LOAD THEME
+==================================================*/
+
+function loadTheme(){
+
+const savedTheme=
+
+localStorage.getItem(
+
+STORAGE.THEME
+
+);
+
+Reader.theme=
+
+savedTheme||
+
+"dark";
+
+applyTheme(
+
+Reader.theme
+
+);
+
+}
+
+/*==================================================
+            APPLY THEME
+==================================================*/
+
+function applyTheme(theme){
+
+Reader.theme=theme;
+
+document.body.classList.remove(
+
+"theme-dark",
+
+"theme-light",
+
+"theme-maroon",
+
+"theme-gold"
+
+);
+
+document.body.classList.add(
+
+"theme-"+theme
+
+);
+
+localStorage.setItem(
+
+STORAGE.THEME,
+
+theme
+
+);
+
+highlightActiveTheme();
+
+showToast(
+
+theme.charAt(0).toUpperCase()+
+
+theme.slice(1)+
+
+" Theme Enabled"
+
+);
+
+}
+
+/*==================================================
+            CHANGE THEME
+==================================================*/
+
+function changeTheme(theme){
+
+applyTheme(theme);
+
+}
+
+/*==================================================
+            ACTIVE THEME CARD
+==================================================*/
+
+function highlightActiveTheme(){
+
+document
+
+.querySelectorAll(
+
+".themeCard"
+
+)
+
+.forEach(card=>{
+
+card.classList.remove(
+
+"active"
+
+);
+
+if(
+
+card.dataset.theme===
+
+Reader.theme
+
+){
+
+card.classList.add(
+
+"active"
+
+);
+
+}
+
+});
+
+}
+
+/*==================================================
+            TOGGLE DARK/LIGHT
+==================================================*/
+
+function toggleTheme(){
+
+if(
+
+Reader.theme==="dark"
+
+){
+
+applyTheme(
+
+"light"
+
+);
+
+}else{
+
+applyTheme(
+
+"dark"
+
+);
+
+}
+
+}
+
+/*==================================================
+            NEXT THEME
+==================================================*/
+
+function nextTheme(){
+
+const themes=[
+
+"dark",
+
+"light",
+
+"maroon",
+
+"gold"
+
+];
+
+let index=
+
+themes.indexOf(
+
+Reader.theme
+
+);
+
+index++;
+
+if(
+
+index>=themes.length
+
+){
+
+index=0;
+
+}
+
+applyTheme(
+
+themes[index]
+
+);
+
+}
+
+/*==================================================
+            PREVIOUS THEME
+==================================================*/
+
+function previousTheme(){
+
+const themes=[
+
+"dark",
+
+"light",
+
+"maroon",
+
+"gold"
+
+];
+
+let index=
+
+themes.indexOf(
+
+Reader.theme
+
+);
+
+index--;
+
+if(
+
+index<0
+
+){
+
+index=
+
+themes.length-1;
+
+}
+
+applyTheme(
+
+themes[index]
+
+);
+
+}
+
+/*==================================================
+            AUTO THEME
+==================================================*/
+
+function autoTheme(){
+
+const hour=
+
+new Date()
+
+.getHours();
+
+if(
+
+hour>=6&&
+
+hour<18
+
+){
+
+applyTheme(
+
+"light"
+
+);
+
+}else{
+
+applyTheme(
+
+"dark"
+
+);
+
+}
+
+}
+
+/*==================================================
+            SYSTEM THEME
+==================================================*/
+
+function followSystemTheme(){
+
+const dark=
+
+window.matchMedia(
+
+"(prefers-color-scheme: dark)"
+
+).matches;
+
+applyTheme(
+
+dark?
+
+"dark":
+
+"light"
+
+);
+
+}
+
+/*==================================================
+            SYSTEM CHANGE
+==================================================*/
+
+window.matchMedia(
+
+"(prefers-color-scheme: dark)"
+
+).addEventListener(
+
+"change",
+
+()=>{
+
+if(
+
+localStorage.getItem(
+
+"followSystem"
+
+)==="true"
+
+){
+
+followSystemTheme();
+
+}
+
+}
+
+);
+
+/*==================================================
+            SAVE OPTION
+==================================================*/
+
+function setFollowSystem(value){
+
+localStorage.setItem(
+
+"followSystem",
+
+value
+
+);
+
+if(value){
+
+followSystemTheme();
+
+}
+
+}
+
+/*==================================================
+            RESET SETTINGS
+==================================================*/
+
+function resetThemeSettings(){
+
+applyTheme(
+
+"dark"
+
+);
+
+localStorage.removeItem(
+
+"followSystem"
+
+);
+
+showToast(
+
+"Theme Reset"
+
+);
+
+}
+
+/*==================================================
+            PART 6 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 7
+        SEARCH SYSTEM
+==================================================*/
+
+/*==================================================
+            SEARCH DATA
+==================================================*/
+
+Reader.searchText=[];
+
+/*==================================================
+            BUILD SEARCH INDEX
+==================================================*/
+
+async function buildSearchIndex(){
+
+Reader.searchText=[];
+
+if(!Reader.pdf)return;
+
+showLoader();
 
 for(
 
@@ -1785,465 +1881,103 @@ item=>item.str
 
 )
 
-.join(" ")
+.join(" ");
 
-.toLowerCase();
+Reader.searchText.push({
 
-if(
+page:i,
 
-content.includes(keyword)
-
-){
-
-Reader.searchResults.push(i);
-
-}
-
-}
-
-Reader.hideLoader();
-
-Reader.renderSearchResults();
-
-if(
-
-Reader.searchResults.length
-
-){
-
-Reader.toast(
-
-Reader.searchResults.length+
-
-" result(s)"
-
-);
-
-}
-
-else{
-
-Reader.toast(
-
-"No results found"
-
-);
-
-}
-
-};
-
-Reader.renderSearchResults=function(){
-
-const results=
-
-Reader.$("searchResults");
-
-if(!results)return;
-
-results.innerHTML="";
-
-Reader.searchResults.forEach(page=>{
-
-const item=
-
-document.createElement("div");
-
-item.className=
-
-"searchResult";
-
-item.textContent=
-
-"Found on Page "+page;
-
-item.onclick=()=>{
-
-Reader.goToPage(page);
-
-Reader.closePanel(
-
-"searchPanel"
-
-);
-
-};
-
-results.appendChild(item);
+text:content.toLowerCase()
 
 });
 
-};
+updateLoadingProgress(
 
-/*==================================================
-                PROGRESS
-==================================================*/
-
-Reader.updateProgress=function(){
-
-const percent=
-
-Reader.totalPages
-
-?Math.round(
-
-(Reader.currentPage/
+(i/
 
 Reader.totalPages)
 
 *100
 
-)
-
-:0;
-
-const fill=
-
-Reader.$("progressFill");
-
-const text=
-
-Reader.$("progressPercent");
-
-if(fill){
-
-fill.style.width=
-
-percent+"%";
-
-}
-
-if(text){
-
-text.textContent=
-
-percent+"%";
-
-}
-
-};
-
-/*==================================================
-            INITIALIZE
-==================================================*/
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
-Reader.loadBookmarks();
-
-}
-
-/*==================================================
-                JS PART 6 END
-==================================================*/
 );
-/*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 7
-        COMMENTS + SHARE + LIKE + STATISTICS
-==================================================*/
+
+}
+
+hideLoader();
+
+}
 
 /*==================================================
-                LOAD STATS
+            SEARCH BOOK
 ==================================================*/
 
-Reader.loadStatistics=function(){
+function searchBook(){
 
-Reader.views=
+const input=
 
-parseInt(
+document.getElementById(
 
-localStorage.getItem("readerViews")||0
+"searchInput"
 
 );
 
-Reader.likes=
+if(!input)return;
 
-parseInt(
+const keyword=
 
-localStorage.getItem("readerLikes")||0
+input.value
 
-);
+.trim()
 
-Reader.comments=
-
-JSON.parse(
-
-localStorage.getItem("readerComments")||"[]"
-
-);
-
-Reader.updateStatistics();
-
-Reader.renderComments();
-
-};
-
-/*==================================================
-                UPDATE STATS
-==================================================*/
-
-Reader.updateStatistics=function(){
-
-const views=
-
-Reader.$("bookViews");
-
-const likes=
-
-Reader.$("bookLikes");
-
-const comments=
-
-Reader.$("bookComments");
-
-const bookmarks=
-
-Reader.$("bookBookmarks");
-
-if(views){
-
-views.textContent=Reader.views;
-
-}
-
-if(likes){
-
-likes.textContent=Reader.likes;
-
-}
-
-if(comments){
-
-comments.textContent=
-
-Reader.comments.length;
-
-}
-
-if(bookmarks){
-
-bookmarks.textContent=
-
-Reader.bookmarks.length;
-
-}
-
-};
-
-/*==================================================
-                LIKE BOOK
-==================================================*/
-
-Reader.likeBook=function(){
+.toLowerCase();
 
 if(
 
-localStorage.getItem(
-
-"readerLiked"
-
-)==="true"
+keyword===""
 
 ){
 
-Reader.toast(
-
-"You already liked this book."
-
-);
+clearSearch();
 
 return;
 
 }
 
-Reader.likes++;
+Reader.searchResults=
 
-localStorage.setItem(
+Reader.searchText.filter(
 
-"readerLikes",
+item=>
 
-Reader.likes
+item.text.includes(
 
-);
-
-localStorage.setItem(
-
-"readerLiked",
-
-"true"
-
-);
-
-Reader.updateStatistics();
-
-Reader.toast(
-
-"Book Liked ❤️"
-
-);
-
-};
-
-/*==================================================
-                SHARE BOOK
-==================================================*/
-
-Reader.shareBook=
-
-async function(){
-
-try{
-
-const url=
-
-window.location.href;
-
-if(
-
-navigator.share
-
-){
-
-await navigator.share({
-
-title:
-
-Reader.$("bookTitle")
-
-?.textContent||
-
-"Book",
-
-text:
-
-"Read this book on Chishti Library",
-
-url:url
-
-});
-
-}
-
-else{
-
-await navigator.clipboard.writeText(
-
-url
-
-);
-
-Reader.toast(
-
-"Link Copied"
-
-);
-
-}
-
-}
-
-catch(error){
-
-console.error(error);
-
-}
-
-};
-
-/*==================================================
-                COMMENTS
-==================================================*/
-
-Reader.addComment=function(){
-
-const name=
-
-Reader.$("commentName")
-
-.value.trim();
-
-const message=
-
-Reader.$("commentMessage")
-
-.value.trim();
-
-if(
-
-!name||
-
-!message
-
-){
-
-Reader.toast(
-
-"Fill all fields"
-
-);
-
-return;
-
-}
-
-Reader.comments.push({
-
-name:name,
-
-message:message,
-
-date:new Date()
-
-.toLocaleString()
-
-});
-
-localStorage.setItem(
-
-"readerComments",
-
-JSON.stringify(
-
-Reader.comments
+keyword
 
 )
 
 );
 
-Reader.$(
+renderSearchResults(
 
-"commentName"
-
-).value="";
-
-Reader.$(
-
-"commentMessage"
-
-).value="";
-
-Reader.renderComments();
-
-Reader.updateStatistics();
-
-Reader.toast(
-
-"Comment Added"
+keyword
 
 );
 
-};
+}
 
-Reader.renderComments=function(){
+/*==================================================
+            RENDER RESULTS
+==================================================*/
+
+function renderSearchResults(keyword){
 
 const container=
 
-Reader.$("commentList");
+document.getElementById(
+
+"searchResults"
+
+);
 
 if(!container)return;
 
@@ -2251,200 +1985,37 @@ container.innerHTML="";
 
 if(
 
-Reader.comments.length===0
+Reader.searchResults.length===0
 
 ){
 
 container.innerHTML=
 
-"<p>No comments yet.</p>";
-
-return;
-
-}
-
-Reader.comments.forEach(comment=>{
-
-const item=
-
-document.createElement("div");
-
-item.className=
-
-"commentItem";
-
-item.innerHTML=
-
 `
 
-<div class="commentUser">
+<div class="searchEmpty">
 
-${comment.name}
-
-</div>
-
-<div class="commentDate">
-
-${comment.date}
-
-</div>
-
-<div class="commentText">
-
-${comment.message}
+No Result Found
 
 </div>
 
 `;
 
-container.appendChild(item);
+showToast(
 
-});
-
-};
-
-/*==================================================
-                EVENTS
-==================================================*/
-
-Reader.$(
-
-"likeBookBtn"
-
-)?.addEventListener(
-
-"click",
-
-Reader.likeBook
+"No Results"
 
 );
-
-Reader.$(
-
-"shareBookBtn"
-
-)?.addEventListener(
-
-"click",
-
-Reader.shareBook
-
-);
-
-Reader.$(
-
-"submitCommentBtn"
-
-)?.addEventListener(
-
-"click",
-
-Reader.addComment
-
-);
-
-/*==================================================
-            INITIALIZE
-==================================================*/
-
-document.addEventListener(
-
-"DOMContentLoaded",
-
-()=>{
-
-Reader.loadStatistics();
-
-});
-
-/*==================================================
-                JS PART 7 END
-==================================================*/
-/*==================================================
-            CHISHTI LIBRARY READER
-                JAVASCRIPT PART 8
-        THUMBNAILS + TOC + SETTINGS + FINAL
-==================================================*/
-
-/*==================================================
-                THUMBNAILS
-==================================================*/
-
-Reader.generateThumbnails=async function(){
-
-const container=
-
-Reader.$("thumbnailContainer");
-
-if(
-
-!container||
-
-!Reader.pdf
-
-){
 
 return;
 
 }
 
-container.innerHTML="";
+Reader.searchResults.forEach(
 
-for(
+result=>{
 
-let pageNumber=1;
-
-pageNumber<=Reader.totalPages;
-
-pageNumber++
-
-){
-
-const page=
-
-await Reader.pdf.getPage(pageNumber);
-
-const viewport=
-
-page.getViewport({
-
-scale:.20
-
-});
-
-const canvas=
-
-document.createElement(
-
-"canvas"
-
-);
-
-const context=
-
-canvas.getContext(
-
-"2d"
-
-);
-
-canvas.width=
-
-viewport.width;
-
-canvas.height=
-
-viewport.height;
-
-await page.render({
-
-canvasContext:context,
-
-viewport:viewport
-
-}).promise;
-
-const item=
+const card=
 
 document.createElement(
 
@@ -2452,83 +2023,298 @@ document.createElement(
 
 );
 
-item.className=
+card.className=
 
-"thumbnail";
+"searchResult";
 
-item.innerHTML=
+const preview=
 
-`<div class="thumbnailNumber">
+result.text
 
-Page ${pageNumber}
+.substring(
 
-</div>`;
+result.text.indexOf(
 
-item.prepend(canvas);
+keyword
 
-item.onclick=()=>{
+)-40,
 
-Reader.goToPage(
+result.text.indexOf(
 
-pageNumber
+keyword
+
+)+80
 
 );
 
+card.innerHTML=
+
+`
+
+<h4>
+
+Page ${result.page}
+
+</h4>
+
+<p>
+
+...${preview}...
+
+</p>
+
+`;
+
+card.onclick=()=>{
+
+goToPage(
+
+result.page
+
+);
+
+closeSearchPanel();
+
 };
 
-container.appendChild(item);
+container.appendChild(
+
+card
+
+);
 
 }
 
-};
+);
+
+showToast(
+
+Reader.searchResults.length+
+
+" Results Found"
+
+);
+
+}
 
 /*==================================================
-                TABLE OF CONTENTS
+            CLEAR SEARCH
 ==================================================*/
 
-Reader.loadTOC=async function(){
+function clearSearch(){
 
-const toc=
+Reader.searchResults=[];
 
-Reader.$("tocList");
+const container=
+
+document.getElementById(
+
+"searchResults"
+
+);
+
+if(container)
+
+container.innerHTML="";
+
+}
+
+/*==================================================
+            SEARCH ENTER
+==================================================*/
+
+document
+
+.getElementById(
+
+"searchInput"
+
+)
+
+?.addEventListener(
+
+"keydown",
+
+e=>{
 
 if(
 
-!toc||
-
-!Reader.pdf
+e.key==="Enter"
 
 ){
 
-return;
+searchBook();
 
 }
 
-toc.innerHTML="";
+}
 
-try{
+);
+
+/*==================================================
+            OPEN PANEL
+==================================================*/
+
+function openSearchPanel(){
+
+document
+
+.getElementById(
+
+"searchPanel"
+
+)
+
+.classList.add(
+
+"active"
+
+);
+
+}
+
+/*==================================================
+            CLOSE PANEL
+==================================================*/
+
+function closeSearchPanel(){
+
+document
+
+.getElementById(
+
+"searchPanel"
+
+)
+
+.classList.remove(
+
+"active"
+
+);
+
+}
+
+/*==================================================
+            HIGHLIGHT RESULT
+==================================================*/
+
+function highlightSearchWord(
+
+text,
+
+word
+
+){
+
+const regex=
+
+new RegExp(
+
+word,
+
+"gi"
+
+);
+
+return text.replace(
+
+regex,
+
+match=>
+
+`<mark>${match}</mark>`
+
+);
+
+}
+
+/*==================================================
+            PART 7 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 8
+        TABLE OF CONTENTS + THUMBNAILS
+==================================================*/
+
+/*==================================================
+            LOAD OUTLINE
+==================================================*/
+
+async function loadTableOfContents(){
+
+if(!Reader.pdf)return;
 
 const outline=
 
 await Reader.pdf.getOutline();
 
-if(
+Reader.toc=[];
 
-!outline||
+if(!outline)return;
 
-outline.length===0
+for(const item of outline){
 
-){
+let page=1;
 
-toc.innerHTML=
+try{
 
-"<p>No table of contents available.</p>";
+const destination=
 
-return;
+await Reader.pdf.getDestination(
+
+item.dest
+
+);
+
+const ref=
+
+destination[0];
+
+page=
+
+(await Reader.pdf.getPageIndex(ref))+1;
+
+}catch(e){
+
+page=1;
 
 }
 
-outline.forEach(item=>{
+Reader.toc.push({
+
+title:item.title,
+
+page:page
+
+});
+
+}
+
+renderTOC();
+
+}
+
+/*==================================================
+            RENDER TOC
+==================================================*/
+
+function renderTOC(){
+
+const container=
+
+document.getElementById(
+
+"tocContainer"
+
+);
+
+if(!container)return;
+
+container.innerHTML="";
+
+Reader.toc.forEach(item=>{
 
 const row=
 
@@ -2542,13 +2328,4020 @@ row.className=
 
 "tocItem";
 
-row.textContent=
+row.innerHTML=
 
-item.title;
+`
 
-toc.appendChild(row);
+<span>${item.title}</span>
+
+<strong>${item.page}</strong>
+
+`;
+
+row.onclick=()=>{
+
+goToPage(item.page);
+
+closeTOC();
+
+};
+
+container.appendChild(row);
 
 });
+
+}
+
+/*==================================================
+            LOAD THUMBNAILS
+==================================================*/
+
+async function generateThumbnails(){
+
+const container=
+
+document.getElementById(
+
+"thumbnailContainer"
+
+);
+
+if(!container)return;
+
+container.innerHTML="";
+
+for(
+
+let i=1;
+
+i<=Reader.totalPages;
+
+i++
+
+){
+
+const page=
+
+await Reader.pdf.getPage(i);
+
+const viewport=
+
+page.getViewport({
+
+scale:0.22
+
+});
+
+const canvas=
+
+document.createElement(
+
+"canvas"
+
+);
+
+const ctx=
+
+canvas.getContext("2d");
+
+canvas.width=
+
+viewport.width;
+
+canvas.height=
+
+viewport.height;
+
+await page.render({
+
+canvasContext:ctx,
+
+viewport:viewport
+
+}).promise;
+
+const card=
+
+document.createElement(
+
+"div"
+
+);
+
+card.className=
+
+"thumbnailCard";
+
+card.innerHTML=
+
+`
+
+<div class="thumbnailNumber">
+
+Page ${i}
+
+</div>
+
+`;
+
+card.prepend(canvas);
+
+card.onclick=()=>{
+
+goToPage(i);
+
+closeThumbnailPanel();
+
+};
+
+container.appendChild(card);
+
+}
+
+}
+
+/*==================================================
+            TOC PANEL
+==================================================*/
+
+function openTOC(){
+
+document
+
+.getElementById(
+
+"tocPanel"
+
+)
+
+.classList.add(
+
+"active"
+
+);
+
+}
+
+function closeTOC(){
+
+document
+
+.getElementById(
+
+"tocPanel"
+
+)
+
+.classList.remove(
+
+"active"
+
+);
+
+}
+
+/*==================================================
+        THUMBNAIL PANEL
+==================================================*/
+
+function openThumbnailPanel(){
+
+document
+
+.getElementById(
+
+"thumbnailSidebar"
+
+)
+
+.classList.add(
+
+"active"
+
+);
+
+}
+
+function closeThumbnailPanel(){
+
+document
+
+.getElementById(
+
+"thumbnailSidebar"
+
+)
+
+.classList.remove(
+
+"active"
+
+);
+
+}
+
+/*==================================================
+            REFRESH
+==================================================*/
+
+async function refreshOutline(){
+
+await loadTableOfContents();
+
+await generateThumbnails();
+
+}
+
+/*==================================================
+            PART 8 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 9
+        LIKE + SHARE SYSTEM
+==================================================*/
+
+/*==================================================
+                LOAD LIKES
+==================================================*/
+
+function loadLikes(){
+
+const likes=
+
+localStorage.getItem(
+
+STORAGE.LIKES
+
+);
+
+Reader.likes=
+
+likes?
+
+parseInt(likes):0;
+
+updateLikeCounter();
+
+}
+
+/*==================================================
+                UPDATE COUNTER
+==================================================*/
+
+function updateLikeCounter(){
+
+const counter=
+
+document.getElementById(
+
+"likeCount"
+
+);
+
+if(counter){
+
+counter.textContent=
+
+Reader.likes;
+
+}
+
+}
+
+/*==================================================
+                LIKE BOOK
+==================================================*/
+
+function likeBook(){
+
+const key=
+
+"liked_"+
+
+Reader.bookTitle;
+
+if(
+
+localStorage.getItem(key)
+
+){
+
+showToast(
+
+"You already liked this book"
+
+);
+
+return;
+
+}
+
+Reader.likes++;
+
+localStorage.setItem(
+
+STORAGE.LIKES,
+
+Reader.likes
+
+);
+
+localStorage.setItem(
+
+key,
+
+true
+
+);
+
+updateLikeCounter();
+
+animateLikeButton();
+
+showToast(
+
+"Thanks for liking ❤️"
+
+);
+
+}
+
+/*==================================================
+            LIKE ANIMATION
+==================================================*/
+
+function animateLikeButton(){
+
+const button=
+
+document.getElementById(
+
+"likeButton"
+
+);
+
+if(!button)return;
+
+button.classList.add(
+
+"pulse"
+
+);
+
+setTimeout(()=>{
+
+button.classList.remove(
+
+"pulse"
+
+);
+
+},600);
+
+}
+
+/*==================================================
+                SHARE BOOK
+==================================================*/
+
+async function shareBook(){
+
+const shareData={
+
+title:
+
+Reader.bookTitle,
+
+text:
+
+"I am reading "+
+
+Reader.bookTitle+
+
+" on Chishti Library",
+
+url:
+
+window.location.href
+
+};
+
+if(
+
+navigator.share
+
+){
+
+try{
+
+await navigator.share(
+
+shareData
+
+);
+
+showToast(
+
+"Book Shared"
+
+);
+
+}
+
+catch(e){}
+
+}else{
+
+copyBookLink();
+
+}
+
+}
+
+/*==================================================
+            COPY LINK
+==================================================*/
+
+function copyBookLink(){
+
+navigator.clipboard
+
+.writeText(
+
+window.location.href
+
+);
+
+showToast(
+
+"Book Link Copied"
+
+);
+
+}
+
+/*==================================================
+            SHARE WHATSAPP
+==================================================*/
+
+function shareWhatsApp(){
+
+const url=
+
+encodeURIComponent(
+
+window.location.href
+
+);
+
+const text=
+
+encodeURIComponent(
+
+"I am reading "+
+
+Reader.bookTitle+
+
+" on Chishti Library"
+
+);
+
+window.open(
+
+`https://wa.me/?text=${text}%20${url}`,
+
+"_blank"
+
+);
+
+}
+
+/*==================================================
+            SHARE FACEBOOK
+==================================================*/
+
+function shareFacebook(){
+
+const url=
+
+encodeURIComponent(
+
+window.location.href
+
+);
+
+window.open(
+
+`https://www.facebook.com/sharer/sharer.php?u=${url}`,
+
+"_blank"
+
+);
+
+}
+
+/*==================================================
+            SHARE TWITTER
+==================================================*/
+
+function shareTwitter(){
+
+const url=
+
+encodeURIComponent(
+
+window.location.href
+
+);
+
+const text=
+
+encodeURIComponent(
+
+Reader.bookTitle
+
+);
+
+window.open(
+
+`https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+
+"_blank"
+
+);
+
+}
+
+/*==================================================
+            SHARE TELEGRAM
+==================================================*/
+
+function shareTelegram(){
+
+const url=
+
+encodeURIComponent(
+
+window.location.href
+
+);
+
+const text=
+
+encodeURIComponent(
+
+Reader.bookTitle
+
+);
+
+window.open(
+
+`https://t.me/share/url?url=${url}&text=${text}`,
+
+"_blank"
+
+);
+
+}
+
+/*==================================================
+            PART 9 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 10
+        FIREBASE COMMENTS SYSTEM
+==================================================*/
+
+/*==================================================
+                FIREBASE CONFIG
+   Replace with your own Firebase project keys
+==================================================*/
+
+const firebaseConfig={
+
+apiKey:"YOUR_API_KEY",
+
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+
+projectId:"YOUR_PROJECT_ID",
+
+storageBucket:"YOUR_PROJECT.appspot.com",
+
+messagingSenderId:"YOUR_SENDER_ID",
+
+appId:"YOUR_APP_ID"
+
+};
+
+/*==================================================
+                INITIALIZE FIREBASE
+==================================================*/
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+/*==================================================
+                LOAD COMMENTS
+==================================================*/
+
+function loadComments(){
+
+if(!Reader.bookTitle)return;
+
+db.collection("comments")
+
+.where(
+
+"book",
+
+"==",
+
+Reader.bookTitle
+
+)
+
+.orderBy(
+
+"time",
+
+"desc"
+
+)
+
+.onSnapshot(snapshot=>{
+
+const container=
+
+document.getElementById(
+
+"commentList"
+
+);
+
+if(!container)return;
+
+container.innerHTML="";
+
+snapshot.forEach(doc=>{
+
+createCommentCard(
+
+doc.data()
+
+);
+
+});
+
+updateCommentCount();
+
+});
+
+}
+
+/*==================================================
+                SUBMIT COMMENT
+==================================================*/
+
+async function submitComment(){
+
+const name=
+
+document
+
+.getElementById(
+
+"commentName"
+
+)
+
+.value
+
+.trim();
+
+const message=
+
+document
+
+.getElementById(
+
+"commentMessage"
+
+)
+
+.value
+
+.trim();
+
+if(
+
+name===""||
+
+message===""
+
+){
+
+showToast(
+
+"Please fill all fields"
+
+);
+
+return;
+
+}
+
+await db
+
+.collection(
+
+"comments"
+
+)
+
+.add({
+
+book:
+
+Reader.bookTitle,
+
+name:name,
+
+message:message,
+
+page:
+
+Reader.currentPage,
+
+time:
+
+firebase.firestore
+
+.FieldValue
+
+.serverTimestamp()
+
+});
+
+document
+
+.getElementById(
+
+"commentMessage"
+
+)
+
+.value="";
+
+showToast(
+
+"Comment Posted"
+
+);
+
+}
+
+/*==================================================
+            CREATE COMMENT
+==================================================*/
+
+function createCommentCard(data){
+
+const container=
+
+document.getElementById(
+
+"commentList"
+
+);
+
+const card=
+
+document.createElement(
+
+"div"
+
+);
+
+card.className=
+
+"commentCard";
+
+const avatar=
+
+data.name
+
+.charAt(0)
+
+.toUpperCase();
+
+card.innerHTML=
+
+`
+
+<div class="commentAvatar">
+
+${avatar}
+
+</div>
+
+<div class="commentRight">
+
+<div class="commentHeader">
+
+<div>
+
+<div class="commentUser">
+
+${data.name}
+
+</div>
+
+<div class="commentDate">
+
+Page ${data.page}
+
+</div>
+
+</div>
+
+</div>
+
+<div class="commentText">
+
+${escapeHTML(data.message)}
+
+</div>
+
+<div class="commentFooter">
+
+<button onclick="likeComment(this)">
+
+👍 Like
+
+</button>
+
+<button onclick="replyComment('${data.name}')">
+
+↩ Reply
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+}
+
+/*==================================================
+            COMMENT COUNT
+==================================================*/
+
+async function updateCommentCount(){
+
+const snap=
+
+await db
+
+.collection(
+
+"comments"
+
+)
+
+.where(
+
+"book",
+
+"==",
+
+Reader.bookTitle
+
+)
+
+.get();
+
+const total=
+
+document.getElementById(
+
+"commentCount"
+
+);
+
+if(total){
+
+total.textContent=
+
+snap.size;
+
+}
+
+}
+
+/*==================================================
+            COMMENT LIKE
+==================================================*/
+
+function likeComment(button){
+
+let count=
+
+Number(
+
+button.dataset.count||0
+
+);
+
+count++;
+
+button.dataset.count=count;
+
+button.innerHTML=
+
+`👍 ${count}`;
+
+}
+
+/*==================================================
+            COMMENT REPLY
+==================================================*/
+
+function replyComment(name){
+
+const input=
+
+document.getElementById(
+
+"commentMessage"
+
+);
+
+input.focus();
+
+input.value=
+
+"@"+name+" ";
+
+}
+
+/*==================================================
+            ESCAPE HTML
+==================================================*/
+
+function escapeHTML(text){
+
+const div=
+
+document.createElement("div");
+
+div.innerText=text;
+
+return div.innerHTML;
+
+}
+
+/*==================================================
+            PART 10 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 11
+        READING HISTORY + RECENT BOOKS
+==================================================*/
+
+/*==================================================
+            LOAD HISTORY
+==================================================*/
+
+function loadHistory(){
+
+const history=
+
+localStorage.getItem(
+
+STORAGE.HISTORY
+
+);
+
+Reader.history=
+
+history?
+
+JSON.parse(history):[];
+
+renderHistory();
+
+}
+
+/*==================================================
+            SAVE HISTORY
+==================================================*/
+
+function saveHistory(){
+
+localStorage.setItem(
+
+STORAGE.HISTORY,
+
+JSON.stringify(
+
+Reader.history
+
+)
+
+);
+
+}
+
+/*==================================================
+            ADD HISTORY
+==================================================*/
+
+function addToHistory(){
+
+if(!Reader.bookTitle)return;
+
+const index=
+
+Reader.history.findIndex(
+
+book=>
+
+book.title===
+
+Reader.bookTitle
+
+);
+
+const item={
+
+title:
+
+Reader.bookTitle,
+
+author:
+
+Reader.bookAuthor,
+
+page:
+
+Reader.currentPage,
+
+total:
+
+Reader.totalPages,
+
+time:
+
+new Date()
+
+.toLocaleString(),
+
+url:
+
+Reader.bookUrl
+
+};
+
+if(index!==-1){
+
+Reader.history.splice(
+
+index,
+
+1
+
+);
+
+}
+
+Reader.history.unshift(
+
+item
+
+);
+
+if(
+
+Reader.history.length>25
+
+){
+
+Reader.history.pop();
+
+}
+
+saveHistory();
+
+renderHistory();
+
+}
+
+/*==================================================
+            RENDER HISTORY
+==================================================*/
+
+function renderHistory(){
+
+const container=
+
+document.getElementById(
+
+"historyContainer"
+
+);
+
+if(!container)return;
+
+container.innerHTML="";
+
+if(
+
+Reader.history.length===0
+
+){
+
+container.innerHTML=
+
+`
+
+<div class="emptyState">
+
+No Reading History
+
+</div>
+
+`;
+
+return;
+
+}
+
+Reader.history.forEach(book=>{
+
+const card=
+
+document.createElement(
+
+"div"
+
+);
+
+card.className=
+
+"historyCard";
+
+card.innerHTML=
+
+`
+
+<div class="historyInfo">
+
+<h3>
+
+${book.title}
+
+</h3>
+
+<p>
+
+${book.author}
+
+</p>
+
+<small>
+
+Page ${book.page}/${book.total}
+
+</small>
+
+</div>
+
+<div class="historyActions">
+
+<button
+
+onclick="resumeBook('${book.url}',${book.page})">
+
+Resume
+
+</button>
+
+</div>
+
+`;
+
+container.appendChild(
+
+card
+
+);
+
+});
+
+}
+
+/*==================================================
+            RESUME BOOK
+==================================================*/
+
+async function resumeBook(
+
+url,
+
+page
+
+){
+
+await openBook(
+
+url
+
+);
+
+Reader.currentPage=
+
+page;
+
+queueRender();
+
+showToast(
+
+"Resumed Reading"
+
+);
+
+}
+
+/*==================================================
+            UPDATE HISTORY
+==================================================*/
+
+function updateHistoryPage(){
+
+const index=
+
+Reader.history.findIndex(
+
+book=>
+
+book.title===
+
+Reader.bookTitle
+
+);
+
+if(index!==-1){
+
+Reader.history[index].page=
+
+Reader.currentPage;
+
+Reader.history[index].time=
+
+new Date()
+
+.toLocaleString();
+
+saveHistory();
+
+}
+
+}
+
+/*==================================================
+            REMOVE HISTORY
+==================================================*/
+
+function removeHistory(title){
+
+Reader.history=
+
+Reader.history.filter(
+
+book=>
+
+book.title!==title
+
+);
+
+saveHistory();
+
+renderHistory();
+
+showToast(
+
+"History Removed"
+
+);
+
+}
+
+/*==================================================
+            CLEAR HISTORY
+==================================================*/
+
+function clearHistory(){
+
+if(
+
+!confirm(
+
+"Clear Reading History?"
+
+)
+
+)return;
+
+Reader.history=[];
+
+saveHistory();
+
+renderHistory();
+
+showToast(
+
+"History Cleared"
+
+);
+
+}
+
+/*==================================================
+            AUTO SAVE
+==================================================*/
+
+setInterval(()=>{
+
+if(
+
+Reader.bookTitle
+
+){
+
+updateHistoryPage();
+
+saveLastPage();
+
+}
+
+},10000);
+
+/*==================================================
+            PART 11 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 12
+        WATERMARK + READING PROGRESS + TOAST
+==================================================*/
+
+/*==================================================
+            DRAW WATERMARK
+==================================================*/
+
+function drawWatermark(context,canvas){
+
+if(!context||!canvas)return;
+
+context.save();
+
+context.translate(
+
+canvas.width/2,
+
+canvas.height/2
+
+);
+
+context.rotate(
+
+-25*Math.PI/180
+
+);
+
+context.font=
+
+"bold 48px Poppins";
+
+context.fillStyle=
+
+"rgba(0,0,0,0.05)";
+
+context.textAlign=
+
+"center";
+
+context.fillText(
+
+Reader.watermark,
+
+0,
+
+0
+
+);
+
+context.restore();
+
+}
+
+/*==================================================
+            UPDATE PROGRESS
+==================================================*/
+
+function updateReadingProgress(){
+
+const percent=
+
+Math.round(
+
+(
+
+Reader.currentPage/
+
+Reader.totalPages
+
+)*100
+
+);
+
+const progress=
+
+document.getElementById(
+
+"readingProgressFill"
+
+);
+
+const text=
+
+document.getElementById(
+
+"readingProgressText"
+
+);
+
+if(progress){
+
+progress.style.width=
+
+percent+"%";
+
+}
+
+if(text){
+
+text.textContent=
+
+percent+"% Completed";
+
+}
+
+}
+
+/*==================================================
+            LOADING PROGRESS
+==================================================*/
+
+function updateLoadingProgress(percent){
+
+const bar=
+
+document.getElementById(
+
+"loadingBar"
+
+);
+
+const text=
+
+document.getElementById(
+
+"loadingPercent"
+
+);
+
+if(bar){
+
+bar.style.width=
+
+percent+"%";
+
+}
+
+if(text){
+
+text.textContent=
+
+Math.round(percent)+"%";
+
+}
+
+}
+
+/*==================================================
+            SHOW TOAST
+==================================================*/
+
+function showToast(message){
+
+const toast=
+
+document.getElementById(
+
+"toast"
+
+);
+
+if(!toast)return;
+
+toast.textContent=
+
+message;
+
+toast.classList.remove(
+
+"show"
+
+);
+
+void toast.offsetWidth;
+
+toast.classList.add(
+
+"show"
+
+);
+
+}
+
+/*==================================================
+            HIDE TOAST
+==================================================*/
+
+function hideToast(){
+
+const toast=
+
+document.getElementById(
+
+"toast"
+
+);
+
+if(!toast)return;
+
+toast.classList.remove(
+
+"show"
+
+);
+
+}
+
+/*==================================================
+            LOADING TEXT
+==================================================*/
+
+function setLoadingText(text){
+
+const loadingText=
+
+document.getElementById(
+
+"loadingText"
+
+);
+
+if(loadingText){
+
+loadingText.textContent=text;
+
+}
+
+}
+
+/*==================================================
+            PAGE INFO
+==================================================*/
+
+function updatePageInfo(){
+
+const pageInfo=
+
+document.getElementById(
+
+"pageInfo"
+
+);
+
+if(!pageInfo)return;
+
+pageInfo.textContent=
+
+`Page ${Reader.currentPage} of ${Reader.totalPages}`;
+
+}
+
+/*==================================================
+            BOOK TITLE
+==================================================*/
+
+function updateBookHeader(){
+
+if(DOM.bookTitle){
+
+DOM.bookTitle.textContent=
+
+Reader.bookTitle;
+
+}
+
+if(DOM.bookAuthor){
+
+DOM.bookAuthor.textContent=
+
+Reader.bookAuthor;
+
+}
+
+}
+
+/*==================================================
+            READER STATUS
+==================================================*/
+
+function updateReaderStatus(){
+
+updatePageCounter();
+
+updatePageInfo();
+
+updateReadingProgress();
+
+updateBookHeader();
+
+}
+
+/*==================================================
+            PAGE CHANGE
+==================================================*/
+
+function onPageChanged(){
+
+updateReaderStatus();
+
+addToHistory();
+
+saveLastPage();
+
+}
+
+/*==================================================
+            BOOK LOADED
+==================================================*/
+
+function onBookLoaded(){
+
+hideLoader();
+
+updateReaderStatus();
+
+loadBookmarks();
+
+loadLikes();
+
+loadComments();
+
+buildSearchIndex();
+
+generateThumbnails();
+
+loadTableOfContents();
+
+showToast(
+
+"Book Ready to Read"
+
+);
+
+}
+
+/*==================================================
+            PART 12 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 13
+        SETTINGS + SIDEBARS + UI CONTROLS
+==================================================*/
+
+/*==================================================
+            SETTINGS PANEL
+==================================================*/
+
+function openSettings(){
+
+const panel=
+
+document.getElementById(
+
+"settingsPanel"
+
+);
+
+if(panel){
+
+panel.classList.add(
+
+"active"
+
+);
+
+}
+
+}
+
+/*==================================================
+            CLOSE SETTINGS
+==================================================*/
+
+function closeSettings(){
+
+const panel=
+
+document.getElementById(
+
+"settingsPanel"
+
+);
+
+if(panel){
+
+panel.classList.remove(
+
+"active"
+
+);
+
+}
+
+}
+
+/*==================================================
+            TOGGLE SETTINGS
+==================================================*/
+
+function toggleSettings(){
+
+const panel=
+
+document.getElementById(
+
+"settingsPanel"
+
+);
+
+if(!panel)return;
+
+panel.classList.toggle(
+
+"active"
+
+);
+
+}
+
+/*==================================================
+            SIDEBAR
+==================================================*/
+
+function openSidebar(id){
+
+closeAllPanels();
+
+const panel=
+
+document.getElementById(id);
+
+if(panel){
+
+panel.classList.add(
+
+"active"
+
+);
+
+}
+
+}
+
+/*==================================================
+            CLOSE SIDEBAR
+==================================================*/
+
+function closeSidebar(id){
+
+const panel=
+
+document.getElementById(id);
+
+if(panel){
+
+panel.classList.remove(
+
+"active"
+
+);
+
+}
+
+}
+
+/*==================================================
+            CLOSE ALL PANELS
+==================================================*/
+
+function closeAllPanels(){
+
+document
+
+.querySelectorAll(
+
+".sidePanel,.activePanel,#settingsPanel,#commentPanel,#thumbnailSidebar"
+
+)
+
+.forEach(panel=>{
+
+panel.classList.remove(
+
+"active"
+
+);
+
+});
+
+}
+
+/*==================================================
+            ESC KEY
+==================================================*/
+
+document.addEventListener(
+
+"keydown",
+
+event=>{
+
+if(
+
+event.key==="Escape"
+
+){
+
+closeAllPanels();
+
+}
+
+});
+
+/*==================================================
+            CLICK OUTSIDE
+==================================================*/
+
+document.addEventListener(
+
+"click",
+
+event=>{
+
+const panels=
+
+document.querySelectorAll(
+
+".sidePanel,#settingsPanel,#commentPanel"
+
+);
+
+panels.forEach(panel=>{
+
+if(
+
+panel.classList.contains("active") &&
+
+!panel.contains(event.target) &&
+
+!event.target.closest("[data-panel]")
+
+){
+
+panel.classList.remove(
+
+"active"
+
+);
+
+}
+
+});
+
+});
+
+/*==================================================
+            AUTO HIDE HEADER
+==================================================*/
+
+let headerTimer;
+
+function showHeader(){
+
+const header=
+
+document.getElementById(
+
+"readerHeader"
+
+);
+
+if(!header)return;
+
+header.style.opacity="1";
+
+clearTimeout(
+
+headerTimer
+
+);
+
+headerTimer=
+
+setTimeout(()=>{
+
+header.style.opacity=".15";
+
+},4000);
+
+}
+
+document.addEventListener(
+
+"mousemove",
+
+showHeader
+
+);
+
+/*==================================================
+            READER MODE
+==================================================*/
+
+function toggleReaderMode(){
+
+document.body.classList.toggle(
+
+"readingMode"
+
+);
+
+showToast(
+
+document.body.classList.contains(
+
+"readingMode"
+
+)
+
+?
+
+"Reading Mode Enabled"
+
+:
+
+"Reading Mode Disabled"
+
+);
+
+}
+
+/*==================================================
+            CURSOR MODE
+==================================================*/
+
+let cursorHidden=false;
+
+function toggleCursor(){
+
+cursorHidden=!cursorHidden;
+
+document.body.style.cursor=
+
+cursorHidden
+
+?
+
+"none"
+
+:
+
+"default";
+
+}
+
+/*==================================================
+            PART 13 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 14
+    REALISTIC PAGE FLIP + TOUCH GESTURES
+==================================================*/
+
+/*==================================================
+            PAGE FLIP SOUND
+==================================================*/
+
+const flipSound=new Audio(
+
+"assets/audio/page-flip.mp3"
+
+);
+
+flipSound.preload="auto";
+
+/*==================================================
+            PLAY SOUND
+==================================================*/
+
+function playFlipSound(){
+
+flipSound.currentTime=0;
+
+flipSound.play()
+
+.catch(()=>{});
+
+}
+
+/*==================================================
+            REAL PAGE FLIP
+==================================================*/
+
+async function realPageFlip(direction="next"){
+
+const page=
+
+document.getElementById(
+
+"flipPage"
+
+);
+
+if(!page)return;
+
+page.style.display="block";
+
+page.style.transition=
+
+"none";
+
+page.style.transform=
+
+direction==="next"
+
+?
+
+"rotateY(0deg)"
+
+:
+
+"rotateY(-180deg)";
+
+requestAnimationFrame(()=>{
+
+page.style.transition=
+
+"transform .9s cubic-bezier(.22,.61,.36,1)";
+
+page.style.transform=
+
+direction==="next"
+
+?
+
+"rotateY(-180deg)"
+
+:
+
+"rotateY(0deg)";
+
+});
+
+playFlipSound();
+
+await new Promise(resolve=>{
+
+setTimeout(resolve,900);
+
+});
+
+page.style.display="none";
+
+}
+
+/*==================================================
+            NEXT PAGE
+==================================================*/
+
+async function flipNext(){
+
+if(
+
+Reader.currentPage>=Reader.totalPages
+
+)return;
+
+await realPageFlip("next");
+
+Reader.currentPage++;
+
+onPageChanged();
+
+queueRender();
+
+}
+
+/*==================================================
+            PREVIOUS PAGE
+==================================================*/
+
+async function flipPrevious(){
+
+if(
+
+Reader.currentPage<=1
+
+)return;
+
+await realPageFlip("previous");
+
+Reader.currentPage--;
+
+onPageChanged();
+
+queueRender();
+
+}
+
+/*==================================================
+            TOUCH GESTURES
+==================================================*/
+
+let touchStartX=0;
+
+let touchEndX=0;
+
+/*==================================================
+            TOUCH START
+==================================================*/
+
+DOM.viewer?.addEventListener(
+
+"touchstart",
+
+e=>{
+
+touchStartX=
+
+e.changedTouches[0].clientX;
+
+}
+
+);
+
+/*==================================================
+            TOUCH END
+==================================================*/
+
+DOM.viewer?.addEventListener(
+
+"touchend",
+
+e=>{
+
+touchEndX=
+
+e.changedTouches[0].clientX;
+
+handleSwipe();
+
+}
+
+);
+
+/*==================================================
+            HANDLE SWIPE
+==================================================*/
+
+function handleSwipe(){
+
+const distance=
+
+touchEndX-touchStartX;
+
+if(distance<-80){
+
+flipNext();
+
+}
+
+else if(distance>80){
+
+flipPrevious();
+
+}
+
+}
+
+/*==================================================
+            MOUSE DRAG PAGE
+==================================================*/
+
+let dragging=false;
+
+let dragStart=0;
+
+DOM.viewer?.addEventListener(
+
+"mousedown",
+
+e=>{
+
+dragging=true;
+
+dragStart=e.clientX;
+
+}
+
+);
+
+document.addEventListener(
+
+"mouseup",
+
+e=>{
+
+if(!dragging)return;
+
+dragging=false;
+
+const diff=
+
+e.clientX-dragStart;
+
+if(diff<-120){
+
+flipNext();
+
+}
+
+else if(diff>120){
+
+flipPrevious();
+
+}
+
+});
+
+/*==================================================
+            PAGE CORNER EFFECT
+==================================================*/
+
+DOM.viewer?.addEventListener(
+
+"mousemove",
+
+e=>{
+
+const rect=
+
+DOM.viewer.getBoundingClientRect();
+
+const x=
+
+e.clientX-rect.left;
+
+const width=
+
+rect.width;
+
+const page=
+
+document.getElementById(
+
+"flipPage"
+
+);
+
+if(!page)return;
+
+if(x>width-80){
+
+page.style.boxShadow=
+
+"-20px 0 60px rgba(0,0,0,.35)";
+
+}
+
+else{
+
+page.style.boxShadow="none";
+
+}
+
+});
+
+/*==================================================
+            AUTO PAGE FLIP
+==================================================*/
+
+let autoFlipTimer=null;
+
+function startAutoFlip(seconds=10){
+
+stopAutoFlip();
+
+autoFlipTimer=
+
+setInterval(()=>{
+
+if(
+
+Reader.currentPage<
+
+Reader.totalPages
+
+){
+
+flipNext();
+
+}else{
+
+stopAutoFlip();
+
+}
+
+},seconds*1000);
+
+showToast(
+
+"Auto Reading Started"
+
+);
+
+}
+
+function stopAutoFlip(){
+
+clearInterval(
+
+autoFlipTimer
+
+);
+
+showToast(
+
+"Auto Reading Stopped"
+
+);
+
+}
+
+/*==================================================
+            PART 14 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 15
+      DOWNLOAD + PRINT + FAVORITES SYSTEM
+==================================================*/
+
+/*==================================================
+            FAVORITES
+==================================================*/
+
+Reader.favorites=[];
+
+/*==================================================
+            LOAD FAVORITES
+==================================================*/
+
+function loadFavorites(){
+
+const data=
+
+localStorage.getItem(
+
+"chishtiFavorites"
+
+);
+
+Reader.favorites=
+
+data?
+
+JSON.parse(data):[];
+
+updateFavoriteButton();
+
+}
+
+/*==================================================
+            SAVE FAVORITES
+==================================================*/
+
+function saveFavorites(){
+
+localStorage.setItem(
+
+"chishtiFavorites",
+
+JSON.stringify(
+
+Reader.favorites
+
+)
+
+);
+
+}
+
+/*==================================================
+            TOGGLE FAVORITE
+==================================================*/
+
+function toggleFavorite(){
+
+if(!Reader.bookTitle)return;
+
+const index=
+
+Reader.favorites.findIndex(
+
+book=>
+
+book.title===
+
+Reader.bookTitle
+
+);
+
+if(index===-1){
+
+Reader.favorites.push({
+
+title:Reader.bookTitle,
+
+author:Reader.bookAuthor,
+
+url:Reader.bookUrl,
+
+date:new Date().toLocaleString()
+
+});
+
+showToast(
+
+"Book Added To Favorites ❤️"
+
+);
+
+}else{
+
+Reader.favorites.splice(
+
+index,
+
+1
+
+);
+
+showToast(
+
+"Book Removed"
+
+);
+
+}
+
+saveFavorites();
+
+updateFavoriteButton();
+
+renderFavorites();
+
+}
+
+/*==================================================
+            UPDATE BUTTON
+==================================================*/
+
+function updateFavoriteButton(){
+
+const button=
+
+document.getElementById(
+
+"favoriteButton"
+
+);
+
+if(!button)return;
+
+const found=
+
+Reader.favorites.find(
+
+b=>b.title===Reader.bookTitle
+
+);
+
+button.classList.toggle(
+
+"active",
+
+!!found
+
+);
+
+}
+
+/*==================================================
+            RENDER FAVORITES
+==================================================*/
+
+function renderFavorites(){
+
+const container=
+
+document.getElementById(
+
+"favoriteContainer"
+
+);
+
+if(!container)return;
+
+container.innerHTML="";
+
+Reader.favorites.forEach(book=>{
+
+const card=
+
+document.createElement(
+
+"div"
+
+);
+
+card.className=
+
+"favoriteCard";
+
+card.innerHTML=
+
+`
+
+<h3>${book.title}</h3>
+
+<p>${book.author}</p>
+
+<button onclick="resumeBook('${book.url}',1)">
+
+Open
+
+</button>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+/*==================================================
+            DOWNLOAD PDF
+==================================================*/
+
+function downloadBook(){
+
+if(!Reader.bookUrl){
+
+showToast(
+
+"No Book Loaded"
+
+);
+
+return;
+
+}
+
+const link=
+
+document.createElement(
+
+"a"
+
+);
+
+link.href=
+
+Reader.bookUrl;
+
+link.download=
+
+Reader.bookTitle+".pdf";
+
+document.body.appendChild(
+
+link
+
+);
+
+link.click();
+
+document.body.removeChild(
+
+link
+
+);
+
+showToast(
+
+"Download Started"
+
+);
+
+}
+
+/*==================================================
+            PRINT PDF
+==================================================*/
+
+function printBook(){
+
+if(!Reader.bookUrl){
+
+showToast(
+
+"No Book Loaded"
+
+);
+
+return;
+
+}
+
+const win=
+
+window.open(
+
+Reader.bookUrl,
+
+"_blank"
+
+);
+
+if(win){
+
+win.onload=()=>{
+
+win.print();
+
+};
+
+}
+
+}
+
+/*==================================================
+            COPY BOOK INFO
+==================================================*/
+
+function copyBookInfo(){
+
+const text=
+
+`
+
+Book : ${Reader.bookTitle}
+
+Author : ${Reader.bookAuthor}
+
+Pages : ${Reader.totalPages}
+
+`;
+
+navigator.clipboard
+
+.writeText(text);
+
+showToast(
+
+"Book Information Copied"
+
+);
+
+}
+
+/*==================================================
+            EXPORT BOOKMARKS
+==================================================*/
+
+function exportBookmarks(){
+
+const file=
+
+new Blob(
+
+[
+
+JSON.stringify(
+
+Reader.bookmarks,
+
+null,
+
+2
+
+)
+
+],
+
+{
+
+type:"application/json"
+
+}
+
+);
+
+const url=
+
+URL.createObjectURL(file);
+
+const a=
+
+document.createElement(
+
+"a"
+
+);
+
+a.href=url;
+
+a.download=
+
+"bookmarks.json";
+
+a.click();
+
+URL.revokeObjectURL(
+
+url
+
+);
+
+}
+
+/*==================================================
+            IMPORT BOOKMARKS
+==================================================*/
+
+function importBookmarks(file){
+
+const reader=
+
+new FileReader();
+
+reader.onload=function(e){
+
+Reader.bookmarks=
+
+JSON.parse(
+
+e.target.result
+
+);
+
+saveBookmarks();
+
+renderBookmarks();
+
+showToast(
+
+"Bookmarks Imported"
+
+);
+
+};
+
+reader.readAsText(file);
+
+}
+
+/*==================================================
+            PART 15 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 16
+        PDF CACHE + FAST LOADING SYSTEM
+==================================================*/
+
+/*==================================================
+            PDF CACHE STORAGE
+==================================================*/
+
+const PDFCache={
+
+pages:{},
+
+thumbnails:{},
+
+text:{}
+
+};
+
+
+/*==================================================
+            CACHE PAGE
+==================================================*/
+
+async function cachePage(pageNumber){
+
+if(PDFCache.pages[pageNumber]){
+
+return PDFCache.pages[pageNumber];
+
+}
+
+const page=
+
+await Reader.pdf.getPage(
+
+pageNumber
+
+);
+
+
+PDFCache.pages[pageNumber]=page;
+
+
+return page;
+
+}
+
+
+/*==================================================
+            FAST PAGE RENDER
+==================================================*/
+
+async function fastRenderPage(
+
+pageNumber,
+
+canvas,
+
+context
+
+){
+
+try{
+
+const page=
+
+await cachePage(
+
+pageNumber
+
+);
+
+
+const viewport=
+
+page.getViewport({
+
+scale:Reader.zoom
+
+});
+
+
+canvas.width=
+
+viewport.width;
+
+
+canvas.height=
+
+viewport.height;
+
+
+await page.render({
+
+canvasContext:context,
+
+viewport:viewport,
+
+intent:"display"
+
+}).promise;
+
+
+drawWatermark(
+
+context,
+
+canvas
+
+);
+
+
+}
+
+catch(error){
+
+console.log(
+
+"Render Error",
+
+error
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            PRELOAD NEXT PAGES
+==================================================*/
+
+async function preloadPages(){
+
+if(!Reader.pdf)return;
+
+
+const pages=[
+
+Reader.currentPage+1,
+
+Reader.currentPage+2,
+
+Reader.currentPage-1
+
+];
+
+
+for(const page of pages){
+
+if(
+
+page>=1 &&
+
+page<=Reader.totalPages
+
+){
+
+await cachePage(page);
+
+}
+
+}
+
+}
+
+
+/*==================================================
+            SMART READER LOADING
+==================================================*/
+
+async function smartLoadBook(){
+
+showLoader();
+
+
+setLoadingText(
+
+"Preparing Book..."
+
+);
+
+
+await renderCurrentPages();
+
+
+updateLoadingProgress(
+
+70
+
+);
+
+
+await preloadPages();
+
+
+updateLoadingProgress(
+
+100
+
+);
+
+
+hideLoader();
+
+
+onBookLoaded();
+
+
+}
+
+
+/*==================================================
+            CLEAR CACHE
+==================================================*/
+
+function clearPDFCache(){
+
+PDFCache.pages={};
+
+PDFCache.thumbnails={};
+
+PDFCache.text={};
+
+
+showToast(
+
+"Cache Cleared"
+
+);
+
+}
+
+
+/*==================================================
+            MEMORY CONTROL
+==================================================*/
+
+function limitCache(){
+
+const keys=
+
+Object.keys(
+
+PDFCache.pages
+
+);
+
+
+if(keys.length>15){
+
+delete PDFCache.pages[
+
+keys[0]
+
+];
+
+}
+
+}
+
+
+/*==================================================
+            AUTO CACHE CLEAN
+==================================================*/
+
+setInterval(()=>{
+
+limitCache();
+
+},30000);
+
+
+/*==================================================
+            PDF QUALITY
+==================================================*/
+
+function setPDFQuality(level){
+
+switch(level){
+
+case "low":
+
+Reader.zoom=.8;
+
+break;
+
+
+case "medium":
+
+Reader.zoom=1;
+
+break;
+
+
+case "high":
+
+Reader.zoom=1.5;
+
+break;
+
+
+case "ultra":
+
+Reader.zoom=2;
+
+break;
+
+}
+
+
+updateZoomIndicator();
+
+queueRender();
+
+showToast(
+
+"Quality Updated"
+
+);
+
+}
+
+
+/*==================================================
+            CONNECTION CHECK
+==================================================*/
+
+function checkConnection(){
+
+if(
+
+navigator.onLine
+
+){
+
+return true;
+
+}
+
+
+showToast(
+
+"No Internet Connection"
+
+);
+
+
+return false;
+
+}
+
+
+/*==================================================
+            ONLINE EVENTS
+==================================================*/
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+showToast(
+
+"Offline Mode"
+
+);
+
+});
+
+
+window.addEventListener(
+
+"online",
+
+()=>{
+
+showToast(
+
+"Connection Restored"
+
+);
+
+});
+
+
+/*==================================================
+            PART 16 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 17
+        BOOK INFO + METADATA + FAVORITES
+==================================================*/
+
+/*==================================================
+            BOOK METADATA
+==================================================*/
+
+Reader.metadata={
+
+title:"",
+
+author:"",
+
+subject:"",
+
+keywords:"",
+
+creator:"",
+
+pages:0
+
+};
+
+/*==================================================
+            LOAD METADATA
+==================================================*/
+
+async function loadBookMetadata(){
+
+if(!Reader.pdf)return;
+
+try{
+
+const meta=
+
+await Reader.pdf.getMetadata();
+
+const info=
+
+meta.info;
+
+Reader.metadata={
+
+title:
+
+info.Title||Reader.bookTitle,
+
+author:
+
+info.Author||Reader.bookAuthor,
+
+subject:
+
+info.Subject||"",
+
+keywords:
+
+info.Keywords||"",
+
+creator:
+
+info.Creator||"",
+
+pages:
+
+Reader.totalPages
+
+};
+
+updateMetadataUI();
+
+}
+
+catch(error){
+
+console.log(
+
+"Metadata unavailable"
+
+);
+
+}
+
+}
+
+/*==================================================
+            UPDATE METADATA UI
+==================================================*/
+
+function updateMetadataUI(){
+
+const title=
+
+document.getElementById(
+
+"metaTitle"
+
+);
+
+const author=
+
+document.getElementById(
+
+"metaAuthor"
+
+);
+
+const pages=
+
+document.getElementById(
+
+"metaPages"
+
+);
+
+if(title)
+
+title.textContent=
+
+Reader.metadata.title;
+
+if(author)
+
+author.textContent=
+
+Reader.metadata.author;
+
+if(pages)
+
+pages.textContent=
+
+Reader.metadata.pages+
+
+" Pages";
+
+}
+
+/*==================================================
+            FAVORITE BOOKS
+==================================================*/
+
+const FAVORITES_KEY=
+
+"chishtiFavorites";
+
+
+function loadFavorites(){
+
+const data=
+
+localStorage.getItem(
+
+FAVORITES_KEY
+
+);
+
+Reader.favorites=
+
+data?
+
+JSON.parse(data):[];
+
+}
+
+
+/*==================================================
+            ADD FAVORITE
+==================================================*/
+
+function addFavorite(){
+
+loadFavorites();
+
+const exists=
+
+Reader.favorites.some(
+
+book=>
+
+book.title===Reader.bookTitle
+
+);
+
+if(exists){
+
+showToast(
+
+"Already in Favorites"
+
+);
+
+return;
+
+}
+
+Reader.favorites.push({
+
+title:
+
+Reader.bookTitle,
+
+author:
+
+Reader.bookAuthor,
+
+url:
+
+Reader.bookUrl,
+
+date:
+
+new Date()
+
+.toLocaleString()
+
+});
+
+localStorage.setItem(
+
+FAVORITES_KEY,
+
+JSON.stringify(
+
+Reader.favorites
+
+)
+
+);
+
+showToast(
+
+"Added to Favorites ⭐"
+
+);
+
+}
+
+
+/*==================================================
+            REMOVE FAVORITE
+==================================================*/
+
+function removeFavorite(title){
+
+loadFavorites();
+
+Reader.favorites=
+
+Reader.favorites.filter(
+
+book=>
+
+book.title!==title
+
+);
+
+localStorage.setItem(
+
+FAVORITES_KEY,
+
+JSON.stringify(
+
+Reader.favorites
+
+)
+
+);
+
+renderFavorites();
+
+}
+
+
+/*==================================================
+            RENDER FAVORITES
+==================================================*/
+
+function renderFavorites(){
+
+const box=
+
+document.getElementById(
+
+"favoritesContainer"
+
+);
+
+if(!box)return;
+
+loadFavorites();
+
+box.innerHTML="";
+
+Reader.favorites.forEach(book=>{
+
+const item=
+
+document.createElement(
+
+"div"
+
+);
+
+item.className=
+
+"favoriteCard";
+
+item.innerHTML=
+
+`
+
+<h3>${book.title}</h3>
+
+<p>${book.author}</p>
+
+<button>
+
+Open
+
+</button>
+
+`;
+
+item.querySelector(
+
+"button"
+
+)
+
+.onclick=()=>{
+
+openBook(
+
+book.url,
+
+book.title,
+
+book.author
+
+);
+
+};
+
+box.appendChild(item);
+
+});
+
+}
+
+
+/*==================================================
+            CHECK FAVORITE
+==================================================*/
+
+function isFavorite(){
+
+loadFavorites();
+
+return Reader.favorites.some(
+
+book=>
+
+book.title===Reader.bookTitle
+
+);
+
+}
+
+
+/*==================================================
+            INIT METADATA
+==================================================*/
+
+async function initializeBookInfo(){
+
+await loadBookMetadata();
+
+loadFavorites();
+
+renderFavorites();
+
+}
+
+
+/*==================================================
+            PART 17 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 18
+        PDF CACHE + FAST LOADING ENGINE
+==================================================*/
+
+/*==================================================
+            PDF CACHE STORAGE
+==================================================*/
+
+const PDFCache={
+
+pages:{},
+
+enabled:true
+
+};
+
+
+/*==================================================
+            CACHE PAGE
+==================================================*/
+
+async function cachePage(pageNumber){
+
+if(!Reader.pdf)return;
+
+if(
+
+PDFCache.pages[pageNumber]
+
+)return;
+
+
+const page=
+
+await Reader.pdf.getPage(
+
+pageNumber
+
+);
+
+
+PDFCache.pages[pageNumber]=page;
+
+
+}
+
+
+/*==================================================
+            PRELOAD NEXT PAGES
+==================================================*/
+
+async function preloadPages(){
+
+if(!Reader.pdf)return;
+
+
+const nextPages=[
+
+Reader.currentPage+1,
+
+Reader.currentPage+2,
+
+Reader.currentPage+3
+
+];
+
+
+for(const page of nextPages){
+
+if(
+
+page<=Reader.totalPages
+
+){
+
+await cachePage(page);
+
+}
+
+}
+
+}
+
+
+/*==================================================
+            FAST GET PAGE
+==================================================*/
+
+async function getFastPage(number){
+
+if(
+
+PDFCache.pages[number]
+
+){
+
+return PDFCache.pages[number];
+
+}
+
+
+const page=
+
+await Reader.pdf.getPage(number);
+
+
+PDFCache.pages[number]=page;
+
+
+return page;
+
+}
+
+
+/*==================================================
+            CLEAR CACHE
+==================================================*/
+
+function clearPDFCache(){
+
+PDFCache.pages={};
+
+showToast(
+
+"Cache Cleared"
+
+);
+
+}
+
+
+/*==================================================
+            SMART RENDER
+==================================================*/
+
+async function fastRenderPage(
+
+number,
+
+canvas,
+
+context
+
+){
+
+try{
+
+
+const page=
+
+await getFastPage(number);
+
+
+const viewport=
+
+page.getViewport({
+
+scale:Reader.zoom
+
+});
+
+
+canvas.width=
+
+viewport.width;
+
+
+canvas.height=
+
+viewport.height;
+
+
+await page.render({
+
+canvasContext:context,
+
+viewport:viewport
+
+}).promise;
+
+
+drawWatermark(
+
+context,
+
+canvas
+
+);
+
+
+}
+
+catch(error){
+
+console.error(
+
+"Render Error",
+
+error
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            BACKGROUND LOADING
+==================================================*/
+
+function startBackgroundLoader(){
+
+setInterval(()=>{
+
+
+if(
+
+Reader.pdf
+
+){
+
+preloadPages();
+
+}
+
+
+},5000);
+
+}
+
+
+/*==================================================
+            MEMORY CONTROL
+==================================================*/
+
+function optimizeMemory(){
+
+const keys=
+
+Object.keys(
+
+PDFCache.pages
+
+);
+
+
+if(
+
+keys.length>15
+
+){
+
+delete PDFCache.pages[
+
+keys[0]
+
+];
+
+}
+
+}
+
+
+/*==================================================
+            DEVICE SPEED CHECK
+==================================================*/
+
+function detectDeviceSpeed(){
+
+const memory=
+
+navigator.deviceMemory||4;
+
+
+if(memory<=2){
+
+Reader.zoom=.8;
+
+}
+
+else if(memory>=8){
+
+Reader.zoom=1.2;
+
+}
+
+}
+
+
+/*==================================================
+            FAST START
+==================================================*/
+
+function enableFastLoading(){
+
+detectDeviceSpeed();
+
+startBackgroundLoader();
+
+
+setInterval(()=>{
+
+optimizeMemory();
+
+},15000);
+
+}
+
+
+/*==================================================
+            PART 18 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 19
+        OFFLINE MODE + CACHE SYSTEM
+==================================================*/
+
+/*==================================================
+            CACHE SETTINGS
+==================================================*/
+
+const CACHE_NAME=
+
+"chishti-library-books-v3";
+
+
+/*==================================================
+            SAVE BOOK OFFLINE
+==================================================*/
+
+async function saveBookOffline(){
+
+if(!Reader.bookUrl){
+
+showToast(
+
+"No Book Loaded"
+
+);
+
+return;
+
+}
+
+try{
+
+const response=
+
+await fetch(
+
+Reader.bookUrl
+
+);
+
+const blob=
+
+await response.blob();
+
+const reader=
+
+new FileReader();
+
+
+reader.onload=()=>{
+
+localStorage.setItem(
+
+"offlineBook",
+
+reader.result
+
+);
+
+localStorage.setItem(
+
+"offlineBookTitle",
+
+Reader.bookTitle
+
+);
+
+showToast(
+
+"Book Saved Offline"
+
+);
+
+};
+
+
+reader.readAsDataURL(blob);
+
 
 }
 
@@ -2556,126 +6349,2047 @@ catch(error){
 
 console.error(error);
 
+showToast(
+
+"Offline Save Failed"
+
+);
+
 }
 
-};
+}
+
 
 /*==================================================
-                SETTINGS
+            OPEN OFFLINE BOOK
 ==================================================*/
 
-Reader.loadSettings=function(){
+async function openOfflineBook(){
 
-Reader.$(
+const book=
 
-"themeSelect"
+localStorage.getItem(
 
-).value=
-
-Reader.theme;
-
-Reader.$(
-
-"readingMode"
-
-).value=
-
-Reader.readingMode;
-
-};
-
-Reader.saveSettings=function(){
-
-localStorage.setItem(
-
-"readerTheme",
-
-Reader.theme
+"offlineBook"
 
 );
 
-localStorage.setItem(
 
-"readingMode",
+if(!book){
 
-Reader.readingMode
+showToast(
+
+"No Offline Book"
 
 );
 
-};
+return;
+
+}
+
+
+await openBook(
+
+book,
+
+localStorage.getItem(
+
+"offlineBookTitle"
+
+),
+
+"Offline Mode"
+
+);
+
+
+showToast(
+
+"Offline Book Opened"
+
+);
+
+}
+
 
 /*==================================================
-                AUTO SAVE
+            CHECK OFFLINE
 ==================================================*/
 
-Reader.autoSave=function(){
+function checkOfflineStatus(){
+
+if(
+
+navigator.onLine
+
+){
+
+showToast(
+
+"Online"
+
+);
+
+}
+
+else{
+
+showToast(
+
+"Offline Mode"
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            NETWORK EVENTS
+==================================================*/
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+showToast(
+
+"Internet Disconnected - Offline Mode"
+
+);
+
+}
+
+);
+
+
+window.addEventListener(
+
+"online",
+
+()=>{
+
+showToast(
+
+"Internet Connected"
+
+);
+
+}
+
+);
+
+
+/*==================================================
+            SERVICE WORKER
+==================================================*/
+
+async function registerReaderServiceWorker(){
+
+if(
+
+"serviceWorker"
+
+in navigator
+
+){
+
+try{
+
+await navigator.serviceWorker.register(
+
+"service-worker.js"
+
+);
+
+console.log(
+
+"Service Worker Registered"
+
+);
+
+}
+
+catch(error){
+
+console.error(
+
+"Service Worker Error",
+
+error
+
+);
+
+}
+
+}
+
+}
+
+
+/*==================================================
+            CLEAR CACHE
+==================================================*/
+
+async function clearReaderCache(){
+
+if(
+
+"caches"
+
+in window
+
+){
+
+const result=
+
+await caches.delete(
+
+CACHE_NAME
+
+);
+
+showToast(
+
+result?
+
+"Cache Cleared":
+
+"Nothing To Clear"
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            STORAGE INFO
+==================================================*/
+
+function storageInfo(){
+
+let size=0;
+
+for(
+
+let key in localStorage
+
+){
+
+size+=
+
+localStorage[key].length;
+
+}
+
+const mb=
+
+(size/1024/1024)
+
+.toFixed(2);
+
+
+showToast(
+
+"Storage Used: "+mb+" MB"
+
+);
+
+}
+
+
+/*==================================================
+            AUTO SAVE OFFLINE
+==================================================*/
+
+function enableAutoOffline(){
 
 localStorage.setItem(
 
-"lastPage",
+"autoOffline",
+
+"true"
+
+);
+
+showToast(
+
+"Auto Offline Enabled"
+
+);
+
+}
+
+
+function disableAutoOffline(){
+
+localStorage.removeItem(
+
+"autoOffline"
+
+);
+
+showToast(
+
+"Auto Offline Disabled"
+
+);
+
+}
+
+
+/*==================================================
+            INITIALIZE OFFLINE
+==================================================*/
+
+document.addEventListener(
+
+"DOMContentLoaded",
+
+()=>{
+
+registerReaderServiceWorker();
+
+checkOfflineStatus();
+
+}
+
+);
+
+
+/*==================================================
+            PART 19 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 20
+        DOWNLOAD + PRINT + PDF ACTIONS
+==================================================*/
+
+
+/*==================================================
+            DOWNLOAD BOOK
+==================================================*/
+
+function downloadBook(){
+
+if(!Reader.bookUrl){
+
+showToast(
+
+"No Book Available"
+
+);
+
+return;
+
+}
+
+
+const link=
+
+document.createElement(
+
+"a"
+
+);
+
+
+link.href=
+
+Reader.bookUrl;
+
+
+link.download=
+
+Reader.bookTitle||
+
+"Chishti-Library-Book.pdf";
+
+
+document.body.appendChild(link);
+
+
+link.click();
+
+
+document.body.removeChild(link);
+
+
+showToast(
+
+"Download Started"
+
+);
+
+}
+
+
+/*==================================================
+            PRINT CURRENT PAGE
+==================================================*/
+
+async function printCurrentPage(){
+
+if(!Reader.pdf)return;
+
+
+try{
+
+
+const page=
+
+await Reader.pdf.getPage(
 
 Reader.currentPage
 
 );
 
-localStorage.setItem(
 
-"lastZoom",
+const viewport=
 
-Reader.scale
+page.getViewport({
+
+scale:2
+
+});
+
+
+const canvas=
+
+document.createElement(
+
+"canvas"
 
 );
 
-};
 
-Reader.restoreLastSession=
+const context=
 
-function(){
+canvas.getContext(
+
+"2d"
+
+);
+
+
+canvas.width=
+
+viewport.width;
+
+
+canvas.height=
+
+viewport.height;
+
+
+
+await page.render({
+
+canvasContext:context,
+
+viewport:viewport
+
+}).promise;
+
+
+
+const image=
+
+canvas.toDataURL(
+
+"image/png"
+
+);
+
+
+
+const win=
+
+window.open("");
+
+
+
+win.document.write(
+
+`
+
+<html>
+
+<head>
+
+<title>
+
+Print Page
+
+</title>
+
+</head>
+
+<body>
+
+<img src="${image}"
+
+style="width:100%">
+
+<script>
+
+window.print();
+
+</script>
+
+</body>
+
+</html>
+
+`
+
+);
+
+
+
+}catch(error){
+
+console.error(error);
+
+showToast(
+
+"Print Error"
+
+);
+
+}
+
+
+}
+
+
+/*==================================================
+            PRINT FULL BOOK
+==================================================*/
+
+async function printFullBook(){
+
+if(!Reader.pdf)return;
+
+
+showToast(
+
+"Preparing Print..."
+
+);
+
+
+let pages=[];
+
+
+for(
+
+let i=1;
+
+i<=Reader.totalPages;
+
+i++
+
+){
+
 
 const page=
 
-parseInt(
+await Reader.pdf.getPage(i);
 
-localStorage.getItem(
 
-"lastPage"
+const viewport=
+
+page.getViewport({
+
+scale:1.5
+
+});
+
+
+const canvas=
+
+document.createElement(
+
+"canvas"
+
+);
+
+
+const ctx=
+
+canvas.getContext(
+
+"2d"
+
+);
+
+
+canvas.width=
+
+viewport.width;
+
+
+canvas.height=
+
+viewport.height;
+
+
+await page.render({
+
+canvasContext:ctx,
+
+viewport
+
+}).promise;
+
+
+
+pages.push(
+
+canvas.toDataURL(
+
+"image/png"
 
 )
 
 );
 
-const zoom=
-
-parseFloat(
-
-localStorage.getItem(
-
-"lastZoom"
-
-)
-
-);
-
-if(!isNaN(page)){
-
-Reader.currentPage=
-
-page;
 
 }
 
-if(!isNaN(zoom)){
 
-Reader.scale=
 
-zoom;
+const win=
+
+window.open("");
+
+
+
+win.document.write(
+
+`
+
+<html>
+
+<body>
+
+${
+
+pages.map(
+
+img=>
+
+`
+
+<img src="${img}"
+
+style="width:100%;page-break-after:always">
+
+`
+
+).join("")
+
+}
+
+<script>
+
+window.print();
+
+</script>
+
+</body>
+
+</html>
+
+`
+
+);
+
+
+}
+
+
+/*==================================================
+            OPEN PDF NEW TAB
+==================================================*/
+
+function openOriginalPDF(){
+
+if(!Reader.bookUrl)return;
+
+
+window.open(
+
+Reader.bookUrl,
+
+"_blank"
+
+);
+
+
+}
+
+
+/*==================================================
+            COPY BOOK INFO
+==================================================*/
+
+function copyBookInfo(){
+
+const info=
+
+`
+
+${Reader.bookTitle}
+
+Author:
+
+${Reader.bookAuthor}
+
+Pages:
+
+${Reader.totalPages}
+
+Read on Chishti Library
+
+`;
+
+
+
+navigator.clipboard
+
+.writeText(info);
+
+
+
+showToast(
+
+"Book Info Copied"
+
+);
+
+}
+
+
+/*==================================================
+            SHARE PDF FILE
+==================================================*/
+
+async function sharePDFFile(){
+
+if(!navigator.share){
+
+shareBook();
+
+return;
+
+}
+
+
+try{
+
+
+const response=
+
+await fetch(
+
+Reader.bookUrl
+
+);
+
+
+const blob=
+
+await response.blob();
+
+
+
+const file=
+
+new File(
+
+[blob],
+
+Reader.bookTitle+".pdf",
+
+{
+
+type:"application/pdf"
+
+}
+
+);
+
+
+
+await navigator.share({
+
+title:Reader.bookTitle,
+
+files:[file]
+
+});
+
+
+}catch(e){
+
+showToast(
+
+"Sharing Not Supported"
+
+);
+
+}
+
+
+}
+
+
+/*==================================================
+            CHECK SUPPORT
+==================================================*/
+
+function checkBrowserSupport(){
+
+return {
+
+pdf:
+
+!!window.pdfjsLib,
+
+share:
+
+!!navigator.share,
+
+fullscreen:
+
+!!document.fullscreenEnabled,
+
+storage:
+
+!!window.localStorage
+
+};
+
+}
+
+
+/*==================================================
+            PART 20 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 21
+        PDF CACHE + FAST LOADING SYSTEM
+==================================================*/
+
+/*==================================================
+            CACHE STORAGE
+==================================================*/
+
+const PDFCache={
+
+pages:{},
+
+thumbnails:{},
+
+text:{}
+
+};
+
+
+/*==================================================
+            CACHE PAGE
+==================================================*/
+
+async function cachePage(pageNumber){
+
+if(
+
+PDFCache.pages[pageNumber]
+
+)return PDFCache.pages[pageNumber];
+
+
+const page=
+
+await Reader.pdf.getPage(
+
+pageNumber
+
+);
+
+
+PDFCache.pages[pageNumber]=page;
+
+
+return page;
+
+}
+
+
+/*==================================================
+            FAST PAGE RENDER
+==================================================*/
+
+async function fastRenderPage(
+
+pageNumber,
+
+canvas,
+
+context
+
+){
+
+try{
+
+const page=
+
+await cachePage(
+
+pageNumber
+
+);
+
+
+const viewport=
+
+page.getViewport({
+
+scale:Reader.zoom
+
+});
+
+
+canvas.width=
+
+viewport.width;
+
+
+canvas.height=
+
+viewport.height;
+
+
+await page.render({
+
+canvasContext:context,
+
+viewport:viewport,
+
+intent:"display"
+
+}).promise;
+
+
+drawWatermark(
+
+context,
+
+canvas
+
+);
+
+
+}
+
+catch(error){
+
+console.error(
+
+"Fast Render Error",
+
+error
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            PRELOAD NEXT PAGES
+==================================================*/
+
+async function preloadPages(){
+
+if(!Reader.pdf)return;
+
+
+const pages=[
+
+Reader.currentPage+1,
+
+Reader.currentPage+2,
+
+Reader.currentPage-1
+
+];
+
+
+for(const page of pages){
+
+if(
+
+page>0 &&
+
+page<=Reader.totalPages
+
+){
+
+cachePage(page);
+
+}
+
+}
+
+}
+
+
+/*==================================================
+            CLEAR CACHE
+==================================================*/
+
+function clearPDFCache(){
+
+PDFCache.pages={};
+
+PDFCache.thumbnails={};
+
+PDFCache.text={};
+
+
+showToast(
+
+"Cache Cleared"
+
+);
+
+}
+
+
+/*==================================================
+            SMART CACHE
+==================================================*/
+
+function smartCache(){
+
+const maxCache=20;
+
+
+const keys=
+
+Object.keys(
+
+PDFCache.pages
+
+);
+
+
+if(
+
+keys.length>maxCache
+
+){
+
+const remove=
+
+keys[0];
+
+
+delete PDFCache.pages[remove];
+
+}
+
+}
+
+
+/*==================================================
+            MEMORY CONTROL
+==================================================*/
+
+setInterval(()=>{
+
+smartCache();
+
+},30000);
+
+
+/*==================================================
+            OFFLINE SAVE CHECK
+==================================================*/
+
+function checkOffline(){
+
+if(
+
+navigator.onLine
+
+){
+
+showToast(
+
+"Online Mode"
+
+);
+
+}
+
+else{
+
+showToast(
+
+"Offline Mode"
+
+);
+
+}
+
+}
+
+
+window.addEventListener(
+
+"online",
+
+checkOffline
+
+);
+
+
+window.addEventListener(
+
+"offline",
+
+checkOffline
+
+);
+
+
+/*==================================================
+            LOAD OPTIMIZER
+==================================================*/
+
+async function optimizeReader(){
+
+setLoadingText(
+
+"Optimizing Reader..."
+
+);
+
+
+await preloadPages();
+
+
+updateLoadingProgress(
+
+100
+
+);
+
+
+setTimeout(()=>{
+
+hideLoader();
+
+},500);
+
+}
+
+
+/*==================================================
+            PART 21 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 22
+        ADVANCED BOOK CACHE + OFFLINE MODE
+==================================================*/
+
+/*==================================================
+            CACHE DATABASE
+==================================================*/
+
+const BookCache = {
+
+dbName:"ChishtiLibraryCache",
+
+store:"books",
+
+version:1
+
+};
+
+
+/*==================================================
+            OPEN INDEXED DB
+==================================================*/
+
+function openBookCache(){
+
+return new Promise((resolve,reject)=>{
+
+const request=
+
+indexedDB.open(
+
+BookCache.dbName,
+
+BookCache.version
+
+);
+
+
+request.onupgradeneeded=e=>{
+
+const db=e.target.result;
+
+
+if(!db.objectStoreNames.contains(BookCache.store)){
+
+db.createObjectStore(
+
+BookCache.store,
+
+{
+
+keyPath:"url"
+
+}
+
+);
 
 }
 
 };
 
+
+request.onsuccess=()=>{
+
+resolve(request.result);
+
+};
+
+
+request.onerror=()=>{
+
+reject(request.error);
+
+};
+
+});
+
+}
+
+
 /*==================================================
-                BEFORE EXIT
+            SAVE BOOK CACHE
+==================================================*/
+
+async function saveBookOffline(url,data){
+
+try{
+
+const db=
+
+await openBookCache();
+
+
+const transaction=
+
+db.transaction(
+
+BookCache.store,
+
+"readwrite"
+
+);
+
+
+const store=
+
+transaction.objectStore(
+
+BookCache.store
+
+);
+
+
+store.put({
+
+url:url,
+
+data:data,
+
+title:Reader.bookTitle,
+
+date:new Date()
+
+.toISOString()
+
+});
+
+
+showToast(
+
+"Book Saved Offline"
+
+);
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+showToast(
+
+"Offline Save Failed"
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            LOAD OFFLINE BOOK
+==================================================*/
+
+async function loadOfflineBook(url){
+
+try{
+
+const db=
+
+await openBookCache();
+
+
+const transaction=
+
+db.transaction(
+
+BookCache.store,
+
+"readonly"
+
+);
+
+
+const store=
+
+transaction.objectStore(
+
+BookCache.store
+
+);
+
+
+const request=
+
+store.get(url);
+
+
+request.onsuccess=()=>{
+
+
+if(request.result){
+
+openBook(
+
+request.result.data,
+
+request.result.title
+
+);
+
+
+showToast(
+
+"Offline Book Opened"
+
+);
+
+
+}else{
+
+
+showToast(
+
+"No Offline Copy"
+
+);
+
+
+}
+
+
+};
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+}
+
+}
+
+
+/*==================================================
+            CHECK OFFLINE
+==================================================*/
+
+async function checkOfflineBook(url){
+
+const db=
+
+await openBookCache();
+
+
+const transaction=
+
+db.transaction(
+
+BookCache.store,
+
+"readonly"
+
+);
+
+
+const store=
+
+transaction.objectStore(
+
+BookCache.store
+
+);
+
+
+const request=
+
+store.get(url);
+
+
+return new Promise(resolve=>{
+
+
+request.onsuccess=()=>{
+
+
+resolve(
+
+!!request.result
+
+);
+
+
+};
+
+
+});
+
+}
+
+
+/*==================================================
+            DELETE OFFLINE BOOK
+==================================================*/
+
+async function deleteOfflineBook(url){
+
+const db=
+
+await openBookCache();
+
+
+const transaction=
+
+db.transaction(
+
+BookCache.store,
+
+"readwrite"
+
+);
+
+
+transaction
+
+.objectStore(
+
+BookCache.store
+
+)
+
+.delete(url);
+
+
+showToast(
+
+"Offline Copy Deleted"
+
+);
+
+}
+
+
+/*==================================================
+            OFFLINE STATUS
+==================================================*/
+
+function updateNetworkStatus(){
+
+const online=
+
+navigator.onLine;
+
+
+if(online){
+
+showToast(
+
+"Online Mode"
+
+);
+
+}else{
+
+showToast(
+
+"Offline Mode"
+
+);
+
+}
+
+}
+
+
+window.addEventListener(
+
+"online",
+
+updateNetworkStatus
+
+);
+
+
+window.addEventListener(
+
+"offline",
+
+updateNetworkStatus
+
+);
+
+
+/*==================================================
+            AUTO CACHE CURRENT BOOK
+==================================================*/
+
+async function autoSaveBook(){
+
+if(
+
+Reader.bookUrl
+
+){
+
+try{
+
+const response=
+
+await fetch(
+
+Reader.bookUrl
+
+);
+
+
+const blob=
+
+await response.blob();
+
+
+saveBookOffline(
+
+Reader.bookUrl,
+
+blob
+
+);
+
+
+}
+
+catch(e){}
+
+}
+
+}
+
+
+/*==================================================
+            PART 22 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 23
+        PWA + OFFLINE READING + CACHE SYSTEM
+==================================================*/
+
+/*==================================================
+            SERVICE WORKER REGISTER
+==================================================*/
+
+function registerServiceWorker(){
+
+if(
+
+"serviceWorker" in navigator
+
+){
+
+navigator.serviceWorker
+
+.register(
+
+"service-worker.js"
+
+)
+
+.then(()=>{
+
+console.log(
+
+"Service Worker Registered"
+
+);
+
+})
+
+.catch(error=>{
+
+console.error(
+
+"Service Worker Error",
+
+error
+
+);
+
+});
+
+}
+
+}
+
+
+/*==================================================
+            CACHE BOOK
+==================================================*/
+
+async function cacheBook(url){
+
+try{
+
+const cache=
+
+await caches.open(
+
+"chishti-library-books"
+
+);
+
+
+await cache.add(url);
+
+
+showToast(
+
+"Book Saved Offline"
+
+);
+
+
+}
+
+catch(error){
+
+console.error(
+
+"Cache Error",
+
+error
+
+);
+
+showToast(
+
+"Offline Save Failed"
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            CHECK OFFLINE BOOK
+==================================================*/
+
+async function isBookOffline(url){
+
+const cache=
+
+await caches.open(
+
+"chishti-library-books"
+
+);
+
+
+const response=
+
+await cache.match(url);
+
+
+return !!response;
+
+}
+
+
+/*==================================================
+            REMOVE OFFLINE BOOK
+==================================================*/
+
+async function removeOfflineBook(url){
+
+const cache=
+
+await caches.open(
+
+"chishti-library-books"
+
+);
+
+
+await cache.delete(url);
+
+
+showToast(
+
+"Offline Book Removed"
+
+);
+
+}
+
+
+/*==================================================
+            DOWNLOAD BOOK
+==================================================*/
+
+async function downloadBookOffline(){
+
+if(!Reader.bookUrl){
+
+showToast(
+
+"No Book Loaded"
+
+);
+
+return;
+
+}
+
+
+await cacheBook(
+
+Reader.bookUrl
+
+);
+
+}
+
+
+/*==================================================
+            OFFLINE STATUS
+==================================================*/
+
+function updateNetworkStatus(){
+
+const status=
+
+navigator.onLine;
+
+
+if(status){
+
+showToast(
+
+"Internet Connected"
+
+);
+
+}
+
+else{
+
+showToast(
+
+"Offline Mode"
+
+);
+
+}
+
+}
+
+
+window.addEventListener(
+
+"online",
+
+updateNetworkStatus
+
+);
+
+
+window.addEventListener(
+
+"offline",
+
+updateNetworkStatus
+
+);
+
+
+/*==================================================
+            READING CACHE
+==================================================*/
+
+function saveReaderState(){
+
+const state={
+
+book:
+
+Reader.bookTitle,
+
+page:
+
+Reader.currentPage,
+
+zoom:
+
+Reader.zoom,
+
+theme:
+
+Reader.theme,
+
+time:
+
+Date.now()
+
+};
+
+
+localStorage.setItem(
+
+"readerState",
+
+JSON.stringify(state)
+
+);
+
+}
+
+
+/*==================================================
+            RESTORE STATE
+==================================================*/
+
+function restoreReaderState(){
+
+const data=
+
+localStorage.getItem(
+
+"readerState"
+
+);
+
+
+if(!data)return;
+
+
+const state=
+
+JSON.parse(data);
+
+
+if(state.zoom){
+
+Reader.zoom=
+
+state.zoom;
+
+}
+
+
+if(state.theme){
+
+applyTheme(
+
+state.theme
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            AUTO SAVE STATE
+==================================================*/
+
+setInterval(()=>{
+
+saveReaderState();
+
+},5000);
+
+
+/*==================================================
+            INIT OFFLINE
+==================================================*/
+
+window.addEventListener(
+
+"load",
+
+()=>{
+
+registerServiceWorker();
+
+restoreReaderState();
+
+}
+
+);
+
+
+/*==================================================
+            PART 23 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 24
+        FINAL SECURITY + OPTIMIZATION
+==================================================*/
+
+/*==================================================
+            DISABLE CONTEXT MENU
+==================================================*/
+
+document.addEventListener(
+
+"contextmenu",
+
+e=>{
+
+if(
+
+e.target.tagName==="CANVAS"
+
+){
+
+e.preventDefault();
+
+}
+
+}
+
+);
+
+
+/*==================================================
+            PREVENT IMAGE DRAG
+==================================================*/
+
+document.addEventListener(
+
+"dragstart",
+
+e=>{
+
+if(
+
+e.target.tagName==="CANVAS" ||
+
+e.target.tagName==="IMG"
+
+){
+
+e.preventDefault();
+
+}
+
+}
+
+);
+
+
+/*==================================================
+            READER VISIBILITY
+==================================================*/
+
+document.addEventListener(
+
+"visibilitychange",
+
+()=>{
+
+if(
+
+document.hidden
+
+){
+
+saveLastPage();
+
+saveBookmarks();
+
+}
+
+}
+
+);
+
+
+/*==================================================
+            BEFORE CLOSE SAVE
 ==================================================*/
 
 window.addEventListener(
@@ -2684,66 +8398,642 @@ window.addEventListener(
 
 ()=>{
 
-Reader.autoSave();
+saveLastPage();
 
-Reader.saveSettings();
+saveBookmarks();
+
+saveHistory();
 
 }
 
+);
+
+
 /*==================================================
-                STARTUP
+            NETWORK STATUS
 ==================================================*/
+
+window.addEventListener(
+
+"online",
+
+()=>{
+
+showToast(
+
+"Internet Connected"
 
 );
 
+}
+
+);
+
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+showToast(
+
+"Offline Mode"
+
+);
+
+}
+
+);
+
+
+/*==================================================
+            MEMORY CLEANUP
+==================================================*/
+
+function clearReaderMemory(){
+
+Reader.searchResults=[];
+
+Reader.thumbnails=[];
+
+Reader.toc=[];
+
+if(
+
+window.gc
+
+){
+
+window.gc();
+
+}
+
+}
+
+
+/*==================================================
+            CACHE CURRENT PAGE
+==================================================*/
+
+async function cacheCurrentPage(){
+
+if(!Reader.pdf)return;
+
+const page=
+
+await Reader.pdf.getPage(
+
+Reader.currentPage
+
+);
+
+return page;
+
+}
+
+
+/*==================================================
+            PRELOAD NEXT PAGE
+==================================================*/
+
+async function preloadNextPage(){
+
+if(
+
+!Reader.pdf ||
+
+Reader.currentPage>=Reader.totalPages
+
+)return;
+
+
+const next=
+
+await Reader.pdf.getPage(
+
+Reader.currentPage+1
+
+);
+
+const viewport=
+
+next.getViewport({
+
+scale:.5
+
+});
+
+
+const canvas=
+
+document.createElement(
+
+"canvas"
+
+);
+
+
+canvas.width=
+
+viewport.width;
+
+
+canvas.height=
+
+viewport.height;
+
+
+await next.render({
+
+canvasContext:
+
+canvas.getContext("2d"),
+
+viewport:
+
+viewport
+
+}).promise;
+
+
+Reader.cachePage=canvas;
+
+}
+
+
+/*==================================================
+            PERFORMANCE MONITOR
+==================================================*/
+
+function readerPerformance(){
+
+const memory=
+
+performance.memory;
+
+
+if(memory){
+
+console.log(
+
+"Reader Memory:",
+
+Math.round(
+
+memory.usedJSHeapSize/
+
+1024/
+
+1024
+
+)+" MB"
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            CLEAN PDF OBJECT
+==================================================*/
+
+async function closeBook(){
+
+if(
+
+Reader.pdf
+
+){
+
+await Reader.pdf.destroy();
+
+}
+
+Reader.pdf=null;
+
+Reader.currentPage=1;
+
+Reader.totalPages=0;
+
+clearReaderMemory();
+
+showToast(
+
+"Book Closed"
+
+);
+
+}
+
+
+/*==================================================
+            VERSION CHECK
+==================================================*/
+
+const ReaderVersion={
+
+name:
+
+"CHISHTI LIBRARY READER",
+
+version:
+
+"3.0.0",
+
+features:[
+
+"PDF.js",
+
+"3D Page Flip",
+
+"Firebase Comments",
+
+"Bookmarks",
+
+"Themes",
+
+"Watermark"
+
+]
+
+};
+
+
+console.log(
+
+ReaderVersion
+
+);
+
+
+/*==================================================
+            PART 24 END
+==================================================*/
+/*==================================================
+        CHISHTI LIBRARY READER V3
+            JAVASCRIPT PART 25
+        FINAL SYSTEM + INITIAL STARTUP
+==================================================*/
+
+/*==================================================
+            READER START
+==================================================*/
+
+async function startReader(){
+
+try{
+
+showLoader();
+
+setLoadingText(
+
+"Preparing Chishti Library Reader..."
+
+);
+
+updateLoadingProgress(10);
+
+
+/* LOAD SAVED DATA */
+
+loadTheme();
+
+loadBookmarks();
+
+loadLikes();
+
+loadHistory();
+
+
+updateLoadingProgress(25);
+
+
+/* CHECK BOOK URL */
+
+const url=
+
+window.bookUrl ||
+
+document.body.dataset.book;
+
+
+if(url){
+
+await openBook(
+
+url,
+
+window.bookTitle||"Chishti Library",
+
+window.bookAuthor||""
+
+);
+
+}
+
+
+updateLoadingProgress(70);
+
+
+/* EXTRA SYSTEMS */
+
+await loadTableOfContents();
+
+await generateThumbnails();
+
+
+updateLoadingProgress(90);
+
+
+onBookLoaded();
+
+
+updateLoadingProgress(100);
+
+
+setTimeout(()=>{
+
+hideLoader();
+
+document.body.classList.add(
+
+"reader-loaded"
+
+);
+
+},600);
+
+
+}
+
+catch(error){
+
+console.error(
+
+"Reader Start Error",
+
+error
+
+);
+
+showToast(
+
+"Reader Initialization Failed"
+
+);
+
+}
+
+}
+
+
+/*==================================================
+            SERVICE WORKER
+==================================================*/
+
+function registerOfflineMode(){
+
+if(
+
+"serviceWorker" in navigator
+
+){
+
+navigator.serviceWorker
+
+.register(
+
+"service-worker.js"
+
+)
+
+.then(()=>{
+
+console.log(
+
+"Offline Mode Ready"
+
+);
+
+})
+
+.catch(error=>{
+
+console.log(error);
+
+});
+
+}
+
+}
+
+
+/*==================================================
+            PREVENT CONTEXT MENU
+==================================================*/
+
 document.addEventListener(
 
-"DOMContentLoaded",
+"contextmenu",
 
-async()=>{
+e=>{
 
-Reader.loadSettings();
+if(
 
-Reader.restoreLastSession();
+document.body.classList.contains(
 
-if(Reader.pdf){
+"readingMode"
 
-await Reader.generateThumbnails();
+)
 
-await Reader.loadTOC();
+){
+
+e.preventDefault();
 
 }
 
 });
 
+
 /*==================================================
-                END OF READER
+            DOUBLE CLICK ZOOM
 ==================================================*/
 
-console.log(
+let lastClick=0;
 
-"==================================="
+DOM.viewer?.addEventListener(
 
-);
+"click",
 
-console.log(
+()=>{
 
-"CHISHTI LIBRARY READER READY"
+const now=
 
-);
+Date.now();
 
-console.log(
 
-"Version:",
+if(
 
-Reader.version
+now-lastClick<300
 
-);
+){
 
-console.log(
+if(
 
-"===================================");
+Reader.zoom===1
+
+){
+
+Reader.zoom=1.5;
+
+}else{
+
+Reader.zoom=1;
+
+}
+
+updateZoomIndicator();
+
+queueRender();
+
+}
+
+
+lastClick=now;
+
+});
+
 
 /*==================================================
-                END OF JAVASCRIPT
+            NETWORK STATUS
+==================================================*/
+
+window.addEventListener(
+
+"online",
+
+()=>{
+
+showToast(
+
+"Internet Connected"
+
+);
+
+});
+
+
+window.addEventListener(
+
+"offline",
+
+()=>{
+
+showToast(
+
+"Offline Mode"
+
+);
+
+});
+
+
+/*==================================================
+            CLEAN MEMORY
+==================================================*/
+
+function clearReaderMemory(){
+
+Reader.searchText=[];
+
+Reader.thumbnails=[];
+
+Reader.pendingPage=null;
+
+}
+
+
+/*==================================================
+            CLOSE READER
+==================================================*/
+
+function closeReader(){
+
+clearReaderMemory();
+
+
+if(
+
+Reader.pdf
+
+){
+
+Reader.pdf.destroy();
+
+}
+
+
+location.href="/";
+
+}
+
+
+/*==================================================
+            VERSION INFO
+==================================================*/
+
+const ReaderVersion={
+
+name:
+
+"CHISHTI LIBRARY READER",
+
+version:
+
+"V3.0",
+
+features:[
+
+"PDF.JS",
+
+"3D Page Flip",
+
+"Bookmarks",
+
+"Firebase Comments",
+
+"Themes",
+
+"Watermark",
+
+"Offline Support"
+
+]
+
+};
+
+
+/*==================================================
+            FINAL BOOT
+==================================================*/
+
+window.addEventListener(
+
+"load",
+
+()=>{
+
+registerOfflineMode();
+
+startReader();
+
+});
+
+
+/*==================================================
+            JAVASCRIPT PART 25 END
+            COMPLETE JS SYSTEM
 ==================================================*/
