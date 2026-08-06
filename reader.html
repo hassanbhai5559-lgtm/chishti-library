@@ -2347,92 +2347,42 @@ pdfjsLib.GlobalWorkerOptions.workerSrc=
 
 <script src="assets/js/reader.js"></script>
 
-<!--==================================================
-            PERFORMANCE SCRIPT
-===================================================-->
-
 <script>
 
-window.addEventListener(
+window.addEventListener("load", ()=>{
 
-"load",
+    document.body.classList.add("reader-loaded");
 
-()=>{
-
-document.body.classList.add(
-
-"reader-loaded"
-
-);
-
-if(
-
-"scrollRestoration"
-
-in history
-
-){
-
-history.scrollRestoration=
-
-"manual";
-
-}
+    if("scrollRestoration" in history){
+        history.scrollRestoration = "manual";
+    }
 
 });
 
-document.addEventListener(
 
-"contextmenu",
-
-event=>{
-
-event.preventDefault();
-
+document.addEventListener("contextmenu", event=>{
+    event.preventDefault();
 });
 
-document.addEventListener(
 
-"dragstart",
-
-event=>{
-
-event.preventDefault();
-
+document.addEventListener("dragstart", event=>{
+    event.preventDefault();
 });
 
-window.addEventListener(
 
-"keydown",
+document.addEventListener("keydown", event=>{
 
-event=>{
-
-if(
-
-event.key==="F12"
-
-||
-
-(event.ctrlKey&&event.shiftKey&&event.key==="I")
-
-||
-
-(event.ctrlKey&&event.shiftKey&&event.key==="J")
-
-||
-
-(event.ctrlKey&&event.key==="U")
-
-){
-
-event.preventDefault();
-
-}
+    if(
+        (event.ctrlKey && event.shiftKey && event.key==="I") ||
+        (event.ctrlKey && event.shiftKey && event.key==="J") ||
+        (event.ctrlKey && event.key==="U")
+    ){
+        event.preventDefault();
+    }
 
 });
 
 </script>
-
 <!--==================================================
             NOSCRIPT
 ===================================================-->
