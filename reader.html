@@ -9,7 +9,23 @@
 name="viewport"
 content="width=device-width,initial-scale=1.0">
 
-<title>Chishti Library Reader V2</title>
+<meta
+name="theme-color"
+content="#111827">
+
+<meta
+name="description"
+content="Chishti Library Professional PDF Reader V3">
+
+<title>
+
+Chishti Reader
+
+</title>
+
+<!--==============================================
+                GOOGLE FONTS
+===============================================-->
 
 <link
 rel="preconnect"
@@ -24,42 +40,148 @@ crossorigin>
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
+<!--==============================================
+                ICONS
+===============================================-->
+
+<link
+rel="stylesheet"
+href="assets/icons/remixicon.css">
+
+<!--==============================================
+                READER CSS
+===============================================-->
+
 <link
 rel="stylesheet"
 href="assets/css/reader.css">
+
+<!--==============================================
+                PDF.JS
+===============================================-->
 
 <script
 src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
 </script>
 
 <script>
+
 pdfjsLib.GlobalWorkerOptions.workerSrc=
+
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
 </script>
 
 </head>
 
-<body>
+<body
+class="theme-dark">
 
-<!--==========================================
-            BOOK OPENING SCREEN
-===========================================-->
+<!--==============================================
+            PREMIUM OPENING SCREEN
+===============================================-->
 
 <div id="openingScreen">
+
+<div id="openingBackground"></div>
+
+<div id="openingParticles"></div>
+
+<div id="openingLight"></div>
 
 <div id="openingGlow"></div>
 
 <div id="openingBook">
 
-<div id="bookCoverFront">
+<div id="openingBookCover"></div>
 
-<div id="coverLogo">
+<div id="openingBookPages"></div>
+
+<div id="openingBookShadow"></div>
+
+</div>
+
+<h1 id="openingTitle">
+
+CHISHTI LIBRARY
+
+</h1>
+
+<p id="openingSubtitle">
+
+Opening Your Book...
+
+</p>
+
+</div>
+
+<!--==============================================
+                PRELOADER
+===============================================-->
+
+<div id="loadingScreen">
+
+<div id="loadingCard">
+
+<div id="loadingBook">
+
+<div class="loadingCover"></div>
+
+<div class="loadingPages"></div>
+
+</div>
+
+<div id="loadingProgress">
+
+<div id="loadingBar"></div>
+
+</div>
+
+<p id="loadingText">
+
+Preparing Reader...
+
+</p>
+
+</div>
+
+</div>
+
+<!--==============================================
+            MAIN READER START
+===============================================-->
+
+<div id="reader">
+
+<div id="readerOverlay"></div>
+<!--==================================================
+                    HEADER
+===================================================-->
+
+<header id="readerHeader">
+
+<!--==================================================
+                HEADER LEFT
+===================================================-->
+
+<div id="headerLeft">
+
+<button
+id="sidebarToggle"
+class="headerButton"
+title="Library">
+
+<i class="ri-menu-2-line"></i>
+
+</button>
+
+<div id="readerLogo">
 
 <img
 src="assets/images/logo.png"
 alt="Chishti Library">
 
-</div>
+<div id="libraryInfo">
 
 <h1>
 
@@ -69,40 +191,21 @@ CHISHTI LIBRARY
 
 <p>
 
-Digital Islamic Library
+Professional Reader V3
 
 </p>
 
 </div>
 
-<div id="bookPaperStack"></div>
-
-<div id="bookShadow"></div>
-
 </div>
 
 </div>
 
-<!--==========================================
-                READER
-===========================================-->
+<!--==================================================
+                HEADER CENTER
+===================================================-->
 
-<div id="reader">
-
-<!--==========================================
-                HEADER
-===========================================-->
-
-<header id="readerHeader">
-
-<div id="headerLeft">
-
-<img
-id="libraryLogo"
-src="assets/images/logo.png"
-alt="Logo">
-
-<div>
+<div id="headerCenter">
 
 <h2 id="bookTitle">
 
@@ -112,49 +215,69 @@ Loading Book...
 
 <p id="bookAuthor">
 
-Author
+Author Loading...
 
 </p>
 
 </div>
 
-</div>
+<!--==================================================
+                HEADER RIGHT
+===================================================-->
 
 <div id="headerRight">
 
-<button id="btnSearch">
+<button
+id="btnSearch"
+class="headerButton"
+title="Search">
 
-🔍
-
-</button>
-
-<button id="btnBookmark">
-
-⭐
+<i class="ri-search-line"></i>
 
 </button>
 
-<button id="btnTheme">
+<button
+id="btnBookmark"
+class="headerButton"
+title="Bookmark">
 
-🌙
-
-</button>
-
-<button id="btnSettings">
-
-⚙
+<i class="ri-bookmark-line"></i>
 
 </button>
 
-<button id="btnFullscreen">
+<button
+id="btnTheme"
+class="headerButton"
+title="Theme">
 
-⛶
+<i class="ri-palette-line"></i>
 
 </button>
 
-<button id="btnClose">
+<button
+id="btnSettings"
+class="headerButton"
+title="Settings">
 
-✕
+<i class="ri-settings-3-line"></i>
+
+</button>
+
+<button
+id="btnFullscreen"
+class="headerButton"
+title="Fullscreen">
+
+<i class="ri-fullscreen-line"></i>
+
+</button>
+
+<button
+id="btnClose"
+class="headerButton dangerButton"
+title="Close Reader">
+
+<i class="ri-close-line"></i>
 
 </button>
 
@@ -162,77 +285,194 @@ Author
 
 </header>
 
-<!--==========================================
-            HTML PART 1 END
-===========================================-->
-<!--==========================================
-            READER BODY
-===========================================-->
+<!--==================================================
+            QUICK TOOLBAR
+===================================================-->
 
-<main id="readerBody">
+<section id="quickToolbar">
 
-<div id="bookStage">
+<div id="toolbarLeft">
 
-<div id="bookLight"></div>
+<button
+id="btnFirstPage"
+class="toolButton">
 
-<div id="bookContainer">
+<i class="ri-skip-left-fill"></i>
 
-<!--==========================================
-            LEFT PAGE
-===========================================-->
+</button>
 
-<div
-class="bookPage leftPage"
-id="leftPage">
+<button
+id="btnPreviousPage"
+class="toolButton">
 
-<canvas
-id="leftCanvas">
-</canvas>
+<i class="ri-arrow-left-s-line"></i>
 
-<div class="pageGradient"></div>
-
-<div class="pageTexture"></div>
+</button>
 
 </div>
 
-<!--==========================================
+<div id="toolbarCenter">
+
+<div id="readerStatus">
+
+<span id="statusText">
+
+Ready
+
+</span>
+
+</div>
+
+</div>
+
+<div id="toolbarRight">
+
+<button
+id="btnNextPage"
+class="toolButton">
+
+<i class="ri-arrow-right-s-line"></i>
+
+</button>
+
+<button
+id="btnLastPage"
+class="toolButton">
+
+<i class="ri-skip-right-fill"></i>
+
+</button>
+
+</div>
+
+</section>
+
+<!--==================================================
+            READER BODY START
+===================================================-->
+
+<main id="readerBody">
+<!--==================================================
+                BOOK STAGE
+===================================================-->
+
+<section id="bookStage">
+
+<!--==============================================
+            BACKGROUND EFFECTS
+===============================================-->
+
+<div id="readerLight"></div>
+
+<div id="readerGlow"></div>
+
+<div id="readerParticles"></div>
+
+<div id="readerShadow"></div>
+
+<!--==============================================
+            BOOK VIEWER
+===============================================-->
+
+<div id="bookViewer">
+
+<!--==============================================
+            LEFT PAGE
+===============================================-->
+
+<div
+id="leftPage"
+class="bookPage">
+
+<canvas
+id="leftCanvas">
+
+</canvas>
+
+<div class="pageTexture"></div>
+
+<div class="pageGradient"></div>
+
+<div class="pageEdge"></div>
+
+<div class="pageWatermark">
+
+CHISHTI LIBRARY
+
+</div>
+
+<div class="pageNumber"
+
+id="leftPageNumber">
+
+1
+
+</div>
+
+</div>
+
+<!--==============================================
             BOOK SPINE
-===========================================-->
+===============================================-->
 
 <div id="bookSpine">
+
+<div id="spineLight"></div>
 
 <div id="spineShadow"></div>
 
 </div>
 
-<!--==========================================
+<!--==============================================
             RIGHT PAGE
-===========================================-->
+===============================================-->
 
 <div
-class="bookPage rightPage"
-id="rightPage">
+id="rightPage"
+class="bookPage">
 
 <canvas
 id="rightCanvas">
-</canvas>
 
-<div class="pageGradient"></div>
+</canvas>
 
 <div class="pageTexture"></div>
 
+<div class="pageGradient"></div>
+
+<div class="pageEdge"></div>
+
+<div class="pageWatermark">
+
+CHISHTI LIBRARY
+
 </div>
 
-<!--==========================================
-        REAL PAGE FLIP LAYER
-===========================================-->
+<div class="pageNumber"
+
+id="rightPageNumber">
+
+2
+
+</div>
+
+</div>
+
+</div>
+
+<!--==============================================
+        REAL PAGE FLIP ENGINE
+===============================================-->
 
 <div id="pageFlipLayer">
+
+<div id="flipPage">
 
 <div id="flipFront">
 
 <canvas
-id="flipCanvas">
+id="flipFrontCanvas">
+
 </canvas>
 
 </div>
@@ -241,45 +481,58 @@ id="flipCanvas">
 
 <canvas
 id="flipBackCanvas">
+
 </canvas>
 
 </div>
 
-</div>
-
-</div>
-
-<!--==========================================
-        PAGE GLOW & SHADOW
-===========================================-->
+<div id="pageCurl"></div>
 
 <div id="pageShadow"></div>
 
-<div id="pageReflection"></div>
-
-<div id="pageGlow"></div>
+</div>
 
 </div>
 
-</main>
+<!--==============================================
+            PAGE LOADER
+===============================================-->
 
-<!--==========================================
-            HTML PART 2 END
-===========================================-->
-<!--==========================================
-        PAGE COUNTER + ACTION BAR
-===========================================-->
+<div id="pageLoader">
 
-<section id="readerBottomBar">
+<div class="loaderCircle"></div>
+
+<p>
+
+Rendering Page...
+
+</p>
+
+</div>
+
+</section>
+
+<!--==================================================
+            BOOK STAGE END
+===================================================-->
+<!--==================================================
+        READER BOTTOM CONTROLS
+===================================================-->
+
+<section id="readerBottom">
+
+<!--==============================================
+            PAGE COUNTER
+===============================================-->
 
 <div id="pageCounterContainer">
 
 <button
-id="btnPrevPage"
-class="navButton"
+id="btnPreviousBottom"
+class="pageButton"
 title="Previous Page">
 
-❮
+<i class="ri-arrow-left-s-line"></i>
 
 </button>
 
@@ -291,7 +544,7 @@ title="Previous Page">
 
 </span>
 
-<span class="counterDivider">
+<span class="divider">
 
 /
 
@@ -306,15 +559,19 @@ title="Previous Page">
 </div>
 
 <button
-id="btnNextPage"
-class="navButton"
+id="btnNextBottom"
+class="pageButton"
 title="Next Page">
 
-❯
+<i class="ri-arrow-right-s-line"></i>
 
 </button>
 
 </div>
+
+<!--==============================================
+            BOOK ACTIONS
+===============================================-->
 
 <div id="bookActions">
 
@@ -322,13 +579,9 @@ title="Next Page">
 id="btnLike"
 class="actionButton">
 
-<span class="actionIcon">
+<i class="ri-heart-3-line"></i>
 
-❤️
-
-</span>
-
-<span class="actionText">
+<span>
 
 Like
 
@@ -348,33 +601,11 @@ class="actionCount">
 id="btnShare"
 class="actionButton">
 
-<span class="actionIcon">
+<i class="ri-share-forward-line"></i>
 
-🔗
-
-</span>
-
-<span class="actionText">
+<span>
 
 Share
-
-</span>
-
-</button>
-
-<button
-id="btnBookmarkHistory"
-class="actionButton">
-
-<span class="actionIcon">
-
-⭐
-
-</span>
-
-<span class="actionText">
-
-Bookmarks
 
 </span>
 
@@ -384,13 +615,9 @@ Bookmarks
 id="btnComments"
 class="actionButton">
 
-<span class="actionIcon">
+<i class="ri-chat-3-line"></i>
 
-💬
-
-</span>
-
-<span class="actionText">
+<span>
 
 Comments
 
@@ -406,18 +633,187 @@ class="actionCount">
 
 </button>
 
+<button
+id="btnViews"
+class="actionButton"
+disabled>
+
+<i class="ri-eye-line"></i>
+
+<span>
+
+Views
+
+</span>
+
+<span
+id="viewCount"
+class="actionCount">
+
+0
+
+</span>
+
+</button>
+
+</div>
+
+<!--==============================================
+            READING STATUS
+===============================================-->
+
+<div id="readingProgressSection">
+
+<div id="readingProgressHeader">
+
+<span>
+
+Reading Progress
+
+</span>
+
+<span id="readingPercentage">
+
+0%
+
+</span>
+
+</div>
+
+<div id="readingProgressBar">
+
+<div id="readingProgressFill"></div>
+
+</div>
+
+</div>
+
+<!--==============================================
+            ZOOM CONTROLS
+===============================================-->
+
+<div id="zoomControls">
+
+<button
+id="zoomOutBtn"
+class="zoomButton">
+
+<i class="ri-subtract-line"></i>
+
+</button>
+
+<div id="zoomIndicator">
+
+100%
+
+</div>
+
+<button
+id="zoomInBtn"
+class="zoomButton">
+
+<i class="ri-add-line"></i>
+
+</button>
+
+<button
+id="fitPageBtn"
+class="zoomButton">
+
+Fit
+
+</button>
+
+<button
+id="fitWidthBtn"
+class="zoomButton">
+
+Width
+
+</button>
+
+<button
+id="resetZoomBtn"
+class="zoomButton">
+
+100%
+
+</button>
+
 </div>
 
 </section>
 
-<!--==========================================
-        HTML PART 3 END
-===========================================-->
-<!--==========================================
-        BOOKMARK HISTORY PANEL
-===========================================-->
+<!--==================================================
+            PART 4 END
+===================================================-->
+<!--==================================================
+                SEARCH PANEL
+===================================================-->
 
-<aside id="bookmarkPanel" class="sidePanel">
+<aside
+id="searchPanel"
+class="sidePanel">
+
+<div class="panelHeader">
+
+<h2>
+
+Search Book
+
+</h2>
+
+<button
+id="closeSearchPanel"
+class="closePanelButton">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div class="panelBody">
+
+<div class="searchBox">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search any word in this book...">
+
+<button
+id="searchButton">
+
+<i class="ri-search-line"></i>
+
+</button>
+
+</div>
+
+<div id="searchInfo">
+
+Type a keyword and press Search
+
+</div>
+
+<div id="searchResults">
+
+<!-- Dynamic Results -->
+
+</div>
+
+</div>
+
+</aside>
+
+<!--==================================================
+                BOOKMARK PANEL
+===================================================-->
+
+<aside
+id="bookmarkPanel"
+class="sidePanel">
 
 <div class="panelHeader">
 
@@ -428,50 +824,107 @@ Bookmarks
 </h2>
 
 <button
-id="closeBookmarkPanel">
+id="closeBookmarkPanel"
+class="closePanelButton">
 
-✕
+<i class="ri-close-line"></i>
 
 </button>
 
 </div>
 
-<div
-id="bookmarkList"
-class="panelContent">
+<div class="panelBody">
 
-<!-- JavaScript -->
+<div id="bookmarkInfo">
+
+Your saved pages will appear here.
+
+</div>
+
+<div id="bookmarkList">
+
+<!-- Dynamic Bookmark List -->
+
+</div>
 
 </div>
 
 </aside>
 
-<!--==========================================
-        COMMENTS PANEL
-===========================================-->
+<!--==================================================
+            BOOKMARK FLOAT BUTTON
+===================================================-->
 
-<aside id="commentPanel" class="sidePanel">
+<button
+id="floatingBookmarkButton"
+title="Bookmark Current Page">
+
+<i class="ri-bookmark-fill"></i>
+
+</button>
+
+<!--==================================================
+                PART 5 END
+===================================================-->
+<!--==================================================
+                COMMENTS PANEL
+===================================================-->
+
+<aside
+id="commentPanel"
+class="sidePanel">
 
 <div class="panelHeader">
 
 <h2>
 
-Comments
+Book Discussion
 
 </h2>
 
 <button
-id="closeCommentPanel">
+id="closeCommentPanel"
+class="closePanelButton">
 
-✕
+<i class="ri-close-line"></i>
 
 </button>
 
 </div>
 
-<div class="panelContent">
+<div class="panelBody">
+
+<!--==============================================
+            COMMENT FORM
+===============================================-->
 
 <div id="commentForm">
+
+<div class="commentProfile">
+
+<div class="profileAvatar">
+
+<i class="ri-user-3-fill"></i>
+
+</div>
+
+<div class="profileInfo">
+
+<h3>
+
+Join Discussion
+
+</h3>
+
+<p>
+
+Share your thoughts about this book.
+
+</p>
+
+</div>
+
+</div>
 
 <input
 type="text"
@@ -480,17 +933,54 @@ placeholder="Your Name">
 
 <textarea
 id="commentMessage"
-placeholder="Write your comment...">
-</textarea>
+placeholder="Write your comment..."></textarea>
 
 <button
 id="submitComment">
+
+<i class="ri-send-plane-fill"></i>
 
 Post Comment
 
 </button>
 
 </div>
+
+<!--==============================================
+            COMMENT STATS
+===============================================-->
+
+<div id="commentStats">
+
+<div class="commentStat">
+
+<i class="ri-chat-3-line"></i>
+
+<span id="totalComments">
+
+0 Comments
+
+</span>
+
+</div>
+
+<div class="commentStat">
+
+<i class="ri-heart-3-line"></i>
+
+<span id="totalLikes">
+
+0 Likes
+
+</span>
+
+</div>
+
+</div>
+
+<!--==============================================
+            COMMENT LIST
+===============================================-->
 
 <div id="commentList">
 
@@ -502,44 +992,89 @@ Post Comment
 
 </aside>
 
-<!--==========================================
-        SEARCH PANEL
-===========================================-->
+<!--==================================================
+                PART 6 END
+===================================================-->
+<!--==================================================
+            THUMBNAIL SIDEBAR
+===================================================-->
 
-<aside id="searchPanel" class="sidePanel">
+<aside
+id="thumbnailPanel">
 
-<div class="panelHeader">
+<div id="thumbnailHeader">
 
 <h2>
 
-Search Book
+Pages
 
 </h2>
 
 <button
-id="closeSearchPanel">
+id="closeThumbnailPanel"
+class="closePanelButton">
 
-✕
+<i class="ri-close-line"></i>
 
 </button>
 
 </div>
 
-<div class="panelContent">
+<div id="thumbnailSearch">
 
 <input
-type="search"
-id="searchInput"
-placeholder="Search in book...">
+type="number"
+id="thumbnailPageInput"
+placeholder="Go to page...">
 
 <button
-id="searchButton">
+id="thumbnailGoButton">
 
-Search
+Go
 
 </button>
 
-<div id="searchResults">
+</div>
+
+<div id="thumbnailContainer">
+
+<!-- PDF Page Thumbnails Generated By JS -->
+
+</div>
+
+</aside>
+
+<!--==================================================
+            TABLE OF CONTENTS
+===================================================-->
+
+<aside
+id="tocPanel"
+class="sidePanel">
+
+<div class="panelHeader">
+
+<h2>
+
+Table Of Contents
+
+</h2>
+
+<button
+id="closeTocPanel"
+class="closePanelButton">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div class="panelBody">
+
+<div id="tocList">
+
+<!-- Generated Automatically -->
 
 </div>
 
@@ -547,14 +1082,48 @@ Search
 
 </aside>
 
-<!--==========================================
-        HTML PART 4 END
-===========================================-->
-<!--==========================================
-            SETTINGS PANEL
-===========================================-->
+<!--==================================================
+            QUICK FLOAT BUTTONS
+===================================================-->
 
-<aside id="settingsPanel" class="sidePanel">
+<div id="floatingButtons">
+
+<button
+id="openThumbnailButton"
+title="Pages">
+
+<i class="ri-file-list-3-line"></i>
+
+</button>
+
+<button
+id="openTocButton"
+title="Contents">
+
+<i class="ri-book-open-line"></i>
+
+</button>
+
+<button
+id="scrollTopButton"
+title="Top">
+
+<i class="ri-arrow-up-line"></i>
+
+</button>
+
+</div>
+
+<!--==================================================
+                HTML PART 7 END
+===================================================-->
+<!--==================================================
+                SETTINGS PANEL
+===================================================-->
+
+<aside
+id="settingsPanel"
+class="sidePanel">
 
 <div class="panelHeader">
 
@@ -565,21 +1134,26 @@ Reader Settings
 </h2>
 
 <button
-id="closeSettingsPanel">
+id="closeSettingsPanel"
+class="closePanelButton">
 
-✕
+<i class="ri-close-line"></i>
 
 </button>
 
 </div>
 
-<div class="panelContent">
+<div class="panelBody">
 
-<div class="settingItem">
+<!--==============================================
+                THEME
+===============================================-->
+
+<div class="settingGroup">
 
 <label>
 
-Theme
+Reader Theme
 
 </label>
 
@@ -599,13 +1173,13 @@ Light
 
 <option value="maroon">
 
-Maroon & Gold
+Maroon Gold
 
 </option>
 
 <option value="gold">
 
-Gold & Maroon
+Golden Maroon
 
 </option>
 
@@ -613,7 +1187,11 @@ Gold & Maroon
 
 </div>
 
-<div class="settingItem">
+<!--==============================================
+            READING MODE
+===============================================-->
+
+<div class="settingGroup">
 
 <label>
 
@@ -622,6 +1200,12 @@ Reading Mode
 </label>
 
 <select id="readingMode">
+
+<option value="auto">
+
+Auto
+
+</option>
 
 <option value="single">
 
@@ -635,58 +1219,235 @@ Double Page
 
 </option>
 
-<option value="auto">
-
-Auto
-
-</option>
-
 </select>
 
 </div>
 
-<div class="settingItem">
+<!--==============================================
+            PAGE ANIMATION
+===============================================-->
 
-<label>
+<div class="settingSwitch">
 
-Page Flip Animation
+<span>
 
-</label>
+Real Page Flip
 
-<input
-type="checkbox"
-id="flipAnimation"
-checked>
+</span>
 
-</div>
-
-<div class="settingItem">
-
-<label>
-
-Page Shadow
-
-</label>
+<label class="switch">
 
 <input
 type="checkbox"
-id="pageShadow"
+id="pageFlipSwitch"
 checked>
+
+<span class="slider"></span>
+
+</label>
 
 </div>
 
-<div class="settingItem">
+<!--==============================================
+            PAGE SOUND
+===============================================-->
 
-<label>
+<div class="settingSwitch">
 
-Watermark
+<span>
+
+Page Flip Sound
+
+</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="pageSoundSwitch"
+checked>
+
+<span class="slider"></span>
 
 </label>
+
+</div>
+
+<!--==============================================
+            WATERMARK
+===============================================-->
+
+<div class="settingSwitch">
+
+<span>
+
+Show Watermark
+
+</span>
+
+<label class="switch">
 
 <input
 type="checkbox"
 id="watermarkSwitch"
 checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<!--==============================================
+            PAGE SHADOW
+===============================================-->
+
+<div class="settingSwitch">
+
+<span>
+
+Book Shadow
+
+</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="shadowSwitch"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<!--==============================================
+            AUTO RESUME
+===============================================-->
+
+<div class="settingSwitch">
+
+<span>
+
+Auto Resume Reading
+
+</span>
+
+<label class="switch">
+
+<input
+type="checkbox"
+id="resumeSwitch"
+checked>
+
+<span class="slider"></span>
+
+</label>
+
+</div>
+
+<!--==============================================
+            RESET SETTINGS
+===============================================-->
+
+<button
+id="resetSettingsButton">
+
+<i class="ri-refresh-line"></i>
+
+Reset Reader Settings
+
+</button>
+
+</div>
+
+</aside>
+
+<!--==================================================
+                HTML PART 8 END
+===================================================-->
+<!--==================================================
+                THUMBNAIL SIDEBAR
+===================================================-->
+
+<aside
+id="thumbnailSidebar">
+
+<div id="thumbnailHeader">
+
+<h2>
+
+Book Pages
+
+</h2>
+
+<button
+id="closeThumbnailSidebar"
+class="closePanelButton">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div id="thumbnailSearchBox">
+
+<input
+type="number"
+id="gotoPageInput"
+placeholder="Go to page...">
+
+<button
+id="gotoPageButton">
+
+Go
+
+</button>
+
+</div>
+
+<div id="thumbnailContainer">
+
+<!-- Generated By JavaScript -->
+
+</div>
+
+</aside>
+
+<!--==================================================
+            TABLE OF CONTENTS PANEL
+===================================================-->
+
+<aside
+id="tocPanel"
+class="sidePanel">
+
+<div class="panelHeader">
+
+<h2>
+
+Contents
+
+</h2>
+
+<button
+id="closeTocPanel"
+class="closePanelButton">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div class="panelBody">
+
+<div id="tocContainer">
+
+<!-- Auto Generated -->
 
 </div>
 
@@ -694,86 +1455,274 @@ checked>
 
 </aside>
 
-<!--==========================================
-            READER OVERLAY
-===========================================-->
+<!--==================================================
+            READING INFORMATION
+===================================================-->
 
-<div id="readerOverlay">
+<aside
+id="readingInfoPanel"
+class="sidePanel">
+
+<div class="panelHeader">
+
+<h2>
+
+Reading Information
+
+</h2>
+
+<button
+id="closeReadingInfo"
+class="closePanelButton">
+
+<i class="ri-close-line"></i>
+
+</button>
 
 </div>
 
-<!--==========================================
-            LOADING STATUS
-===========================================-->
+<div class="panelBody">
 
-<div id="loadingStatus">
+<div class="infoCard">
 
-<div id="loadingSpinner">
+<h3>
 
-</div>
+Current Book
 
-<p id="loadingText">
+</h3>
 
-Opening Book...
+<p id="infoBookTitle">
+
+Loading...
 
 </p>
 
 </div>
 
-<!--==========================================
-            HTML PART 5 END
-===========================================-->
-<!--==========================================
-            FIREBASE COMMENTS
-===========================================-->
+<div class="infoCard">
 
-<section id="commentsSection">
+<h3>
 
-<div id="commentsHeader">
+Current Page
 
-<h2>
+</h3>
 
-Reader Discussion
+<p>
+
+<span id="infoCurrentPage">
+
+1
+
+</span>
+
+/
+
+<span id="infoTotalPages">
+
+1
+
+</span>
+
+</p>
+
+</div>
+
+<div class="infoCard">
+
+<h3>
+
+Reading Progress
+
+</h3>
+
+<div id="readingProgress">
+
+<div id="readingProgressFill"></div>
+
+</div>
+
+<p id="readingProgressText">
+
+0%
+
+</p>
+
+</div>
+
+<div class="infoCard">
+
+<h3>
+
+Reading Time
+
+</h3>
+
+<p id="readingTime">
+
+00:00:00
+
+</p>
+
+</div>
+
+<div class="infoCard">
+
+<h3>
+
+Bookmarks
+
+</h3>
+
+<p id="bookmarkTotal">
+
+0 Saved Pages
+
+</p>
+
+</div>
+
+</div>
+
+</aside>
+
+<!--==================================================
+            FLOATING ACTION BUTTONS
+===================================================-->
+
+<div id="floatingButtons">
+
+<button
+id="openThumbnailBtn"
+title="Pages">
+
+<i class="ri-layout-grid-line"></i>
+
+</button>
+
+<button
+id="openContentsBtn"
+title="Contents">
+
+<i class="ri-book-open-line"></i>
+
+</button>
+
+<button
+id="openInfoBtn"
+title="Reading Info">
+
+<i class="ri-information-line"></i>
+
+</button>
+
+<button
+id="scrollTopBtn"
+title="Top">
+
+<i class="ri-arrow-up-line"></i>
+
+</button>
+
+</div>
+
+<!--==================================================
+                HTML PART 9 END
+===================================================-->
+<!--==================================================
+                LOADING SCREEN
+===================================================-->
+
+<div id="loadingScreen">
+
+<div id="loadingWrapper">
+
+<div id="loadingBook">
+
+<div class="loadingCover"></div>
+
+<div class="loadingPages"></div>
+
+<div class="loadingGlow"></div>
+
+</div>
+
+<h2 id="loadingTitle">
+
+Opening Book...
 
 </h2>
 
-<span id="totalComments">
+<p id="loadingSubtitle">
 
-0 Comments
+Preparing Professional Reader
 
-</span>
+</p>
 
-</div>
+<div id="loadingProgress">
 
-<div id="firebaseComments">
-
-<!-- Firebase Comments -->
+<div id="loadingProgressBar"></div>
 
 </div>
 
-</section>
+<div id="loadingPercent">
 
-<!--==========================================
-            READER TOAST
-===========================================-->
-
-<div id="toast">
-
-<span id="toastText">
-
-Ready
-
-</span>
+0%
 
 </div>
 
-<!--==========================================
-            ERROR SCREEN
-===========================================-->
+</div>
+
+</div>
+
+<!--==================================================
+        PREMIUM BOOK OPEN ANIMATION
+===================================================-->
+
+<div id="bookOpeningAnimation">
+
+<div id="openingOverlay"></div>
+
+<div id="openingWhiteLight"></div>
+
+<div id="openingParticles"></div>
+
+<div id="openingBook3D">
+
+<div id="openingFrontCover"></div>
+
+<div id="openingPages"></div>
+
+<div id="openingBackCover"></div>
+
+</div>
+
+<h1 id="openingLibraryName">
+
+CHISHTI LIBRARY
+
+</h1>
+
+<p id="openingText">
+
+Opening Your Book...
+
+</p>
+
+</div>
+
+<!--==================================================
+                ERROR SCREEN
+===================================================-->
 
 <div id="errorScreen">
 
 <div id="errorCard">
+
+<div id="errorIcon">
+
+<i class="ri-error-warning-fill"></i>
+
+</div>
 
 <h2>
 
@@ -787,15 +1736,23 @@ Unknown Error
 
 </p>
 
-<button id="reloadBook">
+<div id="errorButtons">
 
-Reload Book
+<button
+id="reloadBook">
+
+<i class="ri-refresh-line"></i>
+
+Reload
 
 </button>
 
-<button id="goHome">
+<button
+id="goHome">
 
-Back To Library
+<i class="ri-home-5-line"></i>
+
+Home
 
 </button>
 
@@ -803,53 +1760,708 @@ Back To Library
 
 </div>
 
-<!--==========================================
-            FOOTER
-===========================================-->
+</div>
 
-<footer id="readerFooter">
+<!--==================================================
+                SUCCESS TOAST
+===================================================-->
 
-<div id="footerLeft">
+<div id="toast">
+
+<i
+id="toastIcon"
+class="ri-checkbox-circle-fill">
+
+</i>
+
+<span id="toastText">
+
+Ready
+
+</span>
+
+</div>
+
+<!--==================================================
+            CONFIRM DIALOG
+===================================================-->
+
+<div id="dialogOverlay">
+
+<div id="confirmDialog">
+
+<h3 id="dialogTitle">
+
+Confirmation
+
+</h3>
+
+<p id="dialogMessage">
+
+Are you sure?
+
+</p>
+
+<div id="dialogButtons">
+
+<button
+id="dialogCancel">
+
+Cancel
+
+</button>
+
+<button
+id="dialogConfirm">
+
+OK
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!--==================================================
+                AUDIO FILES
+===================================================-->
+
+<audio
+id="pageFlipSound"
+preload="auto">
+
+<source
+src="assets/sounds/page-flip.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<audio
+id="bookOpenSound"
+preload="auto">
+
+<source
+src="assets/sounds/book-open.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<audio
+id="notificationSound"
+preload="auto">
+
+<source
+src="assets/sounds/notification.mp3"
+type="audio/mpeg">
+
+</audio>
+
+<!--==================================================
+            HTML PART 10 END
+===================================================-->
+<!--==================================================
+            HIDDEN TEMPLATES
+===================================================-->
+
+<template id="commentTemplate">
+
+<div class="commentCard">
+
+<div class="commentLeft">
+
+<div class="commentAvatar">
+
+A
+
+</div>
+
+</div>
+
+<div class="commentRight">
+
+<div class="commentHeader">
+
+<h4 class="commentUser">
+
+Username
+
+</h4>
+
+<span class="commentDate">
+
+Today
+
+</span>
+
+</div>
+
+<p class="commentText">
+
+Comment Text
+
+</p>
+
+<div class="commentFooter">
+
+<button class="commentLike">
+
+<i class="ri-heart-line"></i>
 
 <span>
 
-© Chishti Library
+0
+
+</span>
+
+</button>
+
+<button class="commentReply">
+
+<i class="ri-reply-line"></i>
+
+Reply
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</template>
+
+<!--==================================================
+            BOOKMARK TEMPLATE
+===================================================-->
+
+<template id="bookmarkTemplate">
+
+<div class="bookmarkCard">
+
+<div class="bookmarkIcon">
+
+<i class="ri-bookmark-fill"></i>
+
+</div>
+
+<div class="bookmarkContent">
+
+<h4>
+
+Page
+
+<span class="bookmarkPageNumber">
+
+1
+
+</span>
+
+</h4>
+
+<p class="bookmarkDate">
+
+Saved Today
+
+</p>
+
+</div>
+
+<button class="bookmarkOpen">
+
+Open
+
+</button>
+
+</div>
+
+</template>
+
+<!--==================================================
+            SEARCH RESULT TEMPLATE
+===================================================-->
+
+<template id="searchResultTemplate">
+
+<div class="searchResult">
+
+<div class="searchPage">
+
+Page
+
+<span>
+
+1
 
 </span>
 
 </div>
+
+<div class="searchPreview">
+
+Search Preview...
+
+</div>
+
+</div>
+
+</template>
+
+<!--==================================================
+            THUMBNAIL TEMPLATE
+===================================================-->
+
+<template id="thumbnailTemplate">
+
+<div class="thumbnailCard">
+
+<canvas class="thumbnailCanvas">
+
+</canvas>
+
+<div class="thumbnailNumber">
+
+1
+
+</div>
+
+</div>
+
+</template>
+
+<!--==================================================
+            TABLE OF CONTENTS TEMPLATE
+===================================================-->
+
+<template id="tocTemplate">
+
+<div class="tocItem">
+
+<span class="tocTitle">
+
+Chapter
+
+</span>
+
+<span class="tocPage">
+
+1
+
+</span>
+
+</div>
+
+</template>
+
+<!--==================================================
+            LOADING TEMPLATE
+===================================================-->
+
+<template id="loadingTemplate">
+
+<div class="miniLoader">
+
+<div class="spinner"></div>
+
+<p>
+
+Loading...
+
+</p>
+
+</div>
+
+</template>
+
+<!--==================================================
+            EMPTY STATES
+===================================================-->
+
+<div id="emptyStates">
+
+<div id="emptyBookmarks"
+
+class="emptyState">
+
+<i class="ri-bookmark-3-line"></i>
+
+<h3>
+
+No Bookmarks Yet
+
+</h3>
+
+<p>
+
+Your saved pages will appear here.
+
+</p>
+
+</div>
+
+<div id="emptyComments"
+
+class="emptyState">
+
+<i class="ri-chat-3-line"></i>
+
+<h3>
+
+No Comments Yet
+
+</h3>
+
+<p>
+
+Be the first to comment.
+
+</p>
+
+</div>
+
+<div id="emptySearch"
+
+class="emptyState">
+
+<i class="ri-search-line"></i>
+
+<h3>
+
+No Results Found
+
+</h3>
+
+<p>
+
+Try another keyword.
+
+</p>
+
+</div>
+
+</div>
+
+<!--==================================================
+                HTML PART 11 END
+===================================================-->
+ <!--==================================================
+            READER FOOTER
+===================================================-->
+
+<footer id="readerFooter">
+
+<!--==============================================
+            LEFT SECTION
+===============================================-->
+
+<div id="footerLeft">
+
+<div id="footerBook">
+
+<i class="ri-book-2-fill"></i>
+
+<span id="footerBookTitle">
+
+Loading Book...
+
+</span>
+
+</div>
+
+</div>
+
+<!--==============================================
+            CENTER SECTION
+===============================================-->
 
 <div id="footerCenter">
 
-<span id="footerPage">
+<div id="footerPageCounter">
 
-1 / 1
+<span id="footerCurrentPage">
+
+1
+
+</span>
+
+<span>
+
+/
+
+</span>
+
+<span id="footerTotalPages">
+
+1
 
 </span>
 
 </div>
 
+</div>
+
+<!--==============================================
+            RIGHT SECTION
+===============================================-->
+
 <div id="footerRight">
 
-<span id="footerZoom">
+<div id="footerZoom">
 
 100%
 
-</span>
+</div>
+
+<div id="footerTheme">
+
+Dark
+
+</div>
 
 </div>
 
 </footer>
 
+<!--==================================================
+            HIDDEN INPUTS
+===================================================-->
+
+<input
+type="file"
+id="bookFileInput"
+accept=".pdf"
+hidden>
+
+<input
+type="color"
+id="themeColorPicker"
+hidden>
+
+<!--==================================================
+            READER DATA
+===================================================-->
+
+<div id="readerData"
+
+hidden
+
+data-book-id=""
+
+data-book-title=""
+
+data-book-author=""
+
+data-current-page="1"
+
+data-total-pages="0"
+
+data-theme="dark">
+
 </div>
 
-<!--==========================================
-            READER SCRIPT
-===========================================-->
+<!--==================================================
+            PAGE FLIP CANVAS
+===================================================-->
 
-<script
-src="assets/js/reader.js">
+<div id="pageFlipContainer">
+
+<canvas
+id="pageFlipCanvas">
+
+</canvas>
+
+</div>
+
+<!--==================================================
+            PARTICLE CONTAINER
+===================================================-->
+
+<div id="particleContainer">
+
+<span class="particle"></span>
+
+<span class="particle"></span>
+
+<span class="particle"></span>
+
+<span class="particle"></span>
+
+<span class="particle"></span>
+
+<span class="particle"></span>
+
+<span class="particle"></span>
+
+<span class="particle"></span>
+
+</div>
+
+<!--==================================================
+            GLOBAL LOADER
+===================================================-->
+
+<div id="globalLoader">
+
+<div class="loaderRing"></div>
+
+<p>
+
+Loading...
+
+</p>
+
+</div>
+
+<!--==================================================
+            HTML PART 12 END
+===================================================-->
+<!--==================================================
+            FIREBASE SDK
+===================================================-->
+
+<script type="module" src="assets/js/firebase.js"></script>
+
+<!--==================================================
+            PDF.JS WORKER
+===================================================-->
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc=
+
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
 </script>
+
+<!--==================================================
+            READER CONFIG
+===================================================-->
+
+<script src="assets/js/config.js"></script>
+
+<!--==================================================
+            MAIN READER SCRIPT
+===================================================-->
+
+<script src="assets/js/reader.js"></script>
+
+<!--==================================================
+            PERFORMANCE SCRIPT
+===================================================-->
+
+<script>
+
+window.addEventListener(
+
+"load",
+
+()=>{
+
+document.body.classList.add(
+
+"reader-loaded"
+
+);
+
+if(
+
+"scrollRestoration"
+
+in history
+
+){
+
+history.scrollRestoration=
+
+"manual";
+
+}
+
+});
+
+document.addEventListener(
+
+"contextmenu",
+
+event=>{
+
+event.preventDefault();
+
+});
+
+document.addEventListener(
+
+"dragstart",
+
+event=>{
+
+event.preventDefault();
+
+});
+
+window.addEventListener(
+
+"keydown",
+
+event=>{
+
+if(
+
+event.key==="F12"
+
+||
+
+(event.ctrlKey&&event.shiftKey&&event.key==="I")
+
+||
+
+(event.ctrlKey&&event.shiftKey&&event.key==="J")
+
+||
+
+(event.ctrlKey&&event.key==="U")
+
+){
+
+event.preventDefault();
+
+}
+
+});
+
+</script>
+
+<!--==================================================
+            NOSCRIPT
+===================================================-->
+
+<noscript>
+
+<div id="javascriptDisabled">
+
+<h2>
+
+JavaScript Required
+
+</h2>
+
+<p>
+
+Please enable JavaScript to use the Chishti Library Reader.
+
+</p>
+
+</div>
+
+</noscript>
+
+</div>
+
+<!--==================================================
+            END READER
+===================================================-->
 
 </body>
 
