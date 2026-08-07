@@ -1,9 +1,8 @@
 /*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 1
+        CHISHTI LIBRARY READER V4
+        CSS PART 1
+        RESET + ROOT + THEMES + BASE
 ==================================================*/
-
-/*==================== RESET ====================*/
 
 *,
 *::before,
@@ -13,22 +12,157 @@
     box-sizing:border-box;
 }
 
-html,
+html{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
 body{
     width:100%;
     height:100%;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
     font-family:"Poppins",sans-serif;
-    background:#0f172a;
-    color:#f8fafc;
+    background:var(--app-bg);
+    color:var(--text);
     overflow:hidden;
+    transition:
+        background .3s ease,
+        color .3s ease;
 }
+
+
+/*==================================================
+                    ROOT
+==================================================*/
+
+:root{
+
+    --primary:#2563eb;
+    --secondary:#1e40af;
+    --accent:#60a5fa;
+
+    --gold:#d4af37;
+    --maroon:#5d1023;
+
+    --app-bg:#0b1120;
+    --surface:#111827;
+    --surface-2:#172033;
+    --surface-3:#1e293b;
+
+    --text:#f8fafc;
+    --text-soft:#cbd5e1;
+    --text-muted:#94a3b8;
+
+    --border:rgba(255,255,255,.09);
+
+    --page-bg:#ffffff;
+    --page-shadow:
+        0 18px 50px rgba(0,0,0,.38);
+
+    --header-height:72px;
+    --toolbar-height:54px;
+    --footer-height:54px;
+
+    --radius:12px;
+
+    --transition:.25s ease;
+}
+
+
+/*==================================================
+                    DARK THEME
+==================================================*/
+
+body.theme-dark{
+
+    --app-bg:#0b1120;
+    --surface:#111827;
+    --surface-2:#172033;
+    --surface-3:#1e293b;
+
+    --text:#f8fafc;
+    --text-soft:#cbd5e1;
+    --text-muted:#94a3b8;
+
+    --border:rgba(255,255,255,.09);
+
+}
+
+
+/*==================================================
+                    LIGHT THEME
+==================================================*/
+
+body.theme-light{
+
+    --app-bg:#eef2f7;
+    --surface:#ffffff;
+    --surface-2:#f8fafc;
+    --surface-3:#e2e8f0;
+
+    --text:#0f172a;
+    --text-soft:#334155;
+    --text-muted:#64748b;
+
+    --border:rgba(15,23,42,.10);
+
+    --page-shadow:
+        0 18px 45px rgba(15,23,42,.18);
+
+}
+
+
+/*==================================================
+                    MAROON THEME
+==================================================*/
+
+body.theme-maroon{
+
+    --primary:#8b1e3f;
+    --secondary:#5d1023;
+    --accent:#d4af37;
+
+    --app-bg:#210914;
+    --surface:#350d1b;
+    --surface-2:#461021;
+    --surface-3:#5d1023;
+
+    --text:#fff8f9;
+    --text-soft:#f5dfe5;
+    --text-muted:#d7aeb9;
+
+    --border:rgba(212,175,55,.18);
+
+}
+
+
+/*==================================================
+                    GOLDEN THEME
+==================================================*/
+
+body.theme-gold{
+
+    --primary:#d4af37;
+    --secondary:#a67c00;
+    --accent:#f5d76e;
+
+    --app-bg:#171205;
+    --surface:#282008;
+    --surface-2:#362b0b;
+    --surface-3:#4a3a0d;
+
+    --text:#fffdf4;
+    --text-soft:#f6edc7;
+    --text-muted:#d9c98b;
+
+    --border:rgba(212,175,55,.22);
+
+}
+
+
+/*==================================================
+                    BUTTON RESET
+==================================================*/
 
 button,
 input,
@@ -38,1867 +172,7 @@ textarea{
 
 button{
     border:0;
-    cursor:pointer;
-}
-
-button:focus,
-input:focus,
-textarea:focus{
-    outline:none;
-}
-
-
-/*==================== VARIABLES ====================*/
-
-:root{
-    --primary:#2563eb;
-    --primary-dark:#1d4ed8;
-    --accent:#60a5fa;
-
-    --dark:#0f172a;
-    --dark-2:#111827;
-    --dark-3:#1e293b;
-
-    --white:#ffffff;
-    --light:#f8fafc;
-
-    --gray:#94a3b8;
-    --gray-dark:#64748b;
-
-    --border:rgba(255,255,255,.10);
-
-    --shadow:
-        0 15px 40px rgba(0,0,0,.35);
-
-    --radius:14px;
-
-    --header-height:72px;
-    --toolbar-height:56px;
-    --footer-height:52px;
-
-    --transition:.25s ease;
-}
-
-
-/*==================== OPENING SCREEN ====================*/
-
-#openingScreen{
-    position:fixed;
-    inset:0;
-    z-index:10000;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #1e3a8a 0%,
-            #0f172a 55%,
-            #020617 100%
-        );
-
-    transition:opacity .5s ease,
-               visibility .5s ease;
-}
-
-#openingScreen.hidden{
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-}
-
-#openingScreen .logo{
-    width:90px;
-    height:90px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    margin-bottom:20px;
-
-    font-size:48px;
-
-    border-radius:24px;
-
-    background:rgba(255,255,255,.08);
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.35);
-
-    animation:logoPulse 1.8s infinite ease-in-out;
-}
-
-#openingScreen h1{
-    font-size:30px;
-    font-weight:700;
-    letter-spacing:2px;
-}
-
-#openingScreen p{
-    margin-top:8px;
-    color:#cbd5e1;
-    font-size:14px;
-}
-
-@keyframes logoPulse{
-    0%,100%{
-        transform:scale(1);
-    }
-
-    50%{
-        transform:scale(1.06);
-    }
-}
-
-
-/*==================== LOADING SCREEN ====================*/
-
-#loadingScreen{
-    position:fixed;
-    inset:0;
-    z-index:9999;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:rgba(2,6,23,.96);
-
-    opacity:1;
-    visibility:visible;
-
-    transition:
-        opacity .4s ease,
-        visibility .4s ease;
-}
-
-#loadingScreen.hidden{
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-}
-
-#loadingScreen .loader{
-    width:min(90%,420px);
-    text-align:center;
-}
-
-.spinner{
-    width:48px;
-    height:48px;
-
-    margin:0 auto 20px;
-
-    border:4px solid rgba(255,255,255,.12);
-    border-top-color:var(--accent);
-
-    border-radius:50%;
-
-    animation:spin .8s linear infinite;
-}
-
-@keyframes spin{
-    to{
-        transform:rotate(360deg);
-    }
-}
-
-#loadingText{
-    font-size:18px;
-    font-weight:500;
-}
-
-#loadingPercent{
-    margin-top:10px;
-    color:var(--gray);
-    font-size:13px;
-}
-
-.progress{
-    width:100%;
-    height:7px;
-
-    margin-top:18px;
-
-    overflow:hidden;
-
-    border-radius:20px;
-
-    background:rgba(255,255,255,.10);
-}
-
-#loadingBar{
-    width:0%;
-    height:100%;
-
-    border-radius:20px;
-
-    background:linear-gradient(
-        90deg,
-        var(--primary),
-        var(--accent)
-    );
-
-    transition:width .25s ease;
-}
-
-
-/*==================== TOAST ====================*/
-
-#toast{
-    position:fixed;
-
-    left:50%;
-    bottom:85px;
-
-    z-index:20000;
-
-    max-width:90%;
-
-    padding:11px 18px;
-
-    border-radius:10px;
-
-    background:#020617;
-    color:#fff;
-
-    box-shadow:var(--shadow);
-
-    font-size:13px;
-
-    opacity:0;
-    visibility:hidden;
-
-    transform:
-        translate(-50%,15px);
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease,
-        transform .25s ease;
-}
-
-#toast.show{
-    opacity:1;
-    visibility:visible;
-
-    transform:
-        translate(-50%,0);
-}
-
-
-/*==================== MAIN READER ====================*/
-
-#reader{
-    position:fixed;
-    inset:0;
-
-    display:flex;
-    flex-direction:column;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #1e293b,
-            #0f172a 65%
-        );
-}
-
-
-/*==================== HEADER ====================*/
-
-#readerHeader{
-    position:relative;
-
-    z-index:100;
-
-    height:var(--header-height);
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:0 20px;
-
-    background:
-        rgba(15,23,42,.92);
-
-    border-bottom:1px solid var(--border);
-
-    backdrop-filter:blur(14px);
-}
-
-.leftHeader{
-    min-width:0;
-}
-
-#bookTitle{
-    max-width:55vw;
-
-    overflow:hidden;
-    white-space:nowrap;
-    text-overflow:ellipsis;
-
-    font-size:18px;
-    font-weight:600;
-}
-
-#bookAuthor{
-    margin-top:2px;
-
-    color:var(--gray);
-
-    font-size:12px;
-}
-
-.rightHeader{
-    display:flex;
-    align-items:center;
-    gap:7px;
-}
-
-.rightHeader button{
-    width:40px;
-    height:40px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    border-radius:10px;
-
-    color:#e2e8f0;
-    background:rgba(255,255,255,.06);
-
-    transition:
-        background var(--transition),
-        transform var(--transition);
-}
-
-.rightHeader button:hover{
-    background:rgba(96,165,250,.18);
-    transform:translateY(-1px);
-}
-
-.rightHeader i{
-    font-size:20px;
-}
-
-
-/*==================== READER BODY ====================*/
-
-#readerBody{
-    position:relative;
-
-    flex:1;
-
-    min-height:0;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    overflow:hidden;
-
-    padding:
-        var(--toolbar-height)
-        20px
-        var(--footer-height);
-}
-
-
-/*==================== PDF CONTAINER ====================*/
-
-#pdfContainer{
-    position:relative;
-
-    width:min(100%,1100px);
-    height:100%;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    perspective:1800px;
-
-    overflow:auto;
-
-    scrollbar-width:thin;
-}
-
-#pdfCanvas{
-    display:block;
-
-    max-width:100%;
-    max-height:100%;
-
-    background:#fff;
-
-    border-radius:3px;
-
-    box-shadow:
-        0 20px 55px rgba(0,0,0,.45);
-
-    transition:
-        transform .25s ease;
-}
-
-
-/*==================== PAGE FLIP LAYER ====================*/
-
-#pageFlipLayer{
-    position:absolute;
-
-    inset:0;
-
-    pointer-events:none;
-
-    transform-style:preserve-3d;
-
-    z-index:10;
-}
-
-#flipPage{
-    position:absolute;
-
-    top:50%;
-    left:50%;
-
-    width:min(48%,540px);
-    height:min(85%,760px);
-
-    background:#fff;
-
-    transform:
-        translate(-50%,-50%)
-        rotateY(0deg);
-
-    transform-origin:left center;
-
-    backface-visibility:hidden;
-
-    box-shadow:
-        0 20px 55px rgba(0,0,0,.45);
-
-    display:none;
-
-    z-index:20;
-}
-
-
-/*==================== TOOLBAR ====================*/
-
-#readerToolbar{
-    position:absolute;
-
-    top:10px;
-    left:50%;
-
-    z-index:200;
-
-    height:44px;
-
-    display:flex;
-    align-items:center;
-
-    gap:5px;
-
-    padding:4px 7px;
-
-    transform:translateX(-50%);
-
-    background:
-        rgba(15,23,42,.94);
-
-    border:1px solid var(--border);
-
-    border-radius:12px;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.25);
-
-    backdrop-filter:blur(12px);
-}
-
-#readerToolbar button{
-    width:35px;
-    height:35px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:#e2e8f0;
-
-    background:transparent;
-
-    border-radius:8px;
-
-    transition:background var(--transition);
-}
-
-#readerToolbar button:hover{
-    background:rgba(255,255,255,.10);
-}
-
-#readerToolbar i{
-    font-size:18px;
-}
-
-#pageCounter{
-    min-width:62px;
-
-    text-align:center;
-
-    color:#e2e8f0;
-
-    font-size:12px;
-}
-
-#zoomValue{
-    min-width:42px;
-
-    text-align:center;
-
-    color:var(--gray);
-
-    font-size:11px;
-}
-
-.toolbarDivider{
-    width:1px;
-    height:24px;
-
-    margin:0 3px;
-
-    background:var(--border);
-}
-
-
-/*==================== PROGRESS ====================*/
-
-#readingProgress{
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    height:3px;
-
-    z-index:300;
-
-    background:rgba(255,255,255,.06);
-}
-
-#readingProgressFill{
-    width:0%;
-    height:100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            var(--primary),
-            var(--accent)
-        );
-
-    transition:width .3s ease;
-}
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 2
-==================================================*/
-
-/*==================== FOOTER ====================*/
-
-#readerFooter{
-    position:absolute;
-
-    left:0;
-    right:0;
-    bottom:0;
-
-    z-index:200;
-
-    height:var(--footer-height);
-
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:0 18px;
-
-    background:rgba(15,23,42,.94);
-
-    border-top:1px solid var(--border);
-
-    backdrop-filter:blur(14px);
-}
-
-.footerLeft,
-.footerCenter,
-.footerRight{
-    display:flex;
-    align-items:center;
-    gap:7px;
-}
-
-#pageInfo{
-    color:var(--gray);
-    font-size:12px;
-}
-
-.footerCenter button,
-.footerRight button{
-    min-width:38px;
-    height:34px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:5px;
-
-    padding:0 9px;
-
-    color:#e2e8f0;
-    background:rgba(255,255,255,.06);
-
-    border-radius:8px;
-
-    transition:background var(--transition);
-}
-
-.footerCenter button:hover,
-.footerRight button:hover{
-    background:rgba(96,165,250,.16);
-}
-
-.footerCenter i,
-.footerRight i{
-    font-size:18px;
-}
-
-#likeCount{
-    font-size:11px;
-}
-
-
-/*==================== LEFT SIDEBAR ====================*/
-
-#leftSidebar{
-    position:fixed;
-
-    top:0;
-    left:0;
-    bottom:0;
-
-    z-index:500;
-
-    width:320px;
-
-    padding:20px;
-
-    overflow-y:auto;
-
-    background:#111827;
-
-    border-right:1px solid var(--border);
-
-    box-shadow:
-        15px 0 45px rgba(0,0,0,.3);
-
-    transform:translateX(-105%);
-
-    transition:transform .3s ease;
-}
-
-#leftSidebar.active{
-    transform:translateX(0);
-}
-
-.sidebarHeader{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    margin-bottom:20px;
-}
-
-.sidebarHeader h3{
-    font-size:17px;
-}
-
-#closeSidebar{
-    width:36px;
-    height:36px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:#fff;
-    background:rgba(255,255,255,.07);
-
-    border-radius:8px;
-}
-
-#tocContainer,
-#bookmarkContainer{
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-}
-
-#leftSidebar hr{
-    margin:22px 0;
-
-    border:0;
-    border-top:1px solid var(--border);
-}
-
-.tocItem,
-.bookmarkItem{
-    width:100%;
-
-    padding:10px;
-
-    text-align:left;
-
-    color:#cbd5e1;
-
-    background:rgba(255,255,255,.04);
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    transition:
-        background var(--transition),
-        color var(--transition);
-}
-
-.tocItem:hover,
-.bookmarkItem:hover{
-    color:#fff;
-    background:rgba(96,165,250,.14);
-}
-
-
-/*==================== SEARCH PANEL ====================*/
-
-#searchPanel{
-    position:fixed;
-
-    top:82px;
-    right:20px;
-
-    z-index:600;
-
-    width:min(420px,calc(100% - 40px));
-
-    padding:12px;
-
-    background:#111827;
-
-    border:1px solid var(--border);
-
-    border-radius:14px;
-
-    box-shadow:var(--shadow);
-
-    opacity:0;
-    visibility:hidden;
-
-    transform:
-        translateY(-10px);
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease,
-        transform .25s ease;
-}
-
-#searchPanel.active{
-    opacity:1;
-    visibility:visible;
-
-    transform:translateY(0);
-}
-
-.searchHeader{
-    display:flex;
-    align-items:center;
-    gap:8px;
-}
-
-#searchInput{
-    flex:1;
-
-    min-width:0;
-
-    height:40px;
-
-    padding:0 12px;
-
-    color:#fff;
-
-    background:#1e293b;
-
-    border:1px solid var(--border);
-
-    border-radius:8px;
-}
-
-#searchInput::placeholder{
-    color:#64748b;
-}
-
-#searchClose{
-    width:40px;
-    height:40px;
-
-    color:#fff;
-    background:rgba(255,255,255,.07);
-
-    border-radius:8px;
-}
-
-#searchResults{
-    max-height:350px;
-
-    margin-top:10px;
-
-    overflow-y:auto;
-}
-
-.searchResult{
-    padding:10px;
-
-    color:#cbd5e1;
-
-    border-bottom:1px solid var(--border);
-
-    cursor:pointer;
-}
-
-.searchResult:hover{
-    background:rgba(255,255,255,.05);
-}
-
-
-/*==================== THUMBNAIL SIDEBAR ====================*/
-
-#thumbnailSidebar{
-    position:fixed;
-
-    top:var(--header-height);
-    right:0;
-    bottom:var(--footer-height);
-
-    z-index:450;
-
-    width:190px;
-
-    padding:12px;
-
-    overflow-y:auto;
-
-    background:#111827;
-
-    border-left:1px solid var(--border);
-
-    box-shadow:
-        -12px 0 35px rgba(0,0,0,.25);
-
-    transform:translateX(105%);
-
-    transition:transform .3s ease;
-}
-
-#thumbnailSidebar.active{
-    transform:translateX(0);
-}
-
-.thumbnailHeader{
-    margin-bottom:10px;
-}
-
-.thumbnailHeader h3{
-    font-size:15px;
-}
-
-#thumbnailContainer{
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:8px;
-}
-
-.thumbnail{
-    padding:4px;
-
-    background:#1e293b;
-
-    border:1px solid transparent;
-
-    border-radius:6px;
-
-    cursor:pointer;
-
-    transition:border-color var(--transition);
-}
-
-.thumbnail:hover{
-    border-color:var(--accent);
-}
-
-.thumbnail canvas{
-    width:100%;
-    height:auto;
-
-    display:block;
-
-    background:#fff;
-}
-
-
-/*==================== COMMENTS PANEL ====================*/
-
-#commentPanel{
-    position:fixed;
-
-    right:20px;
-    bottom:70px;
-
-    z-index:550;
-
-    width:min(400px,calc(100% - 40px));
-
-    max-height:70vh;
-
-    padding:16px;
-
-    overflow:hidden;
-
-    display:flex;
-    flex-direction:column;
-
-    background:#111827;
-
-    border:1px solid var(--border);
-
-    border-radius:14px;
-
-    box-shadow:var(--shadow);
-
-    opacity:0;
-    visibility:hidden;
-
-    transform:translateY(10px);
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease,
-        transform .25s ease;
-}
-
-#commentPanel.active{
-    opacity:1;
-    visibility:visible;
-
-    transform:translateY(0);
-}
-
-.commentHeader{
-    margin-bottom:12px;
-}
-
-.commentHeader h3{
-    font-size:16px;
-}
-
-#commentList{
-    flex:1;
-
-    min-height:80px;
-
-    overflow-y:auto;
-
-    margin-bottom:12px;
-}
-
-.commentItem{
-    padding:10px;
-
-    margin-bottom:8px;
-
-    background:rgba(255,255,255,.04);
-
-    border-radius:8px;
-}
-
-.commentItem strong{
-    display:block;
-
-    margin-bottom:3px;
-
-    color:#fff;
-
-    font-size:12px;
-}
-
-.commentItem p{
-    color:#cbd5e1;
-
-    font-size:12px;
-
-    line-height:1.5;
-}
-
-.commentForm{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-}
-
-#commentName,
-#commentMessage{
-    width:100%;
-
-    color:#fff;
-
-    background:#1e293b;
-
-    border:1px solid var(--border);
-
-    border-radius:8px;
-}
-
-#commentName{
-    height:38px;
-    padding:0 10px;
-}
-
-#commentMessage{
-    min-height:80px;
-
-    padding:9px 10px;
-
-    resize:vertical;
-}
-
-#commentSubmit{
-    height:40px;
-
-    color:#fff;
-
-    background:var(--primary);
-
-    border-radius:8px;
-
-    transition:background var(--transition);
-}
-
-#commentSubmit:hover{
-    background:var(--primary-dark);
-}
-
-
-/*==================== SETTINGS ====================*/
-
-#settingsPanel{
-    position:fixed;
-
-    top:82px;
-    right:20px;
-
-    z-index:600;
-
-    width:300px;
-
-    padding:18px;
-
-    background:#111827;
-
-    border:1px solid var(--border);
-
-    border-radius:14px;
-
-    box-shadow:var(--shadow);
-
-    opacity:0;
-    visibility:hidden;
-
-    transform:
-        translateY(-10px);
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease,
-        transform .25s ease;
-}
-
-#settingsPanel.active{
-    opacity:1;
-    visibility:visible;
-
-    transform:translateY(0);
-}
-
-#settingsPanel h3{
-    margin-bottom:15px;
-
-    font-size:16px;
-}
-
-.settingItem{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-
-    padding:12px 0;
-
-    color:#cbd5e1;
-
-    border-bottom:1px solid var(--border);
-
-    font-size:13px;
-}
-
-.settingItem:last-child{
-    border-bottom:0;
-}
-
-.settingItem input{
-    width:18px;
-    height:18px;
-
-    accent-color:var(--primary);
-
-    cursor:pointer;
-}
-
-
-/*==================== SHARE PANEL ====================*/
-
-#sharePanel{
-    position:fixed;
-    inset:0;
-
-    z-index:1000;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    padding:20px;
-
-    background:rgba(0,0,0,.65);
-
-    opacity:0;
-    visibility:hidden;
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease;
-}
-
-#sharePanel.active{
-    opacity:1;
-    visibility:visible;
-}
-
-.shareBox{
-    position:relative;
-
-    width:min(400px,100%);
-
-    padding:24px;
-
-    background:#111827;
-
-    border:1px solid var(--border);
-
-    border-radius:16px;
-
-    box-shadow:var(--shadow);
-
-    text-align:center;
-}
-
-.shareBox h3{
-    margin-bottom:18px;
-
-    font-size:18px;
-}
-
-.closeButton{
-    position:absolute;
-
-    top:10px;
-    right:10px;
-
-    width:34px;
-    height:34px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:#fff;
-
-    background:rgba(255,255,255,.07);
-
-    border-radius:8px;
-}
-
-.shareButtons{
-    display:flex;
-    flex-direction:column;
-    gap:9px;
-}
-
-.shareButtons button{
-    height:42px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-
-    color:#fff;
-
-    background:#1e293b;
-
-    border-radius:8px;
-
-    transition:background var(--transition);
-}
-
-.shareButtons button:hover{
-    background:var(--primary);
-}
-
-
-/*==================== BOOKMARK MESSAGE ====================*/
-
-#bookmarkMessage{
-    position:fixed;
-
-    top:85px;
-    left:50%;
-
-    z-index:2000;
-
-    padding:9px 14px;
-
-    color:#fff;
-
-    background:#2563eb;
-
-    border-radius:8px;
-
-    transform:translate(-50%,-20px);
-
-    opacity:0;
-    visibility:hidden;
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease,
-        transform .25s ease;
-}
-
-#bookmarkMessage.show{
-    opacity:1;
-    visibility:visible;
-
-    transform:translate(-50%,0);
-}
-
-
-/*==================== EMPTY STATES ====================*/
-
-.emptyState{
-    padding:25px 10px;
-
-    color:#64748b;
-
-    text-align:center;
-
-    font-size:12px;
-}
-
-
-/*==================== LIGHT THEME ====================*/
-
-body.lightTheme{
-    background:#e2e8f0;
-    color:#0f172a;
-}
-
-body.lightTheme #reader{
-    background:#e2e8f0;
-}
-
-body.lightTheme #readerHeader,
-body.lightTheme #readerFooter,
-body.lightTheme #readerToolbar,
-body.lightTheme #leftSidebar,
-body.lightTheme #thumbnailSidebar,
-body.lightTheme #commentPanel,
-body.lightTheme #searchPanel,
-body.lightTheme #settingsPanel,
-body.lightTheme .shareBox{
-    background:#ffffff;
-    color:#0f172a;
-}
-
-body.lightTheme #bookTitle,
-body.lightTheme h3{
-    color:#0f172a;
-}
-
-body.lightTheme #bookAuthor,
-body.lightTheme #pageInfo,
-body.lightTheme #zoomValue{
-    color:#64748b;
-}
-
-body.lightTheme #readerToolbar button,
-body.lightTheme .footerCenter button,
-body.lightTheme .footerRight button,
-body.lightTheme .rightHeader button{
-    color:#334155;
-    background:#f1f5f9;
-}
-
-body.lightTheme #searchInput,
-body.lightTheme #commentName,
-body.lightTheme #commentMessage{
-    color:#0f172a;
-    background:#f8fafc;
-}
-
-
-/*==================== RESPONSIVE ====================*/
-
-@media (max-width:900px){
-
-    :root{
-        --header-height:64px;
-        --footer-height:50px;
-    }
-
-    #readerHeader{
-        padding:0 12px;
-    }
-
-    #bookTitle{
-        max-width:45vw;
-        font-size:15px;
-    }
-
-    #bookAuthor{
-        font-size:10px;
-    }
-
-    #readerToolbar{
-        top:7px;
-
-        max-width:calc(100% - 20px);
-
-        overflow-x:auto;
-    }
-
-    #readerBody{
-        padding-left:8px;
-        padding-right:8px;
-    }
-
-    #thumbnailSidebar{
-        width:160px;
-    }
-
-    #leftSidebar{
-        width:min(320px,88vw);
-    }
-}
-
-@media (max-width:600px){
-
-    .rightHeader button{
-        width:34px;
-        height:34px;
-    }
-
-    .rightHeader button:nth-child(2),
-    .rightHeader button:nth-child(4){
-        display:none;
-    }
-
-    #readerToolbar{
-        gap:2px;
-        padding:3px;
-    }
-
-    #readerToolbar button{
-        width:31px;
-        height:31px;
-    }
-
-    #readerToolbar .toolbarDivider{
-        display:none;
-    }
-
-    #readerFooter{
-        padding:0 8px;
-    }
-
-    .footerLeft{
-        display:none;
-    }
-
-    #thumbnailSidebar{
-        width:145px;
-    }
-
-    #commentPanel{
-        right:10px;
-        bottom:60px;
-
-        width:calc(100% - 20px);
-    }
-
-    #searchPanel,
-    #settingsPanel{
-        right:10px;
-        width:calc(100% - 20px);
-    }
-}
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 3
-==================================================*/
-
-/*==================== PDF VIEWER ====================*/
-
-#pdfContainer{
-    scrollbar-color:#475569 transparent;
-    scrollbar-width:thin;
-}
-
-#pdfContainer::-webkit-scrollbar{
-    width:8px;
-    height:8px;
-}
-
-#pdfContainer::-webkit-scrollbar-track{
-    background:transparent;
-}
-
-#pdfContainer::-webkit-scrollbar-thumb{
-    background:#475569;
-    border-radius:20px;
-}
-
-#pdfContainer::-webkit-scrollbar-thumb:hover{
-    background:#64748b;
-}
-
-
-/*==================== PDF PAGE ====================*/
-
-#pdfCanvas{
-    image-rendering:auto;
-    user-select:none;
-    -webkit-user-drag:none;
-}
-
-
-/*==================== ZOOM STATES ====================*/
-
-#pdfContainer.zoomed{
-    align-items:flex-start;
-    justify-content:flex-start;
-}
-
-#pdfCanvas.zoomed{
-    max-width:none;
-    max-height:none;
-}
-
-
-/*==================== PAGE FLIP ANIMATION ====================*/
-
-#pageFlipLayer.flip-next{
-    animation:
-        flipNext .7s
-        cubic-bezier(.22,.61,.36,1);
-}
-
-#pageFlipLayer.flip-prev{
-    animation:
-        flipPrevious .7s
-        cubic-bezier(.22,.61,.36,1);
-}
-
-@keyframes flipNext{
-
-    0%{
-        opacity:1;
-        transform:
-            perspective(1800px)
-            rotateY(0deg);
-        transform-origin:left center;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            perspective(1800px)
-            rotateY(-180deg);
-        transform-origin:left center;
-    }
-
-}
-
-@keyframes flipPrevious{
-
-    0%{
-        opacity:1;
-        transform:
-            perspective(1800px)
-            rotateY(0deg);
-        transform-origin:right center;
-    }
-
-    100%{
-        opacity:0;
-        transform:
-            perspective(1800px)
-            rotateY(180deg);
-        transform-origin:right center;
-    }
-
-}
-
-
-/*==================== DISABLED BUTTONS ====================*/
-
-button:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-    pointer-events:none;
-}
-
-
-/*==================== ACTIVE BUTTON ====================*/
-
-button.active{
-    color:#fff !important;
-
-    background:
-        rgba(37,99,235,.35) !important;
-}
-
-
-/*==================== BOOKMARK STATE ====================*/
-
-#bookmarkBtn.bookmarked{
-    color:#facc15;
-}
-
-#bookmarkBtn.bookmarked i::before{
-    content:"\ee13";
-}
-
-
-/*==================== LIKE STATE ====================*/
-
-#likeBtn.liked{
-    color:#f43f5e;
-}
-
-
-/*==================== SEARCH HIGHLIGHT ====================*/
-
-.searchHighlight{
-    padding:1px 3px;
-
-    color:#fff;
-
-    background:#2563eb;
-
-    border-radius:3px;
-}
-
-
-/*==================== CURRENT TOC ====================*/
-
-.tocItem.active{
-    color:#fff;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(37,99,235,.35),
-            rgba(37,99,235,.10)
-        );
-
-    border-left:3px solid var(--accent);
-}
-
-
-/*==================== CURRENT THUMBNAIL ====================*/
-
-.thumbnail.active{
-    border-color:var(--accent);
-
-    box-shadow:
-        0 0 0 2px rgba(96,165,250,.15);
-}
-
-
-/*==================== DRAG CURSOR ====================*/
-
-#pdfContainer.dragging{
-    cursor:grabbing;
-}
-
-#pdfContainer:not(.dragging){
-    cursor:default;
-}
-
-
-/*==================== FULLSCREEN ====================*/
-
-body.fullscreen #readerHeader{
-    display:none;
-}
-
-body.fullscreen #readerFooter{
-    display:none;
-}
-
-body.fullscreen #readerBody{
-    padding-bottom:0;
-    padding-top:56px;
-}
-
-body.fullscreen #readerToolbar{
-    top:10px;
-}
-
-
-/*==================== HIDE PANELS ====================*/
-
-.panelHidden{
-    display:none !important;
-}
-
-
-/*==================== NO SELECT ====================*/
-
-.noSelect{
-    user-select:none;
-    -webkit-user-select:none;
-}
-
-
-/*==================== BOOK LOADING ====================*/
-
-body.loading #reader{
-    pointer-events:none;
-}
-
-body.loading #readerToolbar,
-body.loading #readerFooter{
-    opacity:.4;
-}
-
-
-/*==================== ERROR MESSAGE ====================*/
-
-.readerError{
-    width:min(500px,90%);
-
-    padding:25px;
-
-    text-align:center;
-
-    color:#fecaca;
-
-    background:
-        rgba(127,29,29,.35);
-
-    border:1px solid
-        rgba(248,113,113,.25);
-
-    border-radius:14px;
-}
-
-.readerError h3{
-    margin-bottom:8px;
-
-    color:#fca5a5;
-}
-
-.readerError p{
-    color:#cbd5e1;
-
-    font-size:13px;
-
-    line-height:1.6;
-}
-
-
-/*==================== EMPTY PDF ====================*/
-
-.pdfEmpty{
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:100%;
-    height:100%;
-
-    color:#64748b;
-
-    text-align:center;
-}
-
-.pdfEmpty i{
-    display:block;
-
-    margin-bottom:10px;
-
-    font-size:42px;
-}
-
-
-/*==================== PRINT ====================*/
-
-@media print{
-
-    #readerHeader,
-    #readerToolbar,
-    #readerFooter,
-    #leftSidebar,
-    #thumbnailSidebar,
-    #searchPanel,
-    #commentPanel,
-    #settingsPanel,
-    #sharePanel,
-    #toast{
-        display:none !important;
-    }
-
-    #readerBody{
-        padding:0 !important;
-    }
-
-    #pdfContainer{
-        overflow:visible;
-    }
-
-}
-
-
-/*==================== REDUCED MOTION ====================*/
-
-@media (prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-        scroll-behavior:auto !important;
-        animation-duration:.01ms !important;
-        animation-iteration-count:1 !important;
-        transition-duration:.01ms !important;
-    }
-
-}
-
-
-/*==================== VERY SMALL DEVICES ====================*/
-
-@media (max-width:380px){
-
-    #bookTitle{
-        max-width:40vw;
-        font-size:13px;
-    }
-
-    .rightHeader{
-        gap:2px;
-    }
-
-    .rightHeader button{
-        width:31px;
-        height:31px;
-    }
-
-    #readerToolbar{
-        transform:translateX(-50%) scale(.92);
-        transform-origin:top center;
-    }
-
-    #pageCounter{
-        min-width:50px;
-    }
-
-    #zoomValue{
-        min-width:35px;
-    }
-
-}
-
-
-/*==================== FINAL BASE HELPERS ====================*/
-
-.hidden{
-    display:none !important;
-}
-
-.visible{
-    display:block !important;
-}
-
-.flex{
-    display:flex !important;
-}
-
-.center{
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-}
-
-.text-center{
-    text-align:center;
-}
-
-
-/*==================== END CSS PART 3 ====================*/
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 4
-==================================================*/
-
-/*==================== ACCESSIBILITY ====================*/
-
-button,
-input,
-textarea{
-    -webkit-tap-highlight-color:transparent;
+    outline:0;
 }
 
 button:focus-visible,
@@ -1909,40 +183,1893 @@ textarea:focus-visible{
 }
 
 
-/*==================== SIDEBAR SCROLLBARS ====================*/
+/*==================================================
+                    SCROLLBAR
+==================================================*/
 
-#leftSidebar,
-#thumbnailSidebar,
-#searchResults,
-#commentList{
-    scrollbar-width:thin;
-    scrollbar-color:#475569 transparent;
+::-webkit-scrollbar{
+    width:7px;
+    height:7px;
 }
 
-#leftSidebar::-webkit-scrollbar,
-#thumbnailSidebar::-webkit-scrollbar,
-#searchResults::-webkit-scrollbar,
-#commentList::-webkit-scrollbar{
-    width:6px;
-}
-
-#leftSidebar::-webkit-scrollbar-track,
-#thumbnailSidebar::-webkit-scrollbar-track,
-#searchResults::-webkit-scrollbar-track,
-#commentList::-webkit-scrollbar-track{
+::-webkit-scrollbar-track{
     background:transparent;
 }
 
-#leftSidebar::-webkit-scrollbar-thumb,
-#thumbnailSidebar::-webkit-scrollbar-thumb,
-#searchResults::-webkit-scrollbar-thumb,
-#commentList::-webkit-scrollbar-thumb{
-    background:#475569;
+::-webkit-scrollbar-thumb{
+    background:rgba(148,163,184,.35);
     border-radius:20px;
 }
 
+::-webkit-scrollbar-thumb:hover{
+    background:rgba(148,163,184,.55);
+}
 
-/*==================== TOOLTIP ====================*/
+
+/*==================================================
+                    READER APP
+==================================================*/
+
+.reader-app{
+    position:relative;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    background:var(--app-bg);
+    overflow:hidden;
+}
+
+
+/*==================================================
+                    HEADER
+==================================================*/
+
+.reader-header{
+    flex:0 0 var(--header-height);
+    height:var(--header-height);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    background:var(--surface);
+
+    border-bottom:
+        1px solid var(--border);
+
+    z-index:100;
+}
+
+
+.headerLeft,
+.headerRight{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.headerRight{
+    margin-left:auto;
+}
+
+
+/*==================================================
+                    BRAND
+==================================================*/
+
+.libraryBrand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    margin-left:8px;
+}
+
+.brandIcon{
+    width:40px;
+    height:40px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:#fff;
+    font-size:20px;
+
+    box-shadow:
+        0 6px 18px
+        rgba(0,0,0,.20);
+}
+
+.libraryBrand strong{
+    display:block;
+    color:var(--text);
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.libraryBrand span{
+    display:block;
+    margin-top:1px;
+    color:var(--text-muted);
+    font-size:11px;
+}
+
+
+/*==================================================
+                    ICON BUTTON
+==================================================*/
+
+.iconBtn{
+    width:40px;
+    height:40px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:var(--surface-2);
+    color:var(--text-soft);
+
+    border:1px solid var(--border);
+
+    cursor:pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        transform var(--transition),
+        border-color var(--transition);
+}
+
+.iconBtn:hover{
+    background:var(--surface-3);
+    color:var(--text);
+    transform:translateY(-1px);
+}
+
+.iconBtn i{
+    font-size:19px;
+}
+
+
+/*==================================================
+                    SEARCH BAR
+==================================================*/
+
+.search-bar{
+    position:absolute;
+
+    top:var(--header-height);
+
+    left:0;
+    right:0;
+
+    padding:10px 18px;
+
+    background:var(--surface);
+
+    border-bottom:
+        1px solid var(--border);
+
+    z-index:95;
+
+    transform:
+        translateY(-120%);
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:
+        transform .25s ease,
+        opacity .25s ease;
+}
+
+.search-bar.active{
+    transform:translateY(0);
+    opacity:1;
+    pointer-events:auto;
+}
+
+.searchBox{
+    width:min(700px,100%);
+    margin:auto;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:0 13px;
+
+    height:44px;
+
+    border-radius:11px;
+
+    background:var(--surface-2);
+    border:1px solid var(--border);
+}
+
+.searchBox > i{
+    color:var(--text-muted);
+}
+
+.searchBox input{
+    flex:1;
+    min-width:0;
+
+    border:0;
+    outline:0;
+
+    background:transparent;
+    color:var(--text);
+
+    font-size:13px;
+}
+
+.searchBox input::placeholder{
+    color:var(--text-muted);
+}
+
+.searchBox button{
+    width:30px;
+    height:30px;
+
+    border-radius:8px;
+
+    background:transparent;
+    color:var(--text-muted);
+
+    cursor:pointer;
+}
+
+.searchBox button:hover{
+    background:var(--surface-3);
+    color:var(--text);
+}
+
+.searchResults{
+    width:min(700px,100%);
+    margin:7px auto 0;
+
+    color:var(--text-muted);
+    font-size:11px;
+}
+
+
+/*==================================================
+                    MAIN TOOLBAR
+==================================================*/
+
+.reader-toolbar{
+    flex:0 0 var(--toolbar-height);
+    height:var(--toolbar-height);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+
+    padding:0 12px;
+
+    background:var(--surface-2);
+
+    border-bottom:
+        1px solid var(--border);
+
+    z-index:90;
+}
+
+.toolbarBtn{
+    width:38px;
+    height:38px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:transparent;
+    color:var(--text-soft);
+
+    cursor:pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+}
+
+.toolbarBtn:hover{
+    background:var(--surface-3);
+    color:var(--text);
+}
+
+.toolbarBtn:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+.toolbarBtn i{
+    font-size:18px;
+}
+
+.toolbarDivider{
+    width:1px;
+    height:25px;
+    margin:0 5px;
+    background:var(--border);
+}
+
+
+/*==================================================
+                    PAGE COUNTER
+==================================================*/
+
+.page-counter{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    color:var(--text-muted);
+    font-size:13px;
+}
+
+.page-counter input{
+    width:48px;
+    height:32px;
+
+    text-align:center;
+
+    border:1px solid var(--border);
+    border-radius:8px;
+
+    background:var(--surface);
+    color:var(--text);
+
+    outline:0;
+}
+
+.page-counter span{
+    color:var(--text-muted);
+}
+
+.zoomValue{
+    min-width:48px;
+    text-align:center;
+    color:var(--text-soft);
+    font-size:12px;
+    font-weight:600;
+}
+
+
+/*==================================================
+                    PROGRESS
+==================================================*/
+
+.reading-progress{
+    width:100%;
+    height:3px;
+
+    background:transparent;
+
+    overflow:hidden;
+
+    z-index:80;
+}
+
+.reading-progress-fill{
+    width:0;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--accent)
+        );
+
+    transition:width .25s ease;
+}
+
+
+/*==================================================
+                    READER MAIN
+==================================================*/
+
+.reader-main{
+    position:relative;
+
+    flex:1;
+    min-height:0;
+
+    display:flex;
+
+    overflow:hidden;
+}
+
+
+/*==================================================
+                    SIDEBAR
+==================================================*/
+
+.reader-sidebar{
+    width:280px;
+    flex:0 0 280px;
+
+    background:var(--surface);
+
+    border-right:
+        1px solid var(--border);
+
+    display:flex;
+    flex-direction:column;
+
+    overflow:hidden;
+
+    transform:translateX(-100%);
+    margin-left:-280px;
+
+    transition:
+        transform .25s ease,
+        margin .25s ease;
+
+    z-index:70;
+}
+
+.reader-sidebar.active{
+    transform:translateX(0);
+    margin-left:0;
+}
+
+.sidebarTabs{
+    display:flex;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.sidebarTab{
+    flex:1;
+
+    padding:13px 5px;
+
+    background:transparent;
+    color:var(--text-muted);
+
+    cursor:pointer;
+
+    font-size:11px;
+    font-weight:600;
+}
+
+.sidebarTab:hover{
+    color:var(--text);
+}
+
+.sidebarTab.active{
+    color:var(--accent);
+
+    box-shadow:
+        inset 0 -2px 0 var(--accent);
+}
+
+.sidebarPanel{
+    display:none;
+    flex:1;
+    min-height:0;
+    overflow:auto;
+}
+
+.sidebarPanel.active{
+    display:block;
+}
+
+
+/*==================================================
+                    CONTENT LISTS
+==================================================*/
+
+.contentsList,
+.bookmarksList,
+.thumbnailList{
+    padding:12px;
+}
+
+.contentsList:empty::after{
+    content:"No contents available";
+    display:block;
+    text-align:center;
+    padding:30px 10px;
+    color:var(--text-muted);
+    font-size:12px;
+}
+
+.bookmarksList:empty::after{
+    content:"No bookmarks yet";
+    display:block;
+    text-align:center;
+    padding:30px 10px;
+    color:var(--text-muted);
+    font-size:12px;
+}
+
+
+/*==================================================
+                    PDF AREA
+==================================================*/
+
+.pdf-area{
+    position:relative;
+
+    flex:1;
+    min-width:0;
+    min-height:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:auto;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(148,163,184,.08),
+            transparent 60%
+        );
+}
+
+.pdf-container{
+    min-width:100%;
+    min-height:100%;
+
+    padding:35px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:20px;
+}
+
+.pdf-canvas{
+    display:block;
+
+    max-width:none;
+
+    background:var(--page-bg);
+
+    box-shadow:var(--page-shadow);
+
+    transition:
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+.pdf-canvas.secondary-page{
+    display:none;
+}
+
+
+/*==================================================
+                    PAGE LOADING
+==================================================*/
+
+.page-loading{
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:12px;
+
+    color:var(--text-muted);
+
+    background:rgba(11,17,32,.35);
+
+    z-index:10;
+}
+
+.loaderSpinner{
+    width:34px;
+    height:34px;
+
+    border:3px solid
+        rgba(148,163,184,.20);
+
+    border-top-color:
+        var(--accent);
+
+    border-radius:50%;
+
+    animation:
+        readerSpin .8s linear infinite;
+}
+
+@keyframes readerSpin{
+
+    to{
+        transform:rotate(360deg);
+    }
+
+}
+
+
+/*==================================================
+                    COMMENTS
+==================================================*/
+
+.comments-panel{
+    width:310px;
+    flex:0 0 310px;
+
+    display:flex;
+    flex-direction:column;
+
+    background:var(--surface);
+
+    border-left:
+        1px solid var(--border);
+
+    transform:translateX(100%);
+    margin-right:-310px;
+
+    transition:
+        transform .25s ease,
+        margin .25s ease;
+
+    z-index:70;
+}
+
+.comments-panel.active{
+    transform:translateX(0);
+    margin-right:0;
+}
+
+.commentsHeader{
+    height:55px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 15px;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.commentsHeader h3{
+    font-size:14px;
+    color:var(--text);
+}
+
+.commentsHeader button{
+    width:32px;
+    height:32px;
+
+    border-radius:8px;
+
+    background:var(--surface-2);
+    color:var(--text-muted);
+
+    cursor:pointer;
+}
+
+.commentsList{
+    flex:1;
+    min-height:0;
+
+    overflow:auto;
+
+    padding:14px;
+}
+
+.commentForm{
+    padding:13px;
+
+    border-top:
+        1px solid var(--border);
+}
+
+.commentForm input,
+.commentForm textarea{
+    width:100%;
+
+    border:1px solid var(--border);
+    border-radius:9px;
+
+    background:var(--surface-2);
+    color:var(--text);
+
+    outline:0;
+
+    padding:10px;
+
+    margin-bottom:8px;
+
+    resize:none;
+
+    font-size:12px;
+}
+
+.commentForm button{
+    width:100%;
+
+    padding:10px;
+
+    border-radius:9px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:#fff;
+
+    cursor:pointer;
+
+    font-weight:600;
+}
+
+
+/*==================================================
+                    FOOTER
+==================================================*/
+
+.reader-footer{
+    flex:0 0 var(--footer-height);
+    height:var(--footer-height);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 16px;
+
+    background:var(--surface);
+
+    border-top:
+        1px solid var(--border);
+
+    z-index:80;
+}
+
+.footerLeft,
+.footerCenter,
+.footerRight{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.footerLeft{
+    color:var(--text-muted);
+    font-size:11px;
+}
+
+.footerBtn{
+    min-width:36px;
+    height:36px;
+
+    padding:0 9px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+
+    border-radius:9px;
+
+    background:transparent;
+    color:var(--text-soft);
+
+    cursor:pointer;
+}
+
+.footerBtn:hover{
+    background:var(--surface-2);
+    color:var(--text);
+}
+
+
+/*==================================================
+                    SETTINGS
+==================================================*/
+
+.settings-panel{
+    position:fixed;
+
+    top:82px;
+    right:18px;
+
+    width:340px;
+    max-width:calc(100vw - 30px);
+    max-height:calc(100vh - 105px);
+
+    overflow:auto;
+
+    padding:20px;
+
+    background:var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:18px;
+
+    box-shadow:
+        0 20px 65px
+        rgba(0,0,0,.45);
+
+    z-index:500;
+
+    opacity:0;
+    visibility:hidden;
+
+    transform:
+        translateY(-10px)
+        scale(.97);
+
+    transition:
+        opacity .2s ease,
+        visibility .2s ease,
+        transform .2s ease;
+}
+
+.settings-panel.active{
+    opacity:1;
+    visibility:visible;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+.settingsHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:20px;
+}
+
+.settingsHeader span{
+    font-size:17px;
+    font-weight:700;
+    color:var(--text);
+}
+
+.closeButton{
+    width:34px;
+    height:34px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:9px;
+
+    background:var(--surface-2);
+    color:var(--text-soft);
+
+    cursor:pointer;
+}
+
+.closeButton:hover{
+    color:var(--text);
+}
+
+.settingsSection{
+    padding:15px 0;
+
+    border-bottom:
+        1px solid var(--border);
+}
+
+.settingsSection:last-child{
+    border-bottom:0;
+}
+
+.settingsSection h4{
+    margin-bottom:11px;
+
+    color:var(--text-muted);
+
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+
+.settingsOptions{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+}
+
+.settingOption{
+    min-height:43px;
+
+    padding:8px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+
+    border-radius:10px;
+
+    background:var(--surface-2);
+
+    border:
+        1px solid var(--border);
+
+    color:var(--text-soft);
+
+    cursor:pointer;
+
+    font-size:12px;
+    font-weight:600;
+
+    transition:.2s ease;
+}
+
+.settingOption:hover{
+    transform:translateY(-1px);
+    background:var(--surface-3);
+}
+
+.settingOption.active{
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:#fff;
+
+    border-color:
+        var(--accent);
+}
+
+.maroonOption{
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e3f,
+            #5d1023
+        ) !important;
+
+    color:#fff !important;
+}
+
+.goldOption{
+    background:
+        linear-gradient(
+            135deg,
+            #f5d76e,
+            #a67c00
+        ) !important;
+
+    color:#211b08 !important;
+}
+
+.themeOptions{
+    grid-template-columns:1fr 1fr;
+}
+
+
+/*==================================================
+                    SHARE MODAL
+==================================================*/
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        rgba(0,0,0,.60);
+
+    backdrop-filter:blur(5px);
+
+    z-index:800;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.2s ease;
+}
+
+.modal.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.shareBox{
+    position:relative;
+
+    width:min(400px,100%);
+
+    padding:25px;
+
+    background:var(--surface);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:18px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.45);
+}
+
+.shareBox h3{
+    margin-bottom:20px;
+    color:var(--text);
+}
+
+.shareBox > .closeButton{
+    position:absolute;
+    top:14px;
+    right:14px;
+}
+
+.shareButtons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.shareButtons button{
+    padding:12px;
+
+    border-radius:10px;
+
+    background:var(--surface-2);
+    color:var(--text-soft);
+
+    border:
+        1px solid var(--border);
+
+    cursor:pointer;
+}
+
+.shareButtons button:hover{
+    background:var(--surface-3);
+    color:var(--text);
+}
+
+
+/*==================================================
+                    TOAST
+==================================================*/
+
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:75px;
+
+    transform:
+        translate(-50%,20px);
+
+    padding:10px 16px;
+
+    border-radius:10px;
+
+    background:
+        rgba(15,23,42,.95);
+
+    color:#fff;
+
+    font-size:12px;
+
+    z-index:1000;
+
+    opacity:0;
+    pointer-events:none;
+
+    transition:.25s ease;
+}
+
+.toast.active{
+    opacity:1;
+
+    transform:
+        translate(-50%,0);
+}
+
+
+/*==================================================
+                READ TRANSITION
+==================================================*/
+
+.reader-transition{
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#fff;
+
+    z-index:2000;
+
+    opacity:0;
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:
+        opacity .55s ease,
+        visibility .55s ease;
+}
+
+.reader-transition.active{
+    opacity:1;
+    visibility:visible;
+}
+
+.transitionGlow{
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,255,255,1) 0%,
+            rgba(255,255,255,.75) 35%,
+            rgba(255,255,255,0) 70%
+        );
+
+    animation:
+        readerGlow 1s ease forwards;
+}
+
+.transitionBook{
+    position:relative;
+
+    width:100px;
+    height:100px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:#fff;
+
+    font-size:48px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.25);
+
+    transform:
+        scale(.6);
+
+    animation:
+        readerBookOpen .75s ease forwards;
+}
+
+@keyframes readerGlow{
+
+    0%{
+        transform:scale(.3);
+        opacity:0;
+    }
+
+    45%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+    100%{
+        transform:scale(2);
+        opacity:0;
+    }
+
+}
+
+@keyframes readerBookOpen{
+
+    0%{
+        transform:
+            scale(.6)
+            rotate(-5deg);
+
+        opacity:0;
+    }
+
+    60%{
+        transform:
+            scale(1.08)
+            rotate(2deg);
+
+        opacity:1;
+    }
+
+    100%{
+        transform:
+            scale(1)
+            rotate(0);
+
+        opacity:1;
+    }
+
+}
+
+
+/*==================================================
+                LOADING SCREEN
+==================================================*/
+
+.loading-screen{
+    position:fixed;
+
+    inset:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        var(--app-bg);
+
+    z-index:1900;
+}
+
+.loading-content{
+    width:min(420px,90%);
+
+    text-align:center;
+}
+
+.loadingLogo{
+    width:72px;
+    height:72px;
+
+    margin:0 auto 18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--secondary)
+        );
+
+    color:#fff;
+
+    font-size:32px;
+}
+
+.loading-content h1{
+    color:var(--text);
+    font-size:20px;
+    letter-spacing:1px;
+}
+
+.loading-content p{
+    margin-top:6px;
+
+    color:var(--text-muted);
+
+    font-size:12px;
+}
+
+.loadingBar{
+    width:100%;
+    height:5px;
+
+    margin-top:20px;
+
+    overflow:hidden;
+
+    border-radius:10px;
+
+    background:var(--surface-2);
+}
+
+.loadingProgress{
+    width:0;
+    height:100%;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--accent)
+        );
+
+    transition:width .25s ease;
+}
+
+#loadingPercent{
+    display:block;
+
+    margin-top:8px;
+
+    color:var(--text-muted);
+
+    font-size:11px;
+}
+
+
+/*==================================================
+                    HIDDEN
+==================================================*/
+
+.reader-app.hidden{
+    display:none;
+}
+
+
+/*==================================================
+                    MOBILE
+==================================================*/
+
+@media(max-width:900px){
+
+    .reader-sidebar{
+        position:absolute;
+
+        top:0;
+        bottom:0;
+        left:0;
+
+        z-index:200;
+    }
+
+    .comments-panel{
+        position:absolute;
+
+        top:0;
+        bottom:0;
+        right:0;
+
+        z-index:200;
+    }
+
+    .libraryBrand span{
+        display:none;
+    }
+
+    .reader-toolbar{
+        overflow-x:auto;
+        justify-content:flex-start;
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    :root{
+        --header-height:60px;
+        --toolbar-height:50px;
+        --footer-height:50px;
+    }
+
+    .reader-header{
+        padding:0 9px;
+    }
+
+    .libraryBrand{
+        gap:7px;
+        margin-left:2px;
+    }
+
+    .libraryBrand strong{
+        font-size:11px;
+    }
+
+    .brandIcon{
+        width:34px;
+        height:34px;
+        font-size:17px;
+    }
+
+    .headerRight{
+        gap:3px;
+    }
+
+    .headerRight .iconBtn{
+        width:34px;
+        height:34px;
+    }
+
+    .headerRight .iconBtn:nth-child(
+        1
+    ),
+    .headerRight .iconBtn:nth-child(
+        2
+    ){
+        display:none;
+    }
+
+    .toolbarBtn{
+        width:34px;
+        height:34px;
+        flex:0 0 34px;
+    }
+
+    .pdf-container{
+        padding:15px;
+    }
+
+    .settings-panel{
+        top:68px;
+        left:10px;
+        right:10px;
+        width:auto;
+    }
+
+    .themeOptions{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .footerLeft{
+        display:none;
+    }
+
+    .reader-footer{
+        justify-content:center;
+    }
+
+    .footerRight{
+        position:absolute;
+        right:8px;
+    }
+
+    .reader-transition .transitionBook{
+        width:80px;
+        height:80px;
+        font-size:38px;
+    }
+
+}
+/*==================================================
+        CHISHTI LIBRARY READER V4
+        CSS PART 2
+        THUMBNAILS + BOOKMARKS + COMMENTS
+        PAGE VIEW + PRINT + STATES
+==================================================*/
+
+
+/*==================================================
+                THUMBNAIL ITEMS
+==================================================*/
+
+.thumbnailItem{
+    position:relative;
+
+    width:100%;
+
+    margin-bottom:10px;
+
+    padding:7px;
+
+    border-radius:10px;
+
+    background:var(--surface-2);
+
+    border:1px solid var(--border);
+
+    cursor:pointer;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease;
+}
+
+.thumbnailItem:hover{
+    background:var(--surface-3);
+
+    transform:translateY(-1px);
+}
+
+.thumbnailItem.active{
+    border-color:var(--accent);
+
+    box-shadow:
+        0 0 0 1px var(--accent);
+}
+
+.thumbnailItem canvas{
+    display:block;
+
+    width:100%;
+    height:auto;
+
+    background:#fff;
+
+    border-radius:5px;
+}
+
+.thumbnailNumber{
+    display:block;
+
+    padding-top:5px;
+
+    text-align:center;
+
+    color:var(--text-muted);
+
+    font-size:10px;
+}
+
+
+/*==================================================
+                BOOKMARK ITEMS
+==================================================*/
+
+.bookmarkItem{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    width:100%;
+
+    margin-bottom:7px;
+    padding:10px;
+
+    border-radius:9px;
+
+    background:var(--surface-2);
+
+    border:1px solid var(--border);
+
+    color:var(--text-soft);
+
+    cursor:pointer;
+
+    text-align:left;
+
+    transition:.2s ease;
+}
+
+.bookmarkItem:hover{
+    background:var(--surface-3);
+
+    color:var(--text);
+}
+
+.bookmarkItem i{
+    color:var(--accent);
+}
+
+.bookmarkPage{
+    font-size:11px;
+    font-weight:600;
+}
+
+.bookmarkTitle{
+    flex:1;
+
+    min-width:0;
+
+    overflow:hidden;
+
+    white-space:nowrap;
+
+    text-overflow:ellipsis;
+
+    font-size:11px;
+}
+
+
+/*==================================================
+                CONTENT ITEMS
+==================================================*/
+
+.contentItem{
+    display:block;
+
+    width:100%;
+
+    padding:10px 11px;
+
+    margin-bottom:5px;
+
+    border-radius:8px;
+
+    background:transparent;
+
+    color:var(--text-soft);
+
+    text-align:left;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+    transition:.2s ease;
+}
+
+.contentItem:hover{
+    background:var(--surface-2);
+
+    color:var(--text);
+}
+
+.contentItem.active{
+    background:var(--surface-2);
+
+    color:var(--accent);
+
+    font-weight:600;
+}
+
+
+/*==================================================
+                COMMENT ITEM
+==================================================*/
+
+.commentItem{
+    padding:11px;
+
+    margin-bottom:9px;
+
+    border-radius:10px;
+
+    background:var(--surface-2);
+
+    border:1px solid var(--border);
+}
+
+.commentAuthor{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:8px;
+
+    margin-bottom:5px;
+}
+
+.commentAuthor strong{
+    color:var(--text);
+
+    font-size:11px;
+}
+
+.commentDate{
+    color:var(--text-muted);
+
+    font-size:9px;
+}
+
+.commentBody{
+    color:var(--text-soft);
+
+    font-size:11px;
+
+    line-height:1.6;
+
+    word-break:break-word;
+}
+
+.noComments{
+    padding:35px 10px;
+
+    text-align:center;
+
+    color:var(--text-muted);
+
+    font-size:11px;
+}
+
+
+/*==================================================
+                PAGE VIEW MODES
+==================================================*/
+
+.pdf-container.single-page{
+    flex-direction:row;
+}
+
+.pdf-container.double-page{
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.pdf-container.double-page
+.pdf-canvas.secondary-page{
+    display:block;
+}
+
+.pdf-container.single-page
+.pdf-canvas.secondary-page{
+    display:none;
+}
+
+
+/*==================================================
+                PAGE SHADOW TOGGLE
+==================================================*/
+
+body.no-page-shadow
+.pdf-canvas{
+    box-shadow:none;
+}
+
+
+/*==================================================
+                PAGE CENTERING
+==================================================*/
+
+.pdf-area{
+    scroll-behavior:smooth;
+}
+
+.pdf-container{
+    min-height:100%;
+
+    margin:auto;
+}
+
+
+/*==================================================
+                PDF PAGE BORDER
+==================================================*/
+
+.pdf-canvas{
+    border:1px solid
+        rgba(15,23,42,.08);
+
+    border-radius:2px;
+}
+
+body.theme-dark
+.pdf-canvas,
+body.theme-maroon
+.pdf-canvas,
+body.theme-gold
+.pdf-canvas{
+    border-color:
+        rgba(255,255,255,.08);
+}
+
+
+/*==================================================
+                FULLSCREEN
+==================================================*/
+
+:fullscreen{
+    background:var(--app-bg);
+}
+
+.reader-app:fullscreen{
+    width:100vw;
+    height:100vh;
+}
+
+
+/*==================================================
+                DISABLED STATES
+==================================================*/
+
+.is-disabled{
+    opacity:.45 !important;
+
+    pointer-events:none !important;
+}
+
+.hidden{
+    display:none !important;
+}
+
+.invisible{
+    visibility:hidden !important;
+}
+
+
+/*==================================================
+                ACTIVE BOOKMARK
+==================================================*/
+
+#bookmarkBtn.bookmarked,
+#bookmarkToolbarBtn.bookmarked{
+
+    color:var(--accent);
+
+    background:var(--surface-3);
+}
+
+#bookmarkBtn.bookmarked i,
+#bookmarkToolbarBtn.bookmarked i{
+
+    color:var(--accent);
+}
+
+
+/*==================================================
+                LIKE BUTTON
+==================================================*/
+
+#likeBtn.liked{
+    color:#ef4444;
+
+    background:rgba(239,68,68,.10);
+}
+
+#likeBtn.liked i{
+    color:#ef4444;
+}
+
+
+/*==================================================
+                SEARCH HIGHLIGHT
+==================================================*/
+
+.search-highlight{
+    background:
+        rgba(212,175,55,.35);
+
+    border-radius:3px;
+}
+
+
+/*==================================================
+                TOOLTIP
+==================================================*/
 
 [data-tooltip]{
     position:relative;
@@ -1954,1900 +2081,356 @@ textarea:focus-visible{
     position:absolute;
 
     left:50%;
-    bottom:calc(100% + 8px);
+    bottom:-34px;
 
-    z-index:5000;
+    transform:
+        translateX(-50%)
+        translateY(-4px);
 
     padding:5px 8px;
 
-    color:#fff;
+    border-radius:6px;
 
     background:#020617;
 
-    border-radius:6px;
+    color:#fff;
 
-    font-size:10px;
+    font-size:9px;
+
     white-space:nowrap;
 
     opacity:0;
-    visibility:hidden;
 
     pointer-events:none;
 
-    transform:
-        translate(-50%,4px);
+    transition:.15s ease;
 
-    transition:
-        opacity .2s ease,
-        visibility .2s ease,
-        transform .2s ease;
+    z-index:999;
 }
 
 [data-tooltip]:hover::after{
     opacity:1;
-    visibility:visible;
 
     transform:
-        translate(-50%,0);
+        translateX(-50%)
+        translateY(0);
 }
 
 
-/*==================== MOBILE TOUCH ====================*/
+/*==================================================
+                READER OPEN STATE
+==================================================*/
 
-@media (hover:none){
+body.reader-opening
+.reader-app{
 
-    .rightHeader button:hover,
-    #readerToolbar button:hover,
-    .footerCenter button:hover,
-    .footerRight button:hover{
-        transform:none;
-        background:rgba(255,255,255,.06);
-    }
+    transform:
+        scale(.985);
 
-    button{
-        touch-action:manipulation;
-    }
+    opacity:.85;
 
+    transition:
+        transform .45s ease,
+        opacity .45s ease;
 }
 
+body.reader-ready
+.reader-app{
 
-/*==================== LANDSCAPE MOBILE ====================*/
+    transform:
+        scale(1);
 
-@media (
-    max-height:520px
-) and (
-    orientation:landscape
-){
-
-    :root{
-        --header-height:52px;
-        --footer-height:42px;
-    }
-
-    #readerHeader{
-        padding:0 10px;
-    }
-
-    #readerToolbar{
-        top:4px;
-        height:38px;
-    }
-
-    #readerToolbar button{
-        width:30px;
-        height:30px;
-    }
-
-    #readerBody{
-        padding-top:42px;
-    }
-
-    #readerFooter{
-        height:42px;
-    }
-
-}
-
-
-/*==================== LARGE SCREENS ====================*/
-
-@media (min-width:1600px){
-
-    #pdfContainer{
-        width:min(1200px,80vw);
-    }
-
-    #pdfCanvas{
-        box-shadow:
-            0 25px 70px rgba(0,0,0,.5);
-    }
-
-}
-
-
-/*==================== PAGE SHADOW OFF ====================*/
-
-body.noPageShadow #pdfCanvas{
-    box-shadow:none;
-}
-
-body.noPageShadow #flipPage{
-    box-shadow:none;
-}
-
-
-/*==================== ANIMATION OFF ====================*/
-
-body.noPageAnimation #pageFlipLayer{
-    animation:none !important;
-}
-
-body.noPageAnimation #flipPage{
-    transition:none !important;
-}
-
-
-/*==================== READING MODE ====================*/
-
-body.readingMode #readerHeader{
-    opacity:0;
-    pointer-events:none;
-
-    transition:opacity .25s ease;
-}
-
-body.readingMode #readerFooter{
-    opacity:0;
-    pointer-events:none;
-
-    transition:opacity .25s ease;
-}
-
-body.readingMode #readerToolbar{
-    opacity:.15;
-
-    transition:opacity .25s ease;
-}
-
-body.readingMode #readerToolbar:hover{
     opacity:1;
 }
 
 
-/*==================== BOOK COVER ====================*/
+/*==================================================
+                LOADING HIDE
+==================================================*/
 
-.bookCover{
-    width:min(280px,80vw);
-
-    aspect-ratio:3 / 4;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-
-    padding:30px;
-
-    color:#fff;
-
-    text-align:center;
-
-    background:
-        linear-gradient(
-            145deg,
-            #1e3a8a,
-            #111827
-        );
-
-    border-radius:8px;
-
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.45);
-}
-
-.bookCover h1{
-    font-size:22px;
-    line-height:1.3;
-}
-
-.bookCover p{
-    margin-top:10px;
-
-    color:#cbd5e1;
-
-    font-size:12px;
-}
-
-
-/*==================== LOADING OVERLAY ====================*/
-
-#readerBody::after{
-    content:"";
-
-    position:absolute;
-    inset:0;
-
-    z-index:5;
-
-    background:rgba(15,23,42,.35);
-
+.loading-screen.hide{
     opacity:0;
+
     visibility:hidden;
 
     pointer-events:none;
 
     transition:
-        opacity .2s ease,
-        visibility .2s ease;
-}
-
-#readerBody.rendering::after{
-    opacity:1;
-    visibility:visible;
+        opacity .45s ease,
+        visibility .45s ease;
 }
 
 
-/*==================== PAGE NUMBER ====================*/
-
-.pageNumber{
-    position:absolute;
-
-    bottom:8px;
-    left:50%;
-
-    transform:translateX(-50%);
-
-    padding:2px 7px;
-
-    color:#64748b;
-
-    background:rgba(255,255,255,.85);
-
-    border-radius:4px;
-
-    font-size:9px;
-}
-
-
-/*==================== FILE DROP ====================*/
-
-#pdfContainer.dragOver{
-    outline:2px dashed var(--accent);
-    outline-offset:-12px;
-
-    background:
-        rgba(37,99,235,.08);
-}
-
-.dropMessage{
-    position:absolute;
-
-    inset:0;
-
-    z-index:50;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    pointer-events:none;
-}
-
-.dropMessage span{
-    padding:15px 22px;
-
-    color:#fff;
-
-    background:rgba(15,23,42,.95);
-
-    border:1px solid var(--border);
-
-    border-radius:12px;
-
-    box-shadow:var(--shadow);
-}
-
-
-/*==================== SELECTION ====================*/
-
-::selection{
-    color:#fff;
-    background:rgba(37,99,235,.75);
-}
-
-
-/*==================== LIGHT THEME EXTRAS ====================*/
-
-body.lightTheme #leftSidebar,
-body.lightTheme #thumbnailSidebar{
-    border-color:#e2e8f0;
-    box-shadow:var(--shadow);
-}
-
-body.lightTheme .tocItem,
-body.lightTheme .bookmarkItem,
-body.lightTheme .thumbnail{
-    color:#334155;
-    background:#f8fafc;
-}
-
-body.lightTheme .tocItem:hover,
-body.lightTheme .bookmarkItem:hover{
-    background:#eff6ff;
-}
-
-body.lightTheme #readerBody::after{
-    background:rgba(255,255,255,.35);
-}
-
-body.lightTheme #toast{
-    background:#0f172a;
-    color:#fff;
-}
-
-
-/*==================== PRINT SAFETY ====================*/
-
-@page{
-    margin:0;
-}
-
-
-/*==================== END CSS PART 4 ====================*/
 /*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 5
+                SIDEBAR OVERLAY
 ==================================================*/
 
-/*==================== FORM ELEMENTS ====================*/
-
-input,
-textarea{
-    appearance:none;
-    -webkit-appearance:none;
-}
-
-input::placeholder,
-textarea::placeholder{
-    color:#64748b;
-    opacity:1;
-}
-
-input:disabled,
-textarea:disabled{
-    opacity:.5;
-    cursor:not-allowed;
-}
-
-
-/*==================== RANGE CONTROLS ====================*/
-
-input[type="range"]{
-    width:100%;
-    height:5px;
-
-    padding:0;
-
-    background:#334155;
-
-    border-radius:20px;
-
-    cursor:pointer;
-}
-
-input[type="range"]::-webkit-slider-thumb{
-    width:16px;
-    height:16px;
-
-    appearance:none;
-    -webkit-appearance:none;
-
-    background:var(--accent);
-
-    border:2px solid #fff;
-
-    border-radius:50%;
-
-    box-shadow:0 2px 8px rgba(0,0,0,.3);
-}
-
-input[type="range"]::-moz-range-thumb{
-    width:16px;
-    height:16px;
-
-    background:var(--accent);
-
-    border:2px solid #fff;
-
-    border-radius:50%;
-
-    cursor:pointer;
-}
-
-
-/*==================== CHECKBOX ====================*/
-
-input[type="checkbox"]{
-    appearance:none;
-    -webkit-appearance:none;
-
-    width:38px;
-    height:21px;
-
-    position:relative;
-
-    background:#334155;
-
-    border-radius:20px;
-
-    cursor:pointer;
-
-    transition:background .2s ease;
-}
-
-input[type="checkbox"]::after{
-    content:"";
-
-    position:absolute;
-
-    top:3px;
-    left:3px;
-
-    width:15px;
-    height:15px;
-
-    background:#fff;
-
-    border-radius:50%;
-
-    box-shadow:0 1px 4px rgba(0,0,0,.3);
-
-    transition:transform .2s ease;
-}
-
-input[type="checkbox"]:checked{
-    background:var(--primary);
-}
-
-input[type="checkbox"]:checked::after{
-    transform:translateX(17px);
-}
-
-
-/*==================== SIDEBAR OVERLAY ====================*/
-
-#sidebarOverlay{
+.sidebarOverlay{
     position:fixed;
 
     inset:0;
 
-    z-index:400;
+    background:
+        rgba(0,0,0,.45);
 
-    background:rgba(0,0,0,.5);
+    backdrop-filter:
+        blur(2px);
+
+    z-index:150;
 
     opacity:0;
+
     visibility:hidden;
 
-    transition:
-        opacity .25s ease,
-        visibility .25s ease;
-}
-
-#sidebarOverlay.active{
-    opacity:1;
-    visibility:visible;
-}
-
-
-/*==================== PANEL OVERLAY ====================*/
-
-.panelOverlay{
-    position:fixed;
-
-    inset:0;
-
-    z-index:350;
-
-    background:rgba(0,0,0,.45);
-
-    opacity:0;
-    visibility:hidden;
-
-    transition:
-        opacity .25s ease,
-        visibility .25s ease;
-}
-
-.panelOverlay.active{
-    opacity:1;
-    visibility:visible;
-}
-
-
-/*==================== COMMENT ACTIONS ====================*/
-
-.commentActions{
-    display:flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    margin-top:7px;
-}
-
-.commentActions button{
-    padding:4px 7px;
-
-    color:#94a3b8;
-
-    background:transparent;
-
-    border-radius:5px;
-
-    font-size:10px;
-}
-
-.commentActions button:hover{
-    color:#fff;
-    background:rgba(255,255,255,.07);
-}
-
-
-/*==================== BOOKMARK ITEM ====================*/
-
-.bookmarkItem{
-    position:relative;
-
-    padding-right:36px;
-}
-
-.bookmarkDelete{
-    position:absolute;
-
-    top:50%;
-    right:7px;
-
-    width:25px;
-    height:25px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:#94a3b8;
-
-    background:transparent;
-
-    border-radius:6px;
-
-    transform:translateY(-50%);
-}
-
-.bookmarkDelete:hover{
-    color:#f87171;
-
-    background:rgba(248,113,113,.1);
-}
-
-
-/*==================== SEARCH RESULT ====================*/
-
-.searchResultPage{
-    display:block;
-
-    margin-bottom:3px;
-
-    color:var(--accent);
-
-    font-size:10px;
-}
-
-.searchResultText{
-    display:block;
-
-    color:#cbd5e1;
-
-    font-size:12px;
-
-    line-height:1.5;
-}
-
-body.lightTheme .searchResultText{
-    color:#475569;
-}
-
-
-/*==================== SEARCH NO RESULT ====================*/
-
-.noSearchResults{
-    padding:25px 10px;
-
-    text-align:center;
-
-    color:#64748b;
-
-    font-size:12px;
-}
-
-.noSearchResults i{
-    display:block;
-
-    margin-bottom:8px;
-
-    font-size:28px;
-}
-
-
-/*==================== PAGE NAVIGATION ====================*/
-
-.pageNavigation{
-    position:absolute;
-
-    top:50%;
-
-    z-index:80;
-
-    width:44px;
-    height:44px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    color:#fff;
-
-    background:rgba(15,23,42,.7);
-
-    border:1px solid var(--border);
-
-    border-radius:50%;
-
-    transform:translateY(-50%);
-
-    backdrop-filter:blur(8px);
-
-    transition:
-        background .2s ease,
-        transform .2s ease;
-}
-
-.pageNavigation:hover{
-    background:var(--primary);
-
-    transform:
-        translateY(-50%)
-        scale(1.05);
-}
-
-#pageNavigationPrev{
-    left:25px;
-}
-
-#pageNavigationNext{
-    right:25px;
-}
-
-
-/*==================== FULLSCREEN BUTTON ====================*/
-
-#fullscreenBtn.active{
-    color:#fff;
-
-    background:rgba(37,99,235,.35);
-}
-
-
-/*==================== BOOKMARK BUTTON ====================*/
-
-#bookmarkBtn.active{
-    color:#facc15;
-
-    background:rgba(250,204,21,.10);
-}
-
-
-/*==================== THEME BUTTON ====================*/
-
-#themeBtn.active{
-    color:#facc15;
-}
-
-
-/*==================== READER CURSOR ====================*/
-
-#pdfContainer.canPan{
-    cursor:grab;
-}
-
-#pdfContainer.canPan.dragging{
-    cursor:grabbing;
-}
-
-
-/*==================== SCROLL MODE ====================*/
-
-body.continuousMode #pdfContainer{
-    align-items:flex-start;
-
-    justify-content:flex-start;
-
-    padding:20px;
-
-    flex-direction:column;
-}
-
-body.continuousMode #pdfCanvas{
-    margin:0 auto 20px;
-}
-
-
-/*==================== PAGE CENTER ====================*/
-
-.pageCenter{
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    width:100%;
-    height:100%;
-}
-
-
-/*==================== MOBILE NAVIGATION ====================*/
-
-@media (max-width:700px){
-
-    .pageNavigation{
-        width:38px;
-        height:38px;
-    }
-
-    #pageNavigationPrev{
-        left:8px;
-    }
-
-    #pageNavigationNext{
-        right:8px;
-    }
-
-    .pageNavigation i{
-        font-size:18px;
-    }
-
-}
-
-
-/*==================== END CSS PART 5 ====================*/
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 6
-==================================================*/
-
-/*==================== TRANSITIONS ====================*/
-
-#readerHeader,
-#readerFooter,
-#readerToolbar,
-#leftSidebar,
-#thumbnailSidebar,
-#searchPanel,
-#commentPanel,
-#settingsPanel,
-#sharePanel,
-#toast,
-#bookmarkMessage{
-    -webkit-backface-visibility:hidden;
-    backface-visibility:hidden;
-}
-
-
-/*==================== UTILITY STATES ====================*/
-
-.is-hidden{
-    display:none !important;
-}
-
-.is-visible{
-    display:block !important;
-}
-
-.is-active{
-    opacity:1 !important;
-    visibility:visible !important;
-}
-
-.no-scroll{
-    overflow:hidden !important;
-}
-
-
-/*==================== READER BODY STATES ====================*/
-
-#readerBody.bookLoading{
-    pointer-events:none;
-}
-
-#readerBody.bookLoading #pdfContainer{
-    opacity:.45;
-}
-
-#readerBody.bookReady #pdfContainer{
-    opacity:1;
-}
-
-
-/*==================== PDF ERROR ====================*/
-
-#pdfError{
-    position:absolute;
-
-    top:50%;
-    left:50%;
-
-    z-index:100;
-
-    width:min(460px,calc(100% - 40px));
-
-    padding:22px;
-
-    text-align:center;
-
-    color:#fecaca;
-
-    background:rgba(127,29,29,.92);
-
-    border:1px solid rgba(248,113,113,.3);
-
-    border-radius:14px;
-
-    box-shadow:var(--shadow);
-
-    transform:translate(-50%,-50%);
-
-    display:none;
-}
-
-#pdfError.show{
-    display:block;
-}
-
-#pdfError i{
-    display:block;
-
-    margin-bottom:8px;
-
-    font-size:32px;
-}
-
-#pdfError strong{
-    display:block;
-
-    margin-bottom:5px;
-
-    color:#fff;
-
-    font-size:15px;
-}
-
-#pdfError span{
-    color:#fecaca;
-
-    font-size:12px;
-
-    line-height:1.5;
-}
-
-
-/*==================== PDF PLACEHOLDER ====================*/
-
-#pdfPlaceholder{
-    position:absolute;
-
-    inset:0;
-
-    z-index:20;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    text-align:center;
-
-    pointer-events:none;
-}
-
-#pdfPlaceholder .placeholderContent{
-    max-width:340px;
-
-    padding:25px;
-}
-
-#pdfPlaceholder i{
-    display:block;
-
-    margin-bottom:12px;
-
-    color:#64748b;
-
-    font-size:48px;
-}
-
-#pdfPlaceholder h3{
-    margin-bottom:6px;
-
-    color:#cbd5e1;
-
-    font-size:17px;
-}
-
-#pdfPlaceholder p{
-    color:#64748b;
-
-    font-size:12px;
-
-    line-height:1.6;
-}
-
-
-/*==================== FILE BUTTON ====================*/
-
-.fileButton{
-    min-height:40px;
-
-    display:inline-flex;
-
-    align-items:center;
-    justify-content:center;
-
-    gap:7px;
-
-    padding:0 15px;
-
-    color:#fff;
-
-    background:var(--primary);
-
-    border-radius:8px;
-
-    transition:background var(--transition);
-}
-
-.fileButton:hover{
-    background:var(--primary-dark);
-}
-
-
-/*==================== PAGE INPUT ====================*/
-
-#pageInput{
-    width:50px;
-    height:32px;
-
-    padding:0 6px;
-
-    color:#fff;
-
-    text-align:center;
-
-    background:#1e293b;
-
-    border:1px solid var(--border);
-
-    border-radius:7px;
-}
-
-#pageInput::-webkit-inner-spin-button,
-#pageInput::-webkit-outer-spin-button{
-    margin:0;
-}
-
-
-/*==================== TOOLBAR INPUT ====================*/
-
-.toolbarPageJump{
-    display:flex;
-
-    align-items:center;
-
-    gap:4px;
-}
-
-
-/*==================== ACTIVE READER PAGE ====================*/
-
-.currentPageIndicator{
-    color:var(--accent);
-
-    font-weight:600;
-}
-
-
-/*==================== BOOK INFO ====================*/
-
-.bookInfo{
-    display:flex;
-
-    flex-direction:column;
-
-    gap:3px;
-}
-
-.bookInfoTitle{
-    color:#fff;
-
-    font-size:14px;
-
-    font-weight:600;
-}
-
-.bookInfoAuthor{
-    color:#94a3b8;
-
-    font-size:11px;
-}
-
-
-/*==================== RESPONSIVE SIDEBAR ====================*/
-
-@media (max-width:480px){
-
-    #leftSidebar{
-        width:88vw;
-
-        padding:16px;
-    }
-
-    #thumbnailSidebar{
-        width:150px;
-    }
-
-    #searchPanel,
-    #settingsPanel{
-        top:72px;
-    }
-
-    #settingsPanel{
-        padding:15px;
-    }
-
-}
-
-
-/*==================== LIGHT THEME INPUTS ====================*/
-
-body.lightTheme #pageInput{
-    color:#0f172a;
-
-    background:#f8fafc;
-
-    border-color:#cbd5e1;
-}
-
-body.lightTheme #pdfPlaceholder h3{
-    color:#334155;
-}
-
-body.lightTheme .bookInfoTitle{
-    color:#0f172a;
-}
-
-
-/*==================== SAFE OVERFLOW ====================*/
-
-#reader,
-#readerBody{
-    min-width:0;
-    min-height:0;
-}
-
-
-/*==================== END CSS PART 6 ====================*/
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 7
-==================================================*/
-
-/*==================== MOBILE HEADER ====================*/
-
-@media (max-width:600px){
-
-    #readerHeader{
-        height:60px;
-    }
-
-    #bookTitle{
-        max-width:42vw;
-        font-size:14px;
-    }
-
-    #bookAuthor{
-        max-width:42vw;
-        overflow:hidden;
-        white-space:nowrap;
-        text-overflow:ellipsis;
-    }
-
-    .rightHeader{
-        gap:4px;
-    }
-
-    .rightHeader button{
-        width:34px;
-        height:34px;
-    }
-
-}
-
-
-/*==================== MOBILE TOOLBAR ====================*/
-
-@media (max-width:600px){
-
-    #readerToolbar{
-        top:6px;
-        max-width:calc(100% - 12px);
-        overflow-x:auto;
-        scrollbar-width:none;
-    }
-
-    #readerToolbar::-webkit-scrollbar{
-        display:none;
-    }
-
-    #readerToolbar button{
-        flex:0 0 32px;
-    }
-
-    #pageCounter{
-        flex:0 0 auto;
-        min-width:52px;
-    }
-
-    #zoomValue{
-        flex:0 0 auto;
-    }
-
-}
-
-
-/*==================== MOBILE PDF ====================*/
-
-@media (max-width:600px){
-
-    #readerBody{
-        padding-left:4px;
-        padding-right:4px;
-    }
-
-    #pdfContainer{
-        width:100%;
-    }
-
-    #pdfCanvas{
-        max-width:96vw;
-        max-height:calc(
-            100vh -
-            var(--header-height) -
-            var(--footer-height) -
-            70px
-        );
-    }
-
-}
-
-
-/*==================== MOBILE FOOTER ====================*/
-
-@media (max-width:600px){
-
-    #readerFooter{
-        padding:0 7px;
-    }
-
-    .footerCenter{
-        gap:4px;
-    }
-
-    .footerCenter button,
-    .footerRight button{
-        min-width:34px;
-        height:32px;
-        padding:0 7px;
-    }
-
-    #likeCount{
-        display:none;
-    }
-
-}
-
-
-/*==================== TABLET ====================*/
-
-@media (min-width:601px) and (max-width:1000px){
-
-    #pdfContainer{
-        width:94%;
-    }
-
-    #leftSidebar{
-        width:300px;
-    }
-
-    #thumbnailSidebar{
-        width:175px;
-    }
-
-}
-
-
-/*==================== DESKTOP PDF ====================*/
-
-@media (min-width:1001px){
-
-    #pdfCanvas{
-        max-width:calc(100vw - 100px);
-    }
-
-}
-
-
-/*==================== SAFE BUTTON ICONS ====================*/
-
-button i{
-    pointer-events:none;
-}
-
-button span{
-    pointer-events:none;
-}
-
-
-/*==================== HOVER EFFECT ====================*/
-
-@media (hover:hover){
-
-    #readerToolbar button:hover,
-    .footerCenter button:hover,
-    .footerRight button:hover{
-        color:#fff;
-
-        background:
-            rgba(96,165,250,.15);
-    }
-
-    .rightHeader button:hover{
-        color:#fff;
-
-        background:
-            rgba(96,165,250,.18);
-    }
-
-}
-
-
-/*==================== ACTIVE NAVIGATION ====================*/
-
-#prevBtn.active,
-#nextBtn.active{
-    background:var(--primary);
-    color:#fff;
-}
-
-
-/*==================== BOOKMARK ACTIVE ====================*/
-
-.bookmarked{
-    color:#facc15 !important;
-}
-
-
-/*==================== LIKE ACTIVE ====================*/
-
-.liked{
-    color:#fb7185 !important;
-}
-
-
-/*==================== PANEL CLOSE BUTTON ====================*/
-
-#searchClose,
-#closeSidebar,
-.closeButton{
-    transition:
-        background .2s ease,
-        transform .2s ease;
-}
-
-#searchClose:hover,
-#closeSidebar:hover,
-.closeButton:hover{
-    background:rgba(255,255,255,.12);
-
-    transform:scale(1.04);
-}
-
-
-/*==================== SMOOTH PANEL CONTENT ====================*/
-
-#tocContainer,
-#bookmarkContainer,
-#searchResults,
-#commentList,
-#thumbnailContainer{
-    animation:
-        panelContentIn .2s ease;
-}
-
-@keyframes panelContentIn{
-
-    from{
-        opacity:0;
-        transform:translateY(4px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-
-}
-
-
-/*==================== LOADING FADE ====================*/
-
-#loadingScreen.hidden .loader{
-    animation:
-        loaderFadeOut .25s ease forwards;
-}
-
-@keyframes loaderFadeOut{
-
-    from{
-        opacity:1;
-    }
-
-    to{
-        opacity:0;
-    }
-
-}
-
-
-/*==================== OPENING FADE ====================*/
-
-#openingScreen.hidden > *{
-    animation:
-        openingFadeOut .25s ease forwards;
-}
-
-@keyframes openingFadeOut{
-
-    from{
-        opacity:1;
-        transform:scale(1);
-    }
-
-    to{
-        opacity:0;
-        transform:scale(.96);
-    }
-
-}
-
-
-/*==================== END CSS PART 7 ====================*/
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.css — PART 8
-==================================================*/
-
-/*==================== FINAL MOBILE FIXES ====================*/
-
-@media (max-width:600px){
-
-    #openingScreen h1{
-        font-size:23px;
-        text-align:center;
-    }
-
-    #openingScreen p{
-        font-size:12px;
-    }
-
-    #loadingScreen .loader{
-        width:85%;
-    }
-
-    #readerBody{
-        padding-top:62px;
-        padding-bottom:52px;
-    }
-
-    #pdfContainer{
-        min-height:0;
-    }
-
-    #pdfCanvas{
-        width:auto;
-        height:auto;
-    }
-
-    #readerFooter{
-        height:50px;
-    }
-
-}
-
-
-/*==================== VERY SMALL SCREENS ====================*/
-
-@media (max-width:360px){
-
-    #bookTitle{
-        max-width:38vw;
-        font-size:12px;
-    }
-
-    #bookAuthor{
-        max-width:38vw;
-        font-size:9px;
-    }
-
-    .rightHeader button{
-        width:30px;
-        height:30px;
-    }
-
-    #readerToolbar{
-        transform:translateX(-50%) scale(.88);
-        transform-origin:top center;
-    }
-
-    #readerFooter{
-        padding:0 4px;
-    }
-
-}
-
-
-/*==================== DARK THEME SAFETY ====================*/
-
-body:not(.lightTheme){
-    color-scheme:dark;
-}
-
-body.lightTheme{
-    color-scheme:light;
-}
-
-
-/*==================== SAFE IMAGE/CANVAS DISPLAY ====================*/
-
-img,
-canvas{
-    max-width:100%;
-}
-
-canvas{
-    vertical-align:middle;
-}
-
-
-/*==================== HIDDEN FILE INPUT ====================*/
-
-#pdfInput{
-    position:absolute;
-
-    width:1px;
-    height:1px;
-
-    opacity:0;
-
-    pointer-events:none;
-}
-
-
-/*==================== FOCUS STATE ====================*/
-
-#pdfInput:focus-visible + *{
-    outline:2px solid var(--accent);
-}
-
-
-/*==================== PANEL Z-INDEX SAFETY ====================*/
-
-#readerHeader{
-    z-index:100;
-}
-
-#readerToolbar{
-    z-index:200;
-}
-
-#readerFooter{
-    z-index:200;
-}
-
-#leftSidebar{
-    z-index:500;
-}
-
-#thumbnailSidebar{
-    z-index:450;
-}
-
-#searchPanel,
-#settingsPanel{
-    z-index:600;
-}
-
-#commentPanel{
-    z-index:550;
-}
-
-#sharePanel{
-    z-index:1000;
-}
-
-#toast{
-    z-index:2000;
-}
-
-
-/*==================== DISABLED LOADING STATE ====================*/
-
-body.loading button{
-    cursor:wait;
-}
-
-
-/*==================== SMOOTH PDF TRANSITION ====================*/
-
-#pdfCanvas{
-    transition:
-        opacity .2s ease,
-        transform .25s ease;
-}
-
-#pdfCanvas.rendering{
-    opacity:.55;
-}
-
-
-/*==================== PAGE FLIP SAFETY ====================*/
-
-#pageFlipLayer{
     pointer-events:none;
 
-    transform-style:preserve-3d;
-
-    will-change:transform,opacity;
-}
-
-
-/*==================== REDUCED MOTION FINAL ====================*/
-
-@media (prefers-reduced-motion:reduce){
-
-    #pageFlipLayer,
-    #openingScreen,
-    #loadingScreen,
-    #toast,
-    #searchPanel,
-    #commentPanel,
-    #settingsPanel,
-    #leftSidebar,
-    #thumbnailSidebar{
-        transition:none !important;
-        animation:none !important;
-    }
-
-}
-
-
-/*==================== END CSS ====================*/
-/*==================================================
-        CHISHTI LIBRARY
-        MAROON + GOLDEN THEMES
-==================================================*/
-
-/*==================== THEME BUTTONS ====================*/
-
-.theme-switcher{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    flex-wrap:wrap;
-}
-
-.theme-switcher button{
-    border:1px solid rgba(255,255,255,.15);
-    border-radius:10px;
-    padding:8px 14px;
-    font-family:Poppins,sans-serif;
-    font-weight:600;
-    cursor:pointer;
     transition:.25s ease;
-    color:#fff;
 }
 
-.theme-switcher button:hover{
-    transform:translateY(-2px);
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
-}
+.sidebarOverlay.active{
+    opacity:1;
 
+    visibility:visible;
 
-/*==================================================
-                MAROON THEME
-==================================================*/
-
-body.theme-maroon{
-
-    --primary:#7f1d35;
-    --secondary:#5d1023;
-    --accent:#b8324f;
-
-    --dark:#250b14;
-    --dark2:#3b0d1b;
-
-    --light:#fff7f8;
-    --white:#ffffff;
-
-    --border:rgba(212,175,55,.20);
-
-    background:
-        radial-gradient(
-            circle at top,
-            #5d1023 0%,
-            #250b14 55%,
-            #16070c 100%
-        ) !important;
-
-    color:#fff;
-}
-
-
-/* Maroon buttons */
-
-body.theme-maroon button,
-body.theme-maroon .btn,
-body.theme-maroon .control-btn{
-
-    background:
-        linear-gradient(
-            135deg,
-            #8b1e3f,
-            #5d1023
-        );
-
-    border:1px solid #b8324f;
-
-    color:#fff;
-
-    box-shadow:
-        0 4px 14px rgba(93,16,35,.35);
-}
-
-body.theme-maroon button:hover,
-body.theme-maroon .btn:hover,
-body.theme-maroon .control-btn:hover{
-
-    background:
-        linear-gradient(
-            135deg,
-            #a8274b,
-            #70152c
-        );
-
-    border-color:#d4af37;
-
-}
-
-
-/* Maroon active */
-
-body.theme-maroon .active,
-body.theme-maroon .active-btn{
-
-    background:
-        linear-gradient(
-            135deg,
-            #b8324f,
-            #7f1d35
-        ) !important;
-
-    border-color:#d4af37 !important;
+    pointer-events:auto;
 }
 
 
 /*==================================================
-                GOLDEN THEME
+                SETTINGS OVERLAY
 ==================================================*/
 
-body.theme-gold{
+.settingsOverlay{
+    position:fixed;
 
-    --primary:#d4af37;
-    --secondary:#a67c00;
-    --accent:#f5d76e;
-
-    --dark:#211b08;
-    --dark2:#30260b;
-
-    --light:#fffdf4;
-    --white:#ffffff;
-
-    --border:rgba(212,175,55,.28);
+    inset:0;
 
     background:
-        radial-gradient(
-            circle at top,
-            #4a3a0d 0%,
-            #211b08 55%,
-            #100d04 100%
-        ) !important;
+        rgba(0,0,0,.25);
 
-    color:#fff;
+    z-index:490;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:.2s ease;
 }
 
+.settingsOverlay.active{
+    opacity:1;
 
-/* Golden buttons */
+    visibility:visible;
 
-body.theme-gold button,
-body.theme-gold .btn,
-body.theme-gold .control-btn{
-
-    background:
-        linear-gradient(
-            135deg,
-            #d4af37,
-            #a67c00
-        );
-
-    border:1px solid #f5d76e;
-
-    color:#1b1505;
-
-    font-weight:700;
-
-    box-shadow:
-        0 4px 14px rgba(212,175,55,.28);
-}
-
-body.theme-gold button:hover,
-body.theme-gold .btn:hover,
-body.theme-gold .control-btn:hover{
-
-    background:
-        linear-gradient(
-            135deg,
-            #f5d76e,
-            #c79a19
-        );
-
-    border-color:#fff1a8;
-
-    transform:translateY(-2px);
-
-}
-
-
-/* Golden active */
-
-body.theme-gold .active,
-body.theme-gold .active-btn{
-
-    background:
-        linear-gradient(
-            135deg,
-            #f5d76e,
-            #d4af37
-        ) !important;
-
-    border-color:#fff1a8 !important;
-
-    color:#211b08 !important;
+    pointer-events:auto;
 }
 
 
 /*==================================================
-        THEME COLOR BUTTONS
+                GOLD BUTTON EFFECT
 ==================================================*/
 
-.theme-maroon-btn{
-
-    background:
-        linear-gradient(
-            135deg,
-            #8b1e3f,
-            #5d1023
-        ) !important;
-
-    color:#fff !important;
-
-    border:1px solid #b8324f !important;
-}
-
-.theme-gold-btn{
-
-    background:
-        linear-gradient(
-            135deg,
-            #f5d76e,
-            #a67c00
-        ) !important;
-
-    color:#211b08 !important;
-
-    border:1px solid #d4af37 !important;
-}
-
-
-/*==================================================
-        GOLD + MAROON ACCENTS
-==================================================*/
-
-body.theme-maroon h1,
-body.theme-maroon h2,
-body.theme-maroon h3{
+body.theme-gold .iconBtn:hover,
+body.theme-gold .toolbarBtn:hover,
+body.theme-gold .footerBtn:hover{
 
     color:#f5d76e;
-}
 
-body.theme-gold h1,
-body.theme-gold h2,
-body.theme-gold h3{
-
-    color:#f5d76e;
-}
-
-
-/* Gold separators */
-
-body.theme-maroon .toolbar,
-body.theme-gold .toolbar{
-
-    border-color:
-        rgba(212,175,55,.25);
-}
-
-
-/* Gold bookmark */
-
-body.theme-maroon .bookmark.active,
-body.theme-gold .bookmark.active{
-
-    color:#d4af37 !important;
-
-    filter:
-        drop-shadow(
-            0 0 6px
-            rgba(212,175,55,.5)
-        );
+    background:
+        rgba(212,175,55,.12);
 }
 
 
 /*==================================================
-                THEME TRANSITION
+                MAROON BUTTON EFFECT
 ==================================================*/
 
-body,
-button,
-.btn,
-.control-btn,
-.toolbar,
-header,
-footer,
-.sidebar,
-.panel{
+body.theme-maroon .iconBtn:hover,
+body.theme-maroon .toolbarBtn:hover,
+body.theme-maroon .footerBtn:hover{
 
-    transition:
-        background .3s ease,
-        color .3s ease,
-        border-color .3s ease,
-        box-shadow .3s ease;
+    color:#f1b4c6;
+
+    background:
+        rgba(139,30,63,.28);
+}
+
+
+/*==================================================
+                LIGHT THEME BUTTON EFFECT
+==================================================*/
+
+body.theme-light .iconBtn:hover,
+body.theme-light .toolbarBtn:hover,
+body.theme-light .footerBtn:hover{
+
+    background:#e2e8f0;
+
+    color:#0f172a;
+}
+
+
+/*==================================================
+                MOBILE SIDEBAR
+==================================================*/
+
+@media(max-width:700px){
+
+    .reader-sidebar{
+        width:min(310px,85vw);
+
+        flex-basis:min(310px,85vw);
+
+        margin-left:min(-310px,-85vw);
+    }
+
+    .reader-sidebar.active{
+        margin-left:0;
+    }
+
+    .comments-panel{
+        width:min(330px,90vw);
+
+        flex-basis:min(330px,90vw);
+
+        margin-right:min(-330px,-90vw);
+    }
+
+    .comments-panel.active{
+        margin-right:0;
+    }
+
+    .pdf-container.double-page{
+        gap:10px;
+    }
+
+    .pdf-container{
+        padding:10px;
+    }
+
+}
+
+
+/*==================================================
+                VERY SMALL SCREENS
+==================================================*/
+
+@media(max-width:420px){
+
+    .settings-panel{
+        padding:15px;
+
+        border-radius:14px;
+    }
+
+    .settingsOptions{
+        gap:6px;
+    }
+
+    .settingOption{
+        font-size:11px;
+
+        min-height:40px;
+    }
+
+    .shareButtons{
+        grid-template-columns:1fr;
+    }
+
+    .page-counter input{
+        width:42px;
+    }
+
+    .zoomValue{
+        min-width:42px;
+    }
+
+}
+
+
+/*==================================================
+                PRINT
+==================================================*/
+
+@media print{
+
+    body{
+        background:#fff !important;
+        color:#000 !important;
+        overflow:visible !important;
+    }
+
+    .reader-header,
+    .reader-toolbar,
+    .reader-footer,
+    .reader-sidebar,
+    .comments-panel,
+    .settings-panel,
+    .search-bar,
+    .reading-progress,
+    .loading-screen,
+    .reader-transition,
+    .modal,
+    .toast{
+        display:none !important;
+    }
+
+    .reader-app,
+    .reader-main,
+    .pdf-area{
+        display:block !important;
+
+        width:100% !important;
+        height:auto !important;
+
+        overflow:visible !important;
+
+        background:#fff !important;
+    }
+
+    .pdf-container{
+        display:block !important;
+
+        padding:0 !important;
+
+        min-width:0 !important;
+        min-height:0 !important;
+    }
+
+    .pdf-canvas{
+        display:block !important;
+
+        width:auto !important;
+        max-width:100% !important;
+
+        margin:0 auto 20px !important;
+
+        box-shadow:none !important;
+
+        border:0 !important;
+    }
+
+}
+
+
+/*==================================================
+                ACCESSIBILITY
+==================================================*/
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+
+        scroll-behavior:auto !important;
+
+        transition-duration:.01ms !important;
+    }
 
 }
