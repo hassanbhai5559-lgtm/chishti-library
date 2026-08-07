@@ -3462,7 +3462,7 @@ function setReaderTheme(theme){
 // existing reader.js code
 
 
-})();   // purane code ka end
+
 
 
 // 👇 YAHAN SE THEME CODE
