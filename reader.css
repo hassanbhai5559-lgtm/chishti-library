@@ -3550,3 +3550,304 @@ body.loading button{
 
 
 /*==================== END CSS ====================*/
+/*==================================================
+        CHISHTI LIBRARY
+        MAROON + GOLDEN THEMES
+==================================================*/
+
+/*==================== THEME BUTTONS ====================*/
+
+.theme-switcher{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.theme-switcher button{
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:10px;
+    padding:8px 14px;
+    font-family:Poppins,sans-serif;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s ease;
+    color:#fff;
+}
+
+.theme-switcher button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
+
+
+/*==================================================
+                MAROON THEME
+==================================================*/
+
+body.theme-maroon{
+
+    --primary:#7f1d35;
+    --secondary:#5d1023;
+    --accent:#b8324f;
+
+    --dark:#250b14;
+    --dark2:#3b0d1b;
+
+    --light:#fff7f8;
+    --white:#ffffff;
+
+    --border:rgba(212,175,55,.20);
+
+    background:
+        radial-gradient(
+            circle at top,
+            #5d1023 0%,
+            #250b14 55%,
+            #16070c 100%
+        ) !important;
+
+    color:#fff;
+}
+
+
+/* Maroon buttons */
+
+body.theme-maroon button,
+body.theme-maroon .btn,
+body.theme-maroon .control-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e3f,
+            #5d1023
+        );
+
+    border:1px solid #b8324f;
+
+    color:#fff;
+
+    box-shadow:
+        0 4px 14px rgba(93,16,35,.35);
+}
+
+body.theme-maroon button:hover,
+body.theme-maroon .btn:hover,
+body.theme-maroon .control-btn:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #a8274b,
+            #70152c
+        );
+
+    border-color:#d4af37;
+
+}
+
+
+/* Maroon active */
+
+body.theme-maroon .active,
+body.theme-maroon .active-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #b8324f,
+            #7f1d35
+        ) !important;
+
+    border-color:#d4af37 !important;
+}
+
+
+/*==================================================
+                GOLDEN THEME
+==================================================*/
+
+body.theme-gold{
+
+    --primary:#d4af37;
+    --secondary:#a67c00;
+    --accent:#f5d76e;
+
+    --dark:#211b08;
+    --dark2:#30260b;
+
+    --light:#fffdf4;
+    --white:#ffffff;
+
+    --border:rgba(212,175,55,.28);
+
+    background:
+        radial-gradient(
+            circle at top,
+            #4a3a0d 0%,
+            #211b08 55%,
+            #100d04 100%
+        ) !important;
+
+    color:#fff;
+}
+
+
+/* Golden buttons */
+
+body.theme-gold button,
+body.theme-gold .btn,
+body.theme-gold .control-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #d4af37,
+            #a67c00
+        );
+
+    border:1px solid #f5d76e;
+
+    color:#1b1505;
+
+    font-weight:700;
+
+    box-shadow:
+        0 4px 14px rgba(212,175,55,.28);
+}
+
+body.theme-gold button:hover,
+body.theme-gold .btn:hover,
+body.theme-gold .control-btn:hover{
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5d76e,
+            #c79a19
+        );
+
+    border-color:#fff1a8;
+
+    transform:translateY(-2px);
+
+}
+
+
+/* Golden active */
+
+body.theme-gold .active,
+body.theme-gold .active-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5d76e,
+            #d4af37
+        ) !important;
+
+    border-color:#fff1a8 !important;
+
+    color:#211b08 !important;
+}
+
+
+/*==================================================
+        THEME COLOR BUTTONS
+==================================================*/
+
+.theme-maroon-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #8b1e3f,
+            #5d1023
+        ) !important;
+
+    color:#fff !important;
+
+    border:1px solid #b8324f !important;
+}
+
+.theme-gold-btn{
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5d76e,
+            #a67c00
+        ) !important;
+
+    color:#211b08 !important;
+
+    border:1px solid #d4af37 !important;
+}
+
+
+/*==================================================
+        GOLD + MAROON ACCENTS
+==================================================*/
+
+body.theme-maroon h1,
+body.theme-maroon h2,
+body.theme-maroon h3{
+
+    color:#f5d76e;
+}
+
+body.theme-gold h1,
+body.theme-gold h2,
+body.theme-gold h3{
+
+    color:#f5d76e;
+}
+
+
+/* Gold separators */
+
+body.theme-maroon .toolbar,
+body.theme-gold .toolbar{
+
+    border-color:
+        rgba(212,175,55,.25);
+}
+
+
+/* Gold bookmark */
+
+body.theme-maroon .bookmark.active,
+body.theme-gold .bookmark.active{
+
+    color:#d4af37 !important;
+
+    filter:
+        drop-shadow(
+            0 0 6px
+            rgba(212,175,55,.5)
+        );
+}
+
+
+/*==================================================
+                THEME TRANSITION
+==================================================*/
+
+body,
+button,
+.btn,
+.control-btn,
+.toolbar,
+header,
+footer,
+.sidebar,
+.panel{
+
+    transition:
+        background .3s ease,
+        color .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+
+}
