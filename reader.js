@@ -6,7 +6,7 @@
 /*==================== CONFIG ====================*/
 
 const ReaderConfig = {
-    pdfUrl: "books/book.pdf",
+   pdfUrl: new URLSearchParams(window.location.search).get("book") || "",
     storagePrefix: "chishti_reader_",
     defaultZoom: 1,
     minZoom: 0.5,
