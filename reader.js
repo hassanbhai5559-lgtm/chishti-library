@@ -3408,3 +3408,67 @@ window.ChishtiReader = {
     );
 
 })();
+function setReaderTheme(theme){
+
+    document.body.classList.remove(
+        "theme-dark",
+        "theme-maroon",
+        "theme-gold"
+    );
+
+    if(theme === "maroon"){
+
+        document.body.classList.add(
+            "theme-maroon"
+        );
+
+    }else if(theme === "gold"){
+
+        document.body.classList.add(
+            "theme-gold"
+        );
+
+    }else{
+
+        document.body.classList.add(
+            "theme-dark"
+        );
+
+    }
+
+    localStorage.setItem(
+        "chishti-theme",
+        theme
+    );
+}
+
+
+/* Load saved theme */
+
+(function(){
+
+    const saved =
+        localStorage.getItem(
+            "chishti-theme"
+        );
+
+    if(saved){
+
+        setReaderTheme(saved);
+
+    }
+
+})();
+// existing reader.js code
+
+
+})();   // purane code ka end
+
+
+// 👇 YAHAN SE THEME CODE
+
+function setReaderTheme(theme){
+
+    // ...
+
+}
