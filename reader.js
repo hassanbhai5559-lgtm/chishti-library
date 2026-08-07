@@ -1,1220 +1,2708 @@
 /*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.js — PART 1
+        CHISHTI LIBRARY READER V4
+        JS PART 3
+        PDF.JS + READER CORE + NAVIGATION
 ==================================================*/
 
-/*==================== CONFIG ====================*/
-
-const ReaderConfig = {
-   pdfUrl: new URLSearchParams(window.location.search).get("book") || "",
-    storagePrefix: "chishti_reader_",
-    defaultZoom: 1,
-    minZoom: 0.5,
-    maxZoom: 2.5,
-    zoomStep: 0.1
-};
+"use strict";
 
 
-/*==================== STATE ====================*/
+/*==================================================
+                    PDF.JS
+==================================================*/
+
+if (typeof pdfjsLib !== "undefined") {
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+}
+
+
+/*==================================================
+                    GLOBAL STATE
+==================================================*/
 
 const ReaderState = {
+
     pdf: null,
+
     currentPage: 1,
+
     totalPages: 0,
-    zoom: ReaderConfig.defaultZoom,
+
+    zoom: 1,
+
+    minZoom: 0.5,
+
+    maxZoom: 3,
+
+    zoomStep: 0.1,
+
+    doublePage: false,
+
+    currentTheme: "dark",
+
+    isRendering: false,
+
+    bookUrl: null,
+
+    bookTitle: "Untitled Book",
 
     bookmarks: [],
-    liked: false,
+
     likes: 0,
 
-    rendering: false,
-    loading: true,
+    comments: [],
 
-    darkMode: true,
-    pageShadow: true,
-    pageAnimation: true,
-    autoSave: true,
+    searchResults: [],
 
-    currentRenderTask: null
+    searchIndex: 0
+
 };
 
 
-/*==================== DOM ====================*/
+/*==================================================
+                    DOM HELPER
+==================================================*/
 
-const $ = id => document.getElementById(id);
+function $(id) {
 
-const DOM = {
-    openingScreen: $("openingScreen"),
+    return document.getElementById(id);
+
+}
+
+
+/*==================================================
+                    ELEMENTS
+==================================================*/
+
+const Elements = {
+
+    body: document.body,
+
+    app: $("readerApp"),
+
     loadingScreen: $("loadingScreen"),
-    loadingText: $("loadingText"),
-    loadingBar: $("loadingBar"),
+
+    loadingMessage: $("loadingMessage"),
+
+    loadingProgress: $("loadingProgress"),
+
     loadingPercent: $("loadingPercent"),
-    toast: $("toast"),
 
-    reader: $("reader"),
-    readerBody: $("readerBody"),
+    transition: $("readerTransition"),
 
-    bookTitle: $("bookTitle"),
-    bookAuthor: $("bookAuthor"),
+    pdfArea: $("pdfArea"),
 
     pdfContainer: $("pdfContainer"),
-    pdfCanvas: $("pdfCanvas"),
-    pageFlipLayer: $("pageFlipLayer"),
+
+    canvas1: $("pdfCanvas"),
+
+    canvas2: $("pdfCanvas2"),
+
+    pageLoading: $("pageLoading"),
 
     currentPage: $("currentPage"),
+
     totalPages: $("totalPages"),
+
     pageInfo: $("pageInfo"),
-    readingProgressFill: $("readingProgressFill"),
+
     zoomValue: $("zoomValue"),
 
-    menuBtn: $("menuBtn"),
-    prevBtn: $("prevBtn"),
-    nextBtn: $("nextBtn"),
-    previousPage: $("previousPage"),
-    nextPage: $("nextPage"),
+    progressFill: $("readingProgressFill"),
 
-    zoomOutBtn: $("zoomOutBtn"),
-    zoomInBtn: $("zoomInBtn"),
-    fitBtn: $("fitBtn"),
+    bookTitle: $("bookTitle"),
 
-    thumbnailBtn: $("thumbnailBtn"),
-    commentsBtn: $("commentsBtn"),
+    searchBar: $("searchBar"),
 
-    searchBtn: $("searchBtn"),
-    bookmarkBtn: $("bookmarkBtn"),
-    themeBtn: $("themeBtn"),
-    fullscreenBtn: $("fullscreenBtn"),
-
-    leftSidebar: $("leftSidebar"),
-    closeSidebar: $("closeSidebar"),
-
-    searchPanel: $("searchPanel"),
     searchInput: $("searchInput"),
-    searchClose: $("searchClose"),
-    searchResults: $("searchResults"),
 
-    thumbnailSidebar: $("thumbnailSidebar"),
-    thumbnailContainer: $("thumbnailContainer"),
-
-    commentPanel: $("commentPanel"),
-    commentList: $("commentList"),
-    commentName: $("commentName"),
-    commentMessage: $("commentMessage"),
-    commentSubmit: $("commentSubmit"),
+    searchStatus: $("searchStatus"),
 
     settingsPanel: $("settingsPanel"),
-    darkMode: $("darkMode"),
-    pageShadow: $("pageShadow"),
-    pageAnimation: $("pageAnimation"),
-    autoSave: $("autoSave"),
 
-    sharePanel: $("sharePanel"),
-    shareClose: $("shareClose"),
-    copyLinkBtn: $("copyLinkBtn"),
-    nativeShareBtn: $("nativeShareBtn"),
+    sidebar: $("readerSidebar"),
 
-    likeBtn: $("likeBtn"),
-    likeCount: $("likeCount"),
-    shareBtn: $("shareBtn"),
+    commentsPanel: $("commentsPanel"),
 
-    bookmarkMessage: $("bookmarkMessage"),
+    toast: $("toast")
 
-    pdfInput: $("pdfInput")
 };
 
 
-/*==================== STORAGE ====================*/
+/*==================================================
+                TOAST MESSAGE
+==================================================*/
 
-function storageKey(name){
-    return ReaderConfig.storagePrefix + name;
-}
+function showToast(message) {
 
-function saveStorage(name, value){
-    try{
-        localStorage.setItem(
-            storageKey(name),
-            JSON.stringify(value)
-        );
-    }catch(error){
-        console.warn("Storage save failed:", error);
-    }
-}
+    if (!Elements.toast) return;
 
-function getStorage(name, fallback = null){
-    try{
-        const value = localStorage.getItem(
-            storageKey(name)
-        );
+    Elements.toast.textContent = message;
 
-        return value === null
-            ? fallback
-            : JSON.parse(value);
+    Elements.toast.classList.add("active");
 
-    }catch(error){
-        console.warn("Storage read failed:", error);
-        return fallback;
-    }
+    clearTimeout(showToast.timer);
+
+    showToast.timer = setTimeout(() => {
+
+        Elements.toast.classList.remove("active");
+
+    }, 2200);
+
 }
 
 
-/*==================== TOAST ====================*/
+/*==================================================
+                LOADING PROGRESS
+==================================================*/
 
-let toastTimer = null;
+function setLoadingProgress(percent, message) {
 
-function showToast(message, duration = 2500){
+    const value =
+        Math.max(0, Math.min(100, percent));
 
-    if(!DOM.toast){
-        return;
+    if (Elements.loadingProgress) {
+
+        Elements.loadingProgress.style.width =
+            `${value}%`;
+
     }
 
-    DOM.toast.textContent = message;
+    if (Elements.loadingPercent) {
 
-    DOM.toast.classList.add("show");
+        Elements.loadingPercent.textContent =
+            `${Math.round(value)}%`;
 
-    clearTimeout(toastTimer);
+    }
 
-    toastTimer = setTimeout(() => {
-        DOM.toast.classList.remove("show");
-    }, duration);
+    if (
+        message &&
+        Elements.loadingMessage
+    ) {
+
+        Elements.loadingMessage.textContent =
+            message;
+
+    }
+
 }
 
 
-/*==================== LOADING ====================*/
+/*==================================================
+                HIDE LOADING
+==================================================*/
 
-function setLoadingProgress(percent, text){
+function hideLoadingScreen() {
 
-    const safePercent = Math.max(
-        0,
-        Math.min(100, Number(percent) || 0)
+    if (!Elements.loadingScreen) return;
+
+    setLoadingProgress(
+        100,
+        "Book Ready"
     );
-
-    if(DOM.loadingBar){
-        DOM.loadingBar.style.width =
-            `${safePercent}%`;
-    }
-
-    if(DOM.loadingPercent){
-        DOM.loadingPercent.textContent =
-            `${Math.round(safePercent)}%`;
-    }
-
-    if(text && DOM.loadingText){
-        DOM.loadingText.textContent = text;
-    }
-}
-
-function hideLoading(){
-
-    ReaderState.loading = false;
-
-    document.body.classList.remove("loading");
-
-    if(DOM.loadingScreen){
-        DOM.loadingScreen.classList.add("hidden");
-    }
 
     setTimeout(() => {
 
-        if(DOM.openingScreen){
-            DOM.openingScreen.classList.add("hidden");
-        }
+        Elements.loadingScreen.classList.add("hide");
 
-    }, 250);
-}
-
-
-/*==================== BOOK INFORMATION ====================*/
-
-function loadBookInformation(){
-
-    const savedTitle =
-        getStorage("bookTitle", "Chishti Library");
-
-    const savedAuthor =
-        getStorage("bookAuthor", "Unknown Author");
-
-    if(DOM.bookTitle){
-        DOM.bookTitle.textContent = savedTitle;
-    }
-
-    if(DOM.bookAuthor){
-        DOM.bookAuthor.textContent = savedAuthor;
-    }
-}
-
-
-/*==================== PDF LOAD ====================*/
-
-async function loadPDF(source = ReaderConfig.pdfUrl){
-
-    if(typeof pdfjsLib === "undefined"){
-        showToast("PDF.js failed to load.");
-        return;
-    }
-
-    try{
-
-        setLoadingProgress(
-            5,
-            "Preparing PDF..."
+        document.body.classList.add(
+            "reader-ready"
         );
 
-        document.body.classList.add("loading");
+    }, 300);
+
+}
+
+
+/*==================================================
+                SHOW PAGE LOADING
+==================================================*/
+
+function showPageLoading() {
+
+    if (Elements.pageLoading) {
+
+        Elements.pageLoading.style.display =
+            "flex";
+
+    }
+
+}
+
+
+/*==================================================
+                HIDE PAGE LOADING
+==================================================*/
+
+function hidePageLoading() {
+
+    if (Elements.pageLoading) {
+
+        Elements.pageLoading.style.display =
+            "none";
+
+    }
+
+}
+
+
+/*==================================================
+                FIND BOOK URL
+==================================================*/
+
+function getBookUrl() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const fromUrl =
+        params.get("pdf") ||
+        params.get("book") ||
+        params.get("file");
+
+    if (fromUrl) {
+
+        return fromUrl;
+
+    }
+
+
+    if (
+        window.ReaderConfig &&
+        ReaderConfig.pdfUrl
+    ) {
+
+        return ReaderConfig.pdfUrl;
+
+    }
+
+
+    const pdfLink =
+        document.querySelector(
+            'a[href$=".pdf"], a[href*=".pdf?"]'
+        );
+
+    if (pdfLink) {
+
+        return pdfLink.href;
+
+    }
+
+
+    return null;
+
+}
+
+
+/*==================================================
+                BOOK TITLE
+==================================================*/
+
+function getBookTitle() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const title =
+        params.get("title");
+
+    if (title) {
+
+        return title;
+
+    }
+
+    return "Untitled Book";
+
+}
+
+
+/*==================================================
+                UPDATE BOOK TITLE
+==================================================*/
+
+function updateBookTitle() {
+
+    ReaderState.bookTitle =
+        getBookTitle();
+
+    if (Elements.bookTitle) {
+
+        Elements.bookTitle.textContent =
+            ReaderState.bookTitle;
+
+    }
+
+}
+
+
+/*==================================================
+                LOAD PDF
+==================================================*/
+
+async function loadPDF(url) {
+
+    if (
+        !url ||
+        typeof pdfjsLib === "undefined"
+    ) {
+
+        setLoadingProgress(
+            100,
+            "No PDF selected"
+        );
+
+        hideLoadingScreen();
+
+        showToast(
+            "PDF file not found"
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        setLoadingProgress(
+            10,
+            "Opening Your Book..."
+        );
+
 
         const loadingTask =
-            pdfjsLib.getDocument(source);
+            pdfjsLib.getDocument({
+                url:url
+            });
 
-        loadingTask.onProgress = progress => {
 
-            if(progress.total){
+        loadingTask.onProgress =
+            function(progressData) {
 
-                const percent =
-                    (progress.loaded / progress.total) * 100;
+                if (
+                    progressData &&
+                    progressData.total
+                ) {
 
-                setLoadingProgress(
-                    Math.min(percent, 90),
-                    "Loading Book..."
-                );
-            }
+                    const percent =
+                        (progressData.loaded /
+                        progressData.total) *
+                        70;
 
-        };
+                    setLoadingProgress(
+                        10 + percent,
+                        "Loading Book..."
+                    );
+
+                }
+
+            };
+
 
         ReaderState.pdf =
             await loadingTask.promise;
 
+
+        ReaderState.bookUrl =
+            url;
+
         ReaderState.totalPages =
             ReaderState.pdf.numPages;
 
-        ReaderState.currentPage = 1;
 
-        if(DOM.totalPages){
-            DOM.totalPages.textContent =
+        if (Elements.totalPages) {
+
+            Elements.totalPages.textContent =
                 ReaderState.totalPages;
+
         }
 
+
         setLoadingProgress(
-            95,
-            "Rendering first page..."
+            85,
+            "Preparing Reader..."
         );
 
-        await renderPage(
-            ReaderState.currentPage
-        );
 
-        buildThumbnails();
+        await renderCurrentPages();
 
-        loadSavedState();
 
-        updateUI();
+        updatePageUI();
+
+        updateReadingProgress();
 
         setLoadingProgress(
             100,
             "Book Ready"
         );
 
-        setTimeout(hideLoading, 350);
 
-    }catch(error){
+        hideLoadingScreen();
 
-        console.error("PDF loading error:", error);
 
-        hideLoading();
+    } catch (error) {
+
+        console.error(
+            "PDF loading error:",
+            error
+        );
+
+
+        setLoadingProgress(
+            100,
+            "Unable to Load Book"
+        );
+
+
+        hidePageLoading();
+
 
         showToast(
-            "PDF could not be loaded. Check the PDF path."
+            "Unable to load PDF"
         );
+
     }
+
 }
 
 
-/*==================== RENDER PAGE ====================*/
+/*==================================================
+                RENDER ONE PAGE
+==================================================*/
 
-async function renderPage(pageNumber){
+async function renderPage(
+    pageNumber,
+    canvas
+) {
 
-    if(!ReaderState.pdf){
+    if (
+        !ReaderState.pdf ||
+        !canvas
+    ) {
+
         return;
+
     }
 
-    if(
+
+    if (
         pageNumber < 1 ||
-        pageNumber > ReaderState.totalPages
-    ){
+        pageNumber >
+        ReaderState.totalPages
+    ) {
+
+        canvas.style.display =
+            "none";
+
         return;
+
     }
 
-    if(ReaderState.currentRenderTask){
 
-        try{
-            ReaderState.currentRenderTask.cancel();
-        }catch(error){
-            console.warn(error);
-        }
-
-        ReaderState.currentRenderTask = null;
-    }
-
-    ReaderState.rendering = true;
-
-    if(DOM.pdfCanvas){
-        DOM.pdfCanvas.classList.add("rendering");
-    }
-
-    try{
-
-        const page =
-            await ReaderState.pdf.getPage(pageNumber);
-
-        const baseViewport =
-            page.getViewport({ scale: 1 });
-
-        const containerWidth =
-            DOM.pdfContainer?.clientWidth || window.innerWidth;
-
-        const containerHeight =
-            DOM.pdfContainer?.clientHeight || window.innerHeight;
-
-        const availableWidth =
-            Math.max(containerWidth - 40, 200);
-
-        const availableHeight =
-            Math.max(containerHeight - 40, 200);
-
-        const fitScale =
-            Math.min(
-                availableWidth / baseViewport.width,
-                availableHeight / baseViewport.height
-            );
-
-        const scale =
-            Math.max(
-                0.1,
-                fitScale * ReaderState.zoom
-            );
-
-        const viewport =
-            page.getViewport({ scale });
-
-        const canvas =
-            DOM.pdfCanvas;
-
-        if(!canvas){
-            return;
-        }
-
-        const context =
-            canvas.getContext("2d", {
-                alpha:false
-            });
-
-        const outputScale =
-            window.devicePixelRatio || 1;
-
-        canvas.width =
-            Math.floor(
-                viewport.width * outputScale
-            );
-
-        canvas.height =
-            Math.floor(
-                viewport.height * outputScale
-            );
-
-        canvas.style.width =
-            `${viewport.width}px`;
-
-        canvas.style.height =
-            `${viewport.height}px`;
-
-        context.setTransform(
-            outputScale,
-            0,
-            0,
-            outputScale,
-            0,
-            0
+    const page =
+        await ReaderState.pdf.getPage(
+            pageNumber
         );
 
-        context.fillStyle = "#ffffff";
 
-        context.fillRect(
-            0,
-            0,
-            viewport.width,
-            viewport.height
-        );
+    const viewport =
+        page.getViewport({
+            scale:ReaderState.zoom
+        });
 
-        ReaderState.currentRenderTask =
-            page.render({
-                canvasContext: context,
-                viewport
-            });
 
-        await ReaderState.currentRenderTask.promise;
+    const context =
+        canvas.getContext("2d");
 
-        ReaderState.currentRenderTask = null;
 
-    }catch(error){
+    canvas.width =
+        viewport.width;
 
-        if(error?.name !== "RenderingCancelledException"){
-            console.error(
-                "Page rendering error:",
-                error
-            );
-        }
+    canvas.height =
+        viewport.height;
 
-    }finally{
 
-        ReaderState.rendering = false;
+    canvas.style.width =
+        `${viewport.width}px`;
 
-        if(DOM.pdfCanvas){
-            DOM.pdfCanvas.classList.remove(
-                "rendering"
-            );
-        }
-    }
+    canvas.style.height =
+        `${viewport.height}px`;
+
+    canvas.style.display =
+        "block";
+
+
+    await page.render({
+
+        canvasContext:context,
+
+        viewport:viewport
+
+    }).promise;
+
 }
 
 
-/*==================== PAGE NAVIGATION ====================*/
+/*==================================================
+                RENDER CURRENT PAGES
+==================================================*/
 
-async function goToPage(pageNumber, animate = true){
+async function renderCurrentPages() {
 
-    if(!ReaderState.pdf){
+    if (
+        !ReaderState.pdf ||
+        ReaderState.isRendering
+    ) {
+
         return;
+
     }
 
-    const target =
+
+    ReaderState.isRendering =
+        true;
+
+
+    showPageLoading();
+
+
+    try {
+
+        const firstPage =
+            ReaderState.currentPage;
+
+
+        await renderPage(
+            firstPage,
+            Elements.canvas1
+        );
+
+
+        if (
+            ReaderState.doublePage &&
+            firstPage <
+            ReaderState.totalPages
+        ) {
+
+            await renderPage(
+                firstPage + 1,
+                Elements.canvas2
+            );
+
+        } else {
+
+            Elements.canvas2.style.display =
+                "none";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Page rendering error:",
+            error
+        );
+
+        showToast(
+            "Page rendering failed"
+        );
+
+    } finally {
+
+        ReaderState.isRendering =
+            false;
+
+        hidePageLoading();
+
+    }
+
+}
+
+
+/*==================================================
+                UPDATE PAGE UI
+==================================================*/
+
+function updatePageUI() {
+
+    if (Elements.currentPage) {
+
+        Elements.currentPage.value =
+            ReaderState.currentPage;
+
+    }
+
+
+    if (Elements.totalPages) {
+
+        Elements.totalPages.textContent =
+            ReaderState.totalPages;
+
+    }
+
+
+    if (Elements.pageInfo) {
+
+        Elements.pageInfo.textContent =
+            `Page ${ReaderState.currentPage} of ${ReaderState.totalPages}`;
+
+    }
+
+
+    updateNavigationButtons();
+
+}
+
+
+/*==================================================
+                NAVIGATION BUTTONS
+==================================================*/
+
+function updateNavigationButtons() {
+
+    const previousButtons = [
+
+        $("prevBtn"),
+
+        $("previousPage")
+
+    ];
+
+
+    const nextButtons = [
+
+        $("nextBtn"),
+
+        $("nextPage")
+
+    ];
+
+
+    previousButtons.forEach(
+        button => {
+
+            if (button) {
+
+                button.disabled =
+                    ReaderState.currentPage <= 1;
+
+            }
+
+        }
+    );
+
+
+    nextButtons.forEach(
+        button => {
+
+            if (button) {
+
+                const nextPage =
+                    ReaderState.doublePage
+                        ? ReaderState.currentPage + 2
+                        : ReaderState.currentPage + 1;
+
+                button.disabled =
+                    nextPage >
+                    ReaderState.totalPages;
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                GO TO PAGE
+==================================================*/
+
+async function goToPage(pageNumber) {
+
+    if (
+        !ReaderState.pdf ||
+        ReaderState.isRendering
+    ) {
+
+        return;
+
+    }
+
+
+    let page =
+        parseInt(
+            pageNumber,
+            10
+        );
+
+
+    if (Number.isNaN(page)) {
+
+        page = ReaderState.currentPage;
+
+    }
+
+
+    page =
         Math.max(
             1,
             Math.min(
-                ReaderState.totalPages,
-                Number(pageNumber) || 1
+                page,
+                ReaderState.totalPages
             )
         );
 
-    if(
-        target === ReaderState.currentPage &&
-        !ReaderState.loading
-    ){
-        return;
+
+    if (
+        ReaderState.doublePage &&
+        page > 1 &&
+        page % 2 === 0
+    ) {
+
+        page -= 1;
+
     }
 
-    const direction =
-        target > ReaderState.currentPage
-            ? "next"
-            : "prev";
 
-    if(
-        animate &&
-        ReaderState.pageAnimation &&
-        DOM.pageFlipLayer
-    ){
+    ReaderState.currentPage =
+        page;
 
-        DOM.pageFlipLayer.classList.remove(
-            "flip-next",
-            "flip-prev"
-        );
 
-        void DOM.pageFlipLayer.offsetWidth;
+    await renderCurrentPages();
 
-        DOM.pageFlipLayer.classList.add(
-            direction === "next"
-                ? "flip-next"
-                : "flip-prev"
-        );
 
-        setTimeout(() => {
+    updatePageUI();
 
-            DOM.pageFlipLayer.classList.remove(
-                "flip-next",
-                "flip-prev"
-            );
+    updateReadingProgress();
 
-        }, 700);
-    }
+    saveReaderState();
 
-    ReaderState.currentPage = target;
-
-    await renderPage(target);
-
-    updateUI();
-
-    saveReadingProgress();
 }
 
-async function nextReaderPage(){
 
-    if(
-        ReaderState.currentPage <
-        ReaderState.totalPages
-    ){
+/*==================================================
+                NEXT PAGE
+==================================================*/
 
-        await goToPage(
+function nextReaderPage() {
+
+    if (
+        ReaderState.doublePage
+    ) {
+
+        goToPage(
+            ReaderState.currentPage + 2
+        );
+
+    } else {
+
+        goToPage(
             ReaderState.currentPage + 1
         );
 
-    }else{
-
-        showToast("You are on the last page.");
     }
+
 }
 
-async function previousReaderPage(){
 
-    if(ReaderState.currentPage > 1){
+/*==================================================
+                PREVIOUS PAGE
+==================================================*/
 
-        await goToPage(
+function previousReaderPage() {
+
+    if (
+        ReaderState.doublePage
+    ) {
+
+        goToPage(
+            ReaderState.currentPage - 2
+        );
+
+    } else {
+
+        goToPage(
             ReaderState.currentPage - 1
         );
 
-    }else{
-
-        showToast("You are on the first page.");
     }
+
 }
 
 
-/*==================== UI UPDATE ====================*/
-
-function updateUI(){
-
-    const page =
-        ReaderState.currentPage;
-
-    const total =
-        ReaderState.totalPages;
-
-    if(DOM.currentPage){
-        DOM.currentPage.textContent = page;
-    }
-
-    if(DOM.totalPages){
-        DOM.totalPages.textContent = total;
-    }
-
-    if(DOM.pageInfo){
-        DOM.pageInfo.textContent =
-            `Page ${page} of ${total}`;
-    }
-
-    if(DOM.zoomValue){
-        DOM.zoomValue.textContent =
-            `${Math.round(
-                ReaderState.zoom * 100
-            )}%`;
-    }
-
-    const progress =
-        total > 0
-            ? ((page - 1) / Math.max(total - 1, 1)) * 100
-            : 0;
-
-    if(DOM.readingProgressFill){
-        DOM.readingProgressFill.style.width =
-            `${progress}%`;
-    }
-
-    if(DOM.prevBtn){
-        DOM.prevBtn.disabled =
-            page <= 1;
-    }
-
-    if(DOM.previousPage){
-        DOM.previousPage.disabled =
-            page <= 1;
-    }
-
-    if(DOM.nextBtn){
-        DOM.nextBtn.disabled =
-            page >= total;
-    }
-
-    if(DOM.nextPage){
-        DOM.nextPage.disabled =
-            page >= total;
-    }
-
-    updateBookmarkButton();
-    updateLikeButton();
-    updateThemeButton();
-}
 /*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.js — PART 2
+                ZOOM
 ==================================================*/
 
-/*==================== ZOOM ====================*/
-
-async function setZoom(value){
+async function setZoom(value) {
 
     const zoom =
         Math.max(
-            ReaderConfig.minZoom,
+            ReaderState.minZoom,
             Math.min(
-                ReaderConfig.maxZoom,
-                Number(value) || 1
+                ReaderState.maxZoom,
+                value
             )
         );
 
+
     ReaderState.zoom =
-        Math.round(zoom * 10) / 10;
+        Math.round(
+            zoom * 100
+        ) / 100;
 
-    await renderPage(
-        ReaderState.currentPage
-    );
 
-    updateUI();
+    if (Elements.zoomValue) {
 
-    if(ReaderState.autoSave){
-        saveStorage(
-            "zoom",
-            ReaderState.zoom
-        );
+        Elements.zoomValue.textContent =
+            `${Math.round(
+                ReaderState.zoom * 100
+            )}%`;
+
     }
+
+
+    await renderCurrentPages();
+
+    saveReaderState();
+
 }
 
-async function zoomIn(){
 
-    await setZoom(
+/*==================================================
+                ZOOM IN
+==================================================*/
+
+function zoomIn() {
+
+    setZoom(
         ReaderState.zoom +
-        ReaderConfig.zoomStep
+        ReaderState.zoomStep
     );
+
 }
 
-async function zoomOut(){
 
-    await setZoom(
+/*==================================================
+                ZOOM OUT
+==================================================*/
+
+function zoomOut() {
+
+    setZoom(
         ReaderState.zoom -
-        ReaderConfig.zoomStep
-    );
-}
-
-async function fitPage(){
-
-    ReaderState.zoom = 1;
-
-    await renderPage(
-        ReaderState.currentPage
+        ReaderState.zoomStep
     );
 
-    updateUI();
 }
 
 
-/*==================== BOOKMARKS ====================*/
+/*==================================================
+                FIT PAGE
+==================================================*/
 
-function loadBookmarks(){
+async function fitPage() {
 
-    ReaderState.bookmarks =
-        getStorage(
-            "bookmarks",
-            []
-        );
+    if (
+        !ReaderState.pdf ||
+        !Elements.pdfArea
+    ) {
 
-    if(!Array.isArray(ReaderState.bookmarks)){
-        ReaderState.bookmarks = [];
+        return;
+
     }
-}
 
-function saveBookmarks(){
-
-    saveStorage(
-        "bookmarks",
-        ReaderState.bookmarks
-    );
-}
-
-function isBookmarked(page){
-
-    return ReaderState.bookmarks.some(
-        item => Number(item.page) === Number(page)
-    );
-}
-
-function toggleBookmark(){
 
     const page =
-        ReaderState.currentPage;
-
-    const index =
-        ReaderState.bookmarks.findIndex(
-            item => Number(item.page) === Number(page)
-        );
-
-    if(index >= 0){
-
-        ReaderState.bookmarks.splice(
-            index,
-            1
-        );
-
-        showToast(
-            `Bookmark removed from page ${page}.`
-        );
-
-    }else{
-
-        ReaderState.bookmarks.push({
-            page,
-            title:`Page ${page}`,
-            createdAt:new Date().toISOString()
-        });
-
-        ReaderState.bookmarks.sort(
-            (a,b) => Number(a.page) - Number(b.page)
-        );
-
-        showToast(
-            `Page ${page} bookmarked.`
-        );
-    }
-
-    saveBookmarks();
-
-    updateBookmarkButton();
-
-    buildBookmarkList();
-}
-
-function updateBookmarkButton(){
-
-    if(!DOM.bookmarkBtn){
-        return;
-    }
-
-    const active =
-        isBookmarked(
+        await ReaderState.pdf.getPage(
             ReaderState.currentPage
         );
 
-    DOM.bookmarkBtn.classList.toggle(
-        "active",
-        active
+
+    const baseViewport =
+        page.getViewport({
+            scale:1
+        });
+
+
+    const areaWidth =
+        Elements.pdfArea.clientWidth -
+        80;
+
+
+    const areaHeight =
+        Elements.pdfArea.clientHeight -
+        70;
+
+
+    let scale =
+        Math.min(
+            areaWidth /
+                baseViewport.width,
+            areaHeight /
+                baseViewport.height
+        );
+
+
+    if (
+        ReaderState.doublePage
+    ) {
+
+        scale =
+            Math.min(
+                scale,
+                (
+                    areaWidth - 30
+                ) /
+                (
+                    baseViewport.width * 2
+                )
+            );
+
+    }
+
+
+    await setZoom(
+        Math.max(
+            ReaderState.minZoom,
+            Math.min(
+                ReaderState.maxZoom,
+                scale
+            )
+        )
     );
 
-    DOM.bookmarkBtn.classList.toggle(
-        "bookmarked",
-        active
-    );
-
-    DOM.bookmarkBtn.setAttribute(
-        "aria-pressed",
-        String(active)
-    );
 }
 
-function buildBookmarkList(){
 
-    if(!DOM.bookmarkContainer){
-        return;
-    }
+/*==================================================
+                READING PROGRESS
+==================================================*/
 
-    DOM.bookmarkContainer.innerHTML = "";
+function updateReadingProgress() {
 
-    if(!ReaderState.bookmarks.length){
-
-        DOM.bookmarkContainer.innerHTML = `
-            <div class="emptyState">
-                No bookmarks yet.
-            </div>
-        `;
+    if (
+        !Elements.progressFill ||
+        ReaderState.totalPages <= 0
+    ) {
 
         return;
+
     }
 
-    ReaderState.bookmarks.forEach(bookmark => {
 
-        const item =
-            document.createElement("div");
+    const progress =
+        (
+            ReaderState.currentPage /
+            ReaderState.totalPages
+        ) * 100;
 
-        item.className =
-            "bookmarkItem";
 
-        item.innerHTML = `
-            <span>
-                ${escapeHTML(
-                    bookmark.title ||
-                    `Page ${bookmark.page}`
-                )}
-            </span>
+    Elements.progressFill.style.width =
+        `${progress}%`;
 
-            <button
-                type="button"
-                class="bookmarkDelete"
-                aria-label="Delete bookmark">
-                <i class="ri-delete-bin-line"></i>
-            </button>
-        `;
+}
 
-        const titleArea =
-            item.querySelector("span");
 
-        titleArea.addEventListener(
-            "click",
-            () => {
+/*==================================================
+                PAGE INPUT
+==================================================*/
 
-                goToPage(
-                    Number(bookmark.page)
+function handlePageInput() {
+
+    if (!Elements.currentPage) {
+
+        return;
+
+    }
+
+
+    const value =
+        parseInt(
+            Elements.currentPage.value,
+            10
+        );
+
+
+    if (
+        !Number.isNaN(value)
+    ) {
+
+        goToPage(value);
+
+    }
+
+}
+
+
+/*==================================================
+                KEYBOARD CONTROLS
+==================================================*/
+
+function handleKeyboard(event) {
+
+    const target =
+        event.target;
+
+
+    if (
+        target &&
+        (
+            target.tagName === "INPUT" ||
+            target.tagName === "TEXTAREA"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    if (event.key === "ArrowRight") {
+
+        nextReaderPage();
+
+    }
+
+
+    if (event.key === "ArrowLeft") {
+
+        previousReaderPage();
+
+    }
+
+
+    if (
+        event.key === "+" ||
+        event.key === "="
+    ) {
+
+        zoomIn();
+
+    }
+
+
+    if (
+        event.key === "-" ||
+        event.key === "_"
+    ) {
+
+        zoomOut();
+
+    }
+
+
+    if (
+        event.key === "f" ||
+        event.key === "F"
+    ) {
+
+        fitPage();
+
+    }
+
+}
+
+
+/*==================================================
+                DOUBLE PAGE
+==================================================*/
+
+async function setPageMode(mode) {
+
+    ReaderState.doublePage =
+        mode === "double";
+
+
+    if (Elements.pdfContainer) {
+
+        Elements.pdfContainer.classList.toggle(
+            "double-page",
+            ReaderState.doublePage
+        );
+
+        Elements.pdfContainer.classList.toggle(
+            "single-page",
+            !ReaderState.doublePage
+        );
+
+    }
+
+
+    if (
+        ReaderState.doublePage &&
+        ReaderState.currentPage %
+        2 === 0
+    ) {
+
+        ReaderState.currentPage--;
+
+        if (
+            ReaderState.currentPage < 1
+        ) {
+
+            ReaderState.currentPage = 1;
+
+        }
+
+    }
+
+
+    await renderCurrentPages();
+
+    updatePageUI();
+
+    saveReaderState();
+
+}
+
+
+/*==================================================
+                SAVE READER STATE
+==================================================*/
+
+function saveReaderState() {
+
+    try {
+
+        localStorage.setItem(
+            "chishti-reader-state",
+            JSON.stringify({
+
+                page:
+                    ReaderState.currentPage,
+
+                zoom:
+                    ReaderState.zoom,
+
+                doublePage:
+                    ReaderState.doublePage
+
+            })
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to save reader state",
+            error
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                LOAD READER STATE
+==================================================*/
+
+function loadReaderState() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "chishti-reader-state"
+            );
+
+
+        if (!saved) {
+
+            return;
+
+        }
+
+
+        const state =
+            JSON.parse(saved);
+
+
+        if (
+            Number.isFinite(
+                state.page
+            )
+        ) {
+
+            ReaderState.currentPage =
+                Math.max(
+                    1,
+                    state.page
                 );
 
-                closeSidebar();
-            }
+        }
+
+
+        if (
+            Number.isFinite(
+                state.zoom
+            )
+        ) {
+
+            ReaderState.zoom =
+                Math.max(
+                    ReaderState.minZoom,
+                    Math.min(
+                        ReaderState.maxZoom,
+                        state.zoom
+                    )
+                );
+
+        }
+
+
+        if (
+            typeof state.doublePage ===
+            "boolean"
+        ) {
+
+            ReaderState.doublePage =
+                state.doublePage;
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to load reader state",
+            error
         );
 
-        const deleteButton =
-            item.querySelector(
-                ".bookmarkDelete"
-            );
+    }
 
-        deleteButton.addEventListener(
+}
+
+
+/*==================================================
+                INITIALIZE READER
+==================================================*/
+
+async function initializeReader() {
+
+    document.body.classList.add(
+        "reader-opening"
+    );
+
+
+    updateBookTitle();
+
+    loadReaderState();
+
+
+    if (Elements.zoomValue) {
+
+        Elements.zoomValue.textContent =
+            `${Math.round(
+                ReaderState.zoom * 100
+            )}%`;
+
+    }
+
+
+    if (Elements.pdfContainer) {
+
+        Elements.pdfContainer.classList.toggle(
+            "double-page",
+            ReaderState.doublePage
+        );
+
+        Elements.pdfContainer.classList.toggle(
+            "single-page",
+            !ReaderState.doublePage
+        );
+
+    }
+
+
+    const url =
+        getBookUrl();
+
+
+    await loadPDF(url);
+
+
+    updatePageUI();
+
+
+    document.body.classList.remove(
+        "reader-opening"
+    );
+
+}
+
+
+/*==================================================
+                BASIC EVENTS
+==================================================*/
+
+function setupCoreEvents() {
+
+
+    if ($("prevBtn")) {
+
+        $("prevBtn").addEventListener(
             "click",
+            previousReaderPage
+        );
+
+    }
+
+
+    if ($("previousPage")) {
+
+        $("previousPage").addEventListener(
+            "click",
+            previousReaderPage
+        );
+
+    }
+
+
+    if ($("nextBtn")) {
+
+        $("nextBtn").addEventListener(
+            "click",
+            nextReaderPage
+        );
+
+    }
+
+
+    if ($("nextPage")) {
+
+        $("nextPage").addEventListener(
+            "click",
+            nextReaderPage
+        );
+
+    }
+
+
+    if ($("zoomInBtn")) {
+
+        $("zoomInBtn").addEventListener(
+            "click",
+            zoomIn
+        );
+
+    }
+
+
+    if ($("zoomOutBtn")) {
+
+        $("zoomOutBtn").addEventListener(
+            "click",
+            zoomOut
+        );
+
+    }
+
+
+    if ($("fitBtn")) {
+
+        $("fitBtn").addEventListener(
+            "click",
+            fitPage
+        );
+
+    }
+
+
+    if (Elements.currentPage) {
+
+        Elements.currentPage.addEventListener(
+            "change",
+            handlePageInput
+        );
+
+        Elements.currentPage.addEventListener(
+            "keydown",
             event => {
 
-                event.stopPropagation();
+                if (
+                    event.key === "Enter"
+                ) {
 
-                ReaderState.bookmarks =
-                    ReaderState.bookmarks.filter(
-                        b =>
-                            Number(b.page) !==
-                            Number(bookmark.page)
-                    );
+                    handlePageInput();
 
-                saveBookmarks();
+                }
 
-                buildBookmarkList();
-
-                updateBookmarkButton();
             }
         );
 
-        DOM.bookmarkContainer.appendChild(item);
-    });
-}
-
-
-/*==================== LIKE ====================*/
-
-function loadLikeState(){
-
-    ReaderState.liked =
-        Boolean(
-            getStorage(
-                "liked",
-                false
-            )
-        );
-
-    ReaderState.likes =
-        Number(
-            getStorage(
-                "likes",
-                0
-            )
-        ) || 0;
-}
-
-function updateLikeButton(){
-
-    if(DOM.likeBtn){
-
-        DOM.likeBtn.classList.toggle(
-            "liked",
-            ReaderState.liked
-        );
-
-        DOM.likeBtn.classList.toggle(
-            "active",
-            ReaderState.liked
-        );
-
-        DOM.likeBtn.setAttribute(
-            "aria-pressed",
-            String(ReaderState.liked)
-        );
     }
 
-    if(DOM.likeCount){
-        DOM.likeCount.textContent =
-            ReaderState.likes;
-    }
+
+    document.addEventListener(
+        "keydown",
+        handleKeyboard
+    );
+
 }
 
-function toggleLike(){
 
-    if(ReaderState.liked){
+/*==================================================
+                START
+==================================================*/
 
-        ReaderState.liked = false;
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-        ReaderState.likes =
-            Math.max(
-                0,
-                ReaderState.likes - 1
+        setupCoreEvents();
+
+        initializeReader();
+
+    }
+);
+/*==================================================
+        CHISHTI LIBRARY READER V4
+        JS PART 2
+        THEME + SETTINGS + SIDEBAR + VIEW
+==================================================*/
+
+
+/*==================================================
+                THEME SYSTEM
+==================================================*/
+
+function setReaderTheme(theme){
+
+    const allowedThemes = [
+        "dark",
+        "light",
+        "maroon",
+        "gold"
+    ];
+
+    if(
+        !allowedThemes.includes(theme)
+    ){
+
+        theme = "dark";
+
+    }
+
+
+    document.body.classList.remove(
+        "theme-dark",
+        "theme-light",
+        "theme-maroon",
+        "theme-gold"
+    );
+
+
+    document.body.classList.add(
+        `theme-${theme}`
+    );
+
+
+    ReaderState.currentTheme =
+        theme;
+
+
+    try{
+
+        localStorage.setItem(
+            "chishti-theme",
+            theme
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Theme save failed:",
+            error
+        );
+
+    }
+
+
+    updateThemeButtons();
+
+}
+
+
+/*==================================================
+                LOAD SAVED THEME
+==================================================*/
+
+function loadReaderTheme(){
+
+    let savedTheme = "dark";
+
+
+    try{
+
+        savedTheme =
+            localStorage.getItem(
+                "chishti-theme"
+            ) || "dark";
+
+    }catch(error){
+
+        savedTheme = "dark";
+
+    }
+
+
+    setReaderTheme(
+        savedTheme
+    );
+
+}
+
+
+/*==================================================
+                THEME BUTTONS
+==================================================*/
+
+function updateThemeButtons(){
+
+    const buttons =
+        document.querySelectorAll(
+            "[data-reader-theme]"
+        );
+
+
+    buttons.forEach(button => {
+
+        const buttonTheme =
+            button.getAttribute(
+                "data-reader-theme"
             );
 
-        showToast("Like removed.");
+
+        button.classList.toggle(
+            "active",
+            buttonTheme ===
+            ReaderState.currentTheme
+        );
+
+    });
+
+}
+
+
+/*==================================================
+                SETTINGS PANEL
+==================================================*/
+
+function openSettings(){
+
+    if(!Elements.settingsPanel){
+        return;
+    }
+
+
+    Elements.settingsPanel.classList.add(
+        "active"
+    );
+
+
+    const overlay =
+        $("settingsOverlay");
+
+    if(overlay){
+
+        overlay.classList.add(
+            "active"
+        );
+
+    }
+
+}
+
+
+function closeSettings(){
+
+    if(Elements.settingsPanel){
+
+        Elements.settingsPanel.classList.remove(
+            "active"
+        );
+
+    }
+
+
+    const overlay =
+        $("settingsOverlay");
+
+    if(overlay){
+
+        overlay.classList.remove(
+            "active"
+        );
+
+    }
+
+}
+
+
+function toggleSettings(){
+
+    if(
+        Elements.settingsPanel &&
+        Elements.settingsPanel.classList.contains(
+            "active"
+        )
+    ){
+
+        closeSettings();
 
     }else{
 
-        ReaderState.liked = true;
+        openSettings();
 
-        ReaderState.likes += 1;
-
-        showToast("Book liked.");
     }
 
-    saveStorage(
-        "liked",
-        ReaderState.liked
-    );
-
-    saveStorage(
-        "likes",
-        ReaderState.likes
-    );
-
-    updateLikeButton();
 }
 
 
-/*==================== THEME ====================*/
-
-function loadTheme(){
-
-    const saved =
-        getStorage(
-            "darkMode",
-            true
-        );
-
-    ReaderState.darkMode =
-        Boolean(saved);
-
-    applyTheme();
-}
-
-function applyTheme(){
-
-    document.body.classList.toggle(
-        "lightTheme",
-        !ReaderState.darkMode
-    );
-
-    if(DOM.darkMode){
-        DOM.darkMode.checked =
-            ReaderState.darkMode;
-    }
-
-    updateThemeButton();
-}
-
-function toggleTheme(){
-
-    ReaderState.darkMode =
-        !ReaderState.darkMode;
-
-    applyTheme();
-
-    saveStorage(
-        "darkMode",
-        ReaderState.darkMode
-    );
-}
-
-function updateThemeButton(){
-
-    if(!DOM.themeBtn){
-        return;
-    }
-
-    DOM.themeBtn.classList.toggle(
-        "active",
-        !ReaderState.darkMode
-    );
-}
-
-
-/*==================== SETTINGS ====================*/
-
-function loadSettings(){
-
-    ReaderState.pageShadow =
-        Boolean(
-            getStorage(
-                "pageShadow",
-                true
-            )
-        );
-
-    ReaderState.pageAnimation =
-        Boolean(
-            getStorage(
-                "pageAnimation",
-                true
-            )
-        );
-
-    ReaderState.autoSave =
-        Boolean(
-            getStorage(
-                "autoSave",
-                true
-            )
-        );
-
-    applySettings();
-}
-
-function applySettings(){
-
-    document.body.classList.toggle(
-        "noPageShadow",
-        !ReaderState.pageShadow
-    );
-
-    document.body.classList.toggle(
-        "noPageAnimation",
-        !ReaderState.pageAnimation
-    );
-
-    if(DOM.pageShadow){
-        DOM.pageShadow.checked =
-            ReaderState.pageShadow;
-    }
-
-    if(DOM.pageAnimation){
-        DOM.pageAnimation.checked =
-            ReaderState.pageAnimation;
-    }
-
-    if(DOM.autoSave){
-        DOM.autoSave.checked =
-            ReaderState.autoSave;
-    }
-}
-
-
-/*==================== SIDEBAR ====================*/
+/*==================================================
+                SIDEBAR
+==================================================*/
 
 function openSidebar(){
 
-    if(!DOM.leftSidebar){
+    if(!Elements.sidebar){
         return;
     }
 
-    DOM.leftSidebar.classList.add(
+
+    Elements.sidebar.classList.add(
         "active"
     );
 
-    DOM.leftSidebar.setAttribute(
-        "aria-hidden",
-        "false"
-    );
 
-    buildBookmarkList();
+    const overlay =
+        $("sidebarOverlay");
+
+    if(overlay){
+
+        overlay.classList.add(
+            "active"
+        );
+
+    }
+
 }
+
 
 function closeSidebar(){
 
-    if(!DOM.leftSidebar){
-        return;
+    if(Elements.sidebar){
+
+        Elements.sidebar.classList.remove(
+            "active"
+        );
+
     }
 
-    DOM.leftSidebar.classList.remove(
-        "active"
-    );
 
-    DOM.leftSidebar.setAttribute(
-        "aria-hidden",
-        "true"
-    );
+    const overlay =
+        $("sidebarOverlay");
+
+    if(overlay){
+
+        overlay.classList.remove(
+            "active"
+        );
+
+    }
+
 }
+
 
 function toggleSidebar(){
 
     if(
-        DOM.leftSidebar?.classList.contains(
+        Elements.sidebar &&
+        Elements.sidebar.classList.contains(
             "active"
         )
     ){
+
         closeSidebar();
+
     }else{
+
         openSidebar();
+
     }
+
 }
 
 
-/*==================== SEARCH ====================*/
+/*==================================================
+                COMMENTS PANEL
+==================================================*/
+
+function openComments(){
+
+    if(!Elements.commentsPanel){
+        return;
+    }
+
+
+    Elements.commentsPanel.classList.add(
+        "active"
+    );
+
+}
+
+
+function closeComments(){
+
+    if(Elements.commentsPanel){
+
+        Elements.commentsPanel.classList.remove(
+            "active"
+        );
+
+    }
+
+}
+
+
+function toggleComments(){
+
+    if(
+        Elements.commentsPanel &&
+        Elements.commentsPanel.classList.contains(
+            "active"
+        )
+    ){
+
+        closeComments();
+
+    }else{
+
+        openComments();
+
+    }
+
+}
+
+
+/*==================================================
+                SEARCH BAR
+==================================================*/
 
 function openSearch(){
 
-    if(!DOM.searchPanel){
+    if(!Elements.searchBar){
         return;
     }
 
-    DOM.searchPanel.classList.add(
+
+    Elements.searchBar.classList.add(
         "active"
     );
 
-    if(DOM.searchInput){
 
-        DOM.searchInput.focus();
+    if(Elements.searchInput){
 
-        DOM.searchInput.select();
+        setTimeout(() => {
+
+            Elements.searchInput.focus();
+
+        },100);
+
     }
+
 }
+
 
 function closeSearch(){
 
-    if(!DOM.searchPanel){
+    if(!Elements.searchBar){
         return;
     }
 
-    DOM.searchPanel.classList.remove(
+
+    Elements.searchBar.classList.remove(
         "active"
     );
+
 }
 
-function clearSearchResults(){
 
-    if(DOM.searchResults){
-        DOM.searchResults.innerHTML = "";
+function toggleSearch(){
+
+    if(
+        Elements.searchBar &&
+        Elements.searchBar.classList.contains(
+            "active"
+        )
+    ){
+
+        closeSearch();
+
+    }else{
+
+        openSearch();
+
     }
+
 }
 
-async function searchPDF(query){
 
-    const text =
-        String(query || "").trim();
+/*==================================================
+                PAGE SHADOW
+==================================================*/
 
-    clearSearchResults();
+function setPageShadow(enabled){
 
-    if(!text){
+    document.body.classList.toggle(
+        "no-page-shadow",
+        !enabled
+    );
 
-        if(DOM.searchResults){
-            DOM.searchResults.innerHTML = `
-                <div class="emptyState">
-                    Type something to search.
-                </div>
-            `;
+
+    try{
+
+        localStorage.setItem(
+            "chishti-page-shadow",
+            enabled ? "1" : "0"
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Page shadow save failed:",
+            error
+        );
+
+    }
+
+
+    const checkbox =
+        $("pageShadow");
+
+    if(checkbox){
+
+        checkbox.checked =
+            enabled;
+
+    }
+
+}
+
+
+/*==================================================
+                LOAD PAGE SHADOW
+==================================================*/
+
+function loadPageShadow(){
+
+    let saved = "1";
+
+
+    try{
+
+        saved =
+            localStorage.getItem(
+                "chishti-page-shadow"
+            ) || "1";
+
+    }catch(error){
+
+        saved = "1";
+
+    }
+
+
+    setPageShadow(
+        saved === "1"
+    );
+
+}
+
+
+/*==================================================
+                DARK MODE
+==================================================*/
+
+function setDarkMode(enabled){
+
+    if(enabled){
+
+        setReaderTheme(
+            "dark"
+        );
+
+    }else{
+
+        setReaderTheme(
+            "light"
+        );
+
+    }
+
+
+    const checkbox =
+        $("darkMode");
+
+    if(checkbox){
+
+        checkbox.checked =
+            enabled;
+
+    }
+
+}
+
+
+/*==================================================
+                LOAD DARK MODE
+==================================================*/
+
+function loadDarkMode(){
+
+    const checkbox =
+        $("darkMode");
+
+
+    if(!checkbox){
+        return;
+    }
+
+
+    checkbox.checked =
+        ReaderState.currentTheme ===
+        "dark";
+
+}
+
+
+/*==================================================
+                VIEW MODE BUTTONS
+==================================================*/
+
+function updateViewModeButtons(){
+
+    const buttons =
+        document.querySelectorAll(
+            "[data-page-mode]"
+        );
+
+
+    buttons.forEach(button => {
+
+        const mode =
+            button.getAttribute(
+                "data-page-mode"
+            );
+
+
+        button.classList.toggle(
+            "active",
+            (
+                mode === "double" &&
+                ReaderState.doublePage
+            ) ||
+            (
+                mode === "single" &&
+                !ReaderState.doublePage
+            )
+        );
+
+    });
+
+}
+
+
+/*==================================================
+                SET SINGLE PAGE
+==================================================*/
+
+async function setSinglePage(){
+
+    await setPageMode(
+        "single"
+    );
+
+    updateViewModeButtons();
+
+}
+
+
+/*==================================================
+                SET DOUBLE PAGE
+==================================================*/
+
+async function setDoublePage(){
+
+    await setPageMode(
+        "double"
+    );
+
+    updateViewModeButtons();
+
+}
+
+
+/*==================================================
+                INITIAL SETTINGS
+==================================================*/
+
+function loadReaderSettings(){
+
+    loadReaderTheme();
+
+    loadPageShadow();
+
+    loadDarkMode();
+
+    updateViewModeButtons();
+
+}
+
+
+/*==================================================
+                SETTINGS EVENTS
+==================================================*/
+
+function setupSettingsEvents(){
+
+
+    /*----------------------------------------------
+                SETTINGS BUTTON
+    ----------------------------------------------*/
+
+    const settingsButton =
+        $("settingsBtn");
+
+    if(settingsButton){
+
+        settingsButton.addEventListener(
+            "click",
+            toggleSettings
+        );
+
+    }
+
+
+    /*----------------------------------------------
+                SETTINGS CLOSE
+    ----------------------------------------------*/
+
+    const settingsClose =
+        $("settingsClose");
+
+    if(settingsClose){
+
+        settingsClose.addEventListener(
+            "click",
+            closeSettings
+        );
+
+    }
+
+
+    const settingsOverlay =
+        $("settingsOverlay");
+
+    if(settingsOverlay){
+
+        settingsOverlay.addEventListener(
+            "click",
+            closeSettings
+        );
+
+    }
+
+
+    /*----------------------------------------------
+                THEME OPTIONS
+    ----------------------------------------------*/
+
+    document
+        .querySelectorAll(
+            "[data-reader-theme]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const theme =
+                        button.getAttribute(
+                            "data-reader-theme"
+                        );
+
+
+                    setReaderTheme(
+                        theme
+                    );
+
+                }
+            );
+
+        });
+
+
+    /*----------------------------------------------
+                DARK MODE
+    ----------------------------------------------*/
+
+    const darkMode =
+        $("darkMode");
+
+    if(darkMode){
+
+        darkMode.addEventListener(
+            "change",
+            () => {
+
+                setDarkMode(
+                    darkMode.checked
+                );
+
+            }
+        );
+
+    }
+
+
+    /*----------------------------------------------
+                PAGE SHADOW
+    ----------------------------------------------*/
+
+    const pageShadow =
+        $("pageShadow");
+
+    if(pageShadow){
+
+        pageShadow.addEventListener(
+            "change",
+            () => {
+
+                setPageShadow(
+                    pageShadow.checked
+                );
+
+            }
+        );
+
+    }
+
+
+    /*----------------------------------------------
+                SINGLE / DOUBLE PAGE
+    ----------------------------------------------*/
+
+    document
+        .querySelectorAll(
+            "[data-page-mode]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                async () => {
+
+                    const mode =
+                        button.getAttribute(
+                            "data-page-mode"
+                        );
+
+
+                    await setPageMode(
+                        mode
+                    );
+
+
+                    updateViewModeButtons();
+
+                }
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                SIDEBAR EVENTS
+==================================================*/
+
+function setupSidebarEvents(){
+
+
+    const menuBtn =
+        $("menuBtn");
+
+    if(menuBtn){
+
+        menuBtn.addEventListener(
+            "click",
+            toggleSidebar
+        );
+
+    }
+
+
+    const sidebarOverlay =
+        $("sidebarOverlay");
+
+    if(sidebarOverlay){
+
+        sidebarOverlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    const thumbnailBtn =
+        $("thumbnailBtn");
+
+    if(thumbnailBtn){
+
+        thumbnailBtn.addEventListener(
+            "click",
+            () => {
+
+                openSidebar();
+
+                activateSidebarTab(
+                    "thumbnails"
+                );
+
+                generateThumbnails();
+
+            }
+        );
+
+    }
+
+
+    const commentsBtn =
+        $("commentsBtn");
+
+    if(commentsBtn){
+
+        commentsBtn.addEventListener(
+            "click",
+            toggleComments
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            "[data-sidebar-tab]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const tab =
+                        button.getAttribute(
+                            "data-sidebar-tab"
+                        );
+
+
+                    activateSidebarTab(
+                        tab
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                SIDEBAR TABS
+==================================================*/
+
+function activateSidebarTab(tabName){
+
+    document
+        .querySelectorAll(
+            "[data-sidebar-tab]"
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.getAttribute(
+                    "data-sidebar-tab"
+                ) === tabName
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-sidebar-panel]"
+        )
+        .forEach(panel => {
+
+            panel.classList.toggle(
+                "active",
+                panel.getAttribute(
+                    "data-sidebar-panel"
+                ) === tabName
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                THUMBNAILS
+==================================================*/
+
+async function generateThumbnails(){
+
+    const container =
+        $("thumbnailList");
+
+
+    if(
+        !container ||
+        !ReaderState.pdf
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        container.dataset.generated ===
+        "true"
+    ){
+
+        updateActiveThumbnail();
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    const maxPages =
+        Math.min(
+            ReaderState.totalPages,
+            100
+        );
+
+
+    for(
+        let pageNumber = 1;
+        pageNumber <= maxPages;
+        pageNumber++
+    ){
+
+        const item =
+            document.createElement(
+                "button"
+            );
+
+
+        item.type =
+            "button";
+
+
+        item.className =
+            "thumbnailItem";
+
+
+        item.dataset.page =
+            pageNumber;
+
+
+        const canvas =
+            document.createElement(
+                "canvas"
+            );
+
+
+        const number =
+            document.createElement(
+                "span"
+            );
+
+
+        number.className =
+            "thumbnailNumber";
+
+
+        number.textContent =
+            `Page ${pageNumber}`;
+
+
+        item.appendChild(
+            canvas
+        );
+
+
+        item.appendChild(
+            number
+        );
+
+
+        item.addEventListener(
+            "click",
+            () => {
+
+                goToPage(
+                    pageNumber
+                );
+
+            }
+        );
+
+
+        container.appendChild(
+            item
+        );
+
+
+        try{
+
+            await renderThumbnail(
+                pageNumber,
+                canvas
+            );
+
+        }catch(error){
+
+            console.warn(
+                "Thumbnail error:",
+                error
+            );
+
         }
 
-        return;
     }
+
+
+    container.dataset.generated =
+        "true";
+
+
+    updateActiveThumbnail();
+
+}
+
+
+/*==================================================
+                RENDER THUMBNAIL
+==================================================*/
+
+async function renderThumbnail(
+    pageNumber,
+    canvas
+){
+
+    const page =
+        await ReaderState.pdf.getPage(
+            pageNumber
+        );
+
+
+    const baseViewport =
+        page.getViewport({
+            scale:1
+        });
+
+
+    const thumbnailWidth =
+        180;
+
+
+    const scale =
+        thumbnailWidth /
+        baseViewport.width;
+
+
+    const viewport =
+        page.getViewport({
+            scale:scale
+        });
+
+
+    canvas.width =
+        viewport.width;
+
+    canvas.height =
+        viewport.height;
+
+
+    const context =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    await page.render({
+
+        canvasContext:context,
+
+        viewport:viewport
+
+    }).promise;
+
+}
+
+
+/*==================================================
+                ACTIVE THUMBNAIL
+==================================================*/
+
+function updateActiveThumbnail(){
+
+    document
+        .querySelectorAll(
+            ".thumbnailItem"
+        )
+        .forEach(item => {
+
+            item.classList.toggle(
+                "active",
+                Number(
+                    item.dataset.page
+                ) ===
+                ReaderState.currentPage
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                SEARCH EVENTS
+==================================================*/
+
+function setupSearchEvents(){
+
+    const searchBtn =
+        $("searchBtn");
+
+    if(searchBtn){
+
+        searchBtn.addEventListener(
+            "click",
+            toggleSearch
+        );
+
+    }
+
+
+    const searchClose =
+        $("searchClose");
+
+    if(searchClose){
+
+        searchClose.addEventListener(
+            "click",
+            closeSearch
+        );
+
+    }
+
+
+    if(Elements.searchInput){
+
+        Elements.searchInput.addEventListener(
+            "keydown",
+            event => {
+
+                if(
+                    event.key === "Enter"
+                ){
+
+                    searchBook(
+                        Elements.searchInput.value
+                    );
+
+                }
+
+                if(
+                    event.key === "Escape"
+                ){
+
+                    closeSearch();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                SEARCH PDF
+==================================================*/
+
+async function searchBook(query){
+
+    query =
+        String(query || "")
+        .trim()
+        .toLowerCase();
+
+
+    if(!query){
+
+        showToast(
+            "Enter text to search"
+        );
+
+        return;
+
+    }
+
 
     if(!ReaderState.pdf){
+
+        showToast(
+            "Book is not loaded"
+        );
+
         return;
+
     }
 
-    if(DOM.searchResults){
-        DOM.searchResults.innerHTML = `
-            <div class="emptyState">
-                Searching...
-            </div>
-        `;
-    }
+
+    showToast(
+        "Searching book..."
+    );
+
 
     const results = [];
-    const searchText = text.toLowerCase();
+
 
     for(
         let pageNumber = 1;
@@ -1229,554 +2717,1000 @@ async function searchPDF(query){
                     pageNumber
                 );
 
+
             const content =
                 await page.getTextContent();
 
-            const pageText =
+
+            const text =
                 content.items
-                    .map(item => item.str)
-                    .join(" ");
+                    .map(
+                        item =>
+                            item.str
+                    )
+                    .join(" ")
+                    .toLowerCase();
+
 
             if(
-                pageText
-                    .toLowerCase()
-                    .includes(searchText)
+                text.includes(query)
             ){
 
-                results.push({
-                    page:pageNumber,
-                    text:pageText
-                });
+                results.push(
+                    pageNumber
+                );
+
             }
 
         }catch(error){
 
             console.warn(
-                `Search failed on page ${pageNumber}`,
+                "Search page error:",
                 error
             );
-        }
-    }
 
-    if(!DOM.searchResults){
-        return;
-    }
-
-    DOM.searchResults.innerHTML = "";
-
-    if(!results.length){
-
-        DOM.searchResults.innerHTML = `
-            <div class="noSearchResults">
-                <i class="ri-search-line"></i>
-                No results found.
-            </div>
-        `;
-
-        return;
-    }
-
-    results.forEach(result => {
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "searchResult";
-
-        const index =
-            result.text
-                .toLowerCase()
-                .indexOf(searchText);
-
-        let preview =
-            result.text.slice(
-                Math.max(0,index - 60),
-                index + text.length + 100
-            );
-
-        if(index < 0){
-            preview =
-                result.text.slice(0,160);
         }
 
-        item.innerHTML = `
-            <span class="searchResultPage">
-                Page ${result.page}
-            </span>
-
-            <span class="searchResultText">
-                ${highlightText(
-                    preview,
-                    text
-                )}
-            </span>
-        `;
-
-        item.addEventListener(
-            "click",
-            () => {
-
-                goToPage(
-                    result.page,
-                    false
-                );
-
-                closeSearch();
-            }
-        );
-
-        DOM.searchResults.appendChild(item);
-    });
-}
-
-
-/*==================== ESCAPE / HIGHLIGHT ====================*/
-
-function escapeHTML(value){
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-}
-
-function escapeRegExp(value){
-
-    return String(value)
-        .replace(
-            /[.*+?^${}()|[\]\\]/g,
-            "\\$&"
-        );
-}
-
-function highlightText(text, query){
-
-    const safeText =
-        escapeHTML(text);
-
-    const safeQuery =
-        escapeRegExp(
-            escapeHTML(query)
-        );
-
-    return safeText.replace(
-        new RegExp(
-            `(${safeQuery})`,
-            "gi"
-        ),
-        `<mark class="searchHighlight">$1</mark>`
-    );
-}
-
-
-/*==================== END PART 2 ====================*/
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.js — PART 3
-==================================================*/
-
-/*==================== THUMBNAILS ====================*/
-
-async function buildThumbnails(){
-
-    if(!DOM.thumbnailContainer || !ReaderState.pdf){
-        return;
     }
 
-    DOM.thumbnailContainer.innerHTML = "";
 
-    for(
-        let pageNumber = 1;
-        pageNumber <= ReaderState.totalPages;
-        pageNumber++
+    ReaderState.searchResults =
+        results;
+
+
+    ReaderState.searchIndex =
+        0;
+
+
+    if(
+        Elements.searchStatus
     ){
 
-        const wrapper =
-            document.createElement("div");
+        Elements.searchStatus.textContent =
+            results.length
+                ? `${results.length} page(s) found`
+                : "No results found";
 
-        wrapper.className = "thumbnail";
-
-        wrapper.dataset.page =
-            pageNumber;
-
-        wrapper.innerHTML = `
-            <canvas></canvas>
-            <span class="pageNumber">
-                ${pageNumber}
-            </span>
-        `;
-
-        wrapper.addEventListener(
-            "click",
-            () => {
-
-                goToPage(
-                    pageNumber,
-                    false
-                );
-
-                updateThumbnailState();
-            }
-        );
-
-        DOM.thumbnailContainer.appendChild(
-            wrapper
-        );
-
-        renderThumbnail(
-            pageNumber,
-            wrapper.querySelector("canvas")
-        );
     }
 
-    updateThumbnailState();
+
+    if(results.length){
+
+        await goToPage(
+            results[0]
+        );
+
+    }else{
+
+        showToast(
+            "No results found"
+        );
+
+    }
+
 }
 
-async function renderThumbnail(
-    pageNumber,
-    canvas
-){
+
+/*==================================================
+                REINITIALIZE AFTER LOAD
+==================================================*/
+
+function initializePartTwo(){
+
+    loadReaderSettings();
+
+    setupSettingsEvents();
+
+    setupSidebarEvents();
+
+    setupSearchEvents();
+
+}
+
+
+/*==================================================
+                PATCH CORE INITIALIZATION
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initializePartTwo();
+
+    }
+);
+/*==================================================
+        CHISHTI LIBRARY READER V4
+        JS PART 3
+        BOOKMARKS + LIKE + SHARE + COMMENTS
+==================================================*/
+
+
+/*==================================================
+                BOOKMARK STORAGE
+==================================================*/
+
+function loadBookmarks(){
 
     try{
 
-        const page =
-            await ReaderState.pdf.getPage(
-                pageNumber
+        const saved =
+            localStorage.getItem(
+                "chishti-bookmarks"
             );
 
-        const original =
-            page.getViewport({
-                scale:1
-            });
+        ReaderState.bookmarks =
+            saved
+                ? JSON.parse(saved)
+                : [];
 
-        const width = 120;
+        if(
+            !Array.isArray(
+                ReaderState.bookmarks
+            )
+        ){
 
-        const scale =
-            width / original.width;
+            ReaderState.bookmarks = [];
 
-        const viewport =
-            page.getViewport({
-                scale
-            });
-
-        const ratio =
-            window.devicePixelRatio || 1;
-
-        canvas.width =
-            Math.floor(
-                viewport.width * ratio
-            );
-
-        canvas.height =
-            Math.floor(
-                viewport.height * ratio
-            );
-
-        canvas.style.width =
-            `${viewport.width}px`;
-
-        canvas.style.height =
-            `${viewport.height}px`;
-
-        const context =
-            canvas.getContext("2d");
-
-        context.setTransform(
-            ratio,
-            0,
-            0,
-            ratio,
-            0,
-            0
-        );
-
-        await page.render({
-            canvasContext:context,
-            viewport
-        }).promise;
+        }
 
     }catch(error){
 
         console.warn(
-            "Thumbnail error:",
+            "Bookmark load failed:",
             error
         );
+
+        ReaderState.bookmarks = [];
+
     }
+
 }
 
-function updateThumbnailState(){
 
-    if(!DOM.thumbnailContainer){
-        return;
+/*==================================================
+                SAVE BOOKMARKS
+==================================================*/
+
+function saveBookmarks(){
+
+    try{
+
+        localStorage.setItem(
+            "chishti-bookmarks",
+            JSON.stringify(
+                ReaderState.bookmarks
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Bookmark save failed:",
+            error
+        );
+
     }
 
-    const thumbnails =
-        DOM.thumbnailContainer.querySelectorAll(
-            ".thumbnail"
+}
+
+
+/*==================================================
+                CHECK BOOKMARK
+==================================================*/
+
+function isCurrentPageBookmarked(){
+
+    return ReaderState.bookmarks.some(
+        bookmark =>
+            Number(bookmark.page) ===
+            ReaderState.currentPage
+    );
+
+}
+
+
+/*==================================================
+                TOGGLE BOOKMARK
+==================================================*/
+
+function toggleBookmark(){
+
+    const page =
+        ReaderState.currentPage;
+
+
+    const existingIndex =
+        ReaderState.bookmarks.findIndex(
+            bookmark =>
+                Number(bookmark.page) ===
+                page
         );
 
-    thumbnails.forEach(item => {
 
-        const page =
-            Number(item.dataset.page);
+    if(existingIndex !== -1){
 
-        item.classList.toggle(
-            "active",
-            page === ReaderState.currentPage
+        ReaderState.bookmarks.splice(
+            existingIndex,
+            1
         );
+
+        showToast(
+            "Bookmark removed"
+        );
+
+    }else{
+
+        ReaderState.bookmarks.push({
+
+            page:page,
+
+            title:
+                `Page ${page}`,
+
+            createdAt:
+                new Date().toISOString()
+
+        });
+
+        showToast(
+            "Page bookmarked"
+        );
+
+    }
+
+
+    saveBookmarks();
+
+    updateBookmarkButtons();
+
+    renderBookmarks();
+
+}
+
+
+/*==================================================
+                UPDATE BOOKMARK BUTTON
+==================================================*/
+
+function updateBookmarkButtons(){
+
+    const bookmarked =
+        isCurrentPageBookmarked();
+
+
+    const buttons = [
+
+        $("bookmarkBtn"),
+
+        $("bookmarkToolbarBtn")
+
+    ];
+
+
+    buttons.forEach(button => {
+
+        if(!button){
+            return;
+        }
+
+
+        button.classList.toggle(
+            "bookmarked",
+            bookmarked
+        );
+
+
+        const icon =
+            button.querySelector("i");
+
+
+        if(icon){
+
+            icon.className =
+                bookmarked
+                    ? "ri-bookmark-fill"
+                    : "ri-bookmark-line";
+
+        }
+
     });
+
 }
 
-function toggleThumbnailSidebar(){
 
-    if(!DOM.thumbnailSidebar){
+/*==================================================
+                RENDER BOOKMARKS
+==================================================*/
+
+function renderBookmarks(){
+
+    const container =
+        $("bookmarksList");
+
+
+    if(!container){
         return;
     }
 
-    DOM.thumbnailSidebar.classList.toggle(
-        "active"
-    );
-}
+
+    container.innerHTML = "";
 
 
-/*==================== COMMENTS ====================*/
+    if(
+        !ReaderState.bookmarks.length
+    ){
 
-function loadComments(){
-
-    const comments =
-        getStorage(
-            "comments",
-            []
-        );
-
-    if(!Array.isArray(comments)){
-        return;
-    }
-
-    renderComments(comments);
-}
-
-function getComments(){
-
-    const comments =
-        getStorage(
-            "comments",
-            []
-        );
-
-    return Array.isArray(comments)
-        ? comments
-        : [];
-}
-
-function saveComments(comments){
-
-    saveStorage(
-        "comments",
-        comments
-    );
-}
-
-function renderComments(comments){
-
-    if(!DOM.commentList){
-        return;
-    }
-
-    DOM.commentList.innerHTML = "";
-
-    if(!comments.length){
-
-        DOM.commentList.innerHTML = `
-            <div class="emptyState">
-                No comments yet.
-            </div>
-        `;
-
-        return;
-    }
-
-    comments.forEach((comment,index) => {
-
-        const item =
-            document.createElement("div");
-
-        item.className =
-            "commentItem";
-
-        item.innerHTML = `
-            <strong>
-                ${escapeHTML(
-                    comment.name || "Reader"
-                )}
-            </strong>
-
-            <p>
-                ${escapeHTML(
-                    comment.message || ""
-                )}
-            </p>
-
-            <div class="commentActions">
-                <button
-                    type="button"
-                    data-delete-comment="${index}">
-                    Delete
-                </button>
-            </div>
-        `;
-
-        const deleteButton =
-            item.querySelector(
-                "[data-delete-comment]"
+        const empty =
+            document.createElement(
+                "div"
             );
 
-        deleteButton?.addEventListener(
+
+        empty.className =
+            "noComments";
+
+
+        empty.textContent =
+            "No bookmarks yet";
+
+
+        container.appendChild(
+            empty
+        );
+
+
+        return;
+
+    }
+
+
+    const sorted =
+        [...ReaderState.bookmarks]
+        .sort(
+            (a,b) =>
+                Number(a.page) -
+                Number(b.page)
+        );
+
+
+    sorted.forEach(bookmark => {
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.type =
+            "button";
+
+
+        button.className =
+            "bookmarkItem";
+
+
+        button.innerHTML = `
+
+            <i class="ri-bookmark-fill"></i>
+
+            <span class="bookmarkPage">
+                Page ${Number(bookmark.page)}
+            </span>
+
+            <span class="bookmarkTitle">
+                ${escapeHTML(
+                    bookmark.title ||
+                    `Page ${bookmark.page}`
+                )}
+            </span>
+
+        `;
+
+
+        button.addEventListener(
             "click",
             () => {
 
-                const updated =
-                    getComments();
-
-                updated.splice(
-                    index,
-                    1
+                goToPage(
+                    Number(
+                        bookmark.page
+                    )
                 );
 
-                saveComments(updated);
-
-                renderComments(updated);
-
-                showToast(
-                    "Comment deleted."
-                );
             }
         );
 
-        DOM.commentList.appendChild(item);
-    });
-}
 
-function submitComment(){
-
-    const name =
-        DOM.commentName?.value.trim();
-
-    const message =
-        DOM.commentMessage?.value.trim();
-
-    if(!message){
-
-        showToast(
-            "Please write a comment first."
+        container.appendChild(
+            button
         );
 
-        return;
+    });
+
+}
+
+
+/*==================================================
+                BOOKMARK EVENTS
+==================================================*/
+
+function setupBookmarkEvents(){
+
+    const buttons = [
+
+        $("bookmarkBtn"),
+
+        $("bookmarkToolbarBtn")
+
+    ];
+
+
+    buttons.forEach(button => {
+
+        if(button){
+
+            button.addEventListener(
+                "click",
+                toggleBookmark
+            );
+
+        }
+
+    });
+
+}
+
+
+/*==================================================
+                LIKE SYSTEM
+==================================================*/
+
+function loadLikes(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                "chishti-book-likes"
+            );
+
+
+        ReaderState.likes =
+            Number(saved) || 0;
+
+    }catch(error){
+
+        ReaderState.likes = 0;
+
     }
 
-    const comments =
-        getComments();
 
-    comments.unshift({
-        name:
-            name || "Reader",
+    updateLikeUI();
 
-        message,
+}
+
+
+/*==================================================
+                SAVE LIKES
+==================================================*/
+
+function saveLikes(){
+
+    try{
+
+        localStorage.setItem(
+            "chishti-book-likes",
+            String(
+                ReaderState.likes
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Like save failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                UPDATE LIKE UI
+==================================================*/
+
+function updateLikeUI(){
+
+    const likeCount =
+        $("likeCount");
+
+
+    if(likeCount){
+
+        likeCount.textContent =
+            ReaderState.likes;
+
+    }
+
+}
+
+
+/*==================================================
+                LIKE BOOK
+==================================================*/
+
+function likeBook(){
+
+    ReaderState.likes += 1;
+
+    saveLikes();
+
+    updateLikeUI();
+
+
+    const button =
+        $("likeBtn");
+
+
+    if(button){
+
+        button.classList.add(
+            "liked"
+        );
+
+        const icon =
+            button.querySelector("i");
+
+
+        if(icon){
+
+            icon.className =
+                "ri-heart-fill";
+
+        }
+
+    }
+
+
+    showToast(
+        "Book liked"
+    );
+
+}
+
+
+/*==================================================
+                COMMENTS STORAGE
+==================================================*/
+
+function getCommentsKey(){
+
+    return (
+        "chishti-comments-" +
+        (
+            ReaderState.bookUrl ||
+            "default"
+        )
+    );
+
+}
+
+
+/*==================================================
+                LOAD COMMENTS
+==================================================*/
+
+function loadComments(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                getCommentsKey()
+            );
+
+
+        ReaderState.comments =
+            saved
+                ? JSON.parse(saved)
+                : [];
+
+
+        if(
+            !Array.isArray(
+                ReaderState.comments
+            )
+        ){
+
+            ReaderState.comments = [];
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Comments load failed:",
+            error
+        );
+
+        ReaderState.comments = [];
+
+    }
+
+
+    renderComments();
+
+}
+
+
+/*==================================================
+                SAVE COMMENTS
+==================================================*/
+
+function saveComments(){
+
+    try{
+
+        localStorage.setItem(
+            getCommentsKey(),
+            JSON.stringify(
+                ReaderState.comments
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Comments save failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                ADD COMMENT
+==================================================*/
+
+function addComment(){
+
+    const nameInput =
+        $("commentName");
+
+
+    const textInput =
+        $("commentText");
+
+
+    if(
+        !nameInput ||
+        !textInput
+    ){
+
+        return;
+
+    }
+
+
+    const name =
+        nameInput.value.trim();
+
+
+    const text =
+        textInput.value.trim();
+
+
+    if(!name){
+
+        showToast(
+            "Enter your name"
+        );
+
+        nameInput.focus();
+
+        return;
+
+    }
+
+
+    if(!text){
+
+        showToast(
+            "Write a comment"
+        );
+
+        textInput.focus();
+
+        return;
+
+    }
+
+
+    ReaderState.comments.unshift({
+
+        name:name,
+
+        text:text,
 
         page:
             ReaderState.currentPage,
 
         createdAt:
             new Date().toISOString()
+
     });
 
-    saveComments(comments);
 
-    renderComments(comments);
+    saveComments();
 
-    if(DOM.commentName){
-        DOM.commentName.value = "";
-    }
+    renderComments();
 
-    if(DOM.commentMessage){
-        DOM.commentMessage.value = "";
-    }
+
+    nameInput.value = "";
+
+    textInput.value = "";
+
 
     showToast(
-        "Comment added."
+        "Comment posted"
     );
+
 }
 
-function toggleComments(){
 
-    if(!DOM.commentPanel){
+/*==================================================
+                RENDER COMMENTS
+==================================================*/
+
+function renderComments(){
+
+    const container =
+        $("commentsList");
+
+
+    if(!container){
         return;
     }
 
-    DOM.commentPanel.classList.toggle(
-        "active"
-    );
+
+    container.innerHTML = "";
+
 
     if(
-        DOM.commentPanel.classList.contains(
-            "active"
-        )
+        !ReaderState.comments.length
     ){
-        renderComments(
-            getComments()
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.className =
+            "noComments";
+
+
+        empty.textContent =
+            "No comments yet";
+
+
+        container.appendChild(
+            empty
         );
-    }
-}
 
 
-/*==================== SETTINGS PANEL ====================*/
-
-function toggleSettings(){
-
-    if(!DOM.settingsPanel){
         return;
+
     }
 
-    DOM.settingsPanel.classList.toggle(
-        "active"
+
+    ReaderState.comments.forEach(
+        comment => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "commentItem";
+
+
+            const date =
+                comment.createdAt
+                    ? new Date(
+                        comment.createdAt
+                    ).toLocaleDateString()
+                    : "";
+
+
+            item.innerHTML = `
+
+                <div class="commentAuthor">
+
+                    <strong>
+                        ${escapeHTML(
+                            comment.name
+                        )}
+                    </strong>
+
+                    <span class="commentDate">
+                        ${escapeHTML(date)}
+                    </span>
+
+                </div>
+
+                <div class="commentBody">
+                    ${escapeHTML(
+                        comment.text
+                    )}
+                </div>
+
+                <div
+                    style="
+                        margin-top:7px;
+                        color:var(--text-muted);
+                        font-size:9px;
+                    "
+                >
+                    Page ${Number(
+                        comment.page || 1
+                    )}
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
     );
+
 }
 
-function closeSettings(){
 
-    DOM.settingsPanel?.classList.remove(
-        "active"
-    );
+/*==================================================
+                COMMENT EVENTS
+==================================================*/
+
+function setupCommentEvents(){
+
+    const postButton =
+        $("postComment");
+
+
+    if(postButton){
+
+        postButton.addEventListener(
+            "click",
+            addComment
+        );
+
+    }
+
+
+    const commentText =
+        $("commentText");
+
+
+    if(commentText){
+
+        commentText.addEventListener(
+            "keydown",
+            event => {
+
+                if(
+                    event.key === "Enter" &&
+                    event.ctrlKey
+                ){
+
+                    addComment();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    const closeButton =
+        $("commentsClose");
+
+
+    if(closeButton){
+
+        closeButton.addEventListener(
+            "click",
+            closeComments
+        );
+
+    }
+
 }
 
 
-/*==================== SHARE ====================*/
+/*==================================================
+                SHARE MODAL
+==================================================*/
 
 function openShare(){
 
-    if(!DOM.sharePanel){
+    const modal =
+        $("shareModal");
+
+
+    if(!modal){
         return;
     }
 
-    DOM.sharePanel.classList.add(
+
+    modal.classList.add(
         "active"
     );
+
 }
+
 
 function closeShare(){
 
-    DOM.sharePanel?.classList.remove(
-        "active"
-    );
+    const modal =
+        $("shareModal");
+
+
+    if(modal){
+
+        modal.classList.remove(
+            "active"
+        );
+
+    }
+
 }
 
-async function copyCurrentLink(){
+
+function toggleShare(){
+
+    const modal =
+        $("shareModal");
+
+
+    if(
+        modal &&
+        modal.classList.contains(
+            "active"
+        )
+    ){
+
+        closeShare();
+
+    }else{
+
+        openShare();
+
+    }
+
+}
+
+
+/*==================================================
+                COPY BOOK LINK
+==================================================*/
+
+async function copyBookLink(){
 
     const url =
         window.location.href;
+
 
     try{
 
@@ -1784,48 +3718,84 @@ async function copyCurrentLink(){
             url
         );
 
+
         showToast(
-            "Link copied."
+            "Book link copied"
         );
+
 
     }catch(error){
 
-        const temporary =
-            document.createElement("textarea");
+        const textarea =
+            document.createElement(
+                "textarea"
+            );
 
-        temporary.value = url;
+
+        textarea.value =
+            url;
+
+
+        textarea.style.position =
+            "fixed";
+
+        textarea.style.opacity =
+            "0";
+
 
         document.body.appendChild(
-            temporary
+            textarea
         );
 
-        temporary.select();
 
-        document.execCommand(
-            "copy"
-        );
+        textarea.select();
 
-        temporary.remove();
 
-        showToast(
-            "Link copied."
-        );
+        try{
+
+            document.execCommand(
+                "copy"
+            );
+
+            showToast(
+                "Book link copied"
+            );
+
+        }catch(copyError){
+
+            showToast(
+                "Unable to copy link"
+            );
+
+        }
+
+
+        textarea.remove();
+
     }
+
 }
+
+
+/*==================================================
+                NATIVE SHARE
+==================================================*/
 
 async function nativeShare(){
 
-    const data = {
+    const shareData = {
+
         title:
-            DOM.bookTitle?.textContent ||
-            "Chishti Library",
+            ReaderState.bookTitle,
 
         text:
-            "Read this book in Chishti Library.",
+            "Read this book in Chishti Library Reader.",
 
         url:
             window.location.href
+
     };
+
 
     if(
         navigator.share
@@ -1834,51 +3804,424 @@ async function nativeShare(){
         try{
 
             await navigator.share(
-                data
+                shareData
             );
 
         }catch(error){
 
             if(
+                error &&
                 error.name !==
                 "AbortError"
             ){
+
                 console.warn(
                     "Share failed:",
                     error
                 );
+
             }
+
         }
 
     }else{
 
-        await copyCurrentLink();
+        await copyBookLink();
+
     }
+
 }
 
 
-/*==================== FULLSCREEN ====================*/
+/*==================================================
+                SHARE EVENTS
+==================================================*/
+
+function setupShareEvents(){
+
+    const shareButton =
+        $("shareBtn");
+
+
+    if(shareButton){
+
+        shareButton.addEventListener(
+            "click",
+            toggleShare
+        );
+
+    }
+
+
+    const closeButton =
+        $("shareClose");
+
+
+    if(closeButton){
+
+        closeButton.addEventListener(
+            "click",
+            closeShare
+        );
+
+    }
+
+
+    const copyButton =
+        $("copyLinkBtn");
+
+
+    if(copyButton){
+
+        copyButton.addEventListener(
+            "click",
+            copyBookLink
+        );
+
+    }
+
+
+    const nativeButton =
+        $("nativeShareBtn");
+
+
+    if(nativeButton){
+
+        nativeButton.addEventListener(
+            "click",
+            nativeShare
+        );
+
+    }
+
+
+    const modal =
+        $("shareModal");
+
+
+    if(modal){
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if(
+                    event.target ===
+                    modal
+                ){
+
+                    closeShare();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                HTML ESCAPE
+==================================================*/
+
+function escapeHTML(value){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+/*==================================================
+                UPDATE AFTER PAGE CHANGE
+==================================================*/
+
+function updatePageFeatures(){
+
+    updateBookmarkButtons();
+
+    updateActiveThumbnail();
+
+}
+
+
+/*==================================================
+                PAGE CHANGE PATCH
+==================================================*/
+
+const originalGoToPage =
+    window.goToPage;
+
+
+window.goToPage =
+    async function(pageNumber){
+
+        if(
+            typeof originalGoToPage ===
+            "function"
+        ){
+
+            await originalGoToPage(
+                pageNumber
+            );
+
+        }
+
+
+        updatePageFeatures();
+
+    };
+
+
+/*==================================================
+                INITIALIZE PART 3
+==================================================*/
+
+function initializePartThree(){
+
+    loadBookmarks();
+
+    loadLikes();
+
+    loadComments();
+
+    setupBookmarkEvents();
+
+    setupCommentEvents();
+
+    setupShareEvents();
+
+    updateBookmarkButtons();
+
+}
+
+
+/*==================================================
+                DOM READY
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initializePartThree();
+
+    }
+);
+/*==================================================
+        CHISHTI LIBRARY READER V4
+        JS PART 4
+        LOADING SCREEN + BOOK OPEN TRANSITION
+        SETTINGS + READER UI HELPERS
+==================================================*/
+
+
+/*==================================================
+                LOADING SCREEN
+==================================================*/
+
+function showLoadingScreen(){
+
+    const screen =
+        $("loadingScreen");
+
+    if(!screen){
+        return;
+    }
+
+    screen.classList.remove(
+        "hide"
+    );
+
+}
+
+
+function finishLoadingScreen(){
+
+    const screen =
+        $("loadingScreen");
+
+    if(!screen){
+        return;
+    }
+
+    setLoadingProgress(
+        100,
+        "Book Ready"
+    );
+
+    setTimeout(() => {
+
+        screen.classList.add(
+            "hide"
+        );
+
+        document.body.classList.add(
+            "reader-ready"
+        );
+
+    }, 350);
+
+}
+
+
+/*==================================================
+                BOOK OPEN ANIMATION
+==================================================*/
+
+function openReaderAnimation(){
+
+    document.body.classList.add(
+        "reader-opening"
+    );
+
+    requestAnimationFrame(() => {
+
+        setTimeout(() => {
+
+            document.body.classList.remove(
+                "reader-opening"
+            );
+
+            document.body.classList.add(
+                "reader-ready"
+            );
+
+        }, 120);
+
+    });
+
+}
+
+
+/*==================================================
+                READER TRANSITION
+==================================================*/
+
+function showReaderTransition(){
+
+    const transition =
+        $("readerTransition");
+
+    if(!transition){
+        return;
+    }
+
+    transition.classList.add(
+        "active"
+    );
+
+}
+
+
+function hideReaderTransition(){
+
+    const transition =
+        $("readerTransition");
+
+    if(!transition){
+        return;
+    }
+
+    transition.classList.remove(
+        "active"
+    );
+
+}
+
+
+/*==================================================
+                MENU CLOSE ALL
+==================================================*/
+
+function closeAllPanels(){
+
+    closeSidebar();
+
+    closeComments();
+
+    closeSettings();
+
+    closeSearch();
+
+    closeShare();
+
+}
+
+
+/*==================================================
+                ESCAPE KEY
+==================================================*/
+
+function setupEscapeHandler(){
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.key !==
+                "Escape"
+            ){
+
+                return;
+
+            }
+
+            closeAllPanels();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                READER FULLSCREEN
+==================================================*/
 
 async function toggleFullscreen(){
 
+    const target =
+        $("readerApp") ||
+        document.documentElement;
+
+
     try{
 
-        if(!document.fullscreenElement){
+        if(
+            !document.fullscreenElement
+        ){
 
-            await document.documentElement
-                .requestFullscreen();
-
-            document.body.classList.add(
-                "fullscreen"
-            );
+            await target.requestFullscreen();
 
         }else{
 
             await document.exitFullscreen();
 
-            document.body.classList.remove(
-                "fullscreen"
-            );
         }
 
     }catch(error){
@@ -1888,641 +4231,282 @@ async function toggleFullscreen(){
             error
         );
 
-        showToast(
-            "Fullscreen is not available."
-        );
-    }
-}
-
-document.addEventListener(
-    "fullscreenchange",
-    () => {
-
-        const active =
-            Boolean(
-                document.fullscreenElement
-            );
-
-        document.body.classList.toggle(
-            "fullscreen",
-            active
-        );
-
-        DOM.fullscreenBtn?.classList.toggle(
-            "active",
-            active
-        );
-    }
-);
-
-
-/*==================== READING PROGRESS ====================*/
-
-function saveReadingProgress(){
-
-    if(!ReaderState.autoSave){
-        return;
     }
 
-    saveStorage(
-        "currentPage",
-        ReaderState.currentPage
-    );
-
-    saveStorage(
-        "zoom",
-        ReaderState.zoom
-    );
-}
-
-function loadSavedState(){
-
-    loadBookmarks();
-
-    loadLikeState();
-
-    loadTheme();
-
-    loadSettings();
-
-    loadComments();
-
-    const savedPage =
-        Number(
-            getStorage(
-                "currentPage",
-                1
-            )
-        );
-
-    const savedZoom =
-        Number(
-            getStorage(
-                "zoom",
-                ReaderConfig.defaultZoom
-            )
-        );
-
-    ReaderState.zoom =
-        Math.max(
-            ReaderConfig.minZoom,
-            Math.min(
-                ReaderConfig.maxZoom,
-                savedZoom || 1
-            )
-        );
-
-    if(
-        savedPage >= 1 &&
-        savedPage <= ReaderState.totalPages
-    ){
-
-        ReaderState.currentPage =
-            savedPage;
-    }
-
-    updateUI();
-
-    buildBookmarkList();
-}
-
-function resetReadingProgress(){
-
-    ReaderState.currentPage = 1;
-
-    ReaderState.zoom =
-        ReaderConfig.defaultZoom;
-
-    saveStorage(
-        "currentPage",
-        1
-    );
-
-    saveStorage(
-        "zoom",
-        ReaderConfig.defaultZoom
-    );
-
-    renderPage(1);
-
-    updateUI();
-
-    showToast(
-        "Reading progress reset."
-    );
 }
 
 
-/*==================== KEYBOARD CONTROLS ====================*/
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        const target =
-            event.target;
-
-        const typing =
-            target instanceof HTMLInputElement ||
-            target instanceof HTMLTextAreaElement ||
-            target?.isContentEditable;
-
-        if(typing){
-            return;
-        }
-
-        switch(event.key){
-
-            case "ArrowRight":
-            case "PageDown":
-                event.preventDefault();
-                nextReaderPage();
-                break;
-
-            case "ArrowLeft":
-            case "PageUp":
-                event.preventDefault();
-                previousReaderPage();
-                break;
-
-            case "+":
-            case "=":
-                event.preventDefault();
-                zoomIn();
-                break;
-
-            case "-":
-            case "_":
-                event.preventDefault();
-                zoomOut();
-                break;
-
-            case "0":
-                event.preventDefault();
-                fitPage();
-                break;
-
-            case "f":
-            case "F":
-                event.preventDefault();
-                toggleFullscreen();
-                break;
-
-            case "b":
-            case "B":
-                event.preventDefault();
-                toggleBookmark();
-                break;
-
-            case "Escape":
-                closeSidebar();
-                closeSearch();
-                closeSettings();
-                closeShare();
-                break;
-        }
-    }
-);
-
-
-/*==================== END PART 3 ====================*/
 /*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.js — PART 4
+                FULLSCREEN EVENT
 ==================================================*/
 
-/*==================== BUTTON EVENTS ====================*/
+function setupFullscreen(){
 
-function setupButtonEvents(){
-
-    DOM.menuBtn?.addEventListener(
-        "click",
-        toggleSidebar
-    );
-
-    DOM.closeSidebar?.addEventListener(
-        "click",
-        closeSidebar
-    );
-
-    DOM.prevBtn?.addEventListener(
-        "click",
-        previousReaderPage
-    );
-
-    DOM.nextBtn?.addEventListener(
-        "click",
-        nextReaderPage
-    );
-
-    DOM.previousPage?.addEventListener(
-        "click",
-        previousReaderPage
-    );
-
-    DOM.nextPage?.addEventListener(
-        "click",
-        nextReaderPage
-    );
-
-    DOM.zoomInBtn?.addEventListener(
-        "click",
-        zoomIn
-    );
-
-    DOM.zoomOutBtn?.addEventListener(
-        "click",
-        zoomOut
-    );
-
-    DOM.fitBtn?.addEventListener(
-        "click",
-        fitPage
-    );
-
-    DOM.bookmarkBtn?.addEventListener(
-        "click",
-        toggleBookmark
-    );
-
-    DOM.likeBtn?.addEventListener(
-        "click",
-        toggleLike
-    );
-
-    DOM.shareBtn?.addEventListener(
-        "click",
-        openShare
-    );
-
-    DOM.shareClose?.addEventListener(
-        "click",
-        closeShare
-    );
-
-    DOM.copyLinkBtn?.addEventListener(
-        "click",
-        copyCurrentLink
-    );
-
-    DOM.nativeShareBtn?.addEventListener(
-        "click",
-        nativeShare
-    );
-
-    DOM.fullscreenBtn?.addEventListener(
-        "click",
-        toggleFullscreen
-    );
-
-    DOM.thumbnailBtn?.addEventListener(
-        "click",
-        toggleThumbnailSidebar
-    );
-
-    DOM.commentsBtn?.addEventListener(
-        "click",
-        toggleComments
-    );
-
-    DOM.searchBtn?.addEventListener(
-        "click",
-        openSearch
-    );
-
-    DOM.searchClose?.addEventListener(
-        "click",
-        closeSearch
-    );
-
-    DOM.themeBtn?.addEventListener(
-        "click",
-        toggleTheme
-    );
-
-    DOM.commentSubmit?.addEventListener(
-        "click",
-        submitComment
-    );
+    const button =
+        $("fullscreenBtn");
 
 
-    /*==================== SETTINGS ====================*/
+    if(button){
 
-    DOM.darkMode?.addEventListener(
-        "change",
-        event => {
+        button.addEventListener(
+            "click",
+            toggleFullscreen
+        );
 
-            ReaderState.darkMode =
-                event.target.checked;
-
-            applyTheme();
-
-            saveStorage(
-                "darkMode",
-                ReaderState.darkMode
-            );
-        }
-    );
-
-    DOM.pageShadow?.addEventListener(
-        "change",
-        event => {
-
-            ReaderState.pageShadow =
-                event.target.checked;
-
-            applySettings();
-
-            saveStorage(
-                "pageShadow",
-                ReaderState.pageShadow
-            );
-        }
-    );
-
-    DOM.pageAnimation?.addEventListener(
-        "change",
-        event => {
-
-            ReaderState.pageAnimation =
-                event.target.checked;
-
-            applySettings();
-
-            saveStorage(
-                "pageAnimation",
-                ReaderState.pageAnimation
-            );
-        }
-    );
-
-    DOM.autoSave?.addEventListener(
-        "change",
-        event => {
-
-            ReaderState.autoSave =
-                event.target.checked;
-
-            applySettings();
-
-            saveStorage(
-                "autoSave",
-                ReaderState.autoSave
-            );
-        }
-    );
+    }
 
 
-    /*==================== SEARCH ====================*/
+    document.addEventListener(
+        "fullscreenchange",
+        () => {
 
-    let searchTimer = null;
-
-    DOM.searchInput?.addEventListener(
-        "input",
-        event => {
-
-            clearTimeout(searchTimer);
-
-            const query =
-                event.target.value;
-
-            searchTimer =
-                setTimeout(
-                    () => searchPDF(query),
-                    350
+            const icon =
+                button?.querySelector(
+                    "i"
                 );
-        }
-    );
-
-    DOM.searchInput?.addEventListener(
-        "keydown",
-        event => {
-
-            if(event.key === "Escape"){
-                closeSearch();
-            }
-        }
-    );
 
 
-    /*==================== PAGE INPUT ====================*/
-
-    DOM.pageInput?.addEventListener(
-        "keydown",
-        event => {
-
-            if(event.key !== "Enter"){
+            if(!icon){
                 return;
             }
 
-            const page =
-                Number(
-                    event.target.value
-                );
 
-            goToPage(
-                page,
-                false
-            );
+            icon.className =
+                document.fullscreenElement
+                    ? "ri-fullscreen-exit-line"
+                    : "ri-fullscreen-line";
+
         }
     );
 
-
-    /*==================== PDF FILE INPUT ====================*/
-
-    DOM.pdfInput?.addEventListener(
-        "change",
-        async event => {
-
-            const file =
-                event.target.files?.[0];
-
-            if(!file){
-                return;
-            }
-
-            if(
-                file.type !==
-                "application/pdf"
-            ){
-
-                showToast(
-                    "Please select a PDF file."
-                );
-
-                return;
-            }
-
-            await loadPDF({
-                data:
-                    await file.arrayBuffer()
-            });
-        }
-    );
 }
 
 
-/*==================== FILE DROP ====================*/
+/*==================================================
+                SCROLL READER
+==================================================*/
 
-function setupFileDrop(){
+function setupReaderScroll(){
 
-    if(!DOM.pdfContainer){
+    if(!Elements.pdfArea){
         return;
     }
 
-    [
-        "dragenter",
-        "dragover"
-    ].forEach(type => {
 
-        DOM.pdfContainer.addEventListener(
-            type,
-            event => {
+    let scrollTimer;
 
-                event.preventDefault();
-                event.stopPropagation();
 
-                DOM.pdfContainer.classList.add(
-                    "dragOver"
-                );
-            }
-        );
-    });
+    Elements.pdfArea.addEventListener(
+        "scroll",
+        () => {
 
-    [
-        "dragleave",
-        "drop"
-    ].forEach(type => {
+            clearTimeout(
+                scrollTimer
+            );
 
-        DOM.pdfContainer.addEventListener(
-            type,
-            event => {
 
-                event.preventDefault();
-                event.stopPropagation();
+            scrollTimer =
+                setTimeout(() => {
 
-                DOM.pdfContainer.classList.remove(
-                    "dragOver"
-                );
-            }
-        );
-    });
+                    updateReadingProgress();
 
-    DOM.pdfContainer.addEventListener(
-        "drop",
-        async event => {
+                }, 50);
 
-            const file =
-                event.dataTransfer.files?.[0];
-
-            if(!file){
-                return;
-            }
-
-            if(
-                file.type !==
-                "application/pdf"
-            ){
-
-                showToast(
-                    "Only PDF files are supported."
-                );
-
-                return;
-            }
-
-            try{
-
-                await loadPDF({
-                    data:
-                        await file.arrayBuffer()
-                });
-
-            }catch(error){
-
-                console.error(error);
-
-                showToast(
-                    "Could not open the PDF."
-                );
-            }
         }
     );
+
 }
 
 
-/*==================== WHEEL ZOOM ====================*/
+/*==================================================
+                RESIZE
+==================================================*/
 
-function setupWheelZoom(){
+function setupResizeHandler(){
 
-    if(!DOM.pdfContainer){
+    let resizeTimer;
+
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            clearTimeout(
+                resizeTimer
+            );
+
+
+            resizeTimer =
+                setTimeout(() => {
+
+                    if(
+                        ReaderState.pdf &&
+                        ReaderState.zoom <= 1
+                    ){
+
+                        fitPage();
+
+                    }
+
+                }, 250);
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                PAGE COUNTER CLICK
+==================================================*/
+
+function setupPageCounter(){
+
+    const counter =
+        $("pageCounter");
+
+
+    if(!counter){
         return;
     }
 
-    DOM.pdfContainer.addEventListener(
-        "wheel",
-        event => {
 
-            if(!event.ctrlKey){
-                return;
+    counter.addEventListener(
+        "click",
+        () => {
+
+            if(
+                Elements.currentPage
+            ){
+
+                Elements.currentPage.focus();
+
+                Elements.currentPage.select();
+
             }
 
-            event.preventDefault();
-
-            if(event.deltaY < 0){
-                zoomIn();
-            }else{
-                zoomOut();
-            }
-        },
-        {
-            passive:false
         }
     );
+
 }
 
 
-/*==================== TOUCH SWIPE ====================*/
+/*==================================================
+                PREVENT BUTTON DRAG
+==================================================*/
+
+function setupButtonProtection(){
+
+    document
+        .querySelectorAll(
+            "button"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "dragstart",
+                event => {
+
+                    event.preventDefault();
+
+                }
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                PREVENT PDF IMAGE DRAG
+==================================================*/
+
+function setupCanvasProtection(){
+
+    document
+        .querySelectorAll(
+            "canvas"
+        )
+        .forEach(canvas => {
+
+            canvas.addEventListener(
+                "dragstart",
+                event => {
+
+                    event.preventDefault();
+
+                }
+
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                TOUCH SWIPE
+==================================================*/
 
 function setupTouchNavigation(){
 
-    if(!DOM.pdfContainer){
+    if(!Elements.pdfArea){
         return;
     }
 
+
     let startX = 0;
+
     let startY = 0;
 
-    DOM.pdfContainer.addEventListener(
+
+    Elements.pdfArea.addEventListener(
         "touchstart",
         event => {
 
-            const touch =
-                event.changedTouches[0];
+            if(
+                !event.touches ||
+                !event.touches.length
+            ){
+
+                return;
+
+            }
+
 
             startX =
-                touch.clientX;
+                event.touches[0].clientX;
 
             startY =
-                touch.clientY;
+                event.touches[0].clientY;
+
         },
         {
             passive:true
         }
     );
 
-    DOM.pdfContainer.addEventListener(
+
+    Elements.pdfArea.addEventListener(
         "touchend",
         event => {
 
-            const touch =
-                event.changedTouches[0];
+            if(
+                !event.changedTouches ||
+                !event.changedTouches.length
+            ){
+
+                return;
+
+            }
+
 
             const endX =
-                touch.clientX;
+                event.changedTouches[0].clientX;
 
             const endY =
-                touch.clientY;
+                event.changedTouches[0].clientY;
+
 
             const deltaX =
                 endX - startX;
@@ -2530,123 +4514,1149 @@ function setupTouchNavigation(){
             const deltaY =
                 endY - startY;
 
+
             if(
                 Math.abs(deltaX) < 60 ||
                 Math.abs(deltaX) <
                 Math.abs(deltaY)
             ){
+
                 return;
+
             }
 
+
             if(deltaX < 0){
+
                 nextReaderPage();
+
             }else{
+
                 previousReaderPage();
+
             }
+
         },
         {
             passive:true
         }
     );
+
 }
 
 
-/*==================== RESIZE ====================*/
+/*==================================================
+                AUTO SAVE
+==================================================*/
 
-let resizeTimer = null;
+function setupAutoSave(){
 
-window.addEventListener(
-    "resize",
-    () => {
+    const checkbox =
+        $("autoSave");
 
-        clearTimeout(resizeTimer);
 
-        resizeTimer =
-            setTimeout(
-                () => {
+    if(!checkbox){
+        return;
+    }
+
+
+    let enabled = true;
+
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                "chishti-auto-save"
+            );
+
+
+        if(saved !== null){
+
+            enabled =
+                saved === "1";
+
+        }
+
+    }catch(error){
+
+        enabled = true;
+
+    }
+
+
+    checkbox.checked =
+        enabled;
+
+
+    checkbox.addEventListener(
+        "change",
+        () => {
+
+            try{
+
+                localStorage.setItem(
+                    "chishti-auto-save",
+                    checkbox.checked
+                        ? "1"
+                        : "0"
+                );
+
+            }catch(error){
+
+                console.warn(
+                    "Auto save setting failed:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                READER READY STATE
+==================================================*/
+
+function setReaderReady(){
+
+    document.body.classList.remove(
+        "reader-opening"
+    );
+
+    document.body.classList.add(
+        "reader-ready"
+    );
+
+    hideReaderTransition();
+
+}
+
+
+/*==================================================
+                READER ERROR
+==================================================*/
+
+function showReaderError(message){
+
+    const screen =
+        $("loadingScreen");
+
+
+    if(screen){
+
+        screen.classList.remove(
+            "hide"
+        );
+
+    }
+
+
+    setLoadingProgress(
+        100,
+        message ||
+        "Unable to open book"
+    );
+
+
+    showToast(
+        message ||
+        "Unable to open book"
+    );
+
+}
+
+
+/*==================================================
+                BOOK OPEN FROM LIBRARY
+==================================================*/
+
+function openBookFromLibrary(
+    url,
+    title
+){
+
+    if(!url){
+
+        showToast(
+            "Book file not found"
+        );
+
+        return;
+
+    }
+
+
+    const encodedUrl =
+        encodeURIComponent(
+            url
+        );
+
+
+    const encodedTitle =
+        encodeURIComponent(
+            title ||
+            "Untitled Book"
+        );
+
+
+    window.location.href =
+        `reader.html?pdf=${encodedUrl}&title=${encodedTitle}`;
+
+}
+
+
+/*==================================================
+                READING POSITION
+==================================================*/
+
+function saveReadingPosition(){
+
+    if(
+        !ReaderState.bookUrl
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        localStorage.setItem(
+            "chishti-reading-position-" +
+            ReaderState.bookUrl,
+            String(
+                ReaderState.currentPage
+            )
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Reading position save failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                LOAD READING POSITION
+==================================================*/
+
+function loadReadingPosition(){
+
+    if(
+        !ReaderState.bookUrl
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                "chishti-reading-position-" +
+                ReaderState.bookUrl
+            );
+
+
+        const page =
+            Number(saved);
+
+
+        if(
+            Number.isFinite(page) &&
+            page >= 1
+        ){
+
+            ReaderState.currentPage =
+                page;
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Reading position load failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                READER SHORTCUTS
+==================================================*/
+
+function setupShortcuts(){
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.ctrlKey ||
+                event.metaKey ||
+                event.altKey
+            ){
+
+                return;
+
+            }
+
+
+            switch(event.key){
+
+                case "m":
+
+                    toggleSidebar();
+
+                    break;
+
+
+                case "s":
+
+                    toggleSettings();
+
+                    break;
+
+
+                case "b":
+
+                    toggleBookmark();
+
+                    break;
+
+
+                case "f":
 
                     if(
-                        ReaderState.pdf &&
-                        !ReaderState.rendering
+                        !event.target.matches(
+                            "input, textarea"
+                        )
                     ){
 
-                        renderPage(
-                            ReaderState.currentPage
-                        );
+                        toggleFullscreen();
+
                     }
 
-                },
-                180
-            );
+                    break;
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                INITIALIZE PART 4
+==================================================*/
+
+function initializePartFour(){
+
+    setupEscapeHandler();
+
+    setupFullscreen();
+
+    setupReaderScroll();
+
+    setupResizeHandler();
+
+    setupPageCounter();
+
+    setupButtonProtection();
+
+    setupCanvasProtection();
+
+    setupTouchNavigation();
+
+    setupAutoSave();
+
+    setupShortcuts();
+
+    updateBookmarkButtons();
+
+    updateViewModeButtons();
+
+}
+
+
+/*==================================================
+                DOM READY
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initializePartFour();
+
     }
 );
+/*==================================================
+        CHISHTI LIBRARY READER V4
+        JS PART 5
+        FINAL INITIALIZATION + UI SYNC
+==================================================*/
 
 
-/*==================== BEFORE UNLOAD ====================*/
+/*==================================================
+                UPDATE ALL UI
+==================================================*/
+
+function updateReaderUI(){
+
+    updatePageUI();
+
+    updateReadingProgress();
+
+    updateBookmarkButtons();
+
+    updateActiveThumbnail();
+
+    updateViewModeButtons();
+
+    updateLikeUI();
+
+}
+
+
+/*==================================================
+                SAFE FUNCTION CALL
+==================================================*/
+
+function safeCall(
+    callback
+){
+
+    try{
+
+        if(
+            typeof callback ===
+            "function"
+        ){
+
+            callback();
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Reader function error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                LOAD ALL SAVED DATA
+==================================================*/
+
+function loadAllReaderData(){
+
+    safeCall(
+        loadReaderTheme
+    );
+
+    safeCall(
+        loadPageShadow
+    );
+
+    safeCall(
+        loadDarkMode
+    );
+
+    safeCall(
+        loadBookmarks
+    );
+
+    safeCall(
+        loadLikes
+    );
+
+    safeCall(
+        loadComments
+    );
+
+}
+
+
+/*==================================================
+                SAVE ALL READER DATA
+==================================================*/
+
+function saveAllReaderData(){
+
+    safeCall(
+        saveBookmarks
+    );
+
+    safeCall(
+        saveLikes
+    );
+
+    safeCall(
+        saveComments
+    );
+
+    safeCall(
+        saveReaderState
+    );
+
+    safeCall(
+        saveReadingPosition
+    );
+
+}
+
+
+/*==================================================
+                BEFORE PAGE CHANGE
+==================================================*/
+
+function preparePageChange(){
+
+    saveReadingPosition();
+
+    saveReaderState();
+
+}
+
+
+/*==================================================
+                WINDOW CLOSE
+==================================================*/
 
 window.addEventListener(
     "beforeunload",
     () => {
 
-        if(ReaderState.autoSave){
-            saveReadingProgress();
-        }
+        saveAllReaderData();
+
     }
 );
 
 
-/*==================== START READER ====================*/
+/*==================================================
+                VISIBILITY CHANGE
+==================================================*/
 
-async function initializeReader(){
+document.addEventListener(
+    "visibilitychange",
+    () => {
 
-    loadBookInformation();
+        if(
+            document.visibilityState ===
+            "hidden"
+        ){
 
-    loadTheme();
+            saveAllReaderData();
 
-    loadSettings();
+        }
 
-    loadBookmarks();
+    }
+);
 
-    loadLikeState();
 
-    setupButtonEvents();
+/*==================================================
+                PRINT BUTTON
+==================================================*/
 
-    setupFileDrop();
+function printCurrentPage(){
 
-    setupWheelZoom();
+    if(
+        !ReaderState.pdf
+    ){
 
-    setupTouchNavigation();
+        showToast(
+            "Book is not loaded"
+        );
 
-    updateUI();
+        return;
 
-    await loadPDF(
-        ReaderConfig.pdfUrl
-    );
+    }
+
+
+    window.print();
+
 }
 
 
-/*==================== DOM READY ====================*/
+function setupPrintButton(){
 
-if(
-    document.readyState ===
-    "loading"
-){
+    const button =
+        $("printBtn");
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeReader,
-        {
-            once:true
+
+    if(button){
+
+        button.addEventListener(
+            "click",
+            printCurrentPage
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                RELOAD BOOK
+==================================================*/
+
+async function reloadCurrentBook(){
+
+    if(
+        !ReaderState.bookUrl
+    ){
+
+        showToast(
+            "No book selected"
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        showReaderTransition();
+
+        showPageLoading();
+
+
+        const loadingTask =
+            pdfjsLib.getDocument({
+                url:
+                    ReaderState.bookUrl
+            });
+
+
+        ReaderState.pdf =
+            await loadingTask.promise;
+
+
+        ReaderState.totalPages =
+            ReaderState.pdf.numPages;
+
+
+        if(
+            ReaderState.currentPage >
+            ReaderState.totalPages
+        ){
+
+            ReaderState.currentPage =
+                ReaderState.totalPages;
+
+        }
+
+
+        await renderCurrentPages();
+
+
+        updateReaderUI();
+
+
+        hidePageLoading();
+
+        hideReaderTransition();
+
+
+        showToast(
+            "Book refreshed"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Reload error:",
+            error
+        );
+
+
+        hidePageLoading();
+
+        hideReaderTransition();
+
+
+        showToast(
+            "Unable to refresh book"
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                REFRESH BUTTON
+==================================================*/
+
+function setupRefreshButton(){
+
+    const button =
+        $("refreshBtn");
+
+
+    if(button){
+
+        button.addEventListener(
+            "click",
+            reloadCurrentBook
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                HOME BUTTON
+==================================================*/
+
+function setupHomeButton(){
+
+    const button =
+        $("homeBtn");
+
+
+    if(
+        !button
+    ){
+
+        return;
+
+    }
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            saveAllReaderData();
+
+            window.location.href =
+                "index.html";
+
         }
     );
 
-}else{
-
-    initializeReader();
 }
 
 
-/*==================== GLOBAL API ====================*/
+/*==================================================
+                CLOSE READER
+==================================================*/
+
+function setupCloseButton(){
+
+    const button =
+        $("closeReaderBtn");
+
+
+    if(
+        !button
+    ){
+
+        return;
+
+    }
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            saveAllReaderData();
+
+            window.history.back();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                PREVENT DOUBLE CLICK ZOOM
+==================================================*/
+
+function setupDoubleClick(){
+
+    if(
+        !Elements.pdfArea
+    ){
+
+        return;
+
+    }
+
+
+    Elements.pdfArea.addEventListener(
+        "dblclick",
+        event => {
+
+            if(
+                event.target.tagName !==
+                "CANVAS"
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                ReaderState.zoom <= 1
+            ){
+
+                setZoom(
+                    1.5
+                );
+
+            }else{
+
+                setZoom(
+                    1
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                MOUSE WHEEL ZOOM
+==================================================*/
+
+function setupWheelZoom(){
+
+    if(
+        !Elements.pdfArea
+    ){
+
+        return;
+
+    }
+
+
+    Elements.pdfArea.addEventListener(
+        "wheel",
+        event => {
+
+            if(
+                !event.ctrlKey
+            ){
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+
+            if(
+                event.deltaY < 0
+            ){
+
+                zoomIn();
+
+            }else{
+
+                zoomOut();
+
+            }
+
+        },
+        {
+            passive:false
+        }
+    );
+
+}
+
+
+/*==================================================
+                UPDATE PAGE AFTER RENDER
+==================================================*/
+
+function afterPageRender(){
+
+    updateReaderUI();
+
+    saveReadingPosition();
+
+    saveReaderState();
+
+}
+
+
+/*==================================================
+                PAGE RENDER PATCH
+==================================================*/
+
+const originalRenderCurrentPages =
+    window.renderCurrentPages;
+
+
+if(
+    typeof originalRenderCurrentPages ===
+    "function"
+){
+
+    window.renderCurrentPages =
+        async function(){
+
+            await originalRenderCurrentPages();
+
+            afterPageRender();
+
+        };
+
+}
+
+
+/*==================================================
+                OPEN READER FROM BOOK CARD
+==================================================*/
+
+function setupBookOpenButtons(){
+
+    document
+        .querySelectorAll(
+            "[data-reader-book]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const url =
+                        button.getAttribute(
+                            "data-reader-book"
+                        );
+
+
+                    const title =
+                        button.getAttribute(
+                            "data-book-title"
+                        ) ||
+                        "Untitled Book";
+
+
+                    openBookFromLibrary(
+                        url,
+                        title
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                BUTTON RIPPLE
+==================================================*/
+
+function setupButtonRipple(){
+
+    document
+        .querySelectorAll(
+            "button"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    const rect =
+                        button.getBoundingClientRect();
+
+
+                    const ripple =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    ripple.className =
+                        "buttonRipple";
+
+
+                    ripple.style.left =
+                        (
+                            event.clientX -
+                            rect.left
+                        ) + "px";
+
+
+                    ripple.style.top =
+                        (
+                            event.clientY -
+                            rect.top
+                        ) + "px";
+
+
+                    button.appendChild(
+                        ripple
+                    );
+
+
+                    setTimeout(
+                        () => {
+
+                            ripple.remove();
+
+                        },
+                        500
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/*==================================================
+                READER ERROR HANDLER
+==================================================*/
+
+window.addEventListener(
+    "error",
+    event => {
+
+        if(
+            event &&
+            event.error
+        ){
+
+            console.error(
+                "Reader error:",
+                event.error
+            );
+
+        }
+
+    }
+);
+
+
+/*==================================================
+                PDF LOAD VALIDATION
+==================================================*/
+
+function validatePDFEnvironment(){
+
+    if(
+        typeof pdfjsLib ===
+        "undefined"
+    ){
+
+        showReaderError(
+            "PDF reader library failed to load"
+        );
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/*==================================================
+                FINAL STARTUP
+==================================================*/
+
+function startChishtiReader(){
+
+    if(
+        !validatePDFEnvironment()
+    ){
+
+        return;
+
+    }
+
+
+    loadAllReaderData();
+
+
+    setupPrintButton();
+
+    setupRefreshButton();
+
+    setupHomeButton();
+
+    setupCloseButton();
+
+    setupDoubleClick();
+
+    setupWheelZoom();
+
+    setupBookOpenButtons();
+
+    setupButtonRipple();
+
+
+    updateReaderUI();
+
+
+    openReaderAnimation();
+
+}
+
+
+/*==================================================
+                FINAL DOM READY
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        startChishtiReader();
+
+    }
+);
+
+
+/*==================================================
+                GLOBAL ACCESS
+==================================================*/
 
 window.ChishtiReader = {
 
@@ -2656,1922 +5666,45 @@ window.ChishtiReader = {
     previousPage:
         previousReaderPage,
 
-    goToPage,
+    goToPage:
+        goToPage,
 
-    zoomIn,
+    zoomIn:
+        zoomIn,
 
-    zoomOut,
+    zoomOut:
+        zoomOut,
 
-    fitPage,
+    fitPage:
+        fitPage,
 
-    toggleBookmark,
+    setTheme:
+        setReaderTheme,
 
-    toggleLike,
+    setPageMode:
+        setPageMode,
 
-    toggleTheme,
+    toggleBookmark:
+        toggleBookmark,
 
-    toggleFullscreen,
+    toggleSettings:
+        toggleSettings,
 
-    openSearch,
+    toggleSidebar:
+        toggleSidebar,
 
-    openShare,
+    toggleComments:
+        toggleComments,
 
-    loadPDF,
+    toggleShare:
+        toggleShare,
 
-    resetReadingProgress
+    toggleFullscreen:
+        toggleFullscreen
+
 };
 
 
-/*==================== END CSS PART 4 ====================*/
 /*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.js — PART 5
+                END OF JS
 ==================================================*/
-
-/*==================== EXTRA SAFETY ====================*/
-
-(function(){
-
-    "use strict";
-
-    /* Prevent duplicate initialization */
-    if(window.__CHISHTI_READER_PART5_LOADED){
-        return;
-    }
-
-    window.__CHISHTI_READER_PART5_LOADED = true;
-
-
-    /*==================== CLOSE ALL PANELS ====================*/
-
-    window.closeAllReaderPanels = function(){
-
-        DOM.leftSidebar?.classList.remove("active");
-        DOM.searchPanel?.classList.remove("active");
-        DOM.commentPanel?.classList.remove("active");
-        DOM.settingsPanel?.classList.remove("active");
-        DOM.sharePanel?.classList.remove("active");
-        DOM.thumbnailSidebar?.classList.remove("active");
-
-    };
-
-
-    /*==================== ESC KEY ====================*/
-
-    document.addEventListener(
-        "keydown",
-        function(event){
-
-            if(event.key !== "Escape"){
-                return;
-            }
-
-            closeAllReaderPanels();
-
-        }
-    );
-
-
-    /*==================== CLICK OUTSIDE ====================*/
-
-    document.addEventListener(
-        "click",
-        function(event){
-
-            const target = event.target;
-
-            if(
-                DOM.searchPanel &&
-                DOM.searchPanel.classList.contains("active") &&
-                !DOM.searchPanel.contains(target) &&
-                !DOM.searchBtn?.contains(target)
-            ){
-                DOM.searchPanel.classList.remove("active");
-            }
-
-            if(
-                DOM.sharePanel &&
-                DOM.sharePanel.classList.contains("active") &&
-                !DOM.sharePanel.contains(target) &&
-                !DOM.shareBtn?.contains(target)
-            ){
-                DOM.sharePanel.classList.remove("active");
-            }
-
-        }
-    );
-
-
-    /*==================== PAGE NUMBER VALIDATION ====================*/
-
-    window.validatePageNumber = function(value){
-
-        let page = parseInt(value,10);
-
-        if(Number.isNaN(page)){
-            page = 1;
-        }
-
-        page = Math.max(
-            1,
-            Math.min(
-                ReaderState.totalPages || 1,
-                page
-            )
-        );
-
-        return page;
-    };
-
-
-    /*==================== PAGE INPUT ====================*/
-
-    if(DOM.pageInput){
-
-        DOM.pageInput.addEventListener(
-            "change",
-            function(){
-
-                const page =
-                    validatePageNumber(
-                        this.value
-                    );
-
-                this.value = page;
-
-                goToPage(
-                    page,
-                    false
-                );
-
-            }
-        );
-
-    }
-
-
-    /*==================== DOUBLE CLICK ZOOM ====================*/
-
-    if(DOM.pdfContainer){
-
-        DOM.pdfContainer.addEventListener(
-            "dblclick",
-            function(event){
-
-                if(
-                    event.target !== DOM.pdfCanvas
-                ){
-                    return;
-                }
-
-                if(
-                    ReaderState.zoom <= 1
-                ){
-
-                    setZoom(1.5);
-
-                }else{
-
-                    fitPage();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /*==================== MOUSE WHEEL PAGE ====================*/
-
-    if(DOM.pdfContainer){
-
-        DOM.pdfContainer.addEventListener(
-            "wheel",
-            function(event){
-
-                if(event.ctrlKey){
-                    return;
-                }
-
-                /*
-                 * Only navigate when the PDF is
-                 * not zoomed.
-                 */
-
-                if(
-                    ReaderState.zoom > 1
-                ){
-                    return;
-                }
-
-                if(
-                    Math.abs(event.deltaY) < 35
-                ){
-                    return;
-                }
-
-                if(event.deltaY > 0){
-                    nextReaderPage();
-                }else{
-                    previousReaderPage();
-                }
-
-            },
-            {
-                passive:true
-            }
-        );
-
-    }
-
-
-    /*==================== SAVE ON PAGE CHANGE ====================*/
-
-    window.addEventListener(
-        "pagehide",
-        function(){
-
-            if(
-                typeof saveReadingProgress ===
-                "function"
-            ){
-                saveReadingProgress();
-            }
-
-        }
-    );
-
-
-    /*==================== CONNECTION STATUS ====================*/
-
-    window.addEventListener(
-        "offline",
-        function(){
-
-            showToast(
-                "You are offline."
-            );
-
-        }
-    );
-
-    window.addEventListener(
-        "online",
-        function(){
-
-            showToast(
-                "Connection restored."
-            );
-
-        }
-    );
-
-
-    /*==================== PREVENT BROKEN IMAGE DRAG ====================*/
-
-    document.addEventListener(
-        "dragstart",
-        function(event){
-
-            if(
-                event.target.tagName === "IMG"
-            ){
-                event.preventDefault();
-            }
-
-        }
-    );
-
-
-    /*==================== PDF TEXT SELECTION ====================*/
-
-    if(DOM.pdfCanvas){
-
-        DOM.pdfCanvas.addEventListener(
-            "contextmenu",
-            function(event){
-
-                /*
-                 * Keep browser context menu available.
-                 * This avoids breaking mobile/desktop
-                 * accessibility.
-                 */
-
-            }
-        );
-
-    }
-
-
-    /*==================== AUTO SAVE TIMER ====================*/
-
-    let autoSaveTimer = null;
-
-    function startAutoSave(){
-
-        clearInterval(autoSaveTimer);
-
-        autoSaveTimer =
-            setInterval(
-                function(){
-
-                    if(
-                        ReaderState.autoSave &&
-                        ReaderState.pdf
-                    ){
-
-                        saveReadingProgress();
-
-                    }
-
-                },
-                10000
-            );
-    }
-
-    startAutoSave();
-
-
-    /*==================== CLEANUP ====================*/
-
-    window.addEventListener(
-        "unload",
-        function(){
-
-            clearInterval(
-                autoSaveTimer
-            );
-
-        }
-    );
-
-
-    /*==================== DEBUG API ====================*/
-
-    window.ChishtiReaderDebug = {
-
-        state:
-            ReaderState,
-
-        dom:
-            DOM,
-
-        config:
-            ReaderConfig,
-
-        reload:
-            function(){
-
-                location.reload();
-
-            },
-
-        clearStorage:
-            function(){
-
-                Object.keys(localStorage)
-                    .filter(
-                        key =>
-                            key.startsWith(
-                                ReaderConfig.storagePrefix
-                            )
-                    )
-                    .forEach(
-                        key =>
-                            localStorage.removeItem(
-                                key
-                            )
-                    );
-
-                showToast(
-                    "Reader data cleared."
-                );
-
-            }
-
-    };
-
-
-})();
-/*==================================================
-        CHISHTI LIBRARY READER V3
-              reader.js — PART 6
-==================================================*/
-
-/*==================== FINAL INIT SAFETY ====================*/
-
-(function(){
-
-    "use strict";
-
-    if(window.__CHISHTI_READER_FINAL){
-        return;
-    }
-
-    window.__CHISHTI_READER_FINAL = true;
-
-
-    /*==================== SAFE ELEMENT HELPER ====================*/
-
-    function on(element, event, handler, options){
-
-        if(!element){
-            return;
-        }
-
-        element.addEventListener(
-            event,
-            handler,
-            options
-        );
-    }
-
-
-    /*==================== OPEN PDF BUTTON ====================*/
-
-    const openPdfBtn =
-        document.getElementById("openPdfBtn");
-
-    on(
-        openPdfBtn,
-        "click",
-        function(){
-
-            if(DOM.pdfInput){
-                DOM.pdfInput.click();
-            }
-
-        }
-    );
-
-
-    /*==================== SETTINGS BUTTON ====================*/
-
-    const settingsBtn =
-        document.getElementById("settingsBtn");
-
-    on(
-        settingsBtn,
-        "click",
-        toggleSettings
-    );
-
-
-    /*==================== RESET BUTTON ====================*/
-
-    const resetBtn =
-        document.getElementById("resetBtn");
-
-    on(
-        resetBtn,
-        "click",
-        function(){
-
-            const confirmed =
-                window.confirm(
-                    "Reset reading progress?"
-                );
-
-            if(!confirmed){
-                return;
-            }
-
-            resetReadingProgress();
-
-        }
-    );
-
-
-    /*==================== PAGE INPUT BLUR ====================*/
-
-    on(
-        DOM.pageInput,
-        "blur",
-        function(){
-
-            const page =
-                validatePageNumber(
-                    this.value
-                );
-
-            this.value = page;
-
-        }
-    );
-
-
-    /*==================== ENTER PAGE ====================*/
-
-    on(
-        DOM.pageInput,
-        "keydown",
-        function(event){
-
-            if(event.key !== "Enter"){
-                return;
-            }
-
-            event.preventDefault();
-
-            const page =
-                validatePageNumber(
-                    this.value
-                );
-
-            this.value = page;
-
-            goToPage(
-                page,
-                false
-            );
-
-        }
-    );
-
-
-    /*==================== RANGE ZOOM ====================*/
-
-    const zoomRange =
-        document.getElementById("zoomRange");
-
-    on(
-        zoomRange,
-        "input",
-        function(){
-
-            const value =
-                Number(this.value);
-
-            setZoom(value);
-
-        }
-    );
-
-
-    /*==================== READER BODY CLICK ====================*/
-
-    on(
-        DOM.readerBody,
-        "click",
-        function(event){
-
-            /*
-             * Prevent accidental page navigation
-             * when clicking controls.
-             */
-
-            if(
-                event.target.closest("button") ||
-                event.target.closest("input") ||
-                event.target.closest("textarea") ||
-                event.target.closest(
-                    "#leftSidebar"
-                ) ||
-                event.target.closest(
-                    "#searchPanel"
-                ) ||
-                event.target.closest(
-                    "#settingsPanel"
-                ) ||
-                event.target.closest(
-                    "#sharePanel"
-                )
-            ){
-                return;
-            }
-
-        }
-    );
-
-
-    /*==================== BEFORE PAGE UNLOAD ====================*/
-
-    window.addEventListener(
-        "beforeunload",
-        function(){
-
-            try{
-
-                if(
-                    ReaderState.autoSave &&
-                    ReaderState.pdf
-                ){
-
-                    saveReadingProgress();
-
-                }
-
-            }catch(error){
-
-                console.warn(
-                    "Could not save reader state:",
-                    error
-                );
-
-            }
-
-        }
-    );
-
-
-    /*==================== INITIAL STATE ====================*/
-
-    function finalStateCheck(){
-
-        if(
-            !ReaderState.pdf
-        ){
-            return;
-        }
-
-        if(
-            ReaderState.currentPage < 1
-        ){
-            ReaderState.currentPage = 1;
-        }
-
-        if(
-            ReaderState.currentPage >
-            ReaderState.totalPages
-        ){
-            ReaderState.currentPage =
-                ReaderState.totalPages;
-        }
-
-        ReaderState.zoom =
-            Math.max(
-                ReaderConfig.minZoom,
-                Math.min(
-                    ReaderConfig.maxZoom,
-                    ReaderState.zoom
-                )
-            );
-
-        updateUI();
-
-        updateThumbnailState();
-
-    }
-
-
-    /*==================== PDF LOAD ERROR HANDLER ====================*/
-
-    window.addEventListener(
-        "error",
-        function(event){
-
-            if(
-                String(
-                    event?.message || ""
-                ).toLowerCase().includes("pdf")
-            ){
-
-                console.error(
-                    "Reader error:",
-                    event.error || event.message
-                );
-
-            }
-
-        }
-    );
-
-
-    /*==================== UNHANDLED PROMISE ====================*/
-
-    window.addEventListener(
-        "unhandledrejection",
-        function(event){
-
-            console.error(
-                "Reader promise error:",
-                event.reason
-            );
-
-        }
-    );
-
-
-    /*==================== FINAL CHECK ====================*/
-
-    setTimeout(
-        finalStateCheck,
-        500
-    );
-
-
-    /*==================== PUBLIC HELPERS ====================*/
-
-    window.ChishtiReader.openPDF =
-        function(){
-
-            if(DOM.pdfInput){
-                DOM.pdfInput.click();
-            }
-
-        };
-
-    window.ChishtiReader.settings =
-        function(){
-
-            toggleSettings();
-
-        };
-
-    window.ChishtiReader.bookmarks =
-        function(){
-
-            openSidebar();
-
-        };
-
-    window.ChishtiReader.comments =
-        function(){
-
-            toggleComments();
-
-        };
-
-    window.ChishtiReader.search =
-        function(){
-
-            openSearch();
-
-        };
-
-
-    /*==================== FINAL MESSAGE ====================*/
-
-    console.log(
-        "Chishti Library Reader V3 initialized."
-    );
-
-})();
-function setReaderTheme(theme){
-
-    document.body.classList.remove(
-        "theme-dark",
-        "theme-maroon",
-        "theme-gold"
-    );
-
-    if(theme === "maroon"){
-
-        document.body.classList.add(
-            "theme-maroon"
-        );
-
-    }else if(theme === "gold"){
-
-        document.body.classList.add(
-            "theme-gold"
-        );
-
-    }else{
-
-        document.body.classList.add(
-            "theme-dark"
-        );
-
-    }
-
-    localStorage.setItem(
-        "chishti-theme",
-        theme
-    );
-}
-
-
-/* Load saved theme */
-
-(function(){
-
-    const saved =
-        localStorage.getItem(
-            "chishti-theme"
-        );
-
-    if(saved){
-
-        setReaderTheme(saved);
-
-    }
-
-})();
-/*==================================================
-        CHISHTI READER V3
-        SETTINGS SYSTEM — FINAL
-==================================================*/
-
-(function(){
-
-    "use strict";
-
-
-    /*==================== SETTINGS BUTTON ====================*/
-
-    let settingsBtn =
-        document.getElementById("settingsBtn");
-
-    if(!settingsBtn){
-
-        settingsBtn =
-            document.createElement("button");
-
-        settingsBtn.id = "settingsBtn";
-        settingsBtn.type = "button";
-        settingsBtn.title = "Reader Settings";
-        settingsBtn.innerHTML = "⚙️";
-
-        settingsBtn.style.cssText = `
-            width:42px;
-            height:42px;
-            margin-left:6px;
-            border-radius:12px;
-            background:rgba(255,255,255,.08);
-            color:#fff;
-            border:1px solid rgba(255,255,255,.10);
-            cursor:pointer;
-            font-size:19px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        `;
-
-        const header =
-            document.querySelector("header");
-
-        if(header){
-
-            header.appendChild(settingsBtn);
-
-        }else{
-
-            document.body.appendChild(settingsBtn);
-
-            settingsBtn.style.position = "fixed";
-            settingsBtn.style.top = "82px";
-            settingsBtn.style.right = "20px";
-            settingsBtn.style.zIndex = "99999";
-
-        }
-
-    }
-
-
-    /*==================== SETTINGS PANEL ====================*/
-
-    let panel =
-        document.getElementById("settingsPanel");
-
-
-    if(!panel){
-
-        panel =
-            document.createElement("div");
-
-        panel.id = "settingsPanel";
-
-        panel.innerHTML = `
-
-            <div class="chishti-settings-header">
-
-                <strong>
-                    Reader Settings
-                </strong>
-
-                <button
-                    id="chishtiSettingsClose"
-                    type="button">
-
-                    ✕
-
-                </button>
-
-            </div>
-
-
-            <div class="chishti-setting-row">
-
-                <span>
-                    🌙 Dark Mode
-                </span>
-
-                <input
-                    type="checkbox"
-                    id="darkMode"
-                    checked>
-
-            </div>
-
-
-            <div class="chishti-setting-row">
-
-                <span>
-                    🖼️ Page Shadow
-                </span>
-
-                <input
-                    type="checkbox"
-                    id="pageShadow"
-                    checked>
-
-            </div>
-
-
-            <div class="chishti-setting-row">
-
-                <span>
-                    ✨ Page Animation
-                </span>
-
-                <input
-                    type="checkbox"
-                    id="pageAnimation"
-                    checked>
-
-            </div>
-
-
-            <div class="chishti-setting-row">
-
-                <span>
-                    💾 Auto Save
-                </span>
-
-                <input
-                    type="checkbox"
-                    id="autoSave"
-                    checked>
-
-            </div>
-
-
-            <div class="chishti-setting-title">
-                Page View
-            </div>
-
-
-            <div class="chishti-view-buttons">
-
-                <button
-                    id="singlePageMode"
-                    type="button"
-                    class="active">
-
-                    📄 Single Page
-
-                </button>
-
-                <button
-                    id="doublePageMode"
-                    type="button">
-
-                    📖 Two Pages
-
-                </button>
-
-            </div>
-
-
-            <div class="chishti-setting-title">
-                Theme
-            </div>
-
-
-            <div class="chishti-theme-buttons">
-
-                <button
-                    type="button"
-                    data-theme="dark">
-
-                    🌙 Dark
-
-                </button>
-
-                <button
-                    type="button"
-                    data-theme="maroon">
-
-                    🟤 Maroon
-
-                </button>
-
-                <button
-                    type="button"
-                    data-theme="gold">
-
-                    🟡 Golden
-
-                </button>
-
-            </div>
-
-
-            <button
-                id="chishtiResetSettings"
-                type="button"
-                class="chishti-reset">
-
-                🔄 Reset Settings
-
-            </button>
-
-        `;
-
-        document.body.appendChild(panel);
-
-    }
-
-
-    /*==================== SETTINGS CSS ====================*/
-
-    if(!document.getElementById(
-        "chishti-settings-style"
-    )){
-
-        const style =
-            document.createElement("style");
-
-        style.id =
-            "chishti-settings-style";
-
-        style.textContent = `
-
-            #settingsPanel{
-
-                position:fixed;
-
-                top:82px;
-
-                right:18px;
-
-                width:330px;
-
-                max-width:
-                    calc(100vw - 28px);
-
-                padding:18px;
-
-                background:
-                    rgba(15,23,42,.98);
-
-                color:#fff;
-
-                border:
-                    1px solid
-                    rgba(255,255,255,.12);
-
-                border-radius:18px;
-
-                box-shadow:
-                    0 20px 60px
-                    rgba(0,0,0,.45);
-
-                backdrop-filter:
-                    blur(18px);
-
-                z-index:99999;
-
-                opacity:0;
-
-                visibility:hidden;
-
-                transform:
-                    translateY(-10px)
-                    scale(.97);
-
-                transition:
-                    .25s ease;
-
-            }
-
-
-            #settingsPanel.chishti-open{
-
-                opacity:1;
-
-                visibility:visible;
-
-                transform:
-                    translateY(0)
-                    scale(1);
-
-            }
-
-
-            .chishti-settings-header{
-
-                display:flex;
-
-                align-items:center;
-
-                justify-content:space-between;
-
-                margin-bottom:18px;
-
-                font-size:17px;
-
-            }
-
-
-            .chishti-settings-header button{
-
-                width:32px;
-
-                height:32px;
-
-                border:0;
-
-                border-radius:9px;
-
-                background:
-                    rgba(255,255,255,.08);
-
-                color:#fff;
-
-                cursor:pointer;
-
-            }
-
-
-            .chishti-setting-row{
-
-                display:flex;
-
-                align-items:center;
-
-                justify-content:space-between;
-
-                padding:12px 0;
-
-                border-bottom:
-                    1px solid
-                    rgba(255,255,255,.07);
-
-                color:#e2e8f0;
-
-                font-size:14px;
-
-            }
-
-
-            .chishti-setting-row input{
-
-                width:18px;
-
-                height:18px;
-
-                accent-color:#2563eb;
-
-                cursor:pointer;
-
-            }
-
-
-            .chishti-setting-title{
-
-                margin-top:18px;
-
-                margin-bottom:9px;
-
-                color:#94a3b8;
-
-                font-size:12px;
-
-                font-weight:700;
-
-                text-transform:uppercase;
-
-            }
-
-
-            .chishti-view-buttons{
-
-                display:grid;
-
-                grid-template-columns:1fr 1fr;
-
-                gap:8px;
-
-            }
-
-
-            .chishti-view-buttons button{
-
-                padding:10px 6px;
-
-                border-radius:10px;
-
-                border:
-                    1px solid
-                    rgba(255,255,255,.10);
-
-                background:
-                    rgba(255,255,255,.06);
-
-                color:#cbd5e1;
-
-                cursor:pointer;
-
-                font-size:12px;
-
-            }
-
-
-            .chishti-view-buttons button.active{
-
-                background:
-                    linear-gradient(
-                        135deg,
-                        #2563eb,
-                        #1d4ed8
-                    );
-
-                color:#fff;
-
-                border-color:#60a5fa;
-
-            }
-
-
-            .chishti-theme-buttons{
-
-                display:grid;
-
-                grid-template-columns:
-                    repeat(3,1fr);
-
-                gap:7px;
-
-            }
-
-
-            .chishti-theme-buttons button{
-
-                padding:10px 4px;
-
-                border-radius:9px;
-
-                border:
-                    1px solid
-                    rgba(255,255,255,.12);
-
-                background:
-                    rgba(255,255,255,.07);
-
-                color:#fff;
-
-                cursor:pointer;
-
-                font-size:12px;
-
-            }
-
-
-            .chishti-theme-buttons
-            button[data-theme="maroon"]{
-
-                background:
-                    linear-gradient(
-                        135deg,
-                        #8b1e3f,
-                        #5d1023
-                    );
-
-            }
-
-
-            .chishti-theme-buttons
-            button[data-theme="gold"]{
-
-                background:
-                    linear-gradient(
-                        135deg,
-                        #f5d76e,
-                        #a67c00
-                    );
-
-                color:#211b08;
-
-            }
-
-
-            .chishti-reset{
-
-                width:100%;
-
-                margin-top:18px;
-
-                padding:11px;
-
-                border-radius:10px;
-
-                border:
-                    1px solid
-                    rgba(239,68,68,.3);
-
-                background:
-                    rgba(239,68,68,.12);
-
-                color:#fca5a5;
-
-                cursor:pointer;
-
-            }
-
-
-            /* PAGE SHADOW */
-
-            body.chishti-no-shadow
-            #pdfCanvas{
-
-                box-shadow:none !important;
-
-            }
-
-
-            /* PAGE ANIMATION */
-
-            body.chishti-page-animation
-            #pdfCanvas{
-
-                animation:
-                    chishtiPageIn
-                    .28s ease;
-
-            }
-
-
-            @keyframes chishtiPageIn{
-
-                from{
-
-                    opacity:.25;
-
-                    transform:
-                        scale(.985);
-
-                }
-
-                to{
-
-                    opacity:1;
-
-                    transform:
-                        scale(1);
-
-                }
-
-            }
-
-
-            /* TWO PAGE MODE */
-
-            body.chishti-double-page
-            #pdfContainer{
-
-                gap:20px;
-
-            }
-
-
-            @media(max-width:600px){
-
-                #settingsPanel{
-
-                    top:70px;
-
-                    left:10px;
-
-                    right:10px;
-
-                    width:auto;
-
-                }
-
-            }
-
-        `;
-
-        document.head.appendChild(style);
-
-    }
-
-
-    /*==================== OPEN / CLOSE ====================*/
-
-    function openSettings(){
-
-        panel.classList.add(
-            "chishti-open"
-        );
-
-    }
-
-
-    function closeSettings(){
-
-        panel.classList.remove(
-            "chishti-open"
-        );
-
-    }
-
-
-    settingsBtn.addEventListener(
-        "click",
-        openSettings
-    );
-
-
-    const closeBtn =
-        document.getElementById(
-            "chishtiSettingsClose"
-        );
-
-    if(closeBtn){
-
-        closeBtn.addEventListener(
-            "click",
-            closeSettings
-        );
-
-    }
-
-
-    /*==================== DARK MODE ====================*/
-
-    const darkMode =
-        document.getElementById(
-            "darkMode"
-        );
-
-
-    if(darkMode){
-
-        darkMode.addEventListener(
-            "change",
-            function(){
-
-                document.body.classList.toggle(
-                    "theme-dark",
-                    this.checked
-                );
-
-                if(!this.checked){
-
-                    document.body.classList.remove(
-                        "theme-dark"
-                    );
-
-                }
-
-                localStorage.setItem(
-                    "chishti-dark-mode",
-                    this.checked
-                );
-
-            }
-        );
-
-    }
-
-
-    /*==================== PAGE SHADOW ====================*/
-
-    const pageShadow =
-        document.getElementById(
-            "pageShadow"
-        );
-
-
-    if(pageShadow){
-
-        pageShadow.addEventListener(
-            "change",
-            function(){
-
-                document.body.classList.toggle(
-                    "chishti-no-shadow",
-                    !this.checked
-                );
-
-                localStorage.setItem(
-                    "chishti-page-shadow",
-                    this.checked
-                );
-
-            }
-        );
-
-    }
-
-
-    /*==================== PAGE ANIMATION ====================*/
-
-    const pageAnimation =
-        document.getElementById(
-            "pageAnimation"
-        );
-
-
-    if(pageAnimation){
-
-        pageAnimation.addEventListener(
-            "change",
-            function(){
-
-                document.body.classList.toggle(
-                    "chishti-page-animation",
-                    this.checked
-                );
-
-                localStorage.setItem(
-                    "chishti-page-animation",
-                    this.checked
-                );
-
-            }
-        );
-
-    }
-
-
-    /*==================== AUTO SAVE ====================*/
-
-    const autoSave =
-        document.getElementById(
-            "autoSave"
-        );
-
-
-    if(autoSave){
-
-        autoSave.addEventListener(
-            "change",
-            function(){
-
-                if(typeof ReaderState !==
-                    "undefined"){
-
-                    ReaderState.autoSave =
-                        this.checked;
-
-                }
-
-                localStorage.setItem(
-                    "chishti-auto-save",
-                    this.checked
-                );
-
-            }
-        );
-
-    }
-
-
-    /*==================== SINGLE PAGE ====================*/
-
-    const singleBtn =
-        document.getElementById(
-            "singlePageMode"
-        );
-
-
-    const doubleBtn =
-        document.getElementById(
-            "doublePageMode"
-        );
-
-
-    if(singleBtn){
-
-        singleBtn.addEventListener(
-            "click",
-            function(){
-
-                document.body.classList.remove(
-                    "chishti-double-page"
-                );
-
-                singleBtn.classList.add(
-                    "active"
-                );
-
-                doubleBtn?.classList.remove(
-                    "active"
-                );
-
-                localStorage.setItem(
-                    "chishti-page-mode",
-                    "single"
-                );
-
-            }
-        );
-
-    }
-
-
-    /*==================== TWO PAGE ====================*/
-
-    if(doubleBtn){
-
-        doubleBtn.addEventListener(
-            "click",
-            function(){
-
-                document.body.classList.add(
-                    "chishti-double-page"
-                );
-
-                doubleBtn.classList.add(
-                    "active"
-                );
-
-                singleBtn?.classList.remove(
-                    "active"
-                );
-
-                localStorage.setItem(
-                    "chishti-page-mode",
-                    "double"
-                );
-
-            }
-        );
-
-    }
-
-
-    /*==================== THEMES ====================*/
-
-    document
-        .querySelectorAll(
-            ".chishti-theme-buttons button"
-        )
-        .forEach(function(button){
-
-            button.addEventListener(
-                "click",
-                function(){
-
-                    const theme =
-                        this.dataset.theme;
-
-                    if(
-                        typeof setReaderTheme ===
-                        "function"
-                    ){
-
-                        setReaderTheme(
-                            theme
-                        );
-
-                    }
-
-                }
-            );
-
-        });
-
-
-    /*==================== RESET ====================*/
-
-    const resetBtn =
-        document.getElementById(
-            "chishtiResetSettings"
-        );
-
-
-    if(resetBtn){
-
-        resetBtn.addEventListener(
-            "click",
-            function(){
-
-                localStorage.removeItem(
-                    "chishti-theme"
-                );
-
-                localStorage.removeItem(
-                    "chishti-dark-mode"
-                );
-
-                localStorage.removeItem(
-                    "chishti-page-shadow"
-                );
-
-                localStorage.removeItem(
-                    "chishti-page-animation"
-                );
-
-                localStorage.removeItem(
-                    "chishti-auto-save"
-                );
-
-                localStorage.removeItem(
-                    "chishti-page-mode"
-                );
-
-
-                if(darkMode){
-
-                    darkMode.checked =
-                        true;
-
-                }
-
-
-                if(pageShadow){
-
-                    pageShadow.checked =
-                        true;
-
-                }
-
-
-                if(pageAnimation){
-
-                    pageAnimation.checked =
-                        true;
-
-                }
-
-
-                if(autoSave){
-
-                    autoSave.checked =
-                        true;
-
-                }
-
-
-                document.body.classList.remove(
-                    "chishti-no-shadow",
-                    "chishti-double-page"
-                );
-
-                document.body.classList.add(
-                    "chishti-page-animation"
-                );
-
-
-                if(
-                    typeof setReaderTheme ===
-                    "function"
-                ){
-
-                    setReaderTheme(
-                        "dark"
-                    );
-
-                }
-
-
-                singleBtn?.classList.add(
-                    "active"
-                );
-
-                doubleBtn?.classList.remove(
-                    "active"
-                );
-
-                closeSettings();
-
-            }
-
-        );
-
-    }
-
-
-    /*==================== LOAD SAVED SETTINGS ====================*/
-
-    const savedShadow =
-        localStorage.getItem(
-            "chishti-page-shadow"
-        );
-
-    if(savedShadow !== null){
-
-        const enabled =
-            savedShadow === "true";
-
-        if(pageShadow){
-
-            pageShadow.checked =
-                enabled;
-
-        }
-
-        document.body.classList.toggle(
-            "chishti-no-shadow",
-            !enabled
-        );
-
-    }
-
-
-    const savedAnimation =
-        localStorage.getItem(
-            "chishti-page-animation"
-        );
-
-    if(savedAnimation !== null){
-
-        const enabled =
-            savedAnimation === "true";
-
-        if(pageAnimation){
-
-            pageAnimation.checked =
-                enabled;
-
-        }
-
-        document.body.classList.toggle(
-            "chishti-page-animation",
-            enabled
-        );
-
-    }
-
-
-    const savedAutoSave =
-        localStorage.getItem(
-            "chishti-auto-save"
-        );
-
-    if(savedAutoSave !== null){
-
-        const enabled =
-            savedAutoSave === "true";
-
-        if(autoSave){
-
-            autoSave.checked =
-                enabled;
-
-        }
-
-        if(
-            typeof ReaderState !==
-            "undefined"
-        ){
-
-            ReaderState.autoSave =
-                enabled;
-
-        }
-
-    }
-
-
-    const savedMode =
-        localStorage.getItem(
-            "chishti-page-mode"
-        );
-
-    if(savedMode === "double"){
-
-        document.body.classList.add(
-            "chishti-double-page"
-        );
-
-        doubleBtn?.classList.add(
-            "active"
-        );
-
-        singleBtn?.classList.remove(
-            "active"
-        );
-
-    }
-
-
-    /*==================== CLOSE ON OUTSIDE CLICK ====================*/
-
-    document.addEventListener(
-        "click",
-        function(event){
-
-            if(
-                panel.classList.contains(
-                    "chishti-open"
-                ) &&
-                !panel.contains(event.target) &&
-                !settingsBtn.contains(event.target)
-            ){
-
-                closeSettings();
-
-            }
-
-        }
-    );
-
-
-})();
