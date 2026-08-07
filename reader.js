@@ -3459,16 +3459,1119 @@ function setReaderTheme(theme){
     }
 
 })();
-// existing reader.js code
+/*==================================================
+        CHISHTI READER V3
+        SETTINGS SYSTEM — FINAL
+==================================================*/
+
+(function(){
+
+    "use strict";
 
 
+    /*==================== SETTINGS BUTTON ====================*/
+
+    let settingsBtn =
+        document.getElementById("settingsBtn");
+
+    if(!settingsBtn){
+
+        settingsBtn =
+            document.createElement("button");
+
+        settingsBtn.id = "settingsBtn";
+        settingsBtn.type = "button";
+        settingsBtn.title = "Reader Settings";
+        settingsBtn.innerHTML = "⚙️";
+
+        settingsBtn.style.cssText = `
+            width:42px;
+            height:42px;
+            margin-left:6px;
+            border-radius:12px;
+            background:rgba(255,255,255,.08);
+            color:#fff;
+            border:1px solid rgba(255,255,255,.10);
+            cursor:pointer;
+            font-size:19px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        `;
+
+        const header =
+            document.querySelector("header");
+
+        if(header){
+
+            header.appendChild(settingsBtn);
+
+        }else{
+
+            document.body.appendChild(settingsBtn);
+
+            settingsBtn.style.position = "fixed";
+            settingsBtn.style.top = "82px";
+            settingsBtn.style.right = "20px";
+            settingsBtn.style.zIndex = "99999";
+
+        }
+
+    }
 
 
+    /*==================== SETTINGS PANEL ====================*/
 
-// 👇 YAHAN SE THEME CODE
+    let panel =
+        document.getElementById("settingsPanel");
 
-function setReaderTheme(theme){
 
-    // ...
+    if(!panel){
 
-}
+        panel =
+            document.createElement("div");
+
+        panel.id = "settingsPanel";
+
+        panel.innerHTML = `
+
+            <div class="chishti-settings-header">
+
+                <strong>
+                    Reader Settings
+                </strong>
+
+                <button
+                    id="chishtiSettingsClose"
+                    type="button">
+
+                    ✕
+
+                </button>
+
+            </div>
+
+
+            <div class="chishti-setting-row">
+
+                <span>
+                    🌙 Dark Mode
+                </span>
+
+                <input
+                    type="checkbox"
+                    id="darkMode"
+                    checked>
+
+            </div>
+
+
+            <div class="chishti-setting-row">
+
+                <span>
+                    🖼️ Page Shadow
+                </span>
+
+                <input
+                    type="checkbox"
+                    id="pageShadow"
+                    checked>
+
+            </div>
+
+
+            <div class="chishti-setting-row">
+
+                <span>
+                    ✨ Page Animation
+                </span>
+
+                <input
+                    type="checkbox"
+                    id="pageAnimation"
+                    checked>
+
+            </div>
+
+
+            <div class="chishti-setting-row">
+
+                <span>
+                    💾 Auto Save
+                </span>
+
+                <input
+                    type="checkbox"
+                    id="autoSave"
+                    checked>
+
+            </div>
+
+
+            <div class="chishti-setting-title">
+                Page View
+            </div>
+
+
+            <div class="chishti-view-buttons">
+
+                <button
+                    id="singlePageMode"
+                    type="button"
+                    class="active">
+
+                    📄 Single Page
+
+                </button>
+
+                <button
+                    id="doublePageMode"
+                    type="button">
+
+                    📖 Two Pages
+
+                </button>
+
+            </div>
+
+
+            <div class="chishti-setting-title">
+                Theme
+            </div>
+
+
+            <div class="chishti-theme-buttons">
+
+                <button
+                    type="button"
+                    data-theme="dark">
+
+                    🌙 Dark
+
+                </button>
+
+                <button
+                    type="button"
+                    data-theme="maroon">
+
+                    🟤 Maroon
+
+                </button>
+
+                <button
+                    type="button"
+                    data-theme="gold">
+
+                    🟡 Golden
+
+                </button>
+
+            </div>
+
+
+            <button
+                id="chishtiResetSettings"
+                type="button"
+                class="chishti-reset">
+
+                🔄 Reset Settings
+
+            </button>
+
+        `;
+
+        document.body.appendChild(panel);
+
+    }
+
+
+    /*==================== SETTINGS CSS ====================*/
+
+    if(!document.getElementById(
+        "chishti-settings-style"
+    )){
+
+        const style =
+            document.createElement("style");
+
+        style.id =
+            "chishti-settings-style";
+
+        style.textContent = `
+
+            #settingsPanel{
+
+                position:fixed;
+
+                top:82px;
+
+                right:18px;
+
+                width:330px;
+
+                max-width:
+                    calc(100vw - 28px);
+
+                padding:18px;
+
+                background:
+                    rgba(15,23,42,.98);
+
+                color:#fff;
+
+                border:
+                    1px solid
+                    rgba(255,255,255,.12);
+
+                border-radius:18px;
+
+                box-shadow:
+                    0 20px 60px
+                    rgba(0,0,0,.45);
+
+                backdrop-filter:
+                    blur(18px);
+
+                z-index:99999;
+
+                opacity:0;
+
+                visibility:hidden;
+
+                transform:
+                    translateY(-10px)
+                    scale(.97);
+
+                transition:
+                    .25s ease;
+
+            }
+
+
+            #settingsPanel.chishti-open{
+
+                opacity:1;
+
+                visibility:visible;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+
+            .chishti-settings-header{
+
+                display:flex;
+
+                align-items:center;
+
+                justify-content:space-between;
+
+                margin-bottom:18px;
+
+                font-size:17px;
+
+            }
+
+
+            .chishti-settings-header button{
+
+                width:32px;
+
+                height:32px;
+
+                border:0;
+
+                border-radius:9px;
+
+                background:
+                    rgba(255,255,255,.08);
+
+                color:#fff;
+
+                cursor:pointer;
+
+            }
+
+
+            .chishti-setting-row{
+
+                display:flex;
+
+                align-items:center;
+
+                justify-content:space-between;
+
+                padding:12px 0;
+
+                border-bottom:
+                    1px solid
+                    rgba(255,255,255,.07);
+
+                color:#e2e8f0;
+
+                font-size:14px;
+
+            }
+
+
+            .chishti-setting-row input{
+
+                width:18px;
+
+                height:18px;
+
+                accent-color:#2563eb;
+
+                cursor:pointer;
+
+            }
+
+
+            .chishti-setting-title{
+
+                margin-top:18px;
+
+                margin-bottom:9px;
+
+                color:#94a3b8;
+
+                font-size:12px;
+
+                font-weight:700;
+
+                text-transform:uppercase;
+
+            }
+
+
+            .chishti-view-buttons{
+
+                display:grid;
+
+                grid-template-columns:1fr 1fr;
+
+                gap:8px;
+
+            }
+
+
+            .chishti-view-buttons button{
+
+                padding:10px 6px;
+
+                border-radius:10px;
+
+                border:
+                    1px solid
+                    rgba(255,255,255,.10);
+
+                background:
+                    rgba(255,255,255,.06);
+
+                color:#cbd5e1;
+
+                cursor:pointer;
+
+                font-size:12px;
+
+            }
+
+
+            .chishti-view-buttons button.active{
+
+                background:
+                    linear-gradient(
+                        135deg,
+                        #2563eb,
+                        #1d4ed8
+                    );
+
+                color:#fff;
+
+                border-color:#60a5fa;
+
+            }
+
+
+            .chishti-theme-buttons{
+
+                display:grid;
+
+                grid-template-columns:
+                    repeat(3,1fr);
+
+                gap:7px;
+
+            }
+
+
+            .chishti-theme-buttons button{
+
+                padding:10px 4px;
+
+                border-radius:9px;
+
+                border:
+                    1px solid
+                    rgba(255,255,255,.12);
+
+                background:
+                    rgba(255,255,255,.07);
+
+                color:#fff;
+
+                cursor:pointer;
+
+                font-size:12px;
+
+            }
+
+
+            .chishti-theme-buttons
+            button[data-theme="maroon"]{
+
+                background:
+                    linear-gradient(
+                        135deg,
+                        #8b1e3f,
+                        #5d1023
+                    );
+
+            }
+
+
+            .chishti-theme-buttons
+            button[data-theme="gold"]{
+
+                background:
+                    linear-gradient(
+                        135deg,
+                        #f5d76e,
+                        #a67c00
+                    );
+
+                color:#211b08;
+
+            }
+
+
+            .chishti-reset{
+
+                width:100%;
+
+                margin-top:18px;
+
+                padding:11px;
+
+                border-radius:10px;
+
+                border:
+                    1px solid
+                    rgba(239,68,68,.3);
+
+                background:
+                    rgba(239,68,68,.12);
+
+                color:#fca5a5;
+
+                cursor:pointer;
+
+            }
+
+
+            /* PAGE SHADOW */
+
+            body.chishti-no-shadow
+            #pdfCanvas{
+
+                box-shadow:none !important;
+
+            }
+
+
+            /* PAGE ANIMATION */
+
+            body.chishti-page-animation
+            #pdfCanvas{
+
+                animation:
+                    chishtiPageIn
+                    .28s ease;
+
+            }
+
+
+            @keyframes chishtiPageIn{
+
+                from{
+
+                    opacity:.25;
+
+                    transform:
+                        scale(.985);
+
+                }
+
+                to{
+
+                    opacity:1;
+
+                    transform:
+                        scale(1);
+
+                }
+
+            }
+
+
+            /* TWO PAGE MODE */
+
+            body.chishti-double-page
+            #pdfContainer{
+
+                gap:20px;
+
+            }
+
+
+            @media(max-width:600px){
+
+                #settingsPanel{
+
+                    top:70px;
+
+                    left:10px;
+
+                    right:10px;
+
+                    width:auto;
+
+                }
+
+            }
+
+        `;
+
+        document.head.appendChild(style);
+
+    }
+
+
+    /*==================== OPEN / CLOSE ====================*/
+
+    function openSettings(){
+
+        panel.classList.add(
+            "chishti-open"
+        );
+
+    }
+
+
+    function closeSettings(){
+
+        panel.classList.remove(
+            "chishti-open"
+        );
+
+    }
+
+
+    settingsBtn.addEventListener(
+        "click",
+        openSettings
+    );
+
+
+    const closeBtn =
+        document.getElementById(
+            "chishtiSettingsClose"
+        );
+
+    if(closeBtn){
+
+        closeBtn.addEventListener(
+            "click",
+            closeSettings
+        );
+
+    }
+
+
+    /*==================== DARK MODE ====================*/
+
+    const darkMode =
+        document.getElementById(
+            "darkMode"
+        );
+
+
+    if(darkMode){
+
+        darkMode.addEventListener(
+            "change",
+            function(){
+
+                document.body.classList.toggle(
+                    "theme-dark",
+                    this.checked
+                );
+
+                if(!this.checked){
+
+                    document.body.classList.remove(
+                        "theme-dark"
+                    );
+
+                }
+
+                localStorage.setItem(
+                    "chishti-dark-mode",
+                    this.checked
+                );
+
+            }
+        );
+
+    }
+
+
+    /*==================== PAGE SHADOW ====================*/
+
+    const pageShadow =
+        document.getElementById(
+            "pageShadow"
+        );
+
+
+    if(pageShadow){
+
+        pageShadow.addEventListener(
+            "change",
+            function(){
+
+                document.body.classList.toggle(
+                    "chishti-no-shadow",
+                    !this.checked
+                );
+
+                localStorage.setItem(
+                    "chishti-page-shadow",
+                    this.checked
+                );
+
+            }
+        );
+
+    }
+
+
+    /*==================== PAGE ANIMATION ====================*/
+
+    const pageAnimation =
+        document.getElementById(
+            "pageAnimation"
+        );
+
+
+    if(pageAnimation){
+
+        pageAnimation.addEventListener(
+            "change",
+            function(){
+
+                document.body.classList.toggle(
+                    "chishti-page-animation",
+                    this.checked
+                );
+
+                localStorage.setItem(
+                    "chishti-page-animation",
+                    this.checked
+                );
+
+            }
+        );
+
+    }
+
+
+    /*==================== AUTO SAVE ====================*/
+
+    const autoSave =
+        document.getElementById(
+            "autoSave"
+        );
+
+
+    if(autoSave){
+
+        autoSave.addEventListener(
+            "change",
+            function(){
+
+                if(typeof ReaderState !==
+                    "undefined"){
+
+                    ReaderState.autoSave =
+                        this.checked;
+
+                }
+
+                localStorage.setItem(
+                    "chishti-auto-save",
+                    this.checked
+                );
+
+            }
+        );
+
+    }
+
+
+    /*==================== SINGLE PAGE ====================*/
+
+    const singleBtn =
+        document.getElementById(
+            "singlePageMode"
+        );
+
+
+    const doubleBtn =
+        document.getElementById(
+            "doublePageMode"
+        );
+
+
+    if(singleBtn){
+
+        singleBtn.addEventListener(
+            "click",
+            function(){
+
+                document.body.classList.remove(
+                    "chishti-double-page"
+                );
+
+                singleBtn.classList.add(
+                    "active"
+                );
+
+                doubleBtn?.classList.remove(
+                    "active"
+                );
+
+                localStorage.setItem(
+                    "chishti-page-mode",
+                    "single"
+                );
+
+            }
+        );
+
+    }
+
+
+    /*==================== TWO PAGE ====================*/
+
+    if(doubleBtn){
+
+        doubleBtn.addEventListener(
+            "click",
+            function(){
+
+                document.body.classList.add(
+                    "chishti-double-page"
+                );
+
+                doubleBtn.classList.add(
+                    "active"
+                );
+
+                singleBtn?.classList.remove(
+                    "active"
+                );
+
+                localStorage.setItem(
+                    "chishti-page-mode",
+                    "double"
+                );
+
+            }
+        );
+
+    }
+
+
+    /*==================== THEMES ====================*/
+
+    document
+        .querySelectorAll(
+            ".chishti-theme-buttons button"
+        )
+        .forEach(function(button){
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    const theme =
+                        this.dataset.theme;
+
+                    if(
+                        typeof setReaderTheme ===
+                        "function"
+                    ){
+
+                        setReaderTheme(
+                            theme
+                        );
+
+                    }
+
+                }
+            );
+
+        });
+
+
+    /*==================== RESET ====================*/
+
+    const resetBtn =
+        document.getElementById(
+            "chishtiResetSettings"
+        );
+
+
+    if(resetBtn){
+
+        resetBtn.addEventListener(
+            "click",
+            function(){
+
+                localStorage.removeItem(
+                    "chishti-theme"
+                );
+
+                localStorage.removeItem(
+                    "chishti-dark-mode"
+                );
+
+                localStorage.removeItem(
+                    "chishti-page-shadow"
+                );
+
+                localStorage.removeItem(
+                    "chishti-page-animation"
+                );
+
+                localStorage.removeItem(
+                    "chishti-auto-save"
+                );
+
+                localStorage.removeItem(
+                    "chishti-page-mode"
+                );
+
+
+                if(darkMode){
+
+                    darkMode.checked =
+                        true;
+
+                }
+
+
+                if(pageShadow){
+
+                    pageShadow.checked =
+                        true;
+
+                }
+
+
+                if(pageAnimation){
+
+                    pageAnimation.checked =
+                        true;
+
+                }
+
+
+                if(autoSave){
+
+                    autoSave.checked =
+                        true;
+
+                }
+
+
+                document.body.classList.remove(
+                    "chishti-no-shadow",
+                    "chishti-double-page"
+                );
+
+                document.body.classList.add(
+                    "chishti-page-animation"
+                );
+
+
+                if(
+                    typeof setReaderTheme ===
+                    "function"
+                ){
+
+                    setReaderTheme(
+                        "dark"
+                    );
+
+                }
+
+
+                singleBtn?.classList.add(
+                    "active"
+                );
+
+                doubleBtn?.classList.remove(
+                    "active"
+                );
+
+                closeSettings();
+
+            }
+
+        );
+
+    }
+
+
+    /*==================== LOAD SAVED SETTINGS ====================*/
+
+    const savedShadow =
+        localStorage.getItem(
+            "chishti-page-shadow"
+        );
+
+    if(savedShadow !== null){
+
+        const enabled =
+            savedShadow === "true";
+
+        if(pageShadow){
+
+            pageShadow.checked =
+                enabled;
+
+        }
+
+        document.body.classList.toggle(
+            "chishti-no-shadow",
+            !enabled
+        );
+
+    }
+
+
+    const savedAnimation =
+        localStorage.getItem(
+            "chishti-page-animation"
+        );
+
+    if(savedAnimation !== null){
+
+        const enabled =
+            savedAnimation === "true";
+
+        if(pageAnimation){
+
+            pageAnimation.checked =
+                enabled;
+
+        }
+
+        document.body.classList.toggle(
+            "chishti-page-animation",
+            enabled
+        );
+
+    }
+
+
+    const savedAutoSave =
+        localStorage.getItem(
+            "chishti-auto-save"
+        );
+
+    if(savedAutoSave !== null){
+
+        const enabled =
+            savedAutoSave === "true";
+
+        if(autoSave){
+
+            autoSave.checked =
+                enabled;
+
+        }
+
+        if(
+            typeof ReaderState !==
+            "undefined"
+        ){
+
+            ReaderState.autoSave =
+                enabled;
+
+        }
+
+    }
+
+
+    const savedMode =
+        localStorage.getItem(
+            "chishti-page-mode"
+        );
+
+    if(savedMode === "double"){
+
+        document.body.classList.add(
+            "chishti-double-page"
+        );
+
+        doubleBtn?.classList.add(
+            "active"
+        );
+
+        singleBtn?.classList.remove(
+            "active"
+        );
+
+    }
+
+
+    /*==================== CLOSE ON OUTSIDE CLICK ====================*/
+
+    document.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                panel.classList.contains(
+                    "chishti-open"
+                ) &&
+                !panel.contains(event.target) &&
+                !settingsBtn.contains(event.target)
+            ){
+
+                closeSettings();
+
+            }
+
+        }
+    );
+
+
+})();
