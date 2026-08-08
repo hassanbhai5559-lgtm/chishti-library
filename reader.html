@@ -3,54 +3,91 @@
 
 <head>
 
+    <!-- ==================================================
+                    BASIC META
+    ================================================== -->
+
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0">
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
 
     <meta
         name="theme-color"
-        content="#0f172a">
+        content="#0f172a"
+    >
 
     <meta
         name="description"
-        content="Chishti Library Professional PDF Reader">
+        content="Chishti Library Professional PDF Reader"
+    >
 
-    <title>Chishti Library Reader</title>
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
 
 
-    <!-- GOOGLE FONT -->
+    <!-- ==================================================
+                    PAGE TITLE
+    ================================================== -->
+
+    <title>
+        Chishti Library Reader
+    </title>
+
+
+    <!-- ==================================================
+                    GOOGLE FONT
+    ================================================== -->
 
     <link
         rel="preconnect"
-        href="https://fonts.googleapis.com">
+        href="https://fonts.googleapis.com"
+    >
 
     <link
         rel="preconnect"
         href="https://fonts.gstatic.com"
-        crossorigin>
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+        rel="stylesheet"
+    >
 
 
-    <!-- ICONS -->
+    <!-- ==================================================
+                    REMIX ICONS
+    ================================================== -->
 
     <link
         rel="stylesheet"
-        href="assets/icons/remixicon.css">
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    >
 
 
-    <!-- READER CSS -->
+    <!-- ==================================================
+                    READER CSS
+    ================================================== -->
 
     <link
         rel="stylesheet"
-        href="reader.css">
+        href="reader.css"
+    >
 
 
-    <!-- PDF.JS -->
+    <!-- ==================================================
+                    PDF.JS
+    ================================================== -->
 
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
@@ -58,8 +95,12 @@
 
     <script>
 
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        if (typeof pdfjsLib !== "undefined") {
+
+            pdfjsLib.GlobalWorkerOptions.workerSrc =
+                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+        }
 
     </script>
 
@@ -69,59 +110,157 @@
 <body class="theme-dark">
 
 
-    <!--==================================================
-                    READ TRANSITION
-    ==================================================-->
+<!-- ==================================================
+            FULLSCREEN OPENING / LOADING SCREEN
+================================================== -->
+
+<div
+    id="loadingScreen"
+    class="loading-screen"
+    aria-hidden="false"
+>
+
+
+    <!-- ==================================================
+                    BACKGROUND GLOW
+    ================================================== -->
 
     <div
-        id="readerTransition"
-        class="reader-transition">
+        class="loading-glow loading-glow-one">
+    </div>
 
-        <div class="transitionGlow"></div>
+    <div
+        class="loading-glow loading-glow-two">
+    </div>
 
-        <div class="transitionBook">
 
-            <i class="ri-book-open-line"></i>
+    <!-- ==================================================
+                    CENTER BOOK
+    ================================================== -->
+
+    <div
+        id="openingBook"
+        class="opening-book"
+    >
+
+
+        <!-- LEFT COVER -->
+
+        <div
+            class="opening-book-cover opening-book-cover-left"
+        >
+
+            <div class="opening-book-brand">
+
+                <i class="ri-book-open-line"></i>
+
+                <span>
+                    CHISHTI
+                </span>
+
+                <small>
+                    LIBRARY
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- INNER PAGES -->
+
+        <div
+            class="opening-book-pages"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <!-- RIGHT COVER -->
+
+        <div
+            class="opening-book-cover opening-book-cover-right"
+        >
+
+            <div class="opening-book-symbol">
+
+                <i class="ri-book-3-line"></i>
+
+            </div>
 
         </div>
 
     </div>
 
 
-    <!--==================================================
-                    LOADING SCREEN
-    ==================================================-->
+    <!-- ==================================================
+                    LOADING INFORMATION
+    ================================================== -->
 
     <div
-        id="loadingScreen"
-        class="loading-screen">
+        class="loading-content"
+    >
 
-        <div class="loading-content">
+        <div
+            class="loading-logo"
+        >
 
-            <div class="loadingLogo">
+            <i class="ri-book-open-fill"></i>
 
-                <i class="ri-book-open-line"></i>
+        </div>
 
-            </div>
 
-            <h1>
-                CHISHTI LIBRARY
-            </h1>
+        <h1
+            id="loadingTitle"
+        >
+            Chishti Library
+        </h1>
 
-            <p id="loadingMessage">
-                Opening Your Book...
-            </p>
 
-            <div class="loadingBar">
+        <p
+            id="loadingMessage"
+        >
+            Opening Your Book...
+        </p>
 
-                <div
-                    id="loadingProgress"
-                    class="loadingProgress">
-                </div>
 
-            </div>
+        <!-- ==================================================
+                    PROGRESS
+        ================================================== -->
 
-            <span id="loadingPercent">
+        <div
+            class="loading-progress"
+            aria-label="Loading progress"
+        >
+
+            <div
+                id="loadingProgressFill"
+                class="loading-progress-fill"
+                style="width:0%;"
+            ></div>
+
+        </div>
+
+
+        <div
+            class="loading-progress-info"
+        >
+
+            <span
+                id="loadingStatus"
+            >
+                Loading Book...
+            </span>
+
+
+            <span
+                id="loadingPercent"
+            >
                 0%
             </span>
 
@@ -130,54 +269,744 @@
     </div>
 
 
-    <!--==================================================
-                    READER APP
-    ==================================================-->
+    <!-- ==================================================
+                    OPEN READER LIGHT
+    ================================================== -->
 
     <div
-        id="readerApp"
-        class="reader-app">
+        id="readerOpeningLight"
+        class="reader-opening-light"
+    ></div>
 
 
-        <!--================================================
-                        HEADER
-        =================================================-->
+    <!-- ==================================================
+                    OPENING WHITE FLASH
+    ================================================== -->
 
-        <header
-            id="readerHeader"
-            class="reader-header">
-
-
-            <div class="headerLeft">
-
-                <button
-                    id="menuBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Menu">
-
-                    <i class="ri-menu-line"></i>
-
-                </button>
+    <div
+        id="openingWhiteFlash"
+        class="opening-white-flash"
+    ></div>
 
 
-                <div class="libraryBrand">
+</div>
 
-                    <div class="brandIcon">
 
-                        <i class="ri-book-open-line"></i>
+<!-- ==================================================
+        READER APP STARTS IN PART 2
+================================================== -->
+
+<div
+    id="readerApp"
+    class="reader-app"
+    hidden
+>
+<!-- ==================================================
+                    HEADER / TOP BAR
+================================================== -->
+
+<header
+    id="readerHeader"
+    class="reader-header"
+>
+
+
+    <!-- ==================================================
+                    LEFT BRAND AREA
+    ================================================== -->
+
+    <div
+        class="header-left"
+    >
+
+        <button
+            id="mobileMenuBtn"
+            class="header-icon-button mobile-only"
+            type="button"
+            title="Menu"
+            aria-label="Open Menu"
+        >
+
+            <i class="ri-menu-line"></i>
+
+        </button>
+
+
+        <div
+            class="library-brand"
+        >
+
+            <div
+                class="brand-mark"
+            >
+
+                <i class="ri-book-open-fill"></i>
+
+            </div>
+
+
+            <div
+                class="brand-details"
+            >
+
+                <strong>
+                    CHISHTI LIBRARY
+                </strong>
+
+
+                <span
+                    id="bookTitle"
+                >
+                    Untitled Book
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+                    RIGHT HEADER ACTIONS
+    ================================================== -->
+
+    <div
+        class="header-actions"
+    >
+
+
+        <!-- SEARCH -->
+
+        <button
+            id="searchBtn"
+            class="header-icon-button"
+            type="button"
+            title="Search"
+            aria-label="Search in book"
+        >
+
+            <i class="ri-search-line"></i>
+
+        </button>
+
+
+        <!-- BOOKMARK -->
+
+        <button
+            id="bookmarkBtn"
+            class="header-icon-button"
+            type="button"
+            title="Bookmark"
+            aria-label="Bookmark page"
+        >
+
+            <i class="ri-bookmark-line"></i>
+
+        </button>
+
+
+        <!-- THEME -->
+
+        <button
+            id="themeBtn"
+            class="header-icon-button"
+            type="button"
+            title="Change Theme"
+            aria-label="Change reader theme"
+        >
+
+            <i class="ri-contrast-2-line"></i>
+
+        </button>
+
+
+        <!-- FULLSCREEN -->
+
+        <button
+            id="fullscreenBtn"
+            class="header-icon-button"
+            type="button"
+            title="Fullscreen"
+            aria-label="Enter fullscreen"
+        >
+
+            <i class="ri-fullscreen-line"></i>
+
+        </button>
+
+
+        <!-- SETTINGS -->
+
+        <button
+            id="settingsBtn"
+            class="header-icon-button settings-button"
+            type="button"
+            title="Reader Settings"
+            aria-label="Open reader settings"
+        >
+
+            <i class="ri-settings-3-line"></i>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- ==================================================
+                    SEARCH PANEL
+================================================== -->
+
+<section
+    id="searchPanel"
+    class="floating-panel search-panel"
+    hidden
+    aria-hidden="true"
+>
+
+
+    <div
+        class="panel-header"
+    >
+
+        <div>
+
+            <span class="panel-kicker">
+                CHISHTI LIBRARY
+            </span>
+
+            <h2>
+                Search Book
+            </h2>
+
+        </div>
+
+
+        <button
+            id="searchCloseBtn"
+            class="panel-close-button"
+            type="button"
+            title="Close Search"
+            aria-label="Close search"
+        >
+
+            <i class="ri-close-line"></i>
+
+        </button>
+
+    </div>
+
+
+
+    <div
+        class="search-box"
+    >
+
+        <i class="ri-search-line"></i>
+
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="Search in book..."
+            autocomplete="off"
+            spellcheck="false"
+        >
+
+
+        <button
+            id="clearSearchBtn"
+            type="button"
+            title="Clear Search"
+            aria-label="Clear search"
+        >
+
+            <i class="ri-close-circle-line"></i>
+
+        </button>
+
+    </div>
+
+
+
+    <div
+        id="searchResults"
+        class="search-results"
+    >
+
+        <div
+            id="searchEmpty"
+            class="search-empty"
+        >
+
+            <i class="ri-search-eye-line"></i>
+
+            <p>
+                Search text inside your book
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+                    BOOKMARK PANEL
+================================================== -->
+
+<section
+    id="bookmarkPanel"
+    class="floating-panel bookmark-panel"
+    hidden
+    aria-hidden="true"
+>
+
+
+    <div
+        class="panel-header"
+    >
+
+        <div>
+
+            <span class="panel-kicker">
+                YOUR READING
+            </span>
+
+            <h2>
+                Bookmarks
+            </h2>
+
+        </div>
+
+
+        <button
+            id="bookmarkCloseBtn"
+            class="panel-close-button"
+            type="button"
+            title="Close Bookmarks"
+            aria-label="Close bookmarks"
+        >
+
+            <i class="ri-close-line"></i>
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="bookmarkList"
+        class="bookmark-list"
+    >
+
+        <div
+            id="bookmarkEmpty"
+            class="panel-empty"
+        >
+
+            <i class="ri-bookmark-line"></i>
+
+            <p>
+                No bookmarks yet
+            </p>
+
+            <span>
+                Bookmark a page to find it quickly later.
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ==================================================
+                    THEME QUICK MENU
+================================================== -->
+
+<div
+    id="themeMenu"
+    class="theme-menu"
+    hidden
+    aria-hidden="true"
+>
+
+
+    <div
+        class="theme-menu-title"
+    >
+        Reader Theme
+    </div>
+
+
+    <button
+        class="quick-theme-button quick-theme-dark active"
+        data-theme="dark"
+        type="button"
+    >
+
+        <span class="theme-color-dot"></span>
+
+        Dark
+
+    </button>
+
+
+    <button
+        class="quick-theme-button quick-theme-light"
+        data-theme="light"
+        type="button"
+    >
+
+        <span class="theme-color-dot"></span>
+
+        Light
+
+    </button>
+
+
+    <button
+        class="quick-theme-button quick-theme-maroon"
+        data-theme="maroon"
+        type="button"
+    >
+
+        <span class="theme-color-dot"></span>
+
+        Maroon
+
+    </button>
+
+
+    <button
+        class="quick-theme-button quick-theme-gold"
+        data-theme="gold"
+        type="button"
+    >
+
+        <span class="theme-color-dot"></span>
+
+        Golden
+
+    </button>
+
+</div>
+
+
+
+<!-- ==================================================
+                    MOBILE BACKDROP
+================================================== -->
+
+<div
+    id="panelBackdrop"
+    class="panel-backdrop"
+    hidden
+></div>
+<!-- ==================================================
+                    MAIN READER AREA
+================================================== -->
+
+<main
+    id="readerMain"
+    class="reader-main"
+>
+
+
+    <!-- ==================================================
+                    READER TOOLBAR
+    ================================================== -->
+
+    <div
+        id="readerToolbar"
+        class="reader-toolbar"
+    >
+
+
+        <!-- MENU -->
+
+        <button
+            id="menuBtn"
+            class="toolbar-button"
+            type="button"
+            title="Menu"
+            aria-label="Open reader menu"
+        >
+
+            <i class="ri-menu-line"></i>
+
+        </button>
+
+
+        <!-- PREVIOUS -->
+
+        <button
+            id="prevBtn"
+            class="toolbar-button"
+            type="button"
+            title="Previous Page"
+            aria-label="Previous page"
+        >
+
+            <i class="ri-arrow-left-line"></i>
+
+        </button>
+
+
+        <!-- PAGE COUNTER -->
+
+        <div
+            id="pageCounter"
+            class="page-counter"
+        >
+
+            <input
+                id="currentPage"
+                type="number"
+                min="1"
+                value="1"
+                inputmode="numeric"
+                aria-label="Current page"
+            >
+
+
+            <span class="page-counter-slash">
+                /
+            </span>
+
+
+            <span
+                id="totalPages"
+            >
+                0
+            </span>
+
+        </div>
+
+
+        <!-- NEXT -->
+
+        <button
+            id="nextBtn"
+            class="toolbar-button"
+            type="button"
+            title="Next Page"
+            aria-label="Next page"
+        >
+
+            <i class="ri-arrow-right-line"></i>
+
+        </button>
+
+
+        <!-- DIVIDER -->
+
+        <span
+            class="toolbar-divider"
+            aria-hidden="true"
+        ></span>
+
+
+        <!-- ZOOM OUT -->
+
+        <button
+            id="zoomOutBtn"
+            class="toolbar-button"
+            type="button"
+            title="Zoom Out"
+            aria-label="Zoom out"
+        >
+
+            <i class="ri-zoom-out-line"></i>
+
+        </button>
+
+
+        <!-- ZOOM VALUE -->
+
+        <span
+            id="zoomValue"
+            class="zoom-value"
+        >
+            100%
+        </span>
+
+
+        <!-- ZOOM IN -->
+
+        <button
+            id="zoomInBtn"
+            class="toolbar-button"
+            type="button"
+            title="Zoom In"
+            aria-label="Zoom in"
+        >
+
+            <i class="ri-zoom-in-line"></i>
+
+        </button>
+
+
+        <!-- FIT -->
+
+        <button
+            id="fitBtn"
+            class="toolbar-button"
+            type="button"
+            title="Fit Page"
+            aria-label="Fit page"
+        >
+
+            <i class="ri-expand-diagonal-line"></i>
+
+        </button>
+
+
+        <!-- DIVIDER -->
+
+        <span
+            class="toolbar-divider"
+            aria-hidden="true"
+        ></span>
+
+
+        <!-- PAGE VIEW -->
+
+        <button
+            id="viewModeBtn"
+            class="toolbar-button"
+            type="button"
+            title="Page View"
+            aria-label="Change page view"
+        >
+
+            <i class="ri-layout-column-line"></i>
+
+        </button>
+
+
+        <!-- THUMBNAILS -->
+
+        <button
+            id="thumbnailBtn"
+            class="toolbar-button"
+            type="button"
+            title="Thumbnails"
+            aria-label="Show thumbnails"
+        >
+
+            <i class="ri-layout-grid-line"></i>
+
+        </button>
+
+
+        <!-- COMMENTS -->
+
+        <button
+            id="commentsBtn"
+            class="toolbar-button"
+            type="button"
+            title="Comments"
+            aria-label="Open comments"
+        >
+
+            <i class="ri-chat-3-line"></i>
+
+        </button>
+
+    </div>
+
+
+
+    <!-- ==================================================
+                    PDF VIEWER
+    ================================================== -->
+
+    <section
+        id="pdfViewer"
+        class="pdf-viewer"
+        aria-label="PDF reader"
+    >
+
+
+        <!-- ==============================================
+                    PDF SCROLL CONTAINER
+        =============================================== -->
+
+        <div
+            id="pdfScrollArea"
+            class="pdf-scroll-area"
+        >
+
+
+            <!-- ==========================================
+                    PDF PAGE CONTAINER
+
+                    view-single = 1 page
+                    view-double = 2 pages
+            =========================================== -->
+
+            <div
+                id="pdfPages"
+                class="pdf-pages view-single"
+            >
+
+
+                <!-- ======================================
+                        SINGLE PAGE SLOT
+                ======================================= -->
+
+                <div
+                    id="pageSlotOne"
+                    class="page-slot page-slot-one"
+                >
+
+                    <div
+                        id="pageLoadingOne"
+                        class="page-loading"
+                        hidden
+                    >
+
+                        <div
+                            class="page-loader-spinner"
+                        ></div>
 
                     </div>
 
-                    <div>
+                </div>
 
-                        <strong>
-                            CHISHTI LIBRARY
-                        </strong>
 
-                        <span id="bookTitle">
-                            Untitled Book
-                        </span>
+                <!-- ======================================
+                        SECOND PAGE SLOT
+
+                        Hidden automatically in
+                        1-page mode.
+                ======================================= -->
+
+                <div
+                    id="pageSlotTwo"
+                    class="page-slot page-slot-two"
+                    hidden
+                >
+
+                    <div
+                        id="pageLoadingTwo"
+                        class="page-loading"
+                        hidden
+                    >
+
+                        <div
+                            class="page-loader-spinner"
+                        ></div>
 
                     </div>
 
@@ -186,124 +1015,32 @@
             </div>
 
 
-            <div class="headerRight">
+        </div>
 
 
-                <button
-                    id="searchBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Search">
-
-                    <i class="ri-search-line"></i>
-
-                </button>
-
-
-                <button
-                    id="bookmarkBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Bookmark">
-
-                    <i class="ri-bookmark-line"></i>
-
-                </button>
-
-
-                <button
-                    id="themeBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Theme">
-
-                    <i class="ri-contrast-2-line"></i>
-
-                </button>
-
-
-                <button
-                    id="fullscreenBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Fullscreen">
-
-                    <i class="ri-fullscreen-line"></i>
-
-                </button>
-
-
-                <button
-                    id="downloadBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Download">
-
-                    <i class="ri-download-2-line"></i>
-
-                </button>
-
-
-                <button
-                    id="printBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Print">
-
-                    <i class="ri-printer-line"></i>
-
-                </button>
-
-
-                <button
-                    id="settingsBtn"
-                    class="iconBtn"
-                    type="button"
-                    title="Reader Settings">
-
-                    <i class="ri-settings-3-line"></i>
-
-                </button>
-
-            </div>
-
-        </header>
-
-
-        <!--================================================
-                        SEARCH BAR
-        =================================================-->
+        <!-- ==============================================
+                    PDF LOADING OVERLAY
+        =============================================== -->
 
         <div
-            id="searchBar"
-            class="search-bar">
-
-            <div class="searchBox">
-
-                <i class="ri-search-line"></i>
-
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search in book..."
-                    autocomplete="off">
-
-                <button
-                    id="searchClose"
-                    type="button">
-
-                    <i class="ri-close-line"></i>
-
-                </button>
-
-            </div>
+            id="pdfLoadingOverlay"
+            class="pdf-loading-overlay"
+            hidden
+        >
 
             <div
-                id="searchResults"
-                class="searchResults">
+                class="pdf-loader"
+            >
 
-                <span id="searchStatus">
-                    Search in your book
+                <div
+                    class="pdf-loader-spinner"
+                ></div>
+
+
+                <span
+                    id="pdfLoadingText"
+                >
+                    Loading page...
                 </span>
 
             </div>
@@ -311,629 +1048,977 @@
         </div>
 
 
-        <!--================================================
-                        MAIN TOOLBAR
-        =================================================-->
+        <!-- ==============================================
+                    NO PDF MESSAGE
+        =============================================== -->
 
         <div
-            id="readerToolbar"
-            class="reader-toolbar">
-
-
-            <button
-                id="prevBtn"
-                class="toolbarBtn"
-                type="button"
-                title="Previous Page">
-
-                <i class="ri-arrow-left-line"></i>
-
-            </button>
-
+            id="pdfEmptyState"
+            class="pdf-empty-state"
+            hidden
+        >
 
             <div
-                id="pageCounter"
-                class="page-counter">
+                class="empty-book-icon"
+            >
 
-                <input
-                    id="currentPage"
-                    type="number"
-                    min="1"
-                    value="1">
-
-                <span>/</span>
-
-                <span id="totalPages">
-                    0
-                </span>
+                <i class="ri-file-unknow-line"></i>
 
             </div>
 
 
-            <button
-                id="nextBtn"
-                class="toolbarBtn"
-                type="button"
-                title="Next Page">
+            <h2>
+                No Book Selected
+            </h2>
 
-                <i class="ri-arrow-right-line"></i>
+
+            <p>
+                Select a book from Chishti Library to start reading.
+            </p>
+
+
+            <button
+                id="backToLibraryBtn"
+                class="primary-button"
+                type="button"
+            >
+
+                <i class="ri-arrow-left-line"></i>
+
+                Back to Library
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================================
+                    READING PROGRESS
+    ================================================== -->
+
+    <div
+        id="readingProgress"
+        class="reading-progress"
+        aria-hidden="true"
+    >
+
+        <div
+            id="readingProgressFill"
+            class="reading-progress-fill"
+        ></div>
+
+    </div>
+
+</main>
+<!-- ==================================================
+                    SETTINGS PANEL
+================================================== -->
+
+<aside
+    id="settingsPanel"
+    class="side-panel settings-panel"
+    hidden
+    aria-hidden="true"
+>
+
+
+    <!-- PANEL HEADER -->
+
+    <div
+        class="panel-header"
+    >
+
+        <div>
+
+            <span class="panel-kicker">
+                READER
+            </span>
+
+            <h2>
+                Reader Settings
+            </h2>
+
+        </div>
+
+
+        <button
+            id="settingsCloseBtn"
+            class="panel-close-button"
+            type="button"
+            title="Close Settings"
+            aria-label="Close settings"
+        >
+
+            <i class="ri-close-line"></i>
+
+        </button>
+
+    </div>
+
+
+
+    <!-- ==================================================
+                    THEME SETTINGS
+    ================================================== -->
+
+    <section
+        class="setting-section"
+    >
+
+        <div
+            class="setting-section-heading"
+        >
+
+            <div>
+
+                <h3>
+                    Theme
+                </h3>
+
+                <p>
+                    Choose your reader appearance
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="themeOptions"
+            class="theme-options"
+        >
+
+
+            <!-- DARK -->
+
+            <button
+                class="theme-option theme-option-dark active"
+                data-theme="dark"
+                type="button"
+            >
+
+                <span
+                    class="theme-preview theme-preview-dark"
+                ></span>
+
+                <span>
+                    Dark
+                </span>
+
+                <i class="ri-check-line"></i>
 
             </button>
 
 
-            <div class="toolbarDivider"></div>
-
+            <!-- LIGHT -->
 
             <button
-                id="zoomOutBtn"
-                class="toolbarBtn"
+                class="theme-option theme-option-light"
+                data-theme="light"
                 type="button"
-                title="Zoom Out">
+            >
 
-                <i class="ri-zoom-out-line"></i>
+                <span
+                    class="theme-preview theme-preview-light"
+                ></span>
+
+                <span>
+                    Light
+                </span>
+
+                <i class="ri-check-line"></i>
 
             </button>
 
+
+            <!-- MAROON -->
+
+            <button
+                class="theme-option theme-option-maroon"
+                data-theme="maroon"
+                type="button"
+            >
+
+                <span
+                    class="theme-preview theme-preview-maroon"
+                ></span>
+
+                <span>
+                    Maroon
+                </span>
+
+                <i class="ri-check-line"></i>
+
+            </button>
+
+
+            <!-- GOLDEN -->
+
+            <button
+                class="theme-option theme-option-gold"
+                data-theme="gold"
+                type="button"
+            >
+
+                <span
+                    class="theme-preview theme-preview-gold"
+                ></span>
+
+                <span>
+                    Golden
+                </span>
+
+                <i class="ri-check-line"></i>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================================
+                    PAGE VIEW
+    ================================================== -->
+
+    <section
+        class="setting-section"
+    >
+
+        <div
+            class="setting-section-heading"
+        >
+
+            <div>
+
+                <h3>
+                    Page View
+                </h3>
+
+                <p>
+                    Choose one or two pages
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="pageViewOptions"
+            class="page-view-options"
+        >
+
+
+            <!-- ONE PAGE -->
+
+            <button
+                id="singlePageBtn"
+                class="page-view-option active"
+                data-view="single"
+                type="button"
+            >
+
+                <i class="ri-file-line"></i>
+
+                <span>
+                    1 Page
+                </span>
+
+            </button>
+
+
+            <!-- TWO PAGE -->
+
+            <button
+                id="doublePageBtn"
+                class="page-view-option"
+                data-view="double"
+                type="button"
+            >
+
+                <i class="ri-book-2-line"></i>
+
+                <span>
+                    2 Pages
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ==================================================
+                    READER OPTIONS
+    ================================================== -->
+
+    <section
+        class="setting-section"
+    >
+
+        <div
+            class="setting-section-heading"
+        >
+
+            <div>
+
+                <h3>
+                    Reader
+                </h3>
+
+                <p>
+                    Customize your reading experience
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PAGE SHADOW -->
+
+        <label
+            class="setting-row"
+            for="pageShadow"
+        >
 
             <span
-                id="zoomValue"
-                class="zoomValue">
+                class="setting-row-info"
+            >
 
-                100%
+                <span
+                    class="setting-row-icon"
+                >
+
+                    <i class="ri-shadow-line"></i>
+
+                </span>
+
+
+                <span>
+
+                    <strong>
+                        Page Shadow
+                    </strong>
+
+                    <small>
+                        Add depth around the book page
+                    </small>
+
+                </span>
 
             </span>
 
 
-            <button
-                id="zoomInBtn"
-                class="toolbarBtn"
-                type="button"
-                title="Zoom In">
+            <input
+                id="pageShadow"
+                type="checkbox"
+                checked
+            >
 
-                <i class="ri-zoom-in-line"></i>
+        </label>
 
-            </button>
 
+        <!-- DARK MODE -->
 
-            <button
-                id="fitBtn"
-                class="toolbarBtn"
-                type="button"
-                title="Fit Page">
+        <label
+            class="setting-row"
+            for="darkMode"
+        >
 
-                <i class="ri-expand-diagonal-line"></i>
+            <span
+                class="setting-row-info"
+            >
 
-            </button>
+                <span
+                    class="setting-row-icon"
+                >
 
+                    <i class="ri-moon-line"></i>
 
-            <div class="toolbarDivider"></div>
-
-
-            <button
-                id="thumbnailBtn"
-                class="toolbarBtn"
-                type="button"
-                title="Thumbnails">
-
-                <i class="ri-layout-grid-line"></i>
-
-            </button>
-
-
-            <button
-                id="commentsBtn"
-                class="toolbarBtn"
-                type="button"
-                title="Comments">
-
-                <i class="ri-chat-3-line"></i>
-
-            </button>
-
-
-            <button
-                id="bookmarkToolbarBtn"
-                class="toolbarBtn"
-                type="button"
-                title="Bookmark Page">
-
-                <i class="ri-bookmark-line"></i>
-
-            </button>
-
-        </div>
-
-
-        <!--================================================
-                    READING PROGRESS
-        =================================================-->
-
-        <div
-            id="readingProgress"
-            class="reading-progress">
-
-            <div
-                id="readingProgressFill"
-                class="reading-progress-fill">
-            </div>
-
-        </div>
-
-
-        <!--================================================
-                    READER BODY
-        =================================================-->
-
-        <main
-            id="readerMain"
-            class="reader-main">
-
-
-            <!-- LEFT SIDEBAR -->
-
-            <aside
-                id="readerSidebar"
-                class="reader-sidebar">
-
-
-                <div class="sidebarTabs">
-
-                    <button
-                        id="contentsTab"
-                        class="sidebarTab active"
-                        type="button">
-
-                        Contents
-
-                    </button>
-
-                    <button
-                        id="bookmarksTab"
-                        class="sidebarTab"
-                        type="button">
-
-                        Bookmarks
-
-                    </button>
-
-                    <button
-                        id="pagesTab"
-                        class="sidebarTab"
-                        type="button">
-
-                        Pages
-
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="contentsPanel"
-                    class="sidebarPanel active">
-
-                    <div
-                        id="contentsList"
-                        class="contentsList">
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="bookmarksPanel"
-                    class="sidebarPanel">
-
-                    <div
-                        id="bookmarksList"
-                        class="bookmarksList">
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="pagesPanel"
-                    class="sidebarPanel">
-
-                    <div
-                        id="thumbnailList"
-                        class="thumbnailList">
-
-                    </div>
-
-                </div>
-
-            </aside>
-
-
-            <!-- PDF AREA -->
-
-            <section
-                id="pdfArea"
-                class="pdf-area">
-
-
-                <div
-                    id="pdfContainer"
-                    class="pdf-container">
-
-
-                    <div
-                        id="pageLoading"
-                        class="page-loading">
-
-                        <div class="loaderSpinner"></div>
-
-                        <span>
-                            Loading Book...
-                        </span>
-
-                    </div>
-
-
-                    <canvas
-                        id="pdfCanvas"
-                        class="pdf-canvas">
-                    </canvas>
-
-
-                    <canvas
-                        id="pdfCanvas2"
-                        class="pdf-canvas secondary-page">
-                    </canvas>
-
-
-                </div>
-
-            </section>
-
-
-            <!-- RIGHT COMMENTS PANEL -->
-
-            <aside
-                id="commentsPanel"
-                class="comments-panel">
-
-
-                <div class="commentsHeader">
-
-                    <h3>
-                        Comments
-                    </h3>
-
-                    <button
-                        id="commentsClose"
-                        type="button">
-
-                        <i class="ri-close-line"></i>
-
-                    </button>
-
-                </div>
-
-
-                <div
-                    id="commentsList"
-                    class="commentsList">
-
-                </div>
-
-
-                <div class="commentForm">
-
-                    <input
-                        type="text"
-                        id="commentName"
-                        placeholder="Your Name"
-                        autocomplete="name">
-
-
-                    <textarea
-                        id="commentText"
-                        placeholder="Write a comment..."
-                        rows="3">
-                    </textarea>
-
-
-                    <button
-                        id="postCommentBtn"
-                        type="button">
-
-                        <i class="ri-send-plane-line"></i>
-
-                        Post Comment
-
-                    </button>
-
-                </div>
-
-            </aside>
-
-        </main>
-
-
-        <!--================================================
-                    BOTTOM FOOTER
-        =================================================-->
-
-        <footer
-            id="readerFooter"
-            class="reader-footer">
-
-
-            <div class="footerLeft">
-
-                <span id="pageInfo">
-                    Page 1 of 0
                 </span>
 
-            </div>
-
-
-            <div class="footerCenter">
-
-                <button
-                    id="previousPage"
-                    class="footerBtn"
-                    type="button"
-                    title="Previous">
-
-                    <i class="ri-arrow-left-s-line"></i>
-
-                </button>
-
-
-                <button
-                    id="nextPage"
-                    class="footerBtn"
-                    type="button"
-                    title="Next">
-
-                    <i class="ri-arrow-right-s-line"></i>
-
-                </button>
-
-            </div>
-
-
-            <div class="footerRight">
-
-                <button
-                    id="likeBtn"
-                    class="footerBtn"
-                    type="button"
-                    title="Like Book">
-
-                    <i class="ri-heart-line"></i>
-
-                    <span id="likeCount">
-                        0
-                    </span>
-
-                </button>
-
-
-                <button
-                    id="shareBtn"
-                    class="footerBtn"
-                    type="button"
-                    title="Share">
-
-                    <i class="ri-share-line"></i>
-
-                </button>
-
-            </div>
-
-        </footer>
-
-
-    </div>
-
-
-    <!--==================================================
-                    SETTINGS PANEL
-    ==================================================-->
-
-    <aside
-        id="settingsPanel"
-        class="settings-panel">
-
-
-        <div class="settingsHeader">
-
-            <div>
 
                 <span>
-                    Reader Settings
+
+                    <strong>
+                        Dark Mode
+                    </strong>
+
+                    <small>
+                        Use the dark reader appearance
+                    </small>
+
                 </span>
 
-            </div>
+            </span>
+
+
+            <input
+                id="darkMode"
+                type="checkbox"
+                checked
+            >
+
+        </label>
+
+
+        <!-- AUTO SAVE -->
+
+        <label
+            class="setting-row"
+            for="autoSave"
+        >
+
+            <span
+                class="setting-row-info"
+            >
+
+                <span
+                    class="setting-row-icon"
+                >
+
+                    <i class="ri-save-3-line"></i>
+
+                </span>
+
+
+                <span>
+
+                    <strong>
+                        Auto Save
+                    </strong>
+
+                    <small>
+                        Remember your reading position
+                    </small>
+
+                </span>
+
+            </span>
+
+
+            <input
+                id="autoSave"
+                type="checkbox"
+                checked
+            >
+
+        </label>
+
+    </section>
+
+</aside>
+
+
+
+<!-- ==================================================
+                    THUMBNAIL PANEL
+================================================== -->
+
+<aside
+    id="thumbnailPanel"
+    class="side-panel thumbnail-panel"
+    hidden
+    aria-hidden="true"
+>
+
+
+    <div
+        class="panel-header"
+    >
+
+        <div>
+
+            <span class="panel-kicker">
+                PAGES
+            </span>
+
+            <h2>
+                Thumbnails
+            </h2>
+
+        </div>
+
+
+        <button
+            id="thumbnailCloseBtn"
+            class="panel-close-button"
+            type="button"
+            title="Close Thumbnails"
+            aria-label="Close thumbnails"
+        >
+
+            <i class="ri-close-line"></i>
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="thumbnailList"
+        class="thumbnail-list"
+    >
+
+        <!-- JS will create thumbnails here -->
+
+    </div>
+
+</aside>
+
+
+
+<!-- ==================================================
+                    COMMENTS PANEL
+================================================== -->
+
+<aside
+    id="commentsPanel"
+    class="side-panel comments-panel"
+    hidden
+    aria-hidden="true"
+>
+
+
+    <div
+        class="panel-header"
+    >
+
+        <div>
+
+            <span class="panel-kicker">
+                COMMUNITY
+            </span>
+
+            <h2>
+                Comments
+            </h2>
+
+        </div>
+
+
+        <button
+            id="commentsCloseBtn"
+            class="panel-close-button"
+            type="button"
+            title="Close Comments"
+            aria-label="Close comments"
+        >
+
+            <i class="ri-close-line"></i>
+
+        </button>
+
+    </div>
+
+
+
+    <!-- COMMENT LIST -->
+
+    <div
+        id="commentsList"
+        class="comments-list"
+    >
+
+        <div
+            id="commentsEmpty"
+            class="panel-empty"
+        >
+
+            <i class="ri-chat-3-line"></i>
+
+            <p>
+                No comments yet
+            </p>
+
+            <span>
+                Be the first to leave a comment.
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- COMMENT FORM -->
+
+    <form
+        id="commentForm"
+        class="comment-form"
+    >
+
+
+        <label
+            for="commentName"
+        >
+            Your Name
+        </label>
+
+
+        <input
+            id="commentName"
+            type="text"
+            placeholder="Enter your name"
+            maxlength="40"
+            autocomplete="name"
+        >
+
+
+        <label
+            for="commentText"
+        >
+            Comment
+        </label>
+
+
+        <textarea
+            id="commentText"
+            placeholder="Write your comment..."
+            maxlength="500"
+            rows="4"
+        ></textarea>
+
+
+        <div
+            class="comment-form-footer"
+        >
+
+            <span
+                id="commentCharacters"
+            >
+                0 / 500
+            </span>
 
 
             <button
-                id="settingsClose"
-                type="button"
-                class="closeButton">
+                id="postCommentBtn"
+                class="primary-button"
+                type="submit"
+            >
 
-                <i class="ri-close-line"></i>
+                <i class="ri-send-plane-fill"></i>
+
+                Post Comment
 
             </button>
 
         </div>
 
+    </form>
 
-        <div class="settingsSection">
-
-            <h4>
-                Page View
-            </h4>
+</aside>
 
 
-            <div class="settingsOptions">
 
-                <button
-                    id="singlePageBtn"
-                    type="button"
-                    class="settingOption active">
-
-                    <i class="ri-file-line"></i>
-
-                    1 Page
-
-                </button>
-
-
-                <button
-                    id="doublePageBtn"
-                    type="button"
-                    class="settingOption">
-
-                    <i class="ri-book-2-line"></i>
-
-                    2 Pages
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="settingsSection">
-
-            <h4>
-                Theme
-            </h4>
-
-
-            <div class="settingsOptions themeOptions">
-
-                <button
-                    id="lightThemeBtn"
-                    type="button"
-                    data-theme="light"
-                    class="settingOption">
-
-                    ☀️ Light
-
-                </button>
-
-
-                <button
-                    id="darkThemeBtn"
-                    type="button"
-                    data-theme="dark"
-                    class="settingOption active">
-
-                    🌙 Dark
-
-                </button>
-
-
-                <button
-                    id="maroonThemeBtn"
-                    type="button"
-                    data-theme="maroon"
-                    class="settingOption maroonOption">
-
-                    🟤 Maroon
-
-                </button>
-
-
-                <button
-                    id="goldThemeBtn"
-                    type="button"
-                    data-theme="gold"
-                    class="settingOption goldOption">
-
-                    🟡 Golden
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-    </aside>
-
-
-    <!--==================================================
+<!-- ==================================================
                     SHARE MODAL
-    ==================================================-->
+================================================== -->
+
+<div
+    id="shareModal"
+    class="modal-overlay"
+    hidden
+    aria-hidden="true"
+>
+
 
     <div
-        id="shareModal"
-        class="modal">
+        class="share-box"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="shareTitle"
+    >
 
 
-        <div class="shareBox">
+        <!-- CLOSE -->
+
+        <button
+            id="shareCloseBtn"
+            class="close-button"
+            type="button"
+            title="Close Share"
+            aria-label="Close share dialog"
+        >
+
+            <i class="ri-close-line"></i>
+
+        </button>
+
+
+        <!-- ICON -->
+
+        <div
+            class="share-icon"
+        >
+
+            <i class="ri-share-forward-fill"></i>
+
+        </div>
+
+
+        <h2
+            id="shareTitle"
+        >
+            Share Book
+        </h2>
+
+
+        <p>
+            Share this book with others.
+        </p>
+
+
+
+        <!-- SHARE BUTTONS -->
+
+        <div
+            class="share-buttons"
+        >
+
 
             <button
-                id="shareClose"
-                class="closeButton"
-                type="button">
+                id="copyLinkBtn"
+                type="button"
+            >
 
-                <i class="ri-close-line"></i>
+                <i class="ri-link"></i>
+
+                <span>
+                    Copy Link
+                </span>
 
             </button>
 
 
-            <h3>
-                Share Book
-            </h3>
+            <button
+                id="nativeShareBtn"
+                type="button"
+            >
 
+                <i class="ri-share-forward-line"></i>
 
-            <div class="shareButtons">
-
-                <button
-                    id="copyLinkBtn"
-                    type="button">
-
-                    <i class="ri-link"></i>
-
-                    Copy Link
-
-                </button>
-
-
-                <button
-                    id="nativeShareBtn"
-                    type="button">
-
-                    <i class="ri-share-forward-line"></i>
-
+                <span>
                     Share
+                </span>
 
-                </button>
-
-            </div>
+            </button>
 
         </div>
 
     </div>
 
+</div>
 
-    <!--==================================================
-                    TOAST
-    ==================================================-->
+
+
+<!-- ==================================================
+                    PANEL BACKDROP
+================================================== -->
+
+<div
+    id="panelBackdrop"
+    class="panel-backdrop"
+    hidden
+></div>
+<!-- ==================================================
+                    READER FOOTER
+================================================== -->
+
+<footer
+    id="readerFooter"
+    class="reader-footer"
+>
+
+
+    <!-- ==================================================
+                    FOOTER LEFT
+    ================================================== -->
 
     <div
-        id="toast"
-        class="toast">
+        class="footer-left"
+    >
+
+        <span
+            id="pageInfo"
+        >
+            Page 1 of 0
+        </span>
 
     </div>
 
 
-    <!-- READER JS -->
 
-    <script src="reader.js"></script>
+    <!-- ==================================================
+                    FOOTER CENTER
+    ================================================== -->
+
+    <div
+        class="footer-center"
+    >
+
+        <button
+            id="previousPage"
+            class="footer-button"
+            type="button"
+            title="Previous Page"
+            aria-label="Previous page"
+        >
+
+            <i class="ri-arrow-left-s-line"></i>
+
+        </button>
+
+
+        <button
+            id="nextPage"
+            class="footer-button"
+            type="button"
+            title="Next Page"
+            aria-label="Next page"
+        >
+
+            <i class="ri-arrow-right-s-line"></i>
+
+        </button>
+
+    </div>
+
+
+
+    <!-- ==================================================
+                    FOOTER RIGHT
+    ================================================== -->
+
+    <div
+        class="footer-right"
+    >
+
+        <!-- LIKE -->
+
+        <button
+            id="likeBtn"
+            class="footer-action"
+            type="button"
+            title="Like Book"
+            aria-label="Like book"
+        >
+
+            <i class="ri-heart-line"></i>
+
+            <span
+                id="likeCount"
+            >
+                0
+            </span>
+
+        </button>
+
+
+        <!-- SHARE -->
+
+        <button
+            id="shareBtn"
+            class="footer-action"
+            type="button"
+            title="Share Book"
+            aria-label="Share book"
+        >
+
+            <i class="ri-share-line"></i>
+
+        </button>
+
+    </div>
+
+</footer>
+
+
+
+<!-- ==================================================
+                READER TRANSITION LAYER
+================================================== -->
+
+<div
+    id="readerTransition"
+    class="reader-transition"
+    hidden
+    aria-hidden="true"
+>
+
+    <div
+        class="transition-book"
+    >
+
+        <div class="transition-page"></div>
+
+        <div class="transition-page"></div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================================================
+                TOAST NOTIFICATION
+================================================== -->
+
+<div
+    id="toast"
+    class="toast"
+    hidden
+    role="status"
+    aria-live="polite"
+>
+
+    <i
+        id="toastIcon"
+        class="ri-information-line"
+    ></i>
+
+
+    <span
+        id="toastMessage"
+    >
+        Ready
+    </span>
+
+</div>
+
+
+
+<!-- ==================================================
+                READER APP CLOSE
+================================================== -->
+
+</div>
+
+
+<!-- ==================================================
+                READER JAVASCRIPT
+================================================== -->
+
+<script
+    src="reader.js"
+    defer
+></script>
+
+
+<!-- ==================================================
+                    HTML END
+================================================== -->
 
 </body>
 
-</html>
+</html>    
+    
