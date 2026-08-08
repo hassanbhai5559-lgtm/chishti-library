@@ -8884,3 +8884,5304 @@ document.addEventListener(
 
     }
 );
+/*==================================================
+        CHISHTI LIBRARY READER
+        JAVASCRIPT PART 10 / 14
+
+        READER SETTINGS
+        DARK MODE
+        MAROON THEME
+        GOLD THEME
+        PAGE SHADOW
+        AUTO SAVE
+
+        NOTE:
+        PAGE ANIMATION SETTING INTENTIONALLY
+        NOT INCLUDED.
+==================================================*/
+
+
+/*==================================================
+                THEME STATE
+==================================================*/
+
+const ThemeState = {
+
+    current:
+        "dark"
+
+};
+
+
+/*==================================================
+                AVAILABLE THEMES
+==================================================*/
+
+const READER_THEMES = [
+
+    "dark",
+
+    "maroon",
+
+    "gold"
+
+];
+
+
+/*==================================================
+                SET READER THEME
+==================================================*/
+
+function setReaderTheme(
+    theme
+){
+
+    theme =
+        String(
+            theme ||
+            "dark"
+        )
+        .toLowerCase()
+        .trim();
+
+
+    /*
+        Invalid theme aaye to dark use hoga.
+    */
+
+    if(
+        !READER_THEMES.includes(
+            theme
+        )
+    ){
+
+        theme =
+            "dark";
+
+    }
+
+
+    /*
+        Purane themes remove.
+    */
+
+    document.body.classList.remove(
+        "theme-dark",
+        "theme-maroon",
+        "theme-gold"
+    );
+
+
+    /*
+        Naya theme add.
+    */
+
+    document.body.classList.add(
+        `theme-${theme}`
+    );
+
+
+    ThemeState.current =
+        theme;
+
+
+    /*
+        ReaderState ke saath bhi sync.
+    */
+
+    ReaderState.theme =
+        theme;
+
+
+    /*
+        Dark mode checkbox ko theme ke
+        according update karna.
+    */
+
+    if(
+        exists(
+            DOM.darkMode
+        )
+    ){
+
+        DOM.darkMode.checked =
+            theme === "dark";
+
+    }
+
+
+    /*
+        Saved theme.
+    */
+
+    saveData(
+        STORAGE.theme,
+        theme
+    );
+
+
+    updateThemeButtons();
+
+}
+
+
+/*==================================================
+                LOAD SAVED THEME
+==================================================*/
+
+function loadSavedTheme(){
+
+    const saved =
+        loadData(
+            STORAGE.theme,
+            "dark"
+        );
+
+
+    setReaderTheme(
+        saved
+    );
+
+}
+
+
+/*==================================================
+                DARK MODE
+==================================================*/
+
+function setDarkMode(
+    enabled
+){
+
+    if(enabled){
+
+        setReaderTheme(
+            "dark"
+        );
+
+    }else{
+
+        /*
+            Dark mode off karne par gold theme
+            fallback rahegi, taake reader blank
+            ya unstyled na ho.
+        */
+
+        setReaderTheme(
+            "gold"
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                DARK MODE BUTTON
+==================================================*/
+
+function bindDarkMode(){
+
+    if(
+        !exists(
+            DOM.darkMode
+        )
+    ){
+
+        return;
+
+    }
+
+
+    DOM.darkMode.addEventListener(
+        "change",
+        function(){
+
+            setDarkMode(
+                this.checked
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                THEME BUTTONS
+==================================================*/
+
+function updateThemeButtons(){
+
+    const buttons =
+        $$(
+            [
+                "[data-theme]",
+                "#darkThemeBtn",
+                "#maroonThemeBtn",
+                "#goldThemeBtn"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            let theme =
+                button.dataset.theme;
+
+
+            /*
+                IDs se theme detect.
+            */
+
+            if(
+                !theme &&
+                button.id
+            ){
+
+                if(
+                    button.id ===
+                    "darkThemeBtn"
+                ){
+
+                    theme =
+                        "dark";
+
+                }else if(
+                    button.id ===
+                    "maroonThemeBtn"
+                ){
+
+                    theme =
+                        "maroon";
+
+                }else if(
+                    button.id ===
+                    "goldThemeBtn"
+                ){
+
+                    theme =
+                        "gold";
+
+                }
+
+            }
+
+
+            if(!theme){
+
+                return;
+
+            }
+
+
+            const active =
+                theme ===
+                ThemeState.current;
+
+
+            button.classList.toggle(
+                "active",
+                active
+            );
+
+
+            button.setAttribute(
+                "aria-pressed",
+                active
+                    ? "true"
+                    : "false"
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                BIND THEME BUTTONS
+==================================================*/
+
+function bindThemeButtons(){
+
+    const buttons =
+        $$(
+            [
+                "[data-theme]",
+                "#darkThemeBtn",
+                "#maroonThemeBtn",
+                "#goldThemeBtn"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    let theme =
+                        this.dataset.theme;
+
+
+                    if(
+                        !theme &&
+                        this.id
+                    ){
+
+                        if(
+                            this.id ===
+                            "darkThemeBtn"
+                        ){
+
+                            theme =
+                                "dark";
+
+                        }else if(
+                            this.id ===
+                            "maroonThemeBtn"
+                        ){
+
+                            theme =
+                                "maroon";
+
+                        }else if(
+                            this.id ===
+                            "goldThemeBtn"
+                        ){
+
+                            theme =
+                                "gold";
+
+                        }
+
+                    }
+
+
+                    if(theme){
+
+                        setReaderTheme(
+                            theme
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                CREATE THEME BUTTONS
+==================================================*/
+
+function createThemeButtons(){
+
+    /*
+        Agar HTML mein buttons already hain,
+        naye buttons create nahi karne.
+    */
+
+    const existing =
+        $$(
+            "[data-theme]"
+        );
+
+
+    if(
+        existing.length > 0
+    ){
+
+        updateThemeButtons();
+
+        return;
+
+    }
+
+
+    const settingsPanel =
+        findPanel(
+            "settings"
+        );
+
+
+    if(!settingsPanel){
+
+        return;
+
+    }
+
+
+    const container =
+        settingsPanel.querySelector(
+            ".theme-buttons, .theme-options"
+        );
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+        <div class="theme-buttons">
+
+            <button
+                type="button"
+                class="theme-button"
+                id="darkThemeBtn"
+                data-theme="dark"
+                aria-label="Dark theme"
+            >
+                <span class="theme-dot theme-dot-dark"></span>
+                <span>Dark</span>
+            </button>
+
+            <button
+                type="button"
+                class="theme-button"
+                id="maroonThemeBtn"
+                data-theme="maroon"
+                aria-label="Maroon theme"
+            >
+                <span class="theme-dot theme-dot-maroon"></span>
+                <span>Maroon</span>
+            </button>
+
+            <button
+                type="button"
+                class="theme-button"
+                id="goldThemeBtn"
+                data-theme="gold"
+                aria-label="Gold theme"
+            >
+                <span class="theme-dot theme-dot-gold"></span>
+                <span>Gold</span>
+            </button>
+
+        </div>
+    `;
+
+
+    /*
+        Newly created buttons bind.
+    */
+
+    bindThemeButtons();
+
+    updateThemeButtons();
+
+}
+
+
+/*==================================================
+                PAGE SHADOW
+==================================================*/
+
+function setPageShadow(
+    enabled
+){
+
+    ReaderState.pageShadow =
+        Boolean(
+            enabled
+        );
+
+
+    document.body.classList.toggle(
+        "no-page-shadow",
+        !ReaderState.pageShadow
+    );
+
+
+    document.body.classList.toggle(
+        "page-shadow-enabled",
+        ReaderState.pageShadow
+    );
+
+
+    saveData(
+        STORAGE.pageShadow,
+        ReaderState.pageShadow
+    );
+
+
+    if(
+        exists(
+            DOM.pageShadow
+        )
+    ){
+
+        DOM.pageShadow.checked =
+            ReaderState.pageShadow;
+
+    }
+
+}
+
+
+/*==================================================
+                LOAD PAGE SHADOW
+==================================================*/
+
+function loadPageShadow(){
+
+    const saved =
+        loadData(
+            STORAGE.pageShadow,
+            true
+        );
+
+
+    setPageShadow(
+        saved !== false
+    );
+
+}
+
+
+/*==================================================
+                PAGE SHADOW EVENT
+==================================================*/
+
+function bindPageShadow(){
+
+    if(
+        !exists(
+            DOM.pageShadow
+        )
+    ){
+
+        return;
+
+    }
+
+
+    DOM.pageShadow.addEventListener(
+        "change",
+        function(){
+
+            setPageShadow(
+                this.checked
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                AUTO SAVE
+==================================================*/
+
+function setAutoSave(
+    enabled
+){
+
+    ReaderState.autoSave =
+        Boolean(
+            enabled
+        );
+
+
+    saveData(
+        STORAGE.autoSave,
+        ReaderState.autoSave
+    );
+
+
+    if(
+        exists(
+            DOM.autoSave
+        )
+    ){
+
+        DOM.autoSave.checked =
+            ReaderState.autoSave;
+
+    }
+
+
+    /*
+        Auto-save off hone par immediate
+        page/theme etc save calls internally
+        safely ignore karenge.
+    */
+
+}
+
+
+/*==================================================
+                LOAD AUTO SAVE
+==================================================*/
+
+function loadAutoSave(){
+
+    const saved =
+        loadData(
+            STORAGE.autoSave,
+            true
+        );
+
+
+    ReaderState.autoSave =
+        saved !== false;
+
+
+    if(
+        exists(
+            DOM.autoSave
+        )
+    ){
+
+        DOM.autoSave.checked =
+            ReaderState.autoSave;
+
+    }
+
+}
+
+
+/*==================================================
+                AUTO SAVE EVENT
+==================================================*/
+
+function bindAutoSave(){
+
+    if(
+        !exists(
+            DOM.autoSave
+        )
+    ){
+
+        return;
+
+    }
+
+
+    DOM.autoSave.addEventListener(
+        "change",
+        function(){
+
+            setAutoSave(
+                this.checked
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                SETTINGS RESET
+==================================================*/
+
+function resetReaderSettings(){
+
+    /*
+        Default values.
+    */
+
+    setReaderTheme(
+        "dark"
+    );
+
+
+    setPageShadow(
+        true
+    );
+
+
+    setAutoSave(
+        true
+    );
+
+
+    /*
+        Zoom reset.
+    */
+
+    if(
+        typeof resetZoom ===
+        "function"
+    ){
+
+        resetZoom();
+
+    }
+
+
+    showToast(
+        "Reader settings restored.",
+        "success"
+    );
+
+}
+
+
+/*==================================================
+                RESET SETTINGS BUTTON
+==================================================*/
+
+function bindSettingsReset(){
+
+    const buttons =
+        $$(
+            [
+                "#resetSettingsBtn",
+                "[data-action='reset-settings']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    resetReaderSettings();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                SETTINGS TOGGLE
+==================================================*/
+
+function bindSettingsPanel(){
+
+    const buttons =
+        $$(
+            [
+                "#settingsBtn",
+                "[data-panel='settings']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    openSettingsPanel();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                SETTINGS INITIALIZATION
+==================================================*/
+
+function initializeReaderSettings(){
+
+    loadAutoSave();
+
+    loadPageShadow();
+
+    loadSavedTheme();
+
+    bindDarkMode();
+
+    bindPageShadow();
+
+    bindAutoSave();
+
+    bindThemeButtons();
+
+    createThemeButtons();
+
+    bindSettingsReset();
+
+    bindSettingsPanel();
+
+    updateThemeButtons();
+
+
+    console.log(
+        "Chishti Reader: Settings initialized."
+    );
+
+}
+
+
+/*==================================================
+                DOM READY
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        initializeReaderSettings();
+
+    }
+);
+/*==================================================
+        CHISHTI LIBRARY READER
+        JAVASCRIPT PART 11 / 14
+
+        CONTENTS / TOC
+        SIDEBAR NAVIGATION
+        THUMBNAILS
+        PAGE NAVIGATION SYNC
+==================================================*/
+
+
+/*==================================================
+                CONTENTS STATE
+==================================================*/
+
+const ContentsState = {
+
+    open:
+        false,
+
+    items:
+        [],
+
+    active:
+        -1
+
+};
+
+
+/*==================================================
+                GET CONTENTS CONTAINER
+==================================================*/
+
+function getContentsContainer(){
+
+    const selectors = [
+
+        "#contentsList",
+
+        "#tocList",
+
+        ".contents-list",
+
+        ".toc-list",
+
+        "#tableOfContents",
+
+        ".table-of-contents"
+
+    ];
+
+
+    for(
+        const selector of selectors
+    ){
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if(element){
+
+            return element;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/*==================================================
+                BUILD CONTENTS
+==================================================*/
+
+function buildContents(){
+
+    const container =
+        getContentsContainer();
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    ContentsState.items =
+        [];
+
+
+    /*
+        Book pages ke headings find karna.
+    */
+
+    const pages =
+        getPageElements();
+
+
+    pages.forEach(
+        (
+            page,
+            index
+        ) => {
+
+            const pageNumber =
+                parseInt(
+                    page.dataset.page ||
+                    page.dataset.pageNumber ||
+                    index + 1,
+                    10
+                );
+
+
+            const headings =
+                page.querySelectorAll(
+                    "h1, h2, h3"
+                );
+
+
+            if(
+                headings.length === 0
+            ){
+
+                /*
+                    Heading na ho to page ko
+                    normal contents item ke taur
+                    par add kar sakte hain.
+                */
+
+                ContentsState.items.push({
+
+                    page:
+                        pageNumber,
+
+                    title:
+                        `Page ${pageNumber}`,
+
+                    level:
+                        1
+
+                });
+
+
+                return;
+
+            }
+
+
+            headings.forEach(
+                heading => {
+
+                    const title =
+                        heading.textContent
+                            .trim();
+
+
+                    if(!title){
+
+                        return;
+
+                    }
+
+
+                    const level =
+                        Math.min(
+                            3,
+                            Math.max(
+                                1,
+                                parseInt(
+                                    heading.tagName
+                                        .replace(
+                                            "H",
+                                            ""
+                                        ),
+                                    10
+                                )
+                            )
+                        );
+
+
+                    ContentsState.items.push({
+
+                        page:
+                            pageNumber,
+
+                        title:
+                            title,
+
+                        level:
+                            level
+
+                    });
+
+                }
+            );
+
+        }
+    );
+
+
+    renderContents();
+
+}
+
+
+/*==================================================
+                RENDER CONTENTS
+==================================================*/
+
+function renderContents(){
+
+    const container =
+        getContentsContainer();
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    if(
+        ContentsState.items.length === 0
+    ){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.className =
+            "empty-state";
+
+
+        empty.textContent =
+            "No contents available.";
+
+
+        container.appendChild(
+            empty
+        );
+
+
+        return;
+
+    }
+
+
+    ContentsState.items.forEach(
+        (
+            item,
+            index
+        ) => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "contents-item";
+
+
+            button.dataset.page =
+                item.page;
+
+
+            button.dataset.contentsIndex =
+                index;
+
+
+            button.style.setProperty(
+                "--contents-level",
+                item.level
+            );
+
+
+            button.innerHTML = `
+                <span class="contents-page">
+                    ${item.page}
+                </span>
+
+                <span class="contents-title">
+                    ${escapeHTML(
+                        item.title
+                    )}
+                </span>
+
+                <i class="ri-arrow-right-s-line"></i>
+            `;
+
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    goToPage(
+                        item.page
+                    );
+
+
+                    updateContentsActive();
+
+                }
+            );
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+
+    updateContentsActive();
+
+}
+
+
+/*==================================================
+                UPDATE CONTENTS ACTIVE
+==================================================*/
+
+function updateContentsActive(){
+
+    const container =
+        getContentsContainer();
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    const items =
+        container.querySelectorAll(
+            ".contents-item"
+        );
+
+
+    let closestIndex =
+        -1;
+
+
+    items.forEach(
+        (
+            item,
+            index
+        ) => {
+
+            const page =
+                parseInt(
+                    item.dataset.page,
+                    10
+                );
+
+
+            const active =
+                page ===
+                ReaderState.currentPage;
+
+
+            item.classList.toggle(
+                "active",
+                active
+            );
+
+
+            if(
+                page <=
+                ReaderState.currentPage
+            ){
+
+                closestIndex =
+                    index;
+
+            }
+
+        }
+    );
+
+
+    ContentsState.active =
+        closestIndex;
+
+}
+
+
+/*==================================================
+                OPEN CONTENTS
+==================================================*/
+
+function openContents(){
+
+    const panel =
+        findPanel(
+            "contents"
+        );
+
+
+    if(panel){
+
+        openPanel(
+            panel
+        );
+
+    }
+
+
+    ContentsState.open =
+        true;
+
+
+    updateContentsActive();
+
+}
+
+
+/*==================================================
+                CLOSE CONTENTS
+==================================================*/
+
+function closeContents(){
+
+    const panel =
+        findPanel(
+            "contents"
+        );
+
+
+    if(panel){
+
+        closePanel(
+            panel
+        );
+
+    }
+
+
+    ContentsState.open =
+        false;
+
+}
+
+
+/*==================================================
+                CONTENTS BUTTON
+==================================================*/
+
+function bindContentsButton(){
+
+    const buttons =
+        $$(
+            [
+                "#contentsBtn",
+                "#tocBtn",
+                "[data-action='contents']",
+                "[data-panel='contents']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    openContents();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                THUMBNAILS
+==================================================*/
+
+function getThumbnailContainer(){
+
+    const selectors = [
+
+        "#thumbnailList",
+
+        "#thumbnailsList",
+
+        ".thumbnail-list",
+
+        ".thumbnails-list",
+
+        "#thumbnails",
+
+        ".thumbnails"
+
+    ];
+
+
+    for(
+        const selector of selectors
+    ){
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if(element){
+
+            return element;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/*==================================================
+                BUILD THUMBNAILS
+==================================================*/
+
+function buildThumbnails(){
+
+    const container =
+        getThumbnailContainer();
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const pages =
+        getPageElements();
+
+
+    pages.forEach(
+        (
+            page,
+            index
+        ) => {
+
+            const pageNumber =
+                parseInt(
+                    page.dataset.page ||
+                    page.dataset.pageNumber ||
+                    index + 1,
+                    10
+                );
+
+
+            const thumbnail =
+                document.createElement(
+                    "button"
+                );
+
+
+            thumbnail.type =
+                "button";
+
+
+            thumbnail.className =
+                "page-thumbnail";
+
+
+            thumbnail.dataset.page =
+                pageNumber;
+
+
+            /*
+                Page ka visual clone.
+            */
+
+            const preview =
+                page.cloneNode(
+                    true
+                );
+
+
+            preview
+                .querySelectorAll(
+                    "script, style, button, input, textarea, select"
+                )
+                .forEach(
+                    element =>
+                        element.remove()
+                );
+
+
+            preview.classList.add(
+                "thumbnail-preview"
+            );
+
+
+            const number =
+                document.createElement(
+                    "span"
+                );
+
+
+            number.className =
+                "thumbnail-number";
+
+
+            number.textContent =
+                pageNumber;
+
+
+            thumbnail.appendChild(
+                preview
+            );
+
+
+            thumbnail.appendChild(
+                number
+            );
+
+
+            thumbnail.addEventListener(
+                "click",
+                function(){
+
+                    goToPage(
+                        pageNumber
+                    );
+
+
+                    updateThumbnailActive();
+
+                }
+            );
+
+
+            container.appendChild(
+                thumbnail
+            );
+
+        }
+    );
+
+
+    updateThumbnailActive();
+
+}
+
+
+/*==================================================
+                UPDATE THUMBNAIL ACTIVE
+==================================================*/
+
+function updateThumbnailActive(){
+
+    const container =
+        getThumbnailContainer();
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    const thumbnails =
+        container.querySelectorAll(
+            ".page-thumbnail"
+        );
+
+
+    thumbnails.forEach(
+        thumbnail => {
+
+            const page =
+                parseInt(
+                    thumbnail.dataset.page,
+                    10
+                );
+
+
+            thumbnail.classList.toggle(
+                "active",
+                page ===
+                ReaderState.currentPage
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                OPEN THUMBNAILS
+==================================================*/
+
+function openThumbnails(){
+
+    const panel =
+        findPanel(
+            "thumbnails"
+        );
+
+
+    if(panel){
+
+        openPanel(
+            panel
+        );
+
+    }
+
+
+    updateThumbnailActive();
+
+}
+
+
+/*==================================================
+                THUMBNAIL BUTTON
+==================================================*/
+
+function bindThumbnailButton(){
+
+    if(
+        exists(
+            DOM.thumbnailBtn
+        )
+    ){
+
+        DOM.thumbnailBtn.addEventListener(
+            "click",
+            function(){
+
+                openThumbnails();
+
+            }
+        );
+
+    }
+
+
+    const buttons =
+        $$(
+            [
+                "#thumbnailsBtn",
+                "[data-action='thumbnails']",
+                "[data-panel='thumbnails']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    openThumbnails();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                COMMENTS PANEL
+==================================================*/
+
+function openComments(){
+
+    const panel =
+        findPanel(
+            "comments"
+        );
+
+
+    if(panel){
+
+        openPanel(
+            panel
+        );
+
+    }
+
+
+    renderComments();
+
+}
+
+
+/*==================================================
+                COMMENTS BUTTON
+==================================================*/
+
+function bindCommentsButton(){
+
+    if(
+        exists(
+            DOM.commentsBtn
+        )
+    ){
+
+        DOM.commentsBtn.addEventListener(
+            "click",
+            function(){
+
+                openComments();
+
+            }
+        );
+
+    }
+
+
+    const buttons =
+        $$(
+            [
+                "#openCommentsBtn",
+                "[data-action='comments']",
+                "[data-panel='comments']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    openComments();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                PAGE COUNTER SYNC
+==================================================*/
+
+function updatePageNavigationUI(){
+
+    const current =
+        ReaderState.currentPage;
+
+
+    const total =
+        getTotalPages();
+
+
+    /*
+        Top page counter.
+    */
+
+    if(
+        exists(
+            DOM.currentPage
+        )
+    ){
+
+        setText(
+            DOM.currentPage,
+            current
+        );
+
+    }
+
+
+    if(
+        exists(
+            DOM.totalPages
+        )
+    ){
+
+        setText(
+            DOM.totalPages,
+            total
+        );
+
+    }
+
+
+    /*
+        Footer page information.
+    */
+
+    if(
+        exists(
+            DOM.pageInfo
+        )
+    ){
+
+        setText(
+            DOM.pageInfo,
+            `Page ${current} of ${total}`
+        );
+
+    }
+
+
+    /*
+        Disable buttons at first/last page.
+    */
+
+    const previousButtons =
+        $$(
+            [
+                "#prevBtn",
+                "#previousPage"
+            ].join(",")
+        );
+
+
+    previousButtons.forEach(
+        button => {
+
+            button.disabled =
+                current <= 1;
+
+        }
+    );
+
+
+    const nextButtons =
+        $$(
+            [
+                "#nextBtn",
+                "#nextPage"
+            ].join(",")
+        );
+
+
+    nextButtons.forEach(
+        button => {
+
+            button.disabled =
+                current >= total;
+
+        }
+    );
+
+
+    updateContentsActive();
+
+    updateThumbnailActive();
+
+    updateBookmarkButton();
+
+}
+
+
+/*==================================================
+                PREVIOUS PAGE BUTTONS
+==================================================*/
+
+function bindPreviousPageButtons(){
+
+    const buttons =
+        $$(
+            [
+                "#prevBtn",
+                "#previousPage"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    if(
+                        ReaderState.currentPage >
+                        1
+                    ){
+
+                        goToPage(
+                            ReaderState.currentPage -
+                            1
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                NEXT PAGE BUTTONS
+==================================================*/
+
+function bindNextPageButtons(){
+
+    const buttons =
+        $$(
+            [
+                "#nextBtn",
+                "#nextPage"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    const total =
+                        getTotalPages();
+
+
+                    if(
+                        ReaderState.currentPage <
+                        total
+                    ){
+
+                        goToPage(
+                            ReaderState.currentPage +
+                            1
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                KEYBOARD PAGE NAVIGATION
+==================================================*/
+
+function bindPageKeyboard(){
+
+    document.addEventListener(
+        "keydown",
+        function(event){
+
+            const target =
+                event.target;
+
+
+            if(
+                target &&
+                (
+                    target.tagName ===
+                    "INPUT" ||
+
+                    target.tagName ===
+                    "TEXTAREA" ||
+
+                    target.tagName ===
+                    "SELECT" ||
+
+                    target.isContentEditable
+                )
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                event.key ===
+                "ArrowLeft"
+            ){
+
+                if(
+                    ReaderState.currentPage >
+                    1
+                ){
+
+                    goToPage(
+                        ReaderState.currentPage -
+                        1
+                    );
+
+                }
+
+            }
+
+
+            if(
+                event.key ===
+                "ArrowRight"
+            ){
+
+                const total =
+                    getTotalPages();
+
+
+                if(
+                    ReaderState.currentPage <
+                    total
+                ){
+
+                    goToPage(
+                        ReaderState.currentPage +
+                        1
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                PAGE CHANGE EVENT
+==================================================*/
+
+function bindPageChangeSync(){
+
+    /*
+        Existing reader events ke saath
+        UI ko sync rakhne ke liye small observer.
+    */
+
+    let lastPage =
+        ReaderState.currentPage;
+
+
+    setInterval(
+        function(){
+
+            if(
+                ReaderState.currentPage !==
+                lastPage
+            ){
+
+                lastPage =
+                    ReaderState.currentPage;
+
+
+                updatePageNavigationUI();
+
+            }
+
+        },
+        120
+    );
+
+}
+
+
+/*==================================================
+                BUILD ALL NAVIGATION
+==================================================*/
+
+function initializeNavigationPanels(){
+
+    buildContents();
+
+    buildThumbnails();
+
+    bindContentsButton();
+
+    bindThumbnailButton();
+
+    bindCommentsButton();
+
+    bindPreviousPageButtons();
+
+    bindNextPageButtons();
+
+    bindPageKeyboard();
+
+    bindPageChangeSync();
+
+    updatePageNavigationUI();
+
+
+    console.log(
+        "Chishti Reader: Navigation initialized."
+    );
+
+}
+
+
+/*==================================================
+                DOM READY
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        initializeNavigationPanels();
+
+    }
+);
+/*==================================================
+        CHISHTI LIBRARY READER
+        JAVASCRIPT PART 12 / 14
+
+        BOOKMARK SYSTEM
+        ADD BOOKMARK
+        REMOVE BOOKMARK
+        SAVED BOOKMARKS
+        BOOKMARK PANEL
+==================================================*/
+
+
+/*==================================================
+                BOOKMARK STATE
+==================================================*/
+
+const BookmarkState = {
+
+    items:
+        [],
+
+    current:
+        false
+
+};
+
+
+/*==================================================
+                GET BOOKMARK STORAGE KEY
+==================================================*/
+
+function getBookmarkStorageKey(){
+
+    const bookId =
+        getBookStorageId();
+
+
+    return `${STORAGE.bookmarks}_${bookId}`;
+
+}
+
+
+/*==================================================
+                LOAD BOOKMARKS
+==================================================*/
+
+function loadBookmarks(){
+
+    const saved =
+        loadData(
+            getBookmarkStorageKey(),
+            []
+        );
+
+
+    if(
+        Array.isArray(
+            saved
+        )
+    ){
+
+        BookmarkState.items =
+            saved;
+
+    }else{
+
+        BookmarkState.items =
+            [];
+
+    }
+
+
+    updateCurrentBookmark();
+
+    renderBookmarks();
+
+}
+
+
+/*==================================================
+                SAVE BOOKMARKS
+==================================================*/
+
+function saveBookmarks(){
+
+    saveData(
+        getBookmarkStorageKey(),
+        BookmarkState.items
+    );
+
+}
+
+
+/*==================================================
+                CHECK CURRENT BOOKMARK
+==================================================*/
+
+function updateCurrentBookmark(){
+
+    const current =
+        ReaderState.currentPage;
+
+
+    BookmarkState.current =
+        BookmarkState.items.some(
+            bookmark =>
+                Number(
+                    bookmark.page
+                ) ===
+                Number(
+                    current
+                )
+        );
+
+
+    updateBookmarkButton();
+
+}
+
+
+/*==================================================
+                UPDATE BOOKMARK BUTTON
+==================================================*/
+
+function updateBookmarkButton(){
+
+    const buttons =
+        $$(
+            [
+                "#bookmarkBtn",
+                "#addBookmarkBtn",
+                ".bookmark-button",
+                "[data-action='bookmark']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.classList.toggle(
+                "active",
+                BookmarkState.current
+            );
+
+
+            button.classList.toggle(
+                "bookmarked",
+                BookmarkState.current
+            );
+
+
+            button.setAttribute(
+                "aria-pressed",
+                BookmarkState.current
+                    ? "true"
+                    : "false"
+            );
+
+
+            const icon =
+                button.querySelector(
+                    "i"
+                );
+
+
+            if(icon){
+
+                icon.className =
+                    BookmarkState.current
+                        ? "ri-bookmark-fill"
+                        : "ri-bookmark-line";
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                GET BOOKMARK TITLE
+==================================================*/
+
+function getBookmarkTitle(
+    page
+){
+
+    const pages =
+        getPageElements();
+
+
+    const pageElement =
+        pages.find(
+            (
+                element,
+                index
+            ) => {
+
+                const number =
+                    parseInt(
+                        element.dataset.page ||
+                        element.dataset.pageNumber ||
+                        index + 1,
+                        10
+                    );
+
+
+                return (
+                    number ===
+                    Number(page)
+                );
+
+            }
+        );
+
+
+    if(!pageElement){
+
+        return `Page ${page}`;
+
+    }
+
+
+    const heading =
+        pageElement.querySelector(
+            "h1, h2, h3, h4"
+        );
+
+
+    if(
+        heading &&
+        heading.textContent.trim()
+    ){
+
+        return heading.textContent.trim();
+
+    }
+
+
+    return `Page ${page}`;
+
+}
+
+
+/*==================================================
+                ADD BOOKMARK
+==================================================*/
+
+function addBookmark(
+    page =
+    ReaderState.currentPage
+){
+
+    page =
+        Number(
+            page
+        );
+
+
+    if(
+        !Number.isFinite(
+            page
+        ) ||
+        page < 1
+    ){
+
+        return false;
+
+    }
+
+
+    /*
+        Duplicate bookmark prevent.
+    */
+
+    const alreadyExists =
+        BookmarkState.items.some(
+            bookmark =>
+                Number(
+                    bookmark.page
+                ) ===
+                page
+        );
+
+
+    if(alreadyExists){
+
+        BookmarkState.current =
+            true;
+
+
+        updateBookmarkButton();
+
+
+        return false;
+
+    }
+
+
+    const bookmark = {
+
+        id:
+            `bookmark-${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2, 8)}`,
+
+        page:
+            page,
+
+        title:
+            getBookmarkTitle(
+                page
+            ),
+
+        createdAt:
+            Date.now()
+
+    };
+
+
+    BookmarkState.items.push(
+        bookmark
+    );
+
+
+    /*
+        Page number ke order mein rakho.
+    */
+
+    BookmarkState.items.sort(
+        (
+            a,
+            b
+        ) =>
+            Number(
+                a.page
+            ) -
+            Number(
+                b.page
+            )
+    );
+
+
+    saveBookmarks();
+
+    updateCurrentBookmark();
+
+    renderBookmarks();
+
+
+    showToast(
+        `Page ${page} bookmarked.`,
+        "success"
+    );
+
+
+    return true;
+
+}
+
+
+/*==================================================
+                REMOVE BOOKMARK
+==================================================*/
+
+function removeBookmark(
+    page =
+    ReaderState.currentPage
+){
+
+    page =
+        Number(
+            page
+        );
+
+
+    const oldLength =
+        BookmarkState.items.length;
+
+
+    BookmarkState.items =
+        BookmarkState.items.filter(
+            bookmark =>
+                Number(
+                    bookmark.page
+                ) !==
+                page
+        );
+
+
+    if(
+        BookmarkState.items.length ===
+        oldLength
+    ){
+
+        return false;
+
+    }
+
+
+    saveBookmarks();
+
+    updateCurrentBookmark();
+
+    renderBookmarks();
+
+
+    showToast(
+        `Page ${page} bookmark removed.`,
+        "info"
+    );
+
+
+    return true;
+
+}
+
+
+/*==================================================
+                TOGGLE BOOKMARK
+==================================================*/
+
+function toggleBookmark(){
+
+    if(
+        BookmarkState.current
+    ){
+
+        removeBookmark(
+            ReaderState.currentPage
+        );
+
+    }else{
+
+        addBookmark(
+            ReaderState.currentPage
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                BOOKMARK BUTTON EVENTS
+==================================================*/
+
+function bindBookmarkButton(){
+
+    const buttons =
+        $$(
+            [
+                "#bookmarkBtn",
+                "#addBookmarkBtn",
+                ".bookmark-button",
+                "[data-action='bookmark']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    toggleBookmark();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                BOOKMARK PANEL
+==================================================*/
+
+function getBookmarkContainer(){
+
+    const selectors = [
+
+        "#bookmarkList",
+
+        "#bookmarksList",
+
+        ".bookmark-list",
+
+        ".bookmarks-list",
+
+        "#bookmarks",
+
+        ".bookmarks"
+
+    ];
+
+
+    for(
+        const selector of selectors
+    ){
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if(element){
+
+            return element;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/*==================================================
+                RENDER BOOKMARKS
+==================================================*/
+
+function renderBookmarks(){
+
+    const container =
+        getBookmarkContainer();
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    if(
+        BookmarkState.items.length ===
+        0
+    ){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.className =
+            "empty-state bookmark-empty";
+
+
+        empty.innerHTML = `
+            <i class="ri-bookmark-line"></i>
+            <span>No bookmarks yet.</span>
+            <small>
+                Bookmark a page while reading.
+            </small>
+        `;
+
+
+        container.appendChild(
+            empty
+        );
+
+
+        return;
+
+    }
+
+
+    BookmarkState.items.forEach(
+        bookmark => {
+
+            const item =
+                document.createElement(
+                    "button"
+                );
+
+
+            item.type =
+                "button";
+
+
+            item.className =
+                "bookmark-item";
+
+
+            item.dataset.page =
+                bookmark.page;
+
+
+            item.dataset.bookmarkId =
+                bookmark.id;
+
+
+            item.innerHTML = `
+                <span class="bookmark-icon">
+                    <i class="ri-bookmark-fill"></i>
+                </span>
+
+                <span class="bookmark-details">
+
+                    <strong>
+                        ${escapeHTML(
+                            bookmark.title
+                        )}
+                    </strong>
+
+                    <small>
+                        Page ${bookmark.page}
+                    </small>
+
+                </span>
+
+                <span class="bookmark-delete"
+                      title="Remove bookmark"
+                      role="button"
+                      tabindex="0">
+
+                    <i class="ri-delete-bin-line"></i>
+
+                </span>
+            `;
+
+
+            /*
+                Main item click = page open.
+            */
+
+            item.addEventListener(
+                "click",
+                function(event){
+
+                    const deleteButton =
+                        event.target.closest(
+                            ".bookmark-delete"
+                        );
+
+
+                    if(deleteButton){
+
+                        return;
+
+                    }
+
+
+                    goToPage(
+                        bookmark.page
+                    );
+
+
+                    updateCurrentBookmark();
+
+                }
+            );
+
+
+            /*
+                Delete bookmark.
+            */
+
+            const deleteButton =
+                item.querySelector(
+                    ".bookmark-delete"
+                );
+
+
+            if(deleteButton){
+
+                deleteButton.addEventListener(
+                    "click",
+                    function(event){
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+
+                        removeBookmark(
+                            bookmark.page
+                        );
+
+                    }
+                );
+
+
+                deleteButton.addEventListener(
+                    "keydown",
+                    function(event){
+
+                        if(
+                            event.key ===
+                            "Enter" ||
+                            event.key ===
+                            " "
+                        ){
+
+                            event.preventDefault();
+
+                            event.stopPropagation();
+
+
+                            removeBookmark(
+                                bookmark.page
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    updateBookmarkListActive();
+
+}
+
+
+/*==================================================
+                ACTIVE BOOKMARK
+==================================================*/
+
+function updateBookmarkListActive(){
+
+    const container =
+        getBookmarkContainer();
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    const items =
+        container.querySelectorAll(
+            ".bookmark-item"
+        );
+
+
+    items.forEach(
+        item => {
+
+            const page =
+                Number(
+                    item.dataset.page
+                );
+
+
+            item.classList.toggle(
+                "active",
+                page ===
+                ReaderState.currentPage
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                OPEN BOOKMARK PANEL
+==================================================*/
+
+function openBookmarks(){
+
+    const panel =
+        findPanel(
+            "bookmarks"
+        );
+
+
+    if(panel){
+
+        openPanel(
+            panel
+        );
+
+    }
+
+
+    renderBookmarks();
+
+    updateBookmarkListActive();
+
+}
+
+
+/*==================================================
+                BOOKMARKS TAB/BUTTON
+==================================================*/
+
+function bindBookmarksPanel(){
+
+    const buttons =
+        $$(
+            [
+                "#bookmarksBtn",
+                "#bookmarkPanelBtn",
+                "[data-action='bookmarks']",
+                "[data-panel='bookmarks']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    openBookmarks();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                REMOVE ALL BOOKMARKS
+==================================================*/
+
+function clearAllBookmarks(){
+
+    if(
+        BookmarkState.items.length ===
+        0
+    ){
+
+        showToast(
+            "There are no bookmarks.",
+            "info"
+        );
+
+
+        return;
+
+    }
+
+
+    BookmarkState.items =
+        [];
+
+
+    BookmarkState.current =
+        false;
+
+
+    saveBookmarks();
+
+    renderBookmarks();
+
+    updateBookmarkButton();
+
+
+    showToast(
+        "All bookmarks removed.",
+        "success"
+    );
+
+}
+
+
+/*==================================================
+                CLEAR BOOKMARKS BUTTON
+==================================================*/
+
+function bindClearBookmarks(){
+
+    const buttons =
+        $$(
+            [
+                "#clearBookmarks",
+                "#clearBookmarksBtn",
+                "[data-action='clear-bookmarks']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    clearAllBookmarks();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                BOOKMARK KEYBOARD SHORTCUT
+==================================================*/
+
+function bindBookmarkShortcut(){
+
+    document.addEventListener(
+        "keydown",
+        function(event){
+
+            const target =
+                event.target;
+
+
+            if(
+                target &&
+                (
+                    target.tagName ===
+                    "INPUT" ||
+
+                    target.tagName ===
+                    "TEXTAREA" ||
+
+                    target.tagName ===
+                    "SELECT" ||
+
+                    target.isContentEditable
+                )
+            ){
+
+                return;
+
+            }
+
+
+            /*
+                B = Bookmark current page
+            */
+
+            if(
+                event.key.toLowerCase() ===
+                "b"
+            ){
+
+                event.preventDefault();
+
+
+                toggleBookmark();
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                BOOKMARK PAGE CHANGE SYNC
+==================================================*/
+
+function bindBookmarkPageSync(){
+
+    let lastPage =
+        ReaderState.currentPage;
+
+
+    setInterval(
+        function(){
+
+            if(
+                ReaderState.currentPage !==
+                lastPage
+            ){
+
+                lastPage =
+                    ReaderState.currentPage;
+
+
+                updateCurrentBookmark();
+
+                updateBookmarkListActive();
+
+            }
+
+        },
+        120
+    );
+
+}
+
+
+/*==================================================
+                INITIALIZE BOOKMARKS
+==================================================*/
+
+function initializeBookmarks(){
+
+    loadBookmarks();
+
+    bindBookmarkButton();
+
+    bindBookmarksPanel();
+
+    bindClearBookmarks();
+
+    bindBookmarkShortcut();
+
+    bindBookmarkPageSync();
+
+    updateBookmarkButton();
+
+
+    console.log(
+        "Chishti Reader: Bookmarks initialized."
+    );
+
+}
+
+
+/*==================================================
+                DOM READY
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        initializeBookmarks();
+
+    }
+);
+/*==================================================
+        CHISHTI LIBRARY READER
+        JAVASCRIPT PART 13 / 14
+
+        COMMENTS
+        COMMENT FORM
+        SAVE COMMENTS
+        DELETE COMMENTS
+        COMMENT COUNT
+==================================================*/
+
+
+/*==================================================
+                COMMENT STATE
+==================================================*/
+
+const CommentState = {
+
+    items: [],
+
+    currentPageOnly: false
+
+};
+
+
+/*==================================================
+                COMMENT STORAGE KEY
+==================================================*/
+
+function getCommentStorageKey(){
+
+    const bookId =
+        getBookStorageId();
+
+    return `${STORAGE.comments}_${bookId}`;
+
+}
+
+
+/*==================================================
+                LOAD COMMENTS
+==================================================*/
+
+function loadComments(){
+
+    const saved =
+        loadData(
+            getCommentStorageKey(),
+            []
+        );
+
+
+    if(
+        Array.isArray(saved)
+    ){
+
+        CommentState.items =
+            saved;
+
+    }else{
+
+        CommentState.items =
+            [];
+
+    }
+
+
+    renderComments();
+
+}
+
+
+/*==================================================
+                SAVE COMMENTS
+==================================================*/
+
+function saveComments(){
+
+    saveData(
+        getCommentStorageKey(),
+        CommentState.items
+    );
+
+}
+
+
+/*==================================================
+                GET COMMENT INPUT
+==================================================*/
+
+function getCommentNameInput(){
+
+    return (
+        DOM.commentName ||
+
+        document.querySelector(
+            "#commentName"
+        )
+    );
+
+}
+
+
+/*==================================================
+                GET COMMENT TEXT INPUT
+==================================================*/
+
+function getCommentTextInput(){
+
+    return (
+        DOM.commentText ||
+
+        document.querySelector(
+            "#commentText"
+        ) ||
+
+        document.querySelector(
+            "#commentInput"
+        ) ||
+
+        document.querySelector(
+            "textarea[name='comment']"
+        )
+    );
+
+}
+
+
+/*==================================================
+                GET COMMENT CONTAINER
+==================================================*/
+
+function getCommentContainer(){
+
+    const selectors = [
+
+        "#commentsList",
+
+        "#commentList",
+
+        ".comments-list",
+
+        ".comment-list",
+
+        "#commentsContainer",
+
+        ".comments-container"
+
+    ];
+
+
+    for(
+        const selector of selectors
+    ){
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if(element){
+
+            return element;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/*==================================================
+                GET COMMENT PAGE
+==================================================*/
+
+function getCommentPage(){
+
+    return Number(
+        ReaderState.currentPage
+    );
+
+}
+
+
+/*==================================================
+                ADD COMMENT
+==================================================*/
+
+function addComment(){
+
+    const nameInput =
+        getCommentNameInput();
+
+
+    const textInput =
+        getCommentTextInput();
+
+
+    const name =
+        nameInput
+            ? nameInput.value.trim()
+            : "";
+
+
+    const text =
+        textInput
+            ? textInput.value.trim()
+            : "";
+
+
+    /*
+        Name optional hai.
+    */
+
+    const finalName =
+        name ||
+        "Anonymous";
+
+
+    if(!text){
+
+        showToast(
+            "Please write a comment first.",
+            "error"
+        );
+
+
+        if(textInput){
+
+            textInput.focus();
+
+        }
+
+
+        return false;
+
+    }
+
+
+    const comment = {
+
+        id:
+            `comment-${Date.now()}-${Math.random()
+                .toString(36)
+                .slice(2, 8)}`,
+
+        name:
+            finalName,
+
+        text:
+            text,
+
+        page:
+            getCommentPage(),
+
+        createdAt:
+            Date.now()
+
+    };
+
+
+    CommentState.items.unshift(
+        comment
+    );
+
+
+    saveComments();
+
+    renderComments();
+
+
+    /*
+        Form clear.
+    */
+
+    if(textInput){
+
+        textInput.value =
+            "";
+
+    }
+
+
+    showToast(
+        "Comment posted.",
+        "success"
+    );
+
+
+    return true;
+
+}
+
+
+/*==================================================
+                DELETE COMMENT
+==================================================*/
+
+function deleteComment(
+    commentId
+){
+
+    const oldLength =
+        CommentState.items.length;
+
+
+    CommentState.items =
+        CommentState.items.filter(
+            comment =>
+                comment.id !==
+                commentId
+        );
+
+
+    if(
+        CommentState.items.length ===
+        oldLength
+    ){
+
+        return false;
+
+    }
+
+
+    saveComments();
+
+    renderComments();
+
+
+    showToast(
+        "Comment deleted.",
+        "info"
+    );
+
+
+    return true;
+
+}
+
+
+/*==================================================
+                COMMENT DATE
+==================================================*/
+
+function formatCommentDate(
+    timestamp
+){
+
+    if(
+        !timestamp
+    ){
+
+        return "";
+
+    }
+
+
+    try{
+
+        const date =
+            new Date(
+                timestamp
+            );
+
+
+        return date.toLocaleDateString(
+            undefined,
+            {
+                day:
+                    "numeric",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric"
+            }
+        );
+
+    }catch(error){
+
+        return "";
+
+    }
+
+}
+
+
+/*==================================================
+                FILTER COMMENTS
+==================================================*/
+
+function getVisibleComments(){
+
+    if(
+        !CommentState.currentPageOnly
+    ){
+
+        return CommentState.items;
+
+    }
+
+
+    return CommentState.items.filter(
+        comment =>
+            Number(
+                comment.page
+            ) ===
+            Number(
+                ReaderState.currentPage
+            )
+    );
+
+}
+
+
+/*==================================================
+                RENDER COMMENTS
+==================================================*/
+
+function renderComments(){
+
+    const container =
+        getCommentContainer();
+
+
+    if(!container){
+
+        updateCommentCount();
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        "";
+
+
+    const comments =
+        getVisibleComments();
+
+
+    if(
+        comments.length ===
+        0
+    ){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+
+        empty.className =
+            "empty-state comments-empty";
+
+
+        empty.innerHTML = `
+            <i class="ri-chat-3-line"></i>
+
+            <span>
+                No comments yet.
+            </span>
+
+            <small>
+                Be the first to share your thoughts.
+            </small>
+        `;
+
+
+        container.appendChild(
+            empty
+        );
+
+
+        updateCommentCount();
+
+        return;
+
+    }
+
+
+    comments.forEach(
+        comment => {
+
+            const item =
+                document.createElement(
+                    "article"
+                );
+
+
+            item.className =
+                "comment-item";
+
+
+            item.dataset.commentId =
+                comment.id;
+
+
+            item.innerHTML = `
+                <div class="comment-avatar">
+                    ${getInitials(
+                        comment.name
+                    )}
+                </div>
+
+                <div class="comment-content">
+
+                    <div class="comment-header">
+
+                        <strong class="comment-author">
+                            ${escapeHTML(
+                                comment.name
+                            )}
+                        </strong>
+
+                        <span class="comment-date">
+                            ${formatCommentDate(
+                                comment.createdAt
+                            )}
+                        </span>
+
+                    </div>
+
+                    <p class="comment-text">
+                        ${escapeHTML(
+                            comment.text
+                        )}
+                    </p>
+
+                    <div class="comment-footer">
+
+                        <button
+                            type="button"
+                            class="comment-page"
+                            data-comment-page="${comment.page}"
+                            title="Go to page ${comment.page}"
+                        >
+                            <i class="ri-book-2-line"></i>
+                            Page ${comment.page}
+                        </button>
+
+                        <button
+                            type="button"
+                            class="comment-delete"
+                            data-comment-delete="${comment.id}"
+                            title="Delete comment"
+                        >
+                            <i class="ri-delete-bin-line"></i>
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+
+            /*
+                Delete button.
+            */
+
+            const deleteButton =
+                item.querySelector(
+                    "[data-comment-delete]"
+                );
+
+
+            if(deleteButton){
+
+                deleteButton.addEventListener(
+                    "click",
+                    function(){
+
+                        deleteComment(
+                            comment.id
+                        );
+
+                    }
+                );
+
+            }
+
+
+            /*
+                Page button.
+            */
+
+            const pageButton =
+                item.querySelector(
+                    "[data-comment-page]"
+                );
+
+
+            if(pageButton){
+
+                pageButton.addEventListener(
+                    "click",
+                    function(){
+
+                        goToPage(
+                            comment.page
+                        );
+
+                    }
+                );
+
+            }
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+
+    updateCommentCount();
+
+}
+
+
+/*==================================================
+                COMMENT COUNT
+==================================================*/
+
+function updateCommentCount(){
+
+    const count =
+        CommentState.items.length;
+
+
+    const selectors = [
+
+        "#commentCount",
+
+        "#commentsCount",
+
+        ".comment-count",
+
+        "[data-comment-count]"
+
+    ];
+
+
+    selectors.forEach(
+        selector => {
+
+            $$(selector).forEach(
+                element => {
+
+                    setText(
+                        element,
+                        count
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                POST COMMENT BUTTON
+==================================================*/
+
+function bindPostComment(){
+
+    const buttons =
+        $$(
+            [
+                "#postComment",
+                "#postCommentBtn",
+                "#submitComment",
+                "[data-action='post-comment']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    addComment();
+
+                }
+            );
+
+        }
+    );
+
+
+    const textInput =
+        getCommentTextInput();
+
+
+    if(textInput){
+
+        textInput.addEventListener(
+            "keydown",
+            function(event){
+
+                /*
+                    Ctrl/Cmd + Enter se comment post.
+                */
+
+                if(
+                    event.key ===
+                    "Enter" &&
+                    (
+                        event.ctrlKey ||
+                        event.metaKey
+                    )
+                ){
+
+                    event.preventDefault();
+
+                    addComment();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                COMMENT PAGE FILTER
+==================================================*/
+
+function setCommentPageFilter(
+    currentPageOnly
+){
+
+    CommentState.currentPageOnly =
+        Boolean(
+            currentPageOnly
+        );
+
+
+    renderComments();
+
+}
+
+
+/*==================================================
+                COMMENT FILTER BUTTON
+==================================================*/
+
+function bindCommentFilter(){
+
+    const buttons =
+        $$(
+            [
+                "#commentPageFilter",
+                "#currentPageComments",
+                "[data-action='current-page-comments']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    setCommentPageFilter(
+                        !CommentState.currentPageOnly
+                    );
+
+
+                    this.classList.toggle(
+                        "active",
+                        CommentState.currentPageOnly
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                CLEAR COMMENTS
+==================================================*/
+
+function clearAllComments(){
+
+    if(
+        CommentState.items.length ===
+        0
+    ){
+
+        showToast(
+            "There are no comments.",
+            "info"
+        );
+
+
+        return;
+
+    }
+
+
+    CommentState.items =
+        [];
+
+
+    saveComments();
+
+    renderComments();
+
+
+    showToast(
+        "All comments removed.",
+        "success"
+    );
+
+}
+
+
+/*==================================================
+                CLEAR COMMENTS BUTTON
+==================================================*/
+
+function bindClearComments(){
+
+    const buttons =
+        $$(
+            [
+                "#clearComments",
+                "#clearCommentsBtn",
+                "[data-action='clear-comments']"
+            ].join(",")
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    clearAllComments();
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                COMMENT PAGE SYNC
+==================================================*/
+
+function bindCommentPageSync(){
+
+    let lastPage =
+        ReaderState.currentPage;
+
+
+    setInterval(
+        function(){
+
+            if(
+                ReaderState.currentPage !==
+                lastPage
+            ){
+
+                lastPage =
+                    ReaderState.currentPage;
+
+
+                if(
+                    CommentState.currentPageOnly
+                ){
+
+                    renderComments();
+
+                }
+
+            }
+
+        },
+        150
+    );
+
+}
+
+
+/*==================================================
+                COMMENTS INITIALIZATION
+==================================================*/
+
+function initializeComments(){
+
+    loadComments();
+
+    bindPostComment();
+
+    bindCommentFilter();
+
+    bindClearComments();
+
+    bindCommentPageSync();
+
+    updateCommentCount();
+
+
+    console.log(
+        "Chishti Reader: Comments initialized."
+    );
+
+}
+
+
+/*==================================================
+                DOM READY
+==================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        initializeComments();
+
+    }
+);
+/*==================================================
+        CHISHTI LIBRARY READER
+        JAVASCRIPT PART 14 / 14
+
+        FINAL INITIALIZATION
+        LOADING SCREEN
+        BOOK OPEN ANIMATION
+        WHITE LIGHT EFFECT
+        MOBILE SUPPORT
+        FINAL SAFETY CHECKS
+==================================================*/
+
+
+/*==================================================
+                FINAL STATE
+==================================================*/
+
+const FinalReaderState = {
+
+    initialized:
+        false,
+
+    opening:
+        false,
+
+    opened:
+        false,
+
+    loading:
+        true
+
+};
+
+
+/*==================================================
+                LOADING ELEMENTS
+==================================================*/
+
+function getLoadingScreen(){
+
+    const selectors = [
+
+        "#loadingScreen",
+
+        ".loading-screen",
+
+        "#readerLoading",
+
+        ".reader-loading"
+
+    ];
+
+
+    for(
+        const selector of selectors
+    ){
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if(element){
+
+            return element;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/*==================================================
+                LOADING PROGRESS
+==================================================*/
+
+function updateLoadingProgress(
+    percent
+){
+
+    percent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                Number(percent) || 0
+            )
+        );
+
+
+    const bars =
+        $$(
+            [
+                "#loadingProgress",
+                "#loadingProgressBar",
+                ".loading-progress"
+            ].join(",")
+        );
+
+
+    bars.forEach(
+        bar => {
+
+            bar.style.width =
+                `${percent}%`;
+
+        }
+    );
+
+
+    const values =
+        $$(
+            [
+                "#loadingPercent",
+                ".loading-percent"
+            ].join(",")
+        );
+
+
+    values.forEach(
+        value => {
+
+            setText(
+                value,
+                `${Math.round(percent)}%`
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                HIDE LOADING SCREEN
+==================================================*/
+
+function hideLoadingScreen(){
+
+    const screen =
+        getLoadingScreen();
+
+
+    if(!screen){
+
+        FinalReaderState.loading =
+            false;
+
+        return;
+
+    }
+
+
+    updateLoadingProgress(
+        100
+    );
+
+
+    screen.classList.add(
+        "loaded",
+        "hide",
+        "hidden"
+    );
+
+
+    screen.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    /*
+        CSS transition complete hone ke baad
+        display none.
+    */
+
+    setTimeout(
+        function(){
+
+            screen.style.pointerEvents =
+                "none";
+
+            screen.style.visibility =
+                "hidden";
+
+        },
+        700
+    );
+
+
+    FinalReaderState.loading =
+        false;
+
+}
+
+
+/*==================================================
+                BOOK OPEN ELEMENT
+==================================================*/
+
+function getBookReaderElement(){
+
+    const selectors = [
+
+        "#reader",
+
+        "#readerContainer",
+
+        ".reader-container",
+
+        ".reader",
+
+        "#bookReader",
+
+        ".book-reader",
+
+        ".reader-wrapper"
+
+    ];
+
+
+    for(
+        const selector of selectors
+    ){
+
+        const element =
+            document.querySelector(
+                selector
+            );
+
+
+        if(element){
+
+            return element;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/*==================================================
+                WHITE LIGHT EFFECT
+==================================================*/
+
+function createWhiteLightEffect(){
+
+    /*
+        Agar effect already hai to duplicate
+        create nahi karna.
+    */
+
+    if(
+        document.querySelector(
+            "#bookWhiteLight"
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const light =
+        document.createElement(
+            "div"
+        );
+
+
+    light.id =
+        "bookWhiteLight";
+
+
+    light.className =
+        "book-white-light";
+
+
+    light.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.appendChild(
+        light
+    );
+
+}
+
+
+/*==================================================
+                BOOK OPEN ANIMATION
+==================================================*/
+
+function openBookReader(){
+
+    const reader =
+        getBookReaderElement();
+
+
+    createWhiteLightEffect();
+
+
+    const light =
+        document.querySelector(
+            "#bookWhiteLight"
+        );
+
+
+    FinalReaderState.opening =
+        true;
+
+
+    document.body.classList.add(
+        "reader-opening"
+    );
+
+
+    if(reader){
+
+        reader.classList.add(
+            "reader-opening",
+            "book-opening"
+        );
+
+    }
+
+
+    /*
+        White light flash.
+    */
+
+    if(light){
+
+        light.classList.add(
+            "active"
+        );
+
+    }
+
+
+    /*
+        Main reader center mein smoothly
+        open hoga.
+    */
+
+    setTimeout(
+        function(){
+
+            document.body.classList.remove(
+                "reader-opening"
+            );
+
+
+            document.body.classList.add(
+                "reader-open"
+            );
+
+
+            if(reader){
+
+                reader.classList.remove(
+                    "reader-opening"
+                );
+
+
+                reader.classList.add(
+                    "book-open",
+                    "reader-visible"
+                );
+
+            }
+
+
+            if(light){
+
+                light.classList.remove(
+                    "active"
+                );
+
+            }
+
+
+            FinalReaderState.opening =
+                false;
+
+
+            FinalReaderState.opened =
+                true;
+
+
+            /*
+                Initial page render.
+            */
+
+            renderCurrentPage();
+
+
+            updatePageNavigationUI();
+
+        },
+        650
+    );
+
+}
+
+
+/*==================================================
+                BOOK CENTER
+==================================================*/
+
+function centerBookReader(){
+
+    const reader =
+        getBookReaderElement();
+
+
+    if(!reader){
+
+        return;
+
+    }
+
+
+    /*
+        CSS handles actual centering.
+        JS sirf class sync karta hai.
+    */
+
+    reader.classList.add(
+        "reader-centered"
+    );
+
+}
+
+
+/*==================================================
+                MOBILE DETECTION
+==================================================*/
+
+function isMobileReader(){
+
+    return (
+        window.matchMedia &&
+        window.matchMedia(
+            "(max-width: 768px)"
+        ).matches
+    );
+
+}
+
+
+/*==================================================
+                MOBILE MODE
+==================================================*/
+
+function updateMobileReader(){
+
+    const mobile =
+        isMobileReader();
+
+
+    document.body.classList.toggle(
+        "reader-mobile",
+        mobile
+    );
+
+
+    document.body.classList.toggle(
+        "reader-desktop",
+        !mobile
+    );
+
+
+    const reader =
+        getBookReaderElement();
+
+
+    if(reader){
+
+        reader.classList.toggle(
+            "mobile-reader",
+            mobile
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                MOBILE RESIZE
+==================================================*/
+
+function bindMobileResize(){
+
+    let resizeTimer;
+
+
+    window.addEventListener(
+        "resize",
+        function(){
+
+            clearTimeout(
+                resizeTimer
+            );
+
+
+            resizeTimer =
+                setTimeout(
+                    function(){
+
+                        updateMobileReader();
+
+                        updatePageNavigationUI();
+
+                    },
+                    120
+                );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                ORIENTATION CHANGE
+==================================================*/
+
+function bindOrientationChange(){
+
+    window.addEventListener(
+        "orientationchange",
+        function(){
+
+            setTimeout(
+                function(){
+
+                    updateMobileReader();
+
+                    updatePageNavigationUI();
+
+                },
+                250
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                ESCAPE KEY
+==================================================*/
+
+function bindEscapeKey(){
+
+    document.addEventListener(
+        "keydown",
+        function(event){
+
+            if(
+                event.key !==
+                "Escape"
+            ){
+
+                return;
+
+            }
+
+
+            /*
+                Share popup close.
+            */
+
+            if(
+                typeof closeShareBox ===
+                "function"
+            ){
+
+                closeShareBox();
+
+            }
+
+
+            /*
+                Settings / sidebar close.
+            */
+
+            const panels =
+                document.querySelectorAll(
+                    ".reader-panel.open, .reader-panel.active, .sidebar.open, .sidebar.active"
+                );
+
+
+            panels.forEach(
+                panel => {
+
+                    if(
+                        typeof closePanel ===
+                        "function"
+                    ){
+
+                        closePanel(
+                            panel
+                        );
+
+                    }else{
+
+                        panel.classList.remove(
+                            "open",
+                            "active"
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                HOME KEY
+==================================================*/
+
+function bindHomeEndKeys(){
+
+    document.addEventListener(
+        "keydown",
+        function(event){
+
+            const target =
+                event.target;
+
+
+            if(
+                target &&
+                (
+                    target.tagName ===
+                    "INPUT" ||
+
+                    target.tagName ===
+                    "TEXTAREA" ||
+
+                    target.tagName ===
+                    "SELECT" ||
+
+                    target.isContentEditable
+                )
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                event.key ===
+                "Home"
+            ){
+
+                event.preventDefault();
+
+
+                goToPage(
+                    1
+                );
+
+            }
+
+
+            if(
+                event.key ===
+                "End"
+            ){
+
+                event.preventDefault();
+
+
+                goToPage(
+                    getTotalPages()
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                PAGE COUNT SAFETY
+==================================================*/
+
+function ensureValidPage(){
+
+    const total =
+        getTotalPages();
+
+
+    if(
+        total <= 0
+    ){
+
+        ReaderState.currentPage =
+            1;
+
+        return;
+
+    }
+
+
+    ReaderState.currentPage =
+        Math.max(
+            1,
+            Math.min(
+                total,
+                Number(
+                    ReaderState.currentPage
+                ) || 1
+            )
+        );
+
+}
+
+
+/*==================================================
+                FINAL UI SYNC
+==================================================*/
+
+function finalUISync(){
+
+    ensureValidPage();
+
+
+    if(
+        typeof updatePageNavigationUI ===
+        "function"
+    ){
+
+        updatePageNavigationUI();
+
+    }
+
+
+    if(
+        typeof updateBookmarkButton ===
+        "function"
+    ){
+
+        updateBookmarkButton();
+
+    }
+
+
+    if(
+        typeof updateLikeButton ===
+        "function"
+    ){
+
+        updateLikeButton();
+
+    }
+
+
+    if(
+        typeof updateContentsActive ===
+        "function"
+    ){
+
+        updateContentsActive();
+
+    }
+
+
+    if(
+        typeof updateThumbnailActive ===
+        "function"
+    ){
+
+        updateThumbnailActive();
+
+    }
+
+
+    if(
+        typeof updateCommentCount ===
+        "function"
+    ){
+
+        updateCommentCount();
+
+    }
+
+}
+
+
+/*==================================================
+                SAVE FINAL READER STATE
+==================================================*/
+
+function saveFinalReaderState(){
+
+    if(
+        ReaderState.autoSave ===
+        false
+    ){
+
+        return;
+
+    }
+
+
+    /*
+        Current page.
+    */
+
+    saveData(
+        STORAGE.page,
+        ReaderState.currentPage
+    );
+
+
+    /*
+        Current theme.
+    */
+
+    if(
+        ReaderState.theme
+    ){
+
+        saveData(
+            STORAGE.theme,
+            ReaderState.theme
+        );
+
+    }
+
+
+    /*
+        Zoom.
+    */
+
+    if(
+        typeof ReaderState.zoom !==
+        "undefined"
+    ){
+
+        saveData(
+            STORAGE.zoom,
+            ReaderState.zoom
+        );
+
+    }
+
+}
+
+
+/*==================================================
+                BEFORE UNLOAD
+==================================================*/
+
+function bindBeforeUnload(){
+
+    window.addEventListener(
+        "beforeunload",
+        function(){
+
+            saveFinalReaderState();
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                PAGE VISIBILITY
+==================================================*/
+
+function bindVisibilitySave(){
+
+    document.addEventListener(
+        "visibilitychange",
+        function(){
+
+            if(
+                document.visibilityState ===
+                "hidden"
+            ){
+
+                saveFinalReaderState();
+
+            }
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                FINAL LOADING SEQUENCE
+==================================================*/
+
+async function startReader(){
+
+    if(
+        FinalReaderState.initialized
+    ){
+
+        return;
+
+    }
+
+
+    FinalReaderState.initialized =
+        true;
+
+
+    /*
+        Step 1
+        Initial loading.
+    */
+
+    updateLoadingProgress(
+        10
+    );
+
+
+    await wait(
+        80
+    );
+
+
+    /*
+        Step 2
+        Make sure page exists.
+    */
+
+    ensureValidPage();
+
+    updateLoadingProgress(
+        25
+    );
+
+
+    await wait(
+        80
+    );
+
+
+    /*
+        Step 3
+        Center reader.
+    */
+
+    centerBookReader();
+
+    updateMobileReader();
+
+    updateLoadingProgress(
+        40
+    );
+
+
+    await wait(
+        80
+    );
+
+
+    /*
+        Step 4
+        Navigation data.
+    */
+
+    if(
+        typeof buildContents ===
+        "function"
+    ){
+
+        buildContents();
+
+    }
+
+
+    if(
+        typeof buildThumbnails ===
+        "function"
+    ){
+
+        buildThumbnails();
+
+    }
+
+
+    updateLoadingProgress(
+        60
+    );
+
+
+    await wait(
+        100
+    );
+
+
+    /*
+        Step 5
+        Current page.
+    */
+
+    if(
+        typeof renderCurrentPage ===
+        "function"
+    ){
+
+        renderCurrentPage();
+
+    }
+
+
+    finalUISync();
+
+    updateLoadingProgress(
+        75
+    );
+
+
+    await wait(
+        100
+    );
+
+
+    /*
+        Step 6
+        Hide loading screen.
+    */
+
+    updateLoadingProgress(
+        100
+    );
+
+
+    await wait(
+        180
+    );
+
+
+    hideLoadingScreen();
+
+
+    /*
+        Step 7
+        Book center + white light +
+        open animation.
+    */
+
+    await wait(
+        180
+    );
+
+
+    openBookReader();
+
+
+    console.log(
+        "Chishti Library Reader: Ready."
+    );
+
+}
+
+
+/*==================================================
+                WAIT HELPER
+==================================================*/
+
+function wait(
+    milliseconds
+){
+
+    return new Promise(
+        resolve => {
+
+            setTimeout(
+                resolve,
+                milliseconds
+            );
+
+        }
+    );
+
+}
+
+
+/*==================================================
+                FINAL INITIALIZATION
+==================================================*/
+
+function initializeFinalReader(){
+
+    createWhiteLightEffect();
+
+    updateMobileReader();
+
+    bindMobileResize();
+
+    bindOrientationChange();
+
+    bindEscapeKey();
+
+    bindHomeEndKeys();
+
+    bindBeforeUnload();
+
+    bindVisibilitySave();
+
+
+    /*
+        Start reader after DOM is ready.
+    */
+
+    startReader();
+
+}
+
+
+/*==================================================
+                FINAL DOM READY
+==================================================*/
+
+if(
+    document.readyState ===
+    "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function(){
+
+            initializeFinalReader();
+
+        },
+        {
+            once:
+                true
+        }
+    );
+
+}else{
+
+    initializeFinalReader();
+
+}
+
+
+/*==================================================
+        CHISHTI LIBRARY READER
+        JAVASCRIPT COMPLETE — 14 / 14
+==================================================*/
