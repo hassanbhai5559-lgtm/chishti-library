@@ -12787,32 +12787,31 @@
                         "--reader-progress",
                         `${percent}%`
                     );
+                bar.style.width =
+                    `${percent}%`;
 
 
-                    bar.style.width =
-                        `${percent}%`;
-
-
-                    bar.setAttribute(
-                        "aria-valuenow",
-                        String(
-                            Math.round(
-                                percent
-            );
-
-
-        getProgressText()
-            .forEach(
-                element => {
-
-                    element.textContent =
-                        `${Math.round(
+                bar.setAttribute(
+                    "aria-valuenow",
+                    String(
+                        Math.round(
                             percent
-                        )}%`;
+                        )
+                    )
+                );
 
-                }
-            );
 
+                getProgressText()
+                    .forEach(
+                        element => {
+
+                            element.textContent =
+                                `${Math.round(
+                                    percent
+                                )}%`;
+
+                        }
+                    );
 
         const reader =
             $(
