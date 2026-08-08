@@ -1193,116 +1193,130 @@
         );
 
 
-        cacheElement(
-            "overlay",
-            [
-                ".reader-overlay",
-                "#readerOverlay",
-                "[data-reader-overlay]"
-            ]
-        );
+      /* =====================================================
+   GET CACHED ELEMENT
+===================================================== */
 
+function getDOM(key) {
 
-        cacheElement(
-            "loading",
-            [
-                ".reader-loading",
-                "#readerLoading",
-                "[data-reader-loading]"
-            ]
-        );
-
-
-        cacheElement(
-            "pageContainer",
-            [
-                ".reader-pages",
-                ".pages-container",
-                ".page-stage",
-                "[data-pages]"
-            ]
-        );
-
-    }
-
-
-    /* =====================================================
-       GET CACHED ELEMENT
-    ===================================================== */
-
-    function getDOM(
-        key
+    if (
+        state.dom &&
+        state.dom[key]
     ) {
-
-        if (
-            state.dom &&
-            state.dom[key]
-        ) {
-
-            return state.dom[key];
-
-        }
-
-
-        return null;
-
+        return state.dom[key];
     }
 
+    return null;
+}
 
-    /* =====================================================
-       REFRESH DOM CACHE
-    ===================================================== */
 
-    function refreshDOM() {
+/* =====================================================
+   REFRESH DOM CACHE
+===================================================== */
 
-        cacheReaderDOM();
+function refreshDOM() {
 
-        return state.dom;
+    cacheReaderDOM();
 
+    return state.dom;
+
+}
+
+
+/* =====================================================
+   READER ELEMENTS
+   IMPORTANT:
+   Do NOT call R.getReader(),
+   R.getViewport(), or R.getStage()
+   from inside these functions.
+   That can create circular recursion.
+===================================================== */
+
+function getReader() {
+
+    const cached =
+        getDOM("reader");
+
+    if (cached) {
+        return cached;
     }
 
-
-    /* =====================================================
-       READER ELEMENTS
-    ===================================================== */
-
-    function getReader() {
-
-        return (
-            getDOM(
-                "reader"
-            ) ||
-            R.getReader?.() ||
-            null
+    const element =
+        document.querySelector(
+            ".reader, #reader, [data-reader]"
         );
 
+    if (element) {
+
+        state.dom =
+            state.dom || {};
+
+        state.dom.reader =
+            element;
+
     }
 
+    return element || null;
 
-    function getViewport() {
+}
 
-        return (
-            getDOM(
-                "viewport"
-            ) ||
-            R.getViewport?.() ||
-            null
+
+function getViewport() {
+
+    const cached =
+        getDOM("viewport");
+
+    if (cached) {
+        return cached;
+    }
+
+    const element =
+        document.querySelector(
+            ".reader-viewport, #readerViewport, [data-reader-viewport]"
         );
 
+    if (element) {
+
+        state.dom =
+            state.dom || {};
+
+        state.dom.viewport =
+            element;
+
     }
 
+    return element || null;
 
-    function getStage() {
+}
 
-        return (
-            getDOM(
-                "stage"
-            ) ||
-            R.getStage?.() ||
-            null
+
+function getStage() {
+
+    const cached =
+        getDOM("stage");
+
+    if (cached) {
+        return cached;
+    }
+
+    const element =
+        document.querySelector(
+            ".page-stage, .reader-pages, .pages-container, [data-pages]"
         );
 
+    if (element) {
+
+        state.dom =
+            state.dom || {};
+
+        state.dom.stage =
+            element;
+
     }
+
+    return element || null;
+
+}
 
 
     function getToolbar() {
