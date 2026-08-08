@@ -12798,111 +12798,117 @@
                             percent
                         )
                     )
+            );
+
+
+            getProgressText()
+                .forEach(
+                    element => {
+
+                        element.textContent =
+                            `${Math.round(
+                                percent
+                            )}%`;
+
+                    }
                 );
 
 
-                getProgressText()
-                    .forEach(
-                        element => {
+            const reader =
+                $(
+                    ".reader"
+                );
 
-                            element.textContent =
-                                `${Math.round(
-                                    percent
-                                )}%`;
 
-                        }
+            if (
+                reader
+            ) {
+
+                reader.style.setProperty(
+                    "--reader-progress",
+                    `${percent}%`
+                );
+
+
+                reader.dataset.progress =
+                    String(
+                        Math.round(
+                            percent
+                        )
                     );
 
-        const reader =
-            $(
-                ".reader"
-            );
+            }
+
+}
 
 
-        if (
-            reader
-        ) {
+/* =====================================================
+   UPDATE NAVIGATION BUTTONS
+===================================================== */
 
-            reader.style.setProperty(
-                "--reader-progress",
-                `${percent}%`
-            );
+function updateNavigationButtons() {
 
-            reader.dataset.progress =
-                String(
-                    Math.round(
-                        percent
+    const current =
+        normalizePage(
+            state.currentPage
+        );
+
+
+    const total =
+        detectTotalPages();
+
+
+    const atFirst =
+        current <= 1;
+
+
+    const atLast =
+        total > 0 &&
+        current >= total;
+
+
+    $$(
+        "[data-page-prev], [data-action='previous-page']"
+    )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    atFirst;
+
+
+                button.setAttribute(
+                    "aria-disabled",
+                    String(
+                        atFirst
                     )
                 );
 
-        }
-
-    }
-
-
-    /* =====================================================
-       UPDATE NAVIGATION BUTTONS
-    ===================================================== */
-
-    function updateNavigationButtons() {
-
-        const current =
-            normalizePage(
-                state.currentPage
-            );
+            }
+        );
 
 
-        const total =
-            detectTotalPages();
+    $$(
+        "[data-page-next], [data-action='next-page']"
+    )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    atLast;
 
 
-        const atFirst =
-            current <= 1;
+                button.setAttribute(
+                    "aria-disabled",
+                    String(
+                        atLast
+                    )
+                );
 
+            }
+        );
 
-        const atLast =
-            total > 0 &&
-            current >= total;
-
-
-        $$(
-            "[data-page-prev], [data-action='previous-page']"
-        )
-            .forEach(
-                button => {
-
-                    button.disabled =
-                        atFirst;
-
-                    button.setAttribute(
-                        "aria-disabled",
-                        String(
-                            atFirst
-                        )
-                    );
-
-                }
-            );
-
-
-        $$(
-            "[data-page-next], [data-action='next-page']"
-        )
-            .forEach(
-                button => {
-
-                    button.disabled =
-                        atLast;
-
-                    button.setAttribute(
-                        "aria-disabled",
-                        String(
-                            atLast
-                        )
-                    );
-
-                }
-            );
+}
 
 
         $$(
