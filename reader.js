@@ -1303,110 +1303,144 @@ function getStage() {
         document.querySelector(
             ".page-stage, .reader-pages, .pages-container, [data-pages]"
         );
+/* =====================================================
+   READER TOOLBAR
+===================================================== */
+
+function getToolbar() {
+
+    const cached =
+        getDOM("toolbar");
+
+    if (cached) {
+
+        return cached;
+
+    }
+
+
+    const element =
+        document.querySelector(
+            ".reader-toolbar, #readerToolbar, [data-reader-toolbar]"
+        );
+
 
     if (element) {
 
         state.dom =
             state.dom || {};
 
-        state.dom.stage =
+        state.dom.toolbar =
             element;
 
     }
+
 
     return element || null;
 
 }
 
 
-    function getToolbar() {
+/* =====================================================
+   PAGE ELEMENTS
+===================================================== */
 
-        return (
-            getDOM(
-                "toolbar"
-            ) ||
-            R.getToolbar?.() ||
-            null
-        );
+function getPages() {
 
-    }
+    const stage =
+        getStage();
 
 
-    /* =====================================================
-       PAGE ELEMENTS
-    ===================================================== */
+    if (!stage) {
 
-    function getPages() {
-
-        const stage =
-            getStage();
-
-
-        if (
-            !stage
-        ) {
-
-            return [];
-
-        }
-
-
-        return Array.from(
-            stage.querySelectorAll(
-                ".reader-page, [data-reader-page]"
-            )
-        );
+        return [];
 
     }
 
 
-    function getPage(
-        pageNumber
-    ) {
+    return Array.from(
+        stage.querySelectorAll(
+            ".reader-page, [data-reader-page]"
+        )
+    );
 
-        const pages =
-            getPages();
+}
 
 
-        const target =
-            R.safeInteger(
+function getPage(pageNumber) {
+
+    const pages =
+        getPages();
+
+
+    const target =
+        typeof R.safeInteger ===
+        "function"
+
+            ? R.safeInteger(
                 pageNumber,
                 1
-            );
+            )
+
+            : Number.isFinite(
+                Number(pageNumber)
+            )
+
+                ? Math.trunc(
+                    Number(pageNumber)
+                )
+
+                : 1;
 
 
-        return (
-            pages.find(
-                page => {
+    return (
+        pages.find(
+            page => {
 
-                    const number =
-                        page.dataset.page ||
-                        page.dataset.pageNumber ||
-                        page.getAttribute(
-                            "data-page"
-                        );
-
-
-                    return (
-                        R.safeInteger(
-                            number,
-                            -1
-                        ) ===
-                        target
+                const number =
+                    page.dataset.page ||
+                    page.dataset.pageNumber ||
+                    page.getAttribute(
+                        "data-page"
                     );
 
-                }
-            ) ||
-            null
-        );
 
-    }
+                const pageValue =
+                    typeof R.safeInteger ===
+                    "function"
+
+                        ? R.safeInteger(
+                            number,
+                            -1
+                        )
+
+                        : Number.isFinite(
+                            Number(number)
+                        )
+
+                            ? Math.trunc(
+                                Number(number)
+                            )
+
+                            : -1;
 
 
-    /* =====================================================
-       READER STATE CLASSES
-    ===================================================== */
+                return (
+                    pageValue ===
+                    target
+                );
 
+            }
+        ) ||
+        null
+    );
+
+}
+
+
+/* =====================================================
+   READER STATE CLASSES
+===================================================== */
     function updateReaderClasses() {
 
         const reader =
