@@ -12337,456 +12337,407 @@
 
 })();
 /* =========================================================
-   CHISHTI LIBRARY READER
-   JAVASCRIPT PART 8 / 14
+CHISHTI LIBRARY READER
+JAVASCRIPT PART 8 / 14
 
-   PAGE NAVIGATION ENGINE
-   - Previous / Next page
-   - First / Last page
-   - Page number input
-   - Progress tracking
-   - Mobile-friendly navigation
-   - Keyboard navigation
-   - URL/hash synchronization
-   - History support
-   - Safe PDF.js integration
+PAGE NAVIGATION ENGINE
 ========================================================= */
 
 (() => {
 
-    "use strict";
+"use strict";
 
-    const R = window.ChishtiReader;
+const R = window.ChishtiReader;
 
-    if (!R || !R.state) {
-        console.error(
-            "ChishtiReader core missing."
+if (!R || !R.state) {
+    console.error("ChishtiReader core missing.");
+    return;
+}
+
+const state = R.state;
+
+/* =====================================================
+   NAVIGATION STATE
+===================================================== */
+
+state.currentPage = Number(state.currentPage) || 1;
+state.totalPages = Number(state.totalPages) || 0;
+state.pageChanging = false;
+state.pageChangeToken = 0;
+state.navigationReady = false;
+
+state.pageHistory =
+    Array.isArray(state.pageHistory)
+        ? state.pageHistory
+        : [];
+
+state.pageHistoryIndex =
+    Number(state.pageHistoryIndex) || -1;
+
+
+/* =====================================================
+   DOM HELPERS
+===================================================== */
+
+const $ =
+    selector =>
+        document.querySelector(selector);
+
+const $$ =
+    selector =>
+        document.querySelectorAll(selector);
+
+
+function getViewport() {
+
+    return $(
+        ".reader-viewport"
+    );
+
+}
+
+
+function getPageInput() {
+
+    return $(
+        ".page-number-input, [data-page-input], #pageNumberInput"
+    );
+
+}
+
+
+function getCurrentPageLabels() {
+
+    return $$(
+        ".current-page, [data-current-page]"
+    );
+
+}
+
+
+function getTotalPageLabels() {
+
+    return $$(
+        ".total-pages, [data-total-pages]"
+    );
+
+}
+
+
+function getProgressBars() {
+
+    return $$(
+        ".reader-progress-bar, [data-reader-progress]"
+    );
+
+}
+
+
+function getProgressText() {
+
+    return $$(
+        ".reader-progress-text, [data-progress-text]"
+    );
+
+}
+
+
+/* =====================================================
+   NUMBER HELPERS
+===================================================== */
+
+function normalizePage(page) {
+
+    let value =
+        parseInt(
+            page,
+            10
         );
-        return;
-    }
 
-    const state = R.state;
-
-
-    /* =====================================================
-       NAVIGATION STATE
-    ===================================================== */
-
-    state.currentPage =
-        Number(state.currentPage) || 1;
-
-    state.totalPages =
-        Number(state.totalPages) || 0;
-
-    state.pageChanging =
-        false;
-
-    state.pageChangeToken =
-        0;
-
-    state.navigationReady =
-        false;
-
-    state.pageHistory =
-        Array.isArray(
-            state.pageHistory
+    if (
+        !Number.isFinite(
+            value
         )
-            ? state.pageHistory
-            : [];
-
-    state.pageHistoryIndex =
-        Number(
-            state.pageHistoryIndex
-        ) || -1;
-
-
-    /* =====================================================
-       DOM HELPERS
-    ===================================================== */
-
-    const $ =
-        selector =>
-            document.querySelector(
-                selector
-            );
-
-
-    const $$ =
-        selector =>
-            document.querySelectorAll(
-                selector
-            );
-
-
-    function getViewport() {
-
-        return $(
-            ".reader-viewport"
-        );
-
-    }
-
-
-    function getPageInput() {
-
-        return $(
-            ".page-number-input, [data-page-input], #pageNumberInput"
-        );
-
-    }
-
-
-    function getCurrentPageLabels() {
-
-        return $$(
-            ".current-page, [data-current-page]"
-        );
-
-    }
-
-
-    function getTotalPageLabels() {
-
-        return $$(
-            ".total-pages, [data-total-pages]"
-        );
-
-    }
-
-
-    function getProgressBars() {
-
-        return $$(
-            ".reader-progress-bar, [data-reader-progress]"
-        );
-
-    }
-
-
-    function getProgressText() {
-
-        return $$(
-            ".reader-progress-text, [data-progress-text]"
-        );
-
-    }
-
-
-    /* =====================================================
-       NUMBER HELPERS
-    ===================================================== */
-
-    function normalizePage(
-        page
     ) {
 
-        let value =
+        value = 1;
+
+    }
+
+    const total =
+        Number(
+            state.totalPages
+        );
+
+    if (
+        total > 0
+    ) {
+
+        value =
+            Math.max(
+                1,
+                Math.min(
+                    total,
+                    value
+                )
+            );
+
+    } else {
+
+        value =
+            Math.max(
+                1,
+                value
+            );
+
+    }
+
+    return value;
+
+}
+
+
+/* =====================================================
+   GET TOTAL PAGES
+===================================================== */
+
+function detectTotalPages() {
+
+    if (
+        state.pdfDocument &&
+        Number(
+            state.pdfDocument.numPages
+        ) > 0
+    ) {
+
+        state.totalPages =
+            Number(
+                state.pdfDocument.numPages
+            );
+
+        return state.totalPages;
+
+    }
+
+
+    if (
+        Number(
+            state.pageCount
+        ) > 0
+    ) {
+
+        state.totalPages =
+            Number(
+                state.pageCount
+            );
+
+        return state.totalPages;
+
+    }
+
+
+    if (
+        Number(
+            state.total
+        ) > 0
+    ) {
+
+        state.totalPages =
+            Number(
+                state.total
+            );
+
+        return state.totalPages;
+
+    }
+
+
+    const totalElement =
+        $(
+            "[data-total-pages]"
+        );
+
+
+    if (
+        totalElement
+    ) {
+
+        const total =
             parseInt(
-                page,
+                totalElement.textContent,
                 10
             );
 
 
         if (
-            !Number.isFinite(
-                value
-            )
-        ) {
-
-            value = 1;
-
-        }
-
-
-        const total =
-            Number(
-                state.totalPages
-            );
-
-
-        if (
+            Number.isFinite(
+                total
+            ) &&
             total > 0
         ) {
 
-            value =
-                Math.max(
-                    1,
-                    Math.min(
-                        total,
-                        value
-                    )
-                );
+            state.totalPages =
+                total;
 
-        } else {
-
-            value =
-                Math.max(
-                    1,
-                    value
-                );
+            return total;
 
         }
-
-
-        return value;
 
     }
 
 
-    /* =====================================================
-       GET TOTAL PAGES
-    ===================================================== */
+    return (
+        Number(
+            state.totalPages
+        ) || 0
+    );
 
-    function detectTotalPages() {
-
-        /*
-         * PDF.js document
-         */
-
-        if (
-            state.pdfDocument &&
-            Number(
-                state.pdfDocument.numPages
-            ) > 0
-        ) {
-
-            state.totalPages =
-                state.pdfDocument.numPages;
-
-            return state.totalPages;
-
-        }
+}
 
 
-        /*
-         * Existing state values
-         */
+/* =====================================================
+   UPDATE PAGE LABELS
+===================================================== */
 
-        if (
-            Number(
-                state.pageCount
-            ) > 0
-        ) {
+function updatePageLabels() {
 
-            state.totalPages =
-                Number(
-                    state.pageCount
-                );
-
-            return state.totalPages;
-
-        }
-
-
-        if (
-            Number(
-                state.total
-            ) > 0
-        ) {
-
-            state.totalPages =
-                Number(
-                    state.total
-                );
-
-            return state.totalPages;
-
-        }
-
-
-        /*
-         * DOM fallback
-         */
-
-        const totalElement =
-            $(
-                "[data-total-pages]"
-            );
-
-
-        if (
-            totalElement
-        ) {
-
-            const total =
-                parseInt(
-                    totalElement.textContent,
-                    10
-                );
-
-
-            if (
-                Number.isFinite(
-                    total
-                ) &&
-                total > 0
-            ) {
-
-                state.totalPages =
-                    total;
-
-                return total;
-
-            }
-
-        }
-
-
-        return (
-            Number(
-                state.totalPages
-            ) || 0
+    const current =
+        normalizePage(
+            state.currentPage
         );
 
-    }
+
+    const total =
+        detectTotalPages();
 
 
-    /* =====================================================
-       UPDATE PAGE LABELS
-    ===================================================== */
+    getCurrentPageLabels()
+        .forEach(
+            element => {
 
-    function updatePageLabels() {
+                element.textContent =
+                    String(
+                        current
+                    );
 
-        const current =
-            normalizePage(
-                state.currentPage
+            }
+        );
+
+
+    getTotalPageLabels()
+        .forEach(
+            element => {
+
+                element.textContent =
+                    total > 0
+                        ? String(
+                            total
+                        )
+                        : "—";
+
+            }
+        );
+
+
+    const input =
+        getPageInput();
+
+
+    if (
+        input &&
+        document.activeElement !==
+        input
+    ) {
+
+        input.value =
+            String(
+                current
             );
-
-
-        const total =
-            detectTotalPages();
-
-
-        getCurrentPageLabels()
-            .forEach(
-                element => {
-
-                    element.textContent =
-                        String(
-                            current
-                        );
-
-                }
-            );
-
-
-        getTotalPageLabels()
-            .forEach(
-                element => {
-
-                    element.textContent =
-                        total > 0
-                            ? String(
-                                total
-                            )
-                            : "—";
-
-                }
-            );
-
-
-        const input =
-            getPageInput();
-
-
-        if (
-            input &&
-            document.activeElement !==
-            input
-        ) {
-
-            input.value =
-                String(
-                    current
-                );
-
-        }
 
     }
 
-
-    /* =====================================================
-       UPDATE PROGRESS
-    ===================================================== */
-
-    function updateProgress() {
-
-        const total =
-            detectTotalPages();
+}
 
 
-        const current =
-            normalizePage(
-                state.currentPage
-            );
+/* =====================================================
+   UPDATE PROGRESS
+===================================================== */
+
+function updateProgress() {
+
+    const total =
+        detectTotalPages();
 
 
-        let percent =
-            0;
+    const current =
+        normalizePage(
+            state.currentPage
+        );
 
 
-        if (
-            total > 1
-        ) {
+    let percent =
+        0;
 
-            percent =
-                (
-                    (
-                        current - 1
-                    ) /
-                    (
-                        total - 1
-                    )
-                ) *
-                100;
 
-        } else if (
-            total === 1
-        ) {
-
-            percent =
-                100;
-
-        }
-
+    if (
+        total > 1
+    ) {
 
         percent =
-            Math.max(
-                0,
-                Math.min(
-                    100,
-                    percent
+            (
+                (
+                    current - 1
+                ) /
+                (
+                    total - 1
                 )
-            );
+            ) *
+            100;
+
+    } else if (
+        total === 1
+    ) {
+
+        percent =
+            100;
+
+    }
 
 
-        getProgressBars()
-            .forEach(
-                bar => {
-
-                    /*
-                     * Support normal progress
-                     * elements.
-                     */
-
-                    if (
-                        bar.tagName ===
-                        "PROGRESS"
-                    ) {
-
-                        bar.max =
-                            100;
-
-                        bar.value =
-                            percent;
-
-                    }
+    percent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                percent
+            )
+        );
 
 
-                    bar.style.setProperty(
-                        "--reader-progress",
-                        `${percent}%`
-                    );
+    getProgressBars()
+        .forEach(
+            bar => {
+
+                if (
+                    bar.tagName ===
+                    "PROGRESS"
+                ) {
+
+                    bar.max =
+                        100;
+
+                    bar.value =
+                        percent;
+
+                }
+
+
+                bar.style.setProperty(
+                    "--reader-progress",
+                    `${percent}%`
+                );
+
+
                 bar.style.width =
                     `${percent}%`;
 
@@ -12798,46 +12749,49 @@
                             percent
                         )
                     )
-            );
-
-
-            getProgressText()
-                .forEach(
-                    element => {
-
-                        element.textContent =
-                            `${Math.round(
-                                percent
-                            )}%`;
-
-                    }
                 );
-
-
-            const reader =
-                $(
-                    ".reader"
-                );
-
-
-            if (
-                reader
-            ) {
-
-                reader.style.setProperty(
-                    "--reader-progress",
-                    `${percent}%`
-                );
-
-
-                reader.dataset.progress =
-                    String(
-                        Math.round(
-                            percent
-                        )
-                    );
 
             }
+        );
+
+
+    getProgressText()
+        .forEach(
+            element => {
+
+                element.textContent =
+                    `${Math.round(
+                        percent
+                    )}%`;
+
+            }
+        );
+
+
+    const reader =
+        $(
+            ".reader"
+        );
+
+
+    if (
+        reader
+    ) {
+
+        reader.style.setProperty(
+            "--reader-progress",
+            `${percent}%`
+        );
+
+
+        reader.dataset.progress =
+            String(
+                Math.round(
+                    percent
+                )
+            );
+
+    }
 
 }
 
@@ -12908,909 +12862,855 @@ function updateNavigationButtons() {
             }
         );
 
-}
+
+    $$(
+        "[data-page-first]"
+    )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    atFirst;
 
 
-        $$(
-            "[data-page-first]"
-        )
-            .forEach(
-                button => {
-
-                    button.disabled =
-                        atFirst;
-
-                }
-            );
-
-
-        $$(
-            "[data-page-last]"
-        )
-            .forEach(
-                button => {
-
-                    button.disabled =
-                        atLast;
-
-                }
-            );
-
-    }
-
-
-    /* =====================================================
-       UPDATE ALL NAVIGATION UI
-    ===================================================== */
-
-    function updateNavigationUI() {
-
-        updatePageLabels();
-
-        updateProgress();
-
-        updateNavigationButtons();
-
-        state.navigationReady =
-            true;
-
-    }
-
-
-    /* =====================================================
-       SAVE CURRENT PAGE
-    ===================================================== */
-
-    function saveCurrentPage() {
-
-        try {
-
-            localStorage.setItem(
-                "chishtilib_current_page",
-                String(
-                    state.currentPage
-                )
-            );
-
-        } catch (_) {}
-
-    }
-
-
-    /* =====================================================
-       RESTORE CURRENT PAGE
-    ===================================================== */
-
-    function restoreCurrentPage() {
-
-        try {
-
-            const saved =
-                localStorage.getItem(
-                    "chishtilib_current_page"
-                );
-
-
-            if (
-                saved !== null
-            ) {
-
-                const page =
-                    parseInt(
-                        saved,
-                        10
-                    );
-
-
-                if (
-                    Number.isFinite(
-                        page
-                    ) &&
-                    page > 0
-                ) {
-
-                    state.currentPage =
-                        page;
-
-                }
-
-            }
-
-        } catch (_) {}
-
-    }
-
-
-    /* =====================================================
-       UPDATE HASH
-    ===================================================== */
-
-    function updatePageHash(
-        page,
-        replace = true
-    ) {
-
-        const cleanPage =
-            normalizePage(
-                page
-            );
-
-
-        const hash =
-            `#page=${cleanPage}`;
-
-
-        try {
-
-            if (
-                replace
-            ) {
-
-                history.replaceState(
-                    {
-                        page:
-                            cleanPage
-                    },
-                    "",
-                    hash
-                );
-
-            } else {
-
-                history.pushState(
-                    {
-                        page:
-                            cleanPage
-                    },
-                    "",
-                    hash
+                button.setAttribute(
+                    "aria-disabled",
+                    String(
+                        atFirst
+                    )
                 );
 
             }
-
-        } catch (_) {
-
-            /*
-             * Very old / restricted browsers.
-             */
-
-            try {
-
-                window.location.hash =
-                    `page=${cleanPage}`;
-
-            } catch (_) {}
-
-        }
-
-    }
-
-
-    /* =====================================================
-       READ PAGE FROM HASH
-    ===================================================== */
-
-    function getPageFromHash() {
-
-        const hash =
-            window.location.hash;
-
-
-        if (
-            !hash
-        ) {
-
-            return null;
-
-        }
-
-
-        const match =
-            hash.match(
-                /page\s*=\s*(\d+)/i
-            );
-
-
-        if (
-            !match
-        ) {
-
-            return null;
-
-        }
-
-
-        const page =
-            parseInt(
-                match[1],
-                10
-            );
-
-
-        return Number.isFinite(
-            page
-        )
-            ? page
-            : null;
-
-    }
-
-
-    /* =====================================================
-       HISTORY
-    ===================================================== */
-
-    function pushPageHistory(
-        page
-    ) {
-
-        const cleanPage =
-            normalizePage(
-                page
-            );
-
-
-        const previous =
-            state.pageHistory[
-                state.pageHistory.length - 1
-            ];
-
-
-        if (
-            previous ===
-            cleanPage
-        ) {
-
-            return;
-
-        }
-
-
-        state.pageHistory.push(
-            cleanPage
         );
 
 
+    $$(
+        "[data-page-last]"
+    )
+        .forEach(
+            button => {
+
+                button.disabled =
+                    atLast;
+
+
+                button.setAttribute(
+                    "aria-disabled",
+                    String(
+                        atLast
+                    )
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   UPDATE ALL NAVIGATION UI
+===================================================== */
+
+function updateNavigationUI() {
+
+    updatePageLabels();
+
+    updateProgress();
+
+    updateNavigationButtons();
+
+    state.navigationReady =
+        true;
+
+}
+
+
+/* =====================================================
+   SAVE CURRENT PAGE
+===================================================== */
+
+function saveCurrentPage() {
+
+    try {
+
+        localStorage.setItem(
+            "chishtilib_current_page",
+            String(
+                state.currentPage
+            )
+        );
+
+    } catch (_) {}
+
+}
+
+
+/* =====================================================
+   RESTORE CURRENT PAGE
+===================================================== */
+
+function restoreCurrentPage() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "chishtilib_current_page"
+            );
+
+
         if (
-            state.pageHistory.length >
-            50
+            saved !== null
         ) {
 
-            state.pageHistory.shift();
+            const page =
+                parseInt(
+                    saved,
+                    10
+                );
+
+
+            if (
+                Number.isFinite(
+                    page
+                ) &&
+                page > 0
+            ) {
+
+                state.currentPage =
+                    page;
+
+            }
 
         }
 
+    } catch (_) {}
 
-        state.pageHistoryIndex =
-            state.pageHistory.length - 1;
+}
+
+
+/* =====================================================
+   UPDATE HASH
+===================================================== */
+
+function updatePageHash(
+    page,
+    replace = true
+) {
+
+    const cleanPage =
+        normalizePage(
+            page
+        );
+
+
+    const hash =
+        `#page=${cleanPage}`;
+
+
+    try {
+
+        if (
+            replace
+        ) {
+
+            history.replaceState(
+                {
+                    page:
+                        cleanPage
+                },
+                "",
+                hash
+            );
+
+        } else {
+
+            history.pushState(
+                {
+                    page:
+                        cleanPage
+                },
+                "",
+                hash
+            );
+
+        }
+
+    } catch (_) {
+
+        try {
+
+            window.location.hash =
+                `page=${cleanPage}`;
+
+        } catch (_) {}
 
     }
 
-
-    /* =====================================================
-       FIND PDF RENDERER
-    ===================================================== */
-
-    function findRenderer() {
-
-        if (
-            typeof R.renderPage ===
-            "function"
-        ) {
-
-            return R.renderPage;
-
-        }
+}
 
 
-        if (
-            typeof R.renderPDFPage ===
-            "function"
-        ) {
+/* =====================================================
+   READ PAGE FROM HASH
+===================================================== */
 
-            return R.renderPDFPage;
+function getPageFromHash() {
 
-        }
-
-
-        if (
-            typeof R.renderPdfPage ===
-            "function"
-        ) {
-
-            return R.renderPdfPage;
-
-        }
+    const hash =
+        window.location.hash;
 
 
-        if (
-            typeof R.showPage ===
-            "function"
-        ) {
-
-            return R.showPage;
-
-        }
-
+    if (
+        !hash
+    ) {
 
         return null;
 
     }
 
 
-    /* =====================================================
-       WAIT FOR PDF PAGE
-    ===================================================== */
+    const match =
+        hash.match(
+            /page\s*=\s*(\d+)/i
+        );
 
-    function wait(
-        milliseconds
+
+    if (
+        !match
     ) {
 
-        return new Promise(
-            resolve =>
-                setTimeout(
-                    resolve,
-                    milliseconds
-                )
-        );
+        return null;
 
     }
 
 
-    /* =====================================================
-       RENDER PAGE
-    ===================================================== */
+    const page =
+        parseInt(
+            match[1],
+            10
+        );
 
-    async function renderPage(
+
+    return Number.isFinite(
         page
+    )
+        ? page
+        : null;
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function pushPageHistory(
+    page
+) {
+
+    const cleanPage =
+        normalizePage(
+            page
+        );
+
+
+    const previous =
+        state.pageHistory[
+            state.pageHistory.length - 1
+        ];
+
+
+    if (
+        previous ===
+        cleanPage
     ) {
 
-        const renderer =
-            findRenderer();
-
-
-        if (
-            renderer
-        ) {
-
-            try {
-
-                const result =
-                    renderer(
-                        page
-                    );
-
-
-                if (
-                    result &&
-                    typeof result.then ===
-                    "function"
-                ) {
-
-                    await result;
-
-                }
-
-
-                return true;
-
-            } catch (error) {
-
-                console.error(
-                    "Page renderer failed:",
-                    error
-                );
-
-                return false;
-
-            }
-
-        }
-
-
-        /*
-         * Fallback:
-         * If another part of the reader
-         * already renders based on state,
-         * dispatch an event.
-         */
-
-        document.dispatchEvent(
-            new CustomEvent(
-                "reader:pagechange",
-                {
-                    detail: {
-                        page
-                    }
-                }
-            )
-        );
-
-
-        await wait(
-            20
-        );
-
-
-        return true;
+        return;
 
     }
 
 
-    /* =====================================================
-       SCROLL TO PAGE
-    ===================================================== */
+    state.pageHistory.push(
+        cleanPage
+    );
 
-    function scrollToPage(
-        behavior = "smooth"
+
+    if (
+        state.pageHistory.length >
+        50
     ) {
 
-        const viewport =
-            getViewport();
+        state.pageHistory.shift();
+
+    }
 
 
-        if (
-            !viewport
-        ) {
+    state.pageHistoryIndex =
+        state.pageHistory.length - 1;
 
-            return;
+}
 
-        }
 
+/* =====================================================
+   FIND PDF RENDERER
+===================================================== */
+
+function findRenderer() {
+
+    if (
+        typeof R.renderPage ===
+        "function"
+    ) {
+
+        return R.renderPage;
+
+    }
+
+
+    if (
+        typeof R.renderPDFPage ===
+        "function"
+    ) {
+
+        return R.renderPDFPage;
+
+    }
+
+
+    if (
+        typeof R.renderPdfPage ===
+        "function"
+    ) {
+
+        return R.renderPdfPage;
+
+    }
+
+
+    if (
+        typeof R.showPage ===
+        "function"
+    ) {
+
+        return R.showPage;
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =====================================================
+   WAIT FOR PDF PAGE
+===================================================== */
+
+function wait(
+    milliseconds
+) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
+
+}
+
+
+/* =====================================================
+   RENDER PAGE
+===================================================== */
+
+async function renderPage(
+    page
+) {
+
+    const renderer =
+        findRenderer();
+
+
+    if (
+        renderer
+    ) {
 
         try {
 
-            viewport.scrollTo({
-                top: 0,
-                left: 0,
-                behavior
-            });
+            const result =
+                renderer(
+                    page
+                );
 
-        } catch (_) {
 
-            viewport.scrollTop =
-                0;
+            if (
+                result &&
+                typeof result.then ===
+                "function"
+            ) {
 
-            viewport.scrollLeft =
-                0;
+                await result;
+
+            }
+
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                "Page renderer failed:",
+                error
+            );
+
+            return false;
 
         }
 
     }
 
 
-    /* =====================================================
-       CHANGE PAGE
-    ===================================================== */
+    document.dispatchEvent(
+        new CustomEvent(
+            "reader:pagechange",
+            {
+                detail: {
+                    page
+                }
+            }
+        )
+    );
 
-    async function goToPage(
-        page,
-        options = {}
+
+    await wait(
+        20
+    );
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+   SCROLL TO PAGE
+===================================================== */
+
+function scrollToPage(
+    behavior = "smooth"
+) {
+
+    const viewport =
+        getViewport();
+
+
+    if (
+        !viewport
     ) {
 
-        const total =
-            detectTotalPages();
+        return;
+
+    }
 
 
-        let target =
-            normalizePage(
-                page
+    try {
+
+        viewport.scrollTo({
+            top: 0,
+            left: 0,
+            behavior
+        });
+
+    } catch (_) {
+
+        viewport.scrollTop =
+            0;
+
+        viewport.scrollLeft =
+            0;
+
+    }
+
+}
+
+
+/* =====================================================
+   CHANGE PAGE
+===================================================== */
+
+async function goToPage(
+    page,
+    options = {}
+) {
+
+    const total =
+        detectTotalPages();
+
+
+    let target =
+        normalizePage(
+            page
+        );
+
+
+    if (
+        total <= 0
+    ) {
+
+        target =
+            Math.max(
+                1,
+                parseInt(
+                    page,
+                    10
+                ) || 1
             );
 
-
-        if (
-            total <= 0
-        ) {
-
-            target =
-                Math.max(
-                    1,
-                    parseInt(
-                        page,
-                        10
-                    ) || 1
-                );
-
-        }
+    }
 
 
-        const oldPage =
-            state.currentPage;
+    const oldPage =
+        state.currentPage;
 
 
-        if (
-            target ===
-            oldPage &&
-            !options.force
-        ) {
-
-            updateNavigationUI();
-
-            return target;
-
-        }
-
-
-        const token =
-            ++state.pageChangeToken;
-
-
-        state.pageChanging =
-            true;
-
-
-        state.currentPage =
-            target;
-
+    if (
+        target ===
+        oldPage &&
+        !options.force
+    ) {
 
         updateNavigationUI();
-
-
-        /*
-         * Render requested page.
-         */
-
-        await renderPage(
-            target
-        );
-
-
-        /*
-         * Ignore stale page request.
-         */
-
-        if (
-            token !==
-            state.pageChangeToken
-        ) {
-
-            return target;
-
-        }
-
-
-        /*
-         * Give renderer one frame.
-         */
-
-        await new Promise(
-            resolve =>
-                requestAnimationFrame(
-                    resolve
-                )
-        );
-
-
-        scrollToPage(
-            options.instant
-                ? "auto"
-                : "smooth"
-        );
-
-
-        state.pageChanging =
-            false;
-
-
-        updateNavigationUI();
-
-        saveCurrentPage();
-
-
-        /*
-         * Update URL.
-         */
-
-        if (
-            options.history ===
-            false
-        ) {
-
-            updatePageHash(
-                target,
-                true
-            );
-
-        } else {
-
-            updatePageHash(
-                target,
-                options.replaceHistory !==
-                    false
-            );
-
-        }
-
-
-        /*
-         * Add to internal history.
-         */
-
-        if (
-            options.recordHistory !==
-            false
-        ) {
-
-            pushPageHistory(
-                target
-            );
-
-        }
-
-
-        /*
-         * Notify all other modules.
-         */
-
-        document.dispatchEvent(
-            new CustomEvent(
-                "reader:page-rendered",
-                {
-                    detail: {
-                        page:
-                            target,
-
-                        previousPage:
-                            oldPage,
-
-                        totalPages:
-                            state.totalPages
-                    }
-                }
-            )
-        );
-
-
-        /*
-         * Search module can highlight
-         * the new page.
-         */
-
-        if (
-            state.searchQuery &&
-            typeof R.search ===
-            "function"
-        ) {
-
-            /*
-             * Do not restart the whole search.
-             * Just allow existing search module
-             * to react to the rendered page.
-             */
-
-            document.dispatchEvent(
-                new CustomEvent(
-                    "reader:search-page-ready",
-                    {
-                        detail: {
-                            page:
-                                target,
-
-                            query:
-                                state.searchQuery
-                        }
-                    }
-                )
-            );
-
-        }
-
-
-        /*
-         * Restore zoom after rendering.
-         */
-
-        if (
-            typeof R.applyZoom ===
-            "function"
-        ) {
-
-            window.requestAnimationFrame(
-                () => {
-
-                    R.applyZoom(
-                        state.zoom,
-                        {
-                            keepFit:
-                                state.fitMode
-                        }
-                    );
-
-                }
-            );
-
-        }
-
 
         return target;
 
     }
 
 
-    /* =====================================================
-       NEXT PAGE
-    ===================================================== */
-
-    async function nextPage() {
-
-        const total =
-            detectTotalPages();
+    const token =
+        ++state.pageChangeToken;
 
 
-        const current =
-            normalizePage(
-                state.currentPage
-            );
+    state.pageChanging =
+        true;
 
 
-        if (
-            total > 0 &&
-            current >= total
-        ) {
+    state.currentPage =
+        target;
 
-            return current;
+
+    updateNavigationUI();
+
+
+    await renderPage(
+        target
+    );
+
+
+    if (
+        token !==
+        state.pageChangeToken
+    ) {
+
+        state.pageChanging =
+            false;
+
+        return target;
+
+    }
+
+
+    await new Promise(
+        resolve => {
+
+            if (
+                typeof requestAnimationFrame ===
+                "function"
+            ) {
+
+                requestAnimationFrame(
+                    resolve
+                );
+
+            } else {
+
+                setTimeout(
+                    resolve,
+                    0
+                );
+
+            }
 
         }
+    );
 
 
-        return goToPage(
-            current + 1
+    scrollToPage(
+        options.instant
+            ? "auto"
+            : "smooth"
+    );
+
+
+    state.pageChanging =
+        false;
+
+
+    updateNavigationUI();
+
+    saveCurrentPage();
+
+
+    if (
+        options.history ===
+        false
+    ) {
+
+        updatePageHash(
+            target,
+            true
+        );
+
+    } else {
+
+        updatePageHash(
+            target,
+            options.replaceHistory !==
+                false
         );
 
     }
 
 
-    /* =====================================================
-       PREVIOUS PAGE
-    ===================================================== */
+    if (
+        options.recordHistory !==
+        false
+    ) {
 
-    async function previousPage() {
-
-        const current =
-            normalizePage(
-                state.currentPage
-            );
-
-
-        if (
-            current <= 1
-        ) {
-
-            return current;
-
-        }
-
-
-        return goToPage(
-            current - 1
+        pushPageHistory(
+            target
         );
 
     }
 
 
-    /* =====================================================
-       FIRST PAGE
-    ===================================================== */
+    document.dispatchEvent(
+        new CustomEvent(
+            "reader:page-rendered",
+            {
+                detail: {
+                    page:
+                        target,
 
-    async function firstPage() {
+                    previousPage:
+                        oldPage,
 
-        return goToPage(
-            1
+                    totalPages:
+                        state.totalPages
+                }
+            }
+        )
+    );
+
+
+    if (
+        state.searchQuery &&
+        typeof R.search ===
+        "function"
+    ) {
+
+        document.dispatchEvent(
+            new CustomEvent(
+                "reader:search-page-ready",
+                {
+                    detail: {
+                        page:
+                            target,
+
+                        query:
+                            state.searchQuery
+                    }
+                }
+            )
         );
 
     }
 
 
-    /* =====================================================
-       LAST PAGE
-    ===================================================== */
+    if (
+        typeof R.applyZoom ===
+        "function"
+    ) {
 
-    async function lastPage() {
-
-        const total =
-            detectTotalPages();
-
-
-        if (
-            total <= 0
-        ) {
-
-            return state.currentPage;
-
-        }
-
-
-        return goToPage(
-            total
-        );
-
-    }
-
-
-    /* =====================================================
-       PAGE INPUT
-    ===================================================== */
-
-    function bindPageInput() {
-
-        const input =
-            getPageInput();
-
-
-        if (
-            !input ||
-            input.dataset.pageBound ===
-            "true"
-        ) {
-
-            return;
-
-        }
-
-
-        input.dataset.pageBound =
-            "true";
-
-
-        input.addEventListener(
-            "focus",
+        window.requestAnimationFrame(
             () => {
 
-                input.select();
+                R.applyZoom(
+                    state.zoom,
+                    {
+                        keepFit:
+                            state.fitMode
+                    }
+                );
 
             }
         );
 
-
-        input.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key ===
-                    "Enter"
-                ) {
-
-                    event.preventDefault();
+    }
 
 
-                    const page =
-                        normalizePage(
-                            input.value
-                        );
+    return target;
+
+}
 
 
-                    goToPage(
-                        page
-                    );
+/* =====================================================
+   NEXT PAGE
+===================================================== */
+
+async function nextPage() {
+
+    const total =
+        detectTotalPages();
 
 
-                    input.blur();
-
-                }
-
-
-                if (
-                    event.key ===
-                    "Escape"
-                ) {
-
-                    event.preventDefault();
-
-                    input.value =
-                        state.currentPage;
-
-                    input.blur();
-
-                }
-
-            }
+    const current =
+        normalizePage(
+            state.currentPage
         );
 
 
-        input.addEventListener(
-            "change",
-            () => {
+    if (
+        total > 0 &&
+        current >= total
+    ) {
+
+        return current;
+
+    }
+
+
+    return goToPage(
+        current + 1
+    );
+
+}
+
+
+/* =====================================================
+   PREVIOUS PAGE
+===================================================== */
+
+async function previousPage() {
+
+    const current =
+        normalizePage(
+            state.currentPage
+        );
+
+
+    if (
+        current <= 1
+    ) {
+
+        return current;
+
+    }
+
+
+    return goToPage(
+        current - 1
+    );
+
+}
+
+
+/* =====================================================
+   FIRST PAGE
+===================================================== */
+
+async function firstPage() {
+
+    return goToPage(
+        1
+    );
+
+}
+
+
+/* =====================================================
+   LAST PAGE
+===================================================== */
+
+async function lastPage() {
+
+    const total =
+        detectTotalPages();
+
+
+    if (
+        total <= 0
+    ) {
+
+        return state.currentPage;
+
+    }
+
+
+    return goToPage(
+        total
+    );
+
+}
+
+
+/* =====================================================
+   PAGE INPUT
+===================================================== */
+
+function bindPageInput() {
+
+    const input =
+        getPageInput();
+
+
+    if (
+        !input ||
+        input.dataset.pageBound ===
+        "true"
+    ) {
+
+        return;
+
+    }
+
+
+    input.dataset.pageBound =
+        "true";
+
+
+    input.addEventListener(
+        "focus",
+        () => {
+
+            input.select();
+
+        }
+    );
+
+
+    input.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                event.preventDefault();
+
 
                 const page =
                     normalizePage(
@@ -13822,763 +13722,808 @@ function updateNavigationButtons() {
                     page
                 );
 
+
+                input.blur();
+
             }
-        );
-
-    }
 
 
-    /* =====================================================
-       NAVIGATION BUTTONS
-    ===================================================== */
+            if (
+                event.key ===
+                "Escape"
+            ) {
 
-    function bindNavigationButtons() {
+                event.preventDefault();
 
-        document.addEventListener(
-            "click",
-            event => {
-
-                const next =
-                    event.target.closest(
-                        "[data-page-next], [data-action='next-page']"
+                input.value =
+                    String(
+                        state.currentPage
                     );
 
+                input.blur();
 
-                if (
-                    next
-                ) {
+            }
+
+        }
+    );
+
+
+    input.addEventListener(
+        "change",
+        () => {
+
+            const page =
+                normalizePage(
+                    input.value
+                );
+
+
+            goToPage(
+                page
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   NAVIGATION BUTTONS
+===================================================== */
+
+function bindNavigationButtons() {
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const target =
+                event.target instanceof Element
+                    ? event.target
+                    : event.target?.parentElement;
+
+
+            if (
+                !target
+            ) {
+
+                return;
+
+            }
+
+
+            const next =
+                target.closest(
+                    "[data-page-next], [data-action='next-page']"
+                );
+
+
+            if (
+                next
+            ) {
+
+                event.preventDefault();
+
+                nextPage();
+
+                return;
+
+            }
+
+
+            const previous =
+                target.closest(
+                    "[data-page-prev], [data-action='previous-page']"
+                );
+
+
+            if (
+                previous
+            ) {
+
+                event.preventDefault();
+
+                previousPage();
+
+                return;
+
+            }
+
+
+            const first =
+                target.closest(
+                    "[data-page-first]"
+                );
+
+
+            if (
+                first
+            ) {
+
+                event.preventDefault();
+
+                firstPage();
+
+                return;
+
+            }
+
+
+            const last =
+                target.closest(
+                    "[data-page-last]"
+                );
+
+
+            if (
+                last
+            ) {
+
+                event.preventDefault();
+
+                lastPage();
+
+                return;
+
+            }
+
+
+            const pageButton =
+                target.closest(
+                    "[data-go-page]"
+                );
+
+
+            if (
+                pageButton
+            ) {
+
+                event.preventDefault();
+
+
+                goToPage(
+                    pageButton.dataset.goPage
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   KEYBOARD NAVIGATION
+===================================================== */
+
+function bindKeyboardNavigation() {
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            const target =
+                event.target;
+
+
+            if (
+                target &&
+                (
+                    target.matches?.(
+                        "input, textarea, select"
+                    ) ||
+                    target.isContentEditable
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                event.ctrlKey ||
+                event.metaKey ||
+                event.altKey
+            ) {
+
+                return;
+
+            }
+
+
+            switch (
+                event.key
+            ) {
+
+                case "ArrowRight":
+
+                case "PageDown":
 
                     event.preventDefault();
 
                     nextPage();
 
-                    return;
-
-                }
+                    break;
 
 
-                const previous =
-                    event.target.closest(
-                        "[data-page-prev], [data-action='previous-page']"
-                    );
+                case "ArrowLeft":
 
-
-                if (
-                    previous
-                ) {
+                case "PageUp":
 
                     event.preventDefault();
 
                     previousPage();
 
-                    return;
-
-                }
+                    break;
 
 
-                const first =
-                    event.target.closest(
-                        "[data-page-first]"
-                    );
-
-
-                if (
-                    first
-                ) {
+                case "Home":
 
                     event.preventDefault();
 
                     firstPage();
 
-                    return;
-
-                }
+                    break;
 
 
-                const last =
-                    event.target.closest(
-                        "[data-page-last]"
-                    );
-
-
-                if (
-                    last
-                ) {
+                case "End":
 
                     event.preventDefault();
 
                     lastPage();
 
-                    return;
-
-                }
-
-
-                const pageButton =
-                    event.target.closest(
-                        "[data-go-page]"
-                    );
-
-
-                if (
-                    pageButton
-                ) {
-
-                    event.preventDefault();
-
-
-                    const page =
-                        pageButton.dataset.goPage;
-
-
-                    goToPage(
-                        page
-                    );
-
-                }
+                    break;
 
             }
-        );
-
-    }
-
-
-    /* =====================================================
-       KEYBOARD NAVIGATION
-    ===================================================== */
-
-    function bindKeyboardNavigation() {
-
-        document.addEventListener(
-            "keydown",
-            event => {
-
-                const target =
-                    event.target;
-
-
-                /*
-                 * Don't hijack typing.
-                 */
-
-                if (
-                    target &&
-                    (
-                        target.matches(
-                            "input, textarea, select"
-                        ) ||
-                        target.isContentEditable
-                    )
-                ) {
-
-                    return;
-
-                }
-
-
-                /*
-                 * Don't interfere with
-                 * browser shortcuts.
-                 */
-
-                if (
-                    event.ctrlKey ||
-                    event.metaKey ||
-                    event.altKey
-                ) {
-
-                    return;
-
-                }
-
-
-                switch (
-                    event.key
-                ) {
-
-                    case "ArrowRight":
-
-                    case "PageDown":
-
-                        event.preventDefault();
-
-                        nextPage();
-
-                        break;
-
-
-                    case "ArrowLeft":
-
-                    case "PageUp":
-
-                        event.preventDefault();
-
-                        previousPage();
-
-                        break;
-
-
-                    case "Home":
-
-                        event.preventDefault();
-
-                        firstPage();
-
-                        break;
-
-
-                    case "End":
-
-                        event.preventDefault();
-
-                        lastPage();
-
-                        break;
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       SWIPE NAVIGATION
-    ===================================================== */
-
-    let touchStartX =
-        null;
-
-    let touchStartY =
-        null;
-
-    let touchStartTime =
-        null;
-
-
-    function bindSwipeNavigation() {
-
-        const viewport =
-            getViewport();
-
-
-        if (
-            !viewport
-        ) {
-
-            return;
 
         }
+    );
 
+}
 
-        viewport.addEventListener(
-            "touchstart",
-            event => {
 
-                if (
-                    event.touches.length !==
-                    1
-                ) {
+/* =====================================================
+   SWIPE NAVIGATION
+===================================================== */
 
-                    return;
+let touchStartX =
+    null;
 
-                }
+let touchStartY =
+    null;
 
+let touchStartTime =
+    null;
 
-                const touch =
-                    event.touches[0];
 
+function bindSwipeNavigation() {
 
-                touchStartX =
-                    touch.clientX;
-
-
-                touchStartY =
-                    touch.clientY;
-
-
-                touchStartTime =
-                    Date.now();
-
-            },
-            {
-                passive: true
-            }
-        );
-
-
-        viewport.addEventListener(
-            "touchend",
-            event => {
-
-                if (
-                    touchStartX ===
-                    null
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    event.changedTouches.length !==
-                    1
-                ) {
-
-                    return;
-
-                }
-
-
-                const touch =
-                    event.changedTouches[0];
-
-
-                const endX =
-                    touch.clientX;
-
-
-                const endY =
-                    touch.clientY;
-
-
-                const deltaX =
-                    endX -
-                    touchStartX;
-
-
-                const deltaY =
-                    endY -
-                    touchStartY;
-
-
-                const elapsed =
-                    Date.now() -
-                    touchStartTime;
-
-
-                touchStartX =
-                    null;
-
-                touchStartY =
-                    null;
-
-                touchStartTime =
-                    null;
-
-
-                /*
-                 * Ignore vertical gestures.
-                 */
-
-                if (
-                    Math.abs(deltaX) <
-                    Math.abs(deltaY)
-                ) {
-
-                    return;
-
-                }
-
-
-                /*
-                 * Minimum swipe.
-                 */
-
-                if (
-                    Math.abs(deltaX) <
-                    55
-                ) {
-
-                    return;
-
-                }
-
-
-                /*
-                 * Don't trigger on very slow
-                 * dragging gestures.
-                 */
-
-                if (
-                    elapsed >
-                    900
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    deltaX < 0
-                ) {
-
-                    nextPage();
-
-                } else {
-
-                    previousPage();
-
-                }
-
-            },
-            {
-                passive: true
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       BROWSER HISTORY
-    ===================================================== */
-
-    function bindBrowserHistory() {
-
-        window.addEventListener(
-            "popstate",
-            event => {
-
-                const page =
-                    event.state?.page ||
-                    getPageFromHash();
-
-
-                if (
-                    page
-                ) {
-
-                    goToPage(
-                        page,
-                        {
-                            history:
-                                false,
-
-                            recordHistory:
-                                false,
-
-                            replaceHistory:
-                                true,
-
-                            instant:
-                                true
-                        }
-                    );
-
-                }
-
-            }
-        );
-
-
-        window.addEventListener(
-            "hashchange",
-            () => {
-
-                const page =
-                    getPageFromHash();
-
-
-                if (
-                    page &&
-                    page !==
-                    state.currentPage
-                ) {
-
-                    goToPage(
-                        page,
-                        {
-                            history:
-                                false,
-
-                            recordHistory:
-                                false,
-
-                            instant:
-                                true
-                        }
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       LOAD INITIAL PAGE
-    ===================================================== */
-
-    async function loadInitialPage() {
-
-        detectTotalPages();
-
-
-        const hashPage =
-            getPageFromHash();
-
-
-        if (
-            hashPage
-        ) {
-
-            state.currentPage =
-                normalizePage(
-                    hashPage
-                );
-
-        } else {
-
-            restoreCurrentPage();
-
-            state.currentPage =
-                normalizePage(
-                    state.currentPage
-                );
-
-        }
-
-
-        updateNavigationUI();
-
-
-        /*
-         * If PDF is already ready,
-         * render initial page.
-         */
-
-        if (
-            state.pdfDocument
-        ) {
-
-            await goToPage(
-                state.currentPage,
-                {
-                    force:
-                        true,
-
-                    history:
-                        false,
-
-                    recordHistory:
-                        false,
-
-                    instant:
-                        true
-                }
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       LISTEN FOR PDF READY
-    ===================================================== */
-
-    function bindPDFReady() {
-
-        document.addEventListener(
-            "reader:pdf-ready",
-            event => {
-
-                const pdf =
-                    event.detail?.pdf ||
-                    event.detail?.document ||
-                    state.pdfDocument;
-
-
-                if (
-                    pdf
-                ) {
-
-                    state.pdfDocument =
-                        pdf;
-
-
-                    state.totalPages =
-                        pdf.numPages;
-
-
-                    updateNavigationUI();
-
-
-                    loadInitialPage();
-
-                }
-
-            }
-        );
-
-
-        document.addEventListener(
-            "reader:document-ready",
-            event => {
-
-                const pdf =
-                    event.detail?.pdf ||
-                    event.detail?.document;
-
-
-                if (
-                    pdf
-                ) {
-
-                    state.pdfDocument =
-                        pdf;
-
-
-                    state.totalPages =
-                        pdf.numPages;
-
-
-                    updateNavigationUI();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       PUBLIC API
-    ===================================================== */
-
-    R.goToPage =
-        goToPage;
-
-    R.nextPage =
-        nextPage;
-
-    R.previousPage =
-        previousPage;
-
-    R.firstPage =
-        firstPage;
-
-    R.lastPage =
-        lastPage;
-
-    R.detectTotalPages =
-        detectTotalPages;
-
-    R.updateNavigationUI =
-        updateNavigationUI;
-
-    R.updateProgress =
-        updateProgress;
-
-
-    /*
-     * Compatibility aliases.
-     */
-
-    R.next =
-        nextPage;
-
-    R.prev =
-        previousPage;
-
-    R.gotoPage =
-        goToPage;
-
-
-    /* =====================================================
-       INITIALIZATION
-    ===================================================== */
-
-    function initializeNavigation() {
-
-        detectTotalPages();
-
-        bindPageInput();
-
-        bindNavigationButtons();
-
-        bindKeyboardNavigation();
-
-        bindSwipeNavigation();
-
-        bindBrowserHistory();
-
-        bindPDFReady();
-
-
-        updateNavigationUI();
-
-
-        /*
-         * If another part has already loaded
-         * the PDF, initialize immediately.
-         */
-
-        if (
-            state.pdfDocument
-        ) {
-
-            state.totalPages =
-                state.pdfDocument.numPages;
-
-        }
-
-
-        const initialHashPage =
-            getPageFromHash();
-
-
-        if (
-            initialHashPage
-        ) {
-
-            state.currentPage =
-                normalizePage(
-                    initialHashPage
-                );
-
-        } else {
-
-            restoreCurrentPage();
-
-        }
-
-
-        updateNavigationUI();
-
-
-        console.log(
-            "Page navigation engine loaded — Part 8/14."
-        );
-
-    }
+    const viewport =
+        getViewport();
 
 
     if (
-        document.readyState ===
-        "loading"
+        !viewport ||
+        viewport.dataset.swipeBound ===
+        "true"
     ) {
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            initializeNavigation,
-            {
-                once: true
+        return;
+
+    }
+
+
+    viewport.dataset.swipeBound =
+        "true";
+
+
+    viewport.addEventListener(
+        "touchstart",
+        event => {
+
+            if (
+                event.touches.length !==
+                1
+            ) {
+
+                return;
+
             }
-        );
+
+
+            const touch =
+                event.touches[0];
+
+
+            touchStartX =
+                touch.clientX;
+
+
+            touchStartY =
+                touch.clientY;
+
+
+            touchStartTime =
+                Date.now();
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    viewport.addEventListener(
+        "touchend",
+        event => {
+
+            if (
+                touchStartX ===
+                null
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                event.changedTouches.length !==
+                1
+            ) {
+
+                return;
+
+            }
+
+
+            const touch =
+                event.changedTouches[0];
+
+
+            const endX =
+                touch.clientX;
+
+
+            const endY =
+                touch.clientY;
+
+
+            const deltaX =
+                endX -
+                touchStartX;
+
+
+            const deltaY =
+                endY -
+                touchStartY;
+
+
+            const elapsed =
+                Date.now() -
+                touchStartTime;
+
+
+            touchStartX =
+                null;
+
+            touchStartY =
+                null;
+
+            touchStartTime =
+                null;
+
+
+            if (
+                Math.abs(deltaX) <
+                Math.abs(deltaY)
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                Math.abs(deltaX) <
+                55
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                elapsed >
+                900
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                deltaX < 0
+            ) {
+
+                nextPage();
+
+            } else {
+
+                previousPage();
+
+            }
+
+        },
+        {
+            passive: true
+        }
+    );
+
+}
+
+
+/* =====================================================
+   BROWSER HISTORY
+===================================================== */
+
+function bindBrowserHistory() {
+
+    window.addEventListener(
+        "popstate",
+        event => {
+
+            const page =
+                event.state?.page ||
+                getPageFromHash();
+
+
+            if (
+                page
+            ) {
+
+                goToPage(
+                    page,
+                    {
+                        history:
+                            false,
+
+                        recordHistory:
+                            false,
+
+                        replaceHistory:
+                            true,
+
+                        instant:
+                            true
+                    }
+                );
+
+            }
+
+        }
+    );
+
+
+    window.addEventListener(
+        "hashchange",
+        () => {
+
+            const page =
+                getPageFromHash();
+
+
+            if (
+                page &&
+                page !==
+                state.currentPage
+            ) {
+
+                goToPage(
+                    page,
+                    {
+                        history:
+                            false,
+
+                        recordHistory:
+                            false,
+
+                        instant:
+                            true
+                    }
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD INITIAL PAGE
+===================================================== */
+
+async function loadInitialPage() {
+
+    detectTotalPages();
+
+
+    const hashPage =
+        getPageFromHash();
+
+
+    if (
+        hashPage
+    ) {
+
+        state.currentPage =
+            normalizePage(
+                hashPage
+            );
 
     } else {
 
-        initializeNavigation();
+        restoreCurrentPage();
+
+        state.currentPage =
+            normalizePage(
+                state.currentPage
+            );
 
     }
+
+
+    updateNavigationUI();
+
+
+    if (
+        state.pdfDocument
+    ) {
+
+        await goToPage(
+            state.currentPage,
+            {
+                force:
+                    true,
+
+                history:
+                    false,
+
+                recordHistory:
+                    false,
+
+                instant:
+                    true
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LISTEN FOR PDF READY
+===================================================== */
+
+function bindPDFReady() {
+
+    document.addEventListener(
+        "reader:pdf-ready",
+        event => {
+
+            const pdf =
+                event.detail?.pdf ||
+                event.detail?.document ||
+                state.pdfDocument;
+
+
+            if (
+                pdf
+            ) {
+
+                state.pdfDocument =
+                    pdf;
+
+
+                state.totalPages =
+                    Number(
+                        pdf.numPages
+                    ) || 0;
+
+
+                updateNavigationUI();
+
+
+                loadInitialPage();
+
+            }
+
+        }
+    );
+
+
+    document.addEventListener(
+        "reader:document-ready",
+        event => {
+
+            const pdf =
+                event.detail?.pdf ||
+                event.detail?.document;
+
+
+            if (
+                pdf
+            ) {
+
+                state.pdfDocument =
+                    pdf;
+
+
+                state.totalPages =
+                    Number(
+                        pdf.numPages
+                    ) || 0;
+
+
+                updateNavigationUI();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   PUBLIC API
+===================================================== */
+
+R.goToPage =
+    goToPage;
+
+R.nextPage =
+    nextPage;
+
+R.previousPage =
+    previousPage;
+
+R.firstPage =
+    firstPage;
+
+R.lastPage =
+    lastPage;
+
+R.detectTotalPages =
+    detectTotalPages;
+
+
+/*
+ * Compatibility alias.
+ * Other modules can safely call
+ * R.getTotalPages().
+ */
+
+R.getTotalPages =
+    detectTotalPages;
+
+
+R.updateNavigationUI =
+    updateNavigationUI;
+
+R.updateProgress =
+    updateProgress;
+
+R.normalizePage =
+    normalizePage;
+
+
+R.next =
+    nextPage;
+
+R.prev =
+    previousPage;
+
+R.gotoPage =
+    goToPage;
+
+
+/* =====================================================
+   INITIALIZATION
+===================================================== */
+
+function initializeNavigation() {
+
+    detectTotalPages();
+
+
+    bindPageInput();
+
+    bindNavigationButtons();
+
+    bindKeyboardNavigation();
+
+    bindSwipeNavigation();
+
+    bindBrowserHistory();
+
+    bindPDFReady();
+
+
+    if (
+        state.pdfDocument
+    ) {
+
+        state.totalPages =
+            Number(
+                state.pdfDocument.numPages
+            ) || 0;
+
+    }
+
+
+    const initialHashPage =
+        getPageFromHash();
+
+
+    if (
+        initialHashPage
+    ) {
+
+        state.currentPage =
+            normalizePage(
+                initialHashPage
+            );
+
+    } else {
+
+        restoreCurrentPage();
+
+        state.currentPage =
+            normalizePage(
+                state.currentPage
+            );
+
+    }
+
+
+    updateNavigationUI();
+
+
+    console.log(
+        "Page navigation engine loaded — Part 8/14."
+    );
+
+}
+
+
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeNavigation,
+        {
+            once:
+                true
+        }
+    );
+
+} else {
+
+    initializeNavigation();
+
+}
 
 })();
 /* =========================================================
