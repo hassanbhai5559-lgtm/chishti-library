@@ -12799,8 +12799,6 @@
                             Math.round(
                                 percent
                             )
-                        );
-
                 }
             );
 
