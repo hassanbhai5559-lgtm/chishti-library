@@ -12798,8 +12798,6 @@
                         String(
                             Math.round(
                                 percent
-                            )
-                }
             );
 
 
