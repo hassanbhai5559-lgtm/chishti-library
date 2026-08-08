@@ -21533,39 +21533,703 @@ if (
         --------------------------------------------- */
 
         getCurrentPage()
-            .forEach?.(
+/* =========================================================
+   CHISHTI LIBRARY READER
+   PART 13 + PART 14
+   FINAL SAFE REPLACEMENT
+   ========================================================= */
+
+(() => {
+
+    "use strict";
+
+    const R = window.ChishtiReader;
+
+    if (!R || !R.state) {
+        console.error("ChishtiReader core missing.");
+        return;
+    }
+
+    const state = R.state;
+
+
+    /* =====================================================
+       SAFE DOM HELPERS
+    ===================================================== */
+
+    const $ = selector => {
+        try {
+            return document.querySelector(selector);
+        } catch (_) {
+            return null;
+        }
+    };
+
+
+    const $$ = selector => {
+        try {
+            return document.querySelectorAll(selector);
+        } catch (_) {
+            return [];
+        }
+    };
+
+
+    function getReader() {
+        return $(".reader");
+    }
+
+
+    function getScrollContainer() {
+
+        return (
+            $(".reader-viewport") ||
+            $(".reader-scroll") ||
+            getReader()
+        );
+
+    }
+
+
+    function getCurrentPageElements() {
+
+        return $$(
+            ".current-page, [data-current-page]"
+        );
+
+    }
+
+
+    function getTotalPageElements() {
+
+        return $$(
+            ".total-pages, [data-total-pages]"
+        );
+
+    }
+
+
+    function getProgressBars() {
+
+        return $$(
+            ".reader-progress-bar, [data-reader-progress]"
+        );
+
+    }
+
+
+    function getProgressTextElements() {
+
+        return $$(
+            ".reader-progress-text, [data-progress-text]"
+        );
+
+    }
+
+
+    function getPageInput() {
+
+        return $(
+            ".page-number-input, [data-page-input], #pageNumberInput"
+        );
+
+    }
+
+
+    /* =====================================================
+       SAFE NUMBER
+    ===================================================== */
+
+    function safeNumber(
+        value,
+        fallback = 0
+    ) {
+
+        const number =
+            Number(value);
+
+        return Number.isFinite(number)
+            ? number
+            : fallback;
+
+    }
+
+
+    /* =====================================================
+       STATE DEFAULTS
+    ===================================================== */
+
+    state.currentPage =
+        safeNumber(
+            state.currentPage,
+            1
+        );
+
+    if (
+        state.currentPage < 1
+    ) {
+
+        state.currentPage = 1;
+
+    }
+
+
+    state.totalPages =
+        safeNumber(
+            state.totalPages,
+            0
+        );
+
+
+    state.readingProgress =
+        safeNumber(
+            state.readingProgress,
+            0
+        );
+
+
+    state.pageProgress =
+        safeNumber(
+            state.pageProgress,
+            0
+        );
+
+
+    state.scrollProgress =
+        safeNumber(
+            state.scrollProgress,
+            0
+        );
+
+
+    state.progressVisible =
+        state.progressVisible !== false;
+
+
+    state.lastSavedProgress =
+        safeNumber(
+            state.lastSavedProgress,
+            -1
+        );
+
+
+    /* =====================================================
+       TOTAL PAGES
+    ===================================================== */
+
+    function getTotalPagesCount() {
+
+        if (
+            state.pdfDocument &&
+            safeNumber(
+                state.pdfDocument.numPages,
+                0
+            ) > 0
+        ) {
+
+            state.totalPages =
+                safeNumber(
+                    state.pdfDocument.numPages,
+                    state.totalPages
+                );
+
+            return state.totalPages;
+
+        }
+
+
+        if (
+            safeNumber(
+                state.totalPages,
+                0
+            ) > 0
+        ) {
+
+            return state.totalPages;
+
+        }
+
+
+        if (
+            safeNumber(
+                state.pageCount,
+                0
+            ) > 0
+        ) {
+
+            state.totalPages =
+                safeNumber(
+                    state.pageCount,
+                    0
+                );
+
+            return state.totalPages;
+
+        }
+
+
+        if (
+            safeNumber(
+                state.total,
+                0
+            ) > 0
+        ) {
+
+            state.totalPages =
+                safeNumber(
+                    state.total,
+                    0
+                );
+
+            return state.totalPages;
+
+        }
+
+
+        const totalElements =
+            getTotalPageElements();
+
+
+        if (
+            totalElements &&
+            typeof totalElements.forEach ===
+            "function"
+        ) {
+
+            let found = 0;
+
+            totalElements.forEach(
                 element => {
 
-                    element.textContent =
-                        String(
-                            state.currentPage ||
-                            1
+                    if (!element) {
+                        return;
+                    }
+
+                    const value =
+                        parseInt(
+                            element.textContent,
+                            10
                         );
+
+                    if (
+                        Number.isFinite(value) &&
+                        value > found
+                    ) {
+
+                        found = value;
+
+                    }
 
                 }
             );
 
 
-        getTotalPages()
-            .forEach?.(
-                element => {
+            if (found > 0) {
 
-                    element.textContent =
-                        String(
-                            state.totalPages ||
-                            1
-                        );
+                state.totalPages =
+                    found;
 
-                }
+                return found;
+
+            }
+
+        }
+
+
+        return safeNumber(
+            state.totalPages,
+            0
+        );
+
+    }
+
+
+    /* =====================================================
+       NORMALIZE PAGE
+    ===================================================== */
+
+    function normalizePage(
+        page
+    ) {
+
+        let value =
+            parseInt(
+                page,
+                10
+            );
+
+
+        if (
+            !Number.isFinite(value)
+        ) {
+
+            value = 1;
+
+        }
+
+
+        const total =
+            getTotalPagesCount();
+
+
+        if (
+            total > 0
+        ) {
+
+            value =
+                Math.max(
+                    1,
+                    Math.min(
+                        total,
+                        value
+                    )
+                );
+
+        } else {
+
+            value =
+                Math.max(
+                    1,
+                    value
+                );
+
+        }
+
+
+        return value;
+
+    }
+
+
+    /* =====================================================
+       UPDATE PROGRESS UI
+    ===================================================== */
+
+    function updateProgressUI() {
+
+        const total =
+            getTotalPagesCount();
+
+
+        const current =
+            normalizePage(
+                state.currentPage
             );
 
 
         /*
-         * CSS custom properties for animations.
+         * Page progress.
+         */
+
+        let pageProgress = 0;
+
+
+        if (
+            total > 1
+        ) {
+
+            pageProgress =
+                (
+                    (current - 1) /
+                    (total - 1)
+                );
+
+        } else if (
+            total === 1
+        ) {
+
+            pageProgress = 1;
+
+        }
+
+
+        pageProgress =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    pageProgress
+                )
+            );
+
+
+        state.pageProgress =
+            pageProgress;
+
+
+        /*
+         * Scroll progress.
+         */
+
+        const container =
+            getScrollContainer();
+
+
+        let scrollProgress = 0;
+
+
+        if (
+            container
+        ) {
+
+            const maxScroll =
+                Math.max(
+                    0,
+                    container.scrollHeight -
+                    container.clientHeight
+                );
+
+
+            if (
+                maxScroll > 0
+            ) {
+
+                scrollProgress =
+                    container.scrollTop /
+                    maxScroll;
+
+            } else {
+
+                scrollProgress = 0;
+
+            }
+
+        }
+
+
+        scrollProgress =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    scrollProgress
+                )
+            );
+
+
+        state.scrollProgress =
+            scrollProgress;
+
+
+        /*
+         * Main reading progress.
+         */
+
+        state.readingProgress =
+            pageProgress;
+
+
+        const readingPercent =
+            Math.round(
+                state.readingProgress *
+                100
+            );
+
+
+        const pagePercent =
+            Math.round(
+                pageProgress *
+                100
+            );
+
+
+        const scrollPercent =
+            Math.round(
+                scrollProgress *
+                100
+            );
+
+
+        /*
+         * Current page labels.
+         */
+
+        const currentElements =
+            getCurrentPageElements();
+
+
+        if (
+            currentElements &&
+            typeof currentElements.forEach ===
+            "function"
+        ) {
+
+            currentElements.forEach(
+                element => {
+
+                    if (!element) {
+                        return;
+                    }
+
+                    element.textContent =
+                        String(
+                            current
+                        );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Total page labels.
+         */
+
+        const totalElements =
+            getTotalPageElements();
+
+
+        if (
+            totalElements &&
+            typeof totalElements.forEach ===
+            "function"
+        ) {
+
+            totalElements.forEach(
+                element => {
+
+                    if (!element) {
+                        return;
+                    }
+
+                    element.textContent =
+                        total > 0
+                            ? String(total)
+                            : "—";
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Page input.
+         */
+
+        const input =
+            getPageInput();
+
+
+        if (
+            input &&
+            document.activeElement !==
+            input
+        ) {
+
+            input.value =
+                String(current);
+
+        }
+
+
+        /*
+         * Progress bars.
+         */
+
+        const bars =
+            getProgressBars();
+
+
+        if (
+            bars &&
+            typeof bars.forEach ===
+            "function"
+        ) {
+
+            bars.forEach(
+                bar => {
+
+                    if (!bar) {
+                        return;
+                    }
+
+
+                    if (
+                        bar.tagName ===
+                        "PROGRESS"
+                    ) {
+
+                        bar.max = 100;
+                        bar.value =
+                            readingPercent;
+
+                    }
+
+
+                    bar.style.setProperty(
+                        "--reader-progress",
+                        `${readingPercent}%`
+                    );
+
+
+                    bar.style.width =
+                        `${readingPercent}%`;
+
+
+                    bar.setAttribute(
+                        "aria-valuenow",
+                        String(
+                            readingPercent
+                        )
+                    );
+
+
+                    bar.setAttribute(
+                        "aria-valuemin",
+                        "0"
+                    );
+
+
+                    bar.setAttribute(
+                        "aria-valuemax",
+                        "100"
+                    );
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Progress text.
+         */
+
+        const progressTexts =
+            getProgressTextElements();
+
+
+        if (
+            progressTexts &&
+            typeof progressTexts.forEach ===
+            "function"
+        ) {
+
+            progressTexts.forEach(
+                element => {
+
+                    if (!element) {
+                        return;
+                    }
+
+                    element.textContent =
+                        `${readingPercent}%`;
+
+                }
+            );
+
+        }
+
+
+        /*
+         * Reader CSS variables.
          */
 
         const reader =
             getReader();
+
 
         if (
             reader
@@ -21573,21 +22237,31 @@ if (
 
             reader.style.setProperty(
                 "--reading-progress",
-                readingProgress
+                `${readingPercent}%`
             );
+
 
             reader.style.setProperty(
                 "--page-progress",
-                pageProgress
+                `${pagePercent}%`
             );
+
 
             reader.style.setProperty(
                 "--scroll-progress",
-                scrollProgress
+                `${scrollPercent}%`
             );
 
+
+            reader.dataset.progress =
+                String(
+                    readingPercent
+                );
+
+
             reader.dataset.progressDirection =
-                state.progressDirection;
+                state.progressDirection ||
+                "forward";
 
         }
 
@@ -21619,99 +22293,21 @@ if (
                     state.progressUpdateFrame =
                         null;
 
-                    updateProgressUI();
+                    try {
+
+                        updateProgressUI();
+
+                    } catch (error) {
+
+                        console.warn(
+                            "Progress UI update failed:",
+                            error
+                        );
+
+                    }
 
                 }
             );
-
-    }
-
-
-    /* =====================================================
-       SAVE READING PROGRESS
-    ===================================================== */
-
-    function scheduleProgressSave() {
-
-        const percent =
-            Math.round(
-                state.readingProgress * 100
-            );
-
-
-        if (
-            percent ===
-            state.lastSavedProgress
-        ) {
-
-            return;
-
-        }
-
-
-        clearTimeout(
-            state.progressSaveTimer
-        );
-
-
-        state.progressSaveTimer =
-            setTimeout(
-                () => {
-
-                    saveReadingProgress();
-
-                },
-                500
-            );
-
-    }
-
-
-    /* =====================================================
-       SAVE TO LOCAL STORAGE
-    ===================================================== */
-
-    function saveReadingProgress() {
-
-        const key =
-            getProgressStorageKey();
-
-
-        try {
-
-            localStorage.setItem(
-                key,
-                JSON.stringify({
-
-                    page:
-                        safeNumber(
-                            state.currentPage,
-                            1
-                        ),
-
-                    progress:
-                        state.readingProgress,
-
-                    timestamp:
-                        Date.now()
-
-                })
-            );
-
-
-            state.lastSavedProgress =
-                Math.round(
-                    state.readingProgress * 100
-                );
-
-        } catch (error) {
-
-            console.warn(
-                "Could not save reading progress.",
-                error
-            );
-
-        }
 
     }
 
@@ -21746,7 +22342,90 @@ if (
 
 
     /* =====================================================
-       RESTORE SAVED PROGRESS
+       SAVE PROGRESS
+    ===================================================== */
+
+    function scheduleProgressSave() {
+
+        const percent =
+            Math.round(
+                state.readingProgress *
+                100
+            );
+
+
+        if (
+            percent ===
+            state.lastSavedProgress
+        ) {
+
+            return;
+
+        }
+
+
+        clearTimeout(
+            state.progressSaveTimer
+        );
+
+
+        state.progressSaveTimer =
+            setTimeout(
+                () => {
+
+                    saveReadingProgress();
+
+                },
+                500
+            );
+
+    }
+
+
+    function saveReadingProgress() {
+
+        try {
+
+            localStorage.setItem(
+                getProgressStorageKey(),
+                JSON.stringify({
+
+                    page:
+                        safeNumber(
+                            state.currentPage,
+                            1
+                        ),
+
+                    progress:
+                        state.readingProgress,
+
+                    timestamp:
+                        Date.now()
+
+                })
+            );
+
+
+            state.lastSavedProgress =
+                Math.round(
+                    state.readingProgress *
+                    100
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "Could not save reading progress.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RESTORE PROGRESS
     ===================================================== */
 
     function restoreReadingProgress() {
@@ -21759,25 +22438,18 @@ if (
                 );
 
 
-            if (
-                !raw
-            ) {
-
+            if (!raw) {
                 return null;
-
             }
 
 
             const saved =
-                JSON.parse(
-                    raw
-                );
+                JSON.parse(raw);
 
 
             if (
                 !saved ||
-                typeof saved !==
-                "object"
+                typeof saved !== "object"
             ) {
 
                 return null;
@@ -21802,7 +22474,7 @@ if (
 
 
     /* =====================================================
-       GO TO SAVED PAGE
+       CONTINUE READING
     ===================================================== */
 
     async function continueReading() {
@@ -21811,12 +22483,8 @@ if (
             restoreReadingProgress();
 
 
-        if (
-            !saved
-        ) {
-
+        if (!saved) {
             return false;
-
         }
 
 
@@ -21851,13 +22519,7 @@ if (
                 );
 
 
-                window.requestAnimationFrame(
-                    () => {
-
-                        requestProgressUpdate();
-
-                    }
-                );
+                requestProgressUpdate();
 
 
                 return true;
@@ -21880,7 +22542,7 @@ if (
 
 
     /* =====================================================
-       CLEAR SAVED PROGRESS
+       CLEAR PROGRESS
     ===================================================== */
 
     function clearReadingProgress() {
@@ -21894,14 +22556,10 @@ if (
         } catch (_) {}
 
 
-        state.readingProgress =
-            0;
-
-        state.pageProgress =
-            0;
-
-        state.lastSavedProgress =
-            -1;
+        state.readingProgress = 0;
+        state.pageProgress = 0;
+        state.scrollProgress = 0;
+        state.lastSavedProgress = -1;
 
 
         requestProgressUpdate();
@@ -21910,7 +22568,7 @@ if (
 
 
     /* =====================================================
-       TOP OF READER
+       SCROLL
     ===================================================== */
 
     function scrollToTop() {
@@ -21919,27 +22577,26 @@ if (
             getScrollContainer();
 
 
-        if (
-            container
-        ) {
+        if (!container) {
+            return;
+        }
+
+
+        try {
 
             container.scrollTo({
-
                 top: 0,
-
-                behavior:
-                    "smooth"
-
+                behavior: "smooth"
             });
+
+        } catch (_) {
+
+            container.scrollTop = 0;
 
         }
 
     }
 
-
-    /* =====================================================
-       BOTTOM OF READER
-    ===================================================== */
 
     function scrollToBottom() {
 
@@ -21947,19 +22604,23 @@ if (
             getScrollContainer();
 
 
-        if (
-            container
-        ) {
+        if (!container) {
+            return;
+        }
+
+
+        try {
 
             container.scrollTo({
-
                 top:
                     container.scrollHeight,
-
-                behavior:
-                    "smooth"
-
+                behavior: "smooth"
             });
+
+        } catch (_) {
+
+            container.scrollTop =
+                container.scrollHeight;
 
         }
 
@@ -21972,26 +22633,40 @@ if (
 
     function showProgress() {
 
-        state.progressVisible =
-            true;
+        state.progressVisible = true;
 
 
-        getReader()?.classList.add(
-            "progress-visible"
-        );
+        const reader =
+            getReader();
+
+
+        if (reader) {
+
+            reader.classList.add(
+                "progress-visible"
+            );
+
+        }
 
     }
 
 
     function hideProgress() {
 
-        state.progressVisible =
-            false;
+        state.progressVisible = false;
 
 
-        getReader()?.classList.remove(
-            "progress-visible"
-        );
+        const reader =
+            getReader();
+
+
+        if (reader) {
+
+            reader.classList.remove(
+                "progress-visible"
+            );
+
+        }
 
     }
 
@@ -22019,98 +22694,101 @@ if (
 
     function bindProgressActions() {
 
+        if (
+            state.progressActionsBound
+        ) {
+
+            return;
+
+        }
+
+
+        state.progressActionsBound =
+            true;
+
+
         document.addEventListener(
             "click",
             event => {
 
+                const target =
+                    event.target;
+
+
+                if (!target) {
+                    return;
+                }
+
+
                 const topButton =
-                    event.target.closest(
+                    target.closest(
                         "[data-scroll-top]"
                     );
 
 
-                if (
-                    topButton
-                ) {
+                if (topButton) {
 
                     event.preventDefault();
-
                     scrollToTop();
-
                     return;
 
                 }
 
 
                 const bottomButton =
-                    event.target.closest(
+                    target.closest(
                         "[data-scroll-bottom]"
                     );
 
 
-                if (
-                    bottomButton
-                ) {
+                if (bottomButton) {
 
                     event.preventDefault();
-
                     scrollToBottom();
-
                     return;
 
                 }
 
 
                 const continueButton =
-                    event.target.closest(
+                    target.closest(
                         "[data-continue-reading]"
                     );
 
 
-                if (
-                    continueButton
-                ) {
+                if (continueButton) {
 
                     event.preventDefault();
-
                     continueReading();
-
                     return;
 
                 }
 
 
                 const clearButton =
-                    event.target.closest(
+                    target.closest(
                         "[data-clear-reading-progress]"
                     );
 
 
-                if (
-                    clearButton
-                ) {
+                if (clearButton) {
 
                     event.preventDefault();
-
                     clearReadingProgress();
-
                     return;
 
                 }
 
 
                 const toggleButton =
-                    event.target.closest(
+                    target.closest(
                         "[data-toggle-progress]"
                     );
 
 
-                if (
-                    toggleButton
-                ) {
+                if (toggleButton) {
 
                     event.preventDefault();
-
                     toggleProgress();
 
                 }
@@ -22131,12 +22809,8 @@ if (
             getScrollContainer();
 
 
-        if (
-            !container
-        ) {
-
+        if (!container) {
             return;
-
         }
 
 
@@ -22166,41 +22840,61 @@ if (
 
 
     /* =====================================================
-       PAGE CHANGE LISTENER
-       Works with the reader state even if
-       another JS part changes currentPage.
+       PAGE STATE WATCHER
     ===================================================== */
 
     function watchPageState() {
+
+        if (
+            state.pageProgressWatcher
+        ) {
+
+            return;
+
+        }
+
 
         let previousPage =
             state.currentPage;
 
 
-        setInterval(
-            () => {
+        state.pageProgressWatcher =
+            setInterval(
+                () => {
 
-                if (
-                    state.currentPage !==
-                    previousPage
-                ) {
+                    if (
+                        state.currentPage !==
+                        previousPage
+                    ) {
 
-                    previousPage =
-                        state.currentPage;
+                        const oldPage =
+                            previousPage;
 
-                    requestProgressUpdate();
 
-                }
+                        previousPage =
+                            state.currentPage;
 
-            },
-            150
-        );
+
+                        state.progressDirection =
+                            state.currentPage >
+                            oldPage
+                                ? "forward"
+                                : "backward";
+
+
+                        requestProgressUpdate();
+
+                    }
+
+                },
+                150
+            );
 
     }
 
 
     /* =====================================================
-       OBSERVE READER DOM
+       OBSERVE READER
     ===================================================== */
 
     function observeReaderChanges() {
@@ -22209,8 +22903,13 @@ if (
             getReader();
 
 
+        if (!reader) {
+            return;
+        }
+
+
         if (
-            !reader
+            state.progressObserver
         ) {
 
             return;
@@ -22246,11 +22945,10 @@ if (
 
 
     /* =====================================================
-       MOBILE RESIZE
+       RESIZE
     ===================================================== */
 
-    let resizeTimer =
-        null;
+    let resizeTimer = null;
 
 
     function handleResize() {
@@ -22276,7 +22974,7 @@ if (
 
 
     /* =====================================================
-       PUBLIC API
+       PUBLIC PROGRESS API
     ===================================================== */
 
     R.updateProgress =
@@ -22309,10 +23007,23 @@ if (
 
 
     /* =====================================================
-       INITIALIZATION
+       PART 13 INITIALIZATION
     ===================================================== */
 
     function initializeProgress() {
+
+        if (
+            state.progressInitialized
+        ) {
+
+            return;
+
+        }
+
+
+        state.progressInitialized =
+            true;
+
 
         bindProgressActions();
 
@@ -22332,17 +23043,8 @@ if (
         );
 
 
-        /*
-         * Initial calculation.
-         */
-
         requestProgressUpdate();
 
-
-        /*
-         * Recalculate after fonts/images/
-         * PDF page layout settles.
-         */
 
         setTimeout(
             requestProgressUpdate,
@@ -22357,58 +23059,15 @@ if (
 
 
         console.log(
-            "Reading progress engine loaded — Part 13/14."
+            "Reading progress engine loaded — SAFE Part 13/14."
         );
 
     }
-
-
-    if (
-        document.readyState ===
-        "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            initializeProgress,
-            {
-                once: true
-            }
-        );
-
-    } else {
-
-        initializeProgress();
-
-    }
-
-})();
-/* =========================================================
-   CHISHTI LIBRARY READER
-   JAVASCRIPT PART 14 / 14
-   FINAL INTEGRATION + MOBILE SAFETY +
-   STATE RESTORE + ANIMATION CLEANUP +
-   MAROON/GOLD FINALIZER
-========================================================= */
-
-(() => {
-
-    "use strict";
-
-    const R = window.ChishtiReader;
-
-    if (!R || !R.state) {
-        console.error(
-            "ChishtiReader core missing."
-        );
-        return;
-    }
-
-    const state = R.state;
 
 
     /* =====================================================
-       FINAL STATE
+       FINAL PART 14
+       MAROON + GOLDEN
     ===================================================== */
 
     state.initialized =
@@ -22436,62 +23095,29 @@ if (
 
 
     /* =====================================================
-       DOM
-    ===================================================== */
-
-    const html =
-        document.documentElement;
-
-    const body =
-        document.body;
-
-
-    const reader =
-        () =>
-            document.querySelector(
-                ".reader"
-            );
-
-
-    const viewport =
-        () =>
-            document.querySelector(
-                ".reader-viewport"
-            );
-
-
-    const stage =
-        () =>
-            document.querySelector(
-                ".page-stage"
-            );
-
-
-    /* =====================================================
-       FORCE MAIN IDENTITY
-       MAROON + GOLDEN
+       BRAND THEME
     ===================================================== */
 
     function enforceBrandTheme() {
 
-        html.dataset.theme =
+        document.documentElement.dataset.theme =
             "maroon-gold";
 
-        body.dataset.theme =
+        document.body.dataset.theme =
             "maroon-gold";
 
 
-        html.classList.add(
+        document.documentElement.classList.add(
             "theme-maroon-gold"
         );
 
-        body.classList.add(
+        document.body.classList.add(
             "theme-maroon-gold"
         );
 
 
         const root =
-            html;
+            document.documentElement;
 
 
         root.style.setProperty(
@@ -22543,14 +23169,23 @@ if (
                 "(max-width: 700px)"
             ).matches;
 
+
         state.isTablet =
             window.matchMedia(
                 "(min-width: 701px) and (max-width: 1024px)"
             ).matches;
 
+
         state.isDesktop =
             !state.isMobile &&
             !state.isTablet;
+
+
+        const html =
+            document.documentElement;
+
+        const body =
+            document.body;
 
 
         html.classList.toggle(
@@ -22590,22 +23225,27 @@ if (
             "function"
         ) {
 
-            /*
-             * Keep current zoom but let
-             * the zoom engine recalculate
-             * its layout.
-             */
-
             requestAnimationFrame(
                 () => {
 
-                    R.applyZoom(
-                        state.zoom || 1,
-                        {
-                            keepFit:
-                                state.fitMode
-                        }
-                    );
+                    try {
+
+                        R.applyZoom(
+                            state.zoom || 1,
+                            {
+                                keepFit:
+                                    state.fitMode
+                            }
+                        );
+
+                    } catch (error) {
+
+                        console.warn(
+                            "Zoom refresh failed:",
+                            error
+                        );
+
+                    }
 
                 }
             );
@@ -22616,20 +23256,21 @@ if (
 
 
     /* =====================================================
-       MOBILE SCROLL SAFETY
+       MOBILE SAFETY
     ===================================================== */
 
     function setupMobileScrollSafety() {
 
-        const v =
-            viewport();
+        const viewport =
+            $(".reader-viewport");
 
-        if (!v) {
+
+        if (!viewport) {
             return;
         }
 
 
-        v.style.setProperty(
+        viewport.style.setProperty(
             "overscroll-behavior",
             "contain"
         );
@@ -22639,7 +23280,7 @@ if (
             state.isMobile
         ) {
 
-            v.style.setProperty(
+            viewport.style.setProperty(
                 "touch-action",
                 "pan-x pan-y"
             );
@@ -22650,14 +23291,25 @@ if (
 
 
     /* =====================================================
-       PREVENT DOUBLE TAP ZOOM
-       WITHOUT BREAKING PINCH ZOOM
+       DOUBLE TAP
     ===================================================== */
 
     function setupDoubleTapProtection() {
 
-        let lastTap =
-            0;
+        if (
+            state.doubleTapProtectionBound
+        ) {
+
+            return;
+
+        }
+
+
+        state.doubleTapProtectionBound =
+            true;
+
+
+        let lastTap = 0;
 
 
         document.addEventListener(
@@ -22665,8 +23317,8 @@ if (
             event => {
 
                 if (
-                    event.changedTouches.length !==
-                    1
+                    !event.changedTouches ||
+                    event.changedTouches.length !== 1
                 ) {
 
                     return;
@@ -22679,18 +23331,16 @@ if (
 
 
                 if (
-                    now -
-                    lastTap <
-                    280
+                    now - lastTap < 280
                 ) {
 
-                    /*
-                     * Only prevent double tap
-                     * inside reader controls/page.
-                     */
+                    const target =
+                        event.target;
+
 
                     if (
-                        event.target.closest(
+                        target &&
+                        target.closest(
                             ".reader, .reader-page"
                         )
                     ) {
@@ -22715,7 +23365,7 @@ if (
 
 
     /* =====================================================
-       SAFE CLICK RIPPLE
+       RIPPLE
     ===================================================== */
 
     function createRipple(
@@ -22748,21 +23398,12 @@ if (
             "reader-ripple";
 
 
-        const x =
-            event.clientX -
-            rect.left;
-
-
-        const y =
-            event.clientY -
-            rect.top;
-
-
         ripple.style.left =
-            `${x}px`;
+            `${event.clientX - rect.left}px`;
+
 
         ripple.style.top =
-            `${y}px`;
+            `${event.clientY - rect.top}px`;
 
 
         element.appendChild(
@@ -22773,7 +23414,14 @@ if (
         window.setTimeout(
             () => {
 
-                ripple.remove();
+                if (
+                    ripple &&
+                    ripple.parentNode
+                ) {
+
+                    ripple.remove();
+
+                }
 
             },
             550
@@ -22784,22 +23432,40 @@ if (
 
     function bindRipple() {
 
+        if (
+            state.rippleBound
+        ) {
+
+            return;
+
+        }
+
+
+        state.rippleBound =
+            true;
+
+
         document.addEventListener(
             "pointerdown",
             event => {
 
+                const target =
+                    event.target;
+
+
+                if (!target) {
+                    return;
+                }
+
+
                 const button =
-                    event.target.closest(
+                    target.closest(
                         "button, .reader-button, [role='button']"
                     );
 
 
-                if (
-                    !button
-                ) {
-
+                if (!button) {
                     return;
-
                 }
 
 
@@ -22818,7 +23484,7 @@ if (
 
 
     /* =====================================================
-       ADD FINAL RUNTIME CSS
+       FINAL CSS
     ===================================================== */
 
     function injectFinalCSS() {
@@ -22846,104 +23512,46 @@ if (
 
         style.textContent = `
 
-            /* =========================================
-               BRAND
-            ========================================= */
-
             :root {
-
-                --ch-final-maroon:
-                    #641b2b;
-
-                --ch-final-maroon-dark:
-                    #3d101b;
-
-                --ch-final-maroon-deep:
-                    #280a12;
-
-                --ch-final-gold:
-                    #c79a3b;
-
-                --ch-final-gold-light:
-                    #e4c66a;
-
+                --ch-final-maroon: #641b2b;
+                --ch-final-maroon-dark: #3d101b;
+                --ch-final-maroon-deep: #280a12;
+                --ch-final-gold: #c79a3b;
+                --ch-final-gold-light: #e4c66a;
             }
 
 
-            /* =========================================
-               RIPPLE
-            ========================================= */
-
             .reader-ripple {
-
-                position:
-                    absolute;
-
-                width:
-                    18px;
-
-                height:
-                    18px;
-
-                border-radius:
-                    50%;
-
-                pointer-events:
-                    none;
-
-                transform:
-                    translate(-50%, -50%)
-                    scale(0);
-
-                background:
-                    rgba(
-                        228,
-                        198,
-                        106,
-                        .45
-                    );
-
-                animation:
-                    chReaderRipple
-                    .55s ease-out
-                    forwards;
-
-                z-index:
-                    9999;
-
+                position: absolute;
+                width: 18px;
+                height: 18px;
+                border-radius: 50%;
+                pointer-events: none;
+                transform: translate(-50%, -50%) scale(0);
+                background: rgba(228,198,106,.45);
+                animation: chReaderRipple .55s ease-out forwards;
+                z-index: 9999;
             }
 
 
             @keyframes chReaderRipple {
 
                 0% {
-
                     transform:
                         translate(-50%, -50%)
                         scale(0);
-
-                    opacity:
-                        .9;
-
+                    opacity: .9;
                 }
 
                 100% {
-
                     transform:
                         translate(-50%, -50%)
                         scale(8);
-
-                    opacity:
-                        0;
-
+                    opacity: 0;
                 }
 
             }
 
-
-            /* =========================================
-               FINAL GOLD FOCUS
-            ========================================= */
 
             .reader button:focus-visible,
             .reader [role="button"]:focus-visible,
@@ -22958,108 +23566,56 @@ if (
 
                 box-shadow:
                     0 0 0 4px
-                    rgba(
-                        199,
-                        154,
-                        59,
-                        .18
-                    );
+                    rgba(199,154,59,.18);
 
             }
 
-
-            /* =========================================
-               MOBILE
-            ========================================= */
 
             @media (max-width: 700px) {
 
                 html,
                 body {
-
-                    width:
-                        100%;
-
-                    max-width:
-                        100%;
-
-                    overflow-x:
-                        hidden;
-
+                    width: 100%;
+                    max-width: 100%;
+                    overflow-x: hidden;
                 }
 
 
                 .reader {
-
-                    width:
-                        100%;
-
-                    max-width:
-                        100%;
-
+                    width: 100%;
+                    max-width: 100%;
                 }
 
 
                 .reader-viewport {
-
-                    width:
-                        100%;
-
-                    max-width:
-                        100%;
-
-                    overflow:
-                        auto;
-
-                    -webkit-overflow-scrolling:
-                        touch;
-
+                    width: 100%;
+                    max-width: 100%;
+                    overflow: auto;
+                    -webkit-overflow-scrolling: touch;
                 }
 
 
                 .page-stage {
-
-                    min-width:
-                        100%;
-
-                    padding-left:
-                        10px;
-
-                    padding-right:
-                        10px;
-
-                    box-sizing:
-                        border-box;
-
+                    min-width: 100%;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                    box-sizing: border-box;
                 }
 
 
                 .reader-page {
-
                     max-width:
-                        calc(
-                            100vw - 20px
-                        );
-
+                        calc(100vw - 20px);
                 }
 
 
                 .reader button {
-
-                    min-width:
-                        42px;
-
-                    min-height:
-                        42px;
-
+                    min-width: 42px;
+                    min-height: 42px;
                 }
 
             }
 
-
-            /* =========================================
-               TABLET
-            ========================================= */
 
             @media (
                 min-width: 701px
@@ -23068,20 +23624,12 @@ if (
             ) {
 
                 .reader-page {
-
                     max-width:
-                        calc(
-                            100vw - 50px
-                        );
-
+                        calc(100vw - 50px);
                 }
 
             }
 
-
-            /* =========================================
-               REDUCE MOTION
-            ========================================= */
 
             @media (
                 prefers-reduced-motion: reduce
@@ -23107,10 +23655,6 @@ if (
 
             }
 
-
-            /* =========================================
-               PRINT
-            ========================================= */
 
             @media print {
 
@@ -23170,25 +23714,21 @@ if (
 
 
     /* =====================================================
-       CLEAN OLD ANIMATION CLASSES
+       ANIMATION CLEANUP
     ===================================================== */
 
     function cleanupAnimationClasses() {
 
-        const r =
-            reader();
+        const reader =
+            getReader();
 
-        if (!r) {
+
+        if (!reader) {
             return;
         }
 
 
-        /*
-         * Remove stale classes from previous
-         * page transitions.
-         */
-
-        r.classList.remove(
+        reader.classList.remove(
             "page-enter",
             "page-exit",
             "is-changing",
@@ -23199,44 +23739,60 @@ if (
 
 
     /* =====================================================
-       FINAL PAGE APPEARANCE
+       PAGE APPEARANCE
     ===================================================== */
 
     function finalizePage() {
 
-        const s =
-            stage();
+        const stage =
+            $(".page-stage");
 
-        if (!s) {
+
+        if (!stage) {
             return;
         }
 
 
         const pages =
-            s.querySelectorAll(
+            stage.querySelectorAll(
                 ".reader-page"
             );
 
 
-        pages.forEach(
-            page => {
+        if (
+            pages &&
+            typeof pages.forEach ===
+            "function"
+        ) {
 
-                page.style.setProperty(
-                    "--theme-primary",
-                    "#641b2b"
-                );
+            pages.forEach(
+                page => {
 
-                page.style.setProperty(
-                    "--theme-gold",
-                    "#c79a3b"
-                );
+                    if (!page) {
+                        return;
+                    }
 
-                page.classList.add(
-                    "book-paper"
-                );
 
-            }
-        );
+                    page.style.setProperty(
+                        "--theme-primary",
+                        "#641b2b"
+                    );
+
+
+                    page.style.setProperty(
+                        "--theme-gold",
+                        "#c79a3b"
+                    );
+
+
+                    page.classList.add(
+                        "book-paper"
+                    );
+
+                }
+            );
+
+        }
 
 
         if (
@@ -23244,7 +23800,9 @@ if (
             "function"
         ) {
 
-            R.applyPageAppearance();
+            try {
+                R.applyPageAppearance();
+            } catch (_) {}
 
         }
 
@@ -23254,7 +23812,9 @@ if (
             "function"
         ) {
 
-            R.updateZoomUI();
+            try {
+                R.updateZoomUI();
+            } catch (_) {}
 
         }
 
@@ -23262,30 +23822,26 @@ if (
 
 
     /* =====================================================
-       RESTORE UI STATE
+       RESTORE FINAL STATE
     ===================================================== */
 
     function restoreFinalState() {
-
-        /*
-         * Theme
-         */
 
         if (
             typeof R.applyTheme ===
             "function"
         ) {
 
-            R.applyTheme(
-                "maroon-gold"
-            );
+            try {
+
+                R.applyTheme(
+                    "maroon-gold"
+                );
+
+            } catch (_) {}
 
         }
 
-
-        /*
-         * Reader light
-         */
 
         if (
             state.readerLight &&
@@ -23293,14 +23849,12 @@ if (
             "function"
         ) {
 
-            R.enableReaderLight();
+            try {
+                R.enableReaderLight();
+            } catch (_) {}
 
         }
 
-
-        /*
-         * Page glow
-         */
 
         if (
             state.pageGlow &&
@@ -23308,27 +23862,29 @@ if (
             "function"
         ) {
 
-            R.enablePageGlow();
+            try {
+                R.enablePageGlow();
+            } catch (_) {}
 
         }
 
-
-        /*
-         * Zoom
-         */
 
         if (
             typeof R.applyZoom ===
             "function"
         ) {
 
-            R.applyZoom(
-                state.zoom || 1,
-                {
-                    keepFit:
-                        state.fitMode
-                }
-            );
+            try {
+
+                R.applyZoom(
+                    state.zoom || 1,
+                    {
+                        keepFit:
+                            state.fitMode
+                    }
+                );
+
+            } catch (_) {}
 
         }
 
@@ -23341,17 +23897,26 @@ if (
 
     function installErrorRecovery() {
 
+        if (
+            state.errorRecoveryBound
+        ) {
+
+            return;
+
+        }
+
+
+        state.errorRecoveryBound =
+            true;
+
+
         window.addEventListener(
             "error",
             event => {
 
-                /*
-                 * Do not allow one animation
-                 * failure to break reader controls.
-                 */
-
                 if (
-                    event?.error
+                    event &&
+                    event.error
                 ) {
 
                     console.warn(
@@ -23374,11 +23939,6 @@ if (
                     event.reason
                 );
 
-                /*
-                 * Don't permanently block
-                 * the interface because of one
-                 * failed async operation.
-                 */
 
                 state.searching =
                     false;
@@ -23390,16 +23950,38 @@ if (
 
 
     /* =====================================================
-       PAGE VISIBILITY OPTIMIZATION
+       VISIBILITY OBSERVER
     ===================================================== */
 
     function setupVisibilityOptimization() {
 
-        const r =
-            reader();
+        const reader =
+            getReader();
 
-        if (!r) {
+
+        const viewport =
+            $(".reader-viewport");
+
+
+        if (
+            !reader ||
+            typeof IntersectionObserver ===
+            "undefined"
+        ) {
+
             return;
+
+        }
+
+
+        if (
+            state.visibilityObserver
+        ) {
+
+            try {
+                state.visibilityObserver.disconnect();
+            } catch (_) {}
+
         }
 
 
@@ -23411,20 +23993,19 @@ if (
                         entry => {
 
                             if (
-                                entry.isIntersecting
+                                !entry ||
+                                !entry.target
                             ) {
 
-                                entry.target.classList.add(
-                                    "page-visible"
-                                );
-
-                            } else {
-
-                                entry.target.classList.remove(
-                                    "page-visible"
-                                );
+                                return;
 
                             }
+
+
+                            entry.target.classList.toggle(
+                                "page-visible",
+                                entry.isIntersecting
+                            );
 
                         }
                     );
@@ -23432,28 +24013,41 @@ if (
                 },
                 {
                     root:
-                        viewport(),
+                        viewport || null,
 
                     threshold:
                         0.01
-
                 }
             );
 
 
-        document
-            .querySelectorAll(
+        const pages =
+            reader.querySelectorAll(
                 ".reader-page"
-            )
-            .forEach(
+            );
+
+
+        if (
+            pages &&
+            typeof pages.forEach ===
+            "function"
+        ) {
+
+            pages.forEach(
                 page => {
 
-                    observer.observe(
-                        page
-                    );
+                    if (page) {
+
+                        observer.observe(
+                            page
+                        );
+
+                    }
 
                 }
             );
+
+        }
 
 
         state.visibilityObserver =
@@ -23463,16 +24057,26 @@ if (
 
 
     /* =====================================================
-       RECONNECT PAGE OBSERVER
+       PAGE OBSERVER
     ===================================================== */
 
     function observeFinalPageChanges() {
 
-        const s =
-            stage();
+        const stage =
+            $(".page-stage");
 
-        if (!s) {
+
+        if (!stage) {
             return;
+        }
+
+
+        if (
+            state.finalPageObserver
+        ) {
+
+            return;
+
         }
 
 
@@ -23495,7 +24099,7 @@ if (
 
 
         observer.observe(
-            s,
+            stage,
             {
                 childList: true,
                 subtree: true
@@ -23510,44 +24114,59 @@ if (
 
 
     /* =====================================================
-       FINAL KEYBOARD SAFETY
+       FINAL KEYBOARD
     ===================================================== */
 
     function bindFinalKeyboard() {
+
+        if (
+            state.finalKeyboardBound
+        ) {
+
+            return;
+
+        }
+
+
+        state.finalKeyboardBound =
+            true;
+
 
         document.addEventListener(
             "keydown",
             event => {
 
-                /*
-                 * Escape closes temporary reader
-                 * interfaces if their public API exists.
-                 */
-
                 if (
-                    event.key ===
+                    event.key !==
                     "Escape"
                 ) {
 
-                    if (
-                        state.searchOpen &&
-                        typeof R.closeSearch ===
-                        "function"
-                    ) {
+                    return;
 
+                }
+
+
+                if (
+                    state.searchOpen &&
+                    typeof R.closeSearch ===
+                    "function"
+                ) {
+
+                    try {
                         R.closeSearch();
+                    } catch (_) {}
 
-                    }
+                }
 
 
-                    if (
-                        typeof R.closeMenu ===
-                        "function"
-                    ) {
+                if (
+                    typeof R.closeMenu ===
+                    "function"
+                ) {
 
+                    try {
                         R.closeMenu();
-
-                    }
+                    } catch (_) {}
 
                 }
 
@@ -23582,6 +24201,8 @@ if (
 
                     finalizePage();
 
+                    requestProgressUpdate();
+
                 },
                 150
             );
@@ -23604,7 +24225,7 @@ if (
 
 
     /* =====================================================
-       MAIN INITIALIZER
+       INITIALIZE FINAL
     ===================================================== */
 
     function initializeFinalIntegration() {
@@ -23654,10 +24275,8 @@ if (
         );
 
 
-        /*
-         * Let every previous module finish
-         * before declaring the reader ready.
-         */
+        requestProgressUpdate();
+
 
         requestAnimationFrame(
             () => {
@@ -23740,7 +24359,12 @@ if (
 
         document.addEventListener(
             "DOMContentLoaded",
-            initializeFinalIntegration,
+            () => {
+
+                initializeProgress();
+                initializeFinalIntegration();
+
+            },
             {
                 once: true
             }
@@ -23748,6 +24372,7 @@ if (
 
     } else {
 
+        initializeProgress();
         initializeFinalIntegration();
 
     }
