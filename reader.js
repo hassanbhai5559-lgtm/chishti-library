@@ -10055,6 +10055,3 @@ console.log(
         finalReaderCheck();
 
     }
-
-
-})();
