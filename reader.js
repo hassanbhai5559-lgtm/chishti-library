@@ -8737,85 +8737,193 @@ console.log(
     }
 
 
+/* =========================================================
+   CHISHTI READER
+   JAVASCRIPT — READER ACTIONS / FINAL EXTENSION
+========================================================= */
+
+(() => {
+
+    "use strict";
+
+
     /* =====================================================
-       READER OPEN HOOK
+       SAFE HELPERS
     ===================================================== */
 
-    const originalShowReader =
-        showReader;
+    const callFunction =
+        function (
+            fn,
+            ...args
+        ) {
+
+            if (
+                typeof fn ===
+                "function"
+            ) {
+
+                return fn(
+                    ...args
+                );
+
+            }
+
+            return undefined;
+
+        };
 
 
-    showReader =
+    const getReaderState =
         function () {
 
-            originalShowReader();
+            if (
+                typeof ReaderState !==
+                "undefined"
+            ) {
 
+                return ReaderState;
+
+            }
+
+            return null;
+
+        };
+
+
+    const getDOMObject =
+        function () {
+
+            if (
+                typeof DOM !==
+                "undefined"
+            ) {
+
+                return DOM;
+
+            }
+
+            return {};
+
+        };
+
+
+    /* =====================================================
+       READER OPEN / STATE
+    ===================================================== */
+
+    function readerOpened() {
+
+        const state =
+            getReaderState();
+
+
+        if (!state) {
+
+            return;
+
+        }
+
+
+        state.isReaderOpen =
+            true;
+
+
+        if (
+            typeof loadBookState ===
+            "function"
+        ) {
 
             loadBookState();
 
+        }
+
+
+        if (
+            typeof refreshReaderUI ===
+            "function"
+        ) {
 
             refreshReaderUI();
 
-        };
+        }
+
+    }
 
 
     /* =====================================================
-       PAGE CHANGE HOOK
+       PAGE CHANGE
     ===================================================== */
 
-    const originalNextPage =
-        nextPage;
+    function afterPageChange() {
 
-
-    nextPage =
-        function () {
-
-            originalNextPage();
-
+        if (
+            typeof saveCurrentPage ===
+            "function"
+        ) {
 
             saveCurrentPage();
 
-            updateBookmarkUI();
-
-        };
+        }
 
 
-    const originalPreviousPage =
-        previousPage;
-
-
-    previousPage =
-        function () {
-
-            originalPreviousPage();
-
-
-            saveCurrentPage();
+        if (
+            typeof updateBookmarkUI ===
+            "function"
+        ) {
 
             updateBookmarkUI();
 
-        };
+        }
+
+
+        if (
+            typeof updatePageUI ===
+            "function"
+        ) {
+
+            updatePageUI();
+
+        }
+
+
+        if (
+            typeof refreshReaderUI ===
+            "function"
+        ) {
+
+            refreshReaderUI();
+
+        }
+
+    }
 
 
     /* =====================================================
-       BOOKMARK HOOK
+       BOOKMARK CHANGE
     ===================================================== */
 
-    const originalToggleBookmark =
-        toggleBookmark;
+    function afterBookmarkChange() {
 
-
-    toggleBookmark =
-        function () {
-
-            originalToggleBookmark();
-
+        if (
+            typeof saveBookmarksForCurrentBook ===
+            "function"
+        ) {
 
             saveBookmarksForCurrentBook();
 
+        }
+
+
+        if (
+            typeof updateBookmarkUI ===
+            "function"
+        ) {
+
             updateBookmarkUI();
 
-        };
+        }
+
+    }
 
 
     /* =====================================================
@@ -8824,12 +8932,16 @@ console.log(
        User can type:
        12
        Enter
-       → page 12
+       → Page 12
     ===================================================== */
 
     document.addEventListener(
         "keydown",
         event => {
+
+            const dom =
+                getDOMObject();
+
 
             const target =
                 event.target;
@@ -8837,7 +8949,9 @@ console.log(
 
             if (
                 !target ||
-                target !== DOM.pageInput
+                !dom.pageInput ||
+                target !==
+                dom.pageInput
             ) {
 
                 return;
@@ -8875,12 +8989,31 @@ console.log(
             }
 
 
+            const state =
+                getReaderState();
+
+
+            if (!state) {
+
+                return;
+
+            }
+
+
+            const total =
+                Number(
+                    state.totalPages
+                );
+
+
             const max =
-                ReaderState.totalPages ||
-                page;
+                Number.isFinite(total) &&
+                total > 0
+                    ? total
+                    : page;
 
 
-            ReaderState.currentPage =
+            state.currentPage =
                 Math.max(
                     1,
                     Math.min(
@@ -8892,11 +9025,44 @@ console.log(
                 );
 
 
-            updatePageUI();
+            if (
+                typeof updatePageUI ===
+                "function"
+            ) {
 
-            saveCurrentPage();
+                updatePageUI();
 
-            showReaderControls();
+            }
+
+
+            if (
+                typeof renderReaderPages ===
+                "function"
+            ) {
+
+                renderReaderPages();
+
+            }
+
+
+            if (
+                typeof saveCurrentPage ===
+                "function"
+            ) {
+
+                saveCurrentPage();
+
+            }
+
+
+            if (
+                typeof showReaderControls ===
+                "function"
+            ) {
+
+                showReaderControls();
+
+            }
 
         }
     );
@@ -8906,9 +9072,24 @@ console.log(
        RANGE ZOOM
     ===================================================== */
 
-    DOM.zoomRange?.addEventListener(
+    document.addEventListener(
         "input",
         event => {
+
+            const dom =
+                getDOMObject();
+
+
+            if (
+                !dom.zoomRange ||
+                event.target !==
+                dom.zoomRange
+            ) {
+
+                return;
+
+            }
+
 
             const value =
                 Number(
@@ -8917,9 +9098,19 @@ console.log(
 
 
             if (
-                Number.isFinite(
+                !Number.isFinite(
                     value
                 )
+            ) {
+
+                return;
+
+            }
+
+
+            if (
+                typeof setZoom ===
+                "function"
             ) {
 
                 setZoom(
@@ -8940,8 +9131,13 @@ console.log(
         "keydown",
         event => {
 
+            const state =
+                getReaderState();
+
+
             if (
-                !ReaderState.isReaderOpen
+                !state ||
+                !state.isReaderOpen
             ) {
 
                 return;
@@ -8954,29 +9150,44 @@ console.log(
 
 
             const tag =
-                target?.tagName
-                    ?.toLowerCase();
+                target &&
+                target.tagName
+                    ? target.tagName.toLowerCase()
+                    : "";
 
 
             const typing =
                 tag === "input" ||
                 tag === "textarea" ||
                 tag === "select" ||
-                target?.isContentEditable;
+                Boolean(
+                    target &&
+                    target.isContentEditable
+                );
 
 
             /* -----------------------------------------
-               Ctrl + F
+               CTRL + F
             ----------------------------------------- */
 
             if (
                 event.ctrlKey &&
-                event.key.toLowerCase() === "f"
+                event.key.toLowerCase() ===
+                "f"
             ) {
 
                 event.preventDefault();
 
-                toggleSearch();
+
+                if (
+                    typeof toggleSearch ===
+                    "function"
+                ) {
+
+                    toggleSearch();
+
+                }
+
 
                 return;
 
@@ -8984,11 +9195,12 @@ console.log(
 
 
             /* -----------------------------------------
-               Escape
+               ESCAPE
             ----------------------------------------- */
 
             if (
-                event.key === "Escape"
+                event.key ===
+                "Escape"
             ) {
 
                 return;
@@ -9004,20 +9216,32 @@ console.log(
 
 
             /* -----------------------------------------
-               Arrow navigation
+               ARROW NAVIGATION
             ----------------------------------------- */
 
             if (
-                ReaderState.keyboardNavigation
+                state.keyboardNavigation
             ) {
 
                 if (
-                    event.key === "ArrowRight"
+                    event.key ===
+                    "ArrowRight"
                 ) {
 
                     event.preventDefault();
 
-                    nextPage();
+
+                    if (
+                        typeof nextPage ===
+                        "function"
+                    ) {
+
+                        nextPage();
+
+                    }
+
+
+                    afterPageChange();
 
                     return;
 
@@ -9025,12 +9249,24 @@ console.log(
 
 
                 if (
-                    event.key === "ArrowLeft"
+                    event.key ===
+                    "ArrowLeft"
                 ) {
 
                     event.preventDefault();
 
-                    previousPage();
+
+                    if (
+                        typeof previousPage ===
+                        "function"
+                    ) {
+
+                        previousPage();
+
+                    }
+
+
+                    afterPageChange();
 
                     return;
 
@@ -9040,7 +9276,7 @@ console.log(
 
 
             /* -----------------------------------------
-               Zoom +
+               ZOOM +
             ----------------------------------------- */
 
             if (
@@ -9050,7 +9286,16 @@ console.log(
 
                 event.preventDefault();
 
-                zoomIn();
+
+                if (
+                    typeof zoomIn ===
+                    "function"
+                ) {
+
+                    zoomIn();
+
+                }
+
 
                 return;
 
@@ -9058,7 +9303,7 @@ console.log(
 
 
             /* -----------------------------------------
-               Zoom -
+               ZOOM -
             ----------------------------------------- */
 
             if (
@@ -9068,7 +9313,16 @@ console.log(
 
                 event.preventDefault();
 
-                zoomOut();
+
+                if (
+                    typeof zoomOut ===
+                    "function"
+                ) {
+
+                    zoomOut();
+
+                }
+
 
                 return;
 
@@ -9076,129 +9330,6 @@ console.log(
 
         }
     );
-
-
-    /* =====================================================
-       FINAL ACTION ROUTER EXTENSION
-    ===================================================== */
-
-    const originalHandleAction =
-        handleAction;
-
-
-    handleAction =
-        function (
-            action,
-            button
-        ) {
-
-            switch (action) {
-
-                case "like-book":
-
-                    toggleLike();
-
-                    break;
-
-
-                case "share-book":
-
-                    openShare();
-
-                    break;
-
-
-                case "comments":
-
-                    openComments();
-
-                    break;
-
-
-                case "download-book":
-
-                    downloadBook();
-
-                    break;
-
-
-                case "print-book":
-
-                    printBook();
-
-                    break;
-
-
-                case "close-search":
-
-                    closeSearch();
-
-                    break;
-
-
-                case "search-next":
-
-                    searchNext();
-
-                    break;
-
-
-                case "search-previous":
-
-                    searchPrevious();
-
-                    break;
-
-
-                case "search-clear":
-
-                    clearSearch();
-
-                    break;
-
-
-                case "close-settings":
-
-                case "close-bookmarks":
-
-                case "close-book-info":
-
-                case "close-comments":
-
-                case "close-share":
-
-                case "close-contents":
-
-                case "close-thumbnails":
-
-                case "close-navigation":
-
-                case "close-panel":
-
-                    closeAllPanels();
-
-                    break;
-
-
-                case "close-modal":
-
-                    closeModal();
-
-                    break;
-
-
-                default:
-
-                    originalHandleAction(
-                        action,
-                        button
-                    );
-
-                    break;
-
-            }
-
-        };
 
 
     /* =====================================================
@@ -9213,7 +9344,11 @@ console.log(
             );
 
 
-        if (panel) {
+        if (
+            panel &&
+            typeof openPanel ===
+            "function"
+        ) {
 
             openPanel(
                 panel
@@ -9236,7 +9371,11 @@ console.log(
             );
 
 
-        if (panel) {
+        if (
+            panel &&
+            typeof openPanel ===
+            "function"
+        ) {
 
             openPanel(
                 panel
@@ -9253,8 +9392,20 @@ console.log(
 
     function closeSearch() {
 
-        ReaderState.searchOpen =
-            false;
+        const state =
+            getReaderState();
+
+
+        const dom =
+            getDOMObject();
+
+
+        if (state) {
+
+            state.searchOpen =
+                false;
+
+        }
 
 
         document
@@ -9267,13 +9418,19 @@ console.log(
             );
 
 
-        DOM.searchInput?.blur();
+        if (
+            dom.searchInput
+        ) {
+
+            dom.searchInput.blur();
+
+        }
 
     }
 
 
     /* =====================================================
-       SEARCH NAVIGATION
+       SEARCH NEXT
     ===================================================== */
 
     function searchNext() {
@@ -9290,8 +9447,16 @@ console.log(
         }
 
 
+        const state =
+            getReaderState();
+
+
         if (
-            ReaderState.searchResults.length ===
+            !state ||
+            !Array.isArray(
+                state.searchResults
+            ) ||
+            state.searchResults.length ===
             0
         ) {
 
@@ -9300,15 +9465,20 @@ console.log(
         }
 
 
-        ReaderState.currentSearchIndex =
+        state.currentSearchIndex =
             (
-                ReaderState.currentSearchIndex +
-                1
+                Number(
+                    state.currentSearchIndex
+                ) + 1
             ) %
-            ReaderState.searchResults.length;
+            state.searchResults.length;
 
     }
 
+
+    /* =====================================================
+       SEARCH PREVIOUS
+    ===================================================== */
 
     function searchPrevious() {
 
@@ -9324,8 +9494,16 @@ console.log(
         }
 
 
+        const state =
+            getReaderState();
+
+
         if (
-            ReaderState.searchResults.length ===
+            !state ||
+            !Array.isArray(
+                state.searchResults
+            ) ||
+            state.searchResults.length ===
             0
         ) {
 
@@ -9334,15 +9512,19 @@ console.log(
         }
 
 
-        ReaderState.currentSearchIndex--;
+        state.currentSearchIndex =
+            Number(
+                state.currentSearchIndex
+            ) - 1;
+
 
         if (
-            ReaderState.currentSearchIndex <
+            state.currentSearchIndex <
             0
         ) {
 
-            ReaderState.currentSearchIndex =
-                ReaderState.searchResults.length -
+            state.currentSearchIndex =
+                state.searchResults.length -
                 1;
 
         }
@@ -9350,29 +9532,54 @@ console.log(
     }
 
 
+    /* =====================================================
+       SEARCH CLEAR
+    ===================================================== */
+
     function clearSearch() {
 
-        ReaderState.searchQuery =
+        const state =
+            getReaderState();
+
+
+        const dom =
+            getDOMObject();
+
+
+        if (!state) {
+
+            return;
+
+        }
+
+
+        state.searchQuery =
             "";
 
-        ReaderState.searchResults =
+
+        state.searchResults =
             [];
 
-        ReaderState.currentSearchIndex =
+
+        state.currentSearchIndex =
             -1;
 
 
-        if (DOM.searchInput) {
+        if (
+            dom.searchInput
+        ) {
 
-            DOM.searchInput.value =
+            dom.searchInput.value =
                 "";
 
         }
 
 
-        if (DOM.searchResults) {
+        if (
+            dom.searchResults
+        ) {
 
-            DOM.searchResults.textContent =
+            dom.searchResults.textContent =
                 "0 / 0";
 
         }
@@ -9386,16 +9593,34 @@ console.log(
 
     function downloadBook() {
 
+        const state =
+            getReaderState();
+
+
+        if (!state) {
+
+            return;
+
+        }
+
+
         const url =
-            ReaderState.currentBookUrl;
+            state.currentBookUrl;
 
 
         if (!url) {
 
-            showToast(
-                "Book file is not available",
-                "!"
-            );
+            if (
+                typeof showToast ===
+                "function"
+            ) {
+
+                showToast(
+                    "Book file is not available",
+                    "!"
+                );
+
+            }
 
             return;
 
@@ -9413,8 +9638,8 @@ console.log(
 
 
         link.download =
-            ReaderState.currentBookName ||
-            "chisti-reader-book.pdf";
+            state.currentBookName ||
+            "chishti-reader-book.pdf";
 
 
         link.target =
@@ -9436,10 +9661,17 @@ console.log(
         link.remove();
 
 
-        showToast(
-            "Download started",
-            "⇩"
-        );
+        if (
+            typeof showToast ===
+            "function"
+        ) {
+
+            showToast(
+                "Download started",
+                "⇩"
+            );
+
+        }
 
     }
 
@@ -9450,13 +9682,21 @@ console.log(
 
     function printBook() {
 
-        if (
-            ReaderState.currentBookUrl
-        ) {
+        const state =
+            getReaderState();
+
+
+        const url =
+            state
+                ? state.currentBookUrl
+                : null;
+
+
+        if (url) {
 
             const printWindow =
                 window.open(
-                    ReaderState.currentBookUrl,
+                    url,
                     "_blank"
                 );
 
@@ -9469,7 +9709,20 @@ console.log(
                     "load",
                     () => {
 
-                        printWindow.print();
+                        try {
+
+                            printWindow.print();
+
+                        } catch (
+                            error
+                        ) {
+
+                            console.error(
+                                "Chishti Reader print error:",
+                                error
+                            );
+
+                        }
 
                     },
                     {
@@ -9498,9 +9751,24 @@ console.log(
         "beforeunload",
         () => {
 
-            saveCurrentPage();
+            if (
+                typeof saveCurrentPage ===
+                "function"
+            ) {
 
-            saveBookmarksForCurrentBook();
+                saveCurrentPage();
+
+            }
+
+
+            if (
+                typeof saveBookmarksForCurrentBook ===
+                "function"
+            ) {
+
+                saveBookmarksForCurrentBook();
+
+            }
 
         }
     );
@@ -9514,23 +9782,189 @@ console.log(
         "fullscreenchange",
         () => {
 
-            ReaderState.isFullscreen =
+            const state =
+                getReaderState();
+
+
+            const dom =
+                getDOMObject();
+
+
+            if (!state) {
+
+                return;
+
+            }
+
+
+            state.isFullscreen =
                 Boolean(
                     document.fullscreenElement
                 );
 
 
-            DOM.reader?.classList.toggle(
-                "fullscreen-active",
-                ReaderState.isFullscreen
-            );
+            if (
+                dom.reader
+            ) {
+
+                dom.reader.classList.toggle(
+                    "fullscreen-active",
+                    state.isFullscreen
+                );
+
+            }
 
         }
     );
 
 
     /* =====================================================
-       FINAL PUBLIC API
+       ACTION HANDLER
+       
+       We DO NOT replace handleAction.
+       We simply expose these actions safely.
+    ===================================================== */
+
+    function readerAction(
+        action,
+        button
+    ) {
+
+        switch (
+            action
+        ) {
+
+            case "like-book":
+
+                if (
+                    typeof toggleLike ===
+                    "function"
+                ) {
+
+                    toggleLike();
+
+                }
+
+                return;
+
+
+            case "share-book":
+
+                openShare();
+
+                return;
+
+
+            case "comments":
+
+                openComments();
+
+                return;
+
+
+            case "download-book":
+
+                downloadBook();
+
+                return;
+
+
+            case "print-book":
+
+                printBook();
+
+                return;
+
+
+            case "close-search":
+
+                closeSearch();
+
+                return;
+
+
+            case "search-next":
+
+                searchNext();
+
+                return;
+
+
+            case "search-previous":
+
+                searchPrevious();
+
+                return;
+
+
+            case "search-clear":
+
+                clearSearch();
+
+                return;
+
+
+            case "close-settings":
+            case "close-bookmarks":
+            case "close-book-info":
+            case "close-comments":
+            case "close-share":
+            case "close-contents":
+            case "close-thumbnails":
+            case "close-navigation":
+            case "close-panel":
+
+                if (
+                    typeof closeAllPanels ===
+                    "function"
+                ) {
+
+                    closeAllPanels();
+
+                }
+
+                return;
+
+
+            case "close-modal":
+
+                if (
+                    typeof closeModal ===
+                    "function"
+                ) {
+
+                    closeModal();
+
+                }
+
+                return;
+
+
+            default:
+
+                if (
+                    typeof handleAction ===
+                    "function" &&
+                    handleAction !==
+                    readerAction
+                ) {
+
+                    handleAction(
+                        action,
+                        button
+                    );
+
+                }
+
+                return;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PUBLIC API
     ===================================================== */
 
     window.ChishtiReader =
@@ -9542,78 +9976,66 @@ console.log(
         window.ChishtiReader,
         {
 
-            state:
-                getState,
+            openShare,
 
-            open:
-                openBook,
-
-            close:
-                closeReader,
-
-            nextPage,
-
-            previousPage,
-
-            zoomIn,
-
-            zoomOut,
-
-            resetZoom,
-
-            setZoom,
-
-            toggleBookmark,
-
-            toggleLike,
-
-            toggleSearch,
+            openComments,
 
             closeSearch,
 
-            refresh:
-                refreshReaderUI,
+            searchNext,
 
-            getCurrentBook,
+            searchPrevious,
 
-            getCurrentPage,
+            clearSearch,
 
-            getTotalPages,
+            downloadBook,
 
-            isOpen:
-                isReaderOpen,
+            printBook,
 
-            isOpening:
-                isOpeningBook
+            readerAction,
+
+            readerOpened,
+
+            afterPageChange,
+
+            afterBookmarkChange
 
         }
     );
 
 
     /* =====================================================
-       FINAL INITIALIZATION CHECK
+       FINAL UI REFRESH
     ===================================================== */
 
     function finalReaderCheck() {
 
+        const state =
+            getReaderState();
+
+
         if (
-            !ReaderState.initialized
+            state &&
+            state.initialized &&
+            typeof refreshReaderUI ===
+            "function"
         ) {
 
-            return;
+            refreshReaderUI();
 
         }
 
 
-        refreshReaderUI();
-
-
         console.log(
-            "CHISHTI READER — JavaScript 8/8 ready."
+            "CHISHTI READER — Final reader actions ready."
         );
 
     }
 
+
+    /* =====================================================
+       INITIALIZATION
+    ===================================================== */
 
     if (
         document.readyState ===
