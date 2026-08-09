@@ -4157,7 +4157,6 @@ window.ChishtiReader.updatePageCounter =
 console.log(
     "Chishti Reader — Part 4/9 loaded."
 );
-);
 /* =========================================================
    CHISHTI READER
    JAVASCRIPT — PART 5 / 9
