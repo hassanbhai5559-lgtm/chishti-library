@@ -1,118 +1,37 @@
 /* =========================================================
    CHISHTI READER
-   STYLE SHEET
-   ========================================================= */
-
-/* =========================================================
-   ROOT
-   ========================================================= */
-
-:root {
-    --burgundy-950: #170609;
-    --burgundy-900: #24090d;
-    --burgundy-850: #320d13;
-    --burgundy-800: #421018;
-    --burgundy-700: #57151e;
-
-    --gold-500: #d4af37;
-    --gold-400: #e5c45a;
-    --gold-300: #f1d77a;
-    --gold-dark: #8f6d16;
-
-    --page-white: #fffdf8;
-    --page-shadow: rgba(0, 0, 0, 0.42);
-
-    --text-light: #fff8ea;
-    --text-muted: #d8c7b0;
-    --border-gold: rgba(212, 175, 55, 0.45);
-
-    --reader-radius: 10px;
-    --reader-transition: 180ms ease;
-}
-
-
-/* =========================================================
-   RESET
+   BASE CSS — PART 1
+   FOUNDATION + MAIN LAYOUT
    ========================================================= */
 
 * {
     box-sizing: border-box;
 }
 
-
-html {
-    width: 100%;
-    min-height: 100%;
-    background: var(--burgundy-950);
-}
-
-
+html,
 body {
     width: 100%;
-    min-height: 100vh;
+    min-height: 100%;
     margin: 0;
-    background:
-        radial-gradient(
-            circle at top,
-            var(--burgundy-700) 0%,
-            var(--burgundy-900) 38%,
-            var(--burgundy-950) 100%
-        );
-    color: var(--text-light);
+    padding: 0;
+}
+
+body {
+    background: #26070d;
+    color: #ead99f;
     font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
+        Arial,
+        Helvetica,
         sans-serif;
 }
 
-
 button,
-input,
-textarea,
-select {
+input {
     font: inherit;
 }
 
-
 button {
-    cursor: pointer;
-}
-
-
-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.45;
-}
-
-
-a {
-    color: inherit;
-}
-
-
-img,
-canvas {
-    max-width: 100%;
-}
-
-
-/* =========================================================
-   SCREEN READER ONLY
-   ========================================================= */
-
-.sr-only {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -120,18 +39,24 @@ canvas {
    MAIN READER
    ========================================================= */
 
+#chishtiReader,
 .chishti-reader {
     position: relative;
-    display: flex;
-    flex-direction: column;
+
     width: 100%;
     min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
     overflow: hidden;
+
     background:
         linear-gradient(
             180deg,
-            rgba(255, 255, 255, 0.015),
-            transparent 30%
+            #3a0b15 0%,
+            #2b0710 55%,
+            #21050b 100%
         );
 }
 
@@ -140,323 +65,341 @@ canvas {
    HEADER
    ========================================================= */
 
+#readerHeader,
 .reader-header {
     position: relative;
-    z-index: 50;
+
+    width: 100%;
+    min-height: 58px;
 
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
 
-    min-height: 68px;
-    padding: 12px 22px;
+    padding: 10px 18px;
+
+    border-bottom:
+        1px solid
+        rgba(214, 169, 72, 0.25);
 
     background:
-        linear-gradient(
-            180deg,
-            rgba(87, 21, 30, 0.98),
-            rgba(36, 9, 13, 0.98)
-        );
+        rgba(35, 5, 11, 0.96);
 
-    border-bottom: 1px solid var(--border-gold);
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
 }
 
+
+/* =========================================================
+   BRAND
+   ========================================================= */
 
 .reader-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    min-width: max-content;
-}
-
-
-.reader-brand-mark {
-    display: grid;
-    place-items: center;
-
-    width: 34px;
-    height: 34px;
-
-    color: var(--gold-300);
-    font-size: 22px;
-
-    border: 1px solid var(--border-gold);
-    border-radius: 50%;
-
-    box-shadow:
-        inset 0 0 12px rgba(212, 175, 55, 0.12),
-        0 0 14px rgba(212, 175, 55, 0.1);
-}
-
-
-.reader-brand-name {
-    color: var(--gold-300);
-    font-size: 19px;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-}
-
-
-.reader-book-title {
-    flex: 1;
-    min-width: 0;
-
-    color: var(--text-light);
-    font-size: 15px;
-    font-weight: 600;
-    text-align: center;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-.reader-header-actions {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-
-
-.reader-tool-button,
-.reader-navigation-button,
-.reader-social-button,
-.reader-zoom-controls button,
-.reader-panel button,
-.reader-share-actions button,
-.chishti-gold-button {
-    color: var(--text-light);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255, 255, 255, 0.08),
-            rgba(255, 255, 255, 0.025)
-        );
-
-    border: 1px solid rgba(212, 175, 55, 0.42);
-    border-radius: 7px;
-
-    transition:
-        transform var(--reader-transition),
-        background var(--reader-transition),
-        border-color var(--reader-transition),
-        box-shadow var(--reader-transition);
-}
-
-
-.reader-tool-button {
-    display: grid;
-    place-items: center;
-
-    width: 40px;
-    height: 40px;
-
-    font-size: 17px;
-}
-
-
-.reader-tool-button:hover,
-.reader-navigation-button:hover,
-.reader-social-button:hover,
-.reader-zoom-controls button:hover,
-.reader-panel button:hover,
-.reader-share-actions button:hover,
-.chishti-gold-button:hover {
-    color: #211006;
-
-    background:
-        linear-gradient(
-            145deg,
-            var(--gold-300),
-            var(--gold-500)
-        );
-
-    border-color: var(--gold-300);
-
-    box-shadow:
-        0 0 16px rgba(212, 175, 55, 0.25);
-
-    transform: translateY(-1px);
-}
-
-
-.reader-tool-button:active,
-.reader-navigation-button:active,
-.reader-social-button:active,
-.reader-zoom-controls button:active {
-    transform: translateY(0);
-}
-
-
-/* =========================================================
-   SEARCH BAR
-   ========================================================= */
-
-.reader-search-bar {
-    position: relative;
-    z-index: 40;
-
-    display: none;
-    align-items: center;
-    gap: 8px;
-
-    padding: 10px 18px;
-
-    background: var(--burgundy-850);
-    border-bottom: 1px solid var(--border-gold);
-}
-
-
-.reader-search-bar.active,
-.reader-search-bar.open {
-    display: flex;
-}
-
-
-.reader-search-field {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    flex: 1;
-    min-width: 180px;
-
-    padding: 8px 12px;
-
-    background: rgba(0, 0, 0, 0.22);
-    border: 1px solid rgba(212, 175, 55, 0.35);
-    border-radius: 7px;
-}
-
-
-.reader-search-field input {
-    width: 100%;
-    min-width: 0;
-
-    color: var(--text-light);
-    background: transparent;
-    border: 0;
-    outline: 0;
-}
-
-
-.reader-search-field input::placeholder {
-    color: var(--text-muted);
-}
-
-
-.reader-search-results {
-    min-width: 60px;
-    color: var(--gold-300);
-    font-size: 13px;
-    text-align: center;
-}
-
-
-/* =========================================================
-   VIEWPORT
-   ========================================================= */
-
-.reader-viewport {
-    position: relative;
-    flex: 1;
-
-    display: flex;
-    align-items: center;
     justify-content: center;
+}
+
+.reader-brand h1 {
+    margin: 0;
+
+    color: #e5c66d;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+#readerContent,
+.reader-content {
+    position: relative;
+
+    width: 100%;
+
+    flex: 1 1 auto;
 
     min-height: 0;
-    padding: 28px;
 
     overflow: auto;
 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 24px;
+
     background:
         radial-gradient(
-            ellipse at center,
-            rgba(87, 21, 30, 0.5),
-            rgba(23, 6, 9, 0.96) 72%
+            circle at center,
+            rgba(115, 25, 38, 0.18),
+            transparent 65%
         );
 }
 
 
-.reader-stage {
+/* =========================================================
+   PAGE AREA
+   ========================================================= */
+
+#readerPages,
+.reader-pages {
     position: relative;
 
+    width: 100%;
+    min-height: 100%;
+
     display: flex;
-    align-items: stretch;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
-    gap: 0;
-
-    max-width: 1600px;
-    min-width: min(1100px, 94vw);
-
-    transform-origin: center center;
-
-    transition:
-        transform 180ms ease;
+    gap: 18px;
 }
 
 
 /* =========================================================
-   PAGE
+   CANVAS CONTAINER
+   ========================================================= */
+
+#readerCanvasContainer,
+.reader-canvas-container {
+    position: relative;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   PDF PAGE
    ========================================================= */
 
 .reader-page {
     position: relative;
 
-    display: flex;
-    justify-content: center;
+    display: block;
 
-    width: min(47vw, 720px);
-    min-height: min(74vh, 900px);
+    max-width: 100%;
+    height: auto;
 
-    overflow: hidden;
-
-    background: var(--page-white);
+    background: #ffffff;
 
     box-shadow:
-        0 18px 45px var(--page-shadow),
-        inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+        0 12px 35px
+        rgba(0, 0, 0, 0.50);
+
+    border-radius: 2px;
 }
 
 
-.reader-page-left {
-    border-radius: 5px 0 0 5px;
+/* =========================================================
+   PDF CANVAS
+   ========================================================= */
+
+.reader-page canvas,
+.reader-canvas-container canvas {
+    display: block;
+
+    max-width: 100%;
+    height: auto;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, 0.50);
 }
 
 
-.reader-page-right {
-    border-radius: 0 5px 5px 0;
+/* =========================================================
+   BOOK TITLE
+   ========================================================= */
+
+#readerBookTitle,
+.reader-book-title {
+    position: absolute;
+
+    top: 8px;
+    left: 50%;
+
+    z-index: 20;
+
+    max-width: 80%;
+
+    padding: 5px 10px;
+
+    transform: translateX(-50%);
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.25);
+
+    border-radius: 5px;
+
+    background:
+        rgba(35, 5, 11, 0.78);
+
+    color: #e5c66d;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
-.page-surface {
-    position: relative;
+/* =========================================================
+   READER STATUS
+   ========================================================= */
+
+#readerStatus,
+.reader-status {
+    position: absolute;
+
+    left: 50%;
+    bottom: 12px;
+
+    z-index: 30;
+
+    transform: translateX(-50%);
+
+    color:
+        rgba(229, 198, 109, 0.65);
+
+    font-size: 10px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   BASIC CONTROLS
+   ========================================================= */
+
+#readerControls,
+.reader-controls {
+    position: absolute;
+
+    top: 12px;
+    right: 16px;
+
+    z-index: 40;
 
     display: flex;
     align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    min-height: 100%;
-
-    background: var(--page-white);
+    gap: 5px;
 }
 
 
-.page-canvas {
-    display: block;
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
 
-    width: 100%;
-    height: auto;
+#readerToolbar,
+.reader-toolbar {
+    position: absolute;
 
-    background: var(--page-white);
+    top: 12px;
+    left: 16px;
+
+    z-index: 40;
+
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+/* =========================================================
+   CONTROL BUTTONS
+   ========================================================= */
+
+#readerToolbar button,
+.reader-toolbar button,
+#readerControls button,
+.reader-controls button {
+    width: 34px;
+    height: 34px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.40);
+
+    border-radius: 6px;
+
+    background:
+        rgba(35, 5, 11, 0.90);
+
+    color: #e5c66d;
+
+    cursor: pointer;
+
+    transition:
+        background 0.16s ease,
+        border-color 0.16s ease;
+}
+
+
+#readerToolbar button:hover,
+.reader-toolbar button:hover,
+#readerControls button:hover,
+.reader-controls button:hover {
+    background:
+        rgba(214, 169, 72, 0.14);
+
+    border-color:
+        rgba(229, 198, 109, 0.75);
+}
+
+
+/* =========================================================
+   ZOOM VALUE
+   ========================================================= */
+
+#readerZoomDisplay,
+.reader-zoom-value,
+#zoomValue {
+    min-width: 52px;
+    height: 34px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 6px;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.25);
+
+    border-radius: 6px;
+
+    color: #e5c66d;
+
+    font-size: 11px;
+    font-weight: 700;
 }
 
 
@@ -464,885 +407,73 @@ canvas {
    WATERMARK
    ========================================================= */
 
-.page-watermark {
+#readerPageWatermark,
+.reader-page-watermark,
+.reader-watermark-reader {
     position: absolute;
+
     left: 50%;
     top: 50%;
 
-    z-index: 5;
-
-    color: rgba(130, 25, 35, 0.14);
-
-    font-size: clamp(18px, 2vw, 30px);
-    font-weight: 700;
-    letter-spacing: 0.08em;
+    z-index: 25;
 
     transform:
         translate(-50%, -50%)
-        rotate(-32deg);
+        rotate(-28deg);
+
+    color:
+        rgba(214, 169, 72, 0.13);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(24px, 4vw, 54px);
+
+    font-weight: 700;
+
+    letter-spacing: 3px;
+
+    white-space: nowrap;
 
     pointer-events: none;
+
     user-select: none;
-    white-space: nowrap;
 }
 
 
 /* =========================================================
-   BOOK SPINE
+   LOADING
    ========================================================= */
 
-.reader-book-spine {
-    position: relative;
-    z-index: 8;
-
-    width: 8px;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0, 0, 0, 0.3),
-            rgba(255, 255, 255, 0.2),
-            rgba(0, 0, 0, 0.35)
-        );
-
-    box-shadow:
-        0 0 10px rgba(0, 0, 0, 0.4);
-}
-
-
-.reader-spine-highlight {
+#readerLoading,
+.reader-loading {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
 
-    width: 1px;
+    inset: 0;
 
-    background:
-        linear-gradient(
-            180deg,
-            transparent,
-            rgba(255, 255, 255, 0.4),
-            transparent
-        );
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-.reader-navigation {
-    position: relative;
-    z-index: 30;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    min-height: 58px;
-    padding: 8px 14px;
-
-    overflow-x: auto;
-
-    background:
-        linear-gradient(
-            180deg,
-            var(--burgundy-850),
-            var(--burgundy-900)
-        );
-
-    border-top: 1px solid var(--border-gold);
-    border-bottom: 1px solid var(--border-gold);
-
-    scrollbar-width: thin;
-}
-
-
-.reader-navigation-button {
-    flex: 0 0 auto;
-
-    min-height: 38px;
-    padding: 7px 12px;
-
-    font-size: 13px;
-    white-space: nowrap;
-}
-
-
-.reader-page-counter {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-
-    flex: 0 0 auto;
-
-    color: var(--text-light);
-}
-
-
-.reader-page-counter input {
-    width: 58px;
-    height: 38px;
-
-    color: var(--gold-300);
-    background: rgba(0, 0, 0, 0.25);
-
-    border: 1px solid var(--border-gold);
-    border-radius: 7px;
-
-    text-align: center;
-    outline: none;
-}
-
-
-.reader-page-counter input:focus {
-    border-color: var(--gold-300);
-    box-shadow:
-        0 0 0 2px rgba(212, 175, 55, 0.13);
-}
-
-
-.reader-zoom-controls {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-
-    flex: 0 0 auto;
-}
-
-
-.reader-zoom-controls button {
-    min-height: 38px;
-    padding: 7px 10px;
-
-    white-space: nowrap;
-}
-
-
-#readerZoomValue {
-    min-width: 62px;
-}
-
-
-/* =========================================================
-   SOCIAL ACTIONS
-   ========================================================= */
-
-.reader-social-actions {
-    position: relative;
-    z-index: 25;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-
-    min-height: 54px;
-    padding: 8px 14px;
-
-    background: var(--burgundy-950);
-}
-
-
-.reader-social-button {
-    min-width: 110px;
-    padding: 8px 15px;
-
-    font-size: 13px;
-}
-
-
-/* =========================================================
-   PANELS
-   ========================================================= */
-
-.reader-panel {
-    position: fixed;
     z-index: 100;
 
-    top: 76px;
-    right: 20px;
-
-    width: min(390px, calc(100vw - 40px));
-    max-height: calc(100vh - 100px);
-
-    overflow: auto;
-
-    color: var(--text-light);
-
-    background:
-        linear-gradient(
-            160deg,
-            var(--burgundy-800),
-            var(--burgundy-950)
-        );
-
-    border: 1px solid var(--border-gold);
-    border-radius: var(--reader-radius);
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.55);
-}
-
-
-.reader-panel[hidden] {
-    display: none;
-}
-
-
-.reader-panel-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 
-    padding: 15px 17px;
+    background:
+        rgba(35, 5, 11, 0.82);
 
-    border-bottom: 1px solid var(--border-gold);
-}
+    color: #e5c66d;
 
-
-.reader-panel-header h2 {
-    margin: 0;
-
-    color: var(--gold-300);
-    font-size: 17px;
-}
-
-
-.reader-panel-header button {
-    display: grid;
-    place-items: center;
-
-    width: 34px;
-    height: 34px;
-
-    padding: 0;
-
-    font-size: 20px;
-}
-
-
-.reader-panel-body {
-    padding: 17px;
-}
-
-
-/* =========================================================
-   SETTINGS
-   ========================================================= */
-
-.settings-section {
-    padding: 14px 0;
-
-    border-bottom: 1px solid rgba(212, 175, 55, 0.16);
-}
-
-
-.settings-section:first-child {
-    padding-top: 0;
-}
-
-
-.settings-section:last-child {
-    border-bottom: 0;
-}
-
-
-.settings-section h3 {
-    margin: 0 0 10px;
-
-    color: var(--gold-300);
     font-size: 13px;
 }
 
 
-.settings-option,
-.settings-switch {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    padding: 8px 0;
-
-    color: var(--text-muted);
-
-    cursor: pointer;
-}
-
-
-.settings-option input,
-.settings-switch input {
-    accent-color: var(--gold-500);
-}
-
-
 /* =========================================================
-   BOOKMARKS
+   HIDDEN STATE
    ========================================================= */
 
-.reader-bookmarks-list,
-.reader-comments-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    padding: 12px;
-}
-
-
-.reader-bookmark-item {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 9px;
-
-    width: 100%;
-    padding: 11px;
-
-    color: var(--text-light);
-
-    text-align: left;
-
-    background: rgba(255, 255, 255, 0.035);
-
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    border-radius: 7px;
-}
-
-
-.reader-bookmark-item:hover {
-    border-color: var(--border-gold);
-    background: rgba(212, 175, 55, 0.08);
-}
-
-
-.bookmark-icon {
-    color: var(--gold-300);
-}
-
-
-.bookmark-page-number {
-    color: var(--gold-300);
-    font-weight: 700;
-}
-
-
-.bookmark-title {
-    grid-column: 2;
-
-    color: var(--text-muted);
-    font-size: 12px;
-}
-
-
-.bookmark-remove {
-    grid-column: 3;
-    grid-row: 1 / span 2;
-
-    color: #f2c8c8;
-    font-size: 18px;
-}
-
-
-.reader-floating-bookmark {
-    position: fixed;
-    z-index: 35;
-
-    right: 22px;
-    bottom: 132px;
-
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 9px 13px;
-
-    color: var(--text-light);
-
-    background:
-        linear-gradient(
-            145deg,
-            var(--burgundy-700),
-            var(--burgundy-900)
-        );
-
-    border: 1px solid var(--border-gold);
-    border-radius: 7px;
-
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, 0.35);
-}
-
-
-.reader-floating-bookmark:hover,
-.reader-floating-bookmark.active {
-    color: #211006;
-
-    background:
-        linear-gradient(
-            145deg,
-            var(--gold-300),
-            var(--gold-500)
-        );
-}
-
-
-/* =========================================================
-   COMMENTS
-   ========================================================= */
-
-.reader-comment {
-    padding: 12px;
-
-    background: rgba(255, 255, 255, 0.035);
-
-    border: 1px solid rgba(212, 175, 55, 0.17);
-    border-radius: 7px;
-}
-
-
-.reader-comment-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-
-    margin-bottom: 7px;
-}
-
-
-.reader-comment-author {
-    color: var(--gold-300);
-}
-
-
-.reader-comment-date {
-    color: var(--text-muted);
-    font-size: 11px;
-}
-
-
-.reader-comment-text {
-    margin: 0;
-
-    color: var(--text-light);
-    line-height: 1.55;
-    white-space: pre-wrap;
-}
-
-
-.reader-comment-form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    padding: 14px;
-
-    border-top: 1px solid var(--border-gold);
-}
-
-
-.reader-comment-form label {
-    color: var(--gold-300);
-    font-size: 13px;
-}
-
-
-.reader-comment-form textarea {
-    resize: vertical;
-
-    min-height: 90px;
-
-    padding: 10px;
-
-    color: var(--text-light);
-    background: rgba(0, 0, 0, 0.25);
-
-    border: 1px solid rgba(212, 175, 55, 0.35);
-    border-radius: 7px;
-
-    outline: none;
-}
-
-
-.reader-comment-form textarea:focus {
-    border-color: var(--gold-300);
-}
-
-
-/* =========================================================
-   SHARE
-   ========================================================= */
-
-.reader-share-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-
-.reader-share-actions button {
-    padding: 8px 12px;
-}
-
-
-.reader-share-title {
-    margin-top: 0;
-    color: var(--text-muted);
-}
-
-
-/* =========================================================
-   MODAL
-   ========================================================= */
-
-.reader-modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-
-    display: grid;
-    place-items: center;
-
-    padding: 20px;
-
-    background: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(5px);
-}
-
-
-.reader-modal-overlay[hidden] {
-    display: none;
-}
-
-
-.reader-modal {
-    width: min(600px, 100%);
-    max-height: 85vh;
-
-    overflow: auto;
-
-    background:
-        linear-gradient(
-            160deg,
-            var(--burgundy-800),
-            var(--burgundy-950)
-        );
-
-    border: 1px solid var(--border-gold);
-    border-radius: var(--reader-radius);
-
-    box-shadow:
-        0 25px 80px rgba(0, 0, 0, 0.6);
-}
-
-
-.reader-modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 15px 17px;
-
-    border-bottom: 1px solid var(--border-gold);
-}
-
-
-.reader-modal-header h2 {
-    margin: 0;
-    color: var(--gold-300);
-}
-
-
-.reader-modal-header button {
-    width: 34px;
-    height: 34px;
-}
-
-
-.reader-modal-content {
-    padding: 18px;
-}
-
-
-/* =========================================================
-   SEARCH RESULTS
-   ========================================================= */
-
-.reader-search-results-panel {
-    position: fixed;
-    z-index: 90;
-
-    top: 125px;
-    left: 20px;
-
-    width: min(430px, calc(100vw - 40px));
-    max-height: 60vh;
-
-    overflow: auto;
-
-    background: var(--burgundy-950);
-
-    border: 1px solid var(--border-gold);
-    border-radius: 8px;
-
-    box-shadow:
-        0 18px 50px rgba(0, 0, 0, 0.5);
-}
-
-
-.reader-search-results-panel[hidden] {
-    display: none;
-}
-
-
-.reader-search-results-header {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-
-    padding: 12px;
-
-    border-bottom: 1px solid var(--border-gold);
-}
-
-
-.reader-search-results-header strong {
-    color: var(--gold-300);
-}
-
-
-.reader-search-result-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-
-    width: 100%;
-    padding: 10px 12px;
-
-    color: var(--text-light);
-
-    text-align: left;
-
-    background: transparent;
-    border: 0;
-    border-bottom: 1px solid rgba(212, 175, 55, 0.12);
-}
-
-
-.reader-search-result-item:hover {
-    background: rgba(212, 175, 55, 0.08);
-}
-
-
-.search-result-page {
-    color: var(--gold-300);
-    font-weight: 700;
-}
-
-
-.search-result-preview {
-    color: var(--text-muted);
-    font-size: 12px;
-}
-
-
-/* =========================================================
-   SEARCH HIGHLIGHT
-   ========================================================= */
-
-.reader-search-highlight-layer {
-    position: absolute;
-    inset: 0;
-
-    z-index: 12;
-
-    pointer-events: none;
-}
-
-
-.reader-search-highlight-layer .search-highlight {
-    position: absolute;
-
-    background: rgba(255, 215, 70, 0.38);
-
-    border-radius: 2px;
-
-    box-shadow:
-        0 0 7px rgba(255, 215, 70, 0.25);
-}
-
-
-/* =========================================================
-   LIGHT ANIMATION
-   ========================================================= */
-
-.reader-light-layer,
-.reader-white-light-sweep,
-.reader-book-transition,
-.reader-page-transition {
-    position: fixed;
-    inset: 0;
-
-    z-index: 150;
-
-    pointer-events: none;
-
-    opacity: 0;
-}
-
-
-.reader-light-layer {
-    background:
-        linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.08) 45%,
-            rgba(255, 255, 255, 0.32) 50%,
-            rgba(255, 255, 255, 0.08) 55%,
-            transparent 100%
-        );
-
-    transform: translateX(-120%);
-}
-
-
-.reader-light-layer.animate,
-.reader-white-light-sweep.animate {
-    opacity: 1;
-    animation: chishtiWhiteLight 700ms ease-in-out forwards;
-}
-
-
-.reader-white-light {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: -30%;
-
-    width: 25%;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.8),
-            transparent
-        );
-
-    filter: blur(12px);
-}
-
-
-.reader-white-light-sweep.animate .reader-white-light {
-    animation: chishtiWhiteSweep 700ms ease-in-out forwards;
-}
-
-
-@keyframes chishtiWhiteLight {
-    0% {
-        opacity: 0;
-        transform: translateX(-120%);
-    }
-
-    20% {
-        opacity: 1;
-    }
-
-    80% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateX(120%);
-    }
-}
-
-
-@keyframes chishtiWhiteSweep {
-    0% {
-        left: -30%;
-    }
-
-    100% {
-        left: 110%;
-    }
-}
-
-
-/* =========================================================
-   PAGE TRANSITION
-   ========================================================= */
-
-.reader-page-transition.animate {
-    animation:
-        chishtiPageTransition 260ms ease-out forwards;
-}
-
-
-@keyframes chishtiPageTransition {
-    0% {
-        opacity: 0;
-    }
-
-    30% {
-        opacity: 0.25;
-    }
-
-    100% {
-        opacity: 0;
-    }
-}
-
-
-/* =========================================================
-   TOAST / NOTIFICATION
-   ========================================================= */
-
-.reader-toast,
-.reader-notification,
-.reader-copy-feedback,
-.reader-bookmark-feedback {
-    position: fixed;
-    z-index: 300;
-
-    left: 50%;
-    bottom: 90px;
-
-    max-width: min(420px, calc(100vw - 32px));
-
-    padding: 11px 15px;
-
-    color: var(--text-light);
-
-    background:
-        linear-gradient(
-            145deg,
-            var(--burgundy-800),
-            var(--burgundy-950)
-        );
-
-    border: 1px solid var(--border-gold);
-    border-radius: 8px;
-
-    box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.45);
-
-    transform: translateX(-50%);
-}
-
-
-.reader-toast[hidden],
-.reader-notification[hidden],
-.reader-copy-feedback[hidden],
-.reader-bookmark-feedback[hidden] {
-    display: none;
+[hidden] {
+    display: none !important;
 }
 
 
@@ -1350,302 +481,77 @@ canvas {
    ERROR
    ========================================================= */
 
-.reader-error {
-    position: fixed;
+#readerError,
+.reader-error-state {
+    position: absolute;
+
     inset: 0;
 
-    z-index: 180;
+    z-index: 110;
 
-    display: grid;
-    place-items: center;
-
-    align-content: center;
-    gap: 10px;
-
-    padding: 25px;
-
-    text-align: center;
-
-    background:
-        rgba(23, 6, 9, 0.97);
-}
-
-
-.reader-error[hidden],
-.reader-book-empty[hidden],
-.reader-book-placeholder[hidden] {
-    display: none;
-}
-
-
-.reader-error-icon {
-    display: grid;
-    place-items: center;
-
-    width: 46px;
-    height: 46px;
-
-    color: var(--gold-300);
-
-    border: 1px solid var(--border-gold);
-    border-radius: 50%;
-
-    font-weight: 800;
-}
-
-
-.reader-error h2 {
-    margin: 0;
-    color: var(--gold-300);
-}
-
-
-.reader-error p {
-    margin: 0;
-    color: var(--text-muted);
-}
-
-
-.chishti-gold-button {
-    padding: 9px 15px;
-
-    color: #211006;
-
-    background:
-        linear-gradient(
-            145deg,
-            var(--gold-300),
-            var(--gold-500)
-        );
-}
-
-
-/* =========================================================
-   BOOK PLACEHOLDER
-   ========================================================= */
-
-.reader-book-placeholder {
-    position: absolute;
-    inset: 0;
-
-    z-index: 10;
-
-    display: grid;
-    place-items: center;
-
-    pointer-events: none;
-}
-
-
-.reader-book-placeholder-inner {
-    text-align: center;
-}
-
-
-.reader-book-placeholder-mark {
-    color: var(--gold-300);
-    font-size: 50px;
-}
-
-
-.reader-book-placeholder-title {
-    color: var(--text-muted);
-    font-size: 18px;
-}
-
-
-/* =========================================================
-   STATUS
-   ========================================================= */
-
-.reader-status-bar {
-    position: absolute;
-    left: 50%;
-    bottom: 5px;
-
-    z-index: 20;
-
-    transform: translateX(-50%);
-
-    color: var(--text-muted);
-    font-size: 11px;
-}
-
-
-.reader-status-bar:empty {
-    display: none;
-}
-
-
-/* =========================================================
-   PAGE NUMBERS
-   ========================================================= */
-
-.reader-page-number {
-    position: absolute;
-    bottom: 10px;
-
-    z-index: 10;
-
-    color: rgba(70, 45, 30, 0.6);
-    font-size: 11px;
-
-    pointer-events: none;
-}
-
-
-.reader-left-page-number {
-    left: 15px;
-}
-
-
-.reader-right-page-number {
-    right: 15px;
-}
-
-
-/* =========================================================
-   CACHE / HIDDEN TECHNICAL ELEMENTS
-   ========================================================= */
-
-.reader-canvas-cache,
-.reader-preload-cache,
-.reader-print-area,
-.reader-download-area,
-.reader-render-status,
-.reader-search-index-status,
-.reader-page-render-status,
-.reader-connection-status,
-.reader-firebase-comment-status,
-.reader-collection-data,
-.reader-context-menu,
-.reader-book-navigation,
-.reader-fullscreen-root,
-.reader-measurement-canvas {
-    display: none;
-}
-
-
-.reader-text-layer {
-    position: absolute;
-
-    overflow: hidden;
-
-    pointer-events: none;
-    user-select: text;
-}
-
-
-.reader-text-layer span {
-    position: absolute;
-
-    color: transparent;
-
-    white-space: pre;
-
-    transform-origin: 0 0;
-}
-
-
-/* =========================================================
-   CONTEXT MENU
-   ========================================================= */
-
-.reader-context-menu {
-    position: fixed;
-    z-index: 250;
-
-    min-width: 190px;
-
-    padding: 5px;
-
-    background: var(--burgundy-950);
-
-    border: 1px solid var(--border-gold);
-    border-radius: 7px;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.5);
-}
-
-
-.reader-context-menu[hidden] {
-    display: none;
-}
-
-
-.reader-context-menu button {
-    display: block;
-
-    width: 100%;
-
-    padding: 9px 11px;
-
-    color: var(--text-light);
-
-    text-align: left;
-
-    background: transparent;
-    border: 0;
-    border-radius: 5px;
-}
-
-
-.reader-context-menu button:hover {
-    background: rgba(212, 175, 55, 0.12);
-}
-
-
-/* =========================================================
-   FOOTER
-   ========================================================= */
-
-.reader-footer {
     display: flex;
+    flex-direction: column;
+
     align-items: center;
     justify-content: center;
 
-    min-height: 30px;
+    gap: 12px;
 
-    color: rgba(255, 248, 234, 0.45);
+    padding: 24px;
 
-    background: var(--burgundy-950);
+    background:
+        rgba(35, 5, 11, 0.92);
 
-    font-size: 10px;
-    letter-spacing: 0.08em;
+    color: #e5c66d;
+
+    text-align: center;
+}
+
+
+#readerError button,
+.reader-error-state button {
+    min-width: 110px;
+    height: 36px;
+
+    padding: 0 12px;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.45);
+
+    border-radius: 6px;
+
+    background:
+        rgba(214, 169, 72, 0.08);
+
+    color: #e5c66d;
+
+    cursor: pointer;
 }
 
 
 /* =========================================================
-   FULLSCREEN
+   MESSAGE
    ========================================================= */
 
-.chishti-reader.fullscreen-active {
-    position: fixed;
-    inset: 0;
+#readerMessage,
+.reader-message {
+    position: absolute;
 
-    z-index: 9999;
+    left: 50%;
+    top: 50%;
 
-    width: 100vw;
-    height: 100vh;
-}
+    z-index: 90;
 
+    transform: translate(-50%, -50%);
 
-.chishti-reader.fullscreen-active .reader-footer {
-    display: none;
-}
+    max-width: 80%;
 
+    color: #e5c66d;
 
-/* =========================================================
-   FOCUS
-   ========================================================= */
+    text-align: center;
 
-button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-a:focus-visible {
-    outline: 2px solid var(--gold-300);
-    outline-offset: 2px;
+    font-size: 13px;
 }
 
 
@@ -1653,247 +559,1443 @@ a:focus-visible {
    MOBILE
    ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 700px) {
 
+    #readerContent,
+    .reader-content {
+        padding: 12px;
+    }
+
+    #readerHeader,
     .reader-header {
-        gap: 10px;
-        padding: 10px 12px;
+        min-height: 50px;
+        padding: 8px 12px;
     }
 
-
-    .reader-brand-name {
-        font-size: 15px;
+    .reader-brand h1 {
+        font-size: 17px;
     }
 
-
-    .reader-book-title {
-        display: none;
+    #readerToolbar,
+    .reader-toolbar {
+        top: 8px;
+        left: 8px;
     }
 
-
-    .reader-viewport {
-        padding: 14px 8px;
-    }
-
-
-    .reader-stage {
-        min-width: 0;
-        width: 100%;
-    }
-
-
-    .reader-page {
-        width: 50vw;
-        min-height: 65vh;
-    }
-
-
-    .reader-navigation {
-        justify-content: flex-start;
-    }
-
-
-    .reader-floating-bookmark {
-        right: 12px;
-        bottom: 115px;
-    }
-
-}
-
-
-@media (max-width: 620px) {
-
-    .reader-header-actions {
-        gap: 4px;
-    }
-
-
-    .reader-tool-button {
-        width: 34px;
-        height: 34px;
-    }
-
-
-    .reader-page-left,
-    .reader-page-right {
-        width: 50vw;
-    }
-
-
-    .reader-page {
-        min-height: 58vh;
-    }
-
-
-    .reader-book-spine {
-        width: 4px;
-    }
-
-
-    .reader-social-actions {
-        gap: 5px;
-    }
-
-
-    .reader-social-button {
-        min-width: auto;
-        padding: 7px 9px;
-        font-size: 12px;
-    }
-
-
-    .reader-floating-bookmark {
-        padding: 8px 10px;
-    }
-
-
-    #readerBookmarkLabel {
-        display: none;
-    }
-
-}
-
-
-@media (max-width: 480px) {
-
-    .reader-brand-mark {
-        width: 30px;
-        height: 30px;
-        font-size: 18px;
-    }
-
-
-    .reader-brand-name {
-        font-size: 13px;
-    }
-
-
-    .reader-header-actions .reader-tool-button:nth-child(4),
-    .reader-header-actions .reader-tool-button:nth-child(5) {
-        display: none;
-    }
-
-
-    .reader-page {
-        min-height: 52vh;
-    }
-
-
-    .reader-social-actions {
-        flex-wrap: wrap;
-    }
-
-
-    .reader-panel {
-        top: 65px;
-        right: 10px;
-
-        width: calc(100vw - 20px);
-        max-height: calc(100vh - 80px);
-    }
-
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-        scroll-behavior: auto !important;
-        animation-duration: 1ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 1ms !important;
+    #readerControls,
+    .reader-controls {
+        top: 8px;
+        right: 8px;
     }
 
 }
 /* =========================================================
    CHISHTI READER
    CSS — PART 2
-   READER SHELL + PAGES + WATERMARK
+   MAIN READER LAYOUT
    ========================================================= */
 
 
 /* =========================================================
-   READER ROOT
+   MAIN READER
    ========================================================= */
 
 #chishtiReader,
-.chishti-reader,
-.reader-overlay {
+.chishti-reader {
 
-    position: fixed;
+    position:
+        relative;
 
-    inset: 0;
+    width:
+        100%;
 
-    width: 100%;
+    min-height:
+        100vh;
 
-    height: 100%;
+    display:
+        flex;
 
-    z-index: 9999;
+    flex-direction:
+        column;
 
-    display: flex;
+    box-sizing:
+        border-box;
 
-    flex-direction: column;
-
-    overflow: hidden;
+    overflow:
+        hidden;
 
     background:
-        #2b080f;
+        #320a12;
 
     color:
-        #f8f1df;
+        #ead99f;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+#readerHeader,
+.reader-header {
+
+    position:
+        relative;
+
+    z-index:
+        10;
+
+    width:
+        100%;
+
+    min-height:
+        58px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        10px 18px;
+
+    box-sizing:
+        border-box;
+
+    background:
+        #320a12;
+
+    border-bottom:
+        1px solid
+        rgba(214,169,72,0.28);
+
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.reader-brand {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+}
+
+
+/* =========================================================
+   BRAND TITLE
+   ========================================================= */
+
+.reader-brand h1 {
+
+    margin:
+        0;
+
+    color:
+        #e5c66d;
 
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
+    font-size:
+        21px;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.2;
+
+    letter-spacing:
+        0.4px;
+
 }
 
 
 /* =========================================================
-   READER HIDDEN STATE
+   READER CONTENT
    ========================================================= */
 
-#chishtiReader.hidden,
-.chishti-reader.hidden,
-.reader-overlay.hidden {
+#readerContent,
+.reader-content {
 
-    display: none;
+    position:
+        relative;
 
-}
+    flex:
+        1 1 auto;
 
+    width:
+        100%;
 
-/* =========================================================
-   READER BACKGROUND
-   ========================================================= */
+    min-height:
+        0;
 
-#chishtiReader::before,
-.chishti-reader::before,
-.reader-overlay::before {
+    display:
+        flex;
 
-    content: "";
+    align-items:
+        flex-start;
 
-    position: absolute;
+    justify-content:
+        center;
 
-    inset: 0;
+    overflow:
+        auto;
 
-    pointer-events: none;
+    box-sizing:
+        border-box;
+
+    padding:
+        22px;
 
     background:
-        radial-gradient(
-            circle at 50% 35%,
-            rgba(122, 25, 42, 0.18),
-            transparent 55%
-        );
+        #25070e;
 
-    z-index: 0;
+}
 
+
+/* =========================================================
+   PAGE CONTAINER
+   ========================================================= */
+
+#readerPages,
+.reader-pages {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    min-height:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    gap:
+        18px;
+
+    box-sizing:
+        border-box;
+
+}
+
+
+/* =========================================================
+   PDF CANVAS CONTAINER
+   ========================================================= */
+
+#readerCanvasContainer,
+.reader-canvas-container {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    min-height:
+        200px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    gap:
+        18px;
+
+    box-sizing:
+        border-box;
+
+}
+
+
+/* =========================================================
+   PDF PAGE
+   ========================================================= */
+
+.reader-page {
+
+    position:
+        relative;
+
+    display:
+        block;
+
+    width:
+        fit-content;
+
+    max-width:
+        100%;
+
+    margin:
+        0 auto;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 10px 32px
+        rgba(0,0,0,0.42);
+
+}
+
+
+/* =========================================================
+   PDF CANVAS
+   ========================================================= */
+
+.reader-page canvas,
+.reader-canvas-container canvas {
+
+    display:
+        block;
+
+    max-width:
+        100%;
+
+    height:
+        auto;
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   LOADING AREA
+   ========================================================= */
+
+#readerLoading,
+.reader-loading {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        80;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        rgba(37,7,14,0.92);
+
+}
+
+
+/* =========================================================
+   LOADING TEXT
+   ========================================================= */
+
+.reader-loading-text {
+
+    padding:
+        12px 18px;
+
+    border:
+        1px solid
+        rgba(214,169,72,0.35);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(50,10,18,0.95);
+
+    color:
+        #e5c66d;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   HIDDEN ELEMENT
+   ========================================================= */
+
+[hidden] {
+
+    display:
+        none !important;
+
+}
+
+
+/* =========================================================
+   READER STATUS
+   ========================================================= */
+
+#readerStatus,
+.reader-status {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    bottom:
+        12px;
+
+    z-index:
+        20;
+
+    transform:
+        translateX(-50%);
+
+    padding:
+        5px 10px;
+
+    border-radius:
+        5px;
+
+    background:
+        rgba(30,4,9,0.80);
+
+    color:
+        rgba(229,198,109,0.70);
+
+    font-size:
+        10px;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   BOOK TITLE
+   ========================================================= */
+
+#readerBookTitle,
+.reader-book-title {
+
+    position:
+        absolute;
+
+    top:
+        10px;
+
+    left:
+        50%;
+
+    z-index:
+        20;
+
+    max-width:
+        70%;
+
+    overflow:
+        hidden;
+
+    transform:
+        translateX(-50%);
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+    color:
+        rgba(229,198,109,0.72);
+
+    font-size:
+        11px;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   BASIC CONTROLS
+   ========================================================= */
+
+#readerControls,
+.reader-controls {
+
+    position:
+        absolute;
+
+    top:
+        10px;
+
+    right:
+        12px;
+
+    z-index:
+        30;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        5px;
+
+}
+
+
+/* =========================================================
+   RESET ZOOM
+   ========================================================= */
+
+#readerResetZoom {
+
+    min-width:
+        52px;
+
+    height:
+        32px;
+
+    padding:
+        0 8px;
+
+    border:
+        1px solid
+        rgba(214,169,72,0.38);
+
+    border-radius:
+        6px;
+
+    background:
+        rgba(35,5,11,0.88);
+
+    color:
+        #e5c66d;
+
+    font-family:
+        inherit;
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+/* =========================================================
+   RESET ZOOM HOVER
+   ========================================================= */
+
+#readerResetZoom:hover {
+
+    background:
+        rgba(214,169,72,0.13);
+
+    border-color:
+        rgba(229,198,109,0.70);
+
+}
+
+
+/* =========================================================
+   WATERMARK
+   ========================================================= */
+
+#readerPageWatermark,
+.reader-page-watermark {
+
+    position:
+        fixed;
+
+    top:
+        50%;
+
+    left:
+        50%;
+
+    z-index:
+        15;
+
+    pointer-events:
+        none;
+
+    user-select:
+        none;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-28deg);
+
+    color:
+        rgba(120, 20, 30, 0.14);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(28px, 5vw, 62px);
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        3px;
+
+    white-space:
+        nowrap;
+
+}
+
+
+/* =========================================================
+   BOOK INFORMATION
+   ========================================================= */
+
+#readerBookInfo,
+.reader-book-info {
+
+    position:
+        absolute;
+
+    left:
+        14px;
+
+    bottom:
+        10px;
+
+    z-index:
+        25;
+
+    max-width:
+        40%;
+
+    overflow:
+        hidden;
+
+    white-space:
+        nowrap;
+
+    text-overflow:
+        ellipsis;
+
+    color:
+        rgba(229,198,109,0.60);
+
+    font-size:
+        10px;
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   READER MESSAGE
+   ========================================================= */
+
+#readerMessage,
+.reader-message {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    z-index:
+        90;
+
+    max-width:
+        min(420px, 85vw);
+
+    padding:
+        14px 18px;
+
+    box-sizing:
+        border-box;
+
+    transform:
+        translate(-50%, -50%);
+
+    border:
+        1px solid
+        rgba(214,169,72,0.35);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(50,10,18,0.96);
+
+    color:
+        #e5c66d;
+
+    font-size:
+        12px;
+
+    text-align:
+        center;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,0.45);
+
+}
+
+
+/* =========================================================
+   CONTENT SCROLLBAR
+   ========================================================= */
+
+#readerContent::-webkit-scrollbar {
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+}
+
+
+/* =========================================================
+   CONTENT SCROLLBAR TRACK
+   ========================================================= */
+
+#readerContent::-webkit-scrollbar-track {
+
+    background:
+        #25070e;
+
+}
+
+
+/* =========================================================
+   CONTENT SCROLLBAR THUMB
+   ========================================================= */
+
+#readerContent::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(214,169,72,0.35);
+
+    border-radius:
+        10px;
+
+}
+
+
+/* =========================================================
+   CONTENT SCROLLBAR HOVER
+   ========================================================= */
+
+#readerContent::-webkit-scrollbar-thumb:hover {
+
+    background:
+        rgba(229,198,109,0.55);
+
+}
+/* =========================================================
+   CHISHTI READER
+   CSS — BASE v1 — PART 3
+   READER AREA + PDF CANVAS + WATERMARK
+   ========================================================= */
+
+
+/* =========================================================
+   READER CONTENT
+   ========================================================= */
+
+.reader-content {
+
+    position:
+        relative;
+
+    flex:
+        1 1 auto;
+
+    width:
+        100%;
+
+    min-height:
+        0;
+
+    overflow:
+        auto;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        center;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        24px;
+
+    background:
+        #1c050a;
+
+}
+
+
+/* =========================================================
+   PAGE CONTAINER
+   ========================================================= */
+
+.reader-pages {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    width:
+        max-content;
+
+    min-width:
+        100%;
+
+    min-height:
+        100%;
+
+}
+
+
+/* =========================================================
+   PDF CANVAS CONTAINER
+   ========================================================= */
+
+.reader-canvas-container {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    width:
+        max-content;
+
+    min-height:
+        1px;
+
+}
+
+
+/* =========================================================
+   PDF PAGE
+   ========================================================= */
+
+.reader-page {
+
+    position:
+        relative;
+
+    display:
+        block;
+
+    margin:
+        0 auto 18px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 10px 35px
+        rgba(0, 0, 0, 0.45);
+
+}
+
+
+/* =========================================================
+   PDF CANVAS
+   ========================================================= */
+
+.reader-page canvas,
+.reader-canvas-container canvas {
+
+    display:
+        block;
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   PDF PAGE IMAGE
+   ========================================================= */
+
+.reader-page img,
+.reader-canvas-container img {
+
+    display:
+        block;
+
+    max-width:
+        none;
+
+}
+
+
+/* =========================================================
+   BOOK TITLE
+   ========================================================= */
+
+.reader-book-title {
+
+    position:
+        absolute;
+
+    top:
+        10px;
+
+    left:
+        50%;
+
+    z-index:
+        20;
+
+    max-width:
+        70%;
+
+    padding:
+        5px 10px;
+
+    box-sizing:
+        border-box;
+
+    color:
+        rgba(229, 198, 109, 0.75);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    text-align:
+        center;
+
+    white-space:
+        nowrap;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    transform:
+        translateX(-50%);
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   PAGE WATERMARK
+   ========================================================= */
+
+.reader-page-watermark {
+
+    position:
+        fixed;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    z-index:
+        30;
+
+    color:
+        rgba(255, 255, 255, 0.12);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        clamp(28px, 5vw, 58px);
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        4px;
+
+    white-space:
+        nowrap;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-28deg);
+
+    pointer-events:
+        none;
+
+    user-select:
+        none;
+
+}
+
+
+/* =========================================================
+   READER STATUS
+   ========================================================= */
+
+.reader-status {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    bottom:
+        12px;
+
+    z-index:
+        25;
+
+    max-width:
+        80%;
+
+    padding:
+        5px 9px;
+
+    border-radius:
+        5px;
+
+    background:
+        rgba(35, 5, 11, 0.82);
+
+    color:
+        rgba(229, 198, 109, 0.80);
+
+    font-size:
+        10px;
+
+    text-align:
+        center;
+
+    transform:
+        translateX(-50%);
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   EMPTY PAGES STATE
+   ========================================================= */
+
+.reader-pages:empty::before {
+
+    content:
+        "Book will appear here";
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        240px;
+
+    color:
+        rgba(229, 198, 109, 0.45);
+
+    font-size:
+        13px;
+
+}
+
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+
+.reader-loading {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        80;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        rgba(28, 5, 10, 0.72);
+
+}
+
+
+/* =========================================================
+   LOADING TEXT
+   ========================================================= */
+
+.reader-loading-text {
+
+    padding:
+        12px 18px;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.35);
+
+    border-radius:
+        7px;
+
+    background:
+        #320a12;
+
+    color:
+        #e5c66d;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.35);
+
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.reader-message {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    z-index:
+        90;
+
+    max-width:
+        min(500px, 85vw);
+
+    padding:
+        12px 16px;
+
+    box-sizing:
+        border-box;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.35);
+
+    border-radius:
+        7px;
+
+    background:
+        #320a12;
+
+    color:
+        #e5c66d;
+
+    font-size:
+        12px;
+
+    text-align:
+        center;
+
+    transform:
+        translate(-50%, -50%);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.40);
+
+}
+
+
+/* =========================================================
+   BASIC READER CONTROLS
+   ========================================================= */
+
+.reader-controls {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        6px;
+
+    padding:
+        6px;
+
+    box-sizing:
+        border-box;
+
+}
+
+
+/* =========================================================
+   READER CONTROL BUTTON
+   ========================================================= */
+
+.reader-controls button {
+
+    min-width:
+        42px;
+
+    height:
+        32px;
+
+    padding:
+        0 9px;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.35);
+
+    border-radius:
+        5px;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    color:
+        #e5c66d;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+/* =========================================================
+   READER CONTROL HOVER
+   ========================================================= */
+
+.reader-controls button:hover {
+
+    background:
+        rgba(214, 169, 72, 0.12);
+
+    border-color:
+        rgba(229, 198, 109, 0.65);
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .reader-content {
+
+        padding:
+            12px;
+
+    }
+
+
+    .reader-page {
+
+        margin-bottom:
+            12px;
+
+    }
+
+
+    .reader-page-watermark {
+
+        font-size:
+            30px;
+
+        letter-spacing:
+            2px;
+
+    }
+
+
+    .reader-book-title {
+
+        max-width:
+            80%;
+
+        font-size:
+            10px;
+
+    }
+
+}
+/* =========================================================
+   CHISHTI READER — CSS PART 4
+   BASE LAYOUT + READER AREA
+   ========================================================= */
+
+
+/* =========================================================
+   READER MAIN
+   ========================================================= */
+
+#chishtiReader,
+.chishti-reader {
+
+    position: relative;
+
+    width: 100%;
+    min-height: 100vh;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #320a12;
+
+    color: #f1dfa1;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 
@@ -1904,113 +2006,9 @@ a:focus-visible {
 #readerHeader,
 .reader-header {
 
-    position: relative;
-
-    z-index: 20;
-
     width: 100%;
 
-    min-height: 64px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 16px;
-
-    padding:
-        10px 18px;
-
-    box-sizing: border-box;
-
-    background:
-        rgba(35, 5, 11, 0.96);
-
-    border-bottom:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    box-shadow:
-        0 4px 18px
-        rgba(0, 0, 0, 0.35);
-
-}
-
-
-/* =========================================================
-   READER TITLE
-   ========================================================= */
-
-#readerTitle,
-.reader-title {
-
-    min-width: 0;
-
-    flex: 1;
-
-    overflow: hidden;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-
-    color:
-        #e5c66d;
-
-    font-size:
-        18px;
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        0.4px;
-
-}
-
-
-/* =========================================================
-   READER MAIN AREA
-   ========================================================= */
-
-#readerMain,
-.reader-main {
-
-    position: relative;
-
-    z-index: 5;
-
-    flex: 1;
-
-    min-height: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    overflow: hidden;
-
-}
-
-
-/* =========================================================
-   PAGE VIEWPORT
-   ========================================================= */
-
-#readerViewport,
-.reader-viewport {
-
-    position: relative;
-
-    flex: 1;
-
-    min-height: 0;
-
-    width: 100%;
-
-    overflow: auto;
+    min-height: 58px;
 
     display: flex;
 
@@ -2020,17 +2018,96 @@ a:focus-visible {
 
     box-sizing: border-box;
 
-    padding:
-        22px;
+    padding: 10px 18px;
 
-    background:
-        #25070d;
+    background: #26060d;
 
+    border-bottom:
+        1px solid
+        rgba(214, 169, 72, 0.28);
+
+    flex-shrink: 0;
 }
 
 
 /* =========================================================
-   PAGE SPREAD
+   BRAND
+   ========================================================= */
+
+.reader-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* =========================================================
+   BRAND TITLE
+   ========================================================= */
+
+.reader-brand h1 {
+
+    margin: 0;
+
+    color: #e5c66d;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 21px;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================================================
+   READER CONTENT
+   ========================================================= */
+
+#readerContent,
+.reader-content {
+
+    position: relative;
+
+    flex: 1;
+
+    width: 100%;
+
+    min-height: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-sizing: border-box;
+
+    overflow: auto;
+
+    padding: 24px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #4a101b 0%,
+            #320a12 48%,
+            #26060d 100%
+        );
+}
+
+
+/* =========================================================
+   PAGES CONTAINER
    ========================================================= */
 
 #readerPages,
@@ -2044,27 +2121,20 @@ a:focus-visible {
 
     justify-content: center;
 
-    gap: 8px;
-
-    width: max-content;
-
-    min-width: min-content;
+    width: 100%;
 
     min-height: 100%;
 
-    margin: auto;
-
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
-   SINGLE PAGE
+   PDF CANVAS CONTAINER
    ========================================================= */
 
-.reader-page,
-.reader-page-container,
-#leftPage,
-#rightPage {
+#readerCanvasContainer,
+.reader-canvas-container {
 
     position: relative;
 
@@ -2074,83 +2144,844 @@ a:focus-visible {
 
     justify-content: center;
 
-    flex: 0 0 auto;
+    width: auto;
 
-    background:
-        #fffdf7;
+    max-width: 100%;
 
-    box-shadow:
-        0 8px 30px
-        rgba(0, 0, 0, 0.48);
+    min-height: 300px;
 
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.28);
+    box-sizing: border-box;
 
+    margin: 0 auto;
 }
 
 
 /* =========================================================
-   PAGE CANVAS
+   PDF PAGE
    ========================================================= */
 
-#leftPageCanvas,
-#rightPageCanvas,
-.reader-page canvas {
+.reader-page {
+
+    position: relative;
 
     display: block;
 
-    max-width: none;
+    max-width: 100%;
 
-    background:
-        #fffdf7;
+    margin: 0 auto;
 
-}
-
-
-/* =========================================================
-   PAGE EMPTY STATE
-   ========================================================= */
-
-.reader-page.empty,
-#rightPage.empty {
-
-    background:
-        transparent;
-
-    border:
-        none;
+    background: #ffffff;
 
     box-shadow:
-        none;
+        0 14px 40px
+        rgba(0, 0, 0, 0.55);
 
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
-   PAGE WATERMARK
+   PDF CANVAS
    ========================================================= */
 
-.reader-watermark {
+.reader-page canvas,
+#readerCanvasContainer canvas {
+
+    display: block;
+
+    max-width: 100%;
+
+    height: auto;
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BOOK TITLE
+   ========================================================= */
+
+#readerBookTitle,
+.reader-book-title {
 
     position: absolute;
 
-    top: 50%;
+    top: 10px;
 
     left: 50%;
 
-    z-index: 8;
+    z-index: 10;
+
+    max-width: 80%;
+
+    padding: 5px 10px;
+
+    box-sizing: border-box;
+
+    transform: translateX(-50%);
+
+    color:
+        rgba(241, 223, 161, 0.72);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 11px;
+
+    text-align: center;
 
     pointer-events: none;
+}
 
-    user-select: none;
+
+/* =========================================================
+   READER STATUS
+   ========================================================= */
+
+#readerStatus,
+.reader-status {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 12px;
+
+    z-index: 10;
+
+    transform: translateX(-50%);
+
+    color:
+        rgba(229, 198, 109, 0.70);
+
+    font-size: 11px;
+
+    text-align: center;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   WATERMARK
+   ========================================================= */
+
+#readerWatermark,
+.reader-page-watermark {
+
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    z-index: 20;
 
     transform:
         translate(-50%, -50%)
         rotate(-28deg);
 
     color:
-        rgba(112, 15, 29, 0.12);
+        rgba(105, 70, 30, 0.16);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(
+        22px,
+        4vw,
+        46px
+    );
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    user-select: none;
+}
+
+
+/* =========================================================
+   SECOND WATERMARK
+   ========================================================= */
+
+#readerPageWatermark {
+
+    pointer-events: none;
+
+    user-select: none;
+}
+
+
+/* =========================================================
+   BASIC CONTROLS
+   ========================================================= */
+
+#readerControls,
+.reader-controls {
+
+    position: absolute;
+
+    top: 12px;
+
+    right: 14px;
+
+    z-index: 30;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+/* =========================================================
+   CONTROL BUTTON
+   ========================================================= */
+
+#readerControls button,
+.reader-controls button {
+
+    min-width: 42px;
+
+    height: 34px;
+
+    padding: 0 9px;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.38);
+
+    border-radius: 6px;
+
+    background:
+        rgba(35, 5, 11, 0.88);
+
+    color: #e5c66d;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   CONTROL BUTTON HOVER
+   ========================================================= */
+
+#readerControls button:hover,
+.reader-controls button:hover {
+
+    background:
+        rgba(214, 169, 72, 0.13);
+
+    border-color:
+        rgba(229, 198, 109, 0.72);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    #readerHeader,
+    .reader-header {
+
+        min-height: 50px;
+
+        padding:
+            8px 12px;
+    }
+
+
+    .reader-brand h1 {
+
+        font-size: 18px;
+    }
+
+
+    #readerContent,
+    .reader-content {
+
+        padding: 12px;
+    }
+
+
+    #readerWatermark,
+    .reader-page-watermark {
+
+        font-size: 24px;
+
+        letter-spacing: 1px;
+    }
+
+}
+/* =========================================================
+   CHISHTI READER — CSS
+   BASE V1 — PART 5
+   LOADING + PDF AREA + WATERMARK + STATUS
+   ========================================================= */
+
+
+/* =========================================================
+   PDF READER CONTENT
+   ========================================================= */
+
+.reader-content {
+
+    position:
+        relative;
+
+    flex:
+        1 1 auto;
+
+    width:
+        100%;
+
+    min-height:
+        0;
+
+    overflow:
+        auto;
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    justify-content:
+        center;
+
+    box-sizing:
+        border-box;
+
+    padding:
+        24px;
+
+    background:
+        #18050a;
+
+}
+
+
+/* =========================================================
+   PDF PAGES CONTAINER
+   ========================================================= */
+
+.reader-pages {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    gap:
+        18px;
+
+    width:
+        max-content;
+
+    min-width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+}
+
+
+/* =========================================================
+   PDF CANVAS CONTAINER
+   ========================================================= */
+
+.reader-canvas-container {
+
+    position:
+        relative;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        flex-start;
+
+    gap:
+        18px;
+
+    width:
+        max-content;
+
+    min-width:
+        100%;
+
+    box-sizing:
+        border-box;
+
+}
+
+
+/* =========================================================
+   PDF PAGE
+   ========================================================= */
+
+.reader-page {
+
+    position:
+        relative;
+
+    display:
+        block;
+
+    margin:
+        0 auto;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 10px 35px
+        rgba(0, 0, 0, 0.50);
+
+}
+
+
+/* =========================================================
+   PDF CANVAS
+   ========================================================= */
+
+.reader-page canvas {
+
+    display:
+        block;
+
+    background:
+        #ffffff;
+
+}
+
+
+/* =========================================================
+   LOADING AREA
+   ========================================================= */
+
+.reader-loading {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        50;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        rgba(24, 5, 10, 0.92);
+
+}
+
+
+/* =========================================================
+   LOADING TEXT
+   ========================================================= */
+
+.reader-loading-text {
+
+    padding:
+        12px 18px;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.35);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(50, 10, 18, 0.95);
+
+    color:
+        #e5c66d;
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+}
+
+
+/* =========================================================
+   ERROR AREA
+   ========================================================= */
+
+.reader-error-state {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    z-index:
+        55;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        12px;
+
+    padding:
+        25px;
+
+    box-sizing:
+        border-box;
+
+    background:
+        #18050a;
+
+    color:
+        #e2b5a8;
+
+    text-align:
+        center;
+
+}
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+#readerErrorMessage {
+
+    max-width:
+        460px;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+
+}
+
+
+/* =========================================================
+   RETRY BUTTON
+   ========================================================= */
+
+#readerRetry {
+
+    min-width:
+        110px;
+
+    height:
+        36px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        rgba(229, 198, 109, 0.55);
+
+    border-radius:
+        6px;
+
+    background:
+        rgba(214, 169, 72, 0.08);
+
+    color:
+        #e5c66d;
+
+    font-family:
+        inherit;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+/* =========================================================
+   RETRY HOVER
+   ========================================================= */
+
+#readerRetry:hover {
+
+    background:
+        rgba(214, 169, 72, 0.16);
+
+    border-color:
+        #e5c66d;
+
+}
+
+
+/* =========================================================
+   BOOK TITLE
+   ========================================================= */
+
+.reader-book-title {
+
+    position:
+        absolute;
+
+    top:
+        10px;
+
+    left:
+        50%;
+
+    z-index:
+        20;
+
+    max-width:
+        70%;
+
+    overflow:
+        hidden;
+
+    padding:
+        5px 10px;
+
+    box-sizing:
+        border-box;
+
+    color:
+        rgba(229, 198, 109, 0.75);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+
+    text-align:
+        center;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
+
+    transform:
+        translateX(-50%);
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   BOOK INFO
+   ========================================================= */
+
+.reader-book-info {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        20px;
+
+    color:
+        #c5aa61;
+
+    font-size:
+        11px;
+
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.reader-status {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    bottom:
+        10px;
+
+    z-index:
+        25;
+
+    padding:
+        5px 9px;
+
+    border-radius:
+        5px;
+
+    background:
+        rgba(25, 3, 8, 0.72);
+
+    color:
+        rgba(229, 198, 109, 0.72);
+
+    font-size:
+        10px;
+
+    transform:
+        translateX(-50%);
+
+    pointer-events:
+        none;
+
+}
+
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.reader-message {
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    left:
+        50%;
+
+    z-index:
+        80;
+
+    max-width:
+        min(420px, 88vw);
+
+    padding:
+        10px 15px;
+
+    border:
+        1px solid
+        rgba(214, 169, 72, 0.35);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(35, 5, 11, 0.96);
+
+    color:
+        #e5c66d;
+
+    font-size:
+        12px;
+
+    text-align:
+        center;
+
+    transform:
+        translate(-50%, -50%);
+
+}
+
+
+/* =========================================================
+   WATERMARK
+   ========================================================= */
+
+.reader-page-watermark,
+.reader-watermark-reader {
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    left:
+        50%;
+
+    z-index:
+        15;
+
+    color:
+        rgba(255, 255, 255, 0.16);
 
     font-family:
         Georgia,
@@ -2164,2257 +2995,14 @@ a:focus-visible {
         700;
 
     letter-spacing:
-        3px;
+        2px;
 
     white-space:
         nowrap;
 
-    text-transform:
-        uppercase;
-
-}
-
-
-/* =========================================================
-   WATERMARK SMALL
-   ========================================================= */
-
-.reader-watermark-small {
-
-    position: absolute;
-
-    right: 18px;
-
-    bottom: 14px;
-
-    z-index: 8;
-
-    pointer-events: none;
-
-    user-select: none;
-
-    color:
-        rgba(112, 15, 29, 0.16);
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size:
-        11px;
-
-    letter-spacing:
-        1.5px;
-
-}
-
-
-/* =========================================================
-   PAGE NUMBER LABEL
-   ========================================================= */
-
-.reader-page-number {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: 7px;
-
     transform:
-        translateX(-50%);
-
-    z-index: 10;
-
-    pointer-events: none;
-
-    color:
-        rgba(75, 15, 23, 0.55);
-
-    font-size:
-        10px;
-
-}
-
-
-/* =========================================================
-   READER BOTTOM BAR
-   ========================================================= */
-
-#readerBottomBar,
-.reader-bottom-bar {
-
-    position: relative;
-
-    z-index: 30;
-
-    width: 100%;
-
-    min-height: 64px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    box-sizing: border-box;
-
-    padding:
-        8px 14px;
-
-    background:
-        rgba(35, 5, 11, 0.98);
-
-    border-top:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    box-shadow:
-        0 -5px 18px
-        rgba(0, 0, 0, 0.32);
-
-}
-
-
-/* =========================================================
-   MAIN READER TOOL ROW
-   ========================================================= */
-
-.reader-toolbar {
-
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
-
-    flex-wrap: nowrap;
-
-}
-
-
-/* =========================================================
-   TOOL GROUP
-   ========================================================= */
-
-.reader-tool-group {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 6px;
-
-}
-
-
-/* =========================================================
-   TOOL DIVIDER
-   ========================================================= */
-
-.reader-tool-divider {
-
-    width: 1px;
-
-    height: 28px;
-
-    flex: 0 0 auto;
-
-    background:
-        rgba(214, 169, 72, 0.28);
-
-}
-
-
-/* =========================================================
-   GOLD BUTTON BASE
-   ========================================================= */
-
-.reader-button,
-.reader-toolbar button {
-
-    min-width: 38px;
-
-    height: 36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 6px;
-
-    padding:
-        0 12px;
-
-    box-sizing: border-box;
-
-    border:
-        1px solid
-        rgba(230, 190, 92, 0.65);
-
-    border-radius:
-        7px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #e5c66d 0%,
-            #b9892f 48%,
-            #8d641f 100%
-        );
-
-    color:
-        #2a090e;
-
-    font-family:
-        inherit;
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,0.45),
-        0 3px 8px
-        rgba(0,0,0,0.28);
-
-    transition:
-        transform 0.16s ease,
-        filter 0.16s ease,
-        box-shadow 0.16s ease;
-
-}
-
-
-/* =========================================================
-   GOLD BUTTON HOVER
-   ========================================================= */
-
-.reader-button:hover,
-.reader-toolbar button:hover {
-
-    filter:
-        brightness(1.08);
-
-    transform:
-        translateY(-1px);
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,0.55),
-        0 5px 12px
-        rgba(0,0,0,0.35);
-
-}
-
-
-/* =========================================================
-   GOLD BUTTON ACTIVE
-   ========================================================= */
-
-.reader-button:active,
-.reader-toolbar button:active {
-
-    transform:
-        translateY(1px);
-
-    box-shadow:
-        inset 0 2px 4px
-        rgba(0,0,0,0.22);
-
-}
-
-
-/* =========================================================
-   DISABLED BUTTON
-   ========================================================= */
-
-.reader-button:disabled,
-.reader-toolbar button:disabled {
-
-    opacity:
-        0.42;
-
-    cursor:
-        not-allowed;
-
-    transform:
-        none;
-
-    filter:
-        grayscale(0.25);
-
-}
-
-
-/* =========================================================
-   PAGE COUNTER
-   ========================================================= */
-
-.reader-page-counter {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-width: 92px;
-
-    height: 36px;
-
-    padding:
-        0 10px;
-
-    box-sizing: border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255,255,255,0.045);
-
-    color:
-        #f3df9a;
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   PAGE INPUT
-   ========================================================= */
-
-#readerPageInput,
-.reader-page-input {
-
-    width: 46px;
-
-    height: 28px;
-
-    padding:
-        0 5px;
-
-    box-sizing: border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.5);
-
-    border-radius:
-        5px;
-
-    outline:
-        none;
-
-    background:
-        rgba(255,255,255,0.08);
-
-    color:
-        #f8edc5;
-
-    text-align:
-        center;
-
-    font-family:
-        inherit;
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   PAGE INPUT FOCUS
-   ========================================================= */
-
-#readerPageInput:focus,
-.reader-page-input:focus {
-
-    border-color:
-        #e5c66d;
-
-    box-shadow:
-        0 0 0 2px
-        rgba(229,198,109,0.16);
-
-}
-
-
-/* =========================================================
-   ZOOM DISPLAY
-   ========================================================= */
-
-.reader-zoom-value {
-
-    min-width:
-        52px;
-
-    color:
-        #f3df9a;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   ZOOM RANGE
-   ========================================================= */
-
-#readerZoomRange,
-.reader-zoom-range {
-
-    width:
-        90px;
-
-    accent-color:
-        #d6aa4d;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   READER PANELS
-   ========================================================= */
-
-.reader-panel {
-
-    position: absolute;
-
-    top: 0;
-
-    right: 0;
-
-    bottom: 0;
-
-    z-index: 100;
-
-    width:
-        min(380px, 92vw);
-
-    overflow-y:
-        auto;
-
-    padding:
-        20px;
-
-    box-sizing:
-        border-box;
-
-    background:
-        #320a12;
-
-    border-left:
-        1px solid
-        rgba(214,169,72,0.32);
-
-    box-shadow:
-        -10px 0 30px
-        rgba(0,0,0,0.38);
-
-    transform:
-        translateX(105%);
-
-    transition:
-        transform 0.24s ease;
-
-}
-
-
-/* =========================================================
-   PANEL OPEN
-   ========================================================= */
-
-.reader-panel.active,
-.reader-panel.open {
-
-    transform:
-        translateX(0);
-
-}
-
-
-/* =========================================================
-   PANEL TITLE
-   ========================================================= */
-
-.reader-panel-title {
-
-    color:
-        #e5c66d;
-
-    font-size:
-        18px;
-
-    font-weight:
-        700;
-
-    margin-bottom:
-        16px;
-
-}
-
-
-/* =========================================================
-   MOBILE READER
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-    #readerHeader,
-    .reader-header {
-
-        min-height:
-            56px;
-
-        padding:
-            8px 10px;
-
-    }
-
-
-    #readerViewport,
-    .reader-viewport {
-
-        padding:
-            10px;
-
-    }
-
-
-    #readerPages,
-    .reader-pages {
-
-        gap:
-            5px;
-
-    }
-
-
-    #readerBottomBar,
-    .reader-bottom-bar {
-
-        min-height:
-            58px;
-
-        padding:
-            7px 6px;
-
-    }
-
-
-    .reader-toolbar {
-
-        gap:
-            4px;
-
-        overflow-x:
-            auto;
-
-        justify-content:
-            flex-start;
-
-    }
-
-
-    .reader-button,
-    .reader-toolbar button {
-
-        min-width:
-            34px;
-
-        height:
-            34px;
-
-        padding:
-            0 8px;
-
-        font-size:
-            12px;
-
-    }
-
-
-    .reader-page-counter {
-
-        min-width:
-            76px;
-
-    }
-
-
-    #readerZoomRange,
-    .reader-zoom-range {
-
-        width:
-            65px;
-
-    }
-
-
-    .reader-watermark {
-
-        font-size:
-            25px;
-
-    }
-
-}
-/* =========================================================
-   CHISHTI READER
-   CSS — PART 3
-   HEADER CONTROLS + NAVIGATION + ZOOM
-   ========================================================= */
-
-
-/* =========================================================
-   HEADER ACTIONS
-   ========================================================= */
-
-.reader-header-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: flex-end;
-
-    gap: 7px;
-
-    flex: 0 0 auto;
-
-}
-
-
-/* =========================================================
-   HEADER ACTION BUTTON
-   ========================================================= */
-
-.reader-header-actions button {
-
-    width: 36px;
-
-    height: 36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 0;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.55);
-
-    border-radius: 7px;
-
-    background:
-        rgba(255, 255, 255, 0.045);
-
-    color:
-        #e5c66d;
-
-    font-size:
-        16px;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        color 0.16s ease,
-        border-color 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-.reader-header-actions button:hover {
-
-    background:
-        rgba(214, 169, 72, 0.14);
-
-    border-color:
-        rgba(229, 198, 109, 0.85);
-
-    color:
-        #f7e7ae;
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   CLOSE BUTTON
-   ========================================================= */
-
-#readerClose,
-.reader-close-button {
-
-    color:
-        #f1d98b;
-
-}
-
-
-/* =========================================================
-   READER CONTENT AREA
-   ========================================================= */
-
-.reader-content {
-
-    position: relative;
-
-    flex: 1;
-
-    min-width: 0;
-
-    min-height: 0;
-
-    display: flex;
-
-    overflow: hidden;
-
-}
-
-
-/* =========================================================
-   PAGE AREA
-   ========================================================= */
-
-.reader-page-area {
-
-    position: relative;
-
-    flex: 1;
-
-    min-width: 0;
-
-    min-height: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    overflow: hidden;
-
-}
-
-
-/* =========================================================
-   TOP READER INFO
-   ========================================================= */
-
-.reader-book-info {
-
-    position: relative;
-
-    z-index: 15;
-
-    min-height: 42px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding:
-        5px 14px;
-
-    box-sizing: border-box;
-
-    background:
-        rgba(35, 5, 11, 0.72);
-
-    border-bottom:
-        1px solid
-        rgba(214, 169, 72, 0.16);
-
-}
-
-
-/* =========================================================
-   BOOK NAME
-   ========================================================= */
-
-.reader-book-name {
-
-    max-width:
-        80%;
-
-    overflow: hidden;
-
-    white-space: nowrap;
-
-    text-overflow: ellipsis;
-
-    color:
-        #d9bd70;
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   BOTTOM NAVIGATION ROW
-   ========================================================= */
-
-#readerNavigation,
-.reader-navigation {
-
-    position: relative;
-
-    z-index: 35;
-
-    width: 100%;
-
-    min-height: 54px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    box-sizing: border-box;
-
-    padding:
-        7px 12px;
-
-    background:
-        rgba(35, 5, 11, 0.98);
-
-    border-top:
-        1px solid
-        rgba(214, 169, 72, 0.30);
-
-}
-
-
-/* =========================================================
-   NAVIGATION INNER
-   ========================================================= */
-
-.reader-navigation-inner {
-
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
-
-}
-
-
-/* =========================================================
-   PREVIOUS / NEXT PAGE
-   ========================================================= */
-
-#previousPage,
-#nextPage,
-.reader-prev-page,
-.reader-next-page {
-
-    min-width:
-        112px;
-
-    height:
-        36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap:
-        7px;
-
-    padding:
-        0 13px;
-
-    border:
-        1px solid
-        rgba(229, 198, 109, 0.62);
-
-    border-radius:
-        7px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #e5c66d 0%,
-            #b9892f 48%,
-            #8d641f 100%
-        );
-
-    color:
-        #2a090e;
-
-    font-family:
-        inherit;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        inset 0 1px 0
-        rgba(255,255,255,0.42),
-        0 3px 8px
-        rgba(0,0,0,0.26);
-
-    transition:
-        filter 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-#previousPage:hover,
-#nextPage:hover,
-.reader-prev-page:hover,
-.reader-next-page:hover {
-
-    filter:
-        brightness(1.08);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   PAGE COUNTER CENTER
-   ========================================================= */
-
-#readerPageCounter,
-.reader-page-counter-center {
-
-    min-width:
-        94px;
-
-    height:
-        36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap:
-        4px;
-
-    padding:
-        0 8px;
-
-    box-sizing: border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.40);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255,255,255,0.045);
-
-    color:
-        #f3df9a;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   CURRENT PAGE NUMBER
-   ========================================================= */
-
-#currentPage,
-.reader-current-page {
-
-    color:
-        #f8e7a8;
-
-    font-weight:
-        800;
-
-}
-
-
-/* =========================================================
-   TOTAL PAGE NUMBER
-   ========================================================= */
-
-#totalPages,
-.reader-total-pages {
-
-    color:
-        #c9ad64;
-
-}
-
-
-/* =========================================================
-   SLASH
-   ========================================================= */
-
-.reader-page-counter-separator {
-
-    color:
-        rgba(229, 198, 109, 0.55);
-
-}
-
-
-/* =========================================================
-   BOOK NAVIGATION
-   ========================================================= */
-
-#previousBook,
-#nextBook,
-.reader-prev-book,
-.reader-next-book {
-
-    min-width:
-        104px;
-
-    height:
-        36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap:
-        6px;
-
-    padding:
-        0 11px;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.48);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(214, 169, 72, 0.08);
-
-    color:
-        #e5c66d;
-
-    font-family:
-        inherit;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-#previousBook:hover,
-#nextBook:hover,
-.reader-prev-book:hover,
-.reader-next-book:hover {
-
-    background:
-        rgba(214, 169, 72, 0.15);
-
-    border-color:
-        rgba(229, 198, 109, 0.78);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   ZOOM BAR
-   ========================================================= */
-
-.reader-zoom-controls {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap:
-        6px;
-
-    margin-left:
-        4px;
-
-}
-
-
-/* =========================================================
-   ZOOM BUTTON
-   ========================================================= */
-
-#zoomOut,
-#zoomIn,
-.reader-zoom-out,
-.reader-zoom-in {
-
-    width:
-        34px;
-
-    height:
-        34px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.48);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.045);
-
-    color:
-        #e5c66d;
-
-    font-size:
-        16px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-#zoomOut:hover,
-#zoomIn:hover,
-.reader-zoom-out:hover,
-.reader-zoom-in:hover {
-
-    background:
-        rgba(214, 169, 72, 0.14);
-
-    border-color:
-        rgba(229, 198, 109, 0.78);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   ZOOM PERCENT
-   ========================================================= */
-
-#zoomValue,
-#zoomPercent,
-.reader-zoom-value {
-
-    min-width:
-        52px;
-
-    height:
-        34px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color:
-        #f3df9a;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   SEARCH BUTTON
-   ========================================================= */
-
-#readerSearchButton,
-.reader-search-button {
-
-    width:
-        36px;
-
-    height:
-        36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.55);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255,255,255,0.045);
-
-    color:
-        #e5c66d;
-
-    font-size:
-        16px;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   BOOKMARK BUTTON
-   ========================================================= */
-
-#readerBookmarkButton,
-.reader-bookmark-button {
-
-    width:
-        36px;
-
-    height:
-        36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.55);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255,255,255,0.045);
-
-    color:
-        #e5c66d;
-
-    font-size:
-        16px;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        color 0.16s ease;
-
-}
-
-
-/* =========================================================
-   BOOKMARK ACTIVE
-   ========================================================= */
-
-#readerBookmarkButton.active,
-#readerBookmarkButton.bookmarked,
-.reader-bookmark-button.active,
-.reader-bookmark-button.bookmarked {
-
-    background:
-        rgba(214, 169, 72, 0.16);
-
-    color:
-        #ffe39a;
-
-    border-color:
-        #e5c66d;
-
-}
-
-
-/* =========================================================
-   COMMENT AREA
-   ========================================================= */
-
-#readerCommentsArea,
-.reader-comments-area {
-
-    position: relative;
-
-    z-index: 40;
-
-    width: 100%;
-
-    box-sizing: border-box;
-
-    padding:
-        10px 14px;
-
-    background:
-        rgba(28, 4, 9, 0.98);
-
-    border-top:
-        1px solid
-        rgba(214, 169, 72, 0.22);
-
-}
-
-
-/* =========================================================
-   COMMENT BUTTON
-   ========================================================= */
-
-#readerCommentButton,
-.reader-comment-button {
-
-    min-width:
-        120px;
-
-    height:
-        36px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap:
-        7px;
-
-    padding:
-        0 14px;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.55);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(214, 169, 72, 0.08);
-
-    color:
-        #e5c66d;
-
-    font-family:
-        inherit;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   COMMENT BUTTON HOVER
-   ========================================================= */
-
-#readerCommentButton:hover,
-.reader-comment-button:hover {
-
-    background:
-        rgba(214, 169, 72, 0.16);
-
-    border-color:
-        #e5c66d;
-
-}
-
-
-/* =========================================================
-   SEARCH BAR
-   ========================================================= */
-
-#readerSearchBar,
-.reader-search-bar {
-
-    position: absolute;
-
-    top: 12px;
-
-    left: 50%;
-
-    z-index: 80;
-
-    width:
-        min(620px, 92vw);
-
-    display: flex;
-
-    align-items: center;
-
-    gap:
-        7px;
-
-    padding:
-        8px;
-
-    box-sizing: border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.42);
-
-    border-radius:
-        9px;
-
-    background:
-        rgba(35, 5, 11, 0.97);
-
-    box-shadow:
-        0 8px 28px
-        rgba(0,0,0,0.42);
-
-    transform:
-        translate(-50%, -150%);
-
-    opacity:
-        0;
-
-    pointer-events:
-        none;
-
-    transition:
-        transform 0.22s ease,
-        opacity 0.22s ease;
-
-}
-
-
-/* =========================================================
-   SEARCH BAR OPEN
-   ========================================================= */
-
-#readerSearchBar.active,
-#readerSearchBar.open,
-.reader-search-bar.active,
-.reader-search-bar.open {
-
-    transform:
-        translate(-50%, 0);
-
-    opacity:
-        1;
-
-    pointer-events:
-        auto;
-
-}
-
-
-/* =========================================================
-   SEARCH INPUT
-   ========================================================= */
-
-#readerSearchInput,
-.reader-search-input {
-
-    flex:
-        1;
-
-    min-width:
-        0;
-
-    height:
-        36px;
-
-    padding:
-        0 11px;
-
-    box-sizing:
-        border-box;
-
-    outline:
-        none;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.42);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.06);
-
-    color:
-        #fff3ca;
-
-    font-family:
-        inherit;
-
-    font-size:
-        13px;
-
-}
-
-
-/* =========================================================
-   SEARCH INPUT FOCUS
-   ========================================================= */
-
-#readerSearchInput:focus,
-.reader-search-input:focus {
-
-    border-color:
-        #e5c66d;
-
-    box-shadow:
-        0 0 0 2px
-        rgba(229,198,109,0.12);
-
-}
-
-
-/* =========================================================
-   SEARCH RESULT COUNT
-   ========================================================= */
-
-#readerSearchResults,
-.reader-search-results {
-
-    min-width:
-        48px;
-
-    color:
-        #d9bd70;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   MOBILE NAVIGATION
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-    #readerNavigation,
-    .reader-navigation {
-
-        min-height:
-            52px;
-
-        padding:
-            6px 5px;
-
-    }
-
-
-    .reader-navigation-inner {
-
-        gap:
-            4px;
-
-        overflow-x:
-            auto;
-
-        justify-content:
-            flex-start;
-
-        scrollbar-width:
-            none;
-
-    }
-
-
-    .reader-navigation-inner::-webkit-scrollbar {
-
-        display:
-            none;
-
-    }
-
-
-    #previousPage,
-    #nextPage,
-    .reader-prev-page,
-    .reader-next-page {
-
-        min-width:
-            86px;
-
-        padding:
-            0 8px;
-
-        font-size:
-            10px;
-
-    }
-
-
-    #previousBook,
-    #nextBook,
-    .reader-prev-book,
-    .reader-next-book {
-
-        min-width:
-            78px;
-
-        padding:
-            0 7px;
-
-        font-size:
-            10px;
-
-    }
-
-
-    #readerPageCounter,
-    .reader-page-counter-center {
-
-        min-width:
-            72px;
-
-    }
-
-
-    .reader-zoom-controls {
-
-        gap:
-            3px;
-
-    }
-
-
-    #zoomOut,
-    #zoomIn,
-    .reader-zoom-out,
-    .reader-zoom-in {
-
-        width:
-            31px;
-
-        height:
-            31px;
-
-    }
-
-
-    #zoomValue,
-    #zoomPercent,
-    .reader-zoom-value {
-
-        min-width:
-            42px;
-
-    }
-
-}
-/* =========================================================
-   CHISHTI READER
-   CSS — PART 4
-   WHITE LIGHT ANIMATION + PAGE TRANSITIONS
-   ========================================================= */
-
-
-/* =========================================================
-   OLD LOADING / SPINNER HIDE
-   ========================================================= */
-
-#readerLoading,
-.reader-loading,
-.reader-loader,
-.reader-spinner,
-.loading-spinner,
-.pdf-loading,
-.pdf-loader {
-
-    display:
-        none !important;
-
-}
-
-
-/* =========================================================
-   LOADING OVERLAY HIDE
-   ========================================================= */
-
-#readerLoadingOverlay,
-.reader-loading-overlay {
-
-    opacity:
-        0 !important;
-
-    visibility:
-        hidden !important;
-
-    pointer-events:
-        none !important;
-
-}
-
-
-/* =========================================================
-   READER OPEN ANIMATION
-   ========================================================= */
-
-#chishtiReader,
-.chishti-reader,
-.reader-overlay {
-
-    animation:
-        readerAppear 0.35s ease-out both;
-
-}
-
-
-@keyframes readerAppear {
-
-    from {
-
-        opacity:
-            0;
-
-    }
-
-    to {
-
-        opacity:
-            1;
-
-    }
-
-}
-
-
-/* =========================================================
-   WHITE LIGHT LAYER
-   ========================================================= */
-
-#readerLightLayer,
-.reader-light-layer,
-#whiteLightLayer,
-.white-light-layer {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    z-index:
-        70;
-
-    pointer-events:
-        none;
-
-    overflow:
-        hidden;
-
-    opacity:
-        0;
-
-}
-
-
-/* =========================================================
-   WHITE LIGHT SWEEP
-   ========================================================= */
-
-#whiteLightSweep,
-.reader-white-light,
-.white-light-sweep {
-
-    position:
-        absolute;
-
-    top:
-        0;
-
-    left:
-        -35%;
-
-    width:
-        28%;
-
-    height:
-        100%;
-
-    pointer-events:
-        none;
-
-    opacity:
-        0;
-
-    transform:
-        skewX(-18deg);
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255,255,255,0.03) 20%,
-            rgba(255,255,255,0.38) 50%,
-            rgba(255,255,255,0.08) 78%,
-            transparent 100%
-        );
-
-    filter:
-        blur(4px);
-
-}
-
-
-/* =========================================================
-   WHITE LIGHT ACTIVE
-   ========================================================= */
-
-#readerLightLayer.animate,
-.reader-light-layer.animate,
-#whiteLightLayer.animate,
-.white-light-layer.animate {
-
-    animation:
-        whiteLightLayer 0.72s ease-out both;
-
-}
-
-
-#whiteLightSweep.animate,
-.reader-white-light.animate,
-.white-light-sweep.animate {
-
-    animation:
-        whiteLightSweep 0.72s ease-out both;
-
-}
-
-
-/* =========================================================
-   WHITE LIGHT LAYER ANIMATION
-   ========================================================= */
-
-@keyframes whiteLightLayer {
-
-    0% {
-
-        opacity:
-            0;
-
-    }
-
-    22% {
-
-        opacity:
-            0.08;
-
-    }
-
-    48% {
-
-        opacity:
-            0.16;
-
-    }
-
-    72% {
-
-        opacity:
-            0.06;
-
-    }
-
-    100% {
-
-        opacity:
-            0;
-
-    }
-
-}
-
-
-/* =========================================================
-   WHITE LIGHT SWEEP ANIMATION
-   ========================================================= */
-
-@keyframes whiteLightSweep {
-
-    0% {
-
-        left:
-            -35%;
-
-        opacity:
-            0;
-
-    }
-
-    18% {
-
-        opacity:
-            0.15;
-
-    }
-
-    48% {
-
-        opacity:
-            0.85;
-
-    }
-
-    72% {
-
-        opacity:
-            0.20;
-
-    }
-
-    100% {
-
-        left:
-            115%;
-
-        opacity:
-            0;
-
-    }
-
-}
-
-
-/* =========================================================
-   PAGE TRANSITION LAYER
-   ========================================================= */
-
-#readerPageTransition,
-.reader-page-transition {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    z-index:
-        65;
-
-    pointer-events:
-        none;
-
-    opacity:
-        0;
-
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,0.18),
-            transparent
-        );
-
-}
-
-
-/* =========================================================
-   PAGE TRANSITION ACTIVE
-   ========================================================= */
-
-#readerPageTransition.animate,
-.reader-page-transition.animate {
-
-    animation:
-        pageLightTransition 0.55s ease-out both;
-
-}
-
-
-@keyframes pageLightTransition {
-
-    0% {
-
-        opacity:
-            0;
-
-        transform:
-            translateX(-30%);
-
-    }
-
-    35% {
-
-        opacity:
-            0.55;
-
-    }
-
-    70% {
-
-        opacity:
-            0.16;
-
-    }
-
-    100% {
-
-        opacity:
-            0;
-
-        transform:
-            translateX(30%);
-
-    }
-
-}
-
-
-/* =========================================================
-   PAGE APPEAR
-   ========================================================= */
-
-.reader-page.page-enter {
-
-    animation:
-        pageEnter 0.28s ease-out both;
-
-}
-
-
-@keyframes pageEnter {
-
-    from {
-
-        opacity:
-            0.65;
-
-        transform:
-            translateY(3px);
-
-    }
-
-    to {
-
-        opacity:
-            1;
-
-        transform:
-            translateY(0);
-
-    }
-
-}
-
-
-/* =========================================================
-   CANVAS RENDER SMOOTHNESS
-   ========================================================= */
-
-#leftPageCanvas,
-#rightPageCanvas,
-.reader-page canvas {
-
-    image-rendering:
-        auto;
-
-    backface-visibility:
-        hidden;
-
-    transform:
-        translateZ(0);
-
-}
-
-
-/* =========================================================
-   PAGE SHADOW
-   ========================================================= */
-
-.reader-page,
-.reader-page-container,
-#leftPage,
-#rightPage {
-
-    transition:
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
-
-}
-
-
-/* =========================================================
-   PAGE HOVER
-   ========================================================= */
-
-.reader-page:hover,
-.reader-page-container:hover {
-
-    box-shadow:
-        0 10px 34px
-        rgba(0,0,0,0.52);
-
-}
-
-
-/* =========================================================
-   PREMIUM WATERMARK
-   ========================================================= */
-
-.reader-watermark {
-
-    text-shadow:
-        0 1px 0
-        rgba(255,255,255,0.18);
-
-    opacity:
-        0.78;
-
-}
-
-
-/* =========================================================
-   WATERMARK ON DARK READER
-   ========================================================= */
-
-.reader-watermark-reader {
-
-    position:
-        absolute;
-
-    top:
-        50%;
-
-    left:
-        50%;
-
-    z-index:
-        9;
+        translate(-50%, -50%)
+        rotate(-28deg);
 
     pointer-events:
         none;
@@ -4422,815 +3010,50 @@ a:focus-visible {
     user-select:
         none;
 
-    transform:
-        translate(-50%, -50%)
-        rotate(-30deg);
-
-    color:
-        rgba(229,198,109,0.09);
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size:
-        clamp(25px, 4vw, 48px);
-
-    font-weight:
-        700;
-
-    letter-spacing:
-        4px;
-
-    white-space:
-        nowrap;
-
 }
 
 
 /* =========================================================
-   GOLD GLOW
+   READER CONTROLS
    ========================================================= */
 
-.reader-gold-glow {
-
-    text-shadow:
-        0 0 8px
-        rgba(229,198,109,0.18);
-
-}
-
-
-/* =========================================================
-   FOCUS RING
-   ========================================================= */
-
-.reader-button:focus-visible,
-.reader-toolbar button:focus-visible,
-.reader-header-actions button:focus-visible {
-
-    outline:
-        2px solid
-        rgba(229,198,109,0.9);
-
-    outline-offset:
-        2px;
-
-}
-
-
-/* =========================================================
-   REMOVE DEFAULT BUTTON OUTLINE
-   ========================================================= */
-
-.reader-button:focus,
-.reader-toolbar button:focus,
-.reader-header-actions button:focus {
-
-    outline:
-        none;
-
-}
-
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    #chishtiReader,
-    .chishti-reader,
-    .reader-overlay {
-
-        animation:
-            none;
-
-    }
-
-
-    #readerLightLayer,
-    .reader-light-layer,
-    #whiteLightLayer,
-    .white-light-layer,
-    #whiteLightSweep,
-    .reader-white-light,
-    .white-light-sweep,
-    #readerPageTransition,
-    .reader-page-transition {
-
-        animation:
-            none !important;
-
-        opacity:
-            0 !important;
-
-    }
-
-
-    .reader-page,
-    .reader-page-container,
-    .reader-button,
-    .reader-toolbar button {
-
-        transition:
-            none;
-
-    }
-
-}
-
-
-/* =========================================================
-   SMALL SCREEN WHITE LIGHT
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-    #whiteLightSweep,
-    .reader-white-light,
-    .white-light-sweep {
-
-        width:
-            36%;
-
-    }
-
-
-    .reader-watermark-reader {
-
-        font-size:
-            22px;
-
-        letter-spacing:
-            2px;
-
-    }
-
-}
-
-
-/* =========================================================
-   PART 4 READY
-   ========================================================= */
-/* =========================================================
-   CHISHTI READER
-   CSS — PART 5
-   SEARCH + BOOKMARKS + COMMENTS
-   ========================================================= */
-
-
-/* =========================================================
-   SEARCH PANEL
-   ========================================================= */
-
-#readerSearchPanel,
-.reader-search-panel {
-
-    position: absolute;
-
-    top: 58px;
-
-    left: 50%;
-
-    z-index: 90;
-
-    width:
-        min(680px, 94vw);
-
-    padding:
-        10px;
-
-    box-sizing:
-        border-box;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.42);
-
-    border-radius:
-        9px;
-
-    background:
-        rgba(35, 5, 11, 0.98);
-
-    box-shadow:
-        0 10px 30px
-        rgba(0, 0, 0, 0.45);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    pointer-events:
-        none;
-
-    transform:
-        translate(-50%, -12px);
-
-    transition:
-        opacity 0.2s ease,
-        visibility 0.2s ease,
-        transform 0.2s ease;
-
-}
-
-
-/* =========================================================
-   SEARCH PANEL OPEN
-   ========================================================= */
-
-#readerSearchPanel.active,
-#readerSearchPanel.open,
-.reader-search-panel.active,
-.reader-search-panel.open {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    pointer-events:
-        auto;
-
-    transform:
-        translate(-50%, 0);
-
-}
-
-
-/* =========================================================
-   SEARCH INPUT WRAPPER
-   ========================================================= */
-
-.reader-search-input-wrap {
-
-    flex:
-        1;
-
-    min-width:
-        0;
+.reader-controls {
 
     display:
         flex;
 
     align-items:
+        center;
+
+    justify-content:
         center;
 
     gap:
         6px;
 
+    padding:
+        6px 10px;
+
+    background:
+        rgba(35, 5, 11, 0.96);
+
 }
 
 
 /* =========================================================
-   SEARCH INPUT
+   RESET ZOOM
    ========================================================= */
 
-#readerSearchInput,
-#readerSearchPanel input,
-.reader-search-panel input {
-
-    flex:
-        1;
+#readerResetZoom {
 
     min-width:
-        0;
-
-    height:
-        38px;
-
-    padding:
-        0 12px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.42);
-
-    border-radius:
-        6px;
-
-    outline:
-        none;
-
-    background:
-        rgba(255, 255, 255, 0.06);
-
-    color:
-        #fff2c5;
-
-    font-family:
-        inherit;
-
-    font-size:
-        13px;
-
-}
-
-
-/* =========================================================
-   SEARCH INPUT PLACEHOLDER
-   ========================================================= */
-
-#readerSearchInput::placeholder,
-.reader-search-panel input::placeholder {
-
-    color:
-        rgba(243, 223, 154, 0.48);
-
-}
-
-
-/* =========================================================
-   SEARCH INPUT FOCUS
-   ========================================================= */
-
-#readerSearchInput:focus,
-#readerSearchPanel input:focus,
-.reader-search-panel input:focus {
-
-    border-color:
-        #e5c66d;
-
-    box-shadow:
-        0 0 0 2px
-        rgba(229, 198, 109, 0.10);
-
-}
-
-
-/* =========================================================
-   SEARCH RESULT COUNT
-   ========================================================= */
-
-#readerSearchResults,
-.reader-search-results {
-
-    min-width:
-        58px;
-
-    color:
-        #e5c66d;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   SEARCH ACTION BUTTONS
-   ========================================================= */
-
-.reader-search-panel button,
-#readerSearchPanel button {
-
-    width:
-        36px;
-
-    height:
-        36px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.48);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(214, 169, 72, 0.08);
-
-    color:
-        #e5c66d;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   SEARCH ACTION HOVER
-   ========================================================= */
-
-.reader-search-panel button:hover,
-#readerSearchPanel button:hover {
-
-    background:
-        rgba(214, 169, 72, 0.17);
-
-    border-color:
-        #e5c66d;
-
-}
-
-
-/* =========================================================
-   SEARCH RESULTS LIST
-   ========================================================= */
-
-#readerSearchResultsList,
-.reader-search-results-list {
-
-    position:
-        absolute;
-
-    top:
-        calc(100% + 6px);
-
-    left:
-        0;
-
-    right:
-        0;
-
-    max-height:
-        300px;
-
-    overflow-y:
-        auto;
-
-    padding:
-        5px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.28);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(35, 5, 11, 0.98);
-
-    box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.40);
-
-}
-
-
-/* =========================================================
-   SEARCH RESULT ITEM
-   ========================================================= */
-
-.reader-search-result {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-
-    padding:
-        9px 10px;
-
-    border-radius:
-        5px;
-
-    color:
-        #ead99f;
-
-    font-size:
-        12px;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   SEARCH RESULT HOVER
-   ========================================================= */
-
-.reader-search-result:hover {
-
-    background:
-        rgba(214, 169, 72, 0.10);
-
-}
-
-
-/* =========================================================
-   SEARCH HIGHLIGHT
-   ========================================================= */
-
-.reader-search-highlight {
-
-    background:
-        rgba(229, 198, 109, 0.55);
-
-    color:
-        #2b080f;
-
-    border-radius:
-        2px;
-
-    padding:
-        0 2px;
-
-}
-
-
-/* =========================================================
-   BOOKMARK PANEL
-   ========================================================= */
-
-#readerBookmarksPanel,
-.reader-bookmarks-panel {
-
-    position:
-        absolute;
-
-    top:
-        0;
-
-    right:
-        0;
-
-    bottom:
-        0;
-
-    z-index:
-        110;
-
-    width:
-        min(360px, 92vw);
-
-    overflow-y:
-        auto;
-
-    padding:
-        18px;
-
-    box-sizing:
-        border-box;
-
-    background:
-        #320a12;
-
-    border-left:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    box-shadow:
-        -12px 0 32px
-        rgba(0, 0, 0, 0.45);
-
-    transform:
-        translateX(105%);
-
-    transition:
-        transform 0.24s ease;
-
-}
-
-
-/* =========================================================
-   BOOKMARK PANEL OPEN
-   ========================================================= */
-
-#readerBookmarksPanel.active,
-#readerBookmarksPanel.open,
-.reader-bookmarks-panel.active,
-.reader-bookmarks-panel.open {
-
-    transform:
-        translateX(0);
-
-}
-
-
-/* =========================================================
-   BOOKMARK HEADER
-   ========================================================= */
-
-.reader-bookmarks-header {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-
-    padding-bottom:
-        12px;
-
-    margin-bottom:
-        12px;
-
-    border-bottom:
-        1px solid
-        rgba(214, 169, 72, 0.20);
-
-}
-
-
-/* =========================================================
-   BOOKMARK TITLE
-   ========================================================= */
-
-.reader-bookmarks-title {
-
-    color:
-        #e5c66d;
-
-    font-size:
-        18px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   BOOKMARK ITEM
-   ========================================================= */
-
-.reader-bookmark-item {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-
-    width:
-        100%;
-
-    padding:
-        10px;
-
-    margin-bottom:
-        7px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.18);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255, 255, 255, 0.035);
-
-    color:
-        #ead99f;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease;
-
-}
-
-
-/* =========================================================
-   BOOKMARK ITEM HOVER
-   ========================================================= */
-
-.reader-bookmark-item:hover {
-
-    background:
-        rgba(214, 169, 72, 0.09);
-
-    border-color:
-        rgba(214, 169, 72, 0.40);
-
-}
-
-
-/* =========================================================
-   BOOKMARK PAGE
-   ========================================================= */
-
-.reader-bookmark-page {
-
-    color:
-        #e5c66d;
-
-    font-size:
-        12px;
-
-    font-weight:
-        800;
-
-}
-
-
-/* =========================================================
-   BOOKMARK TEXT
-   ========================================================= */
-
-.reader-bookmark-text {
-
-    flex:
-        1;
-
-    min-width:
-        0;
-
-    overflow:
-        hidden;
-
-    white-space:
-        nowrap;
-
-    text-overflow:
-        ellipsis;
-
-    color:
-        #ead99f;
-
-    font-size:
-        12px;
-
-}
-
-
-/* =========================================================
-   BOOKMARK DELETE
-   ========================================================= */
-
-.reader-bookmark-delete {
-
-    width:
-        30px;
+        55px;
 
     height:
         30px;
 
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    flex:
-        0 0 auto;
+    padding:
+        0 8px;
 
     border:
         1px solid
@@ -5240,2657 +3063,7 @@ a:focus-visible {
         5px;
 
     background:
-        transparent;
-
-    color:
-        #d8b95e;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   BOOKMARK DELETE HOVER
-   ========================================================= */
-
-.reader-bookmark-delete:hover {
-
-    background:
-        rgba(180, 40, 45, 0.18);
-
-    color:
-        #f0c96e;
-
-}
-
-
-/* =========================================================
-   COMMENTS PANEL
-   ========================================================= */
-
-#readerCommentsPanel,
-.reader-comments-panel {
-
-    position:
-        absolute;
-
-    top:
-        0;
-
-    right:
-        0;
-
-    bottom:
-        0;
-
-    z-index:
-        115;
-
-    width:
-        min(420px, 94vw);
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    overflow:
-        hidden;
-
-    background:
-        #320a12;
-
-    border-left:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    box-shadow:
-        -12px 0 32px
-        rgba(0, 0, 0, 0.45);
-
-    transform:
-        translateX(105%);
-
-    transition:
-        transform 0.24s ease;
-
-}
-
-
-/* =========================================================
-   COMMENTS PANEL OPEN
-   ========================================================= */
-
-#readerCommentsPanel.active,
-#readerCommentsPanel.open,
-.reader-comments-panel.active,
-.reader-comments-panel.open {
-
-    transform:
-        translateX(0);
-
-}
-
-
-/* =========================================================
-   COMMENTS HEADER
-   ========================================================= */
-
-.reader-comments-header {
-
-    flex:
-        0 0 auto;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    padding:
-        15px;
-
-    border-bottom:
-        1px solid
-        rgba(214, 169, 72, 0.20);
-
-}
-
-
-/* =========================================================
-   COMMENTS TITLE
-   ========================================================= */
-
-.reader-comments-title {
-
-    color:
-        #e5c66d;
-
-    font-size:
-        18px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   COMMENTS LIST
-   ========================================================= */
-
-#readerCommentsList,
-.reader-comments-list {
-
-    flex:
-        1;
-
-    min-height:
-        0;
-
-    overflow-y:
-        auto;
-
-    padding:
-        14px;
-
-}
-
-
-/* =========================================================
-   COMMENT ITEM
-   ========================================================= */
-
-.reader-comment {
-
-    padding:
-        10px;
-
-    margin-bottom:
-        9px;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.17);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255, 255, 255, 0.035);
-
-}
-
-
-/* =========================================================
-   COMMENT AUTHOR
-   ========================================================= */
-
-.reader-comment-author {
-
-    margin-bottom:
-        4px;
-
-    color:
-        #e5c66d;
-
-    font-size:
-        11px;
-
-    font-weight:
-        800;
-
-}
-
-
-/* =========================================================
-   COMMENT TEXT
-   ========================================================= */
-
-.reader-comment-text {
-
-    color:
-        #ead99f;
-
-    font-size:
-        12px;
-
-    line-height:
-        1.55;
-
-    overflow-wrap:
-        anywhere;
-
-}
-
-
-/* =========================================================
-   COMMENT FORM
-   ========================================================= */
-
-.reader-comment-form {
-
-    flex:
-        0 0 auto;
-
-    display:
-        flex;
-
-    gap:
-        7px;
-
-    padding:
-        12px;
-
-    border-top:
-        1px solid
-        rgba(214, 169, 72, 0.20);
-
-    background:
-        rgba(28, 4, 9, 0.55);
-
-}
-
-
-/* =========================================================
-   COMMENT TEXTAREA
-   ========================================================= */
-
-#readerCommentInput,
-.reader-comment-input {
-
-    flex:
-        1;
-
-    min-width:
-        0;
-
-    min-height:
-        38px;
-
-    max-height:
-        120px;
-
-    padding:
-        9px 10px;
-
-    resize:
-        vertical;
-
-    box-sizing:
-        border-box;
-
-    outline:
-        none;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.055);
-
-    color:
-        #fff1c3;
-
-    font-family:
-        inherit;
-
-    font-size:
-        12px;
-
-}
-
-
-/* =========================================================
-   COMMENT TEXTAREA FOCUS
-   ========================================================= */
-
-#readerCommentInput:focus,
-.reader-comment-input:focus {
-
-    border-color:
-        #e5c66d;
-
-    box-shadow:
-        0 0 0 2px
-        rgba(229,198,109,0.10);
-
-}
-
-
-/* =========================================================
-   COMMENT SUBMIT
-   ========================================================= */
-
-#readerCommentSubmit,
-.reader-comment-submit {
-
-    align-self:
-        flex-end;
-
-    min-width:
-        78px;
-
-    height:
-        38px;
-
-    border:
-        1px solid
-        rgba(229,198,109,0.65);
-
-    border-radius:
-        6px;
-
-    background:
-        linear-gradient(
-            180deg,
-            #e5c66d,
-            #a87927
-        );
-
-    color:
-        #2b080f;
-
-    font-family:
-        inherit;
-
-    font-size:
-        11px;
-
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   COMMENTS MOBILE
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-    #readerSearchPanel,
-    .reader-search-panel {
-
-        top:
-            52px;
-
-        width:
-            96vw;
-
-    }
-
-
-    #readerBookmarksPanel,
-    .reader-bookmarks-panel,
-    #readerCommentsPanel,
-    .reader-comments-panel {
-
-        width:
-            94vw;
-
-    }
-
-
-    .reader-comments-form {
-
-        padding:
-            9px;
-
-    }
-
-}
-/* =========================================================
-   CHISHTI READER
-   CSS — PART 6
-   SETTINGS + CONTENTS + BOOK INFO + SHARE
-   ========================================================= */
-
-
-/* =========================================================
-   SETTINGS PANEL
-   ========================================================= */
-
-#readerSettingsPanel,
-.reader-settings-panel {
-
-    position:
-        absolute;
-
-    top:
-        0;
-
-    right:
-        0;
-
-    bottom:
-        0;
-
-    z-index:
-        120;
-
-    width:
-        min(380px, 92vw);
-
-    overflow-y:
-        auto;
-
-    padding:
-        18px;
-
-    box-sizing:
-        border-box;
-
-    background:
-        #320a12;
-
-    border-left:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    box-shadow:
-        -12px 0 32px
-        rgba(0, 0, 0, 0.45);
-
-    transform:
-        translateX(105%);
-
-    transition:
-        transform 0.24s ease;
-
-}
-
-
-/* =========================================================
-   SETTINGS OPEN
-   ========================================================= */
-
-#readerSettingsPanel.active,
-#readerSettingsPanel.open,
-.reader-settings-panel.active,
-.reader-settings-panel.open {
-
-    transform:
-        translateX(0);
-
-}
-
-
-/* =========================================================
-   SETTINGS HEADER
-   ========================================================= */
-
-.reader-settings-header {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-
-    padding-bottom:
-        12px;
-
-    margin-bottom:
-        14px;
-
-    border-bottom:
-        1px solid
-        rgba(214, 169, 72, 0.20);
-
-}
-
-
-/* =========================================================
-   SETTINGS TITLE
-   ========================================================= */
-
-.reader-settings-title {
-
-    color:
-        #e5c66d;
-
-    font-size:
-        18px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   SETTINGS GROUP
-   ========================================================= */
-
-.reader-settings-group {
-
-    padding:
-        12px;
-
-    margin-bottom:
-        10px;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.17);
-
-    border-radius:
-        8px;
-
-    background:
-        rgba(255,255,255,0.035);
-
-}
-
-
-/* =========================================================
-   SETTINGS LABEL
-   ========================================================= */
-
-.reader-settings-label {
-
-    display:
-        block;
-
-    margin-bottom:
-        8px;
-
-    color:
-        #e5c66d;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   SETTINGS SELECT
-   ========================================================= */
-
-.reader-settings-group select {
-
-    width:
-        100%;
-
-    height:
-        38px;
-
-    padding:
-        0 9px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    border-radius:
-        6px;
-
-    outline:
-        none;
-
-    background:
-        #2b080f;
-
-    color:
-        #f2df9e;
-
-    font-family:
-        inherit;
-
-    font-size:
-        12px;
-
-}
-
-
-/* =========================================================
-   SETTINGS RANGE
-   ========================================================= */
-
-.reader-settings-group input[type="range"] {
-
-    width:
-        100%;
-
-    accent-color:
-        #d6aa4d;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   SETTINGS CHECKBOX
-   ========================================================= */
-
-.reader-settings-group input[type="checkbox"] {
-
-    width:
-        17px;
-
-    height:
-        17px;
-
-    accent-color:
-        #c79a3c;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   SETTINGS ROW
-   ========================================================= */
-
-.reader-setting-row {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-
-    min-height:
-        38px;
-
-}
-
-
-/* =========================================================
-   CONTENTS PANEL
-   ========================================================= */
-
-#readerContentsPanel,
-.reader-contents-panel {
-
-    position:
-        absolute;
-
-    top:
-        0;
-
-    left:
-        0;
-
-    bottom:
-        0;
-
-    z-index:
-        120;
-
-    width:
-        min(360px, 92vw);
-
-    overflow-y:
-        auto;
-
-    padding:
-        18px;
-
-    box-sizing:
-        border-box;
-
-    background:
-        #320a12;
-
-    border-right:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    box-shadow:
-        12px 0 32px
-        rgba(0, 0, 0, 0.42);
-
-    transform:
-        translateX(-105%);
-
-    transition:
-        transform 0.24s ease;
-
-}
-
-
-/* =========================================================
-   CONTENTS OPEN
-   ========================================================= */
-
-#readerContentsPanel.active,
-#readerContentsPanel.open,
-.reader-contents-panel.active,
-.reader-contents-panel.open {
-
-    transform:
-        translateX(0);
-
-}
-
-
-/* =========================================================
-   CONTENTS HEADER
-   ========================================================= */
-
-.reader-contents-header {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    padding-bottom:
-        12px;
-
-    margin-bottom:
-        12px;
-
-    border-bottom:
-        1px solid
-        rgba(214, 169, 72, 0.20);
-
-}
-
-
-/* =========================================================
-   CONTENTS TITLE
-   ========================================================= */
-
-.reader-contents-title {
-
-    color:
-        #e5c66d;
-
-    font-size:
-        18px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   CONTENTS LIST
-   ========================================================= */
-
-#readerContentsList,
-.reader-contents-list {
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        5px;
-
-}
-
-
-/* =========================================================
-   CONTENTS ITEM
-   ========================================================= */
-
-.reader-contents-item {
-
-    width:
-        100%;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        10px;
-
-    padding:
-        10px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        transparent;
-
-    border-radius:
-        6px;
-
-    background:
-        transparent;
-
-    color:
-        #ead99f;
-
-    font-family:
-        inherit;
-
-    font-size:
-        12px;
-
-    text-align:
-        left;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease;
-
-}
-
-
-/* =========================================================
-   CONTENTS ITEM HOVER
-   ========================================================= */
-
-.reader-contents-item:hover {
-
-    background:
-        rgba(214, 169, 72, 0.09);
-
-    border-color:
-        rgba(214, 169, 72, 0.25);
-
-}
-
-
-/* =========================================================
-   CONTENTS ACTIVE ITEM
-   ========================================================= */
-
-.reader-contents-item.active {
-
-    background:
-        rgba(214, 169, 72, 0.14);
-
-    border-color:
-        rgba(229, 198, 109, 0.42);
-
-    color:
-        #f2d98b;
-
-}
-
-
-/* =========================================================
-   BOOK INFO PANEL
-   ========================================================= */
-
-#readerBookInfoPanel,
-.reader-book-info-panel {
-
-    position:
-        absolute;
-
-    top:
-        50%;
-
-    left:
-        50%;
-
-    z-index:
-        130;
-
-    width:
-        min(520px, 92vw);
-
-    max-height:
-        84vh;
-
-    overflow-y:
-        auto;
-
-    padding:
-        22px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.40);
-
-    border-radius:
-        10px;
-
-    background:
-        #320a12;
-
-    box-shadow:
-        0 20px 55px
-        rgba(0,0,0,0.55);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    pointer-events:
-        none;
-
-    transform:
-        translate(-50%, -46%);
-
-    transition:
-        opacity 0.22s ease,
-        visibility 0.22s ease,
-        transform 0.22s ease;
-
-}
-
-
-/* =========================================================
-   BOOK INFO OPEN
-   ========================================================= */
-
-#readerBookInfoPanel.active,
-#readerBookInfoPanel.open,
-.reader-book-info-panel.active,
-.reader-book-info-panel.open {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    pointer-events:
-        auto;
-
-    transform:
-        translate(-50%, -50%);
-
-}
-
-
-/* =========================================================
-   BOOK INFO TITLE
-   ========================================================= */
-
-.reader-book-info-title {
-
-    margin-bottom:
-        14px;
-
-    color:
-        #e5c66d;
-
-    font-size:
-        22px;
-
-    font-weight:
-        700;
-
-    line-height:
-        1.3;
-
-}
-
-
-/* =========================================================
-   BOOK INFO TEXT
-   ========================================================= */
-
-.reader-book-info-text {
-
-    color:
-        #ead99f;
-
-    font-size:
-        13px;
-
-    line-height:
-        1.7;
-
-}
-
-
-/* =========================================================
-   BOOK INFO META
-   ========================================================= */
-
-.reader-book-info-meta {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap:
-        8px;
-
-    margin-top:
-        16px;
-
-}
-
-
-/* =========================================================
-   BOOK INFO META ITEM
-   ========================================================= */
-
-.reader-book-info-meta-item {
-
-    padding:
-        10px;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.18);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(255,255,255,0.035);
-
-}
-
-
-/* =========================================================
-   BOOK INFO META LABEL
-   ========================================================= */
-
-.reader-book-info-meta-label {
-
-    display:
-        block;
-
-    margin-bottom:
-        4px;
-
-    color:
-        #bfa45d;
-
-    font-size:
-        10px;
-
-}
-
-
-/* =========================================================
-   BOOK INFO META VALUE
-   ========================================================= */
-
-.reader-book-info-meta-value {
-
-    color:
-        #f0dfa4;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   SHARE PANEL
-   ========================================================= */
-
-#readerSharePanel,
-.reader-share-panel {
-
-    position:
-        absolute;
-
-    top:
-        50%;
-
-    left:
-        50%;
-
-    z-index:
-        135;
-
-    width:
-        min(430px, 92vw);
-
-    padding:
-        20px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.40);
-
-    border-radius:
-        10px;
-
-    background:
-        #320a12;
-
-    box-shadow:
-        0 20px 55px
-        rgba(0,0,0,0.55);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    pointer-events:
-        none;
-
-    transform:
-        translate(-50%, -46%);
-
-    transition:
-        opacity 0.22s ease,
-        visibility 0.22s ease,
-        transform 0.22s ease;
-
-}
-
-
-/* =========================================================
-   SHARE OPEN
-   ========================================================= */
-
-#readerSharePanel.active,
-#readerSharePanel.open,
-.reader-share-panel.active,
-.reader-share-panel.open {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    pointer-events:
-        auto;
-
-    transform:
-        translate(-50%, -50%);
-
-}
-
-
-/* =========================================================
-   SHARE TITLE
-   ========================================================= */
-
-.reader-share-title {
-
-    margin-bottom:
-        14px;
-
-    color:
-        #e5c66d;
-
-    font-size:
-        19px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   SHARE ACTIONS
-   ========================================================= */
-
-.reader-share-actions {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap:
-        8px;
-
-}
-
-
-/* =========================================================
-   SHARE BUTTON
-   ========================================================= */
-
-.reader-share-actions button {
-
-    min-height:
-        40px;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.35);
-
-    border-radius:
-        7px;
-
-    background:
-        rgba(214, 169, 72, 0.08);
-
-    color:
-        #e5c66d;
-
-    font-family:
-        inherit;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease;
-
-}
-
-
-/* =========================================================
-   SHARE BUTTON HOVER
-   ========================================================= */
-
-.reader-share-actions button:hover {
-
-    background:
-        rgba(214, 169, 72, 0.16);
-
-    border-color:
-        rgba(229, 198, 109, 0.70);
-
-}
-
-
-/* =========================================================
-   MODAL BACKDROP
-   ========================================================= */
-
-#readerModalBackdrop,
-.reader-modal-backdrop {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    z-index:
-        125;
-
-    background:
-        rgba(8, 1, 3, 0.62);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    pointer-events:
-        none;
-
-    transition:
-        opacity 0.22s ease,
-        visibility 0.22s ease;
-
-}
-
-
-/* =========================================================
-   MODAL BACKDROP OPEN
-   ========================================================= */
-
-#readerModalBackdrop.active,
-#readerModalBackdrop.open,
-.reader-modal-backdrop.active,
-.reader-modal-backdrop.open {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    pointer-events:
-        auto;
-
-}
-
-
-/* =========================================================
-   GENERIC CLOSE BUTTON
-   ========================================================= */
-
-.reader-panel-close {
-
-    width:
-        34px;
-
-    height:
-        34px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    flex:
-        0 0 auto;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.38);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.04);
-
-    color:
-        #e5c66d;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   GENERIC CLOSE HOVER
-   ========================================================= */
-
-.reader-panel-close:hover {
-
-    background:
-        rgba(214, 169, 72, 0.12);
-
-    border-color:
-        #e5c66d;
-
-}
-
-
-/* =========================================================
-   MOBILE MODALS
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-    #readerBookInfoPanel,
-    .reader-book-info-panel,
-    #readerSharePanel,
-    .reader-share-panel {
-
-        width:
-            94vw;
-
-        max-height:
-            86vh;
-
-    }
-
-
-    .reader-book-info-meta {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    .reader-share-actions {
-
-        grid-template-columns:
-            1fr;
-
-    }
-
-
-    #readerContentsPanel,
-    .reader-contents-panel {
-
-        width:
-            94vw;
-
-    }
-
-
-    #readerSettingsPanel,
-    .reader-settings-panel {
-
-        width:
-            94vw;
-
-    }
-
-}
-/* =========================================================
-   CHISHTI READER
-   CSS — PART 7
-   TOAST + FULLSCREEN + THUMBNAILS + OVERLAY STATES
-   ========================================================= */
-
-
-/* =========================================================
-   TOAST NOTIFICATION
-   ========================================================= */
-
-#readerToast,
-.reader-toast {
-
-    position:
-        fixed;
-
-    left:
-        50%;
-
-    bottom:
-        78px;
-
-    z-index:
-        1000;
-
-    min-width:
-        180px;
-
-    max-width:
-        min(420px, 88vw);
-
-    padding:
-        10px 16px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(229, 198, 109, 0.45);
-
-    border-radius:
-        8px;
-
-    background:
-        rgba(35, 5, 11, 0.97);
-
-    color:
-        #f1dfa1;
-
-    font-size:
-        12px;
-
-    font-weight:
-        600;
-
-    text-align:
-        center;
-
-    box-shadow:
-        0 8px 28px
-        rgba(0,0,0,0.45);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    pointer-events:
-        none;
-
-    transform:
-        translate(-50%, 12px);
-
-    transition:
-        opacity 0.22s ease,
-        visibility 0.22s ease,
-        transform 0.22s ease;
-
-}
-
-
-/* =========================================================
-   TOAST ACTIVE
-   ========================================================= */
-
-#readerToast.show,
-#readerToast.active,
-.reader-toast.show,
-.reader-toast.active {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    transform:
-        translate(-50%, 0);
-
-}
-
-
-/* =========================================================
-   TOAST SUCCESS
-   ========================================================= */
-
-.reader-toast.success {
-
-    border-color:
-        rgba(229, 198, 109, 0.72);
-
-}
-
-
-/* =========================================================
-   TOAST ERROR
-   ========================================================= */
-
-.reader-toast.error {
-
-    border-color:
-        rgba(190, 75, 75, 0.70);
-
-    color:
-        #f2b5a9;
-
-}
-
-
-/* =========================================================
-   FULLSCREEN READER
-   ========================================================= */
-
-#chishtiReader.fullscreen-active,
-.chishti-reader.fullscreen-active,
-.reader-overlay.fullscreen-active {
-
-    position:
-        fixed;
-
-    inset:
-        0;
-
-    width:
-        100vw;
-
-    height:
-        100vh;
-
-    z-index:
-        9999;
-
-}
-
-
-/* =========================================================
-   FULLSCREEN CONTENT
-   ========================================================= */
-
-.fullscreen-active .reader-content {
-
-    height:
-        100%;
-
-}
-
-
-/* =========================================================
-   THUMBNAILS PANEL
-   ========================================================= */
-
-#readerThumbnailsPanel,
-.reader-thumbnails-panel {
-
-    position:
-        absolute;
-
-    left:
-        0;
-
-    top:
-        0;
-
-    bottom:
-        0;
-
-    z-index:
-        100;
-
-    width:
-        min(190px, 45vw);
-
-    overflow-y:
-        auto;
-
-    padding:
-        10px;
-
-    box-sizing:
-        border-box;
-
-    background:
-        rgba(35, 5, 11, 0.98);
-
-    border-right:
-        1px solid
-        rgba(214, 169, 72, 0.28);
-
-    box-shadow:
-        8px 0 25px
-        rgba(0,0,0,0.35);
-
-    transform:
-        translateX(-105%);
-
-    transition:
-        transform 0.24s ease;
-
-}
-
-
-/* =========================================================
-   THUMBNAILS OPEN
-   ========================================================= */
-
-#readerThumbnailsPanel.active,
-#readerThumbnailsPanel.open,
-.reader-thumbnails-panel.active,
-.reader-thumbnails-panel.open {
-
-    transform:
-        translateX(0);
-
-}
-
-
-/* =========================================================
-   THUMBNAIL ITEM
-   ========================================================= */
-
-.reader-thumbnail {
-
-    position:
-        relative;
-
-    width:
-        100%;
-
-    margin-bottom:
-        8px;
-
-    padding:
-        4px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214, 169, 72, 0.18);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.035);
-
-    cursor:
-        pointer;
-
-    transition:
-        border-color 0.16s ease,
-        background 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-/* =========================================================
-   THUMBNAIL HOVER
-   ========================================================= */
-
-.reader-thumbnail:hover {
-
-    background:
-        rgba(214, 169, 72, 0.08);
-
-    border-color:
-        rgba(214, 169, 72, 0.42);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   ACTIVE THUMBNAIL
-   ========================================================= */
-
-.reader-thumbnail.active,
-.reader-thumbnail.current {
-
-    border-color:
-        #e5c66d;
-
-    background:
-        rgba(214, 169, 72, 0.12);
-
-    box-shadow:
-        0 0 0 1px
-        rgba(229,198,109,0.12);
-
-}
-
-
-/* =========================================================
-   THUMBNAIL CANVAS / IMAGE
-   ========================================================= */
-
-.reader-thumbnail canvas,
-.reader-thumbnail img {
-
-    display:
-        block;
-
-    width:
-        100%;
-
-    height:
-        auto;
-
-    border-radius:
-        3px;
-
-}
-
-
-/* =========================================================
-   THUMBNAIL PAGE NUMBER
-   ========================================================= */
-
-.reader-thumbnail-number {
-
-    position:
-        absolute;
-
-    right:
-        6px;
-
-    bottom:
-        6px;
-
-    min-width:
-        22px;
-
-    padding:
-        3px 5px;
-
-    border-radius:
-        4px;
-
-    background:
-        rgba(25, 3, 8, 0.86);
-
-    color:
-        #e5c66d;
-
-    font-size:
-        9px;
-
-    font-weight:
-        700;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   READER OVERLAY
-   ========================================================= */
-
-#readerOverlay,
-.reader-overlay-layer {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    z-index:
-        60;
-
-    pointer-events:
-        none;
-
-    background:
-        transparent;
-
-}
-
-
-/* =========================================================
-   PANEL OVERLAY
-   ========================================================= */
-
-#readerPanelOverlay,
-.reader-panel-overlay {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    z-index:
-        105;
-
-    background:
-        rgba(7, 1, 3, 0.48);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    pointer-events:
-        none;
-
-    transition:
-        opacity 0.22s ease,
-        visibility 0.22s ease;
-
-}
-
-
-/* =========================================================
-   PANEL OVERLAY ACTIVE
-   ========================================================= */
-
-#readerPanelOverlay.active,
-#readerPanelOverlay.open,
-.reader-panel-overlay.active,
-.reader-panel-overlay.open {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    pointer-events:
-        auto;
-
-}
-
-
-/* =========================================================
-   READER TOOLBAR
-   ========================================================= */
-
-.reader-toolbar {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        6px;
-
-}
-
-
-/* =========================================================
-   TOOLBAR BUTTON
-   ========================================================= */
-
-.reader-toolbar button {
-
-    width:
-        35px;
-
-    height:
-        35px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.45);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.04);
-
-    color:
-        #e5c66d;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-/* =========================================================
-   TOOLBAR BUTTON HOVER
-   ========================================================= */
-
-.reader-toolbar button:hover {
-
-    background:
-        rgba(214,169,72,0.13);
-
-    border-color:
-        rgba(229,198,109,0.72);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   DISABLED BUTTON
-   ========================================================= */
-
-.reader-toolbar button:disabled,
-.reader-navigation button:disabled {
-
-    opacity:
-        0.38;
-
-    cursor:
-        not-allowed;
-
-    transform:
-        none;
-
-}
-
-
-/* =========================================================
-   READER EMPTY STATE
-   ========================================================= */
-
-.reader-empty-state {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        25px;
-
-    box-sizing:
-        border-box;
-
-    color:
-        #cbb66e;
-
-    font-size:
-        13px;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   READER ERROR STATE
-   ========================================================= */
-
-.reader-error-state {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        10px;
-
-    padding:
-        25px;
-
-    box-sizing:
-        border-box;
-
-    color:
-        #e2b5a8;
-
-    font-size:
-        13px;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   ERROR RETRY BUTTON
-   ========================================================= */
-
-.reader-error-state button {
-
-    min-width:
-        110px;
-
-    height:
-        36px;
-
-    padding:
-        0 13px;
-
-    border:
-        1px solid
-        rgba(229,198,109,0.60);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(214,169,72,0.10);
-
-    color:
-        #e5c66d;
-
-    font-family:
-        inherit;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   SCROLLBAR
-   ========================================================= */
-
-#readerBookmarksPanel::-webkit-scrollbar,
-#readerCommentsList::-webkit-scrollbar,
-#readerSettingsPanel::-webkit-scrollbar,
-#readerContentsPanel::-webkit-scrollbar,
-#readerThumbnailsPanel::-webkit-scrollbar,
-.reader-scrollable::-webkit-scrollbar {
-
-    width:
-        6px;
-
-}
-
-
-/* =========================================================
-   SCROLLBAR TRACK
-   ========================================================= */
-
-#readerBookmarksPanel::-webkit-scrollbar-track,
-#readerCommentsList::-webkit-scrollbar-track,
-#readerSettingsPanel::-webkit-scrollbar-track,
-#readerContentsPanel::-webkit-scrollbar-track,
-#readerThumbnailsPanel::-webkit-scrollbar-track,
-.reader-scrollable::-webkit-scrollbar-track {
-
-    background:
-        rgba(255,255,255,0.025);
-
-}
-
-
-/* =========================================================
-   SCROLLBAR THUMB
-   ========================================================= */
-
-#readerBookmarksPanel::-webkit-scrollbar-thumb,
-#readerCommentsList::-webkit-scrollbar-thumb,
-#readerSettingsPanel::-webkit-scrollbar-thumb,
-#readerContentsPanel::-webkit-scrollbar-thumb,
-#readerThumbnailsPanel::-webkit-scrollbar-thumb,
-.reader-scrollable::-webkit-scrollbar-thumb {
-
-    background:
-        rgba(214,169,72,0.38);
-
-    border-radius:
-        10px;
-
-}
-
-
-/* =========================================================
-   SCROLLBAR THUMB HOVER
-   ========================================================= */
-
-#readerBookmarksPanel::-webkit-scrollbar-thumb:hover,
-#readerCommentsList::-webkit-scrollbar-thumb:hover,
-#readerSettingsPanel::-webkit-scrollbar-thumb:hover,
-#readerContentsPanel::-webkit-scrollbar-thumb:hover,
-#readerThumbnailsPanel::-webkit-scrollbar-thumb:hover,
-.reader-scrollable::-webkit-scrollbar-thumb:hover {
-
-    background:
-        rgba(229,198,109,0.60);
-
-}
-
-
-/* =========================================================
-   MOBILE THUMBNAILS
-   ========================================================= */
-
-@media (max-width: 760px) {
-
-    #readerThumbnailsPanel,
-    .reader-thumbnails-panel {
-
-        width:
-            150px;
-
-    }
-
-
-    #readerToast,
-    .reader-toast {
-
-        bottom:
-            68px;
-
-        min-width:
-            150px;
-
-        font-size:
-            11px;
-
-    }
-
-
-    .reader-toolbar {
-
-        gap:
-            3px;
-
-    }
-
-
-    .reader-toolbar button {
-
-        width:
-            32px;
-
-        height:
-            32px;
-
-    }
-
-}
-
-
-/* =========================================================
-   PART 7 READY
-   ========================================================= */
-/* =========================================================
-   CHISHTI READER
-   CSS — PART 8 / FINAL
-   NAVIGATION + PAGE COUNTER + ZOOM + FINAL RESPONSIVE
-   ========================================================= */
-
-
-/* =========================================================
-   READER NAVIGATION AREA
-   ========================================================= */
-
-.reader-navigation {
-
-    width:
-        100%;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        10px;
-
-    padding:
-        9px 12px;
-
-    box-sizing:
-        border-box;
-
-    border-top:
-        1px solid
-        rgba(214,169,72,0.20);
-
-    background:
-        rgba(35,5,11,0.96);
-
-}
-
-
-/* =========================================================
-   PAGE NAVIGATION GROUP
-   ========================================================= */
-
-.reader-page-navigation {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        8px;
-
-}
-
-
-/* =========================================================
-   PREVIOUS / NEXT PAGE
-   ========================================================= */
-
-#previousPage,
-#nextPage,
-.reader-previous-page,
-.reader-next-page {
-
-    min-width:
-        118px;
-
-    height:
-        36px;
-
-    padding:
-        0 13px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        6px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.42);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.035);
-
-    color:
-        #e5c66d;
-
-    font-family:
-        inherit;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    white-space:
-        nowrap;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-/* =========================================================
-   PAGE NAVIGATION HOVER
-   ========================================================= */
-
-#previousPage:hover,
-#nextPage:hover,
-.reader-previous-page:hover,
-.reader-next-page:hover {
-
-    background:
-        rgba(214,169,72,0.12);
-
-    border-color:
-        rgba(229,198,109,0.72);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   CURRENT PAGE DISPLAY
-   ========================================================= */
-
-.reader-page-counter {
-
-    min-width:
-        92px;
-
-    height:
-        36px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        5px;
-
-    padding:
-        0 9px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.28);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.025);
-
-    color:
-        #e5c66d;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   PAGE INPUT
-   ========================================================= */
-
-#pageInput,
-#readerPageInput,
-.reader-page-input {
-
-    width:
-        45px;
-
-    height:
-        28px;
-
-    padding:
-        0 5px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.35);
-
-    border-radius:
-        5px;
-
-    outline:
-        none;
-
-    background:
-        rgba(255,255,255,0.055);
-
-    color:
-        #fff0bd;
-
-    font-family:
-        inherit;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    text-align:
-        center;
-
-}
-
-
-/* =========================================================
-   PAGE INPUT FOCUS
-   ========================================================= */
-
-#pageInput:focus,
-#readerPageInput:focus,
-.reader-page-input:focus {
-
-    border-color:
-        #e5c66d;
-
-    box-shadow:
-        0 0 0 2px
-        rgba(229,198,109,0.10);
-
-}
-
-
-/* =========================================================
-   TOTAL PAGE NUMBER
-   ========================================================= */
-
-.reader-total-pages {
-
-    color:
-        #bda45e;
-
-    font-size:
-        11px;
-
-}
-
-
-/* =========================================================
-   BOOK NAVIGATION
-   ========================================================= */
-
-.reader-book-navigation {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        7px;
-
-}
-
-
-/* =========================================================
-   PREVIOUS / NEXT BOOK
-   ========================================================= */
-
-#previousBook,
-#nextBook,
-.reader-previous-book,
-.reader-next-book {
-
-    min-width:
-        92px;
-
-    height:
-        34px;
-
-    padding:
-        0 10px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        5px;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.35);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.035);
+        rgba(255,255,255,0.03);
 
     color:
         #d9bc68;
@@ -7901,570 +3074,63 @@ a:focus-visible {
     font-size:
         10px;
 
-    font-weight:
-        700;
-
-    white-space:
-        nowrap;
-
     cursor:
         pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease;
 
 }
 
 
 /* =========================================================
-   BOOK NAVIGATION HOVER
+   RESET ZOOM HOVER
    ========================================================= */
 
-#previousBook:hover,
-#nextBook:hover,
-.reader-previous-book:hover,
-.reader-next-book:hover {
+#readerResetZoom:hover {
 
     background:
-        rgba(214,169,72,0.12);
+        rgba(214,169,72,0.10);
 
     border-color:
-        rgba(229,198,109,0.68);
+        rgba(229,198,109,0.65);
 
 }
 
 
 /* =========================================================
-   ZOOM CONTROLS
-   ========================================================= */
-
-.reader-zoom-controls {
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    gap:
-        5px;
-
-}
-
-
-/* =========================================================
-   ZOOM BUTTON
-   ========================================================= */
-
-#zoomOut,
-#zoomIn,
-#resetZoom,
-.reader-zoom-controls button {
-
-    width:
-        34px;
-
-    height:
-        34px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.38);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.035);
-
-    color:
-        #e5c66d;
-
-    font-family:
-        inherit;
-
-    font-size:
-        13px;
-
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease,
-        transform 0.16s ease;
-
-}
-
-
-/* =========================================================
-   ZOOM HOVER
-   ========================================================= */
-
-#zoomOut:hover,
-#zoomIn:hover,
-#resetZoom:hover,
-.reader-zoom-controls button:hover {
-
-    background:
-        rgba(214,169,72,0.13);
-
-    border-color:
-        rgba(229,198,109,0.72);
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-/* =========================================================
-   ZOOM PERCENTAGE
-   ========================================================= */
-
-#zoomValue,
-.reader-zoom-value {
-
-    min-width:
-        52px;
-
-    height:
-        34px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0 6px;
-
-    box-sizing:
-        border-box;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.24);
-
-    border-radius:
-        6px;
-
-    color:
-        #e5c66d;
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   ZOOM RANGE
-   ========================================================= */
-
-#zoomRange,
-.reader-zoom-range {
-
-    width:
-        92px;
-
-    accent-color:
-        #d6aa4d;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   BOOKMARK BUTTON
-   ========================================================= */
-
-#bookmarkButton,
-#toggleBookmark,
-.reader-bookmark-button {
-
-    width:
-        36px;
-
-    height:
-        36px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.42);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.035);
-
-    color:
-        #d7b75e;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.16s ease,
-        border-color 0.16s ease,
-        color 0.16s ease;
-
-}
-
-
-/* =========================================================
-   BOOKMARK ACTIVE
-   ========================================================= */
-
-#bookmarkButton.active,
-#toggleBookmark.active,
-.reader-bookmark-button.active,
-#bookmarkButton.bookmarked,
-#toggleBookmark.bookmarked {
-
-    background:
-        rgba(214,169,72,0.15);
-
-    border-color:
-        #e5c66d;
-
-    color:
-        #f0d27d;
-
-}
-
-
-/* =========================================================
-   LIKE BUTTON
-   ========================================================= */
-
-#likeBook,
-#toggleLike,
-.reader-like-button {
-
-    width:
-        36px;
-
-    height:
-        36px;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(214,169,72,0.38);
-
-    border-radius:
-        6px;
-
-    background:
-        rgba(255,255,255,0.035);
-
-    color:
-        #d7b75e;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   LIKE ACTIVE
-   ========================================================= */
-
-#likeBook.active,
-#toggleLike.active,
-.reader-like-button.active {
-
-    color:
-        #e7a2a2;
-
-    border-color:
-        rgba(214,100,100,0.65);
-
-    background:
-        rgba(180,40,45,0.12);
-
-}
-
-
-/* =========================================================
-   READER FOOTER
-   ========================================================= */
-
-.reader-footer {
-
-    min-height:
-        42px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        7px 12px;
-
-    box-sizing:
-        border-box;
-
-    background:
-        #26060d;
-
-    border-top:
-        1px solid
-        rgba(214,169,72,0.16);
-
-    color:
-        #8f7840;
-
-    font-size:
-        10px;
-
-}
-
-
-/* =========================================================
-   WATERMARK FOOTER
-   ========================================================= */
-
-.reader-footer-watermark {
-
-    color:
-        rgba(229,198,109,0.42);
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    letter-spacing:
-        1px;
-
-}
-
-
-/* =========================================================
-   DISABLE TEXT SELECTION ON CONTROLS
-   ========================================================= */
-
-.reader-toolbar,
-.reader-navigation,
-.reader-book-navigation,
-.reader-zoom-controls,
-.reader-footer {
-
-    user-select:
-        none;
-
-}
-
-
-/* =========================================================
-   READER BUTTON UNIVERSAL
-   ========================================================= */
-
-.reader-button,
-.reader-toolbar button,
-.reader-navigation button,
-.reader-book-navigation button {
-
-    -webkit-tap-highlight-color:
-        transparent;
-
-}
-
-
-/* =========================================================
-   TABLET LAYOUT
-   ========================================================= */
-
-@media (max-width: 1000px) {
-
-    .reader-navigation {
-
-        flex-wrap:
-            wrap;
-
-        gap:
-            7px;
-
-    }
-
-
-    .reader-page-navigation {
-
-        order:
-            1;
-
-    }
-
-
-    .reader-book-navigation {
-
-        order:
-            2;
-
-    }
-
-
-    .reader-zoom-controls {
-
-        order:
-            3;
-
-    }
-
-}
-
-
-/* =========================================================
-   MOBILE NAVIGATION
+   SMALL SCREEN
    ========================================================= */
 
 @media (max-width: 700px) {
 
-    .reader-navigation {
+    .reader-content {
 
         padding:
-            7px;
+            12px;
+
+    }
+
+
+    .reader-pages,
+    .reader-canvas-container {
 
         gap:
-            5px;
+            12px;
 
     }
 
 
-    .reader-page-navigation {
+    .reader-page-watermark,
+    .reader-watermark-reader {
 
-        width:
-            100%;
+        font-size:
+            24px;
 
     }
 
 
-    #previousPage,
-    #nextPage,
-    .reader-previous-page,
-    .reader-next-page {
-
-        min-width:
-            0;
-
-        flex:
-            1;
+    .reader-book-title {
 
         max-width:
-            130px;
-
-        padding:
-            0 7px;
-
-        font-size:
-            10px;
-
-    }
-
-
-    .reader-page-counter {
-
-        min-width:
-            78px;
-
-    }
-
-
-    .reader-book-navigation {
-
-        width:
-            100%;
-
-        justify-content:
-            center;
-
-    }
-
-
-    #previousBook,
-    #nextBook,
-    .reader-previous-book,
-    .reader-next-book {
-
-        min-width:
-            90px;
-
-    }
-
-
-    .reader-zoom-controls {
-
-        width:
-            100%;
-
-        justify-content:
-            center;
-
-    }
-
-
-    #zoomRange,
-    .reader-zoom-range {
-
-        width:
-            75px;
+            82%;
 
     }
 
@@ -8472,153 +3138,5 @@ a:focus-visible {
 
 
 /* =========================================================
-   VERY SMALL SCREEN
-   ========================================================= */
-
-@media (max-width: 420px) {
-
-    #previousPage,
-    #nextPage,
-    .reader-previous-page,
-    .reader-next-page {
-
-        font-size:
-            9px;
-
-    }
-
-
-    .reader-page-counter {
-
-        min-width:
-            66px;
-
-        font-size:
-            10px;
-
-    }
-
-
-    #pageInput,
-    #readerPageInput,
-    .reader-page-input {
-
-        width:
-            38px;
-
-    }
-
-
-    #previousBook,
-    #nextBook,
-    .reader-previous-book,
-    .reader-next-book {
-
-        min-width:
-            78px;
-
-        font-size:
-            9px;
-
-    }
-
-
-    #zoomOut,
-    #zoomIn,
-    #resetZoom,
-    .reader-zoom-controls button {
-
-        width:
-            31px;
-
-        height:
-            31px;
-
-    }
-
-
-    #zoomValue,
-    .reader-zoom-value {
-
-        min-width:
-            45px;
-
-        height:
-            31px;
-
-    }
-
-}
-
-
-/* =========================================================
-   PRINT
-   ========================================================= */
-
-@media print {
-
-    #chishtiReader,
-    .chishti-reader,
-    .reader-overlay {
-
-        background:
-            #ffffff !important;
-
-        color:
-            #000000 !important;
-
-    }
-
-
-    .reader-toolbar,
-    .reader-navigation,
-    .reader-footer,
-    .reader-panel-overlay,
-    #readerPanelOverlay {
-
-        display:
-            none !important;
-
-    }
-
-
-    .reader-page {
-
-        box-shadow:
-            none !important;
-
-    }
-
-}
-
-
-/* =========================================================
-   FINAL CSS SAFETY
-   ========================================================= */
-
-.reader-page,
-.reader-page canvas,
-.reader-page img {
-
-    max-width:
-        100%;
-
-}
-
-
-/* =========================================================
-   FINAL CSS READY
-   ========================================================= */
-
-body.reader-open {
-
-    overflow:
-        hidden;
-
-}
-
-
-/* =========================================================
-   CHISHTI READER — CSS COMPLETE
-   PART 1 → PART 8
+   BASE V1 — PART 5 COMPLETE
    ========================================================= */
