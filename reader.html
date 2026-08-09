@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -13,29 +15,41 @@
         content="#21070d"
     >
 
-    <title>Chishti Library — Digital Reader</title>
+    <meta
+        name="description"
+        content="Chishti Reader Digital Reader"
+    >
+
+    <title>Chishti Reader</title>
 
     <link
         rel="stylesheet"
         href="reader.css"
     >
+
 </head>
+
 
 <body>
 
 <!-- =====================================================
-     CHISHTI LIBRARY READER
-     HTML PART 1 / 6
+     CHISHTI LIBRARY
+     DIGITAL BOOK READER
      
-     CORE DOCUMENT + OPENING ANIMATION + READER SHELL
+     HTML REWRITE — PART 1 / 6
 ===================================================== -->
 
 
 <!-- =====================================================
-     OPENING WHITE-LIGHT ANIMATION
+     WHITE-LIGHT BOOK OPENING ANIMATION
      
-     Read button ke baad:
-     Book center → white light → reader
+     Read
+       ↓
+     Book Center
+       ↓
+     White Light
+       ↓
+     Reader
 ===================================================== -->
 
 <div
@@ -44,24 +58,30 @@
     aria-hidden="true"
 >
 
-    <div class="reader-opening-book">
+    <div
+        id="openingBook"
+        class="opening-book"
+    >
 
         <div class="opening-book-cover">
 
-            <div class="opening-book-title">
-                Chishti Library
+            <div class="opening-library-name">
+                CHISHTI Reader
             </div>
 
-            <div class="opening-book-subtitle">
-                Digital Reading Room
+            <div class="opening-book-title">
+                Digital Reader
             </div>
 
         </div>
 
+
         <div class="opening-book-pages">
+
             <span></span>
             <span></span>
             <span></span>
+
         </div>
 
     </div>
@@ -100,12 +120,12 @@
         <div class="reader-header-left">
 
             <button
-                type="button"
                 id="readerBackButton"
+                type="button"
                 class="reader-header-button"
                 data-action="close-reader"
-                aria-label="Close reader"
-                title="Back"
+                aria-label="Back to library"
+                title="Back to Library"
             >
                 ←
             </button>
@@ -116,6 +136,7 @@
                 <div class="reader-brand-name">
                     Chishti Library
                 </div>
+
 
                 <div
                     id="readerBookTitle"
@@ -132,12 +153,12 @@
 
         <div class="reader-header-center">
 
-            <div
-                id="readerBookStatus"
-                class="reader-book-status"
+            <span
+                id="readerReadingStatus"
+                class="reader-reading-status"
             >
                 Reading
-            </div>
+            </span>
 
         </div>
 
@@ -146,17 +167,19 @@
         <div class="reader-header-right">
 
             <button
+                id="headerSearchButton"
                 type="button"
                 class="reader-header-button"
-                data-action="search"
+                data-action="toggle-search"
                 aria-label="Search in book"
-                title="Search"
+                title="Search — Ctrl+F"
             >
                 🔍
             </button>
 
 
             <button
+                id="headerSettingsButton"
                 type="button"
                 class="reader-header-button"
                 data-action="settings"
@@ -173,7 +196,7 @@
 
 
     <!-- =================================================
-         READER BODY
+         READER MAIN
     ================================================= -->
 
     <main
@@ -183,19 +206,19 @@
 
 
         <!-- =============================================
-             READER VIEWPORT
+             TWO-PAGE READER VIEWPORT
         ============================================== -->
 
         <section
             id="readerViewport"
             class="reader-viewport"
-            aria-label="Book reader"
+            aria-label="Chishti Reader book reader"
         >
 
-            <!--
-                Page stage.
-                JavaScript PDF pages yahan render karega.
-            -->
+
+            <!-- =========================================
+                 PAGE STAGE
+            ========================================== -->
 
             <div
                 id="readerPageStage"
@@ -203,25 +226,18 @@
             >
 
 
-                <!--
-                    Two page containers will be created
-                    by reader.js.
-
-                    Left page:
-                    #readerPageLeft
-
-                    Right page:
-                    #readerPageRight
-                -->
+                <!-- =====================================
+                     LEFT PAGE
+                ====================================== -->
 
                 <div
                     id="readerPageLeft"
                     class="reader-page-wrapper reader-page-left"
                 >
 
-                    <div
+                    <article
                         class="reader-page"
-                        data-page="left"
+                        data-reader-page="left"
                     >
 
                         <canvas
@@ -230,34 +246,54 @@
                         ></canvas>
 
 
+                        <!--
+                            PDF.js text layer.
+                            Used by Ctrl+F search.
+                        -->
+
                         <div
                             class="reader-page-text-layer"
                             aria-hidden="true"
                         ></div>
 
 
-                        <!-- PAGE WATERMARK -->
+                        <!--
+                            CHISHTI LIBRARY WATERMARK
+                            Appears on every rendered page.
+                        -->
+
                         <div
                             class="reader-page-watermark"
                             aria-hidden="true"
                         >
-                            CHISHTI LIBRARY
+                            CHISHTI Reader
                         </div>
 
-                    </div>
+
+                        <!-- Page number -->
+                        <span
+                            class="reader-page-number"
+                            aria-hidden="true"
+                        ></span>
+
+                    </article>
 
                 </div>
 
 
+
+                <!-- =====================================
+                     RIGHT PAGE
+                ====================================== -->
 
                 <div
                     id="readerPageRight"
                     class="reader-page-wrapper reader-page-right"
                 >
 
-                    <div
+                    <article
                         class="reader-page"
-                        data-page="right"
+                        data-reader-page="right"
                     >
 
                         <canvas
@@ -266,13 +302,22 @@
                         ></canvas>
 
 
+                        <!--
+                            PDF.js text layer.
+                            Used by Ctrl+F search.
+                        -->
+
                         <div
                             class="reader-page-text-layer"
                             aria-hidden="true"
                         ></div>
 
 
-                        <!-- PAGE WATERMARK -->
+                        <!--
+                            CHISHTI LIBRARY WATERMARK
+                            Appears on every rendered page.
+                        -->
+
                         <div
                             class="reader-page-watermark"
                             aria-hidden="true"
@@ -280,706 +325,710 @@
                             CHISHTI LIBRARY
                         </div>
 
-                    </div>
+
+                        <!-- Page number -->
+                        <span
+                            class="reader-page-number"
+                            aria-hidden="true"
+                        ></span>
+
+                    </article>
 
                 </div>
 
 
-            </div
-
+            </div>
 
         </section>
-
-
-    </main>
-    <!-- =================================================
-         READER BOTTOM CONTROLS
-    ================================================= -->
-
-    <footer
-        id="readerFooter"
-        class="reader-footer"
-    >
-
-
-        <!-- =============================================
-             PAGE NAVIGATION
-        ============================================== -->
+        <!-- =================================================
+             READER OVERLAY
+             
+             Used behind side panels and settings.
+        ================================================= -->
 
         <div
-            class="reader-navigation-row"
-            aria-label="Page navigation"
+            id="readerOverlay"
+            class="reader-overlay"
+            aria-hidden="true"
+        ></div>
+
+
+
+        <!-- =================================================
+             SEARCH BAR
+             
+             Ctrl + F style book search.
+        ================================================= -->
+
+        <div
+            id="readerSearchBar"
+            class="reader-search-bar"
+            aria-hidden="true"
         >
 
-            <button
-                type="button"
-                id="previousPageButton"
-                class="reader-control-button page-navigation-button"
-                data-action="previous-page"
-                aria-label="Previous page"
-            >
-                ← Previous Page
-            </button>
+            <div class="reader-search-inner">
 
-
-            <div
-                id="readerPageCounter"
-                class="reader-page-counter"
-                aria-label="Current page"
-            >
-
-                <span class="page-counter-label">
-                    Page
+                <span
+                    class="reader-search-icon"
+                    aria-hidden="true"
+                >
+                    🔍
                 </span>
 
 
                 <input
-                    id="readerCurrentPage"
-                    class="reader-page-input"
-                    type="number"
-                    min="1"
-                    value="1"
-                    inputmode="numeric"
-                    aria-label="Current page number"
+                    id="readerSearchInput"
+                    class="reader-search-input"
+                    type="search"
+                    placeholder="Find in this book"
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-label="Find in this book"
                 >
-
-
-                <span class="page-counter-separator">
-                    /
-                </span>
 
 
                 <span
-                    id="readerTotalPages"
-                    class="reader-total-pages"
+                    id="readerSearchResults"
+                    class="reader-search-results"
+                    aria-live="polite"
                 >
-                    0
+                    0 / 0
                 </span>
 
+
+                <button
+                    type="button"
+                    class="reader-search-button"
+                    data-action="search-previous"
+                    aria-label="Previous result"
+                    title="Previous result"
+                >
+                    ↑
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-search-button"
+                    data-action="search-next"
+                    aria-label="Next result"
+                    title="Next result"
+                >
+                    ↓
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-search-button"
+                    data-action="search-clear"
+                    aria-label="Clear search"
+                    title="Clear"
+                >
+                    ×
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-search-button"
+                    data-action="close-search"
+                    aria-label="Close search"
+                    title="Close search"
+                >
+                    ✕
+                </button>
+
             </div>
-
-
-            <button
-                type="button"
-                id="nextPageButton"
-                class="reader-control-button page-navigation-button"
-                data-action="next-page"
-                aria-label="Next page"
-            >
-                Next Page →
-            </button>
 
         </div>
 
 
 
-        <!-- =============================================
-             BOOK / ZOOM CONTROLS
-        ============================================== -->
+        <!-- =================================================
+             READER TOP TOOLBAR
+             
+             Download / Print / Settings / Fullscreen
+        ================================================= -->
 
         <div
-            class="reader-book-controls-row"
-            aria-label="Book and zoom controls"
+            id="readerToolbar"
+            class="reader-toolbar"
         >
 
-            <button
-                type="button"
-                id="previousBookButton"
-                class="reader-control-button book-navigation-button"
-                data-action="previous-book"
-                aria-label="Previous book"
+            <div
+                class="reader-toolbar-left"
+                role="toolbar"
+                aria-label="Reader tools"
             >
-                ← Previous Book
-            </button>
 
+                <button
+                    type="button"
+                    class="reader-tool-button"
+                    data-action="download-book"
+                    aria-label="Download book"
+                    title="Download book"
+                >
+                    <span aria-hidden="true">⇩</span>
+                    <span>Download</span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-tool-button"
+                    data-action="print-book"
+                    aria-label="Print book"
+                    title="Print book"
+                >
+                    <span aria-hidden="true">🖨</span>
+                    <span>Print</span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-tool-button"
+                    data-action="settings"
+                    aria-label="Settings"
+                    title="Settings"
+                >
+                    <span aria-hidden="true">⚙</span>
+                    <span>Settings</span>
+                </button>
+
+            </div>
 
 
             <div
-                class="reader-zoom-controls"
-                aria-label="Zoom controls"
+                class="reader-toolbar-right"
+                role="toolbar"
+                aria-label="Reader display tools"
             >
 
                 <button
                     type="button"
-                    id="zoomOutButton"
-                    class="reader-zoom-button"
-                    data-action="zoom-out"
-                    aria-label="Zoom out"
-                    title="Zoom out"
+                    class="reader-tool-button"
+                    data-action="fit-width"
+                    aria-label="Fit page width"
+                    title="Fit width"
                 >
-                    🔍 −
+                    Fit Width
                 </button>
 
 
                 <button
                     type="button"
-                    id="zoomResetButton"
-                    class="reader-zoom-level"
-                    data-action="zoom-reset"
-                    aria-label="Reset zoom"
-                    title="Reset zoom"
+                    class="reader-tool-button"
+                    data-action="fit-page"
+                    aria-label="Fit page"
+                    title="Fit page"
                 >
-                    <span id="readerZoomValue">
-                        100%
-                    </span>
+                    Fit Page
                 </button>
 
 
                 <button
                     type="button"
-                    id="zoomInButton"
-                    class="reader-zoom-button"
-                    data-action="zoom-in"
-                    aria-label="Zoom in"
-                    title="Zoom in"
+                    class="reader-tool-button"
+                    data-action="fullscreen"
+                    aria-label="Fullscreen"
+                    title="Fullscreen"
                 >
-                    + 🔎
+                    <span aria-hidden="true">⛶</span>
+                    <span>Fullscreen</span>
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SETTINGS PANEL
+        ================================================= -->
+
+        <aside
+            id="readerSettingsPanel"
+            class="reader-panel reader-settings-panel"
+            aria-hidden="true"
+            aria-label="Reader settings"
+        >
+
+            <div class="reader-panel-header">
+
+                <h2>
+                    Reader Settings
+                </h2>
+
+
+                <button
+                    type="button"
+                    class="reader-panel-close"
+                    data-action="close-settings"
+                    aria-label="Close settings"
+                >
+                    ×
                 </button>
 
             </div>
 
 
+            <div class="reader-panel-content">
 
-            <button
-                type="button"
-                id="nextBookButton"
-                class="reader-control-button book-navigation-button"
-                data-action="next-book"
-                aria-label="Next book"
-            >
-                Next Book →
-            </button>
-
-        </div>
-
-
-
-        <!-- =============================================
-             SOCIAL ACTIONS
-        ============================================== -->
-
-        <div
-            class="reader-social-row"
-            aria-label="Book actions"
-        >
-
-            <button
-                type="button"
-                id="likeBookButton"
-                class="reader-social-button"
-                data-action="like-book"
-                aria-label="Like this book"
-            >
-                <span
-                    class="reader-social-icon"
-                    aria-hidden="true"
-                >
-                    ♡
-                </span>
-
-                <span>
-                    Like
-                </span>
-            </button>
-
-
-            <button
-                type="button"
-                id="shareBookButton"
-                class="reader-social-button"
-                data-action="share-book"
-                aria-label="Share this book"
-            >
-                <span
-                    class="reader-social-icon"
-                    aria-hidden="true"
-                >
-                    ↗
-                </span>
-
-                <span>
-                    Share
-                </span>
-            </button>
-
-
-            <button
-                type="button"
-                id="commentBookButton"
-                class="reader-social-button"
-                data-action="comment-book"
-                aria-label="Comment on this book"
-            >
-                <span
-                    class="reader-social-icon"
-                    aria-hidden="true"
-                >
-                    💬
-                </span>
-
-                <span>
-                    Comment
-                </span>
-            </button>
-
-        </div>
-
-    </footer>
-    <!-- =================================================
-         READER BOTTOM CONTROLS
-    ================================================= -->
-
-    <footer
-        id="readerFooter"
-        class="reader-footer"
-    >
-
-
-        <!-- =============================================
-             PAGE NAVIGATION
-        ============================================== -->
-
-        <div
-            class="reader-navigation-row"
-            aria-label="Page navigation"
-        >
-
-            <button
-                type="button"
-                id="previousPageButton"
-                class="reader-control-button page-navigation-button"
-                data-action="previous-page"
-                aria-label="Previous page"
-            >
-                ← Previous Page
-            </button>
-
-
-            <div
-                id="readerPageCounter"
-                class="reader-page-counter"
-                aria-label="Current page"
-            >
-
-                <span class="page-counter-label">
-                    Page
-                </span>
-
-
-                <input
-                    id="readerCurrentPage"
-                    class="reader-page-input"
-                    type="number"
-                    min="1"
-                    value="1"
-                    inputmode="numeric"
-                    aria-label="Current page number"
-                >
-
-
-                <span class="page-counter-separator">
-                    /
-                </span>
-
-
-                <span
-                    id="readerTotalPages"
-                    class="reader-total-pages"
-                >
-                    0
-                </span>
-
-            </div>
-
-
-            <button
-                type="button"
-                id="nextPageButton"
-                class="reader-control-button page-navigation-button"
-                data-action="next-page"
-                aria-label="Next page"
-            >
-                Next Page →
-            </button>
-
-        </div>
-
-
-
-        <!-- =============================================
-             BOOK / ZOOM CONTROLS
-        ============================================== -->
-
-        <div
-            class="reader-book-controls-row"
-            aria-label="Book and zoom controls"
-        >
-
-            <button
-                type="button"
-                id="previousBookButton"
-                class="reader-control-button book-navigation-button"
-                data-action="previous-book"
-                aria-label="Previous book"
-            >
-                ← Previous Book
-            </button>
-
-
-
-            <div
-                class="reader-zoom-controls"
-                aria-label="Zoom controls"
-            >
-
-                <button
-                    type="button"
-                    id="zoomOutButton"
-                    class="reader-zoom-button"
-                    data-action="zoom-out"
-                    aria-label="Zoom out"
-                    title="Zoom out"
-                >
-                    🔍 −
-                </button>
-
-
-                <button
-                    type="button"
-                    id="zoomResetButton"
-                    class="reader-zoom-level"
-                    data-action="zoom-reset"
-                    aria-label="Reset zoom"
-                    title="Reset zoom"
-                >
-                    <span id="readerZoomValue">
-                        100%
-                    </span>
-                </button>
-
-
-                <button
-                    type="button"
-                    id="zoomInButton"
-                    class="reader-zoom-button"
-                    data-action="zoom-in"
-                    aria-label="Zoom in"
-                    title="Zoom in"
-                >
-                    + 🔎
-                </button>
-
-            </div>
-
-
-
-            <button
-                type="button"
-                id="nextBookButton"
-                class="reader-control-button book-navigation-button"
-                data-action="next-book"
-                aria-label="Next book"
-            >
-                Next Book →
-            </button>
-
-        </div>
-
-
-
-        <!-- =============================================
-             SOCIAL ACTIONS
-        ============================================== -->
-
-        <div
-            class="reader-social-row"
-            aria-label="Book actions"
-        >
-
-            <button
-                type="button"
-                id="likeBookButton"
-                class="reader-social-button"
-                data-action="like-book"
-                aria-label="Like this book"
-            >
-                <span
-                    class="reader-social-icon"
-                    aria-hidden="true"
-                >
-                    ♡
-                </span>
-
-                <span>
-                    Like
-                </span>
-            </button>
-
-
-            <button
-                type="button"
-                id="shareBookButton"
-                class="reader-social-button"
-                data-action="share-book"
-                aria-label="Share this book"
-            >
-                <span
-                    class="reader-social-icon"
-                    aria-hidden="true"
-                >
-                    ↗
-                </span>
-
-                <span>
-                    Share
-                </span>
-            </button>
-
-
-            <button
-                type="button"
-                id="commentBookButton"
-                class="reader-social-button"
-                data-action="comment-book"
-                aria-label="Comment on this book"
-            >
-                <span
-                    class="reader-social-icon"
-                    aria-hidden="true"
-                >
-                    💬
-                </span>
-
-                <span>
-                    Comment
-                </span>
-            </button>
-
-        </div>
-
-    </footer>
-    <!-- =================================================
-         BOOK INFORMATION PANEL
-    ================================================= -->
-
-    <aside
-        id="readerBookInfoPanel"
-        class="reader-panel reader-book-info-panel"
-        aria-hidden="true"
-        aria-label="Book information"
-    >
-
-        <div class="reader-panel-header">
-
-            <h2>
-                Book Information
-            </h2>
-
-            <button
-                type="button"
-                class="reader-panel-close"
-                data-action="close-book-info"
-                aria-label="Close book information"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="reader-panel-content">
-
-            <div class="reader-book-info-cover">
-
-                <div
-                    id="readerBookCover"
-                    class="reader-book-cover-placeholder"
-                >
-                    Chishti Library
+
+                <!-- Page mode -->
+
+                <div class="reader-setting">
+
+                    <label
+                        for="readerPageMode"
+                    >
+                        Page Mode
+                    </label>
+
+
+                    <select
+                        id="readerPageMode"
+                        name="pageMode"
+                    >
+
+                        <option value="two-page">
+                            Two Pages
+                        </option>
+
+                        <option value="single-page">
+                            Single Page
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Page fit -->
+
+                <div class="reader-setting">
+
+                    <label
+                        for="readerFitMode"
+                    >
+                        Page Fit
+                    </label>
+
+
+                    <select
+                        id="readerFitMode"
+                        name="fitMode"
+                    >
+
+                        <option value="width">
+                            Fit Width
+                        </option>
+
+                        <option value="page">
+                            Fit Page
+                        </option>
+
+                        <option value="actual">
+                            Actual Size
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- Watermark -->
+
+                <div class="reader-setting-row">
+
+                    <div>
+
+                        <strong>
+                            Chishti Library Watermark
+                        </strong>
+
+                        <small>
+                            Show watermark on book pages
+                        </small>
+
+                    </div>
+
+
+                    <label class="reader-switch">
+
+                        <input
+                            id="readerWatermark"
+                            type="checkbox"
+                            checked
+                        >
+
+                        <span
+                            class="reader-switch-slider"
+                        ></span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- Page numbers -->
+
+                <div class="reader-setting-row">
+
+                    <div>
+
+                        <strong>
+                            Page Numbers
+                        </strong>
+
+                        <small>
+                            Show page numbers
+                        </small>
+
+                    </div>
+
+
+                    <label class="reader-switch">
+
+                        <input
+                            id="readerShowPageNumbers"
+                            type="checkbox"
+                            checked
+                        >
+
+                        <span
+                            class="reader-switch-slider"
+                        ></span>
+
+                    </label>
+
+                </div>
+
+
+
+                <!-- Remember position -->
+
+                <div class="reader-setting-row">
+
+                    <div>
+
+                        <strong>
+                            Remember Reading Position
+                        </strong>
+
+                        <small>
+                            Continue from your last page
+                        </small>
+
+                    </div>
+
+
+                    <label class="reader-switch">
+
+                        <input
+                            id="readerRememberPosition"
+                            type="checkbox"
+                            checked
+                        >
+
+                        <span
+                            class="reader-switch-slider"
+                        ></span>
+
+                    </label>
+
                 </div>
 
             </div>
 
+        </aside>
+        <!-- =================================================
+             BOOK INFORMATION PANEL
+        ================================================= -->
 
-            <div class="reader-book-info-details">
+        <aside
+            id="readerBookInfoPanel"
+            class="reader-panel reader-book-info-panel"
+            aria-hidden="true"
+            aria-label="Book information"
+        >
 
-                <h3
-                    id="readerInfoBookTitle"
+            <div class="reader-panel-header">
+
+                <h2>
+                    Book Information
+                </h2>
+
+                <button
+                    type="button"
+                    class="reader-panel-close"
+                    data-action="close-book-info"
+                    aria-label="Close book information"
                 >
-                    Book Title
-                </h3>
-
-
-                <p>
-                    <strong>
-                        Author:
-                    </strong>
-
-                    <span id="readerInfoAuthor">
-                        —
-                    </span>
-                </p>
-
-
-                <p>
-                    <strong>
-                        Pages:
-                    </strong>
-
-                    <span id="readerInfoPages">
-                        —
-                    </span>
-                </p>
-
-
-                <p>
-                    <strong>
-                        Progress:
-                    </strong>
-
-                    <span id="readerInfoProgress">
-                        0%
-                    </span>
-                </p>
+                    ×
+                </button>
 
             </div>
 
-        </div>
 
-    </aside>
+            <div class="reader-panel-content">
 
-
-
-    <!-- =================================================
-         COMMENTS PANEL
-    ================================================= -->
-
-    <aside
-        id="readerCommentsPanel"
-        class="reader-panel reader-comments-panel"
-        aria-hidden="true"
-        aria-label="Comments"
-    >
-
-        <div class="reader-panel-header">
-
-            <h2>
-                Comments
-            </h2>
-
-
-            <button
-                type="button"
-                class="reader-panel-close"
-                data-action="close-comments"
-                aria-label="Close comments"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div class="reader-panel-content">
-
-            <div
-                id="readerCommentsList"
-                class="reader-comments-list"
-            >
-
-                <div class="reader-empty-state">
+                <div class="reader-book-info-cover">
 
                     <div
-                        class="reader-empty-icon"
-                        aria-hidden="true"
+                        id="readerBookCover"
+                        class="reader-book-cover"
+                    ></div>
+
+                </div>
+
+
+                <div class="reader-book-info-details">
+
+                    <h3
+                        id="readerInfoTitle"
                     >
-                        💬
-                    </div>
+                        Book Title
+                    </h3>
+
 
                     <p>
-                        No comments yet.
+
+                        <strong>
+                            Author:
+                        </strong>
+
+                        <span
+                            id="readerInfoAuthor"
+                        >
+                            —
+                        </span>
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Pages:
+                        </strong>
+
+                        <span
+                            id="readerInfoTotalPages"
+                        >
+                            —
+                        </span>
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Current Page:
+                        </strong>
+
+                        <span
+                            id="readerInfoCurrentPage"
+                        >
+                            1
+                        </span>
+
                     </p>
 
                 </div>
 
             </div>
 
-
-            <form
-                id="readerCommentForm"
-                class="reader-comment-form"
-            >
-
-                <label
-                    for="readerCommentInput"
-                    class="sr-only"
-                >
-                    Write a comment
-                </label>
+        </aside>
 
 
-                <textarea
-                    id="readerCommentInput"
-                    name="comment"
-                    rows="4"
-                    maxlength="1000"
-                    placeholder="Write a comment..."
-                ></textarea>
+
+        <!-- =================================================
+             BOOKMARKS PANEL
+        ================================================= -->
+
+        <aside
+            id="readerBookmarksPanel"
+            class="reader-panel reader-bookmarks-panel"
+            aria-hidden="true"
+            aria-label="Bookmarks"
+        >
+
+            <div class="reader-panel-header">
+
+                <h2>
+                    Bookmarks
+                </h2>
 
 
                 <button
-                    type="submit"
-                    class="reader-primary-button"
+                    type="button"
+                    class="reader-panel-close"
+                    data-action="close-bookmarks"
+                    aria-label="Close bookmarks"
                 >
-                    Post Comment
+                    ×
                 </button>
 
-            </form>
-
-        </div>
-
-    </aside>
+            </div>
 
 
-
-    <!-- =================================================
-         SHARE PANEL
-    ================================================= -->
-
-    <aside
-        id="readerSharePanel"
-        class="reader-panel reader-share-panel"
-        aria-hidden="true"
-        aria-label="Share book"
-    >
-
-        <div class="reader-panel-header">
-
-            <h2>
-                Share
-            </h2>
-
-
-            <button
-                type="button"
-                class="reader-panel-close"
-                data-action="close-share"
-                aria-label="Close share panel"
+            <div
+                id="readerBookmarksList"
+                class="reader-bookmarks-list"
             >
-                ×
-            </button>
 
-        </div>
+                <div
+                    id="readerNoBookmarks"
+                    class="reader-empty-state"
+                >
+
+                    <div
+                        class="reader-empty-icon"
+                        aria-hidden="true"
+                    >
+                        ☆
+                    </div>
+
+                    <p>
+                        No bookmarks yet.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
 
 
-        <div class="reader-panel-content">
 
-            <p class="reader-share-text">
-                Share this book from Chishti Library.
-            </p>
+        <!-- =================================================
+             COMMENTS PANEL
+        ================================================= -->
+
+        <aside
+            id="readerCommentsPanel"
+            class="reader-panel reader-comments-panel"
+            aria-hidden="true"
+            aria-label="Comments"
+        >
+
+            <div class="reader-panel-header">
+
+                <h2>
+                    Comments
+                </h2>
 
 
-            <div class="reader-share-actions">
+                <button
+                    type="button"
+                    class="reader-panel-close"
+                    data-action="close-comments"
+                    aria-label="Close comments"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="reader-comments-content">
+
+                <div
+                    id="readerCommentsList"
+                    class="reader-comments-list"
+                ></div>
+
+
+                <form
+                    id="readerCommentForm"
+                    class="reader-comment-form"
+                >
+
+                    <label
+                        for="readerCommentInput"
+                        class="sr-only"
+                    >
+                        Write a comment
+                    </label>
+
+
+                    <textarea
+                        id="readerCommentInput"
+                        name="comment"
+                        rows="4"
+                        maxlength="1000"
+                        placeholder="Write a comment..."
+                    ></textarea>
+
+
+                    <button
+                        type="submit"
+                        class="reader-primary-button"
+                    >
+                        Post Comment
+                    </button>
+
+                </form>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             SHARE PANEL
+        ================================================= -->
+
+        <aside
+            id="readerSharePanel"
+            class="reader-panel reader-share-panel"
+            aria-hidden="true"
+            aria-label="Share book"
+        >
+
+            <div class="reader-panel-header">
+
+                <h2>
+                    Share Book
+                </h2>
+
+
+                <button
+                    type="button"
+                    class="reader-panel-close"
+                    data-action="close-share"
+                    aria-label="Close share"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="reader-share-content">
+
+                <p>
+                    Share this book from Chishti Library.
+                </p>
+
+
+                <button
+                    type="button"
+                    class="reader-share-option"
+                    data-share="native"
+                >
+                    ↗ Share
+                </button>
+
 
                 <button
                     type="button"
@@ -989,108 +1038,155 @@
                     Copy Link
                 </button>
 
-
-                <button
-                    type="button"
-                    class="reader-share-option"
-                    data-share="native"
-                >
-                    Share
-                </button>
-
             </div>
 
-        </div>
-
-    </aside>
+        </aside>
 
 
 
-    <!-- =================================================
-         BOOKMARK PANEL
-    ================================================= -->
-
-    <aside
-        id="readerBookmarksPanel"
-        class="reader-panel reader-bookmarks-panel"
-        aria-hidden="true"
-        aria-label="Bookmarks"
-    >
-
-        <div class="reader-panel-header">
-
-            <h2>
-                Bookmarks
-            </h2>
-
-
-            <button
-                type="button"
-                class="reader-panel-close"
-                data-action="close-bookmarks"
-                aria-label="Close bookmarks"
-            >
-                ×
-            </button>
-
-        </div>
-
+        <!-- =================================================
+             SHORTCUTS MODAL
+        ================================================= -->
 
         <div
-            id="readerBookmarksList"
-            class="reader-panel-content reader-bookmarks-list"
+            id="readerShortcutsModal"
+            class="reader-modal"
+            aria-hidden="true"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="readerShortcutsTitle"
         >
 
-            <div class="reader-empty-state">
+            <div class="reader-modal-box">
 
-                <div
-                    class="reader-empty-icon"
-                    aria-hidden="true"
-                >
-                    ☆
+                <div class="reader-modal-header">
+
+                    <h2
+                        id="readerShortcutsTitle"
+                    >
+                        Keyboard Shortcuts
+                    </h2>
+
+
+                    <button
+                        type="button"
+                        class="reader-modal-close"
+                        data-action="close-modal"
+                        aria-label="Close"
+                    >
+                        ×
+                    </button>
+
                 </div>
 
-                <p>
-                    No bookmarks yet.
-                </p>
+
+                <div class="reader-shortcuts-list">
+
+                    <div class="reader-shortcut-row">
+
+                        <span>
+                            Search
+                        </span>
+
+                        <kbd>
+                            Ctrl + F
+                        </kbd>
+
+                    </div>
+
+
+                    <div class="reader-shortcut-row">
+
+                        <span>
+                            Previous Page
+                        </span>
+
+                        <kbd>
+                            ←
+                        </kbd>
+
+                    </div>
+
+
+                    <div class="reader-shortcut-row">
+
+                        <span>
+                            Next Page
+                        </span>
+
+                        <kbd>
+                            →
+                        </kbd>
+
+                    </div>
+
+
+                    <div class="reader-shortcut-row">
+
+                        <span>
+                            Zoom In
+                        </span>
+
+                        <kbd>
+                            +
+                        </kbd>
+
+                    </div>
+
+
+                    <div class="reader-shortcut-row">
+
+                        <span>
+                            Zoom Out
+                        </span>
+
+                        <kbd>
+                            −
+                        </kbd>
+
+                    </div>
+
+
+                    <div class="reader-shortcut-row">
+
+                        <span>
+                            Close
+                        </span>
+
+                        <kbd>
+                            Esc
+                        </kbd>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
+        <!-- =================================================
+             READER SIDE NAVIGATION
+        ================================================= -->
 
-    </aside>
+        <aside
+            id="readerNavigationPanel"
+            class="reader-navigation-panel"
+            aria-hidden="true"
+            aria-label="Book navigation"
+        >
 
+            <div class="reader-panel-header">
 
-
-    <!-- =================================================
-         SHORTCUTS / HELP MODAL
-    ================================================= -->
-
-    <div
-        id="readerShortcutsModal"
-        class="reader-modal"
-        aria-hidden="true"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="readerShortcutsTitle"
-    >
-
-        <div class="reader-modal-box">
-
-            <div class="reader-modal-header">
-
-                <h2
-                    id="readerShortcutsTitle"
-                >
-                    Keyboard Shortcuts
+                <h2>
+                    Book Navigation
                 </h2>
 
 
                 <button
                     type="button"
-                    class="reader-modal-close"
-                    data-action="close-modal"
-                    aria-label="Close"
+                    class="reader-panel-close"
+                    data-action="close-navigation"
+                    aria-label="Close navigation"
                 >
                     ×
                 </button>
@@ -1098,82 +1194,474 @@
             </div>
 
 
-            <div class="reader-shortcuts-list">
+            <div class="reader-navigation-content">
 
-                <div class="reader-shortcut-row">
+                <button
+                    type="button"
+                    class="reader-navigation-item"
+                    data-action="toggle-contents"
+                >
+                    <span aria-hidden="true">☰</span>
+                    <span>Contents</span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-navigation-item"
+                    data-action="toggle-bookmarks"
+                >
+                    <span aria-hidden="true">☆</span>
+                    <span>Bookmarks</span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-navigation-item"
+                    data-action="toggle-book-info"
+                >
+                    <span aria-hidden="true">ⓘ</span>
+                    <span>Book Information</span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="reader-navigation-item"
+                    data-action="show-shortcuts"
+                >
+                    <span aria-hidden="true">⌨</span>
+                    <span>Keyboard Shortcuts</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             READER CONTENTS PANEL
+        ================================================= -->
+
+        <aside
+            id="readerContentsPanel"
+            class="reader-panel reader-contents-panel"
+            aria-hidden="true"
+            aria-label="Table of contents"
+        >
+
+            <div class="reader-panel-header">
+
+                <h2>
+                    Contents
+                </h2>
+
+
+                <button
+                    type="button"
+                    class="reader-panel-close"
+                    data-action="close-contents"
+                    aria-label="Close contents"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <nav
+                id="readerContentsList"
+                class="reader-contents-list"
+                aria-label="Table of contents"
+            >
+
+                <!--
+                    Contents items are inserted by reader.js.
+                -->
+
+            </nav>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             READER THUMBNAILS
+        ================================================= -->
+
+        <aside
+            id="readerThumbnailsPanel"
+            class="reader-panel reader-thumbnails-panel"
+            aria-hidden="true"
+            aria-label="Page thumbnails"
+        >
+
+            <div class="reader-panel-header">
+
+                <h2>
+                    Pages
+                </h2>
+
+
+                <button
+                    type="button"
+                    class="reader-panel-close"
+                    data-action="close-thumbnails"
+                    aria-label="Close thumbnails"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                id="readerThumbnailsList"
+                class="reader-thumbnails-list"
+            ></div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             READER BOTTOM CONTROLS
+             
+             Exact requested layout:
+             
+             ← Previous Page
+             Page 12 / 240
+             Next Page →
+             
+             ← Previous Book
+             Zoom − 100% +
+             Next Book →
+             
+             Like / Share / Comment
+        ================================================= -->
+
+        <footer
+            id="readerFooter"
+            class="reader-footer"
+        >
+
+
+            <!-- =============================================
+                 PAGE NAVIGATION ROW
+            ============================================== -->
+
+            <div
+                class="reader-page-navigation"
+                role="navigation"
+                aria-label="Page navigation"
+            >
+
+                <button
+                    type="button"
+                    id="previousPageButton"
+                    class="reader-page-button"
+                    data-action="previous-page"
+                    aria-label="Previous page"
+                >
+                    ← Previous Page
+                </button>
+
+
+                <div
+                    class="reader-page-counter"
+                    aria-label="Current page"
+                >
 
                     <span>
-                        Previous page
+                        Page
                     </span>
 
-                    <kbd>
-                        ←
-                    </kbd>
+
+                    <input
+                        id="readerPageInput"
+                        class="reader-page-input"
+                        type="number"
+                        min="1"
+                        value="1"
+                        inputmode="numeric"
+                        aria-label="Page number"
+                    >
+
+
+                    <span>
+                        /
+                    </span>
+
+
+                    <span
+                        id="readerTotalPages"
+                        class="reader-total-pages"
+                    >
+                        0
+                    </span>
 
                 </div>
 
 
-                <div class="reader-shortcut-row">
+                <button
+                    type="button"
+                    id="nextPageButton"
+                    class="reader-page-button"
+                    data-action="next-page"
+                    aria-label="Next page"
+                >
+                    Next Page →
+                </button>
 
-                    <span>
-                        Next page
-                    </span>
+            </div>
 
-                    <kbd>
-                        →
-                    </kbd>
+
+
+            <!-- =============================================
+                 BOOK / ZOOM NAVIGATION ROW
+            ============================================== -->
+
+            <div
+                class="reader-book-navigation"
+                role="toolbar"
+                aria-label="Book and zoom controls"
+            >
+
+                <button
+                    type="button"
+                    id="previousBookButton"
+                    class="reader-book-button"
+                    data-action="previous-book"
+                    aria-label="Previous book"
+                >
+                    ← Previous Book
+                </button>
+
+
+
+                <div
+                    class="reader-zoom-controls"
+                    aria-label="Zoom controls"
+                >
+
+                    <button
+                        type="button"
+                        id="zoomOutButton"
+                        class="reader-zoom-button"
+                        data-action="zoom-out"
+                        aria-label="Zoom out"
+                        title="Zoom out"
+                    >
+                        🔍 −
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="zoomResetButton"
+                        class="reader-zoom-level"
+                        data-action="zoom-reset"
+                        aria-label="Reset zoom"
+                        title="Reset zoom"
+                    >
+                        100%
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="zoomInButton"
+                        class="reader-zoom-button"
+                        data-action="zoom-in"
+                        aria-label="Zoom in"
+                        title="Zoom in"
+                    >
+                        + 🔎
+                    </button>
 
                 </div>
 
 
-                <div class="reader-shortcut-row">
 
-                    <span>
-                        Search
+                <button
+                    type="button"
+                    id="nextBookButton"
+                    class="reader-book-button"
+                    data-action="next-book"
+                    aria-label="Next book"
+                >
+                    Next Book →
+                </button>
+
+            </div>
+
+
+
+            <!-- =============================================
+                 SOCIAL / BOOK ACTIONS
+            ============================================== -->
+
+            <div
+                class="reader-social-actions"
+                role="toolbar"
+                aria-label="Book actions"
+            >
+
+                <button
+                    type="button"
+                    id="readerLikeButton"
+                    class="reader-social-button"
+                    data-action="like-book"
+                    aria-label="Like this book"
+                >
+                    <span
+                        class="reader-social-icon"
+                        aria-hidden="true"
+                    >
+                        ♡
                     </span>
 
-                    <kbd>
-                        Ctrl + F
-                    </kbd>
+                    <span>
+                        Like
+                    </span>
 
+                </button>
+
+
+                <button
+                    type="button"
+                    id="readerShareButton"
+                    class="reader-social-button"
+                    data-action="share-book"
+                    aria-label="Share this book"
+                >
+                    <span
+                        class="reader-social-icon"
+                        aria-hidden="true"
+                    >
+                        ↗
+                    </span>
+
+                    <span>
+                        Share
+                    </span>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="readerCommentButton"
+                    class="reader-social-button"
+                    data-action="comments"
+                    aria-label="Comment on this book"
+                >
+                    <span
+                        class="reader-social-icon"
+                        aria-hidden="true"
+                    >
+                        💬
+                    </span>
+
+                    <span>
+                        Comment
+                    </span>
+
+                </button>
+
+            </div>
+
+        </footer>
+        <!-- =================================================
+             READER STATUS / TOAST
+             
+             Small notifications only.
+             No loading screen.
+        ================================================= -->
+
+        <div
+            id="readerToast"
+            class="reader-toast"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            aria-hidden="true"
+        >
+
+            <span
+                id="readerToastIcon"
+                class="reader-toast-icon"
+                aria-hidden="true"
+            >
+                ✓
+            </span>
+
+
+            <span
+                id="readerToastMessage"
+                class="reader-toast-message"
+            >
+                Done
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             READER ERROR
+        ================================================= -->
+
+        <div
+            id="readerError"
+            class="reader-error"
+            role="alert"
+            aria-hidden="true"
+        >
+
+            <div class="reader-error-box">
+
+                <div
+                    class="reader-error-icon"
+                    aria-hidden="true"
+                >
+                    !
                 </div>
 
 
-                <div class="reader-shortcut-row">
-
-                    <span>
-                        Close panel
-                    </span>
-
-                    <kbd>
-                        Esc
-                    </kbd>
-
-                </div>
+                <h2>
+                    Unable to Open Book
+                </h2>
 
 
-                <div class="reader-shortcut-row">
-
-                    <span>
-                        Zoom in
-                    </span>
-
-                    <kbd>
-                        +
-                    </kbd>
-
-                </div>
+                <p
+                    id="readerErrorMessage"
+                >
+                    Something went wrong while opening
+                    this book.
+                </p>
 
 
-                <div class="reader-shortcut-row">
+                <div class="reader-error-actions">
 
-                    <span>
-                        Zoom out
-                    </span>
+                    <button
+                        type="button"
+                        class="reader-primary-button"
+                        data-action="retry-book"
+                    >
+                        Try Again
+                    </button>
 
-                    <kbd>
-                        −
-                    </kbd>
+
+                    <button
+                        type="button"
+                        class="reader-secondary-button"
+                        data-action="close-reader"
+                    >
+                        Back to Library
+                    </button>
 
                 </div>
 
@@ -1181,249 +1669,149 @@
 
         </div>
 
-    </div>
-    <!-- =================================================
-         READER TOAST / NOTIFICATIONS
-    ================================================= -->
-
-    <div
-        id="readerToast"
-        class="reader-toast"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        aria-hidden="true"
-    >
-
-        <span
-            id="readerToastIcon"
-            class="reader-toast-icon"
-            aria-hidden="true"
-        >
-            ✓
-        </span>
-
-        <span
-            id="readerToastMessage"
-            class="reader-toast-message"
-        >
-            Done
-        </span>
-
-    </div>
 
 
-
-    <!-- =================================================
-         READER PROGRESS
-    ================================================= -->
-
-    <div
-        id="readerProgress"
-        class="reader-progress"
-        aria-hidden="true"
-    >
+        <!-- =================================================
+             EMPTY BOOK STATE
+        ================================================= -->
 
         <div
-            id="readerProgressFill"
-            class="reader-progress-fill"
-        ></div>
-
-    </div>
-
-
-
-    <!-- =================================================
-         PAGE LOADING / RENDER STATUS
-    ================================================= -->
-
-    <div
-        id="readerRenderStatus"
-        class="reader-render-status"
-        aria-hidden="true"
-    >
-
-        <span
-            id="readerRenderStatusText"
+            id="readerEmpty"
+            class="reader-empty"
+            aria-hidden="true"
         >
-            Rendering pages...
-        </span>
 
-    </div>
+            <div class="reader-empty-box">
 
-
-
-    <!-- =================================================
-         PDF RENDER / PRINT AREA
-         
-         These containers are controlled by reader.js.
-         They stay outside the visible reader controls.
-    ================================================= -->
-
-    <div
-        id="readerPdfPrintArea"
-        class="reader-pdf-print-area"
-        aria-hidden="true"
-    ></div>
+                <div
+                    class="reader-empty-icon"
+                    aria-hidden="true"
+                >
+                    📖
+                </div>
 
 
-
-    <!-- =================================================
-         HIDDEN PDF TEXT SEARCH DATA
-         
-         PDF.js text content will be connected here.
-         Ctrl+F searches the actual text layer.
-    ================================================= -->
-
-    <div
-        id="readerSearchTextLayer"
-        class="reader-search-text-layer"
-        aria-hidden="true"
-    ></div>
+                <h2>
+                    No Book Selected
+                </h2>
 
 
+                <p>
+                    Please select a book from
+                    Chishti Library.
+                </p>
 
-    <!-- =================================================
-         ACCESSIBILITY LIVE REGION
-    ================================================= -->
-
-    <div
-        id="readerLiveRegion"
-        class="sr-only"
-        aria-live="polite"
-        aria-atomic="true"
-    ></div>
-
-
-
-    <!-- =================================================
-         READER KEYBOARD HELP
-    ================================================= -->
-
-    <div
-        id="readerKeyboardHint"
-        class="reader-keyboard-hint"
-        aria-hidden="true"
-    >
-
-        <span>
-            Ctrl + F
-        </span>
-
-        <span>
-            Search
-        </span>
-
-    </div>
-
-
-
-    <!-- =================================================
-         READER ERROR MESSAGE
-    ================================================= -->
-
-    <div
-        id="readerError"
-        class="reader-error"
-        role="alert"
-        aria-hidden="true"
-    >
-
-        <div class="reader-error-box">
-
-            <div
-                class="reader-error-icon"
-                aria-hidden="true"
-            >
-                !
-            </div>
-
-
-            <h2>
-                Unable to open this book
-            </h2>
-
-
-            <p
-                id="readerErrorMessage"
-            >
-                Something went wrong while loading
-                the book.
-            </p>
-
-
-            <div class="reader-error-actions">
 
                 <button
                     type="button"
                     class="reader-primary-button"
-                    data-action="retry-book"
-                >
-                    Try Again
-                </button>
-
-
-                <button
-                    type="button"
-                    class="reader-secondary-button"
                     data-action="close-reader"
                 >
-                    Close Reader
+                    Back to Library
                 </button>
 
             </div>
 
         </div>
 
-    </div>
+
+
+        <!-- =================================================
+             ACCESSIBILITY LIVE REGION
+        ================================================= -->
+
+        <div
+            id="readerLiveRegion"
+            class="reader-visually-hidden"
+            aria-live="polite"
+            aria-atomic="true"
+        ></div>
 
 
 
-    <!-- =================================================
-         NO BOOK MESSAGE
-    ================================================= -->
+        <!-- =================================================
+             PDF PRINT CONTAINER
+             
+             Hidden until print is requested.
+        ================================================= -->
 
-    <div
-        id="readerEmpty"
-        class="reader-empty"
-        aria-hidden="true"
-    >
-
-        <div class="reader-empty-box">
-
-            <div
-                class="reader-empty-icon"
-                aria-hidden="true"
-            >
-                📖
-            </div>
+        <div
+            id="readerPrintArea"
+            class="reader-print-area"
+            aria-hidden="true"
+        ></div>
 
 
-            <h2>
-                No Book Selected
-            </h2>
+
+        <!-- =================================================
+             PDF TEXT SEARCH CONTAINER
+             
+             Reader.js can use the PDF text layer for
+             Ctrl + F searching.
+        ================================================= -->
+
+        <div
+            id="readerTextSearchContainer"
+            class="reader-text-search-container"
+            aria-hidden="true"
+        ></div>
 
 
-            <p>
-                Please select a book from
-                Chishti Library.
-            </p>
+
+        <!-- =================================================
+             BOOK DATA
+             
+             Reader.js may update these values when a book
+             is opened.
+        ================================================= -->
+
+        <div
+            id="readerBookData"
+            class="reader-hidden-data"
+            aria-hidden="true"
+        >
+
+            <span
+                id="readerBookUrl"
+                data-book-url=""
+            ></span>
 
 
-            <button
-                type="button"
-                class="reader-primary-button"
-                data-action="close-reader"
-            >
-                Back to Library
-            </button>
+            <span
+                id="readerBookName"
+                data-book-name=""
+            ></span>
 
         </div>
 
-    </div>
-    <!-- =================================================
-         FINAL READER CLOSE
-    ================================================= -->
+
+
+        <!-- =================================================
+             READER KEYBOARD HINT
+        ================================================= -->
+
+        <div
+            id="readerKeyboardHint"
+            class="reader-keyboard-hint"
+            aria-hidden="true"
+        >
+
+            <span>
+                Ctrl + F
+            </span>
+
+            <span>
+                Search in book
+            </span>
+
+        </div>
+        <!-- =================================================
+             READER END
+        ================================================= -->
+
+    </main>
+    <!-- /#readerMain -->
+
 
 </div>
 <!-- /#chishtilib-reader -->
@@ -1431,30 +1819,18 @@
 
 
 <!-- =====================================================
-     PDF.JS
+     CHISHTI LIBRARY READER JAVASCRIPT
      
-     Agar tum already PDF.js load kar rahe ho to
-     duplicate PDF.js script mat rakhna.
+     PDF.js / worker configuration reader.js mein
+     handle ki jayegi.
 ===================================================== -->
 
 <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs"
-    type="module"
+    src="reader.js"
+    defer
 ></script>
 
 
-
-<!-- =====================================================
-     CHISHTI LIBRARY READER JAVASCRIPT
-===================================================== -->
-
-<script>src="reader.jsdefer</script>
-
-
-
-<!-- =====================================================
-     DOCUMENT CLOSE
-===================================================== -->
-
 </body>
-</html>     
+</html>        
+        
