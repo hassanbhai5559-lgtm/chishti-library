@@ -4103,59 +4103,50 @@ function initializePageControls() {
    PUBLIC API
 ========================================================= */
 
-R.nextPage =
+window.ChishtiReader =
+    window.ChishtiReader || {};
+
+
+window.ChishtiReader.nextPage =
     nextPage;
 
-
-R.previousPage =
+window.ChishtiReader.previousPage =
     previousPage;
 
-
-R.goToPage =
+window.ChishtiReader.goToPage =
     goToPage;
 
-
-R.setCurrentPage =
+window.ChishtiReader.setCurrentPage =
     setCurrentPage;
 
-
-R.getCurrentPage =
+window.ChishtiReader.getCurrentPage =
     getCurrentPage;
 
-
-R.getTotalPages =
+window.ChishtiReader.getTotalPages =
     getTotalPages;
 
-
-R.setZoom =
+window.ChishtiReader.setZoom =
     setZoom;
 
-
-R.zoomIn =
+window.ChishtiReader.zoomIn =
     zoomIn;
 
-
-R.zoomOut =
+window.ChishtiReader.zoomOut =
     zoomOut;
 
-
-R.resetZoom =
+window.ChishtiReader.resetZoom =
     resetZoom;
 
-
-R.setFitMode =
+window.ChishtiReader.setFitMode =
     setFitMode;
 
-
-R.renderReaderPages =
+window.ChishtiReader.renderReaderPages =
     renderReaderPages;
 
-
-R.updatePageUI =
+window.ChishtiReader.updatePageUI =
     updatePageUI;
 
-
-R.updatePageCounter =
+window.ChishtiReader.updatePageCounter =
     updatePageCounter;
 
 
@@ -4165,6 +4156,7 @@ R.updatePageCounter =
 
 console.log(
     "Chishti Reader — Part 4/9 loaded."
+);
 );
 /* =========================================================
    CHISHTI READER
