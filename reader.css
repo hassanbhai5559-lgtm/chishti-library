@@ -720,3 +720,71 @@ body {
         scroll-behavior: auto !important;
     }
 }
+/* ================================
+   MOBILE READER CONTROLS FIX
+   ================================ */
+
+.reader-controls,
+.controls,
+.pdf-controls,
+.toolbar {
+    position: fixed !important;
+    left: 50% !important;
+    bottom: 12px !important;
+    transform: translateX(-50%) !important;
+
+    z-index: 99999 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+
+    width: auto !important;
+    max-width: calc(100vw - 20px) !important;
+
+    padding: 8px !important;
+
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Buttons */
+.reader-controls button,
+.controls button,
+.pdf-controls button,
+.toolbar button {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    min-width: 42px !important;
+    min-height: 42px !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    cursor: pointer !important;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .reader-controls,
+    .controls,
+    .pdf-controls,
+    .toolbar {
+        bottom: 10px !important;
+        gap: 5px !important;
+        padding: 6px !important;
+    }
+
+    .reader-controls button,
+    .controls button,
+    .pdf-controls button,
+    .toolbar button {
+        min-width: 40px !important;
+        min-height: 40px !important;
+        font-size: 16px !important;
+    }
+}
