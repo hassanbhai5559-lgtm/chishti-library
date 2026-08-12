@@ -1,13 +1,8 @@
 /* =========================================================
    CHISHTI READER
    reader.js
-   Fixed PDF Reader for ChishtiLibrary.com
-   ========================================================= */
-
-
-/* =========================================================
-   PDF.JS
-   ========================================================= */
+   CLEAN FINAL VERSION
+========================================================= */
 
 import * as pdfjsLib from
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
@@ -17,117 +12,67 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
 
 /* =========================================================
-   GET BOOK URL
-   Supports:
+   GET BOOK FROM URL
+========================================================= */
 
-   reader.html?book=books/my-book.pdf
+const params = new URLSearchParams(window.location.search);
 
-   reader.html?book=my-book.pdf
-
-   ========================================================= */
-
-const readerParams = new URLSearchParams(
-    window.location.search
-);
-
-let PDF_URL = readerParams.get("book");
+const rawBook =
+    params.get("book") ||
+    params.get("pdf") ||
+    "";
 
 
 /* =========================================================
-   NORMALIZE PDF URL
-   ========================================================= */
+   BUILD PDF URL
+========================================================= */
 
-function normalizePDFUrl(value) {
+function getPDFURL() {
 
-    if (!value) {
+    if (!rawBook) {
         return "";
     }
 
-    let url = value.trim();
-
     try {
-        url = decodeURIComponent(url);
+
+        // URLSearchParams already decodes query parameters
+        const decoded = decodeURIComponent(rawBook);
+
+        // Remove starting slash
+        const cleanPath =
+            decoded.replace(/^\/+/, "");
+
+        // Resolve from website root
+        const baseURL =
+            new URL("./", window.location.href);
+
+        const pdfURL =
+            new URL(
+                cleanPath,
+                baseURL
+            );
+
+        return pdfURL.href;
+
     } catch (error) {
-        console.warn(
-            "URL decode warning:",
+
+        console.error(
+            "PDF URL creation failed:",
             error
         );
+
+        return "";
     }
-
-
-    /*
-     * Remove accidental quotes
-     */
-
-    url = url.replace(
-        /^["']|["']$/g,
-        ""
-    );
-
-
-    /*
-     * If image extension accidentally comes
-     * from the book data, convert it to PDF.
-     */
-
-    url = url.replace(
-        /\.(png|jpg|jpeg)$/i,
-        ".pdf"
-    );
-
-
-    /*
-     * Full external URL
-     */
-
-    if (
-        url.startsWith("http://") ||
-        url.startsWith("https://")
-    ) {
-
-        return url;
-    }
-
-
-    /*
-     * Absolute website path
-     */
-
-    if (url.startsWith("/")) {
-
-        return url;
-    }
-
-
-    /*
-     * Already has books/ folder
-     */
-
-    if (
-        url.startsWith("books/")
-    ) {
-
-        return url;
-    }
-
-
-    /*
-     * Relative path such as:
-     *
-     * my-book.pdf
-     *
-     * Automatically become:
-     *
-     * books/my-book.pdf
-     */
-
-    return "books/" + url;
 }
 
 
-PDF_URL =
-    normalizePDFUrl(PDF_URL);
+const PDF_URL = getPDFURL();
 
+
+console.log(
+    "RAW BOOK:",
+    rawBook
+);
 
 console.log(
     "FINAL PDF URL:",
@@ -137,7 +82,7 @@ console.log(
 
 /* =========================================================
    SETTINGS
-   ========================================================= */
+========================================================= */
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3;
@@ -147,131 +92,85 @@ const DEFAULT_ZOOM = 1;
 
 /* =========================================================
    DOM
-   ========================================================= */
+========================================================= */
 
 const bookTitle =
-    document.getElementById(
-        "bookTitle"
-    );
-
-const readerArea =
-    document.getElementById(
-        "readerArea"
-    );
+    document.getElementById("bookTitle");
 
 const bookViewport =
-    document.getElementById(
-        "bookViewport"
-    );
+    document.getElementById("bookViewport");
 
 const pageWrapper =
-    document.getElementById(
-        "pageWrapper"
-    );
+    document.getElementById("pageWrapper");
 
 const pdfCanvas =
-    document.getElementById(
-        "pdfCanvas"
-    );
+    document.getElementById("pdfCanvas");
 
 const previousPageButton =
-    document.getElementById(
-        "previousPageButton"
-    );
+    document.getElementById("previousPageButton");
 
 const nextPageButton =
-    document.getElementById(
-        "nextPageButton"
-    );
+    document.getElementById("nextPageButton");
 
 const pageNumberInput =
-    document.getElementById(
-        "pageNumberInput"
-    );
+    document.getElementById("pageNumberInput");
 
 const totalPages =
-    document.getElementById(
-        "totalPages"
-    );
+    document.getElementById("totalPages");
 
 const zoomOutButton =
-    document.getElementById(
-        "zoomOutButton"
-    );
+    document.getElementById("zoomOutButton");
 
 const resetZoomButton =
-    document.getElementById(
-        "resetZoomButton"
-    );
+    document.getElementById("resetZoomButton");
 
 const zoomInButton =
-    document.getElementById(
-        "zoomInButton"
-    );
+    document.getElementById("zoomInButton");
 
 const zoomLevel =
-    document.getElementById(
-        "zoomLevel"
-    );
+    document.getElementById("zoomLevel");
 
 const errorScreen =
-    document.getElementById(
-        "errorScreen"
-    );
+    document.getElementById("errorScreen");
 
 const errorMessage =
-    document.getElementById(
-        "errorMessage"
-    );
+    document.getElementById("errorMessage");
 
 const retryButton =
-    document.getElementById(
-        "retryButton"
-    );
+    document.getElementById("retryButton");
 
 const readerStatus =
-    document.getElementById(
-        "readerStatus"
-    );
+    document.getElementById("readerStatus");
 
 
 /* =========================================================
    CANVAS
-   ========================================================= */
+========================================================= */
 
 const context =
     pdfCanvas
-        ? pdfCanvas.getContext(
-            "2d",
-            {
-                alpha: false
-            }
-        )
+        ? pdfCanvas.getContext("2d", {
+            alpha: false
+        })
         : null;
 
 
 /* =========================================================
    STATE
-   ========================================================= */
+========================================================= */
 
 let pdfDocument = null;
-
 let currentPage = 1;
-
 let pageCount = 0;
-
 let zoom = DEFAULT_ZOOM;
 
 let rendering = false;
-
 let pendingPage = null;
-
-let renderRequest = 0;
 
 
 /* =========================================================
    TITLE
-   ========================================================= */
+========================================================= */
 
 function setBookTitle() {
 
@@ -279,8 +178,7 @@ function setBookTitle() {
         return;
     }
 
-
-    if (!PDF_URL) {
+    if (!rawBook) {
 
         bookTitle.textContent =
             "No book selected";
@@ -288,60 +186,26 @@ function setBookTitle() {
         return;
     }
 
-
     try {
 
-        const cleanURL =
-            PDF_URL
-                .split("?")[0]
-                .split("#")[0];
-
-
         const filename =
-            cleanURL
-                .split("/")
-                .pop();
-
-
-        if (!filename) {
-
-            bookTitle.textContent =
-                "Digital Book";
-
-            return;
-        }
-
-
-        const decoded =
             decodeURIComponent(
-                filename
+                rawBook
+                    .split("?")[0]
+                    .split("/")
+                    .pop() || ""
             );
 
-
         const title =
-            decoded
-                .replace(
-                    /\.pdf$/i,
-                    ""
-                )
-                .replace(
-                    /[-_]+/g,
-                    " "
-                );
-
+            filename
+                .replace(/\.pdf$/i, "")
+                .replace(/[-_]+/g, " ")
+                .trim();
 
         bookTitle.textContent =
-            title ||
-            "Digital Book";
+            title || "Digital Book";
 
-
-    } catch (error) {
-
-        console.error(
-            "Title error:",
-            error
-        );
-
+    } catch {
 
         bookTitle.textContent =
             "Digital Book";
@@ -351,21 +215,19 @@ function setBookTitle() {
 
 /* =========================================================
    STATUS
-   ========================================================= */
+========================================================= */
 
 function announce(message) {
 
     if (readerStatus) {
-
-        readerStatus.textContent =
-            message;
+        readerStatus.textContent = message;
     }
 }
 
 
 /* =========================================================
    ERROR
-   ========================================================= */
+========================================================= */
 
 function showError(message) {
 
@@ -374,18 +236,12 @@ function showError(message) {
         message
     );
 
-
     if (errorMessage) {
-
-        errorMessage.textContent =
-            message;
+        errorMessage.textContent = message;
     }
 
-
     if (errorScreen) {
-
-        errorScreen.hidden =
-            false;
+        errorScreen.hidden = false;
     }
 }
 
@@ -393,32 +249,24 @@ function showError(message) {
 function hideError() {
 
     if (errorScreen) {
-
-        errorScreen.hidden =
-            true;
+        errorScreen.hidden = true;
     }
 }
 
 
 /* =========================================================
    UI
-   ========================================================= */
+========================================================= */
 
 function updateUI() {
 
     if (pageNumberInput) {
-
-        pageNumberInput.value =
-            currentPage;
+        pageNumberInput.value = currentPage;
     }
-
 
     if (totalPages) {
-
-        totalPages.textContent =
-            pageCount;
+        totalPages.textContent = pageCount;
     }
-
 
     if (zoomLevel) {
 
@@ -426,14 +274,12 @@ function updateUI() {
             `${Math.round(zoom * 100)}%`;
     }
 
-
     if (previousPageButton) {
 
         previousPageButton.disabled =
             !pdfDocument ||
             currentPage <= 1;
     }
-
 
     if (nextPageButton) {
 
@@ -445,53 +291,45 @@ function updateUI() {
 
 
 /* =========================================================
-   CALCULATE SCALE
-   ========================================================= */
+   SCALE
+========================================================= */
 
 function calculateScale(page) {
 
     if (!bookViewport) {
-
         return zoom;
     }
 
-
-    const viewport =
+    const baseViewport =
         page.getViewport({
             scale: 1
         });
 
-
     const availableWidth =
         Math.max(
             200,
-            bookViewport.clientWidth - 40
+            bookViewport.clientWidth - 30
         );
-
 
     const availableHeight =
         Math.max(
             200,
-            bookViewport.clientHeight - 40
+            bookViewport.clientHeight - 30
         );
-
 
     const widthScale =
         availableWidth /
-        viewport.width;
-
+        baseViewport.width;
 
     const heightScale =
         availableHeight /
-        viewport.height;
-
+        baseViewport.height;
 
     const fitScale =
         Math.min(
             widthScale,
             heightScale
         );
-
 
     return Math.max(
         0.25,
@@ -502,7 +340,7 @@ function calculateScale(page) {
 
 /* =========================================================
    RENDER PAGE
-   ========================================================= */
+========================================================= */
 
 async function renderPage(pageNumber) {
 
@@ -511,10 +349,8 @@ async function renderPage(pageNumber) {
         !pdfCanvas ||
         !context
     ) {
-
         return;
     }
-
 
     pageNumber =
         Math.max(
@@ -526,11 +362,6 @@ async function renderPage(pageNumber) {
         );
 
 
-    /*
-     * If another page is currently rendering,
-     * remember latest requested page.
-     */
-
     if (rendering) {
 
         pendingPage =
@@ -540,26 +371,7 @@ async function renderPage(pageNumber) {
     }
 
 
-    rendering =
-        true;
-
-
-    if (previousPageButton) {
-
-        previousPageButton.disabled =
-            true;
-    }
-
-
-    if (nextPageButton) {
-
-        nextPageButton.disabled =
-            true;
-    }
-
-
-    const requestID =
-        ++renderRequest;
+    rendering = true;
 
 
     try {
@@ -570,30 +382,15 @@ async function renderPage(pageNumber) {
             );
 
 
-        if (
-            requestID !==
-            renderRequest
-        ) {
-
-            return;
-        }
-
-
         const scale =
-            calculateScale(
-                page
-            );
+            calculateScale(page);
 
 
         const viewport =
             page.getViewport({
-                scale: scale
+                scale
             });
 
-
-        /*
-         * High DPI / Retina support
-         */
 
         const pixelRatio =
             Math.min(
@@ -608,7 +405,6 @@ async function renderPage(pageNumber) {
                 pixelRatio
             );
 
-
         pdfCanvas.height =
             Math.floor(
                 viewport.height *
@@ -618,7 +414,6 @@ async function renderPage(pageNumber) {
 
         pdfCanvas.style.width =
             `${viewport.width}px`;
-
 
         pdfCanvas.style.height =
             `${viewport.height}px`;
@@ -647,7 +442,6 @@ async function renderPage(pageNumber) {
         context.fillStyle =
             "#ffffff";
 
-
         context.fillRect(
             0,
             0,
@@ -656,28 +450,12 @@ async function renderPage(pageNumber) {
         );
 
 
-        /*
-         * Render actual PDF
-         */
-
         await page.render({
 
-            canvasContext:
-                context,
-
-            viewport:
-                viewport
+            canvasContext: context,
+            viewport
 
         }).promise;
-
-
-        if (
-            requestID !==
-            renderRequest
-        ) {
-
-            return;
-        }
 
 
         currentPage =
@@ -699,45 +477,30 @@ async function renderPage(pageNumber) {
             error
         );
 
-
         showError(
             "This PDF page could not be rendered."
         );
 
-
     } finally {
 
-        rendering =
-            false;
-
+        rendering = false;
 
         updateUI();
 
 
-        /*
-         * Render newest requested page
-         */
+        if (pendingPage !== null) {
 
-        if (
-            pendingPage !== null
-        ) {
-
-            const nextPage =
+            const next =
                 pendingPage;
 
-
-            pendingPage =
-                null;
+            pendingPage = null;
 
 
             if (
-                nextPage !==
-                currentPage
+                next !== currentPage
             ) {
 
-                renderPage(
-                    nextPage
-                );
+                renderPage(next);
             }
         }
     }
@@ -745,8 +508,8 @@ async function renderPage(pageNumber) {
 
 
 /* =========================================================
-   GO TO PAGE
-   ========================================================= */
+   PAGE NAVIGATION
+========================================================= */
 
 function goToPage(value) {
 
@@ -754,23 +517,15 @@ function goToPage(value) {
         return;
     }
 
-
     let page =
-        Number(value);
+        parseInt(
+            value,
+            10
+        );
 
-
-    if (
-        !Number.isFinite(page)
-    ) {
-
-        page =
-            currentPage;
+    if (!Number.isFinite(page)) {
+        page = currentPage;
     }
-
-
-    page =
-        Math.round(page);
-
 
     page =
         Math.max(
@@ -781,16 +536,9 @@ function goToPage(value) {
             )
         );
 
-
-    renderPage(
-        page
-    );
+    renderPage(page);
 }
 
-
-/* =========================================================
-   PREVIOUS
-   ========================================================= */
 
 function previousPage() {
 
@@ -798,10 +546,8 @@ function previousPage() {
         !pdfDocument ||
         currentPage <= 1
     ) {
-
         return;
     }
-
 
     goToPage(
         currentPage - 1
@@ -809,20 +555,14 @@ function previousPage() {
 }
 
 
-/* =========================================================
-   NEXT
-   ========================================================= */
-
 function nextPage() {
 
     if (
         !pdfDocument ||
         currentPage >= pageCount
     ) {
-
         return;
     }
-
 
     goToPage(
         currentPage + 1
@@ -831,8 +571,8 @@ function nextPage() {
 
 
 /* =========================================================
-   ZOOM IN
-   ========================================================= */
+   ZOOM
+========================================================= */
 
 function zoomIn() {
 
@@ -847,19 +587,13 @@ function zoomIn() {
             )
         );
 
-
     updateUI();
 
-
-    renderPage(
-        currentPage
-    );
+    if (pdfDocument) {
+        renderPage(currentPage);
+    }
 }
 
-
-/* =========================================================
-   ZOOM OUT
-   ========================================================= */
 
 function zoomOut() {
 
@@ -874,52 +608,39 @@ function zoomOut() {
             )
         );
 
-
     updateUI();
 
-
-    renderPage(
-        currentPage
-    );
+    if (pdfDocument) {
+        renderPage(currentPage);
+    }
 }
 
-
-/* =========================================================
-   RESET ZOOM
-   ========================================================= */
 
 function resetZoom() {
 
     zoom =
         DEFAULT_ZOOM;
 
-
     updateUI();
 
-
-    renderPage(
-        currentPage
-    );
+    if (pdfDocument) {
+        renderPage(currentPage);
+    }
 }
 
 
 /* =========================================================
    LOAD PDF
-   ========================================================= */
+========================================================= */
 
 async function loadPDF() {
 
     hideError();
 
-
-    /*
-     * No PDF
-     */
-
     if (!PDF_URL) {
 
         showError(
-            "No PDF was selected. Please open the book using its Read button."
+            "No PDF selected."
         );
 
         return;
@@ -937,42 +658,16 @@ async function loadPDF() {
         );
 
 
-        /*
-         * Resolve relative URL against
-         * current reader.html location.
-         */
-
-        const resolvedURL =
-            new URL(
-                PDF_URL,
-                window.location.href
-            ).href;
-
-
-        console.log(
-            "Resolved PDF URL:",
-            resolvedURL
-        );
-
-
-        /*
-         * PDF.js loading
-         */
-
         const loadingTask =
             pdfjsLib.getDocument({
 
-                url:
-                    resolvedURL,
+                url: PDF_URL,
 
-                disableAutoFetch:
-                    false,
+                disableAutoFetch: false,
 
-                disableStream:
-                    false,
+                disableStream: false,
 
-                rangeChunkSize:
-                    65536
+                rangeChunkSize: 65536
 
             });
 
@@ -981,37 +676,24 @@ async function loadPDF() {
             await loadingTask.promise;
 
 
-        /*
-         * PDF successfully loaded
-         */
-
         pageCount =
             pdfDocument.numPages;
 
+        currentPage = 1;
+        zoom = DEFAULT_ZOOM;
 
-        currentPage =
-            1;
 
-
-        zoom =
-            DEFAULT_ZOOM;
+        console.log(
+            "PDF loaded successfully:",
+            pageCount,
+            "pages"
+        );
 
 
         updateUI();
 
 
-        announce(
-            `Loaded ${pageCount} pages`
-        );
-
-
-        /*
-         * Render first page
-         */
-
-        await renderPage(
-            1
-        );
+        await renderPage(1);
 
 
     } catch (error) {
@@ -1022,19 +704,11 @@ async function loadPDF() {
         );
 
 
-        pdfDocument =
-            null;
-
-
-        pageCount =
-            0;
+        pdfDocument = null;
+        pageCount = 0;
 
 
         updateUI();
-
-
-        let message =
-            "The PDF could not be loaded.";
 
 
         if (
@@ -1042,79 +716,53 @@ async function loadPDF() {
             "MissingPDFException"
         ) {
 
-            message =
-                "PDF file was not found. Check the file name and books/ folder.";
-        }
+            showError(
+                `PDF not found.
 
+Requested file:
+${rawBook}
 
-        else if (
+Final URL:
+${PDF_URL}
+
+Check the exact filename in your books folder.`
+            );
+
+        } else if (
             error?.name ===
             "InvalidPDFException"
         ) {
 
-            message =
-                "The selected file is not a valid PDF.";
+            showError(
+                "The selected file is not a valid PDF."
+            );
+
+        } else {
+
+            showError(
+                "PDF could not be loaded. Check the PDF path and filename."
+            );
         }
-
-
-        else if (
-            error?.name ===
-            "UnexpectedResponseException"
-        ) {
-
-            message =
-                "The server returned an unexpected response for this PDF.";
-        }
-
-
-        else if (
-            error?.name ===
-            "UnknownErrorException"
-        ) {
-
-            message =
-                "The PDF could not be opened. Check the PDF path and GitHub file name.";
-        }
-
-
-        /*
-         * Show actual URL in console,
-         * not in normal UI.
-         */
-
-        console.error(
-            "PDF URL that failed:",
-            PDF_URL
-        );
-
-
-        showError(
-            message
-        );
     }
 }
 
 
 /* =========================================================
    RETRY
-   ========================================================= */
+========================================================= */
 
 if (retryButton) {
 
     retryButton.addEventListener(
         "click",
-        function() {
-
-            loadPDF();
-
-        }
+        loadPDF
     );
 }
 
 
 /* =========================================================
    BUTTONS
-   ========================================================= */
+========================================================= */
 
 if (previousPageButton) {
 
@@ -1130,15 +778,6 @@ if (nextPageButton) {
     nextPageButton.addEventListener(
         "click",
         nextPage
-    );
-}
-
-
-if (zoomInButton) {
-
-    zoomInButton.addEventListener(
-        "click",
-        zoomIn
     );
 }
 
@@ -1161,40 +800,45 @@ if (resetZoomButton) {
 }
 
 
+if (zoomInButton) {
+
+    zoomInButton.addEventListener(
+        "click",
+        zoomIn
+    );
+}
+
+
 /* =========================================================
    PAGE INPUT
-   ========================================================= */
+========================================================= */
 
 if (pageNumberInput) {
 
     pageNumberInput.addEventListener(
         "change",
-        function() {
+        function () {
 
             goToPage(
                 this.value
             );
-
         }
     );
 
 
     pageNumberInput.addEventListener(
         "keydown",
-        function(event) {
+        function (event) {
 
             if (
-                event.key ===
-                "Enter"
+                event.key === "Enter"
             ) {
 
                 event.preventDefault();
 
-
                 goToPage(
                     this.value
                 );
-
 
                 this.blur();
             }
@@ -1205,25 +849,20 @@ if (pageNumberInput) {
 
 /* =========================================================
    KEYBOARD
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
     "keydown",
-    function(event) {
+    function (event) {
 
         const active =
             document.activeElement;
 
-
         const typing =
             active &&
             (
-                active.tagName ===
-                    "INPUT" ||
-
-                active.tagName ===
-                    "TEXTAREA" ||
-
+                active.tagName === "INPUT" ||
+                active.tagName === "TEXTAREA" ||
                 active.isContentEditable
             );
 
@@ -1233,10 +872,7 @@ document.addEventListener(
         }
 
 
-        if (
-            event.key ===
-            "ArrowLeft"
-        ) {
+        if (event.key === "ArrowLeft") {
 
             event.preventDefault();
 
@@ -1246,10 +882,7 @@ document.addEventListener(
         }
 
 
-        if (
-            event.key ===
-            "ArrowRight"
-        ) {
+        if (event.key === "ArrowRight") {
 
             event.preventDefault();
 
@@ -1272,9 +905,7 @@ document.addEventListener(
         }
 
 
-        if (
-            event.key === "-"
-        ) {
+        if (event.key === "-") {
 
             event.preventDefault();
 
@@ -1284,9 +915,7 @@ document.addEventListener(
         }
 
 
-        if (
-            event.key === "0"
-        ) {
+        if (event.key === "0") {
 
             event.preventDefault();
 
@@ -1296,9 +925,7 @@ document.addEventListener(
         }
 
 
-        if (
-            event.key === "Home"
-        ) {
+        if (event.key === "Home") {
 
             event.preventDefault();
 
@@ -1308,9 +935,7 @@ document.addEventListener(
         }
 
 
-        if (
-            event.key === "End"
-        ) {
+        if (event.key === "End") {
 
             event.preventDefault();
 
@@ -1324,28 +949,23 @@ document.addEventListener(
 
 /* =========================================================
    RESIZE
-   ========================================================= */
+========================================================= */
 
-let resizeTimer;
-
+let resizeTimer = null;
 
 window.addEventListener(
     "resize",
-    function() {
+    function () {
 
         clearTimeout(
             resizeTimer
         );
 
-
         resizeTimer =
             setTimeout(
-                function() {
+                function () {
 
-                    if (
-                        pdfDocument &&
-                        !rendering
-                    ) {
+                    if (pdfDocument) {
 
                         renderPage(
                             currentPage
@@ -1361,7 +981,7 @@ window.addEventListener(
 
 /* =========================================================
    START
-   ========================================================= */
+========================================================= */
 
 setBookTitle();
 
