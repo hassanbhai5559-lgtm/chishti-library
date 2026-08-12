@@ -3,7 +3,11 @@
    reader.js
    Simple Fast PDF Reader
    ========================================================= */
+const params = new URLSearchParams(window.location.search);
 
+const PDF_URL = params.get("pdf");
+
+console.log("PDF URL:", PDF_URL);
 
 /* =========================================================
    PDF.JS
