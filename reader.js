@@ -2,15 +2,14 @@
    CHISHTI READER
    reader.js
    CLEAN FINAL VERSION
-   ========================================================= */
+========================================================= */
 
 import * as pdfjsLib from
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 
-
 /* =========================================================
    PDF.JS WORKER
-   ========================================================= */
+========================================================= */
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
@@ -19,14 +18,15 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 /* =========================================================
    GET BOOK FROM URL
    Supports:
+
    reader.html?book=books/my-book.pdf
+   reader.html?book=my-book.pdf
    reader.html?pdf=books/my-book.pdf
-   ========================================================= */
+   reader.html?pdf=my-book.pdf
+========================================================= */
 
 const params =
-    new URLSearchParams(
-        window.location.search
-    );
+    new URLSearchParams(window.location.search);
 
 const rawBook =
     params.get("book") ||
@@ -36,7 +36,7 @@ const rawBook =
 
 /* =========================================================
    BUILD PDF URL
-   ========================================================= */
+========================================================= */
 
 function getPDFURL() {
 
@@ -47,48 +47,76 @@ function getPDFURL() {
     try {
 
         /*
-         * URLSearchParams has already decoded the query
-         * parameter once.
+         * URLSearchParams already decodes the query parameter.
+         */
+
+        let cleanPath =
+            rawBook.trim();
+
+        /*
+         * Convert accidental backslashes.
+         */
+
+        cleanPath =
+            cleanPath.replace(/\\/g, "/");
+
+
+        /*
+         * If a complete URL was supplied,
+         * use it directly.
+         */
+
+        if (
+            cleanPath.startsWith("http://") ||
+            cleanPath.startsWith("https://")
+        ) {
+
+            return new URL(cleanPath).href;
+        }
+
+
+        /*
+         * Remove leading ./ and /.
+         */
+
+        cleanPath =
+            cleanPath.replace(/^\.?\//, "");
+
+
+        /*
+         * If only the filename was supplied,
+         * automatically use the books folder.
          *
          * Example:
+         *
+         * Sbhy Hamdan Ne Rab Sohnay.pdf
+         *
+         * becomes:
          *
          * books/Sbhy Hamdan Ne Rab Sohnay.pdf
          */
 
-        const cleanPath =
-            rawBook
-                .trim()
-                .replace(/^\/+/, "");
+        if (
+            !cleanPath.startsWith("books/")
+        ) {
+
+            cleanPath =
+                `books/${cleanPath}`;
+        }
 
 
         /*
-         * Resolve relative to the current reader.html
-         * directory.
-         *
-         * Example:
-         *
-         * /chishti-library/reader.html
-         *
-         * + books/file.pdf
-         *
-         * becomes:
-         *
-         * /chishti-library/books/file.pdf
+         * Resolve from reader.html directory.
          */
 
         const baseURL =
-            new URL(
-                "./",
-                window.location.href
-            );
-
+            new URL("./", window.location.href);
 
         const pdfURL =
             new URL(
                 cleanPath,
                 baseURL
             );
-
 
         return pdfURL.href;
 
@@ -121,7 +149,7 @@ console.log(
 
 /* =========================================================
    SETTINGS
-   ========================================================= */
+========================================================= */
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 3;
@@ -131,92 +159,60 @@ const DEFAULT_ZOOM = 1;
 
 /* =========================================================
    DOM
-   ========================================================= */
+========================================================= */
 
 const bookTitle =
-    document.getElementById(
-        "bookTitle"
-    );
+    document.getElementById("bookTitle");
 
 const bookViewport =
-    document.getElementById(
-        "bookViewport"
-    );
+    document.getElementById("bookViewport");
 
 const pageWrapper =
-    document.getElementById(
-        "pageWrapper"
-    );
+    document.getElementById("pageWrapper");
 
 const pdfCanvas =
-    document.getElementById(
-        "pdfCanvas"
-    );
+    document.getElementById("pdfCanvas");
 
 const previousPageButton =
-    document.getElementById(
-        "previousPageButton"
-    );
+    document.getElementById("previousPageButton");
 
 const nextPageButton =
-    document.getElementById(
-        "nextPageButton"
-    );
+    document.getElementById("nextPageButton");
 
 const pageNumberInput =
-    document.getElementById(
-        "pageNumberInput"
-    );
+    document.getElementById("pageNumberInput");
 
 const totalPages =
-    document.getElementById(
-        "totalPages"
-    );
+    document.getElementById("totalPages");
 
 const zoomOutButton =
-    document.getElementById(
-        "zoomOutButton"
-    );
+    document.getElementById("zoomOutButton");
 
 const resetZoomButton =
-    document.getElementById(
-        "resetZoomButton"
-    );
+    document.getElementById("resetZoomButton");
 
 const zoomInButton =
-    document.getElementById(
-        "zoomInButton"
-    );
+    document.getElementById("zoomInButton");
 
 const zoomLevel =
-    document.getElementById(
-        "zoomLevel"
-    );
+    document.getElementById("zoomLevel");
 
 const errorScreen =
-    document.getElementById(
-        "errorScreen"
-    );
+    document.getElementById("errorScreen");
 
 const errorMessage =
-    document.getElementById(
-        "errorMessage"
-    );
+    document.getElementById("errorMessage");
 
 const retryButton =
-    document.getElementById(
-        "retryButton"
-    );
+    document.getElementById("retryButton");
 
 const readerStatus =
-    document.getElementById(
-        "readerStatus"
-    );
+    document.getElementById("readerStatus");
 
 
 /* =========================================================
    CANVAS
-   ========================================================= */
+========================================================= */
 
 const context =
     pdfCanvas
@@ -231,7 +227,7 @@ const context =
 
 /* =========================================================
    STATE
-   ========================================================= */
+========================================================= */
 
 let pdfDocument = null;
 
@@ -239,52 +235,20 @@ let currentPage = 1;
 
 let pageCount = 0;
 
-let zoom =
-    DEFAULT_ZOOM;
-
-
-/*
- * Current PDF.js rendering task.
- */
+let zoom = DEFAULT_ZOOM;
 
 let currentRenderTask = null;
 
 
-/*
- * Every render receives a unique ID.
- *
- * This prevents an older asynchronous render
- * from overwriting a newer page request.
- */
-
-let renderRequestId = 0;
-
-
-/*
- * Prevent multiple PDF loading operations
- * from running simultaneously.
- */
-
-let loadingPDF = false;
-
-
-/*
- * Resize debounce timer.
- */
-
-let resizeTimer = null;
-
-
 /* =========================================================
    TITLE
-   ========================================================= */
+========================================================= */
 
 function setBookTitle() {
 
     if (!bookTitle) {
         return;
     }
-
 
     if (!rawBook) {
 
@@ -294,12 +258,7 @@ function setBookTitle() {
         return;
     }
 
-
     try {
-
-        /*
-         * Get filename only.
-         */
 
         const filename =
             rawBook
@@ -308,35 +267,8 @@ function setBookTitle() {
                 .pop() || "";
 
 
-        /*
-         * Decode filename safely.
-         *
-         * This allows filenames such as:
-         *
-         * Sbhy%20Hamdan%20Ne%20Rab%20Sohnay.pdf
-         */
-
-        let decodedFilename =
-            filename;
-
-
-        try {
-
-            decodedFilename =
-                decodeURIComponent(
-                    filename
-                );
-
-        } catch {
-            /*
-             * Keep original filename if
-             * decoding is unnecessary/invalid.
-             */
-        }
-
-
         const title =
-            decodedFilename
+            decodeURIComponent(filename)
                 .replace(
                     /\.pdf$/i,
                     ""
@@ -367,7 +299,7 @@ function setBookTitle() {
 
 /* =========================================================
    STATUS
-   ========================================================= */
+========================================================= */
 
 function announce(message) {
 
@@ -381,7 +313,7 @@ function announce(message) {
 
 /* =========================================================
    ERROR
-   ========================================================= */
+========================================================= */
 
 function showError(message) {
 
@@ -418,7 +350,7 @@ function hideError() {
 
 /* =========================================================
    UI
-   ========================================================= */
+========================================================= */
 
 function updateUI() {
 
@@ -462,7 +394,7 @@ function updateUI() {
 
 /* =========================================================
    CALCULATE SCALE
-   ========================================================= */
+========================================================= */
 
 function calculateScale(page) {
 
@@ -517,54 +449,20 @@ function calculateScale(page) {
 
 
 /* =========================================================
-   CANCEL CURRENT RENDER
-   ========================================================= */
-
-function cancelCurrentRender() {
-
-    if (!currentRenderTask) {
-        return;
-    }
-
-
-    try {
-
-        currentRenderTask.cancel();
-
-    } catch (error) {
-
-        console.warn(
-            "Could not cancel PDF render:",
-            error
-        );
-    }
-
-
-    currentRenderTask =
-        null;
-}
-
-
-/* =========================================================
    RENDER PAGE
-   ========================================================= */
+========================================================= */
 
 async function renderPage(pageNumber) {
 
     if (
         !pdfDocument ||
         !pdfCanvas ||
-        !context ||
-        pageCount <= 0
+        !context
     ) {
 
         return;
     }
 
-
-    /*
-     * Clamp page number.
-     */
 
     pageNumber =
         Math.max(
@@ -577,20 +475,25 @@ async function renderPage(pageNumber) {
 
 
     /*
-     * Create a unique request ID.
-     *
-     * Any older render becomes invalid.
+     * Cancel previous render.
      */
 
-    const requestId =
-        ++renderRequestId;
+    if (currentRenderTask) {
 
+        try {
 
-    /*
-     * Cancel the previous PDF.js render.
-     */
+            currentRenderTask.cancel();
 
-    cancelCurrentRender();
+        } catch (error) {
+
+            console.warn(
+                "Render cancellation warning:",
+                error
+            );
+        }
+
+        currentRenderTask = null;
+    }
 
 
     try {
@@ -601,36 +504,15 @@ async function renderPage(pageNumber) {
             );
 
 
-        /*
-         * If another request was made while
-         * getPage() was loading, stop here.
-         */
-
-        if (
-            requestId !==
-            renderRequestId
-        ) {
-
-            return;
-        }
-
-
         const scale =
             calculateScale(page);
 
 
         const viewport =
             page.getViewport({
-                scale: scale
+                scale
             });
 
-
-        /*
-         * Retina / high-DPI support.
-         *
-         * Limit to 2x to avoid unnecessarily
-         * huge canvas memory usage.
-         */
 
         const pixelRatio =
             Math.min(
@@ -640,7 +522,7 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * Real canvas resolution.
+         * Real canvas dimensions.
          */
 
         pdfCanvas.width =
@@ -658,7 +540,7 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * CSS display size.
+         * CSS display dimensions.
          */
 
         pdfCanvas.style.width =
@@ -668,11 +550,6 @@ async function renderPage(pageNumber) {
         pdfCanvas.style.height =
             `${viewport.height}px`;
 
-
-        /*
-         * Keep wrapper exactly the same size
-         * as the rendered PDF page.
-         */
 
         if (pageWrapper) {
 
@@ -686,7 +563,7 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * High-DPI transform.
+         * Retina scaling.
          */
 
         context.setTransform(
@@ -716,11 +593,12 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * Start PDF.js render.
+         * Render PDF page.
          */
 
         currentRenderTask =
             page.render({
+
                 canvasContext:
                     context,
 
@@ -730,20 +608,6 @@ async function renderPage(pageNumber) {
 
 
         await currentRenderTask.promise;
-
-
-        /*
-         * Ignore this render if another
-         * request was created while rendering.
-         */
-
-        if (
-            requestId !==
-            renderRequestId
-        ) {
-
-            return;
-        }
 
 
         currentRenderTask =
@@ -764,45 +628,17 @@ async function renderPage(pageNumber) {
 
     } catch (error) {
 
-        /*
-         * Always clear task reference if
-         * this was the current task.
-         */
-
-        if (
-            requestId ===
-            renderRequestId
-        ) {
-
-            currentRenderTask =
-                null;
-        }
+        currentRenderTask =
+            null;
 
 
         /*
-         * PDF.js throws this when a render
-         * is intentionally cancelled.
-         *
-         * This is NOT an actual error.
+         * Ignore normal cancellation.
          */
 
         if (
             error?.name ===
             "RenderingCancelledException"
-        ) {
-
-            return;
-        }
-
-
-        /*
-         * Ignore errors belonging to
-         * an outdated render request.
-         */
-
-        if (
-            requestId !==
-            renderRequestId
         ) {
 
             return;
@@ -823,16 +659,12 @@ async function renderPage(pageNumber) {
 
 
 /* =========================================================
-   GO TO PAGE
-   ========================================================= */
+   PAGE NAVIGATION
+========================================================= */
 
 function goToPage(value) {
 
-    if (
-        !pdfDocument ||
-        pageCount <= 0
-    ) {
-
+    if (!pdfDocument) {
         return;
     }
 
@@ -844,9 +676,7 @@ function goToPage(value) {
         );
 
 
-    if (
-        !Number.isFinite(page)
-    ) {
+    if (!Number.isFinite(page)) {
 
         page =
             currentPage;
@@ -863,15 +693,9 @@ function goToPage(value) {
         );
 
 
-    renderPage(
-        page
-    );
+    renderPage(page);
 }
 
-
-/* =========================================================
-   PREVIOUS PAGE
-   ========================================================= */
 
 function previousPage() {
 
@@ -889,10 +713,6 @@ function previousPage() {
     );
 }
 
-
-/* =========================================================
-   NEXT PAGE
-   ========================================================= */
 
 function nextPage() {
 
@@ -912,8 +732,8 @@ function nextPage() {
 
 
 /* =========================================================
-   ZOOM IN
-   ========================================================= */
+   ZOOM
+========================================================= */
 
 function zoomIn() {
 
@@ -941,10 +761,6 @@ function zoomIn() {
 }
 
 
-/* =========================================================
-   ZOOM OUT
-   ========================================================= */
-
 function zoomOut() {
 
     zoom =
@@ -971,10 +787,6 @@ function zoomOut() {
 }
 
 
-/* =========================================================
-   RESET ZOOM
-   ========================================================= */
-
 function resetZoom() {
 
     zoom =
@@ -995,18 +807,9 @@ function resetZoom() {
 
 /* =========================================================
    LOAD PDF
-   ========================================================= */
+========================================================= */
 
 async function loadPDF() {
-
-    /*
-     * Prevent duplicate loading operations.
-     */
-
-    if (loadingPDF) {
-        return;
-    }
-
 
     hideError();
 
@@ -1021,20 +824,6 @@ async function loadPDF() {
     }
 
 
-    loadingPDF =
-        true;
-
-
-    /*
-     * Cancel anything from a previous
-     * document/render.
-     */
-
-    cancelCurrentRender();
-
-    renderRequestId++;
-
-
     try {
 
         setBookTitle();
@@ -1046,50 +835,11 @@ async function loadPDF() {
         );
 
 
-        /*
-         * Destroy previous document if one exists.
-         */
-
-        if (pdfDocument) {
-
-            try {
-
-                await pdfDocument.destroy();
-
-            } catch (error) {
-
-                console.warn(
-                    "Previous PDF cleanup failed:",
-                    error
-                );
-            }
-
-
-            pdfDocument =
-                null;
-        }
-
-
-        pageCount =
-            0;
-
-        currentPage =
-            1;
-
-        zoom =
-            DEFAULT_ZOOM;
-
-
-        updateUI();
-
-
-        /*
-         * Load PDF with PDF.js.
-         */
-
         const loadingTask =
             pdfjsLib.getDocument({
-                url: PDF_URL,
+
+                url:
+                    PDF_URL,
 
                 disableAutoFetch:
                     false,
@@ -1102,17 +852,8 @@ async function loadPDF() {
             });
 
 
-        const loadedDocument =
-            await loadingTask.promise;
-
-
-        /*
-         * Store only the successfully
-         * loaded document.
-         */
-
         pdfDocument =
-            loadedDocument;
+            await loadingTask.promise;
 
 
         pageCount =
@@ -1137,11 +878,6 @@ async function loadPDF() {
         updateUI();
 
 
-        announce(
-            `Page 1 of ${pageCount}`
-        );
-
-
         await renderPage(
             1
         );
@@ -1155,28 +891,6 @@ async function loadPDF() {
         );
 
 
-        /*
-         * Clean state after failure.
-         */
-
-        cancelCurrentRender();
-
-
-        renderRequestId++;
-
-
-        if (pdfDocument) {
-
-            try {
-
-                await pdfDocument.destroy();
-
-            } catch {
-                // Ignore cleanup errors.
-            }
-        }
-
-
         pdfDocument =
             null;
 
@@ -1185,16 +899,8 @@ async function loadPDF() {
             0;
 
 
-        currentPage =
-            1;
-
-
         updateUI();
 
-
-        /*
-         * Specific PDF.js errors.
-         */
 
         if (
             error?.name ===
@@ -1202,7 +908,15 @@ async function loadPDF() {
         ) {
 
             showError(
-                `PDF not found.\n\nRequested file:\n${rawBook}\n\nFinal URL:\n${PDF_URL}\n\nCheck the exact filename in your books folder.`
+                `PDF not found.
+
+Requested file:
+${rawBook}
+
+Final URL:
+${PDF_URL}
+
+Check the exact filename inside your books folder.`
             );
 
 
@@ -1229,24 +943,16 @@ async function loadPDF() {
         } else {
 
             showError(
-                "PDF could not be loaded. Check the PDF path, filename, and server response."
+                "PDF could not be loaded. Check the PDF path, filename, and GitHub Pages file location."
             );
         }
-
-
-    } finally {
-
-        loadingPDF =
-            false;
-
-        updateUI();
     }
 }
 
 
 /* =========================================================
    RETRY
-   ========================================================= */
+========================================================= */
 
 if (retryButton) {
 
@@ -1258,8 +964,8 @@ if (retryButton) {
 
 
 /* =========================================================
-   PAGE BUTTONS
-   ========================================================= */
+   BUTTONS
+========================================================= */
 
 if (previousPageButton) {
 
@@ -1278,10 +984,6 @@ if (nextPageButton) {
     );
 }
 
-
-/* =========================================================
-   ZOOM BUTTONS
-   ========================================================= */
 
 if (zoomOutButton) {
 
@@ -1312,7 +1014,7 @@ if (zoomInButton) {
 
 /* =========================================================
    PAGE INPUT
-   ========================================================= */
+========================================================= */
 
 if (pageNumberInput) {
 
@@ -1352,8 +1054,8 @@ if (pageNumberInput) {
 
 
 /* =========================================================
-   KEYBOARD CONTROLS
-   ========================================================= */
+   KEYBOARD
+========================================================= */
 
 document.addEventListener(
     "keydown",
@@ -1363,20 +1065,13 @@ document.addEventListener(
             document.activeElement;
 
 
-        /*
-         * Don't hijack keyboard input while
-         * user is typing in an input/textarea.
-         */
-
         const typing =
             active &&
             (
                 active.tagName ===
                     "INPUT" ||
-
                 active.tagName ===
                     "TEXTAREA" ||
-
                 active.isContentEditable
             );
 
@@ -1385,8 +1080,6 @@ document.addEventListener(
             return;
         }
 
-
-        /* Previous page */
 
         if (
             event.key ===
@@ -1401,8 +1094,6 @@ document.addEventListener(
         }
 
 
-        /* Next page */
-
         if (
             event.key ===
             "ArrowRight"
@@ -1415,8 +1106,6 @@ document.addEventListener(
             return;
         }
 
-
-        /* Zoom in */
 
         if (
             event.key === "+" ||
@@ -1431,8 +1120,6 @@ document.addEventListener(
         }
 
 
-        /* Zoom out */
-
         if (
             event.key === "-"
         ) {
@@ -1444,8 +1131,6 @@ document.addEventListener(
             return;
         }
 
-
-        /* Reset zoom */
 
         if (
             event.key === "0"
@@ -1459,8 +1144,6 @@ document.addEventListener(
         }
 
 
-        /* First page */
-
         if (
             event.key === "Home"
         ) {
@@ -1472,8 +1155,6 @@ document.addEventListener(
             return;
         }
 
-
-        /* Last page */
 
         if (
             event.key === "End"
@@ -1491,7 +1172,10 @@ document.addEventListener(
 
 /* =========================================================
    RESIZE
-   ========================================================= */
+========================================================= */
+
+let resizeTimer = null;
+
 
 window.addEventListener(
     "resize",
@@ -1506,10 +1190,7 @@ window.addEventListener(
             setTimeout(
                 function () {
 
-                    if (
-                        pdfDocument &&
-                        pageCount > 0
-                    ) {
+                    if (pdfDocument) {
 
                         renderPage(
                             currentPage
@@ -1524,38 +1205,8 @@ window.addEventListener(
 
 
 /* =========================================================
-   CLEANUP
-   ========================================================= */
-
-window.addEventListener(
-    "beforeunload",
-    function () {
-
-        clearTimeout(
-            resizeTimer
-        );
-
-
-        cancelCurrentRender();
-
-
-        if (pdfDocument) {
-
-            try {
-
-                pdfDocument.destroy();
-
-            } catch {
-                // Ignore cleanup errors.
-            }
-        }
-    }
-);
-
-
-/* =========================================================
-   START READER
-   ========================================================= */
+   START
+========================================================= */
 
 setBookTitle();
 
