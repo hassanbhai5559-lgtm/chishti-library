@@ -1099,3 +1099,88 @@ setBookTitle();
 updateUI();
 
 loadPDF();
+/* =========================================================
+   MOBILE SWIPE PAGE NAVIGATION
+   ========================================================= */
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+const SWIPE_THRESHOLD = 60;
+
+const bookViewport = document.getElementById("bookViewport");
+
+if (bookViewport) {
+
+    bookViewport.addEventListener(
+        "touchstart",
+        function (event) {
+
+            if (event.touches.length !== 1) return;
+
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+
+        },
+        { passive: true }
+    );
+
+
+    bookViewport.addEventListener(
+        "touchend",
+        function (event) {
+
+            if (event.changedTouches.length !== 1) return;
+
+            touchEndX = event.changedTouches[0].clientX;
+            touchEndY = event.changedTouches[0].clientY;
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            /*
+             * Ignore vertical scrolling.
+             */
+            if (Math.abs(deltaY) > Math.abs(deltaX)) {
+                return;
+            }
+
+            /*
+             * Swipe must be long enough.
+             */
+            if (Math.abs(deltaX) < SWIPE_THRESHOLD) {
+                return;
+            }
+
+            /*
+             * Swipe LEFT = NEXT PAGE
+             */
+            if (deltaX < 0) {
+
+                if (
+                    typeof nextPage === "function"
+                ) {
+                    nextPage();
+                }
+
+            }
+
+            /*
+             * Swipe RIGHT = PREVIOUS PAGE
+             */
+            else {
+
+                if (
+                    typeof previousPage === "function"
+                ) {
+                    previousPage();
+                }
+
+            }
+
+        },
+        { passive: true }
+    );
+}
