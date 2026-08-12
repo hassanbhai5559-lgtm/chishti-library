@@ -1,143 +1,942 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2B0000">
+  <meta name="description" content="Chishti Library — Premium Islamic Digital Book">
+  <title>Book — Chishti Library</title>
 
-    <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+  <style>
+    :root {
+      --maroon-950: #160000;
+      --maroon-900: #220000;
+      --maroon-800: #2b0000;
+      --maroon-700: #430000;
+      --gold: #d6ad54;
+      --gold-light: #f0d58a;
+      --cream: #f7f0df;
+      --text: #f8f5ed;
+      --muted: #c8bfae;
+      --glass: rgba(255, 255, 255, 0.055);
+      --border: rgba(214, 173, 84, 0.22);
+    }
 
-    <meta
-        name="description"
-        content="ChishtiLibrary.com Digital Books"
-    >
+    * {
+      box-sizing: border-box;
+    }
 
-    <title>ChishtiLibrary.com — Books</title>
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
 
-    <link
-        rel="stylesheet"
-        href="./book.css"
-    >
+    body {
+      font-family: "Poppins", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(
+          circle at 15% 15%,
+          rgba(214, 173, 84, 0.12),
+          transparent 32%
+        ),
+        radial-gradient(
+          circle at 85% 75%,
+          rgba(120, 0, 0, 0.24),
+          transparent 38%
+        ),
+        linear-gradient(
+          135deg,
+          var(--maroon-950),
+          var(--maroon-800) 48%,
+          #090000
+        );
+    }
 
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image:
+        linear-gradient(
+          rgba(255, 255, 255, 0.025) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.025) 1px,
+          transparent 1px
+        );
+      background-size: 42px 42px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      min-height: 76px;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background: rgba(18, 0, 0, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .brand-name {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .brand-subtitle {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 16px;
+      color: var(--cream);
+      background: var(--glass);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+    }
+
+    .back-button:hover {
+      transform: translateY(-2px);
+      background: rgba(214, 173, 84, 0.09);
+      border-color: rgba(214, 173, 84, 0.48);
+    }
+
+    /* =====================================================
+       MAIN
+    ===================================================== */
+
+    .book-main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 55px 0 70px;
+      flex: 1;
+    }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(35px, 6vw, 85px);
+    }
+
+    /* =====================================================
+       COVER
+    ===================================================== */
+
+    .cover-column {
+      display: flex;
+      justify-content: center;
+    }
+
+    .book-cover-wrap {
+      position: relative;
+      width: min(100%, 390px);
+    }
+
+    .book-cover-glow {
+      position: absolute;
+      inset: 12% -10% -12%;
+      background:
+        radial-gradient(
+          ellipse,
+          rgba(214, 173, 84, 0.25),
+          transparent 65%
+        );
+      filter: blur(35px);
+      pointer-events: none;
+    }
+
+    .book-cover {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      aspect-ratio: 0.68;
+      overflow: hidden;
+      border-radius: 10px 16px 16px 10px;
+      background: linear-gradient(145deg, #4b0808, #1d0000);
+      border: 1px solid rgba(214, 173, 84, 0.38);
+      box-shadow:
+        0 28px 60px rgba(0, 0, 0, 0.58),
+        10px 10px 0 rgba(0, 0, 0, 0.16),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+      transform: perspective(1200px) rotateY(-5deg);
+      transition:
+        transform 0.4s ease,
+        box-shadow 0.4s ease;
+    }
+
+    .book-cover:hover {
+      transform:
+        perspective(1200px)
+        rotateY(0deg)
+        translateY(-5px);
+
+      box-shadow:
+        0 35px 70px rgba(0, 0, 0, 0.64),
+        10px 12px 0 rgba(0, 0, 0, 0.18),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.035);
+    }
+
+    .cover-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      text-align: center;
+      background:
+        radial-gradient(
+          circle at 50% 35%,
+          rgba(214, 173, 84, 0.18),
+          transparent 30%
+        ),
+        linear-gradient(145deg, #560909, #1c0000);
+    }
+
+    .cover-placeholder i {
+      font-size: 65px;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+
+    .cover-placeholder span {
+      color: var(--gold-light);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .cover-spine {
+      position: absolute;
+      z-index: 3;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 9px;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.55),
+          rgba(214, 173, 84, 0.12),
+          rgba(255, 255, 255, 0.04)
+        );
+      pointer-events: none;
+    }
+
+    /* =====================================================
+       DETAILS
+    ===================================================== */
+
+    .details-column {
+      min-width: 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    .book-title {
+      margin: 16px 0 10px;
+      font-size: clamp(30px, 4vw, 54px);
+      line-height: 1.08;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .book-author {
+      margin: 0 0 24px;
+      color: var(--gold-light);
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .book-description {
+      max-width: 700px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.9;
+    }
+
+    /* =====================================================
+       META
+    ===================================================== */
+
+    .book-meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 30px 0;
+    }
+
+    .meta-card {
+      padding: 17px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(214, 173, 84, 0.15);
+      border-radius: 14px;
+    }
+
+    .meta-label {
+      display: block;
+      margin-bottom: 5px;
+      color: #9d9383;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .meta-value {
+      color: var(--cream);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* =====================================================
+       ACTIONS
+    ===================================================== */
+
+    .book-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .open-reader {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      min-height: 52px;
+      padding: 0 25px;
+      color: #170700;
+      background:
+        linear-gradient(
+          135deg,
+          var(--gold-light),
+          var(--gold)
+        );
+      border: 0;
+      border-radius: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(214, 173, 84, 0.18);
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    .open-reader:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 17px 34px rgba(214, 173, 84, 0.26);
+    }
+
+    .secondary-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 52px;
+      padding: 0 20px;
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      cursor: pointer;
+    }
+
+    .secondary-action:hover {
+      background: rgba(214, 173, 84, 0.08);
+    }
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .site-footer {
+      padding: 24px 20px;
+      color: #968b7a;
+      text-align: center;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      border-top: 1px solid rgba(214, 173, 84, 0.12);
+    }
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 800px) {
+      .site-header {
+        padding: 11px 16px;
+      }
+
+      .brand-subtitle {
+        display: none;
+      }
+
+      .book-main {
+        padding-top: 30px;
+      }
+
+      .book-grid {
+        grid-template-columns: 1fr;
+        gap: 38px;
+      }
+
+      .cover-column {
+        order: 1;
+      }
+
+      .details-column {
+        order: 2;
+        text-align: center;
+      }
+
+      .eyebrow {
+        justify-content: center;
+      }
+
+      .book-description {
+        margin-inline: auto;
+      }
+
+      .book-meta {
+        text-align: left;
+      }
+
+      .book-actions {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .brand-name {
+        font-size: 14px;
+      }
+
+      .book-cover-wrap {
+        width: min(82vw, 340px);
+      }
+
+      .book-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .book-actions {
+        flex-direction: column;
+      }
+
+      .open-reader,
+      .secondary-action {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="page">
 
-    <main class="library">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-        <header class="library-header">
-
-            <div class="brand">
-                ChishtiLibrary.com
-            </div>
-
-            <h1>
-                Islamic Digital Library
-            </h1>
-
-            <p>
-                Read your books online
-            </p>
-
-        </header>
-
-
-        <section
-            class="books"
-            aria-label="Available books"
+    <header class="site-header">
+      <a
+        href="./index.html"
+        class="brand"
+        aria-label="Back to Chishti Library"
+      >
+        <img
+          src="./logo.png"
+          alt="Chishti Library"
+          class="brand-logo"
         >
 
-            <!-- BOOK 1 -->
+        <div class="brand-text">
+          <span class="brand-name">
+            CHISHTI LIBRARY
+          </span>
 
-            <article class="book-card">
+          <span class="brand-subtitle">
+            Premium Islamic Digital Library
+          </span>
+        </div>
+      </a>
 
-                <div class="book-cover">
+      <a
+        href="./index.html"
+        class="back-button"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+        Library
+      </a>
+    </header>
 
-                    <span>
-                        BOOK
-                    </span>
+    <!-- =====================================================
+         BOOK CONTENT
+    ====================================================== -->
 
-                    <strong>
-                        Sample Islamic Book
-                    </strong>
+    <main class="book-main">
+      <div class="book-grid">
 
-                </div>
+        <!-- =================================================
+             COVER
+        ================================================== -->
 
+        <section class="cover-column">
+          <div class="book-cover-wrap">
 
-                <div class="book-info">
+            <div
+              class="book-cover-glow"
+              aria-hidden="true"
+            ></div>
 
-                    <h2>
-                        Sample Islamic Book
-                    </h2>
+            <div class="book-cover">
 
-                    <p>
-                        Read this book online in
-                        Chishti Reader.
-                    </p>
+              <div class="cover-spine"></div>
 
+              <img
+                id="bookCover"
+                class="cover-image"
+                src="./books/covers/book-cover.jpg"
+                alt="Book cover"
+                onerror="this.style.display='none'; document.getElementById('coverPlaceholder').style.display='flex';"
+              >
 
-                    <!-- IMPORTANT:
-                         PDF path yahan set hoga -->
+              <div
+                id="coverPlaceholder"
+                class="cover-placeholder"
+                style="display:none;"
+              >
+                <i class="fa-solid fa-book-open"></i>
 
-                    <a
-                        class="read-button"
-                        href="reader.html?book=books/sample-book.pdf"
-                        aria-label="Read Sample Islamic Book"
-                    >
-                        Read
-                    </a>
+                <span>
+                  CHISHTI LIBRARY
+                </span>
+              </div>
 
-                </div>
+            </div>
+          </div>
+        </section>
 
-            </article>
+        <!-- =================================================
+             BOOK DETAILS
+        ================================================== -->
 
+        <section class="details-column">
 
-            <!-- BOOK 2 -->
+          <div class="eyebrow">
+            Digital Edition
+          </div>
 
-            <article class="book-card">
+          <h1
+            id="bookTitle"
+            class="book-title"
+          >
+            Book Title
+          </h1>
 
-                <div class="book-cover">
+          <p
+            id="bookAuthor"
+            class="book-author"
+          >
+            Hazrat Allama Saim Chishti
+          </p>
 
-                    <span>
-                        BOOK
-                    </span>
+          <p
+            id="bookDescription"
+            class="book-description"
+          >
+            This digital edition is presented through Chishti
+            Library for a premium reading experience. Open the
+            book to read it directly in the Chishti Reader.
+          </p>
 
-                    <strong>
-                        Another Islamic Book
-                    </strong>
+          <!-- =================================================
+               META
+          ================================================== -->
 
-                </div>
+          <div class="book-meta">
 
+            <div class="meta-card">
+              <span class="meta-label">
+                Format
+              </span>
 
-                <div class="book-info">
+              <span
+                id="bookFormat"
+                class="meta-value"
+              >
+                PDF
+              </span>
+            </div>
 
-                    <h2>
-                        Another Islamic Book
-                    </h2>
+            <div class="meta-card">
+              <span class="meta-label">
+                Language
+              </span>
 
-                    <p>
-                        Open this book in the
-                        digital reader.
-                    </p>
+              <span
+                id="bookLanguage"
+                class="meta-value"
+              >
+                Urdu
+              </span>
+            </div>
 
+            <div class="meta-card">
+              <span class="meta-label">
+                Library
+              </span>
 
-                    <a
-                        class="read-button"
-                        href="reader.html?book=books/another-book.pdf"
-                        aria-label="Read Another Islamic Book"
-                    >
-                        Read
-                    </a>
+              <span class="meta-value">
+                Chishti Library
+              </span>
+            </div>
 
-                </div>
+          </div>
 
-            </article>
+          <!-- =================================================
+               ACTIONS
+          ================================================== -->
+
+          <div class="book-actions">
+
+            <button
+              id="openReaderButton"
+              class="open-reader"
+              type="button"
+            >
+              <i class="fa-solid fa-book-open"></i>
+              Open Book
+            </button>
+
+            <button
+              id="shareBookButton"
+              class="secondary-action"
+              type="button"
+            >
+              <i class="fa-solid fa-share-nodes"></i>
+              Share
+            </button>
+
+          </div>
 
         </section>
 
+      </div>
     </main>
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="site-footer">
+      ©
+      <span id="year"></span>
+      ChishtiLibrary.com — Islamic Digital Library
+    </footer>
+
+  </div>
+
+  <!-- =====================================================
+       BOOK CONFIGURATION
+  ====================================================== -->
+
+  <script>
+    "use strict";
+
+    /*
+      =========================================================
+      BOOK CONFIGURATION
+      =========================================================
+
+      IMPORTANT:
+      Ye wahi PDF path hai jo reader.js ko milega.
+
+      Example:
+      books/saim-chishti.pdf
+
+      Reader URL banega:
+      reader.html?book=books%2Fsaim-chishti.pdf
+
+      reader.js isi "book" parameter ko read karta hai.
+    */
+
+    const BOOK = {
+      title: "Book Title",
+      author: "Hazrat Allama Saim Chishti",
+      description:
+        "This digital edition is presented through Chishti Library for a premium reading experience.",
+      language: "Urdu",
+      format: "PDF",
+      cover: "./books/covers/book-cover.jpg",
+      pdf: "./books/saim-chishti.pdf"
+    };
+
+    /*
+      =========================================================
+      DOM
+      =========================================================
+    */
+
+    const openReaderButton =
+      document.getElementById("openReaderButton");
+
+    const shareBookButton =
+      document.getElementById("shareBookButton");
+
+    const bookTitle =
+      document.getElementById("bookTitle");
+
+    const bookAuthor =
+      document.getElementById("bookAuthor");
+
+    const bookDescription =
+      document.getElementById("bookDescription");
+
+    const bookLanguage =
+      document.getElementById("bookLanguage");
+
+    const bookFormat =
+      document.getElementById("bookFormat");
+
+    const bookCover =
+      document.getElementById("bookCover");
+
+    const year =
+      document.getElementById("year");
+
+    /*
+      =========================================================
+      APPLY BOOK DATA
+      =========================================================
+    */
+
+    function applyBookData() {
+      bookTitle.textContent = BOOK.title;
+      bookAuthor.textContent = BOOK.author;
+      bookDescription.textContent = BOOK.description;
+      bookLanguage.textContent = BOOK.language;
+      bookFormat.textContent = BOOK.format;
+
+      if (bookCover) {
+        bookCover.src = BOOK.cover;
+        bookCover.alt = `${BOOK.title} — Book Cover`;
+      }
+
+      document.title =
+        `${BOOK.title} — Chishti Library`;
+    }
+
+    /*
+      =========================================================
+      OPEN READER
+      =========================================================
+    */
+
+    function openReader() {
+      if (!BOOK.pdf) {
+        alert("PDF file is not configured.");
+        return;
+      }
+
+      /*
+        encodeURIComponent zaroori hai.
+        Is se spaces aur special characters wali
+        PDF paths bhi safely pass hoti hain.
+      */
+
+      const readerURL =
+        "./reader.html?book=" +
+        encodeURIComponent(BOOK.pdf);
+
+      window.location.href = readerURL;
+    }
+
+    /*
+      =========================================================
+      SHARE
+      =========================================================
+    */
+
+    async function shareBook() {
+      const shareData = {
+        title: BOOK.title,
+        text: `${BOOK.title} — Chishti Library`,
+        url: window.location.href
+      };
+
+      try {
+        if (navigator.share) {
+          await navigator.share(shareData);
+          return;
+        }
+
+        if (navigator.clipboard) {
+          await navigator.clipboard.writeText(
+            window.location.href
+          );
+
+          shareBookButton.innerHTML =
+            '<i class="fa-solid fa-check"></i> Copied';
+
+          setTimeout(() => {
+            shareBookButton.innerHTML =
+              '<i class="fa-solid fa-share-nodes"></i> Share';
+          }, 1800);
+
+          return;
+        }
+
+        alert(window.location.href);
+
+      } catch (error) {
+        /*
+          User ne share dialog cancel kiya ho
+          to error show karna zaroori nahi.
+        */
+
+        console.log(
+          "Share cancelled.",
+          error
+        );
+      }
+    }
+
+    /*
+      =========================================================
+      EVENTS
+      =========================================================
+    */
+
+    openReaderButton.addEventListener(
+      "click",
+      openReader
+    );
+
+    shareBookButton.addEventListener(
+      "click",
+      shareBook
+    );
+
+    /*
+      =========================================================
+      YEAR
+      =========================================================
+    */
+
+    year.textContent =
+      new Date().getFullYear();
+
+    /*
+      =========================================================
+      START
+      =========================================================
+    */
+
+    applyBookData();
+  </script>
 
 </body>
 </html>
