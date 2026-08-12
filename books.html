@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -21,7 +22,10 @@
 
     <title>All Books — Chishti Library</title>
 
-    <link rel="stylesheet" href="./style.css">
+    <link
+        rel="stylesheet"
+        href="./style.css"
+    >
 
     <link
         rel="stylesheet"
@@ -30,16 +34,25 @@
 
 </head>
 
+
 <body class="library-page">
+
 
     <!-- =========================================
          BACKGROUND
     ========================================== -->
 
-    <div class="background-system" aria-hidden="true">
+    <div
+        class="background-system"
+        aria-hidden="true"
+    >
+
         <div class="background-overlay"></div>
+
         <div class="background-gradient"></div>
+
         <div class="background-grid"></div>
+
     </div>
 
 
@@ -81,21 +94,32 @@
         <nav class="library-navigation">
 
             <a href="./index.html">
+
                 <i class="fa-solid fa-house"></i>
+
                 Home
+
             </a>
+
 
             <a
                 href="./book.html"
                 class="active"
             >
+
                 <i class="fa-solid fa-book-open"></i>
+
                 All Books
+
             </a>
 
+
             <a href="./index.html#authors">
+
                 <i class="fa-solid fa-user-pen"></i>
+
                 Authors
+
             </a>
 
         </nav>
@@ -108,15 +132,20 @@
                 type="button"
                 aria-label="Search Books"
             >
+
                 <i class="fa-solid fa-magnifying-glass"></i>
+
             </button>
+
 
             <button
                 id="themeButton"
                 type="button"
                 aria-label="Change Theme"
             >
+
                 <i class="fa-solid fa-circle-half-stroke"></i>
+
             </button>
 
         </div>
@@ -130,6 +159,7 @@
 
     <main class="books-page">
 
+
         <!-- HERO -->
 
         <section class="books-hero">
@@ -137,13 +167,18 @@
             <div class="hero-content">
 
                 <span class="hero-label">
+
                     <i class="fa-solid fa-book"></i>
+
                     CHISHTI DIGITAL LIBRARY
+
                 </span>
+
 
                 <h1>
                     All Books
                 </h1>
+
 
                 <p>
                     Explore the complete collection of
@@ -198,41 +233,52 @@
             <button
                 class="filter-button active"
                 data-category="all"
+                type="button"
             >
                 All Books
             </button>
 
+
             <button
                 class="filter-button"
                 data-category="naat"
+                type="button"
             >
                 Naat
             </button>
 
+
             <button
                 class="filter-button"
                 data-category="manqabat"
+                type="button"
             >
                 Manqabat
             </button>
 
+
             <button
                 class="filter-button"
                 data-category="hamd"
+                type="button"
             >
                 Hamd
             </button>
 
+
             <button
                 class="filter-button"
                 data-category="deeni"
+                type="button"
             >
                 Deeni
             </button>
 
+
             <button
                 class="filter-button"
                 data-category="adab"
+                type="button"
             >
                 Adab
             </button>
@@ -262,12 +308,16 @@
         >
 
             <div class="empty-icon">
+
                 <i class="fa-solid fa-book-open"></i>
+
             </div>
+
 
             <h2>
                 No Books Found
             </h2>
+
 
             <p>
                 Try another book title, author or category.
@@ -296,9 +346,14 @@
 
         </div>
 
+
         <div>
-            © <span id="footerYear"></span>
+
+            ©
+            <span id="footerYear"></span>
+
             ChishtiLibrary.com
+
         </div>
 
     </footer>
@@ -310,542 +365,715 @@
 
     <script>
 
-    (() => {
+        (() => {
 
-        "use strict";
-
-
-        /*
-        =====================================================
-        BOOK DATABASE
-
-        Yahan apni books add karni hain.
-
-        pdf:
-        books folder ke andar PDF ka naam
-
-        cover:
-        covers folder ke andar image
-
-        reader:
-        tumhara existing reader page
-        =====================================================
-        */
-
-        const books = [
-
-            {
-                id: "book-001",
-
-                title: "Naat Collection",
-
-                author: "Allama Saim Chishti",
-
-                category: "naat",
-
-                categoryName: "Naat",
-
-                cover: "./covers/book-001.jpg",
-
-                pdf: "./books/book-001.pdf",
-
-                description:
-                    "Beautiful collection of Naatiya poetry and devotional literature."
-            },
+            "use strict";
 
 
-            {
-                id: "book-002",
+            /* =========================================
+               BOOK DATABASE
+            ========================================== */
 
-                title: "Manqabat Collection",
+            const books = [
 
-                author: "Allama Saim Chishti",
-
-                category: "manqabat",
-
-                categoryName: "Manqabat",
-
-                cover: "./covers/book-002.jpg",
-
-                pdf: "./books/book-002.pdf",
-
-                description:
-                    "Collection of Manqabati poetry and devotional writings."
-            },
-
-
-            {
-                id: "book-003",
-
-                title: "Hamd Collection",
-
-                author: "Allama Saim Chishti",
-
-                category: "hamd",
-
-                categoryName: "Hamd",
-
-                cover: "./covers/book-003.jpg",
-
-                pdf: "./books/book-003.pdf",
-
-                description:
-                    "Selected Hamdiya writings and spiritual poetry."
-            },
+                {
+                    id: 1,
+                    title: "Al-Rehman",
+                    author: "Sahibzada Muhammad Latif Sajid Chishti",
+                    category: "hamd",
+                    categoryName: "Hamd",
+                    cover: "al-rehman-cover.png",
+                    pdf: "Al Rehman .. Latif Sajid.C.pdf",
+                    description:
+                        "99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti.",
+                    latest: true
+                },
 
 
-            {
-                id: "book-004",
-
-                title: "Deeni Tasneefaat",
-
-                author: "Allama Saim Chishti",
-
-                category: "deeni",
-
-                categoryName: "Deeni",
-
-                cover: "./covers/book-004.jpg",
-
-                pdf: "./books/book-004.pdf",
-
-                description:
-                    "Important religious writings and Islamic literature."
-            },
+                {
+                    id: 2,
+                    title: "Husn-e-Kainat",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "naat",
+                    categoryName: "Naat",
+                    cover: "husn-e-kainat-cover.png",
+                    pdf: "husn-e-kainat.pdf",
+                    description:
+                        "Naatiya Kalam by Hazrat Allama Saim Chishti."
+                },
 
 
-            {
-                id: "book-005",
+                {
+                    id: 3,
+                    title: "Shahdaye Karbala",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "manqabat",
+                    categoryName: "Manqabat",
+                    cover: "shahdaye karbala-cover.png",
+                    pdf: "shahdaye-karbala.pdf",
+                    description:
+                        "Karbala ke shuhada ke fazail par manqabat ki kitab."
+                },
 
-                title: "Adabi Majmua",
 
-                author: "Allama Saim Chishti",
+                {
+                    id: 4,
+                    title: "Shaheed Ibn-e-Shaheed",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "manqabat",
+                    categoryName: "Manqabat",
+                    cover: "shaheed-ibn-e-shaheed-cover.png",
+                    pdf: "shaheed-ibn-e-shaheed.pdf",
+                    description:
+                        "Historical Manqabat book by Hazrat Allama Saim Chishti."
+                },
 
-                category: "adab",
 
-                categoryName: "Adab",
+                {
+                    id: 5,
+                    title: "Nawaye Saim",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "naat",
+                    categoryName: "Naat",
+                    cover: "Nawaye Saim-cover.png",
+                    pdf: "noori.pdf",
+                    description:
+                        "Naatiya Majmua by Hazrat Allama Saim Chishti."
+                },
 
-                cover: "./covers/book-005.jpg",
 
-                pdf: "./books/book-005.pdf",
+                {
+                    id: 6,
+                    title: "Kulliyat-e-Saim Chishti",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "kulliyat",
+                    categoryName: "Kulliyat",
+                    cover: "kulliyat e saim chishti-cover.png",
+                    pdf: "Kulliyat e Saim Chishti By Allama Saim Chishti.pdf",
+                    description:
+                        "Complete Kulliyat of Hazrat Allama Saim Chishti."
+                },
 
-                description:
-                    "Literary collection preserving valuable Islamic Urdu literature."
+
+                {
+                    id: 7,
+                    title: "Punjabi Maqala",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "maqala",
+                    categoryName: "Maqala",
+                    cover: "allamasaimchishtipunjbimaqala-cover.png",
+                    pdf: "allamasaimchishtipunjabimaqala-231010120010-3ca7944b (1).pdf",
+                    description:
+                        "Punjabi Maqala by Hazrat Allama Saim Chishti."
+                },
+
+
+                {
+                    id: 8,
+                    title: "Armaghan-e-Madina",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "naat",
+                    categoryName: "Naat",
+                    cover: "Armaghan-e-Madina-By-Allama-Saim-Chishti-cover.webp",
+                    pdf: "armughan e madina.pdf",
+                    description:
+                        "Collection of Naats by Hazrat Allama Saim Chishti."
+                },
+
+
+                {
+                    id: 9,
+                    title: "Shan-e-Kainat",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "naat",
+                    categoryName: "Naat",
+                    cover: "naat-cover2.png",
+                    pdf: "shan-e-kainat.pdf",
+                    description:
+                        "Naatiya Collection by Hazrat Allama Saim Chishti."
+                },
+
+
+                {
+                    id: 10,
+                    title: "Rehmat Da Khazana",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "naat",
+                    categoryName: "Naat",
+                    cover: "rehmatdakhazana-cover.png",
+                    pdf: "rehmatdakhazana.pdf",
+                    description:
+                        "Naatiya Collection by Hazrat Allama Saim Chishti."
+                },
+
+
+                {
+                    id: 11,
+                    title: "Madinay Diyan Kaliyan",
+                    author: "Hazrat Allama Saim Chishti",
+                    category: "naat",
+                    categoryName: "Naat",
+                    cover: "madinydiankalinyan-cover.png",
+                    pdf: "madinydiankalinyan.pdf",
+                    description:
+                        "Naatiya Collection by Hazrat Allama Saim Chishti."
+                },
+
+
+                {
+                    id: 12,
+                    title: "Darooda Di Dali",
+                    author: "Sahibzada Muhammad Latif Sajid Chishti",
+                    category: "hamd",
+                    categoryName: "Hamd",
+                    cover: "darooda di dali-cover.png",
+                    pdf: "Darooda Di Dali Pdf.pdf",
+                    description:
+                        "A Punjabi Naatiya book by Sahibzada Muhammad Latif Sajid Chishti.",
+                    latest: true
+                },
+
+
+                {
+                    id: 13,
+                    title: "Sbhy Hamdan Ne Rab Sohnay",
+                    author: "Sahibzada Muhammad Latif Sajid Chishti",
+                    category: "hamd",
+                    categoryName: "Hamd",
+                    cover: "Sbhy Hamdan Ne Rab Sohnay-cover.jpeg",
+                    pdf: "Sbhy Hamdan Ne Rab Sohnay.pdf",
+                    description:
+                        "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti.",
+                    latest: true
+                }
+
+            ];
+
+
+            /* =========================================
+               ELEMENTS
+            ========================================== */
+
+            const booksGrid =
+                document.getElementById("booksGrid");
+
+            const emptyBooks =
+                document.getElementById("emptyBooks");
+
+            const bookSearch =
+                document.getElementById("bookSearch");
+
+            const bookCount =
+                document.getElementById("bookCount");
+
+            const footerYear =
+                document.getElementById("footerYear");
+
+
+            let currentCategory = "all";
+
+
+            /* =========================================
+               ESCAPE HTML
+            ========================================== */
+
+            function escapeHTML(value) {
+
+                return String(value)
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll('"', "&quot;")
+                    .replaceAll("'", "&#039;");
+
             }
 
-        ];
+
+            /* =========================================
+               CREATE BOOK CARD
+            ========================================== */
+
+            function createBookCard(book) {
+
+                const card =
+                    document.createElement("article");
+
+                card.className =
+                    "book-card";
+
+                card.dataset.category =
+                    book.category;
+
+                card.dataset.search =
+                    (
+                        book.title +
+                        " " +
+                        book.author +
+                        " " +
+                        book.categoryName
+                    ).toLowerCase();
 
 
-        /*
-        =====================================================
-        ELEMENTS
-        =====================================================
-        */
+                card.innerHTML = `
 
-        const booksGrid =
-            document.getElementById("booksGrid");
+                    <div class="book-cover">
 
-        const emptyBooks =
-            document.getElementById("emptyBooks");
-
-        const bookSearch =
-            document.getElementById("bookSearch");
-
-        const bookCount =
-            document.getElementById("bookCount");
-
-        const footerYear =
-            document.getElementById("footerYear");
-
-
-        let currentCategory = "all";
-
-
-        /*
-        =====================================================
-        CREATE BOOK CARD
-        =====================================================
-        */
-
-        function createBookCard(book) {
-
-            const card =
-                document.createElement("article");
-
-            card.className = "book-card";
-
-            card.dataset.category =
-                book.category;
-
-            card.dataset.search =
-                (
-                    book.title +
-                    " " +
-                    book.author +
-                    " " +
-                    book.categoryName
-                ).toLowerCase();
-
-
-            card.innerHTML = `
-
-                <div class="book-cover">
-
-                    <img
-                        src="${book.cover}"
-                        alt="${escapeHTML(book.title)}"
-                        loading="lazy"
-                        onerror="this.src='./logo.png'"
-                    >
-
-                    <span class="book-category">
-                        ${escapeHTML(book.categoryName)}
-                    </span>
-
-                    <div class="book-cover-overlay">
-
-                        <button
-                            class="read-button"
-                            type="button"
-                            data-book-id="${book.id}"
+                        <img
+                            src="${escapeHTML(book.cover)}"
+                            alt="${escapeHTML(book.title)}"
+                            loading="lazy"
+                            onerror="this.src='./logo.png'"
                         >
 
-                            <i class="fa-solid fa-book-open"></i>
+                        <span class="book-category">
 
-                            Read Book
+                            ${escapeHTML(book.categoryName)}
 
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <div class="book-card-content">
-
-                    <h2>
-                        ${escapeHTML(book.title)}
-                    </h2>
-
-                    <p class="book-author">
-
-                        <i class="fa-solid fa-user-pen"></i>
-
-                        ${escapeHTML(book.author)}
-
-                    </p>
-
-                    <p class="book-description">
-
-                        ${escapeHTML(book.description)}
-
-                    </p>
-
-                    <div class="book-card-footer">
-
-                        <span>
-                            <i class="fa-solid fa-book"></i>
-                            Digital Edition
                         </span>
 
-                        <button
-                            class="open-book-button"
-                            type="button"
-                            data-book-id="${book.id}"
-                        >
-                            Open
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </button>
+
+                        <div class="book-cover-overlay">
+
+                            <button
+                                class="read-button"
+                                type="button"
+                                data-book-id="${escapeHTML(book.id)}"
+                            >
+
+                                <i class="fa-solid fa-book-open"></i>
+
+                                Read Book
+
+                            </button>
+
+                        </div>
 
                     </div>
 
-                </div>
 
-            `;
+                    <div class="book-card-content">
 
-            return card;
-        }
+                        <h2>
 
+                            ${escapeHTML(book.title)}
 
-        /*
-        =====================================================
-        RENDER BOOKS
-        =====================================================
-        */
-
-        function renderBooks() {
-
-            const query =
-                bookSearch.value
-                    .trim()
-                    .toLowerCase();
+                        </h2>
 
 
-            booksGrid.innerHTML = "";
+                        <p class="book-author">
+
+                            <i class="fa-solid fa-user-pen"></i>
+
+                            ${escapeHTML(book.author)}
+
+                        </p>
 
 
-            const filteredBooks =
-                books.filter(book => {
+                        <p class="book-description">
 
-                    const categoryMatch =
-                        currentCategory === "all" ||
-                        book.category === currentCategory;
+                            ${escapeHTML(book.description)}
 
-
-                    const searchText =
-                        (
-                            book.title +
-                            " " +
-                            book.author +
-                            " " +
-                            book.categoryName
-                        ).toLowerCase();
+                        </p>
 
 
-                    const searchMatch =
-                        !query ||
-                        searchText.includes(query);
+                        <div class="book-card-footer">
+
+                            <span>
+
+                                <i class="fa-solid fa-book"></i>
+
+                                Digital Edition
+
+                            </span>
 
 
-                    return (
-                        categoryMatch &&
-                        searchMatch
+                            <button
+                                class="open-book-button"
+                                type="button"
+                                data-book-id="${escapeHTML(book.id)}"
+                            >
+
+                                Open
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                return card;
+
+            }
+
+
+            /* =========================================
+               RENDER BOOKS
+            ========================================== */
+
+            function renderBooks() {
+
+                const query =
+                    bookSearch.value
+                        .trim()
+                        .toLowerCase();
+
+
+                booksGrid.innerHTML = "";
+
+
+                const filteredBooks =
+                    books.filter(book => {
+
+                        const categoryMatch =
+                            currentCategory === "all" ||
+                            book.category === currentCategory;
+
+
+                        const searchText =
+                            (
+                                book.title +
+                                " " +
+                                book.author +
+                                " " +
+                                book.categoryName
+                            ).toLowerCase();
+
+
+                        const searchMatch =
+                            !query ||
+                            searchText.includes(query);
+
+
+                        return (
+                            categoryMatch &&
+                            searchMatch
+                        );
+
+                    });
+
+
+                bookCount.textContent =
+                    filteredBooks.length;
+
+
+                if (!filteredBooks.length) {
+
+                    emptyBooks.hidden =
+                        false;
+
+                    return;
+
+                }
+
+
+                emptyBooks.hidden =
+                    true;
+
+
+                const fragment =
+                    document.createDocumentFragment();
+
+
+                filteredBooks.forEach(book => {
+
+                    fragment.appendChild(
+                        createBookCard(book)
                     );
 
                 });
 
 
-            bookCount.textContent =
-                filteredBooks.length;
-
-
-            if (!filteredBooks.length) {
-
-                emptyBooks.hidden = false;
-
-                return;
+                booksGrid.appendChild(
+                    fragment
+                );
 
             }
 
 
-            emptyBooks.hidden = true;
+            /* =========================================
+               OPEN BOOK
+            ========================================== */
 
+            function openBook(bookId) {
 
-            const fragment =
-                document.createDocumentFragment();
-
-
-            filteredBooks.forEach(book => {
-
-                fragment.appendChild(
-                    createBookCard(book)
-                );
-
-            });
-
-
-            booksGrid.appendChild(fragment);
-
-        }
-
-
-        /*
-        =====================================================
-        OPEN READER
-
-        IMPORTANT:
-        Existing reader.html ko yahan connect kiya gaya hai.
-
-        PDF URL query parameter ke through jayegi.
-
-        Example:
-
-        reader.html?book=./books/book-001.pdf
-        =====================================================
-        */
-
-        function openBook(bookId) {
-
-            const book =
-                books.find(
-                    item => item.id === bookId
-                );
-
-
-            if (!book) {
-
-                console.error(
-                    "Book not found:",
-                    bookId
-                );
-
-                return;
-
-            }
-
-
-            const readerURL =
-                "./reader.html?book=" +
-                encodeURIComponent(book.pdf) +
-                "&title=" +
-                encodeURIComponent(book.title) +
-                "&author=" +
-                encodeURIComponent(book.author);
-
-
-            window.location.href =
-                readerURL;
-
-        }
-
-
-        /*
-        =====================================================
-        BOOK CLICK
-        =====================================================
-        */
-
-        booksGrid.addEventListener(
-            "click",
-            event => {
-
-                const button =
-                    event.target.closest(
-                        "[data-book-id]"
+                const book =
+                    books.find(
+                        item =>
+                            String(item.id) ===
+                            String(bookId)
                     );
 
 
-                if (!button) {
+                if (!book) {
+
+                    console.error(
+                        "Book not found:",
+                        bookId
+                    );
+
                     return;
+
                 }
 
 
-                openBook(
-                    button.dataset.bookId
+                /*
+                 * IMPORTANT:
+                 *
+                 * book.cover = ONLY cover image
+                 *
+                 * book.pdf = ONLY PDF file
+                 *
+                 * Reader always receives book.pdf.
+                 */
+
+
+                if (!book.pdf) {
+
+                    console.error(
+                        "PDF filename missing:",
+                        book
+                    );
+
+                    alert(
+                        "PDF file is not configured for this book."
+                    );
+
+                    return;
+
+                }
+
+
+                const pdfFile =
+                    String(book.pdf).trim();
+
+
+                /*
+                 * Extra safety:
+                 *
+                 * If somebody accidentally puts an image
+                 * filename into pdf, stop instead of opening PNG.
+                 */
+
+                const extension =
+                    pdfFile
+                        .split("?")[0]
+                        .split(".")
+                        .pop()
+                        .toLowerCase();
+
+
+                if (extension !== "pdf") {
+
+                    console.error(
+                        "Invalid PDF filename:",
+                        pdfFile
+                    );
+
+                    alert(
+                        "This book does not have a valid PDF file."
+                    );
+
+                    return;
+
+                }
+
+
+                const readerURL =
+                    "./reader.html?book=" +
+                    encodeURIComponent(pdfFile);
+
+
+                console.log(
+                    "Opening PDF:",
+                    pdfFile
                 );
 
+                console.log(
+                    "Reader URL:",
+                    readerURL
+                );
+
+
+                window.location.href =
+                    readerURL;
+
             }
-        );
 
 
-        /*
-        =====================================================
-        SEARCH
-        =====================================================
-        */
+            /* =========================================
+               BOOK CLICK
+            ========================================== */
 
-        bookSearch.addEventListener(
-            "input",
-            renderBooks
-        );
+            booksGrid.addEventListener(
+                "click",
+                event => {
 
-
-        /*
-        =====================================================
-        CATEGORY FILTER
-        =====================================================
-        */
-
-        document
-            .querySelectorAll(".filter-button")
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        document
-                            .querySelectorAll(
-                                ".filter-button"
-                            )
-                            .forEach(
-                                item =>
-                                    item.classList.remove(
-                                        "active"
-                                    )
-                            );
-
-
-                        button.classList.add(
-                            "active"
+                    const button =
+                        event.target.closest(
+                            "[data-book-id]"
                         );
 
 
-                        currentCategory =
-                            button.dataset.category;
+                    if (!button) {
+
+                        return;
+
+                    }
 
 
-                        renderBooks();
+                    const bookId =
+                        button.dataset.bookId;
+
+
+                    openBook(
+                        bookId
+                    );
+
+                }
+            );
+
+
+            /* =========================================
+               SEARCH
+            ========================================== */
+
+            if (bookSearch) {
+
+                bookSearch.addEventListener(
+                    "input",
+                    renderBooks
+                );
+
+            }
+
+
+            /* =========================================
+               CATEGORY FILTER
+            ========================================== */
+
+            document
+                .querySelectorAll(
+                    ".filter-button"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            document
+                                .querySelectorAll(
+                                    ".filter-button"
+                                )
+                                .forEach(item => {
+
+                                    item.classList.remove(
+                                        "active"
+                                    );
+
+                                });
+
+
+                            button.classList.add(
+                                "active"
+                            );
+
+
+                            currentCategory =
+                                button.dataset.category;
+
+
+                            renderBooks();
+
+                        }
+                    );
+
+                });
+
+
+            /* =========================================
+               THEME
+            ========================================== */
+
+            const themeButton =
+                document.getElementById(
+                    "themeButton"
+                );
+
+
+            if (themeButton) {
+
+                themeButton.addEventListener(
+                    "click",
+                    () => {
+
+                        document.body.classList.toggle(
+                            "light-theme"
+                        );
 
                     }
                 );
 
-            });
+            }
 
 
-        /*
-        =====================================================
-        THEME
-        =====================================================
-        */
+            /* =========================================
+               SEARCH BUTTON
+            ========================================== */
 
-        const themeButton =
-            document.getElementById(
-                "themeButton"
-            );
+            const searchButton =
+                document.getElementById(
+                    "searchButton"
+                );
 
 
-        themeButton.addEventListener(
-            "click",
-            () => {
+            if (searchButton) {
 
-                document.body.classList.toggle(
-                    "light-theme"
+                searchButton.addEventListener(
+                    "click",
+                    () => {
+
+                        if (bookSearch) {
+
+                            bookSearch.focus();
+
+                        }
+
+                    }
                 );
 
             }
-        );
 
 
-        /*
-        =====================================================
-        YEAR
-        =====================================================
-        */
+            /* =========================================
+               YEAR
+            ========================================== */
 
-        footerYear.textContent =
-            new Date().getFullYear();
+            if (footerYear) {
 
+                footerYear.textContent =
+                    new Date().getFullYear();
 
-        /*
-        =====================================================
-        ESCAPE HTML
-        =====================================================
-        */
-
-        function escapeHTML(value) {
-
-            return String(value)
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-
-        }
+            }
 
 
-        /*
-        =====================================================
-        INITIAL RENDER
-        =====================================================
-        */
+            /* =========================================
+               INITIAL RENDER
+            ========================================== */
 
-        renderBooks();
+            renderBooks();
 
-    })();
+
+        })();
 
     </script>
 
+
 </body>
+
 </html>
