@@ -1,55 +1,34 @@
+/* =========================================================
+   CHISHTI READER
+   reader.css
+   Simple Black PDF Reader
+   ========================================================= */
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-:root {
-    --maroon-950: #14070b;
-    --maroon-900: #1d080e;
-    --maroon-800: #2a0b13;
-    --maroon-700: #3a101a;
-
-    --gold: #c9a45c;
-    --gold-light: #e1c77d;
-
-    --cream: #f7f0e3;
-    --text: #f5eee2;
-    --muted: #b9a9a0;
-
-    --border: rgba(201, 164, 92, 0.25);
-
-    --shadow:
-        0 20px 50px rgba(0, 0, 0, 0.45);
-
-    --radius: 10px;
-}
-
-
-/* =========================================================
-   BODY
-   ========================================================= */
 
 html,
 body {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
 }
 
-body {
-    min-height: 100vh;
 
+body {
     overflow: hidden;
 
-    background:
-        radial-gradient(
-            circle at 50% 35%,
-            #35101a 0%,
-            var(--maroon-900) 42%,
-            var(--maroon-950) 100%
-        );
+    background: #000;
 
-    color: var(--text);
+    color: #fff;
 
     font-family:
         Arial,
@@ -59,24 +38,19 @@ body {
 
 
 /* =========================================================
-   MAIN APP
+   MAIN READER
    ========================================================= */
 
 .reader-app {
     width: 100%;
     height: 100vh;
 
-    min-height: 500px;
-
     display: flex;
     flex-direction: column;
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(42, 11, 19, 0.96),
-            rgba(20, 7, 11, 0.98)
-        );
+    overflow: hidden;
+
+    background: #000;
 }
 
 
@@ -85,7 +59,7 @@ body {
    ========================================================= */
 
 .reader-header {
-    height: 64px;
+    height: 58px;
 
     flex-shrink: 0;
 
@@ -93,22 +67,13 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    gap: 20px;
+    padding: 0 22px;
 
-    padding:
-        0 24px;
+    background: #050505;
 
-    border-bottom:
-        1px solid var(--border);
+    border-bottom: 1px solid #222;
 
-    background:
-        rgba(29, 8, 14, 0.92);
-
-    box-shadow:
-        0 4px 20px rgba(0, 0, 0, 0.18);
-
-    position: relative;
-    z-index: 10;
+    z-index: 20;
 }
 
 
@@ -122,8 +87,8 @@ body {
 }
 
 
-.reader-brand__name {
-    color: var(--gold-light);
+.reader-brand-name {
+    color: #d2ad68;
 
     font-size: 14px;
 
@@ -133,18 +98,18 @@ body {
 }
 
 
-.reader-brand__title {
-    color: var(--muted);
+.reader-brand-title {
+    color: #888;
 
-    font-size: 11px;
-
-    letter-spacing: 0.08em;
+    font-size: 10px;
 
     text-transform: uppercase;
+
+    letter-spacing: 0.12em;
 }
 
 
-.reader-book-title {
+.book-title {
     max-width: 55%;
 
     overflow: hidden;
@@ -153,11 +118,11 @@ body {
 
     white-space: nowrap;
 
-    color: var(--cream);
+    color: #eee;
 
     font-size: 14px;
 
-    font-weight: 600;
+    font-weight: 500;
 
     text-align: right;
 }
@@ -174,40 +139,34 @@ body {
 
     min-height: 0;
 
+    overflow: hidden;
+
     display: flex;
 
     align-items: center;
 
     justify-content: center;
 
-    overflow: hidden;
-
-    padding: 20px;
+    background: #000;
 }
 
 
 /* =========================================================
-   BOOK CONTAINER
+   BOOK VIEWPORT
    ========================================================= */
 
-.book-container {
-    position: relative;
+.book-viewport {
+    width: 100%;
+    height: 100%;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
-
-    width: 100%;
-    height: 100%;
-
-    min-width: 0;
-    min-height: 0;
 
     overflow: auto;
 
-    padding: 20px;
+    padding: 24px;
 }
 
 
@@ -218,7 +177,7 @@ body {
 .page-wrapper {
     position: relative;
 
-    flex-shrink: 0;
+    flex: 0 0 auto;
 
     display: flex;
 
@@ -226,26 +185,13 @@ body {
 
     justify-content: center;
 
-    background: var(--cream);
+    background: #fff;
 
     box-shadow:
-        0 25px 60px rgba(0, 0, 0, 0.55),
-        0 5px 18px rgba(0, 0, 0, 0.28);
-
-    border-radius: 2px;
+        0 12px 35px rgba(0, 0, 0, 0.75),
+        0 3px 10px rgba(0, 0, 0, 0.5);
 
     overflow: hidden;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-.page-wrapper:hover {
-    box-shadow:
-        0 30px 70px rgba(0, 0, 0, 0.62),
-        0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 
@@ -263,10 +209,10 @@ body {
 
 
 /* =========================================================
-   WATERMARK
+   PAGE WATERMARK
    ========================================================= */
 
-.book-watermark {
+.page-watermark {
     position: absolute;
 
     left: 50%;
@@ -284,16 +230,14 @@ body {
 
     white-space: nowrap;
 
-    color:
-        rgba(91, 24, 38, 0.12);
+    color: rgba(70, 20, 30, 0.11);
 
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
-    font-size:
-        clamp(16px, 2vw, 28px);
+    font-size: clamp(16px, 2vw, 28px);
 
     font-weight: 700;
 
@@ -302,15 +246,228 @@ body {
 
 
 /* =========================================================
-   LOADING SCREEN
+   BOTTOM CONTROLS
    ========================================================= */
 
-.loading-screen {
+.reader-controls {
+    min-height: 64px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    background: #050505;
+
+    border-top: 1px solid #222;
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   CONTROL BUTTON
+   ========================================================= */
+
+.control-button {
+    min-width: 42px;
+
+    height: 38px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 13px;
+
+    border: 1px solid #292929;
+
+    border-radius: 6px;
+
+    background: #101010;
+
+    color: #ddd;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.control-button:hover:not(:disabled) {
+    background: #191919;
+
+    border-color: #8c6b37;
+
+    color: #e0bd72;
+}
+
+
+.control-button:active:not(:disabled) {
+    background: #0b0b0b;
+}
+
+
+.control-button:focus-visible {
+    outline: 2px solid #c9a45c;
+
+    outline-offset: 2px;
+}
+
+
+.control-button:disabled {
+    opacity: 0.35;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   PAGE COUNTER
+   ========================================================= */
+
+.page-counter {
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 4px;
+
+    color: #999;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+}
+
+
+.page-number-input {
+    width: 50px;
+
+    height: 38px;
+
+    border: 1px solid #292929;
+
+    border-radius: 6px;
+
+    outline: none;
+
+    background: #101010;
+
+    color: #eee;
+
+    text-align: center;
+
+    font-size: 12px;
+}
+
+
+.page-number-input:focus {
+    border-color: #a17c40;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(201, 164, 92, 0.12);
+}
+
+
+.page-number-input::-webkit-inner-spin-button,
+.page-number-input::-webkit-outer-spin-button {
+    margin: 0;
+
+    -webkit-appearance: none;
+}
+
+
+.page-number-input {
+    appearance: textfield;
+}
+
+
+.total-pages {
+    min-width: 24px;
+
+    color: #bbb;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.control-divider {
+    width: 1px;
+
+    height: 24px;
+
+    margin: 0 5px;
+
+    background: #292929;
+}
+
+
+/* =========================================================
+   ZOOM
+   ========================================================= */
+
+.zoom-button {
+    width: 38px;
+
+    min-width: 38px;
+
+    padding: 0;
+
+    font-size: 18px;
+
+    font-weight: 400;
+}
+
+
+.zoom-level {
+    min-width: 64px;
+
+    padding: 0 10px;
+
+    color: #c9a45c;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-screen {
     position: absolute;
 
     inset: 0;
 
-    z-index: 30;
+    z-index: 50;
 
     display: flex;
 
@@ -322,290 +479,34 @@ body {
 
     gap: 12px;
 
-    background:
-        radial-gradient(
-            circle at center,
-            #35101a 0%,
-            #1d080e 55%,
-            #14070b 100%
-        );
+    padding: 30px;
 
-    color: var(--text);
+    background: #000;
 
-    transition:
-        opacity 0.3s ease,
-        visibility 0.3s ease;
+    text-align: center;
 }
 
 
-.loading-screen.hidden {
-    opacity: 0;
-
-    visibility: hidden;
-
-    pointer-events: none;
+.error-screen[hidden] {
+    display: none;
 }
 
 
-/* =========================================================
-   LOADER
-   ========================================================= */
+.error-screen h2 {
+    color: #eee;
 
-.loading-spinner {
-    width: 54px;
-    height: 54px;
-
-    border-radius: 50%;
-
-    border:
-        2px solid
-        rgba(201, 164, 92, 0.18);
-
-    border-top-color:
-        var(--gold);
-
-    animation:
-        readerSpin 0.9s linear infinite;
+    font-size: 20px;
 }
 
 
-@keyframes readerSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
+.error-screen p {
+    max-width: 450px;
 
+    color: #888;
 
-#loadingText {
-    color: var(--cream);
+    font-size: 13px;
 
-    font-size: 14px;
-
-    font-weight: 600;
-}
-
-
-#loadingProgress {
-    color: var(--gold-light);
-
-    font-size: 12px;
-
-    font-weight: 700;
-}
-
-
-/* =========================================================
-   CONTROLS
-   ========================================================= */
-
-.reader-controls {
-    min-height: 70px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-
-    padding:
-        10px 18px;
-
-    border-top:
-        1px solid var(--border);
-
-    background:
-        rgba(29, 8, 14, 0.96);
-
-    box-shadow:
-        0 -5px 20px rgba(0, 0, 0, 0.15);
-
-    position: relative;
-
-    z-index: 10;
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.reader-button {
-    min-height: 38px;
-
-    padding:
-        0 14px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        var(--radius);
-
-    background:
-        rgba(255, 255, 255, 0.035);
-
-    color:
-        var(--text);
-
-    font-size:
-        12px;
-
-    font-weight:
-        600;
-
-    cursor:
-        pointer;
-
-    transition:
-        background 0.18s ease,
-        border-color 0.18s ease,
-        color 0.18s ease,
-        transform 0.18s ease;
-}
-
-
-.reader-button:hover {
-    background:
-        rgba(201, 164, 92, 0.1);
-
-    border-color:
-        rgba(201, 164, 92, 0.55);
-
-    color:
-        var(--gold-light);
-
-    transform:
-        translateY(-1px);
-}
-
-
-.reader-button:active {
-    transform:
-        translateY(0);
-}
-
-
-.reader-button:focus-visible {
-    outline:
-        2px solid var(--gold-light);
-
-    outline-offset:
-        2px;
-}
-
-
-.reader-button--small {
-    width: 38px;
-
-    padding: 0;
-
-    font-size: 18px;
-}
-
-
-.reader-button--zoom {
-    min-width: 65px;
-}
-
-
-/* =========================================================
-   PAGE COUNTER
-   ========================================================= */
-
-.page-counter {
-    display: flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    color:
-        var(--muted);
-
-    font-size:
-        12px;
-}
-
-
-.page-number-input {
-    width: 52px;
-
-    height: 38px;
-
-    padding:
-        0 7px;
-
-    border:
-        1px solid var(--border);
-
-    border-radius:
-        var(--radius);
-
-    background:
-        rgba(255, 255, 255, 0.04);
-
-    color:
-        var(--text);
-
-    text-align:
-        center;
-
-    font-size:
-        12px;
-
-    outline:
-        none;
-}
-
-
-.page-number-input:focus {
-    border-color:
-        var(--gold);
-
-    box-shadow:
-        0 0 0 2px
-        rgba(201, 164, 92, 0.1);
-}
-
-
-/* Remove number input arrows */
-
-.page-number-input::-webkit-inner-spin-button,
-.page-number-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-
-    margin: 0;
-}
-
-.page-number-input {
-    appearance: textfield;
-}
-
-
-/* =========================================================
-   ZOOM CONTROLS
-   ========================================================= */
-
-.zoom-controls {
-    display: flex;
-
-    align-items: center;
-
-    gap: 5px;
-
-    margin-left: 8px;
-
-    padding-left: 10px;
-
-    border-left:
-        1px solid
-        rgba(201, 164, 92, 0.15);
+    line-height: 1.6;
 }
 
 
@@ -633,51 +534,53 @@ body {
 
 
 /* =========================================================
-   RESPONSIVE TABLET
+   TABLET
    ========================================================= */
 
 @media (max-width: 800px) {
 
     .reader-header {
-        height: 58px;
+        height: 54px;
 
-        padding:
-            0 16px;
+        padding: 0 15px;
     }
 
 
-    .reader-book-title {
-        max-width: 45%;
+    .reader-brand-name {
+        font-size: 12px;
+    }
+
+
+    .reader-brand-title {
+        font-size: 9px;
+    }
+
+
+    .book-title {
+        max-width: 48%;
 
         font-size: 12px;
     }
 
 
-    .reader-area {
-        padding: 10px;
-    }
-
-
-    .book-container {
-        padding: 10px;
+    .book-viewport {
+        padding: 12px;
     }
 
 
     .reader-controls {
-        min-height: 64px;
+        min-height: 60px;
 
-        gap: 7px;
+        padding: 8px 10px;
 
-        padding:
-            8px 10px;
+        gap: 6px;
     }
 
 
-    .reader-button {
-        min-height: 36px;
+    .control-button {
+        height: 36px;
 
-        padding:
-            0 10px;
+        padding: 0 10px;
 
         font-size: 11px;
     }
@@ -685,84 +588,92 @@ body {
 
 
 /* =========================================================
-   RESPONSIVE MOBILE
+   MOBILE
    ========================================================= */
 
 @media (max-width: 560px) {
 
-    body {
-        overflow: hidden;
-    }
-
-
     .reader-header {
-        height: 58px;
-
-        gap: 8px;
+        padding: 0 10px;
     }
 
 
-    .reader-brand__name {
-        font-size: 12px;
+    .reader-brand-name {
+        font-size: 11px;
     }
 
 
-    .reader-brand__title {
-        font-size: 9px;
+    .reader-brand-title {
+        display: none;
     }
 
 
-    .reader-book-title {
-        max-width: 48%;
+    .book-title {
+        max-width: 50%;
 
         font-size: 11px;
     }
 
 
-    .reader-area {
-        padding: 5px;
-    }
-
-
-    .book-container {
-        padding: 5px;
+    .book-viewport {
+        padding: 6px;
     }
 
 
     .reader-controls {
-        min-height: auto;
+        min-height: 58px;
 
-        padding: 8px;
+        flex-wrap: wrap;
 
-        gap: 6px;
+        padding: 7px;
+
+        gap: 5px;
     }
 
 
-    .reader-button {
-        min-height: 34px;
+    .control-button {
+        height: 34px;
 
-        padding:
-            0 9px;
+        min-width: 34px;
+
+        padding: 0 8px;
 
         font-size: 10px;
     }
 
 
     .page-counter {
-        order: 1;
+        height: 34px;
+
+        gap: 5px;
     }
 
 
-    .zoom-controls {
-        margin-left: 0;
+    .page-number-input {
+        width: 44px;
 
-        padding-left: 0;
-
-        border-left: 0;
+        height: 34px;
     }
 
 
-    .book-watermark {
+    .zoom-button {
+        width: 34px;
+
+        min-width: 34px;
+    }
+
+
+    .zoom-level {
+        min-width: 55px;
+    }
+
+
+    .control-divider {
+        display: none;
+    }
+
+
+    .page-watermark {
         font-size: 13px;
     }
 }
@@ -774,38 +685,21 @@ body {
 
 @media (max-width: 380px) {
 
-    .reader-brand__title {
+    .reader-controls {
+        gap: 4px;
+    }
+
+
+    .control-button {
+        padding: 0 6px;
+    }
+
+
+    .reader-controls
+    .control-button:first-child span:last-child,
+    .reader-controls
+    .control-button:nth-child(3) span:first-child {
         display: none;
-    }
-
-
-    .reader-book-title {
-        max-width: 50%;
-    }
-
-
-    .reader-button {
-        min-height: 32px;
-
-        padding:
-            0 7px;
-    }
-
-
-    .reader-button--small {
-        width: 34px;
-    }
-
-
-    .reader-button--zoom {
-        min-width: 55px;
-    }
-
-
-    .page-number-input {
-        width: 45px;
-
-        height: 34px;
     }
 }
 
@@ -819,12 +713,10 @@ body {
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
+        transition: none !important;
 
-        animation-iteration-count: 1 !important;
+        animation: none !important;
 
         scroll-behavior: auto !important;
-
-        transition-duration: 0.01ms !important;
     }
 }
