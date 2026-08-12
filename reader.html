@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -10,64 +11,79 @@
 
     <meta
         name="description"
-        content="ChishtiLibrary.com Digital Book Reader"
+        content="ChishtiLibrary.com Premium Digital Book Reader"
+    >
+
+    <meta
+        name="theme-color"
+        content="#000000"
     >
 
     <title>Chishti Reader — ChishtiLibrary.com</title>
 
     <!-- Reader CSS -->
-    <link rel="stylesheet" href="./reader.css">
+    <link
+        rel="stylesheet"
+        href="./reader.css"
+    >
+
 </head>
 
 <body>
 
     <!-- =====================================================
          CHISHTI READER
-         Main Application
          ===================================================== -->
 
     <main
         id="readerApp"
         class="reader-app"
-        aria-label="ChishtiLibrary PDF Reader"
+        aria-label="ChishtiLibrary digital book reader"
     >
 
         <!-- =================================================
-             HEADER
+             TOP BAR
              ================================================= -->
 
-        <header class="reader-header">
+        <header
+            id="readerHeader"
+            class="reader-header"
+        >
 
             <div class="reader-brand">
-                <span class="reader-brand__name">
+
+                <div class="reader-brand-name">
                     ChishtiLibrary.com
-                </span>
+                </div>
 
-                <span class="reader-brand__title">
+                <div class="reader-brand-title">
                     Chishti Reader
-                </span>
+                </div>
+
             </div>
 
-            <div
+
+            <h1
                 id="bookTitle"
-                class="reader-book-title"
+                class="book-title"
             >
-                Loading book...
-            </div>
+                Digital Book
+            </h1>
 
         </header>
 
 
         <!-- =================================================
-             READER AREA
+             BOOK AREA
              ================================================= -->
 
         <section
+            id="readerArea"
             class="reader-area"
-            aria-label="Book reading area"
+            aria-label="Book page"
         >
 
-            <!-- Loading Screen -->
+            <!-- Loading -->
 
             <div
                 id="loadingScreen"
@@ -76,47 +92,85 @@
                 aria-live="polite"
             >
 
-                <div class="loading-spinner"></div>
+                <div
+                    class="loading-spinner"
+                    aria-hidden="true"
+                ></div>
 
-                <p id="loadingText">
+                <div
+                    id="loadingText"
+                    class="loading-text"
+                >
                     Loading book...
-                </p>
+                </div>
 
-                <span id="loadingProgress">
+                <div
+                    id="loadingProgress"
+                    class="loading-progress"
+                >
                     0%
-                </span>
+                </div>
 
             </div>
 
 
-            <!-- Book Container -->
+            <!-- Error -->
 
             <div
-                id="bookContainer"
-                class="book-container"
+                id="errorScreen"
+                class="error-screen"
+                role="alert"
+                hidden
             >
 
-                <!-- Watermark -->
+                <h2>
+                    Unable to open book
+                </h2>
 
-                <div
-                    class="book-watermark"
-                    aria-hidden="true"
+                <p id="errorMessage">
+                    The requested PDF could not be loaded.
+                </p>
+
+                <button
+                    id="retryButton"
+                    type="button"
+                    class="control-button"
                 >
-                    ChishtiLibrary.com
-                </div>
+                    Retry
+                </button>
+
+            </div>
 
 
-                <!-- PDF Page -->
+            <!-- PDF Page -->
+
+            <div
+                id="bookViewport"
+                class="book-viewport"
+            >
 
                 <div
                     id="pageWrapper"
                     class="page-wrapper"
                 >
 
+                    <!-- PDF.js renders here -->
+
                     <canvas
                         id="pdfCanvas"
-                        aria-label="Current PDF page"
+                        aria-label="Current book page"
                     ></canvas>
+
+
+                    <!-- Watermark -->
+
+                    <div
+                        id="pageWatermark"
+                        class="page-watermark"
+                        aria-hidden="true"
+                    >
+                        ChishtiLibrary.com
+                    </div>
 
                 </div>
 
@@ -126,24 +180,31 @@
 
 
         <!-- =================================================
-             READER CONTROLS
+             BOTTOM CONTROLS
              ================================================= -->
 
         <nav
+            id="readerControls"
             class="reader-controls"
-            aria-label="Reader controls"
+            aria-label="Book controls"
         >
 
-            <!-- Previous Page -->
+            <!-- Previous -->
 
             <button
                 id="previousPageButton"
+                class="control-button"
                 type="button"
-                class="reader-button"
                 title="Previous page"
-                aria-label="Go to previous page"
+                aria-label="Previous page"
             >
-                ← Previous
+                <span aria-hidden="true">
+                    ←
+                </span>
+
+                <span>
+                    Previous
+                </span>
             </button>
 
 
@@ -151,14 +212,14 @@
 
             <div
                 class="page-counter"
-                aria-label="Page navigation"
+                aria-label="Page counter"
             >
 
                 <label
                     for="pageNumberInput"
                     class="sr-only"
                 >
-                    Page number
+                    Current page
                 </label>
 
                 <input
@@ -177,7 +238,7 @@
 
                 <span
                     id="totalPages"
-                    aria-label="Total pages"
+                    class="total-pages"
                 >
                     0
                 </span>
@@ -185,59 +246,74 @@
             </div>
 
 
-            <!-- Next Page -->
+            <!-- Next -->
 
             <button
                 id="nextPageButton"
+                class="control-button"
                 type="button"
-                class="reader-button"
                 title="Next page"
-                aria-label="Go to next page"
+                aria-label="Next page"
             >
-                Next →
+
+                <span>
+                    Next
+                </span>
+
+                <span aria-hidden="true">
+                    →
+                </span>
+
             </button>
 
 
-            <!-- Zoom Controls -->
+            <!-- Divider -->
 
-            <div
-                class="zoom-controls"
-                aria-label="Zoom controls"
+            <span
+                class="control-divider"
+                aria-hidden="true"
+            ></span>
+
+
+            <!-- Zoom Out -->
+
+            <button
+                id="zoomOutButton"
+                class="control-button zoom-button"
+                type="button"
+                title="Zoom out"
+                aria-label="Zoom out"
             >
+                −
+            </button>
 
-                <button
-                    id="zoomOutButton"
-                    type="button"
-                    class="reader-button reader-button--small"
-                    title="Zoom out"
-                    aria-label="Zoom out"
-                >
-                    −
-                </button>
 
-                <button
-                    id="resetZoomButton"
-                    type="button"
-                    class="reader-button reader-button--zoom"
-                    title="Reset zoom"
-                    aria-label="Reset zoom"
-                >
-                    <span id="zoomLevel">
-                        100%
-                    </span>
-                </button>
+            <!-- Zoom Level -->
 
-                <button
-                    id="zoomInButton"
-                    type="button"
-                    class="reader-button reader-button--small"
-                    title="Zoom in"
-                    aria-label="Zoom in"
-                >
-                    +
-                </button>
+            <button
+                id="resetZoomButton"
+                class="control-button zoom-level"
+                type="button"
+                title="Reset zoom"
+                aria-label="Reset zoom"
+            >
+                <span id="zoomLevel">
+                    100%
+                </span>
+            </button>
 
-            </div>
+
+            <!-- Zoom In -->
+
+            <button
+                id="zoomInButton"
+                class="control-button zoom-button"
+                type="button"
+                title="Zoom in"
+                aria-label="Zoom in"
+            >
+                +
+            </button>
 
         </nav>
 
@@ -261,18 +337,18 @@
          ===================================================== -->
 
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs"
         type="module"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs"
     ></script>
 
 
     <!-- =====================================================
-         READER JAVASCRIPT
+         CHISHTI READER JS
          ===================================================== -->
 
     <script
-        src="./reader.js"
         type="module"
+        src="./reader.js"
     ></script>
 
 </body>
