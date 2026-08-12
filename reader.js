@@ -30,15 +30,15 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
    ========================================================= */
 
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
+// =========================================================
+// PDF URL
+// =========================================================
 
-const PDF_URL =
-    params.get("book");
+const readerParams = new URLSearchParams(
+    window.location.search
+);
 
-
+const PDF_URL = readerParams.get("book");
 /* =========================================================
    SETTINGS
    ========================================================= */
