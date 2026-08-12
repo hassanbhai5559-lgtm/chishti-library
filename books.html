@@ -1,214 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Books | Chishti Library</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<link rel="stylesheet" href="style.css">
+    <meta
+        name="description"
+        content="ChishtiLibrary.com Digital Books"
+    >
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>ChishtiLibrary.com — Books</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="./book.css"
+    >
 
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
+    <main class="library">
 
-<nav class="navbar">
+        <header class="library-header">
 
-<ul class="menu">
+            <div class="brand">
+                ChishtiLibrary.com
+            </div>
 
-<li><a href="index.html">Home</a></li>
-<li><a href="books.html" class="active">Books</a></li>
-<li><a href="#">Authors</a></li>
-<li><a href="#">About</a></li>
-<li><a href="#">Contact</a></li>
+            <h1>
+                Islamic Digital Library
+            </h1>
 
-</ul>
+            <p>
+                Read your books online
+            </p>
 
-<div class="mobile-menu">
-<i class="fa fa-bars"></i>
-</div>
+        </header>
 
-</nav>
 
-<!-- ================= HERO ================= -->
+        <section
+            class="books"
+            aria-label="Available books"
+        >
 
-<section class="hero">
+            <!-- BOOK 1 -->
 
-<div class="hero-content">
+            <article class="book-card">
 
-<span class="hero-badge">
-<i class="fa fa-book"></i> Islamic Library
-</span>
+                <div class="book-cover">
 
-<h1>Explore Islamic Books</h1>
+                    <span>
+                        BOOK
+                    </span>
 
-<p>Read, Download and Learn authentic Islamic knowledge</p>
+                    <strong>
+                        Sample Islamic Book
+                    </strong>
 
-<div class="search-box">
+                </div>
 
-<i class="fa fa-search"></i>
 
-<input 
-type="text" 
-id="searchInput" 
-placeholder="Search books...">
+                <div class="book-info">
 
-</div>
+                    <h2>
+                        Sample Islamic Book
+                    </h2>
 
-</div>
+                    <p>
+                        Read this book online in
+                        Chishti Reader.
+                    </p>
 
-</section>
 
-<!-- ================= CATEGORIES ================= -->
+                    <!-- IMPORTANT:
+                         PDF path yahan set hoga -->
 
-<section class="categories-section">
+                    <a
+                        class="read-button"
+                        href="reader.html?book=books/sample-book.pdf"
+                        aria-label="Read Sample Islamic Book"
+                    >
+                        Read
+                    </a>
 
-<div class="container">
+                </div>
 
-<div class="category-buttons">
+            </article>
 
-<button class="category active" onclick="filterBooks('All', this)">All</button>
-<button class="category" onclick="filterBooks('Naat', this)">Naat</button>
-<button class="category" onclick="filterBooks('Manqabat', this)">Manqabat</button>
-<button class="category" onclick="filterBooks('Hamd', this)">Hamd</button>
-<button class="category" onclick="filterBooks('Maqala', this)">Maqala</button>
 
-</div>
+            <!-- BOOK 2 -->
 
-</div>
+            <article class="book-card">
 
-</section>
+                <div class="book-cover">
 
-<!-- ================= BOOKS GRID ================= -->
+                    <span>
+                        BOOK
+                    </span>
 
-<section class="books-section">
+                    <strong>
+                        Another Islamic Book
+                    </strong>
 
-<div class="container">
+                </div>
 
-<div id="booksContainer" class="books-grid"></div>
 
-</div>
+                <div class="book-info">
 
-</section>
+                    <h2>
+                        Another Islamic Book
+                    </h2>
 
-<!-- ================= BOOK TEMPLATE ================= -->
+                    <p>
+                        Open this book in the
+                        digital reader.
+                    </p>
 
-<template id="bookTemplate">
 
-<div class="book-card">
+                    <a
+                        class="read-button"
+                        href="reader.html?book=books/another-book.pdf"
+                        aria-label="Read Another Islamic Book"
+                    >
+                        Read
+                    </a>
 
-<div class="book-image">
+                </div>
 
-<img class="cover" src="no-image.png">
+            </article>
 
-<span class="latest-tag">Latest</span>
+        </section>
 
-</div>
-
-<div class="book-content">
-
-<h3 class="title"></h3>
-
-<p class="author"></p>
-
-<p class="description"></p>
-
-<div class="book-meta">
-
-<span class="book-category"></span>
-
-<span><i class="fa fa-eye"></i> <span class="views"></span></span>
-
-<span><i class="fa fa-download"></i> <span class="downloads"></span></span>
-
-</div>
-
-<div class="book-actions">
-
-<a class="readBtn btn btn-primary" href="#">Read</a>
-<a class="downloadBtn btn btn-outline" href="#" download>Download</a>
-
-</div>
-
-</div>
-
-</div>
-
-</template>
-
-<!-- ================= AI BUTTON ================= -->
-
-<button id="chatBtn" class="ai-button">
-
-<img src="logo.png" alt="AI">
-
-<span class="ai-pulse"></span>
-
-</button>
-
-<!-- ================= CHAT WINDOW ================= -->
-
-<div id="chatWindow" class="chat-window">
-
-<div class="chat-header">
-
-<div class="chat-info">
-
-<img src="logo.png">
-
-<div>
-<h3>CHISHTI AI</h3>
-<p>Assistant</p>
-</div>
-
-</div>
-
-<button id="closeChat">
-<i class="fa fa-times"></i>
-</button>
-
-</div>
-
-<div id="chatMessages" class="chat-messages">
-
-<div class="bot-message">
-<div>Assalamu Alaikum 👋 How can I help you?</div>
-</div>
-
-</div>
-
-<div class="chat-input">
-
-<input type="text" id="chatInput" placeholder="Ask something...">
-
-<button id="sendMessage">
-<i class="fa fa-paper-plane"></i>
-</button>
-
-</div>
-
-</div>
-
-<!-- ================= SCROLL TOP ================= -->
-
-<button id="scrollTop" class="scroll-top">
-<i class="fa fa-arrow-up"></i>
-</button>
-
-<!-- ================= SCRIPT ================= -->
-
-<script src="script.js"></script>
+    </main>
 
 </body>
 </html>
