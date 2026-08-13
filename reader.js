@@ -1361,3 +1361,224 @@ setBookTitle();
 updateUI();
 
 loadPDF();
+/* =========================================
+   READER CONTROLS
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const reader =
+        document.getElementById("readerMode");
+
+    const readerContent =
+        document.getElementById("readerContent");
+
+    const readerPage =
+        document.getElementById("readerPage");
+
+    const prevBtn =
+        document.getElementById("readerPrev");
+
+    const nextBtn =
+        document.getElementById("readerNext");
+
+    const fontMinus =
+        document.getElementById("readerFontMinus");
+
+    const fontPlus =
+        document.getElementById("readerFontPlus");
+
+    const themeBtn =
+        document.getElementById("readerTheme");
+
+    const closeBtn =
+        document.getElementById("readerClose");
+
+
+    if (!reader || !readerContent) {
+        return;
+    }
+
+
+    /* =====================================
+       FONT SIZE
+    ===================================== */
+
+    let fontSize = 18;
+
+    fontMinus.addEventListener("click", function () {
+
+        if (fontSize > 14) {
+
+            fontSize -= 1;
+
+            readerContent.style.fontSize =
+                fontSize + "px";
+
+        }
+
+    });
+
+
+    fontPlus.addEventListener("click", function () {
+
+        if (fontSize < 30) {
+
+            fontSize += 1;
+
+            readerContent.style.fontSize =
+                fontSize + "px";
+
+        }
+
+    });
+
+
+    /* =====================================
+       THEME SWAP
+    ===================================== */
+
+    let theme = 0;
+
+    themeBtn.addEventListener("click", function () {
+
+        theme++;
+
+        if (theme > 2) {
+            theme = 0;
+        }
+
+
+        reader.classList.remove(
+            "dark-bg",
+            "sepia-bg"
+        );
+
+        readerContent.classList.remove(
+            "dark",
+            "sepia"
+        );
+
+
+        /* NORMAL */
+
+        if (theme === 0) {
+
+            reader.style.background = "#fff";
+
+            readerContent.style.color =
+                "#222";
+
+        }
+
+
+        /* DARK */
+
+        if (theme === 1) {
+
+            reader.classList.add("dark-bg");
+
+            readerContent.classList.add("dark");
+
+        }
+
+
+        /* SEPIA */
+
+        if (theme === 2) {
+
+            reader.classList.add("sepia-bg");
+
+            readerContent.classList.add("sepia");
+
+        }
+
+    });
+
+
+    /* =====================================
+       CLOSE READER
+    ===================================== */
+
+    closeBtn.addEventListener("click", function () {
+
+        reader.classList.remove("active");
+
+        document.body.style.overflow = "";
+
+    });
+
+
+    /* =====================================
+       ESC KEY
+    ===================================== */
+
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+
+            reader.classList.remove("active");
+
+            document.body.style.overflow = "";
+
+        }
+
+    });
+
+
+    /* =====================================
+       PREVIOUS / NEXT
+    ===================================== */
+
+    let currentPage = 1;
+
+    let totalPages = 1;
+
+
+    function updatePage() {
+
+        readerPage.textContent =
+            currentPage + " / " + totalPages;
+
+    }
+
+
+    prevBtn.addEventListener("click", function () {
+
+        if (currentPage > 1) {
+
+            currentPage--;
+
+            updatePage();
+
+            reader.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+    });
+
+
+    nextBtn.addEventListener("click", function () {
+
+        if (currentPage < totalPages) {
+
+            currentPage++;
+
+            updatePage();
+
+            reader.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+    });
+
+
+    updatePage();
+
+});
