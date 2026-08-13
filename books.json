@@ -183,5 +183,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+  },
+  {
+    "id": 16,
+    "title": "Hammad Hico ",
+    "author": "Sahibzada Muhammad Latif Sajid Chishti",
+    "category": "Hammad",
+    "cover": "Hammad Hico-cover.png",
+    "pdf": "Hamad Hico Book.pdf",
+    "description": "A Hammad book by Sahibzada Muhammad Latif Sajid Chishti.",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
