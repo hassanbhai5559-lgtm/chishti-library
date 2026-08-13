@@ -788,3 +788,146 @@ body {
         font-size: 16px !important;
     }
 }
+/* =========================================
+   READER CONTROLS
+========================================= */
+
+.reader-controls {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px;
+
+    background: rgba(43, 0, 0, 0.95);
+    border-radius: 16px;
+
+    box-shadow: 0 10px 35px rgba(0,0,0,.25);
+}
+
+.reader-controls button {
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.12);
+    color: #fff;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.reader-controls button:hover {
+    background: rgba(255,255,255,.25);
+    transform: translateY(-2px);
+}
+
+.reader-controls .reader-page {
+    min-width: 75px;
+
+    color: #fff;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+.reader-controls .reader-close {
+    background: #c40000;
+}
+
+.reader-controls .reader-close:hover {
+    background: #e00000;
+}
+
+
+/* READER MODE */
+
+.reader-mode {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9998;
+
+    display: none;
+
+    background: #fff;
+
+    overflow-y: auto;
+}
+
+.reader-mode.active {
+    display: block;
+}
+
+.reader-content {
+    max-width: 850px;
+
+    margin: auto;
+
+    padding: 80px 25px 120px;
+
+    color: #222;
+
+    font-size: 18px;
+
+    line-height: 1.9;
+}
+
+.reader-content.dark {
+    background: #181818;
+    color: #eee;
+}
+
+.reader-content.sepia {
+    background: #f4ecd8;
+    color: #3d3528;
+}
+
+.reader-mode.dark-bg {
+    background: #181818;
+}
+
+.reader-mode.sepia-bg {
+    background: #f4ecd8;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .reader-controls {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+
+        justify-content: center;
+    }
+
+    .reader-controls button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .reader-content {
+        padding:
+            60px 18px
+            100px;
+
+        font-size: 17px;
+    }
+
+}
