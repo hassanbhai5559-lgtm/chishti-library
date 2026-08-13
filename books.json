@@ -209,5 +209,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id": 18,
+    "title": "Ali Ali Hai",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Manqbat",
+    "cover": "ALI ALI HAI-COVER.png",
+    "pdf": "ALI ALI HAI BOOK SAIM CHISHTI BOOKS.pdf",
+    "description": "معری قطعات منقبت حضرت علیمصنف علامہ صائم چشتی،.",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
