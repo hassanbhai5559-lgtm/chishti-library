@@ -5,32 +5,51 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="description"
-        content="Chishti Library — All Books"
-    >
-
-    <meta
-        name="theme-color"
-        content="#2B0000"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>All Books — Chishti Library</title>
 
-    <link
-        rel="stylesheet"
-        href="./style.css"
-    >
+    <meta name="description"
+          content="Chishti Library — Complete Digital Islamic Book Collection">
+
+    <meta name="keywords"
+          content="Chishti Library, Islamic Books, Naat, Manqabat, Hamd, Kulliyat">
+
+    <meta name="author"
+          content="Chishti Library">
+
+    <!-- GOOGLE SITE VERIFICATION -->
+    <meta name="google-site-verification"
+          content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc">
+
+    <!-- FAVICON / LOGO -->
+    <link rel="icon"
+          type="image/png"
+          href="./logo.png">
+
+    <link rel="apple-touch-icon"
+          href="./logo.png">
+
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
     <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- MAIN CSS -->
+    <link rel="stylesheet"
+          href="./style.css">
+
+    <!-- FONT AWESOME -->
+    <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    >
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
@@ -38,1041 +57,1203 @@
 <body class="library-page">
 
 
-    <!-- =========================================
-         BACKGROUND
-    ========================================== -->
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
 
-    <div
-        class="background-system"
-        aria-hidden="true"
-    >
+<nav class="navbar">
 
-        <div class="background-overlay"></div>
+    <!-- LOGO -->
 
-        <div class="background-gradient"></div>
+    <div class="logo">
 
-        <div class="background-grid"></div>
+        <a href="./index.html">
+
+            <img
+                src="./logo.png"
+                alt="Chishti Library Logo"
+            >
+
+        </a>
+
+        <div class="logo-text">
+
+            <h2>CHISHTI LIBRARY</h2>
+
+            <span>Digital Library</span>
+
+        </div>
 
     </div>
 
 
-    <!-- =========================================
-         HEADER
-    ========================================== -->
+    <!-- MENU -->
 
-    <header class="library-header">
+    <ul class="menu">
 
-        <div class="header-left">
-
-            <a
-                href="./index.html"
-                class="library-logo"
-            >
-
-                <img
-                    src="./logo.png"
-                    alt="Chishti Library"
-                >
-
-                <div>
-
-                    <strong>
-                        CHISHTI LIBRARY
-                    </strong>
-
-                    <span>
-                        Premium Islamic Digital Library
-                    </span>
-
-                </div>
-
-            </a>
-
-        </div>
-
-
-        <nav class="library-navigation">
+        <li>
 
             <a href="./index.html">
 
-                <i class="fa-solid fa-house"></i>
+                <i class="fas fa-house"></i>
 
                 Home
 
             </a>
 
+        </li>
 
-            <a
-                href="./book.html"
-                class="active"
-            >
 
-                <i class="fa-solid fa-book-open"></i>
+        <li>
 
-                All Books
+            <a href="./books.html"
+               class="active">
+
+                <i class="fas fa-book"></i>
+
+                Books
 
             </a>
 
+        </li>
 
-            <a href="./index.html#authors">
 
-                <i class="fa-solid fa-user-pen"></i>
+        <li>
+
+            <a href="./authors.html">
+
+                <i class="fas fa-feather-alt"></i>
 
                 Authors
 
             </a>
 
-        </nav>
+        </li>
 
 
-        <div class="header-actions">
+        <li>
 
-            <button
-                id="searchButton"
-                type="button"
-                aria-label="Search Books"
+            <a href="./developer.html">
+
+                <i class="fas fa-code"></i>
+
+                Developer
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a href="./contact.html">
+
+                <i class="fas fa-phone"></i>
+
+                Contact
+
+            </a>
+
+        </li>
+
+
+        <li>
+
+            <a href="./admin/index.html">
+
+                <i class="fas fa-user-shield"></i>
+
+                Admin Login
+
+            </a>
+
+        </li>
+
+    </ul>
+
+
+    <!-- MOBILE MENU -->
+
+    <div class="mobile-menu">
+
+        <i class="fas fa-bars"></i>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     PAGE HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <img
+            src="./logo.png"
+            class="hero-logo"
+            alt="Chishti Library"
+        >
+
+        <h1>
+            ALL BOOKS
+        </h1>
+
+        <h3>
+            Chishti Digital Islamic Library
+        </h3>
+
+        <p>
+            Explore Islamic Books, Naat, Manqabat,
+            Hamd, Kulliyat and Maqala.
+        </p>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <i class="fas fa-search"></i>
+
+            <input
+                type="text"
+                id="bookSearch"
+                placeholder="Search Books..."
+                autocomplete="off"
             >
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-            </button>
-
-
-            <button
-                id="themeButton"
-                type="button"
-                aria-label="Change Theme"
-            >
-
-                <i class="fa-solid fa-circle-half-stroke"></i>
-
-            </button>
 
         </div>
 
-    </header>
 
+        <!-- BOOK COUNTER -->
 
-    <!-- =========================================
-         MAIN
-    ========================================== -->
+        <div class="counter-area">
 
-    <main class="books-page">
+            <div class="counter-card books">
 
+                <i class="fas fa-book-open"></i>
 
-        <!-- HERO -->
-
-        <section class="books-hero">
-
-            <div class="hero-content">
-
-                <span class="hero-label">
-
-                    <i class="fa-solid fa-book"></i>
-
-                    CHISHTI DIGITAL LIBRARY
-
-                </span>
-
-
-                <h1>
-                    All Books
-                </h1>
-
+                <h2 id="bookCount">
+                    0
+                </h2>
 
                 <p>
-                    Explore the complete collection of
-                    Islamic, Naat, Manqabat, Hamd and
-                    religious literature.
+                    Books
                 </p>
 
             </div>
 
-        </section>
+        </div>
+
+    </div>
+
+</section>
 
 
-        <!-- =====================================
-             SEARCH
-        ====================================== -->
 
-        <section class="books-tools">
+<!-- =====================================================
+     CATEGORIES
+===================================================== -->
 
-            <div class="books-search">
+<section class="categories">
 
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-                <input
-                    id="bookSearch"
-                    type="search"
-                    placeholder="Search books, authors..."
-                    autocomplete="off"
-                >
-
-            </div>
+    <h2 class="section-title">
+        Browse Categories
+    </h2>
 
 
-            <div class="books-count">
+    <div class="category-grid">
 
-                <span id="bookCount">
-                    0
-                </span>
-
-                Books
-
-            </div>
-
-        </section>
+        <button
+            class="category active"
+            data-category="all"
+            type="button"
+        >
+            ALL
+        </button>
 
 
-        <!-- =====================================
-             CATEGORY FILTERS
-        ====================================== -->
-
-        <section class="book-filters">
-
-            <button
-                class="filter-button active"
-                data-category="all"
-                type="button"
-            >
-                All Books
-            </button>
+        <button
+            class="category"
+            data-category="naat"
+            type="button"
+        >
+            NAAT
+        </button>
 
 
-            <button
-                class="filter-button"
-                data-category="naat"
-                type="button"
-            >
-                Naat
-            </button>
+        <button
+            class="category"
+            data-category="manqabat"
+            type="button"
+        >
+            MANQABAT
+        </button>
 
 
-            <button
-                class="filter-button"
-                data-category="manqabat"
-                type="button"
-            >
-                Manqabat
-            </button>
+        <button
+            class="category"
+            data-category="hamd"
+            type="button"
+        >
+            HAMD
+        </button>
 
 
-            <button
-                class="filter-button"
-                data-category="hamd"
-                type="button"
-            >
-                Hamd
-            </button>
+        <button
+            class="category"
+            data-category="maqala"
+            type="button"
+        >
+            MAQALA
+        </button>
 
 
-            <button
-                class="filter-button"
-                data-category="deeni"
-                type="button"
-            >
-                Deeni
-            </button>
+        <button
+            class="category"
+            data-category="kulliyat"
+            type="button"
+        >
+            KULLIYAT
+        </button>
+
+    </div>
+
+</section>
 
 
-            <button
-                class="filter-button"
-                data-category="adab"
-                type="button"
-            >
-                Adab
-            </button>
 
-        </section>
+<!-- =====================================================
+     BOOKS
+===================================================== -->
 
+<section class="featured-books">
 
-        <!-- =====================================
-             BOOK GRID
-        ====================================== -->
-
-        <section
-            id="booksGrid"
-            class="books-grid"
-            aria-label="All Books"
-        ></section>
+    <h2 class="section-title">
+        All Books
+    </h2>
 
 
-        <!-- =====================================
-             EMPTY STATE
-        ====================================== -->
+    <div
+        id="booksContainer"
+        class="books-grid"
+    >
 
-        <section
-            id="emptyBooks"
-            class="empty-books"
-            hidden
+    </div>
+
+
+    <!-- EMPTY -->
+
+    <div
+        id="emptyBooks"
+        class="no-books"
+        style="display:none;"
+    >
+
+        <h2>
+            No Books Found
+        </h2>
+
+        <p>
+            Try another search or category.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="footer-logo">
+
+        <img
+            src="./logo.png"
+            alt="Chishti Library"
         >
 
-            <div class="empty-icon">
+        <h2>
+            CHISHTI LIBRARY
+        </h2>
 
-                <i class="fa-solid fa-book-open"></i>
+        <p>
+            Digital Islamic Library
+        </p>
+
+    </div>
+
+
+    <!-- SOCIAL LINKS -->
+
+    <div class="footer-social">
+
+        <a
+            href="https://www.facebook.com/profile.php?id=100063724950961"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Facebook"
+            title="Facebook"
+        >
+
+            <i class="fab fa-facebook-f"></i>
+
+            <span>
+                Facebook
+            </span>
+
+        </a>
+
+
+        <a
+            href="https://www.youtube.com/@Saimtv5"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="YouTube"
+            title="YouTube"
+        >
+
+            <i class="fab fa-youtube"></i>
+
+            <span>
+                YouTube
+            </span>
+
+        </a>
+
+
+        <a
+            href="https://www.facebook.com/saimchishtiofficial"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Saim Chishti Official Facebook"
+            title="Saim Chishti Official"
+        >
+
+            <i class="fab fa-facebook-f"></i>
+
+            <span>
+                Saim Chishti Official
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="footer-copy">
+
+        ©
+        <span id="footerYear"></span>
+
+        Chishti Library —
+        All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     SCROLL TOP
+===================================================== -->
+
+<button id="scrollTop">
+
+    <i class="fas fa-arrow-up"></i>
+
+</button>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+"use strict";
+
+
+/* =====================================================
+   BOOK DATABASE
+   COVER = IMAGE
+   PDF   = PDF ONLY
+===================================================== */
+
+const books = [
+
+    {
+        id: 1,
+        title: "Al-Rehman",
+        author: "Sahibzada Muhammad Latif Sajid Chishti",
+        category: "hamd",
+        categoryName: "Hamd",
+        cover: "al-rehman-cover.png",
+        pdf: "Al Rehman .. Latif Sajid.C.pdf",
+        description:
+            "99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti."
+    },
+
+
+    {
+        id: 2,
+        title: "Husn-e-Kainat",
+        author: "Hazrat Allama Saim Chishti",
+        category: "naat",
+        categoryName: "Naat",
+        cover: "husn-e-kainat-cover.png",
+        pdf: "husn-e-kainat.pdf",
+        description:
+            "Naatiya Kalam by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 3,
+        title: "Shahdaye Karbala",
+        author: "Hazrat Allama Saim Chishti",
+        category: "manqabat",
+        categoryName: "Manqabat",
+        cover: "shahdaye karbala-cover.png",
+        pdf: "shahdaye-karbala.pdf",
+        description:
+            "Karbala ke shuhada ke fazail par manqabat ki kitab."
+    },
+
+
+    {
+        id: 4,
+        title: "Shaheed Ibn-e-Shaheed",
+        author: "Hazrat Allama Saim Chishti",
+        category: "manqabat",
+        categoryName: "Manqabat",
+        cover: "shaheed-ibn-e-shaheed-cover.png",
+        pdf: "shaheed-ibn-e-shaheed.pdf",
+        description:
+            "Historical Manqabat book by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 5,
+        title: "Nawaye Saim",
+        author: "Hazrat Allama Saim Chishti",
+        category: "naat",
+        categoryName: "Naat",
+        cover: "Nawaye Saim-cover.png",
+        pdf: "noori.pdf",
+        description:
+            "Naatiya Majmua by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 6,
+        title: "Kulliyat-e-Saim Chishti",
+        author: "Hazrat Allama Saim Chishti",
+        category: "kulliyat",
+        categoryName: "Kulliyat",
+        cover: "kulliyat e saim chishti-cover.png",
+        pdf: "Kulliyat e Saim Chishti By Allama Saim Chishti.pdf",
+        description:
+            "Complete Kulliyat of Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 7,
+        title: "Punjabi Maqala",
+        author: "Hazrat Allama Saim Chishti",
+        category: "maqala",
+        categoryName: "Maqala",
+        cover: "allamasaimchishtipunjbimaqala-cover.png",
+        pdf: "allamasaimchishtipunjabimaqala-231010120010-3ca7944b (1).pdf",
+        description:
+            "Punjabi Maqala by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 8,
+        title: "Armaghan-e-Madina",
+        author: "Hazrat Allama Saim Chishti",
+        category: "naat",
+        categoryName: "Naat",
+        cover: "Armaghan-e-Madina-By-Allama-Saim-Chishti-cover.webp",
+        pdf: "armughan e madina.pdf",
+        description:
+            "Collection of Naats by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 9,
+        title: "Shan-e-Kainat",
+        author: "Hazrat Allama Saim Chishti",
+        category: "naat",
+        categoryName: "Naat",
+        cover: "naat-cover2.png",
+        pdf: "shan-e-kainat.pdf",
+        description:
+            "Naatiya Collection by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 10,
+        title: "Rehmat Da Khazana",
+        author: "Hazrat Allama Saim Chishti",
+        category: "naat",
+        categoryName: "Naat",
+        cover: "rehmatdakhazana-cover.png",
+        pdf: "rehmatdakhazana.pdf",
+        description:
+            "Naatiya Collection by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 11,
+        title: "Madinay Diyan Kaliyan",
+        author: "Hazrat Allama Saim Chishti",
+        category: "naat",
+        categoryName: "Naat",
+        cover: "madinydiankalinyan-cover.png",
+        pdf: "madinydiankalinyan.pdf",
+        description:
+            "Naatiya Collection by Hazrat Allama Saim Chishti."
+    },
+
+
+    {
+        id: 12,
+        title: "Darooda Di Dali",
+        author: "Sahibzada Muhammad Latif Sajid Chishti",
+        category: "hamd",
+        categoryName: "Hamd",
+        cover: "darooda di dali-cover.png",
+        pdf: "Darooda Di Dali Pdf.pdf",
+        description:
+            "A Punjabi Naatiya book by Sahibzada Muhammad Latif Sajid Chishti."
+    },
+
+
+    {
+        id: 13,
+        title: "Sbhy Hamdan Ne Rab Sohnay",
+        author: "Sahibzada Muhammad Latif Sajid Chishti",
+        category: "hamd",
+        categoryName: "Hamd",
+        cover: "Sbhy Hamdan Ne Rab Sohnay-cover.jpeg",
+        pdf: "Sbhy Hamdan Ne Rab Sohnay.pdf",
+        description:
+            "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
+    }
+
+];
+
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const booksContainer =
+    document.getElementById("booksContainer");
+
+const bookSearch =
+    document.getElementById("bookSearch");
+
+const bookCount =
+    document.getElementById("bookCount");
+
+const emptyBooks =
+    document.getElementById("emptyBooks");
+
+const footerYear =
+    document.getElementById("footerYear");
+
+
+
+let currentCategory = "all";
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+
+/* =====================================================
+   CREATE BOOK CARD
+===================================================== */
+
+function createBookCard(book) {
+
+    const card =
+        document.createElement("article");
+
+    card.className =
+        "book-card";
+
+
+    card.innerHTML = `
+
+        <div class="book-cover">
+
+            <img
+                src="${escapeHTML(book.cover)}"
+                alt="${escapeHTML(book.title)}"
+                loading="lazy"
+                onerror="this.src='./logo.png'"
+            >
+
+
+            <span class="book-category">
+
+                ${escapeHTML(book.categoryName)}
+
+            </span>
+
+
+            <div class="book-cover-overlay">
+
+                <button
+                    class="read-button"
+                    type="button"
+                    data-book-id="${escapeHTML(book.id)}"
+                >
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    Read Book
+
+                </button>
 
             </div>
 
+        </div>
+
+
+        <div class="book-card-content">
 
             <h2>
-                No Books Found
+
+                ${escapeHTML(book.title)}
+
             </h2>
 
 
-            <p>
-                Try another book title, author or category.
+            <p class="book-author">
+
+                <i class="fa-solid fa-user-pen"></i>
+
+                ${escapeHTML(book.author)}
+
             </p>
 
-        </section>
 
-    </main>
+            <p class="book-description">
 
+                ${escapeHTML(book.description)}
 
-    <!-- =========================================
-         FOOTER
-    ========================================== -->
-
-    <footer class="library-footer">
-
-        <div>
-
-            <strong>
-                CHISHTI LIBRARY
-            </strong>
-
-            <p>
-                Ilm • Ishq-e-Rasool ﷺ • Muhabbat-e-Ahl-e-Baitؑ
             </p>
+
+
+            <div class="book-card-footer">
+
+                <span>
+
+                    <i class="fa-solid fa-book"></i>
+
+                    Digital Edition
+
+                </span>
+
+
+                <button
+                    class="open-book-button"
+                    type="button"
+                    data-book-id="${escapeHTML(book.id)}"
+                >
+
+                    Open
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+            </div>
 
         </div>
 
+    `;
 
-        <div>
-
-            ©
-            <span id="footerYear"></span>
-
-            ChishtiLibrary.com
-
-        </div>
-
-    </footer>
-
-
-    <!-- =========================================
-         JAVASCRIPT
-    ========================================== -->
-
-    <script>
-
-        (() => {
-
-            "use strict";
-
-
-            /* =========================================
-               BOOK DATABASE
-            ========================================== */
-
-            const books = [
-
-                {
-                    id: 1,
-                    title: "Al-Rehman",
-                    author: "Sahibzada Muhammad Latif Sajid Chishti",
-                    category: "hamd",
-                    categoryName: "Hamd",
-                    cover: "al-rehman-cover.png",
-                    pdf: "Al Rehman .. Latif Sajid.C.pdf",
-                    description:
-                        "99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti.",
-                    latest: true
-                },
-
-
-                {
-                    id: 2,
-                    title: "Husn-e-Kainat",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "naat",
-                    categoryName: "Naat",
-                    cover: "husn-e-kainat-cover.png",
-                    pdf: "husn-e-kainat.pdf",
-                    description:
-                        "Naatiya Kalam by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 3,
-                    title: "Shahdaye Karbala",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "manqabat",
-                    categoryName: "Manqabat",
-                    cover: "shahdaye karbala-cover.png",
-                    pdf: "shahdaye-karbala.pdf",
-                    description:
-                        "Karbala ke shuhada ke fazail par manqabat ki kitab."
-                },
-
-
-                {
-                    id: 4,
-                    title: "Shaheed Ibn-e-Shaheed",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "manqabat",
-                    categoryName: "Manqabat",
-                    cover: "shaheed-ibn-e-shaheed-cover.png",
-                    pdf: "shaheed-ibn-e-shaheed.pdf",
-                    description:
-                        "Historical Manqabat book by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 5,
-                    title: "Nawaye Saim",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "naat",
-                    categoryName: "Naat",
-                    cover: "Nawaye Saim-cover.png",
-                    pdf: "noori.pdf",
-                    description:
-                        "Naatiya Majmua by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 6,
-                    title: "Kulliyat-e-Saim Chishti",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "kulliyat",
-                    categoryName: "Kulliyat",
-                    cover: "kulliyat e saim chishti-cover.png",
-                    pdf: "Kulliyat e Saim Chishti By Allama Saim Chishti.pdf",
-                    description:
-                        "Complete Kulliyat of Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 7,
-                    title: "Punjabi Maqala",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "maqala",
-                    categoryName: "Maqala",
-                    cover: "allamasaimchishtipunjbimaqala-cover.png",
-                    pdf: "allamasaimchishtipunjabimaqala-231010120010-3ca7944b (1).pdf",
-                    description:
-                        "Punjabi Maqala by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 8,
-                    title: "Armaghan-e-Madina",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "naat",
-                    categoryName: "Naat",
-                    cover: "Armaghan-e-Madina-By-Allama-Saim-Chishti-cover.webp",
-                    pdf: "armughan e madina.pdf",
-                    description:
-                        "Collection of Naats by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 9,
-                    title: "Shan-e-Kainat",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "naat",
-                    categoryName: "Naat",
-                    cover: "naat-cover2.png",
-                    pdf: "shan-e-kainat.pdf",
-                    description:
-                        "Naatiya Collection by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 10,
-                    title: "Rehmat Da Khazana",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "naat",
-                    categoryName: "Naat",
-                    cover: "rehmatdakhazana-cover.png",
-                    pdf: "rehmatdakhazana.pdf",
-                    description:
-                        "Naatiya Collection by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 11,
-                    title: "Madinay Diyan Kaliyan",
-                    author: "Hazrat Allama Saim Chishti",
-                    category: "naat",
-                    categoryName: "Naat",
-                    cover: "madinydiankalinyan-cover.png",
-                    pdf: "madinydiankalinyan.pdf",
-                    description:
-                        "Naatiya Collection by Hazrat Allama Saim Chishti."
-                },
-
-
-                {
-                    id: 12,
-                    title: "Darooda Di Dali",
-                    author: "Sahibzada Muhammad Latif Sajid Chishti",
-                    category: "hamd",
-                    categoryName: "Hamd",
-                    cover: "darooda di dali-cover.png",
-                    pdf: "Darooda Di Dali Pdf.pdf",
-                    description:
-                        "A Punjabi Naatiya book by Sahibzada Muhammad Latif Sajid Chishti.",
-                    latest: true
-                },
-
-
-                {
-                    id: 13,
-                    title: "Sbhy Hamdan Ne Rab Sohnay",
-                    author: "Sahibzada Muhammad Latif Sajid Chishti",
-                    category: "hamd",
-                    categoryName: "Hamd",
-                    cover: "Sbhy Hamdan Ne Rab Sohnay-cover.jpeg",
-                    pdf: "Sbhy Hamdan Ne Rab Sohnay.pdf",
-                    description:
-                        "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti.",
-                    latest: true
-                }
 
-            ];
+    return card;
 
+}
 
-            /* =========================================
-               ELEMENTS
-            ========================================== */
 
-            const booksGrid =
-                document.getElementById("booksGrid");
 
-            const emptyBooks =
-                document.getElementById("emptyBooks");
+/* =====================================================
+   OPEN BOOK
+   IMPORTANT:
+   COVER IS NEVER USED HERE.
+   ONLY PDF IS SENT TO READER.
+===================================================== */
 
-            const bookSearch =
-                document.getElementById("bookSearch");
+function openBook(bookId) {
 
-            const bookCount =
-                document.getElementById("bookCount");
+    const book =
+        books.find(
+            item =>
+                String(item.id) ===
+                String(bookId)
+        );
 
-            const footerYear =
-                document.getElementById("footerYear");
 
+    if (!book) {
 
-            let currentCategory = "all";
+        console.error(
+            "Book not found:",
+            bookId
+        );
 
+        return;
 
-            /* =========================================
-               ESCAPE HTML
-            ========================================== */
+    }
 
-            function escapeHTML(value) {
 
-                return String(value)
-                    .replaceAll("&", "&amp;")
-                    .replaceAll("<", "&lt;")
-                    .replaceAll(">", "&gt;")
-                    .replaceAll('"', "&quot;")
-                    .replaceAll("'", "&#039;");
+    const pdfFile =
+        String(book.pdf || "").trim();
 
-            }
 
+    if (!pdfFile) {
 
-            /* =========================================
-               CREATE BOOK CARD
-            ========================================== */
+        alert(
+            "Is book ki PDF file configured nahi hai."
+        );
 
-            function createBookCard(book) {
+        return;
 
-                const card =
-                    document.createElement("article");
+    }
 
-                card.className =
-                    "book-card";
 
-                card.dataset.category =
-                    book.category;
+    /*
+     * SAFETY CHECK
+     *
+     * PNG / JPG / JPEG / WEBP
+     * kabhi reader ko nahi bheji jayengi.
+     */
 
-                card.dataset.search =
-                    (
-                        book.title +
-                        " " +
-                        book.author +
-                        " " +
-                        book.categoryName
-                    ).toLowerCase();
+    const extension =
+        pdfFile
+            .split("?")[0]
+            .split(".")
+            .pop()
+            .toLowerCase();
 
 
-                card.innerHTML = `
+    if (extension !== "pdf") {
 
-                    <div class="book-cover">
+        console.error(
+            "Invalid PDF filename:",
+            pdfFile
+        );
 
-                        <img
-                            src="${escapeHTML(book.cover)}"
-                            alt="${escapeHTML(book.title)}"
-                            loading="lazy"
-                            onerror="this.src='./logo.png'"
-                        >
+        alert(
+            "Is book ki valid PDF file nahi mili."
+        );
 
-                        <span class="book-category">
+        return;
 
-                            ${escapeHTML(book.categoryName)}
+    }
 
-                        </span>
 
+    /*
+     * EXACT READER URL
+     */
 
-                        <div class="book-cover-overlay">
+    const readerURL =
+        "./reader.html?book=" +
+        encodeURIComponent(pdfFile);
 
-                            <button
-                                class="read-button"
-                                type="button"
-                                data-book-id="${escapeHTML(book.id)}"
-                            >
 
-                                <i class="fa-solid fa-book-open"></i>
+    console.log(
+        "PDF:",
+        pdfFile
+    );
 
-                                Read Book
+    console.log(
+        "Reader:",
+        readerURL
+    );
 
-                            </button>
 
-                        </div>
+    window.location.href =
+        readerURL;
 
-                    </div>
+}
 
 
-                    <div class="book-card-content">
 
-                        <h2>
+/* =====================================================
+   BOOK CLICK
+===================================================== */
 
-                            ${escapeHTML(book.title)}
+booksContainer.addEventListener(
+    "click",
+    function(event) {
 
-                        </h2>
+        const button =
+            event.target.closest(
+                "[data-book-id]"
+            );
 
 
-                        <p class="book-author">
+        if (!button) {
 
-                            <i class="fa-solid fa-user-pen"></i>
+            return;
 
-                            ${escapeHTML(book.author)}
+        }
 
-                        </p>
 
+        openBook(
+            button.dataset.bookId
+        );
 
-                        <p class="book-description">
+    }
+);
 
-                            ${escapeHTML(book.description)}
 
-                        </p>
 
+/* =====================================================
+   RENDER BOOKS
+===================================================== */
 
-                        <div class="book-card-footer">
+function renderBooks() {
 
-                            <span>
+    const query =
+        bookSearch
+            ? bookSearch.value
+                .trim()
+                .toLowerCase()
+            : "";
 
-                                <i class="fa-solid fa-book"></i>
 
-                                Digital Edition
+    const filteredBooks =
+        books.filter(book => {
 
-                            </span>
+            const categoryMatch =
+                currentCategory === "all" ||
+                book.category === currentCategory;
 
 
-                            <button
-                                class="open-book-button"
-                                type="button"
-                                data-book-id="${escapeHTML(book.id)}"
-                            >
+            const searchText =
+                (
+                    book.title +
+                    " " +
+                    book.author +
+                    " " +
+                    book.categoryName +
+                    " " +
+                    book.description
+                ).toLowerCase();
 
-                                Open
 
-                                <i class="fa-solid fa-arrow-right"></i>
+            const searchMatch =
+                !query ||
+                searchText.includes(query);
 
-                            </button>
 
-                        </div>
+            return (
+                categoryMatch &&
+                searchMatch
+            );
 
-                    </div>
+        });
 
-                `;
 
+    booksContainer.innerHTML = "";
 
-                return card;
 
-            }
+    if (bookCount) {
 
+        bookCount.textContent =
+            filteredBooks.length;
 
-            /* =========================================
-               RENDER BOOKS
-            ========================================== */
+    }
 
-            function renderBooks() {
 
-                const query =
-                    bookSearch.value
-                        .trim()
-                        .toLowerCase();
+    if (!filteredBooks.length) {
 
+        if (emptyBooks) {
 
-                booksGrid.innerHTML = "";
+            emptyBooks.style.display =
+                "block";
 
+        }
 
-                const filteredBooks =
-                    books.filter(book => {
+        return;
 
-                        const categoryMatch =
-                            currentCategory === "all" ||
-                            book.category === currentCategory;
+    }
 
 
-                        const searchText =
-                            (
-                                book.title +
-                                " " +
-                                book.author +
-                                " " +
-                                book.categoryName
-                            ).toLowerCase();
+    if (emptyBooks) {
 
+        emptyBooks.style.display =
+            "none";
 
-                        const searchMatch =
-                            !query ||
-                            searchText.includes(query);
+    }
 
 
-                        return (
-                            categoryMatch &&
-                            searchMatch
+    const fragment =
+        document.createDocumentFragment();
+
+
+    filteredBooks.forEach(book => {
+
+        fragment.appendChild(
+            createBookCard(book)
+        );
+
+    });
+
+
+    booksContainer.appendChild(
+        fragment
+    );
+
+}
+
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+if (bookSearch) {
+
+    bookSearch.addEventListener(
+        "input",
+        renderBooks
+    );
+
+}
+
+
+
+/* =====================================================
+   CATEGORY FILTER
+===================================================== */
+
+document
+    .querySelectorAll(".category")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                document
+                    .querySelectorAll(".category")
+                    .forEach(item => {
+
+                        item.classList.remove(
+                            "active"
                         );
 
                     });
 
 
-                bookCount.textContent =
-                    filteredBooks.length;
-
-
-                if (!filteredBooks.length) {
-
-                    emptyBooks.hidden =
-                        false;
-
-                    return;
-
-                }
-
-
-                emptyBooks.hidden =
-                    true;
-
-
-                const fragment =
-                    document.createDocumentFragment();
-
-
-                filteredBooks.forEach(book => {
-
-                    fragment.appendChild(
-                        createBookCard(book)
-                    );
-
-                });
-
-
-                booksGrid.appendChild(
-                    fragment
+                this.classList.add(
+                    "active"
                 );
+
+
+                currentCategory =
+                    this.dataset.category;
+
+
+                renderBooks();
 
             }
+        );
+
+    });
 
 
-            /* =========================================
-               OPEN BOOK
-            ========================================== */
 
-            function openBook(bookId) {
+/* =====================================================
+   MOBILE MENU
+===================================================== */
 
-                const book =
-                    books.find(
-                        item =>
-                            String(item.id) ===
-                            String(bookId)
-                    );
+const mobileMenu =
+    document.querySelector(".mobile-menu");
+
+const menu =
+    document.querySelector(".menu");
 
 
-                if (!book) {
+if (mobileMenu && menu) {
 
-                    console.error(
-                        "Book not found:",
-                        bookId
-                    );
+    mobileMenu.addEventListener(
+        "click",
+        function() {
 
-                    return;
-
-                }
-
-
-                /*
-                 * IMPORTANT:
-                 *
-                 * book.cover = ONLY cover image
-                 *
-                 * book.pdf = ONLY PDF file
-                 *
-                 * Reader always receives book.pdf.
-                 */
-
-
-                if (!book.pdf) {
-
-                    console.error(
-                        "PDF filename missing:",
-                        book
-                    );
-
-                    alert(
-                        "PDF file is not configured for this book."
-                    );
-
-                    return;
-
-                }
-
-
-                const pdfFile =
-                    String(book.pdf).trim();
-
-
-                /*
-                 * Extra safety:
-                 *
-                 * If somebody accidentally puts an image
-                 * filename into pdf, stop instead of opening PNG.
-                 */
-
-                const extension =
-                    pdfFile
-                        .split("?")[0]
-                        .split(".")
-                        .pop()
-                        .toLowerCase();
-
-
-                if (extension !== "pdf") {
-
-                    console.error(
-                        "Invalid PDF filename:",
-                        pdfFile
-                    );
-
-                    alert(
-                        "This book does not have a valid PDF file."
-                    );
-
-                    return;
-
-                }
-
-
-                const readerURL =
-                    "./reader.html?book=" +
-                    encodeURIComponent(pdfFile);
-
-
-                console.log(
-                    "Opening PDF:",
-                    pdfFile
-                );
-
-                console.log(
-                    "Reader URL:",
-                    readerURL
-                );
-
-
-                window.location.href =
-                    readerURL;
-
-            }
-
-
-            /* =========================================
-               BOOK CLICK
-            ========================================== */
-
-            booksGrid.addEventListener(
-                "click",
-                event => {
-
-                    const button =
-                        event.target.closest(
-                            "[data-book-id]"
-                        );
-
-
-                    if (!button) {
-
-                        return;
-
-                    }
-
-
-                    const bookId =
-                        button.dataset.bookId;
-
-
-                    openBook(
-                        bookId
-                    );
-
-                }
+            menu.classList.toggle(
+                "show"
             );
 
+        }
+    );
 
-            /* =========================================
-               SEARCH
-            ========================================== */
-
-            if (bookSearch) {
-
-                bookSearch.addEventListener(
-                    "input",
-                    renderBooks
-                );
-
-            }
+}
 
 
-            /* =========================================
-               CATEGORY FILTER
-            ========================================== */
 
-            document
-                .querySelectorAll(
-                    ".filter-button"
-                )
-                .forEach(button => {
+/* =====================================================
+   SCROLL TOP
+===================================================== */
 
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            document
-                                .querySelectorAll(
-                                    ".filter-button"
-                                )
-                                .forEach(item => {
-
-                                    item.classList.remove(
-                                        "active"
-                                    );
-
-                                });
+const scrollTop =
+    document.getElementById("scrollTop");
 
 
-                            button.classList.add(
-                                "active"
-                            );
+if (scrollTop) {
+
+    window.addEventListener(
+        "scroll",
+        function() {
+
+            scrollTop.style.display =
+                window.scrollY > 300
+                    ? "block"
+                    : "none";
+
+        }
+    );
 
 
-                            currentCategory =
-                                button.dataset.category;
+    scrollTop.addEventListener(
+        "click",
+        function() {
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        }
+    );
+
+}
 
 
-                            renderBooks();
 
-                        }
-                    );
+/* =====================================================
+   FOOTER YEAR
+===================================================== */
 
-                });
+if (footerYear) {
 
+    footerYear.textContent =
+        new Date().getFullYear();
 
-            /* =========================================
-               THEME
-            ========================================== */
-
-            const themeButton =
-                document.getElementById(
-                    "themeButton"
-                );
+}
 
 
-            if (themeButton) {
 
-                themeButton.addEventListener(
-                    "click",
-                    () => {
+/* =====================================================
+   IMAGE FALLBACK
+===================================================== */
 
-                        document.body.classList.toggle(
-                            "light-theme"
-                        );
+document
+    .querySelectorAll("img")
+    .forEach(img => {
 
-                    }
-                );
+        img.addEventListener(
+            "error",
+            function() {
 
-            }
+                if (
+                    this.src.indexOf(
+                        "logo.png"
+                    ) === -1
+                ) {
 
+                    this.src =
+                        "./logo.png";
 
-            /* =========================================
-               SEARCH BUTTON
-            ========================================== */
-
-            const searchButton =
-                document.getElementById(
-                    "searchButton"
-                );
-
-
-            if (searchButton) {
-
-                searchButton.addEventListener(
-                    "click",
-                    () => {
-
-                        if (bookSearch) {
-
-                            bookSearch.focus();
-
-                        }
-
-                    }
-                );
+                }
 
             }
+        );
+
+    });
 
 
-            /* =========================================
-               YEAR
-            ========================================== */
 
-            if (footerYear) {
+/* =====================================================
+   START
+===================================================== */
 
-                footerYear.textContent =
-                    new Date().getFullYear();
-
-            }
+renderBooks();
 
 
-            /* =========================================
-               INITIAL RENDER
-            ========================================== */
+console.log(
+    "===================================="
+);
 
-            renderBooks();
+console.log(
+    "📚 CHISHTI LIBRARY"
+);
 
+console.log(
+    "✅ Books Loaded:",
+    books.length
+);
 
-        })();
+console.log(
+    "✅ Cover = Image"
+);
 
-    </script>
+console.log(
+    "✅ Reader = PDF"
+);
 
+console.log(
+    "🚀 Books Page Ready"
+);
+
+</script>
 
 </body>
 
