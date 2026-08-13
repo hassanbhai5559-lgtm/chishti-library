@@ -3,50 +3,71 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Contact Us | Chishti Library</title>
+    <title>Contact Us | Chishti Library</title>
 
-<meta name="description"
-      content="Contact Chishti Library through WhatsApp and phone.">
+    <meta name="description"
+          content="Contact Chishti Library through WhatsApp and phone.">
 
-<meta name="author"
-      content="Chishti Library">
+    <meta name="author"
+          content="Chishti Library">
 
-<!-- FAVICON -->
-<link rel="icon" type="image/png" href="./logo.png">
-<link rel="apple-touch-icon" href="./logo.png">
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="apple-touch-icon" href="./logo.png">
 
-<!-- GOOGLE FONTS -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-<!-- MAIN CSS -->
-<link rel="stylesheet" href="./style.css">
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
 
-<!-- FONT AWESOME -->
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="./style.css">
+
 
 <style>
 
 /* =========================================
-   CONTACT PAGE
+   RESET
 ========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: "Poppins", Arial, sans-serif;
+}
 
 .contact-page {
     min-height: 100vh;
-    padding-bottom: 80px;
+    background: #f5f5f5;
 }
 
-/* HERO */
+
+/* =========================================
+   HERO
+========================================= */
 
 .contact-hero {
-    min-height: 380px;
+    min-height: 400px;
 
     display: flex;
     align-items: center;
@@ -54,46 +75,95 @@
 
     text-align: center;
 
-    padding: 80px 20px;
+    padding: 90px 20px 120px;
 
     background:
         linear-gradient(
-            rgba(43,0,0,0.88),
-            rgba(20,0,0,0.94)
+            135deg,
+            #2b0000,
+            #570000,
+            #180000
         );
+
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.04);
+
+    top: -250px;
+    left: -150px;
+}
+
+.contact-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 450px;
+    height: 450px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.04);
+
+    bottom: -250px;
+    right: -150px;
 }
 
 .contact-hero-content {
+    position: relative;
+    z-index: 2;
+
     max-width: 850px;
 }
 
 .contact-hero-logo {
-    width: 100px;
-    height: 100px;
+    width: 105px;
+    height: 105px;
 
     object-fit: contain;
 
     margin-bottom: 20px;
 
-    filter: drop-shadow(0 8px 20px rgba(0,0,0,.45));
+    filter:
+        drop-shadow(
+            0 8px 20px rgba(0,0,0,.5)
+        );
 }
 
 .contact-label {
     display: inline-flex;
-    align-items: center;
-    gap: 8px;
 
-    padding: 8px 18px;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    padding: 9px 18px;
 
     border-radius: 30px;
 
     background: rgba(255,255,255,.10);
 
-    border: 1px solid rgba(255,255,255,.18);
+    border:
+        1px solid
+        rgba(255,255,255,.22);
 
-    color: #fff;
+    color: white;
 
     font-size: 13px;
+
     font-weight: 600;
 
     letter-spacing: 1px;
@@ -102,9 +172,14 @@
 }
 
 .contact-hero h1 {
-    color: #fff;
+    color: white;
 
-    font-size: clamp(38px, 6vw, 68px);
+    font-size:
+        clamp(
+            40px,
+            6vw,
+            70px
+        );
 
     margin: 0 0 15px;
 
@@ -112,9 +187,9 @@
 }
 
 .contact-hero p {
-    color: rgba(255,255,255,.82);
+    color: rgba(255,255,255,.85);
 
-    max-width: 650px;
+    max-width: 680px;
 
     margin: auto;
 
@@ -129,52 +204,60 @@
 ========================================= */
 
 .contact-section {
-    max-width: 1100px;
+    max-width: 1150px;
 
-    margin: -60px auto 0;
+    margin: -70px auto 0;
 
     padding: 0 20px;
 
     position: relative;
-    z-index: 5;
+
+    z-index: 10;
 }
 
 .contact-card-main {
-    background: rgba(255,255,255,.97);
+    background: white;
 
-    border-radius: 25px;
+    border-radius: 28px;
 
-    padding: 40px;
+    padding: 45px;
 
     box-shadow:
-        0 20px 60px rgba(0,0,0,.20);
+        0 25px 70px
+        rgba(0,0,0,.18);
 
-    border: 1px solid rgba(0,0,0,.08);
+    border:
+        1px solid
+        rgba(0,0,0,.08);
 }
 
 .contact-title {
     text-align: center;
 
-    margin-bottom: 35px;
+    margin-bottom: 38px;
 }
 
 .contact-title h2 {
+    color: #2b0000;
+
     font-size: 32px;
 
-    margin: 0 0 8px;
+    margin: 0 0 10px;
 
-    color: #2b0000;
+    font-weight: 800;
 }
 
 .contact-title p {
+    color: #666;
+
     margin: 0;
 
-    color: #666;
+    font-size: 15px;
 }
 
 
 /* =========================================
-   WHATSAPP CARDS
+   WHATSAPP GRID
 ========================================= */
 
 .whatsapp-grid {
@@ -183,8 +266,13 @@
     grid-template-columns:
         repeat(3, 1fr);
 
-    gap: 20px;
+    gap: 22px;
 }
+
+
+/* =========================================
+   WHATSAPP CARD
+========================================= */
 
 .whatsapp-card {
     display: flex;
@@ -197,31 +285,44 @@
 
     text-align: center;
 
-    padding: 30px 20px;
+    padding: 32px 20px;
 
-    border-radius: 20px;
+    border-radius: 22px;
+
+    background: #fafafa;
+
+    border:
+        1px solid
+        #e8e8e8;
 
     text-decoration: none;
 
-    background: #f8f8f8;
-
-    border: 1px solid #eee;
-
-    transition: .3s;
-
     color: #222;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
 }
 
 .whatsapp-card:hover {
     transform: translateY(-8px);
 
     box-shadow:
-        0 15px 35px rgba(0,0,0,.12);
+        0 18px 40px
+        rgba(0,0,0,.14);
+
+    border-color: #25D366;
 }
 
+
+/* =========================================
+   WHATSAPP ICON
+========================================= */
+
 .whatsapp-icon {
-    width: 70px;
-    height: 70px;
+    width: 78px;
+    height: 78px;
 
     border-radius: 50%;
 
@@ -230,40 +331,69 @@
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 18px;
-
     background: #25D366;
 
     color: white;
 
-    font-size: 34px;
+    font-size: 40px;
+
+    margin-bottom: 18px;
 
     box-shadow:
-        0 8px 20px rgba(37,211,102,.30);
+        0 10px 25px
+        rgba(37,211,102,.35);
 }
 
-.whatsapp-card h3 {
-    margin: 5px 0;
+/*
+   Fallback WhatsApp logo
+   Font Awesome load na ho
+   tab bhi icon visible rahega.
+*/
 
+.whatsapp-fallback {
+    display: none;
+
+    font-size: 38px;
+
+    line-height: 1;
+}
+
+
+/* =========================================
+   CARD TEXT
+========================================= */
+
+.whatsapp-card h3 {
     color: #2b0000;
 
-    font-size: 18px;
+    margin: 4px 0 6px;
+
+    font-size: 19px;
 }
 
 .whatsapp-card p {
-    margin: 5px 0;
-
     color: #555;
 
-    font-size: 15px;
+    margin: 0;
+
+    font-size: 16px;
+
+    font-weight: 500;
 }
 
 .whatsapp-card span {
-    margin-top: 12px;
+    display: inline-flex;
 
-    padding: 7px 15px;
+    align-items: center;
+    justify-content: center;
 
-    border-radius: 20px;
+    gap: 7px;
+
+    margin-top: 16px;
+
+    padding: 8px 17px;
+
+    border-radius: 25px;
 
     background: #25D366;
 
@@ -276,7 +406,7 @@
 
 
 /* =========================================
-   INFO
+   INFO BOXES
 ========================================= */
 
 .contact-info {
@@ -293,15 +423,21 @@
 .info-box {
     text-align: center;
 
-    padding: 25px;
+    padding: 27px 20px;
 
-    border-radius: 18px;
+    border-radius: 20px;
 
     background: #f7f7f7;
+
+    border:
+        1px solid
+        #eee;
 }
 
 .info-box i {
-    font-size: 25px;
+    display: block;
+
+    font-size: 27px;
 
     color: #2b0000;
 
@@ -309,15 +445,19 @@
 }
 
 .info-box h3 {
-    margin: 5px 0;
-
     color: #2b0000;
+
+    margin: 5px 0 8px;
+
+    font-size: 18px;
 }
 
 .info-box p {
+    color: #666;
+
     margin: 0;
 
-    color: #666;
+    font-size: 14px;
 }
 
 
@@ -326,11 +466,11 @@
 ========================================= */
 
 .contact-footer {
-    margin-top: 70px;
+    margin-top: 80px;
 
     text-align: center;
 
-    padding: 40px 20px;
+    padding: 50px 20px;
 
     background: #2b0000;
 
@@ -338,9 +478,8 @@
 }
 
 .contact-footer img {
-    width: 70px;
-
-    height: 70px;
+    width: 75px;
+    height: 75px;
 
     object-fit: contain;
 
@@ -349,25 +488,34 @@
 
 .contact-footer h2 {
     margin: 5px 0;
+
+    font-size: 24px;
 }
 
 .contact-footer p {
-    color: rgba(255,255,255,.7);
+    color:
+        rgba(255,255,255,.75);
 
-    margin: 5px 0 20px;
+    margin: 7px 0 20px;
 }
+
+
+/* =========================================
+   FOOTER SOCIAL
+========================================= */
 
 .footer-social {
     display: flex;
 
     justify-content: center;
+    align-items: center;
 
     gap: 15px;
 }
 
 .footer-social a {
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
 
     border-radius: 50%;
 
@@ -380,15 +528,19 @@
 
     text-decoration: none;
 
-    background: rgba(255,255,255,.12);
+    background:
+        rgba(255,255,255,.12);
+
+    font-size: 19px;
 
     transition: .3s;
 }
 
 .footer-social a:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
 
-    background: rgba(255,255,255,.22);
+    background:
+        rgba(255,255,255,.23);
 }
 
 
@@ -396,7 +548,7 @@
    MOBILE
 ========================================= */
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
 
     .whatsapp-grid {
         grid-template-columns: 1fr;
@@ -407,11 +559,41 @@
     }
 
     .contact-card-main {
-        padding: 25px 18px;
+        padding: 30px 18px;
     }
 
     .contact-section {
-        margin-top: -40px;
+        margin-top: -50px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .contact-hero {
+        min-height: 350px;
+
+        padding:
+            70px 18px
+            100px;
+    }
+
+    .contact-hero-logo {
+        width: 85px;
+        height: 85px;
+    }
+
+    .contact-hero h1 {
+        font-size: 42px;
+    }
+
+    .contact-hero p {
+        font-size: 14px;
+    }
+
+    .contact-title h2 {
+        font-size: 26px;
     }
 
 }
@@ -443,9 +625,13 @@
 
         <div class="logo-text">
 
-            <h2>CHISHTI LIBRARY</h2>
+            <h2>
+                CHISHTI LIBRARY
+            </h2>
 
-            <span>Digital Library</span>
+            <span>
+                Digital Library
+            </span>
 
         </div>
 
@@ -456,43 +642,69 @@
 
         <li>
             <a href="./index.html">
+
                 <i class="fas fa-house"></i>
+
                 Home
+
             </a>
         </li>
+
 
         <li>
             <a href="./book.html">
+
                 <i class="fas fa-book"></i>
+
                 Books
+
             </a>
         </li>
+
 
         <li>
             <a href="./authors.html">
+
                 <i class="fas fa-feather-alt"></i>
+
                 Authors
+
             </a>
         </li>
+
 
         <li>
             <a href="./developer.html">
+
                 <i class="fas fa-code"></i>
+
                 Developer
+
             </a>
         </li>
 
+
         <li>
-            <a href="./contact.html" class="active">
+            <a
+                href="./contact.html"
+                class="active"
+            >
+
                 <i class="fas fa-phone"></i>
+
                 Contact
+
             </a>
         </li>
+
 
         <li>
             <a href="./admin/index.html">
+
                 <i class="fas fa-user-shield"></i>
+
                 Admin Login
+
             </a>
         </li>
 
@@ -517,11 +729,13 @@
 
     <div class="contact-hero-content">
 
+
         <img
             src="./logo.png"
             class="contact-hero-logo"
-            alt="Chishti Library"
+            alt="Chishti Library Logo"
         >
+
 
         <div class="contact-label">
 
@@ -545,6 +759,7 @@
 
         </p>
 
+
     </div>
 
 </section>
@@ -552,7 +767,7 @@
 
 
 <!-- =========================================
-     CONTACT CARDS
+     CONTACT SECTION
 ========================================= -->
 
 <section class="contact-section">
@@ -573,6 +788,11 @@
         </div>
 
 
+
+        <!-- =====================================
+             WHATSAPP NUMBERS
+        ====================================== -->
+
         <div class="whatsapp-grid">
 
 
@@ -583,11 +803,22 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="whatsapp-card"
+                aria-label="WhatsApp 0306 7813783"
             >
 
                 <div class="whatsapp-icon">
 
-                    <i class="fa-brands fa-whatsapp"></i>
+                    <i
+                        class="fa-brands fa-whatsapp"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span
+                        class="whatsapp-fallback"
+                        aria-hidden="true"
+                    >
+                        ☎
+                    </span>
 
                 </div>
 
@@ -603,8 +834,11 @@
 
 
                 <span>
+
                     <i class="fa-brands fa-whatsapp"></i>
+
                     Chat Now
+
                 </span>
 
             </a>
@@ -618,11 +852,22 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="whatsapp-card"
+                aria-label="WhatsApp 0300 6674752"
             >
 
                 <div class="whatsapp-icon">
 
-                    <i class="fa-brands fa-whatsapp"></i>
+                    <i
+                        class="fa-brands fa-whatsapp"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span
+                        class="whatsapp-fallback"
+                        aria-hidden="true"
+                    >
+                        ☎
+                    </span>
 
                 </div>
 
@@ -638,8 +883,11 @@
 
 
                 <span>
+
                     <i class="fa-brands fa-whatsapp"></i>
+
                     Chat Now
+
                 </span>
 
             </a>
@@ -653,11 +901,22 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="whatsapp-card"
+                aria-label="WhatsApp 0302 7190715"
             >
 
                 <div class="whatsapp-icon">
 
-                    <i class="fa-brands fa-whatsapp"></i>
+                    <i
+                        class="fa-brands fa-whatsapp"
+                        aria-hidden="true"
+                    ></i>
+
+                    <span
+                        class="whatsapp-fallback"
+                        aria-hidden="true"
+                    >
+                        ☎
+                    </span>
 
                 </div>
 
@@ -673,8 +932,11 @@
 
 
                 <span>
+
                     <i class="fa-brands fa-whatsapp"></i>
+
                     Chat Now
+
                 </span>
 
             </a>
@@ -685,7 +947,7 @@
 
 
         <!-- =====================================
-             EXTRA INFO
+             INFORMATION
         ====================================== -->
 
         <div class="contact-info">
@@ -751,29 +1013,37 @@
 
 <footer class="contact-footer">
 
+
     <img
         src="./logo.png"
         alt="Chishti Library"
     >
 
+
     <h2>
         CHISHTI LIBRARY
     </h2>
+
 
     <p>
         Digital Islamic Library
     </p>
 
 
+
     <div class="footer-social">
+
 
         <a
             href="https://www.facebook.com/profile.php?id=100063724950961"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Facebook"
+            title="Facebook"
         >
-            <i class="fab fa-facebook-f"></i>
+
+            <i class="fa-brands fa-facebook-f"></i>
+
         </a>
 
 
@@ -782,8 +1052,11 @@
             target="_blank"
             rel="noopener noreferrer"
             aria-label="YouTube"
+            title="YouTube"
         >
-            <i class="fab fa-youtube"></i>
+
+            <i class="fa-brands fa-youtube"></i>
+
         </a>
 
 
@@ -792,42 +1065,114 @@
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Saim Chishti Official"
+            title="Saim Chishti Official"
         >
-            <i class="fab fa-facebook-f"></i>
+
+            <i class="fa-brands fa-facebook-f"></i>
+
         </a>
+
 
     </div>
 
+
     <p style="margin-top:20px;">
+
         © 2026 Chishti Library — All Rights Reserved.
+
     </p>
+
 
 </footer>
 
 
 
 <!-- =========================================
-     JAVASCRIPT
+     MOBILE MENU
 ========================================= -->
 
 <script>
 
-const menuBtn =
-    document.querySelector(".mobile-menu");
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-const menu =
-    document.querySelector(".menu");
+        const menuBtn =
+            document.querySelector(".mobile-menu");
+
+        const menu =
+            document.querySelector(".menu");
 
 
-if (menuBtn && menu) {
+        if (menuBtn && menu) {
 
-    menuBtn.addEventListener("click", () => {
+            menuBtn.addEventListener(
+                "click",
+                function () {
 
-        menu.classList.toggle("show");
+                    menu.classList.toggle("show");
 
-    });
+                }
+            );
 
-}
+        }
+
+
+        /*
+         * Font Awesome check
+         *
+         * Agar Font Awesome load na ho
+         * to fallback icon show hoga.
+         */
+
+        setTimeout(function () {
+
+            const whatsappIcons =
+                document.querySelectorAll(
+                    ".whatsapp-icon"
+                );
+
+
+            whatsappIcons.forEach(function (box) {
+
+                const icon =
+                    box.querySelector(
+                        ".fa-whatsapp"
+                    );
+
+                const fallback =
+                    box.querySelector(
+                        ".whatsapp-fallback"
+                    );
+
+
+                if (
+                    icon &&
+                    fallback
+                ) {
+
+                    const iconWidth =
+                        icon.getBoundingClientRect().width;
+
+
+                    if (iconWidth === 0) {
+
+                        icon.style.display =
+                            "none";
+
+                        fallback.style.display =
+                            "block";
+
+                    }
+
+                }
+
+            });
+
+        }, 1000);
+
+    }
+);
 
 </script>
 
