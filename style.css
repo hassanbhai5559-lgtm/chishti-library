@@ -1874,3 +1874,60 @@ transform:rotate(360deg);
 /* ===== END ===== */
 
 /* ===== AUTHORS PREMIUM SECTION END ===== */
+/* ==========================
+FOOTER SOCIAL LINKS
+========================== */
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 25px 0;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 11px 18px;
+    border-radius: 30px;
+    text-decoration: none;
+    color: #fff;
+    background: #222;
+    transition: 0.3s ease;
+    font-weight: 500;
+}
+
+.footer-social a i {
+    font-size: 18px;
+}
+
+.footer-social a:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+}
+
+.footer-social a:first-child:hover,
+.footer-social a:last-child:hover {
+    background: #1877f2;
+}
+
+.footer-social a:nth-child(2):hover {
+    background: #ff0000;
+}
+
+@media (max-width: 600px) {
+
+    .footer-social {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer-social a {
+        width: 220px;
+    }
+
+}
