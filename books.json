@@ -196,5 +196,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id": 17,
+    "title": "Mazhar E noor e Khuda",
+    "author": "Sahibzada Muhammad Latif Sajid Chishti",
+    "category": "Hammad",
+    "cover": "Mazhar E noor e Khuda-cover.png",
+    "pdf": "Mazhar E noor e Khuda.pdf",
+    "description": "A Hammad book by Sahibzada Muhammad Latif Sajid Chishti.",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
