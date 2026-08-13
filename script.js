@@ -83,33 +83,103 @@ if (scrollBtn) {
 VISITOR COUNTER
 =========================*/
 
-let visitors = Number(localStorage.getItem("chishtiVisitors")) || 0;
+async function updateVisitorCounter() {
 
-visitors++;
+    const visitorCounter =
+        document.getElementById("visitorCounter");
 
-localStorage.setItem("chishtiVisitors", visitors);
+    if (!visitorCounter) return;
 
-const visitorCounter = document.getElementById("visitorCounter");
+    try {
 
-if (visitorCounter) {
+        // Firestore visitor document
+        const visitorRef =
+            db.collection("counter").doc("visitors");
 
-    let current = 0;
+        /*
+         * Check whether this browser session
+         * has already been counted.
+         *
+         * Refresh = no new visitor
+         * New session = +1 visitor
+         */
 
-    const animation = setInterval(() => {
+        const alreadyCounted =
+            sessionStorage.getItem("chishtiVisitorCounted");
 
-        current++;
+        if (!alreadyCounted) {
 
-        visitorCounter.innerText = current;
+            await visitorRef.update({
 
-        if (current >= visitors) {
+                count:
+                    firebase.firestore.FieldValue.increment(1)
 
-            clearInterval(animation);
+            });
+
+            sessionStorage.setItem(
+                "chishtiVisitorCounted",
+                "true"
+            );
 
         }
 
-    }, 25);
+        /*
+         * Get latest global visitor count
+         */
+
+        const snapshot =
+            await visitorRef.get();
+
+        if (!snapshot.exists()) {
+
+            visitorCounter.innerText = "0";
+
+            return;
+
+        }
+
+        const visitors =
+            Number(snapshot.data().count) || 0;
+
+        /*
+         * Counter animation
+         */
+
+        let current = 0;
+
+        const animation =
+            setInterval(() => {
+
+                current++;
+
+                visitorCounter.innerText =
+                    current;
+
+                if (current >= visitors) {
+
+                    clearInterval(animation);
+
+                }
+
+            }, 25);
+
+    } catch (error) {
+
+        console.error(
+            "Visitor counter error:",
+            error
+        );
+
+        visitorCounter.innerText = "0";
+
+    }
 
 }
+
+
+/* Start visitor counter */
+
+updateVisitorCounter();
 
 /*=========================
 GLOBAL VARIABLES
