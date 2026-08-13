@@ -80,7 +80,7 @@ if (scrollBtn) {
 }
 
 /*=========================
-VISITOR COUNTER
+  VISITOR COUNTER
 =========================*/
 
 async function updateVisitorCounter() {
@@ -92,20 +92,52 @@ async function updateVisitorCounter() {
 
     try {
 
-        // Firestore visitor document
         const visitorRef =
             db.collection("counter").doc("visitors");
 
-        /*
-         * Check whether this browser session
-         * has already been counted.
-         *
-         * Refresh = no new visitor
-         * New session = +1 visitor
-         */
+
+        /* =========================
+           GET CURRENT DOCUMENT
+        ========================= */
+
+        const snapshot =
+            await visitorRef.get();
+
+
+        /* =========================
+           CREATE DOCUMENT IF MISSING
+        ========================= */
+
+        if (!snapshot.exists) {
+
+            await visitorRef.set({
+                count: 1
+            });
+
+            sessionStorage.setItem(
+                "chishtiVisitorCounted",
+                "true"
+            );
+
+            visitorCounter.innerText = "1";
+
+            return;
+        }
+
+
+        /* =========================
+           CHECK THIS SESSION
+        ========================= */
 
         const alreadyCounted =
-            sessionStorage.getItem("chishtiVisitorCounted");
+            sessionStorage.getItem(
+                "chishtiVisitorCounted"
+            );
+
+
+        /* =========================
+           NEW VISITOR
+        ========================= */
 
         if (!alreadyCounted) {
 
@@ -123,32 +155,29 @@ async function updateVisitorCounter() {
 
         }
 
-        /*
-         * Get latest global visitor count
-         */
 
-        const snapshot =
+        /* =========================
+           GET UPDATED COUNT
+        ========================= */
+
+        const latestSnapshot =
             await visitorRef.get();
 
-        if (!snapshot.exists()) {
-
-            visitorCounter.innerText = "0";
-
-            return;
-
-        }
 
         const visitors =
-            Number(snapshot.data().count) || 0;
+            Number(
+                latestSnapshot.data().count
+            ) || 0;
 
-        /*
-         * Counter animation
-         */
+
+        /* =========================
+           ANIMATION
+        ========================= */
 
         let current = 0;
 
         const animation =
-            setInterval(() => {
+            setInterval(function () {
 
                 current++;
 
@@ -162,6 +191,7 @@ async function updateVisitorCounter() {
                 }
 
             }, 25);
+
 
     } catch (error) {
 
@@ -177,7 +207,9 @@ async function updateVisitorCounter() {
 }
 
 
-/* Start visitor counter */
+/* =========================
+   START COUNTER
+========================= */
 
 updateVisitorCounter();
 
