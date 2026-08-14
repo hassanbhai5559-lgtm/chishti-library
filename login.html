@@ -1,15 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Login | Chishti Library</title>
 
-    <link rel="icon" type="image/png" href="logo.png">
+    <link
+        rel="icon"
+        type="image/png"
+        href="logo.png"
+    >
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
@@ -17,6 +35,7 @@
     >
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -24,8 +43,19 @@
         }
 
         body {
+
             min-height: 100vh;
+
             font-family: Poppins, sans-serif;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
             background:
                 linear-gradient(
                     135deg,
@@ -33,331 +63,323 @@
                     #570000,
                     #160000
                 );
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+
         }
 
         .login-box {
+
             width: 100%;
-            max-width: 430px;
-            background: #fff;
+
+            max-width: 420px;
+
+            background: #ffffff;
+
             border-radius: 25px;
-            padding: 35px 30px;
-            box-shadow: 0 25px 70px rgba(0,0,0,.35);
+
+            padding: 40px 30px;
+
             text-align: center;
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, .35);
+
         }
 
         .logo {
-            width: 90px;
-            height: 90px;
+
+            width: 95px;
+
+            height: 95px;
+
             object-fit: contain;
-            margin-bottom: 12px;
+
+            margin-bottom: 15px;
+
         }
 
         h1 {
+
             color: #2b0000;
+
             font-size: 28px;
-            margin-bottom: 7px;
+
+            margin-bottom: 8px;
+
         }
 
         .subtitle {
+
             color: #777;
+
             font-size: 14px;
-            margin-bottom: 25px;
-        }
 
-        .form-group {
-            text-align: left;
-            margin-bottom: 16px;
-        }
+            line-height: 1.6;
 
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 7px;
-            color: #333;
-        }
+            margin-bottom: 28px;
 
-        .form-group input {
-            width: 100%;
-            padding: 13px 15px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            outline: none;
-            font-family: inherit;
-            font-size: 14px;
-        }
-
-        .form-group input:focus {
-            border-color: #2b0000;
-        }
-
-        .main-btn {
-            width: 100%;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            background: #2b0000;
-            color: white;
-            font-family: inherit;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 4px;
-        }
-
-        .main-btn:hover {
-            background: #4b0000;
-        }
-
-        .main-btn:disabled {
-            opacity: .6;
-            cursor: not-allowed;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin: 22px 0;
-            color: #999;
-            font-size: 13px;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #ddd;
         }
 
         .google-btn {
+
             width: 100%;
-            padding: 13px;
-            border-radius: 12px;
+
+            min-height: 52px;
+
             border: 1px solid #ddd;
-            background: white;
+
+            border-radius: 12px;
+
+            background: #fff;
+
             color: #333;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 12px;
+
             font-family: inherit;
+
+            font-size: 15px;
+
             font-weight: 600;
+
             cursor: pointer;
+
+            transition: .2s;
+
         }
 
         .google-btn:hover {
+
             background: #f7f7f7;
+
+            border-color: #bbb;
+
         }
 
-        .google-btn span {
-            margin-right: 8px;
-            font-weight: 800;
+        .google-btn:disabled {
+
+            opacity: .6;
+
+            cursor: not-allowed;
+
         }
 
-        .switch-text {
-            margin-top: 22px;
-            font-size: 14px;
-            color: #777;
-        }
+        .google-icon {
 
-        .switch-text button {
-            border: none;
-            background: none;
-            color: #2b0000;
-            font-family: inherit;
-            font-weight: 700;
-            cursor: pointer;
+            width: 21px;
+
+            height: 21px;
+
+            display: block;
+
         }
 
         .message {
-            display: none;
-            padding: 11px 13px;
-            border-radius: 10px;
-            margin-bottom: 17px;
-            font-size: 13px;
-            text-align: left;
-        }
 
-        .message.success {
-            display: block;
-            background: #eaf8ef;
-            color: #17753b;
+            display: none;
+
+            padding: 12px 14px;
+
+            border-radius: 10px;
+
+            margin-bottom: 18px;
+
+            font-size: 13px;
+
+            text-align: left;
+
         }
 
         .message.error {
+
             display: block;
+
+            color: #a00000;
+
             background: #fff0f0;
-            color: #b00000;
+
         }
 
-        .forgot {
+        .message.success {
+
             display: block;
-            text-align: right;
-            margin-top: -8px;
-            margin-bottom: 15px;
-            border: none;
-            background: none;
-            color: #2b0000;
-            font-family: inherit;
-            font-size: 12px;
-            cursor: pointer;
+
+            color: #16723a;
+
+            background: #eaf8ef;
+
         }
 
-        .terms {
-            margin-top: 20px;
+        .bottom-text {
+
+            margin-top: 25px;
+
             color: #999;
+
             font-size: 11px;
+
             line-height: 1.6;
+
         }
 
-        .hidden {
-            display: none;
+        .back-btn {
+
+            display: inline-block;
+
+            margin-top: 18px;
+
+            color: #2b0000;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+        }
+
+        .back-btn:hover {
+
+            text-decoration: underline;
+
         }
 
         @media (max-width: 480px) {
+
             .login-box {
-                padding: 30px 20px;
+
+                padding: 32px 20px;
+
             }
 
             h1 {
+
                 font-size: 24px;
+
             }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-<div class="login-box">
 
-    <img
-        src="logo.png"
-        alt="Chishti Library"
-        class="logo"
-        onerror="this.style.display='none'"
-    >
+    <main class="login-box">
 
-    <h1 id="formTitle">Welcome Back</h1>
-
-    <p class="subtitle" id="formSubtitle">
-        Login to your Chishti Library account
-    </p>
-
-    <div id="message" class="message"></div>
+        <img
+            src="logo.png"
+            alt="Chishti Library"
+            class="logo"
+            onerror="this.style.display='none'"
+        >
 
 
-    <!-- EMAIL LOGIN -->
-
-    <form id="loginForm">
-
-        <div class="form-group">
-
-            <label for="email">
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Enter your email"
-                autocomplete="email"
-                required
-            >
-
-        </div>
+        <h1>
+            Welcome to Chishti Library
+        </h1>
 
 
-        <div class="form-group">
+        <p class="subtitle">
 
-            <label for="password">
-                Password
-            </label>
+            Sign in with your Google account
+            to continue to Chishti Library.
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-                required
-            >
+        </p>
 
-        </div>
+
+        <div
+            id="message"
+            class="message"
+        ></div>
 
 
         <button
             type="button"
-            class="forgot"
-            id="forgotPasswordBtn"
+            id="googleLoginBtn"
+            class="google-btn"
         >
-            Forgot password?
+
+            <svg
+                class="google-icon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+
+                <path
+                    fill="#4285F4"
+                    d="M21.35 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.23a4.47 4.47 0 0 1-1.94 2.93v2.45h3.14c1.84-1.69 2.92-4.18 2.92-7.41z"
+                />
+
+                <path
+                    fill="#34A853"
+                    d="M12 21.5c2.63 0 4.84-.87 6.45-2.35l-3.14-2.45c-.87.58-1.98.93-3.31.93-2.54 0-4.7-1.72-5.47-4.03H3.28v2.53A9.74 9.74 0 0 0 12 21.5z"
+                />
+
+                <path
+                    fill="#FBBC05"
+                    d="M6.53 13.6A5.86 5.86 0 0 1 6.22 12c0-.56.1-1.1.31-1.6V7.87H3.28A9.5 9.5 0 0 0 2.25 12c0 1.53.37 2.98 1.03 4.13l3.25-2.53z"
+                />
+
+                <path
+                    fill="#EA4335"
+                    d="M12 6.37c1.43 0 2.72.49 3.73 1.45l2.8-2.8C16.84 3.47 14.63 2.5 12 2.5a9.74 9.74 0 0 0-8.72 5.37l3.25 2.53C7.3 8.09 9.46 6.37 12 6.37z"
+                />
+
+            </svg>
+
+
+            <span id="googleButtonText">
+                Continue with Google
+            </span>
+
         </button>
 
 
-        <button
-            type="submit"
-            class="main-btn"
-            id="submitBtn"
+        <a
+            href="index.html"
+            class="back-btn"
         >
-            Login
-        </button>
-
-    </form>
+            ← Back to Library
+        </a>
 
 
-    <div class="divider">
-        OR
-    </div>
+        <p class="bottom-text">
+
+            Your Google account is used only to
+            sign you in to Chishti Library.
+
+        </p>
+
+    </main>
 
 
-    <!-- GOOGLE LOGIN -->
+    <!-- Firebase -->
 
-    <button
-        type="button"
-        class="google-btn"
-        id="googleBtn"
-    >
-        <span>G</span>
-        Continue with Google
-    </button>
+    <script
+        src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"
+    ></script>
 
+    <script
+        src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"
+    ></script>
 
-    <!-- SWITCH LOGIN / SIGNUP -->
-
-    <p class="switch-text">
-
-        <span id="switchQuestion">
-            Don't have an account?
-        </span>
-
-        <button
-            type="button"
-            id="switchBtn"
-        >
-            Create account
-        </button>
-
-    </p>
+    <script
+        src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"
+    ></script>
 
 
-    <p class="terms">
-        By continuing, you agree to use Chishti Library
-        responsibly.
-    </p>
-
-</div>
-
-
-<!-- FIREBASE -->
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-
-<script src="login.js"></script>
+    <script src="login.js"></script>
 
 </body>
+
 </html>
