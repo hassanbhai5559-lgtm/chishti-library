@@ -1,78 +1,263 @@
-/*==================================================
-CHISHTI LIBRARY
-login.js
-==================================================*/
+/* ==================================================
+   CHISHTI LIBRARY
+   login.js
+   ADMIN AUTHENTICATION
+================================================== */
 
-/*==========================
-ADMIN EMAIL
-==========================*/
 
-const ADMIN_EMAIL = "admin@chishtilibrary.com";
+/* ==================================================
+   FIREBASE CONFIG
+================================================== */
 
-/*==========================
-LOGIN
-==========================*/
+const firebaseConfig = {
 
-const loginForm = document.getElementById("loginForm");
-const message = document.getElementById("message");
+    apiKey: "YOUR_API_KEY",
 
-loginForm.addEventListener("submit", function (e) {
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
 
-    e.preventDefault();
+    projectId: "YOUR_PROJECT_ID",
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    storageBucket: "YOUR_PROJECT.firebasestorage.app",
 
-    message.style.color = "#0b6b3a";
-    message.innerHTML = "Signing in...";
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
 
-    auth.signInWithEmailAndPassword(email, password)
+    appId: "YOUR_APP_ID"
 
-        .then((userCredential) => {
+};
 
-            const user = userCredential.user;
 
-            // Sirf Admin Email Allow
-            if (user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+/* ==================================================
+   INITIALIZE FIREBASE
+================================================== */
 
-                auth.signOut();
+if (!firebase.apps.length) {
 
-                message.style.color = "red";
-                message.innerHTML = "Access Denied! You are not Admin.";
+    firebase.initializeApp(firebaseConfig);
 
-                return;
-            }
+}
 
-            message.style.color = "green";
-            message.innerHTML = "Login Successful...";
 
-            setTimeout(() => {
+const auth = firebase.auth();
 
-                window.location.href = "admin.html";
 
-            }, 1000);
+/* ==================================================
+   ELEMENTS
+================================================== */
 
-        })
+const loginForm =
+    document.getElementById("loginForm");
 
-        .catch((error) => {
+const loginEmail =
+    document.getElementById("loginEmail");
 
-            message.style.color = "red";
-            message.innerHTML = error.message;
+const loginPassword =
+    document.getElementById("loginPassword");
 
-        });
+const loginBtn =
+    document.getElementById("loginBtn");
 
-});
+const loginError =
+    document.getElementById("loginError");
 
-/*==========================
-ALREADY LOGIN
-==========================*/
+const loginLoading =
+    document.getElementById("loginLoading");
 
-auth.onAuthStateChanged((user) => {
+const togglePassword =
+    document.getElementById("togglePassword");
 
-    if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
 
-        window.location.href = "admin.html";
+/* ==================================================
+   ALREADY LOGGED IN
+================================================== */
+
+auth.onAuthStateChanged(function(user){
+
+    if(user){
+
+        window.location.replace("admin.html");
 
     }
 
 });
+
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+loginForm.addEventListener("submit", async function(event){
+
+    event.preventDefault();
+
+    clearError();
+
+    const email =
+        loginEmail.value.trim();
+
+    const password =
+        loginPassword.value;
+
+
+    if(!email || !password){
+
+        showError(
+            "Please enter your email and password."
+        );
+
+        return;
+
+    }
+
+
+    setLoading(true);
+
+
+    try{
+
+        await auth.signInWithEmailAndPassword(
+            email,
+            password
+        );
+
+
+        window.location.replace("admin.html");
+
+
+    }catch(error){
+
+        console.error(
+            "Login error:",
+            error
+        );
+
+
+        showError(
+            getFirebaseErrorMessage(error)
+        );
+
+
+        setLoading(false);
+
+    }
+
+});
+
+
+/* ==================================================
+   PASSWORD TOGGLE
+================================================== */
+
+togglePassword.addEventListener(
+    "click",
+    function(){
+
+        const isPassword =
+            loginPassword.type === "password";
+
+
+        loginPassword.type =
+            isPassword
+                ? "text"
+                : "password";
+
+
+        togglePassword.innerHTML =
+            isPassword
+                ? '<i class="fas fa-eye-slash"></i>'
+                : '<i class="fas fa-eye"></i>';
+
+    }
+);
+
+
+/* ==================================================
+   LOADING
+================================================== */
+
+function setLoading(isLoading){
+
+    loginBtn.disabled =
+        isLoading;
+
+
+    if(isLoading){
+
+        loginBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+        loginLoading.style.display =
+            "block";
+
+    }else{
+
+        loginBtn.innerHTML =
+            '<i class="fas fa-right-to-bracket"></i> Login';
+
+        loginLoading.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* ==================================================
+   ERROR
+================================================== */
+
+function showError(message){
+
+    loginError.textContent =
+        message;
+
+    loginError.classList.add(
+        "show"
+    );
+
+}
+
+
+function clearError(){
+
+    loginError.textContent =
+        "";
+
+    loginError.classList.remove(
+        "show"
+    );
+
+}
+
+
+/* ==================================================
+   FIREBASE ERROR MESSAGE
+================================================== */
+
+function getFirebaseErrorMessage(error){
+
+    switch(error.code){
+
+        case "auth/invalid-email":
+            return "Email address is invalid.";
+
+        case "auth/user-disabled":
+            return "This admin account has been disabled.";
+
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+        case "auth/invalid-credential":
+            return "Incorrect email or password.";
+
+        case "auth/too-many-requests":
+            return "Too many login attempts. Please try again later.";
+
+        case "auth/network-request-failed":
+            return "Network error. Please check your internet connection.";
+
+        default:
+            return error.message ||
+                   "Login failed. Please try again.";
+
+    }
+
+}
