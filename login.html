@@ -1,299 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>Admin Login | Chishti Library</title>
-
-<link rel="icon"
-      type="image/png"
-      href="../logo.png">
-
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-<style>
-
-*{
-    box-sizing:border-box;
-}
-
-body{
-
-    margin:0;
-
-    min-height:100vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    font-family:Arial, sans-serif;
-
-    background:
-    linear-gradient(
-        135deg,
-        #300000,
-        #750000,
-        #1f0000
-    );
-
-}
-
-
-/* LOGIN BOX */
-
-.login-box{
-
-    width:90%;
-
-    max-width:420px;
-
-    background:#ffffff;
-
-    padding:40px 35px;
-
-    border-radius:22px;
-
-    text-align:center;
-
-    box-shadow:
-    0 20px 60px rgba(0,0,0,.45);
-
-}
-
-
-/* LOGO */
-
-.login-box img{
-
-    width:90px;
-
-    height:90px;
-
-    object-fit:contain;
-
-    margin-bottom:10px;
-
-}
-
-
-/* TITLE */
-
-.login-box h1{
-
-    margin:5px 0;
-
-    color:#650000;
-
-    font-size:28px;
-
-}
-
-.login-box p{
-
-    color:#777;
-
-    margin-bottom:30px;
-
-}
-
-
-/* INPUT */
-
-.input-group{
-
-    position:relative;
-
-    margin-bottom:18px;
-
-}
-
-.input-group i{
-
-    position:absolute;
-
-    left:15px;
-
-    top:50%;
-
-    transform:translateY(-50%);
-
-    color:#650000;
-
-}
-
-.input-group input{
-
-    width:100%;
-
-    padding:15px 15px 15px 45px;
-
-    border:1px solid #ddd;
-
-    border-radius:12px;
-
-    font-size:15px;
-
-    outline:none;
-
-}
-
-.input-group input:focus{
-
-    border-color:#650000;
-
-}
-
-
-/* LOGIN BUTTON */
-
-.login-btn{
-
-    width:100%;
-
-    padding:15px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#650000;
-
-    color:white;
-
-    font-size:16px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-}
-
-.login-btn:hover{
-
-    background:#420000;
-
-}
-
-
-/* BACK BUTTON */
-
-.back-home{
-
-    display:block;
-
-    margin-top:22px;
-
-    color:#650000;
-
-    text-decoration:none;
-
-    font-weight:bold;
-
-}
-
-.back-home:hover{
-
-    text-decoration:underline;
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | Chishti Library</title>
+
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+        }
+
+        body{
+            font-family:Poppins,sans-serif;
+            min-height:100vh;
+        }
+
+        .login-page{
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #210000,
+                    #570000,
+                    #160000
+                );
+        }
+
+        .login-box{
+            width:100%;
+            max-width:430px;
+            background:#fff;
+            border-radius:24px;
+            padding:40px 30px;
+            text-align:center;
+            box-shadow:0 25px 70px rgba(0,0,0,.35);
+        }
+
+        .login-logo{
+            width:90px;
+            height:90px;
+            object-fit:contain;
+            margin-bottom:15px;
+        }
+
+        .login-box h1{
+            color:#2b0000;
+            margin-bottom:8px;
+        }
+
+        .login-box > p{
+            color:#777;
+            font-size:14px;
+            margin-bottom:25px;
+        }
+
+        .input-group{
+            text-align:left;
+            margin-bottom:18px;
+        }
+
+        .input-group label{
+            display:block;
+            margin-bottom:7px;
+            font-weight:600;
+            color:#333;
+        }
+
+        .input-wrapper{
+            position:relative;
+        }
+
+        .input-wrapper i{
+            position:absolute;
+            left:15px;
+            top:50%;
+            transform:translateY(-50%);
+            color:#777;
+        }
+
+        .input-wrapper input{
+            width:100%;
+            padding:13px 45px;
+            border:1px solid #ddd;
+            border-radius:12px;
+            outline:none;
+            font-family:inherit;
+            font-size:14px;
+        }
+
+        .input-wrapper input:focus{
+            border-color:#2b0000;
+        }
+
+        .password-toggle{
+            position:absolute;
+            right:14px;
+            top:50%;
+            transform:translateY(-50%);
+            border:none;
+            background:none;
+            color:#777;
+            cursor:pointer;
+            padding:5px;
+        }
+
+        .btn{
+            width:100%;
+            border:none;
+            padding:14px;
+            border-radius:12px;
+            background:#2b0000;
+            color:#fff;
+            font-family:inherit;
+            font-weight:700;
+            cursor:pointer;
+            transition:.2s;
+        }
+
+        .btn:hover{
+            background:#4b0000;
+        }
+
+        .btn:disabled{
+            opacity:.7;
+            cursor:not-allowed;
+        }
+
+        .login-error{
+            display:none;
+            margin-top:15px;
+            padding:11px 13px;
+            border-radius:10px;
+            background:#fff0f0;
+            color:#b00000;
+            font-size:13px;
+            text-align:left;
+        }
+
+        .login-error.show{
+            display:block;
+        }
+
+        .login-loading{
+            display:none;
+            margin-top:15px;
+            color:#777;
+            font-size:13px;
+        }
+
+        @media(max-width:480px){
+            .login-box{
+                padding:32px 20px;
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
+<div class="login-page">
 
-<div class="login-box">
+    <div class="login-box">
+
+        <img
+            src="logo.png"
+            class="login-logo"
+            alt="Chishti Library"
+            onerror="this.style.display='none'">
+
+        <h1>Admin Login</h1>
+
+        <p>Chishti Library Management Panel</p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+
+                <label for="loginEmail">
+                    Email
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Admin email"
+                        autocomplete="username"
+                        required>
+
+                </div>
+
+            </div>
 
 
-    <img
-        src="../logo.png"
-        alt="Chishti Library Logo"
-    >
+            <div class="input-group">
+
+                <label for="loginPassword">
+                    Password
+                </label>
+
+                <div class="input-wrapper">
+
+                    <i class="fas fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required>
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        id="togglePassword"
+                        aria-label="Show password">
+
+                        <i class="fas fa-eye"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
 
 
-    <h1>
-        Admin Login
-    </h1>
+            <button
+                type="submit"
+                class="btn"
+                id="loginBtn">
+
+                <i class="fas fa-right-to-bracket"></i>
+                Login
+
+            </button>
+
+        </form>
 
 
-    <p>
-        Chishti Library Administration
-    </p>
-
-
-    <form id="loginForm">
-
-
-        <div class="input-group">
-
-            <i class="fas fa-envelope"></i>
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Admin Email"
-                required
-            >
-
+        <div
+            id="loginError"
+            class="login-error">
         </div>
 
 
-        <div class="input-group">
+        <div
+            id="loginLoading"
+            class="login-loading">
 
-            <i class="fas fa-lock"></i>
-
-            <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-            >
+            <i class="fas fa-spinner fa-spin"></i>
+            Checking login...
 
         </div>
 
-
-        <button
-            type="submit"
-            class="login-btn"
-        >
-
-            <i class="fas fa-right-to-bracket"></i>
-
-            Login
-
-        </button>
-
-
-    </form>
-
-
-    <a
-        href="../index.html"
-        class="back-home"
-    >
-
-        <i class="fas fa-arrow-left"></i>
-
-        Back to Library
-
-    </a>
-
+    </div>
 
 </div>
 
 
-</body>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
+<script src="login.js"></script>
+
+</body>
 </html>
