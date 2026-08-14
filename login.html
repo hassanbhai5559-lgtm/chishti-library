@@ -4,41 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Admin Login | Chishti Library</title>
+    <title>Login | Chishti Library</title>
 
     <link rel="icon" type="image/png" href="logo.png">
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <style>
-        *{
-            box-sizing:border-box;
-            margin:0;
-            padding:0;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
-        body{
-            font-family:Poppins,sans-serif;
-            min-height:100vh;
-        }
-
-        .login-page{
-            min-height:100vh;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            padding:20px;
-
+        body {
+            min-height: 100vh;
+            font-family: Poppins, sans-serif;
             background:
                 linear-gradient(
                     135deg,
@@ -46,133 +33,195 @@
                     #570000,
                     #160000
                 );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .login-box{
-            width:100%;
-            max-width:430px;
-            background:#fff;
-            border-radius:24px;
-            padding:40px 30px;
-            text-align:center;
-            box-shadow:0 25px 70px rgba(0,0,0,.35);
+        .login-box {
+            width: 100%;
+            max-width: 430px;
+            background: #fff;
+            border-radius: 25px;
+            padding: 35px 30px;
+            box-shadow: 0 25px 70px rgba(0,0,0,.35);
+            text-align: center;
         }
 
-        .login-logo{
-            width:90px;
-            height:90px;
-            object-fit:contain;
-            margin-bottom:15px;
+        .logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 12px;
         }
 
-        .login-box h1{
-            color:#2b0000;
-            margin-bottom:8px;
+        h1 {
+            color: #2b0000;
+            font-size: 28px;
+            margin-bottom: 7px;
         }
 
-        .login-box > p{
-            color:#777;
-            font-size:14px;
-            margin-bottom:25px;
+        .subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 25px;
         }
 
-        .input-group{
-            text-align:left;
-            margin-bottom:18px;
+        .form-group {
+            text-align: left;
+            margin-bottom: 16px;
         }
 
-        .input-group label{
-            display:block;
-            margin-bottom:7px;
-            font-weight:600;
-            color:#333;
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+            color: #333;
         }
 
-        .input-wrapper{
-            position:relative;
+        .form-group input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+            font-family: inherit;
+            font-size: 14px;
         }
 
-        .input-wrapper i{
-            position:absolute;
-            left:15px;
-            top:50%;
-            transform:translateY(-50%);
-            color:#777;
+        .form-group input:focus {
+            border-color: #2b0000;
         }
 
-        .input-wrapper input{
-            width:100%;
-            padding:13px 45px;
-            border:1px solid #ddd;
-            border-radius:12px;
-            outline:none;
-            font-family:inherit;
-            font-size:14px;
+        .main-btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            background: #2b0000;
+            color: white;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
         }
 
-        .input-wrapper input:focus{
-            border-color:#2b0000;
+        .main-btn:hover {
+            background: #4b0000;
         }
 
-        .password-toggle{
-            position:absolute;
-            right:14px;
-            top:50%;
-            transform:translateY(-50%);
-            border:none;
-            background:none;
-            color:#777;
-            cursor:pointer;
-            padding:5px;
+        .main-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
         }
 
-        .btn{
-            width:100%;
-            border:none;
-            padding:14px;
-            border-radius:12px;
-            background:#2b0000;
-            color:#fff;
-            font-family:inherit;
-            font-weight:700;
-            cursor:pointer;
-            transition:.2s;
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 22px 0;
+            color: #999;
+            font-size: 13px;
         }
 
-        .btn:hover{
-            background:#4b0000;
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #ddd;
         }
 
-        .btn:disabled{
-            opacity:.7;
-            cursor:not-allowed;
+        .google-btn {
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        .login-error{
-            display:none;
-            margin-top:15px;
-            padding:11px 13px;
-            border-radius:10px;
-            background:#fff0f0;
-            color:#b00000;
-            font-size:13px;
-            text-align:left;
+        .google-btn:hover {
+            background: #f7f7f7;
         }
 
-        .login-error.show{
-            display:block;
+        .google-btn span {
+            margin-right: 8px;
+            font-weight: 800;
         }
 
-        .login-loading{
-            display:none;
-            margin-top:15px;
-            color:#777;
-            font-size:13px;
+        .switch-text {
+            margin-top: 22px;
+            font-size: 14px;
+            color: #777;
         }
 
-        @media(max-width:480px){
-            .login-box{
-                padding:32px 20px;
+        .switch-text button {
+            border: none;
+            background: none;
+            color: #2b0000;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .message {
+            display: none;
+            padding: 11px 13px;
+            border-radius: 10px;
+            margin-bottom: 17px;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .message.success {
+            display: block;
+            background: #eaf8ef;
+            color: #17753b;
+        }
+
+        .message.error {
+            display: block;
+            background: #fff0f0;
+            color: #b00000;
+        }
+
+        .forgot {
+            display: block;
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 15px;
+            border: none;
+            background: none;
+            color: #2b0000;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .terms {
+            margin-top: 20px;
+            color: #999;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .login-box {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
             }
         }
     </style>
@@ -180,110 +229,127 @@
 
 <body>
 
-<div class="login-page">
+<div class="login-box">
 
-    <div class="login-box">
+    <img
+        src="logo.png"
+        alt="Chishti Library"
+        class="logo"
+        onerror="this.style.display='none'"
+    >
 
-        <img
-            src="logo.png"
-            class="login-logo"
-            alt="Chishti Library"
-            onerror="this.style.display='none'">
+    <h1 id="formTitle">Welcome Back</h1>
 
-        <h1>Admin Login</h1>
+    <p class="subtitle" id="formSubtitle">
+        Login to your Chishti Library account
+    </p>
 
-        <p>Chishti Library Management Panel</p>
-
-        <form id="loginForm">
-
-            <div class="input-group">
-
-                <label for="loginEmail">
-                    Email
-                </label>
-
-                <div class="input-wrapper">
-
-                    <i class="fas fa-envelope"></i>
-
-                    <input
-                        type="email"
-                        id="loginEmail"
-                        placeholder="Admin email"
-                        autocomplete="username"
-                        required>
-
-                </div>
-
-            </div>
+    <div id="message" class="message"></div>
 
 
-            <div class="input-group">
+    <!-- EMAIL LOGIN -->
 
-                <label for="loginPassword">
-                    Password
-                </label>
+    <form id="loginForm">
 
-                <div class="input-wrapper">
+        <div class="form-group">
 
-                    <i class="fas fa-lock"></i>
+            <label for="email">
+                Email
+            </label>
 
-                    <input
-                        type="password"
-                        id="loginPassword"
-                        placeholder="Password"
-                        autocomplete="current-password"
-                        required>
-
-                    <button
-                        type="button"
-                        class="password-toggle"
-                        id="togglePassword"
-                        aria-label="Show password">
-
-                        <i class="fas fa-eye"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <button
-                type="submit"
-                class="btn"
-                id="loginBtn">
-
-                <i class="fas fa-right-to-bracket"></i>
-                Login
-
-            </button>
-
-        </form>
-
-
-        <div
-            id="loginError"
-            class="login-error">
-        </div>
-
-
-        <div
-            id="loginLoading"
-            class="login-loading">
-
-            <i class="fas fa-spinner fa-spin"></i>
-            Checking login...
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
 
         </div>
 
+
+        <div class="form-group">
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            class="forgot"
+            id="forgotPasswordBtn"
+        >
+            Forgot password?
+        </button>
+
+
+        <button
+            type="submit"
+            class="main-btn"
+            id="submitBtn"
+        >
+            Login
+        </button>
+
+    </form>
+
+
+    <div class="divider">
+        OR
     </div>
+
+
+    <!-- GOOGLE LOGIN -->
+
+    <button
+        type="button"
+        class="google-btn"
+        id="googleBtn"
+    >
+        <span>G</span>
+        Continue with Google
+    </button>
+
+
+    <!-- SWITCH LOGIN / SIGNUP -->
+
+    <p class="switch-text">
+
+        <span id="switchQuestion">
+            Don't have an account?
+        </span>
+
+        <button
+            type="button"
+            id="switchBtn"
+        >
+            Create account
+        </button>
+
+    </p>
+
+
+    <p class="terms">
+        By continuing, you agree to use Chishti Library
+        responsibly.
+    </p>
 
 </div>
 
 
-<!-- Firebase -->
+<!-- FIREBASE -->
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
