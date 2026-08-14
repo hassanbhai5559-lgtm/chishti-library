@@ -5,100 +5,294 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>Admin Login | Chishti Library</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="icon"
+      type="image/png"
+      href="../logo.png">
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-family:Arial, sans-serif;
+
+    background:
+    linear-gradient(
+        135deg,
+        #300000,
+        #750000,
+        #1f0000
+    );
+
+}
+
+
+/* LOGIN BOX */
+
+.login-box{
+
+    width:90%;
+
+    max-width:420px;
+
+    background:#ffffff;
+
+    padding:40px 35px;
+
+    border-radius:22px;
+
+    text-align:center;
+
+    box-shadow:
+    0 20px 60px rgba(0,0,0,.45);
+
+}
+
+
+/* LOGO */
+
+.login-box img{
+
+    width:90px;
+
+    height:90px;
+
+    object-fit:contain;
+
+    margin-bottom:10px;
+
+}
+
+
+/* TITLE */
+
+.login-box h1{
+
+    margin:5px 0;
+
+    color:#650000;
+
+    font-size:28px;
+
+}
+
+.login-box p{
+
+    color:#777;
+
+    margin-bottom:30px;
+
+}
+
+
+/* INPUT */
+
+.input-group{
+
+    position:relative;
+
+    margin-bottom:18px;
+
+}
+
+.input-group i{
+
+    position:absolute;
+
+    left:15px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#650000;
+
+}
+
+.input-group input{
+
+    width:100%;
+
+    padding:15px 15px 15px 45px;
+
+    border:1px solid #ddd;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+.input-group input:focus{
+
+    border-color:#650000;
+
+}
+
+
+/* LOGIN BUTTON */
+
+.login-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#650000;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
+
+.login-btn:hover{
+
+    background:#420000;
+
+}
+
+
+/* BACK BUTTON */
+
+.back-home{
+
+    display:block;
+
+    margin-top:22px;
+
+    color:#650000;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+}
+
+.back-home:hover{
+
+    text-decoration:underline;
+
+}
+
+</style>
 
 </head>
 
+
 <body>
 
-<div class="login-container">
 
 <div class="login-box">
 
-<div style="text-align:center;">
 
-<img src="logo.png"
-width="90">
+    <img
+        src="../logo.png"
+        alt="Chishti Library Logo"
+    >
 
-<h2>
 
-CHISHTI LIBRARY
+    <h1>
+        Admin Login
+    </h1>
 
-</h2>
 
-<p>
+    <p>
+        Chishti Library Administration
+    </p>
 
-Admin Secure Login
 
-</p>
+    <form id="loginForm">
+
+
+        <div class="input-group">
+
+            <i class="fas fa-envelope"></i>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Admin Email"
+                required
+            >
+
+        </div>
+
+
+        <div class="input-group">
+
+            <i class="fas fa-lock"></i>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+            >
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="login-btn"
+        >
+
+            <i class="fas fa-right-to-bracket"></i>
+
+            Login
+
+        </button>
+
+
+    </form>
+
+
+    <a
+        href="../index.html"
+        class="back-home"
+    >
+
+        <i class="fas fa-arrow-left"></i>
+
+        Back to Library
+
+    </a>
+
 
 </div>
 
-<form id="loginForm">
-
-<input
-type="email"
-id="email"
-placeholder="Admin Email"
-required>
-
-<input
-type="password"
-id="password"
-placeholder="Password"
-required>
-
-<button
-type="submit"
-class="btn">
-
-<i class="fas fa-lock"></i>
-
-Login
-
-</button>
-
-</form>
-
-<br>
-
-<a
-href="index.html"
-class="btn"
-style="background:#444;width:100%;display:block;text-align:center;">
-
-Back To Home
-
-</a>
-
-<p
-id="message"
-style="margin-top:20px;color:red;text-align:center;">
-
-</p>
-
-</div>
-
-</div>
-
-<!-- Firebase -->
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-<script src="firebase.js"></script>
-
-<script src="login.js"></script>
 
 </body>
 
