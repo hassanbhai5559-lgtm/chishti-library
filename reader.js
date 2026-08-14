@@ -1,8 +1,9 @@
-/* =========================================================
-   CHISHTI READER
-   reader.js
-   CLEAN FINAL VERSION
-========================================================= */
+ /* =========================================================
+    CHISHTI LIBRARY
+    reader.js
+    FULL PDF READER
+ ========================================================= */
+
 
 import * as pdfjsLib from
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
@@ -10,25 +11,21 @@ import * as pdfjsLib from
 
 /* =========================================================
    PDF.JS WORKER
-========================================================= */
+ ========================================================= */
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
 
 
 /* =========================================================
-   GET BOOK FROM URL
-   Supports:
-
-   reader.html?book=Sbhy%20Hamdan%20Ne%20Rab%20Sohnay.pdf
-
-   reader.html?pdf=Sbhy%20Hamdan%20Ne%20Rab%20Sohnay.pdf
-========================================================= */
+   GET URL PARAMETERS
+ ========================================================= */
 
 const params =
     new URLSearchParams(
         window.location.search
     );
+
 
 const rawBook =
     params.get("book") ||
@@ -38,7 +35,7 @@ const rawBook =
 
 /* =========================================================
    BUILD PDF URL
-========================================================= */
+ ========================================================= */
 
 function getPDFURL() {
 
@@ -48,31 +45,10 @@ function getPDFURL() {
 
     try {
 
-        /*
-         * URLSearchParams already decodes
-         * %20 into spaces.
-         */
-
         const cleanPath =
             rawBook
                 .replace(/^\/+/, "")
                 .trim();
-
-
-        /*
-         * reader.html and the PDF files
-         * are in the same GitHub Pages root.
-         *
-         * Example:
-         *
-         * reader.html
-         * Sbhy Hamdan Ne Rab Sohnay.pdf
-         *
-         * becomes:
-         *
-         * /chishti-library/
-         * Sbhy%20Hamdan%20Ne%20Rab%20Sohnay.pdf
-         */
 
         const pdfURL =
             new URL(
@@ -80,13 +56,12 @@ function getPDFURL() {
                 window.location.href
             );
 
-
         return pdfURL.href;
 
     } catch (error) {
 
         console.error(
-            "PDF URL creation failed:",
+            "PDF URL error:",
             error
         );
 
@@ -105,106 +80,117 @@ console.log(
 );
 
 console.log(
-    "FINAL PDF URL:",
+    "PDF URL:",
     PDF_URL
 );
 
 
 /* =========================================================
    SETTINGS
-========================================================= */
+ ========================================================= */
 
-const MIN_ZOOM =
-    0.5;
+const MIN_ZOOM = 0.5;
 
-const MAX_ZOOM =
-    3;
+const MAX_ZOOM = 3;
 
-const ZOOM_STEP =
-    0.1;
+const ZOOM_STEP = 0.1;
 
-const DEFAULT_ZOOM =
-    1;
+const DEFAULT_ZOOM = 1;
 
 
 /* =========================================================
    DOM
-========================================================= */
+ ========================================================= */
 
 const bookTitle =
     document.getElementById(
         "bookTitle"
     );
 
+
 const bookViewport =
     document.getElementById(
         "bookViewport"
     );
+
 
 const pageWrapper =
     document.getElementById(
         "pageWrapper"
     );
 
+
 const pdfCanvas =
     document.getElementById(
         "pdfCanvas"
     );
+
 
 const previousPageButton =
     document.getElementById(
         "previousPageButton"
     );
 
+
 const nextPageButton =
     document.getElementById(
         "nextPageButton"
     );
+
 
 const pageNumberInput =
     document.getElementById(
         "pageNumberInput"
     );
 
+
 const totalPages =
     document.getElementById(
         "totalPages"
     );
+
 
 const zoomOutButton =
     document.getElementById(
         "zoomOutButton"
     );
 
+
 const resetZoomButton =
     document.getElementById(
         "resetZoomButton"
     );
+
 
 const zoomInButton =
     document.getElementById(
         "zoomInButton"
     );
 
+
 const zoomLevel =
     document.getElementById(
         "zoomLevel"
     );
+
 
 const errorScreen =
     document.getElementById(
         "errorScreen"
     );
 
+
 const errorMessage =
     document.getElementById(
         "errorMessage"
     );
 
+
 const retryButton =
     document.getElementById(
         "retryButton"
     );
+
 
 const readerStatus =
     document.getElementById(
@@ -213,8 +199,36 @@ const readerStatus =
 
 
 /* =========================================================
+   OPTIONAL EXTRA BUTTONS
+ ========================================================= */
+
+const downloadButton =
+    document.getElementById(
+        "downloadButton"
+    );
+
+
+const printButton =
+    document.getElementById(
+        "printButton"
+    );
+
+
+const fullscreenButton =
+    document.getElementById(
+        "fullscreenButton"
+    );
+
+
+const swipeButton =
+    document.getElementById(
+        "swipeButton"
+    );
+
+
+/* =========================================================
    CANVAS
-========================================================= */
+ ========================================================= */
 
 const context =
     pdfCanvas
@@ -229,27 +243,35 @@ const context =
 
 /* =========================================================
    STATE
-========================================================= */
+ ========================================================= */
 
-let pdfDocument =
-    null;
+let pdfDocument = null;
 
-let currentPage =
-    1;
+let currentPage = 1;
 
-let pageCount =
-    0;
+let pageCount = 0;
 
-let zoom =
-    DEFAULT_ZOOM;
+let zoom = DEFAULT_ZOOM;
 
-let currentRenderTask =
-    null;
+let currentRenderTask = null;
+
+
+/* =========================================================
+   SWIPE STATE
+ ========================================================= */
+
+let touchStartX = 0;
+
+let touchStartY = 0;
+
+let touchEndX = 0;
+
+let touchEndY = 0;
 
 
 /* =========================================================
    TITLE
-========================================================= */
+ ========================================================= */
 
 function setBookTitle() {
 
@@ -314,7 +336,7 @@ function setBookTitle() {
 
 /* =========================================================
    STATUS
-========================================================= */
+ ========================================================= */
 
 function announce(message) {
 
@@ -328,7 +350,7 @@ function announce(message) {
 
 /* =========================================================
    ERROR
-========================================================= */
+ ========================================================= */
 
 function showError(message) {
 
@@ -364,8 +386,8 @@ function hideError() {
 
 
 /* =========================================================
-   UI
-========================================================= */
+   UPDATE UI
+ ========================================================= */
 
 function updateUI() {
 
@@ -409,7 +431,7 @@ function updateUI() {
 
 /* =========================================================
    CALCULATE SCALE
-========================================================= */
+ ========================================================= */
 
 function calculateScale(page) {
 
@@ -464,8 +486,8 @@ function calculateScale(page) {
 
 
 /* =========================================================
-   CANCEL CURRENT RENDER
-========================================================= */
+   CANCEL RENDER
+ ========================================================= */
 
 function cancelCurrentRender() {
 
@@ -481,7 +503,7 @@ function cancelCurrentRender() {
     } catch (error) {
 
         console.warn(
-            "Could not cancel render:",
+            "Render cancel error:",
             error
         );
     }
@@ -494,7 +516,7 @@ function cancelCurrentRender() {
 
 /* =========================================================
    RENDER PAGE
-========================================================= */
+ ========================================================= */
 
 async function renderPage(pageNumber) {
 
@@ -518,10 +540,6 @@ async function renderPage(pageNumber) {
         );
 
 
-    /*
-     * Cancel previous render.
-     */
-
     cancelCurrentRender();
 
 
@@ -544,7 +562,7 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * High DPI / Retina support.
+         * Retina / High DPI
          */
 
         const pixelRatio =
@@ -553,10 +571,6 @@ async function renderPage(pageNumber) {
                 2
             );
 
-
-        /*
-         * Actual canvas resolution.
-         */
 
         pdfCanvas.width =
             Math.floor(
@@ -572,10 +586,6 @@ async function renderPage(pageNumber) {
             );
 
 
-        /*
-         * CSS display size.
-         */
-
         pdfCanvas.style.width =
             `${viewport.width}px`;
 
@@ -583,10 +593,6 @@ async function renderPage(pageNumber) {
         pdfCanvas.style.height =
             `${viewport.height}px`;
 
-
-        /*
-         * Page wrapper size.
-         */
 
         if (pageWrapper) {
 
@@ -599,7 +605,7 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * Retina transform.
+         * Canvas transform
          */
 
         context.setTransform(
@@ -613,7 +619,7 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * White background.
+         * White background
          */
 
         context.fillStyle =
@@ -629,7 +635,7 @@ async function renderPage(pageNumber) {
 
 
         /*
-         * Render PDF page.
+         * Render PDF
          */
 
         currentRenderTask =
@@ -650,11 +656,6 @@ async function renderPage(pageNumber) {
             null;
 
 
-        /*
-         * Update current page only
-         * after successful render.
-         */
-
         currentPage =
             pageNumber;
 
@@ -668,11 +669,6 @@ async function renderPage(pageNumber) {
 
 
     } catch (error) {
-
-        /*
-         * PDF.js throws this when a render
-         * is intentionally cancelled.
-         */
 
         if (
             error?.name ===
@@ -704,7 +700,7 @@ async function renderPage(pageNumber) {
 
 /* =========================================================
    GO TO PAGE
-========================================================= */
+ ========================================================= */
 
 function goToPage(value) {
 
@@ -720,9 +716,7 @@ function goToPage(value) {
         );
 
 
-    if (
-        !Number.isFinite(page)
-    ) {
+    if (!Number.isFinite(page)) {
 
         page =
             currentPage;
@@ -746,8 +740,8 @@ function goToPage(value) {
 
 
 /* =========================================================
-   PREVIOUS PAGE
-========================================================= */
+   PREVIOUS
+ ========================================================= */
 
 function previousPage() {
 
@@ -767,8 +761,8 @@ function previousPage() {
 
 
 /* =========================================================
-   NEXT PAGE
-========================================================= */
+   NEXT
+ ========================================================= */
 
 function nextPage() {
 
@@ -789,7 +783,7 @@ function nextPage() {
 
 /* =========================================================
    ZOOM IN
-========================================================= */
+ ========================================================= */
 
 function zoomIn() {
 
@@ -819,7 +813,7 @@ function zoomIn() {
 
 /* =========================================================
    ZOOM OUT
-========================================================= */
+ ========================================================= */
 
 function zoomOut() {
 
@@ -849,7 +843,7 @@ function zoomOut() {
 
 /* =========================================================
    RESET ZOOM
-========================================================= */
+ ========================================================= */
 
 function resetZoom() {
 
@@ -871,7 +865,7 @@ function resetZoom() {
 
 /* =========================================================
    LOAD PDF
-========================================================= */
+ ========================================================= */
 
 async function loadPDF() {
 
@@ -888,10 +882,6 @@ async function loadPDF() {
     }
 
 
-    /*
-     * Cancel any old rendering.
-     */
-
     cancelCurrentRender();
 
 
@@ -906,16 +896,6 @@ async function loadPDF() {
         );
 
 
-        /*
-         * Simple PDF.js loading.
-         *
-         * No custom rangeChunkSize,
-         * no disableStream,
-         * no disableAutoFetch.
-         *
-         * PDF.js uses its normal defaults.
-         */
-
         const loadingTask =
             pdfjsLib.getDocument({
                 url: PDF_URL
@@ -925,10 +905,6 @@ async function loadPDF() {
         pdfDocument =
             await loadingTask.promise;
 
-
-        /*
-         * PDF successfully loaded.
-         */
 
         pageCount =
             pdfDocument.numPages;
@@ -943,7 +919,7 @@ async function loadPDF() {
 
 
         console.log(
-            "PDF loaded successfully:",
+            "PDF loaded:",
             pageCount,
             "pages"
         );
@@ -985,10 +961,6 @@ async function loadPDF() {
         updateUI();
 
 
-        /*
-         * PDF not found.
-         */
-
         if (
             error?.name ===
             "MissingPDFException"
@@ -997,23 +969,18 @@ async function loadPDF() {
             showError(
                 `PDF not found.
 
-Requested file:
+Requested:
 ${rawBook}
 
-Final URL:
+URL:
 ${PDF_URL}
 
-Check the exact filename and GitHub Pages path.`
+Check the exact PDF filename and path.`
             );
-
 
             return;
         }
 
-
-        /*
-         * Invalid PDF.
-         */
 
         if (
             error?.name ===
@@ -1024,14 +991,9 @@ Check the exact filename and GitHub Pages path.`
                 "The selected file is not a valid PDF."
             );
 
-
             return;
         }
 
-
-        /*
-         * Unexpected server response.
-         */
 
         if (
             error?.name ===
@@ -1042,14 +1004,9 @@ Check the exact filename and GitHub Pages path.`
                 "The server returned an unexpected response for this PDF."
             );
 
-
             return;
         }
 
-
-        /*
-         * Generic error.
-         */
 
         showError(
             "PDF could not be loaded. Check the PDF URL and filename."
@@ -1060,7 +1017,7 @@ Check the exact filename and GitHub Pages path.`
 
 /* =========================================================
    RETRY
-========================================================= */
+ ========================================================= */
 
 if (retryButton) {
 
@@ -1073,7 +1030,7 @@ if (retryButton) {
 
 /* =========================================================
    PAGE BUTTONS
-========================================================= */
+ ========================================================= */
 
 if (previousPageButton) {
 
@@ -1095,7 +1052,7 @@ if (nextPageButton) {
 
 /* =========================================================
    ZOOM BUTTONS
-========================================================= */
+ ========================================================= */
 
 if (zoomOutButton) {
 
@@ -1126,7 +1083,7 @@ if (zoomInButton) {
 
 /* =========================================================
    PAGE INPUT
-========================================================= */
+ ========================================================= */
 
 if (pageNumberInput) {
 
@@ -1167,7 +1124,7 @@ if (pageNumberInput) {
 
 /* =========================================================
    KEYBOARD CONTROLS
-========================================================= */
+ ========================================================= */
 
 document.addEventListener(
     "keydown",
@@ -1177,20 +1134,11 @@ document.addEventListener(
             document.activeElement;
 
 
-        /*
-         * Don't hijack keyboard controls
-         * while user is typing.
-         */
-
         const typing =
             active &&
             (
-                active.tagName ===
-                    "INPUT" ||
-
-                active.tagName ===
-                    "TEXTAREA" ||
-
+                active.tagName === "INPUT" ||
+                active.tagName === "TEXTAREA" ||
                 active.isContentEditable
             );
 
@@ -1201,7 +1149,7 @@ document.addEventListener(
 
 
         /*
-         * Previous page
+         * LEFT
          */
 
         if (
@@ -1218,7 +1166,7 @@ document.addEventListener(
 
 
         /*
-         * Next page
+         * RIGHT
          */
 
         if (
@@ -1235,7 +1183,7 @@ document.addEventListener(
 
 
         /*
-         * Zoom in
+         * PLUS
          */
 
         if (
@@ -1252,7 +1200,7 @@ document.addEventListener(
 
 
         /*
-         * Zoom out
+         * MINUS
          */
 
         if (
@@ -1268,7 +1216,7 @@ document.addEventListener(
 
 
         /*
-         * Reset zoom
+         * RESET
          */
 
         if (
@@ -1284,7 +1232,7 @@ document.addEventListener(
 
 
         /*
-         * First page
+         * FIRST PAGE
          */
 
         if (
@@ -1300,7 +1248,7 @@ document.addEventListener(
 
 
         /*
-         * Last page
+         * LAST PAGE
          */
 
         if (
@@ -1313,16 +1261,370 @@ document.addEventListener(
 
             return;
         }
+
+
+        /*
+         * FULLSCREEN
+         */
+
+        if (
+            event.key === "f" ||
+            event.key === "F"
+        ) {
+
+            toggleFullscreen();
+
+            return;
+        }
     }
 );
 
 
 /* =========================================================
-   RESIZE
-========================================================= */
+   MOBILE SWIPE
+ ========================================================= */
 
-let resizeTimer =
-    null;
+if (bookViewport) {
+
+    bookViewport.addEventListener(
+        "touchstart",
+        function (event) {
+
+            if (
+                !event.touches ||
+                !event.touches.length
+            ) {
+                return;
+            }
+
+
+            touchStartX =
+                event.touches[0].clientX;
+
+
+            touchStartY =
+                event.touches[0].clientY;
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    bookViewport.addEventListener(
+        "touchend",
+        function (event) {
+
+            if (
+                !event.changedTouches ||
+                !event.changedTouches.length
+            ) {
+                return;
+            }
+
+
+            touchEndX =
+                event.changedTouches[0].clientX;
+
+
+            touchEndY =
+                event.changedTouches[0].clientY;
+
+
+            handleSwipe();
+        },
+        {
+            passive: true
+        }
+    );
+}
+
+
+/* =========================================================
+   HANDLE SWIPE
+ ========================================================= */
+
+function handleSwipe() {
+
+    const deltaX =
+        touchEndX -
+        touchStartX;
+
+
+    const deltaY =
+        touchEndY -
+        touchStartY;
+
+
+    /*
+     * Ignore mostly vertical movement.
+     */
+
+    if (
+        Math.abs(deltaX) <
+        60
+    ) {
+        return;
+    }
+
+
+    if (
+        Math.abs(deltaX) <
+        Math.abs(deltaY)
+    ) {
+        return;
+    }
+
+
+    /*
+     * Swipe LEFT
+     * = Next page
+     */
+
+    if (deltaX < 0) {
+
+        nextPage();
+
+        return;
+    }
+
+
+    /*
+     * Swipe RIGHT
+     * = Previous page
+     */
+
+    if (deltaX > 0) {
+
+        previousPage();
+    }
+}
+
+
+/* =========================================================
+   FULLSCREEN
+ ========================================================= */
+
+async function toggleFullscreen() {
+
+    const reader =
+        document.getElementById(
+            "readerApp"
+        );
+
+
+    if (!reader) {
+        return;
+    }
+
+
+    try {
+
+        if (!document.fullscreenElement) {
+
+            await reader.requestFullscreen();
+
+        } else {
+
+            await document.exitFullscreen();
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Fullscreen not available:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   FULLSCREEN BUTTON
+ ========================================================= */
+
+if (fullscreenButton) {
+
+    fullscreenButton.addEventListener(
+        "click",
+        toggleFullscreen
+    );
+}
+
+
+/* =========================================================
+   PRINT
+ ========================================================= */
+
+function printCurrentBook() {
+
+    /*
+     * Browser PDF print.
+     *
+     * This opens the browser print dialog.
+     */
+
+    if (!PDF_URL) {
+
+        alert(
+            "No PDF selected."
+        );
+
+        return;
+    }
+
+
+    const printWindow =
+        window.open(
+            PDF_URL,
+            "_blank"
+        );
+
+
+    if (!printWindow) {
+
+        alert(
+            "Please allow popups to print the book."
+        );
+
+        return;
+    }
+
+
+    printWindow.addEventListener(
+        "load",
+        function () {
+
+            setTimeout(
+                function () {
+
+                    try {
+
+                        printWindow.print();
+
+                    } catch (error) {
+
+                        console.warn(
+                            "Print error:",
+                            error
+                        );
+                    }
+
+                },
+                1000
+            );
+        }
+    );
+}
+
+
+if (printButton) {
+
+    printButton.addEventListener(
+        "click",
+        printCurrentBook
+    );
+}
+
+
+/* =========================================================
+   DOWNLOAD
+ ========================================================= */
+
+function downloadBook() {
+
+    if (!PDF_URL) {
+
+        alert(
+            "No PDF selected."
+        );
+
+        return;
+    }
+
+
+    /*
+     * IMPORTANT:
+     *
+     * This is only the frontend download action.
+     *
+     * Real subscription protection must be
+     * handled by Firebase/backend.
+     */
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        PDF_URL;
+
+
+    link.download =
+        rawBook
+            .split("/")
+            .pop() ||
+        "book.pdf";
+
+
+    link.target =
+        "_blank";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+}
+
+
+if (downloadButton) {
+
+    downloadButton.addEventListener(
+        "click",
+        downloadBook
+    );
+}
+
+
+/* =========================================================
+   SWIPE BUTTON
+ ========================================================= */
+
+if (swipeButton) {
+
+    swipeButton.addEventListener(
+        "click",
+        function () {
+
+            if (bookViewport) {
+
+                bookViewport.scrollIntoView({
+                    behavior: "smooth"
+                });
+            }
+
+
+            announce(
+                "Swipe navigation is enabled. Swipe left for next page and right for previous page."
+            );
+        }
+    );
+}
+
+
+/* =========================================================
+   RESIZE
+ ========================================================= */
+
+let resizeTimer = null;
 
 
 window.addEventListener(
@@ -1346,239 +1648,84 @@ window.addEventListener(
                     }
 
                 },
-                150
+                180
             );
     }
 );
 
 
 /* =========================================================
-   START READER
-========================================================= */
+   ORIENTATION CHANGE
+ ========================================================= */
+
+window.addEventListener(
+    "orientationchange",
+    function () {
+
+        setTimeout(
+            function () {
+
+                if (pdfDocument) {
+
+                    renderPage(
+                        currentPage
+                    );
+                }
+
+            },
+            300
+        );
+    }
+);
+
+
+/* =========================================================
+   FULLSCREEN CHANGE
+ ========================================================= */
+
+document.addEventListener(
+    "fullscreenchange",
+    function () {
+
+        setTimeout(
+            function () {
+
+                if (pdfDocument) {
+
+                    renderPage(
+                        currentPage
+                    );
+                }
+
+            },
+            200
+        );
+    }
+);
+
+
+/* =========================================================
+   PREVENT ACCIDENTAL IMAGE DRAG
+ ========================================================= */
+
+if (pdfCanvas) {
+
+    pdfCanvas.addEventListener(
+        "dragstart",
+        function (event) {
+
+            event.preventDefault();
+        }
+    );
+}
+
+
+/* =========================================================
+   START
+ ========================================================= */
 
 setBookTitle();
 
 updateUI();
 
 loadPDF();
-/* =========================================
-   READER CONTROLS
-========================================= */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const reader =
-        document.getElementById("readerMode");
-
-    const readerContent =
-        document.getElementById("readerContent");
-
-    const readerPage =
-        document.getElementById("readerPage");
-
-    const prevBtn =
-        document.getElementById("readerPrev");
-
-    const nextBtn =
-        document.getElementById("readerNext");
-
-    const fontMinus =
-        document.getElementById("readerFontMinus");
-
-    const fontPlus =
-        document.getElementById("readerFontPlus");
-
-    const themeBtn =
-        document.getElementById("readerTheme");
-
-    const closeBtn =
-        document.getElementById("readerClose");
-
-
-    if (!reader || !readerContent) {
-        return;
-    }
-
-
-    /* =====================================
-       FONT SIZE
-    ===================================== */
-
-    let fontSize = 18;
-
-    fontMinus.addEventListener("click", function () {
-
-        if (fontSize > 14) {
-
-            fontSize -= 1;
-
-            readerContent.style.fontSize =
-                fontSize + "px";
-
-        }
-
-    });
-
-
-    fontPlus.addEventListener("click", function () {
-
-        if (fontSize < 30) {
-
-            fontSize += 1;
-
-            readerContent.style.fontSize =
-                fontSize + "px";
-
-        }
-
-    });
-
-
-    /* =====================================
-       THEME SWAP
-    ===================================== */
-
-    let theme = 0;
-
-    themeBtn.addEventListener("click", function () {
-
-        theme++;
-
-        if (theme > 2) {
-            theme = 0;
-        }
-
-
-        reader.classList.remove(
-            "dark-bg",
-            "sepia-bg"
-        );
-
-        readerContent.classList.remove(
-            "dark",
-            "sepia"
-        );
-
-
-        /* NORMAL */
-
-        if (theme === 0) {
-
-            reader.style.background = "#fff";
-
-            readerContent.style.color =
-                "#222";
-
-        }
-
-
-        /* DARK */
-
-        if (theme === 1) {
-
-            reader.classList.add("dark-bg");
-
-            readerContent.classList.add("dark");
-
-        }
-
-
-        /* SEPIA */
-
-        if (theme === 2) {
-
-            reader.classList.add("sepia-bg");
-
-            readerContent.classList.add("sepia");
-
-        }
-
-    });
-
-
-    /* =====================================
-       CLOSE READER
-    ===================================== */
-
-    closeBtn.addEventListener("click", function () {
-
-        reader.classList.remove("active");
-
-        document.body.style.overflow = "";
-
-    });
-
-
-    /* =====================================
-       ESC KEY
-    ===================================== */
-
-    document.addEventListener("keydown", function (event) {
-
-        if (event.key === "Escape") {
-
-            reader.classList.remove("active");
-
-            document.body.style.overflow = "";
-
-        }
-
-    });
-
-
-    /* =====================================
-       PREVIOUS / NEXT
-    ===================================== */
-
-    let currentPage = 1;
-
-    let totalPages = 1;
-
-
-    function updatePage() {
-
-        readerPage.textContent =
-            currentPage + " / " + totalPages;
-
-    }
-
-
-    prevBtn.addEventListener("click", function () {
-
-        if (currentPage > 1) {
-
-            currentPage--;
-
-            updatePage();
-
-            reader.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-
-    });
-
-
-    nextBtn.addEventListener("click", function () {
-
-        if (currentPage < totalPages) {
-
-            currentPage++;
-
-            updatePage();
-
-            reader.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-
-    });
-
-
-    updatePage();
-
-});
