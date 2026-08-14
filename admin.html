@@ -3,817 +3,1002 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Admin Panel | Chishti Library</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-<link rel="icon" type="image/png" href="../logo.png">
+    <title>Admin Panel | Chishti Library</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link
+        rel="icon"
+        type="image/png"
+        href="logo.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
 
-<style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
 
-body{
+    <style>
 
-    font-family:Poppins,sans-serif;
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+        }
 
-    background:#f4f4f4;
+        body{
+            font-family:Poppins,sans-serif;
+            background:#f5f5f5;
+            color:#222;
+        }
 
-    color:#222;
+        button,
+        input,
+        textarea,
+        select{
+            font-family:inherit;
+        }
 
-}
 
+        /* =================================
+           SIDEBAR
+        ================================= */
 
-/* =========================
-   LOGIN
-========================= */
+        .sidebar{
 
-.login-page{
+            position:fixed;
 
-    min-height:100vh;
+            left:0;
+            top:0;
 
-    display:flex;
+            width:250px;
+            height:100vh;
 
-    align-items:center;
+            background:#2b0000;
 
-    justify-content:center;
+            color:white;
 
-    padding:20px;
+            padding:22px 16px;
 
-    background:
-    linear-gradient(
-        135deg,
-        #210000,
-        #570000,
-        #160000
-    );
+            z-index:1000;
 
-}
+            overflow-y:auto;
 
-.login-box{
+        }
 
-    width:100%;
 
-    max-width:430px;
+        .sidebar-logo{
 
-    background:white;
+            text-align:center;
 
-    border-radius:25px;
+            padding:5px 0 22px;
 
-    padding:40px 30px;
+            border-bottom:
+                1px solid
+                rgba(255,255,255,.15);
 
-    text-align:center;
+        }
 
-    box-shadow:0 25px 70px rgba(0,0,0,.35);
 
-}
+        .sidebar-logo img{
 
-.login-logo{
+            width:70px;
+            height:70px;
 
-    width:90px;
+            object-fit:contain;
 
-    height:90px;
+        }
 
-    object-fit:contain;
 
-    margin-bottom:15px;
+        .sidebar-logo h2{
 
-}
+            font-size:17px;
 
-.login-box h1{
+            margin-top:8px;
 
-    color:#2b0000;
+        }
 
-    margin-bottom:8px;
 
-}
+        .sidebar-logo span{
 
-.login-box p{
+            font-size:11px;
 
-    color:#777;
+            opacity:.7;
 
-    margin-bottom:25px;
+        }
 
-}
 
-.input-group{
+        .sidebar-menu{
 
-    text-align:left;
+            list-style:none;
 
-    margin-bottom:18px;
+            margin-top:22px;
 
-}
+        }
 
-.input-group label{
 
-    display:block;
+        .sidebar-menu li{
 
-    margin-bottom:7px;
+            margin-bottom:7px;
 
-    font-weight:600;
+        }
 
-}
 
-.input-group input{
+        .sidebar-menu button{
 
-    width:100%;
+            width:100%;
 
-    padding:13px 15px;
+            border:none;
 
-    border:1px solid #ddd;
+            background:transparent;
 
-    border-radius:12px;
+            color:white;
 
-    outline:none;
+            padding:13px 14px;
 
-    font-family:inherit;
+            border-radius:10px;
 
-}
+            text-align:left;
 
-.input-group input:focus{
+            cursor:pointer;
 
-    border-color:#2b0000;
+            transition:.2s;
 
-}
+        }
 
-.btn{
 
-    width:100%;
+        .sidebar-menu button:hover,
+        .sidebar-menu button.active{
 
-    border:none;
+            background:
+                rgba(255,255,255,.13);
 
-    padding:14px;
+        }
 
-    border-radius:12px;
 
-    background:#2b0000;
+        .sidebar-menu i{
 
-    color:white;
+            width:25px;
 
-    font-family:inherit;
+        }
 
-    font-weight:700;
 
-    cursor:pointer;
+        /* =================================
+           MAIN
+        ================================= */
 
-}
+        .main{
 
-.btn:hover{
+            margin-left:250px;
 
-    background:#4b0000;
+            min-height:100vh;
 
-}
+        }
 
-.login-error{
 
-    color:#d00000;
+        .topbar{
 
-    margin-top:15px;
+            height:72px;
 
-    font-size:14px;
+            background:white;
 
-}
+            display:flex;
 
+            align-items:center;
 
-/* =========================
-   ADMIN
-========================= */
+            justify-content:space-between;
 
-.admin-page{
+            padding:0 28px;
 
-    display:none;
+            box-shadow:
+                0 2px 15px
+                rgba(0,0,0,.07);
 
-    min-height:100vh;
+            position:sticky;
 
-}
+            top:0;
 
+            z-index:100;
 
-/* SIDEBAR */
+        }
 
-.sidebar{
 
-    position:fixed;
+        .topbar h2{
 
-    left:0;
+            color:#2b0000;
 
-    top:0;
+            font-size:20px;
 
-    width:250px;
+        }
 
-    height:100vh;
 
-    background:#2b0000;
+        .admin-email{
 
-    color:white;
+            color:#777;
 
-    padding:25px 18px;
+            font-size:12px;
 
-    z-index:100;
+            margin-right:12px;
 
-}
+        }
 
-.sidebar-logo{
 
-    text-align:center;
+        .logout-btn{
 
-    padding-bottom:25px;
+            border:none;
 
-    border-bottom:1px solid rgba(255,255,255,.15);
+            background:#2b0000;
 
-}
+            color:white;
 
-.sidebar-logo img{
+            padding:10px 17px;
 
-    width:70px;
+            border-radius:9px;
 
-    height:70px;
+            cursor:pointer;
 
-    object-fit:contain;
+            font-weight:600;
 
-}
+        }
 
-.sidebar-logo h2{
 
-    font-size:18px;
+        .content{
 
-    margin-top:8px;
+            padding:28px;
 
-}
+        }
 
-.sidebar-logo span{
 
-    font-size:12px;
+        /* =================================
+           SECTIONS
+        ================================= */
 
-    opacity:.7;
+        .admin-section{
 
-}
+            display:none;
 
-.sidebar-menu{
+        }
 
-    list-style:none;
 
-    margin-top:25px;
+        .admin-section.active{
 
-}
+            display:block;
 
-.sidebar-menu li{
+        }
 
-    margin-bottom:8px;
 
-}
+        /* =================================
+           STATS
+        ================================= */
 
-.sidebar-menu button{
+        .stats{
 
-    width:100%;
+            display:grid;
 
-    border:none;
+            grid-template-columns:
+                repeat(4,1fr);
 
-    background:transparent;
+            gap:18px;
 
-    color:white;
+            margin-bottom:25px;
 
-    padding:13px 15px;
+        }
 
-    border-radius:10px;
 
-    text-align:left;
+        .stat-card{
 
-    font-family:inherit;
+            background:white;
 
-    cursor:pointer;
+            border-radius:17px;
 
-}
+            padding:22px;
 
-.sidebar-menu button:hover,
+            box-shadow:
+                0 5px 25px
+                rgba(0,0,0,.06);
 
-.sidebar-menu button.active{
+        }
 
-    background:rgba(255,255,255,.12);
 
-}
+        .stat-card i{
 
-.sidebar-menu i{
+            font-size:25px;
 
-    width:25px;
+            color:#2b0000;
 
-}
+            margin-bottom:13px;
 
+        }
 
-/* MAIN */
 
-.main{
+        .stat-card h3{
 
-    margin-left:250px;
+            color:#2b0000;
 
-    min-height:100vh;
+            font-size:29px;
 
-}
+            margin-bottom:3px;
 
-.topbar{
+        }
 
-    height:75px;
 
-    background:white;
+        .stat-card p{
 
-    display:flex;
+            color:#777;
 
-    align-items:center;
+            font-size:13px;
 
-    justify-content:space-between;
+        }
 
-    padding:0 30px;
 
-    box-shadow:0 2px 15px rgba(0,0,0,.08);
+        /* =================================
+           PANELS
+        ================================= */
 
-}
+        .panel{
 
-.topbar h2{
+            background:white;
 
-    color:#2b0000;
+            border-radius:18px;
 
-}
+            padding:25px;
 
-.logout-btn{
+            box-shadow:
+                0 5px 25px
+                rgba(0,0,0,.06);
 
-    border:none;
+            margin-bottom:22px;
 
-    background:#2b0000;
+        }
 
-    color:white;
 
-    padding:10px 18px;
+        .panel-header{
 
-    border-radius:10px;
+            display:flex;
 
-    cursor:pointer;
+            align-items:center;
 
-    font-family:inherit;
+            justify-content:space-between;
 
-}
+            gap:15px;
 
-.content{
+            margin-bottom:22px;
 
-    padding:30px;
+        }
 
-}
 
+        .panel h2{
 
-/* DASHBOARD CARDS */
+            color:#2b0000;
 
-.stats{
+            font-size:21px;
 
-    display:grid;
+        }
 
-    grid-template-columns:
-    repeat(3,1fr);
 
-    gap:20px;
+        .panel-description{
 
-    margin-bottom:30px;
+            color:#777;
 
-}
+            font-size:14px;
 
-.stat-card{
+            line-height:1.7;
 
-    background:white;
+        }
 
-    border-radius:18px;
 
-    padding:25px;
+        /* =================================
+           SEARCH
+        ================================= */
 
-    box-shadow:0 5px 25px rgba(0,0,0,.07);
+        .search-box{
 
-}
+            position:relative;
 
-.stat-card i{
+            width:280px;
 
-    font-size:28px;
+        }
 
-    color:#2b0000;
 
-    margin-bottom:15px;
+        .search-box i{
 
-}
+            position:absolute;
 
-.stat-card h3{
+            left:13px;
 
-    font-size:30px;
+            top:50%;
 
-    color:#2b0000;
+            transform:
+                translateY(-50%);
 
-}
+            color:#777;
 
-.stat-card p{
+        }
 
-    color:#777;
 
-}
+        .search-box input{
 
+            width:100%;
 
-/* BOOK FORM */
+            padding:11px 13px 11px 38px;
 
-.panel{
+            border:1px solid #ddd;
 
-    background:white;
+            border-radius:10px;
 
-    border-radius:20px;
+            outline:none;
 
-    padding:30px;
+        }
 
-    box-shadow:0 5px 25px rgba(0,0,0,.07);
 
-    margin-bottom:25px;
+        .search-box input:focus{
 
-}
+            border-color:#2b0000;
 
-.panel h2{
+        }
 
-    color:#2b0000;
 
-    margin-bottom:25px;
+        /* =================================
+           BOOK GRID
+        ================================= */
 
-}
+        .book-list{
 
-.form-grid{
+            display:grid;
 
-    display:grid;
+            grid-template-columns:
+                repeat(3,1fr);
 
-    grid-template-columns:
-    repeat(2,1fr);
+            gap:18px;
 
-    gap:20px;
+        }
 
-}
 
-.form-group{
+        .book-card{
 
-    display:flex;
+            background:white;
 
-    flex-direction:column;
+            border:1px solid #eee;
 
-    gap:7px;
+            border-radius:16px;
 
-}
+            overflow:hidden;
 
-.form-group.full{
+        }
 
-    grid-column:1/-1;
 
-}
+        .book-cover{
 
-.form-group label{
+            width:100%;
 
-    font-weight:600;
+            height:220px;
 
-}
+            object-fit:cover;
 
-.form-group input,
+            background:#eee;
 
-.form-group textarea,
+            display:block;
 
-.form-group select{
+        }
 
-    width:100%;
 
-    border:1px solid #ddd;
+        .book-card-body{
 
-    border-radius:10px;
+            padding:17px;
 
-    padding:12px;
+        }
 
-    font-family:inherit;
 
-    outline:none;
+        .book-card h3{
 
-}
+            color:#2b0000;
 
-.form-group textarea{
+            font-size:16px;
 
-    min-height:130px;
+            margin-bottom:5px;
 
-    resize:vertical;
+        }
 
-}
 
-.form-group input:focus,
+        .book-author{
 
-.form-group textarea:focus,
+            color:#777;
 
-.form-group select:focus{
+            font-size:13px;
 
-    border-color:#2b0000;
+            margin-bottom:4px;
 
-}
+        }
 
-.cover-preview{
 
-    width:130px;
+        .book-category{
 
-    height:170px;
+            display:inline-block;
 
-    object-fit:cover;
+            background:#f2e8e8;
 
-    border-radius:10px;
+            color:#2b0000;
 
-    border:1px solid #ddd;
+            padding:4px 8px;
 
-    display:none;
+            border-radius:6px;
 
-    margin-top:10px;
+            font-size:11px;
 
-}
+            margin-bottom:14px;
 
-.form-buttons{
+        }
 
-    display:flex;
 
-    gap:12px;
+        .book-actions{
 
-    margin-top:20px;
+            display:flex;
 
-}
+            gap:8px;
 
-.save-btn{
+        }
 
-    background:#2b0000;
 
-    color:white;
+        .book-actions button{
 
-    border:none;
+            flex:1;
 
-    padding:13px 22px;
+            border:none;
 
-    border-radius:10px;
+            padding:9px;
 
-    cursor:pointer;
+            border-radius:8px;
 
-    font-family:inherit;
+            cursor:pointer;
 
-    font-weight:600;
+            font-weight:600;
 
-}
+        }
 
-.clear-btn{
 
-    background:#eee;
+        .edit-btn{
 
-    color:#222;
+            background:#2b0000;
 
-    border:none;
+            color:white;
 
-    padding:13px 22px;
+        }
 
-    border-radius:10px;
 
-    cursor:pointer;
+        .delete-btn{
 
-    font-family:inherit;
+            background:#f3eeee;
 
-}
+            color:#b00000;
 
+        }
 
-/* BOOK LIST */
 
-.book-list{
+        /* =================================
+           FORM
+        ================================= */
 
-    display:grid;
+        .form-grid{
 
-    grid-template-columns:
-    repeat(3,1fr);
+            display:grid;
 
-    gap:20px;
+            grid-template-columns:
+                repeat(2,1fr);
 
-}
+            gap:18px;
 
-.book-card{
+        }
 
-    background:#fff;
 
-    border:1px solid #eee;
+        .form-group{
 
-    border-radius:18px;
+            display:flex;
 
-    overflow:hidden;
+            flex-direction:column;
 
-}
+            gap:7px;
 
-.book-card img{
+        }
 
-    width:100%;
 
-    height:230px;
+        .form-group.full{
 
-    object-fit:cover;
+            grid-column:1/-1;
 
-}
+        }
 
-.book-card-body{
 
-    padding:18px;
+        .form-group label{
 
-}
+            font-weight:600;
 
-.book-card h3{
+            font-size:13px;
 
-    color:#2b0000;
+        }
 
-    margin-bottom:6px;
 
-}
+        .form-group input,
+        .form-group textarea,
+        .form-group select{
 
-.book-card p{
+            width:100%;
 
-    color:#777;
+            padding:12px;
 
-    font-size:13px;
+            border:1px solid #ddd;
 
-    margin-bottom:15px;
+            border-radius:10px;
 
-}
+            outline:none;
 
-.book-actions{
+            background:white;
 
-    display:flex;
+        }
 
-    gap:8px;
 
-}
+        .form-group textarea{
 
-.book-actions button{
+            min-height:125px;
 
-    flex:1;
+            resize:vertical;
 
-    border:none;
+        }
 
-    padding:9px;
 
-    border-radius:8px;
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus{
 
-    cursor:pointer;
+            border-color:#2b0000;
 
-    font-family:inherit;
+        }
 
-}
 
-.edit-btn{
+        .cover-preview{
 
-    background:#2b0000;
+            width:120px;
 
-    color:white;
+            height:160px;
 
-}
+            object-fit:cover;
 
-.delete-btn{
+            border-radius:9px;
 
-    background:#eee;
+            border:1px solid #ddd;
 
-    color:#b00000;
+            margin-top:5px;
 
-}
+            display:none;
 
+        }
 
-/* MESSAGE */
 
-.message{
+        .form-buttons{
 
-    padding:12px 15px;
+            display:flex;
 
-    border-radius:10px;
+            gap:10px;
 
-    margin-bottom:20px;
+            margin-top:20px;
 
-    display:none;
+        }
 
-}
 
-.message.success{
+        .save-btn,
+        .clear-btn{
 
-    display:block;
+            border:none;
 
-    background:#e9f9ef;
+            padding:12px 20px;
 
-    color:#16803c;
+            border-radius:9px;
 
-}
+            cursor:pointer;
 
-.message.error{
+            font-weight:600;
 
-    display:block;
+        }
 
-    background:#fff0f0;
 
-    color:#b00000;
+        .save-btn{
 
-}
+            background:#2b0000;
 
+            color:white;
 
-/* MOBILE */
+        }
 
-.mobile-admin-btn{
 
-    display:none;
+        .clear-btn{
 
-}
+            background:#eee;
 
+            color:#222;
 
-@media(max-width:900px){
+        }
 
-    .sidebar{
 
-        width:220px;
+        /* =================================
+           NOTIFICATION
+        ================================= */
 
-    }
+        .notification-grid{
 
-    .main{
+            display:grid;
 
-        margin-left:220px;
+            grid-template-columns:
+                1fr 1fr;
 
-    }
+            gap:18px;
 
-    .stats{
+        }
 
-        grid-template-columns:1fr;
 
-    }
+        .notification-grid textarea{
 
-    .book-list{
+            min-height:120px;
 
-        grid-template-columns:
-        repeat(2,1fr);
+        }
 
-    }
 
-}
+        .notification-btn{
 
+            margin-top:18px;
 
-@media(max-width:700px){
+            background:#2b0000;
 
-    .sidebar{
+            color:white;
 
-        position:relative;
+            border:none;
 
-        width:100%;
+            padding:12px 20px;
 
-        height:auto;
+            border-radius:9px;
 
-    }
+            cursor:pointer;
 
-    .main{
+            font-weight:600;
 
-        margin-left:0;
+        }
 
-    }
 
-    .form-grid{
+        /* =================================
+           MESSAGE
+        ================================= */
 
-        grid-template-columns:1fr;
+        .message{
 
-    }
+            display:none;
 
-    .form-group.full{
+            padding:11px 14px;
 
-        grid-column:auto;
+            border-radius:9px;
 
-    }
+            margin-bottom:18px;
 
-    .book-list{
+            font-size:13px;
 
-        grid-template-columns:1fr;
+        }
 
-    }
 
-    .topbar{
+        .message.show{
 
-        padding:0 15px;
+            display:block;
 
-    }
+        }
 
-    .content{
 
-        padding:18px;
+        .message.success{
 
-    }
+            background:#e9f9ef;
 
-}
+            color:#16803c;
 
-</style>
+        }
+
+
+        .message.error{
+
+            background:#fff0f0;
+
+            color:#b00000;
+
+        }
+
+
+        /* =================================
+           EMPTY / LOADING
+        ================================= */
+
+        .empty-state{
+
+            text-align:center;
+
+            padding:35px 15px;
+
+            color:#777;
+
+        }
+
+
+        .empty-state i{
+
+            font-size:35px;
+
+            margin-bottom:10px;
+
+            color:#bbb;
+
+        }
+
+
+        /* =================================
+           MOBILE
+        ================================= */
+
+        .mobile-menu-btn{
+
+            display:none;
+
+            border:none;
+
+            background:#2b0000;
+
+            color:white;
+
+            width:40px;
+
+            height:40px;
+
+            border-radius:8px;
+
+            cursor:pointer;
+
+        }
+
+
+        @media(max-width:1100px){
+
+            .stats{
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+            .book-list{
+
+                grid-template-columns:
+                    repeat(2,1fr);
+
+            }
+
+        }
+
+
+        @media(max-width:800px){
+
+            .sidebar{
+
+                transform:
+                    translateX(-100%);
+
+                transition:.25s;
+
+            }
+
+            .sidebar.open{
+
+                transform:
+                    translateX(0);
+
+            }
+
+            .main{
+
+                margin-left:0;
+
+            }
+
+            .mobile-menu-btn{
+
+                display:block;
+
+            }
+
+            .topbar{
+
+                gap:10px;
+
+            }
+
+            .admin-email{
+
+                display:none;
+
+            }
+
+            .form-grid,
+            .notification-grid{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .form-group.full{
+
+                grid-column:auto;
+
+            }
+
+        }
+
+
+        @media(max-width:600px){
+
+            .content{
+
+                padding:15px;
+
+            }
+
+            .stats{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .book-list{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .panel{
+
+                padding:18px;
+
+            }
+
+            .panel-header{
+
+                align-items:flex-start;
+
+                flex-direction:column;
+
+            }
+
+            .search-box{
+
+                width:100%;
+
+            }
+
+            .topbar{
+
+                padding:0 15px;
+
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -821,499 +1006,590 @@ body{
 <body>
 
 
-<!-- =========================
-     LOGIN PAGE
-========================= -->
+<!-- ==========================================
+     SIDEBAR
+========================================== -->
 
-<div class="login-page" id="loginPage">
+<aside class="sidebar" id="sidebar">
 
-    <div class="login-box">
+    <div class="sidebar-logo">
 
         <img
-            src="../logo.png"
-            class="login-logo"
-            alt="Chishti Library">
+            src="logo.png"
+            alt="Chishti Library"
+            onerror="this.style.display='none'">
 
-        <h1>Admin Login</h1>
+        <h2>CHISHTI LIBRARY</h2>
 
-        <p>
-            Chishti Library Management Panel
-        </p>
-
-        <div class="input-group">
-
-            <label>
-                Email
-            </label>
-
-            <input
-                type="email"
-                id="loginEmail"
-                placeholder="Admin email">
-
-        </div>
-
-        <div class="input-group">
-
-            <label>
-                Password
-            </label>
-
-            <input
-                type="password"
-                id="loginPassword"
-                placeholder="Password">
-
-        </div>
-
-        <button
-            class="btn"
-            onclick="adminLogin()">
-
-            <i class="fas fa-right-to-bracket"></i>
-
-            Login
-
-        </button>
-
-        <div
-            id="loginError"
-            class="login-error">
-        </div>
+        <span>Admin Panel</span>
 
     </div>
 
-</div>
+
+    <ul class="sidebar-menu">
+
+        <li>
+
+            <button
+                class="active"
+                data-section="dashboard">
+
+                <i class="fas fa-chart-line"></i>
+
+                Dashboard
+
+            </button>
+
+        </li>
 
 
+        <li>
 
-<!-- =========================
-     ADMIN PAGE
-========================= -->
+            <button
+                data-section="books">
 
-<div
-    class="admin-page"
-    id="adminPage">
+                <i class="fas fa-book"></i>
+
+                Manage Books
+
+            </button>
+
+        </li>
 
 
-    <!-- SIDEBAR -->
+        <li>
 
-    <aside class="sidebar">
+            <button
+                data-section="addBook">
 
-        <div class="sidebar-logo">
+                <i class="fas fa-plus"></i>
 
-            <img
-                src="../logo.png"
-                alt="Chishti Library">
+                Add / Edit Book
 
-            <h2>
-                CHISHTI LIBRARY
+            </button>
+
+        </li>
+
+
+        <li>
+
+            <button
+                data-section="notifications">
+
+                <i class="fas fa-bell"></i>
+
+                Notifications
+
+            </button>
+
+        </li>
+
+
+        <li>
+
+            <button id="sidebarLogout">
+
+                <i class="fas fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- ==========================================
+     MAIN
+========================================== -->
+
+<main class="main">
+
+
+    <header class="topbar">
+
+        <div style="display:flex;align-items:center;gap:12px;">
+
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn">
+
+                <i class="fas fa-bars"></i>
+
+            </button>
+
+            <h2 id="pageTitle">
+                Admin Dashboard
             </h2>
-
-            <span>
-                Admin Panel
-            </span>
 
         </div>
 
 
-        <ul class="sidebar-menu">
+        <div style="display:flex;align-items:center;">
 
-            <li>
-
-                <button
-                    class="active"
-                    onclick="showSection('dashboard',this)">
-
-                    <i class="fas fa-chart-line"></i>
-
-                    Dashboard
-
-                </button>
-
-            </li>
-
-            <li>
-
-                <button
-                    onclick="showSection('books',this)">
-
-                    <i class="fas fa-book"></i>
-
-                    Manage Books
-
-                </button>
-
-            </li>
-
-            <li>
-
-                <button
-                    onclick="showSection('addBook',this)">
-
-                    <i class="fas fa-plus"></i>
-
-                    Add / Edit Book
-
-                </button>
-
-            </li>
-
-            <li>
-
-                <button
-                    onclick="logout()">
-
-                    <i class="fas fa-right-from-bracket"></i>
-
-                    Logout
-
-                </button>
-
-            </li>
-
-        </ul>
-
-    </aside>
-
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-
-        <div class="topbar">
-
-            <h2>
-                Admin Dashboard
-            </h2>
+            <span
+                class="admin-email"
+                id="adminEmail">
+            </span>
 
             <button
                 class="logout-btn"
-                onclick="logout()">
+                id="topLogout">
 
+                <i class="fas fa-right-from-bracket"></i>
                 Logout
 
             </button>
 
         </div>
 
-
-        <div class="content">
-
-
-            <!-- DASHBOARD -->
-
-            <section
-                id="dashboard"
-                class="admin-section">
-
-                <div class="stats">
-
-                    <div class="stat-card">
-
-                        <i class="fas fa-book"></i>
-
-                        <h3 id="totalBooks">
-                            0
-                        </h3>
-
-                        <p>
-                            Total Books
-                        </p>
-
-                    </div>
+    </header>
 
 
-                    <div class="stat-card">
-
-                        <i class="fas fa-eye"></i>
-
-                        <h3 id="totalVisitors">
-                            0
-                        </h3>
-
-                        <p>
-                            Visitors
-                        </p>
-
-                    </div>
+    <div class="content">
 
 
-                    <div class="stat-card">
+        <!-- ==================================
+             DASHBOARD
+        ================================== -->
 
-                        <i class="fas fa-user-pen"></i>
+        <section
+            id="dashboard"
+            class="admin-section active">
 
-                        <h3 id="totalAuthors">
-                            0
-                        </h3>
-
-                        <p>
-                            Authors
-                        </p>
-
-                    </div>
-
-                </div>
+            <div class="stats">
 
 
-                <div class="panel">
+                <div class="stat-card">
 
-                    <h2>
-                        Welcome to Admin Panel
-                    </h2>
+                    <i class="fas fa-book"></i>
+
+                    <h3 id="totalBooks">
+                        0
+                    </h3>
 
                     <p>
-                        Yahan se aap books ka title,
-                        description, author aur cover
-                        manage kar sakte hain.
+                        Total Books
                     </p>
 
                 </div>
 
-            </section>
+
+                <div class="stat-card">
+
+                    <i class="fas fa-eye"></i>
+
+                    <h3 id="totalVisitors">
+                        0
+                    </h3>
+
+                    <p>
+                        Visitors
+                    </p>
+
+                </div>
 
 
+                <div class="stat-card">
 
-            <!-- BOOK LIST -->
+                    <i class="fas fa-users"></i>
 
-            <section
-                id="books"
-                class="admin-section"
-                style="display:none;">
+                    <h3 id="totalAuthors">
+                        0
+                    </h3>
 
-                <div class="panel">
+                    <p>
+                        Authors
+                    </p>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <i class="fas fa-robot"></i>
+
+                    <h3 id="aiUsers">
+                        0
+                    </h3>
+
+                    <p>
+                        AI Users
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <h2 style="margin-bottom:10px;">
+                    Welcome to Chishti Library
+                </h2>
+
+                <p class="panel-description">
+
+                    Admin panel se aap books,
+                    authors, categories aur
+                    notifications manage kar sakte hain.
+
+                </p>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        Latest Books
+                    </h2>
+
+                </div>
+
+                <div
+                    id="latestBooks"
+                    class="book-list">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================
+             BOOKS
+        ================================== -->
+
+        <section
+            id="books"
+            class="admin-section">
+
+            <div class="panel">
+
+                <div class="panel-header">
 
                     <h2>
                         Manage Books
                     </h2>
 
-                    <div
-                        id="bookMessage"
-                        class="message">
-                    </div>
+                    <div class="search-box">
 
-                    <div
-                        id="bookList"
-                        class="book-list">
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- ADD / EDIT -->
-
-            <section
-                id="addBook"
-                class="admin-section"
-                style="display:none;">
-
-                <div class="panel">
-
-                    <h2 id="formTitle">
-
-                        Add New Book
-
-                    </h2>
-
-
-                    <div
-                        id="formMessage"
-                        class="message">
-                    </div>
-
-
-                    <form
-                        id="bookForm">
-
+                        <i class="fas fa-search"></i>
 
                         <input
-                            type="hidden"
-                            id="bookId">
+                            type="search"
+                            id="bookSearch"
+                            placeholder="Search books...">
 
-
-                        <div class="form-grid">
-
-
-                            <div class="form-group">
-
-                                <label>
-                                    Book Title
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="bookTitle"
-                                    required
-                                    placeholder="Enter book title">
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label>
-                                    Author
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="bookAuthor"
-                                    required
-                                    placeholder="Author name">
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label>
-                                    Category
-                                </label>
-
-                                <select id="bookCategory">
-
-                                    <option value="All">
-                                        All
-                                    </option>
-
-                                    <option value="Naat">
-                                        Naat
-                                    </option>
-
-                                    <option value="Manqabat">
-                                        Manqabat
-                                    </option>
-
-                                    <option value="Hamd">
-                                        Hamd
-                                    </option>
-
-                                    <option value="Maqala">
-                                        Maqala
-                                    </option>
-
-                                    <option value="Kulliyat">
-                                        Kulliyat
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label>
-                                    Book Cover URL
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="bookCover"
-                                    placeholder="cover.jpg">
-
-                                <img
-                                    id="coverPreview"
-                                    class="cover-preview"
-                                    alt="Cover Preview">
-
-                            </div>
-
-
-                            <div class="form-group full">
-
-                                <label>
-                                    Book Description
-                                </label>
-
-                                <textarea
-                                    id="bookDescription"
-                                    placeholder="Write book description..."
-                                    required>
-                                </textarea>
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label>
-                                    Read Book URL
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="bookUrl"
-                                    placeholder="book.html">
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label>
-                                    PDF URL
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="bookPdf"
-                                    placeholder="book.pdf">
-
-                            </div>
-
-
-                        </div>
-
-
-                        <div class="form-buttons">
-
-                            <button
-                                type="submit"
-                                class="save-btn">
-
-                                <i class="fas fa-save"></i>
-
-                                Save Book
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="clear-btn"
-                                onclick="clearForm()">
-
-                                Clear
-
-                            </button>
-
-                        </div>
-
-                    </form>
+                    </div>
 
                 </div>
 
-            </section>
+
+                <div
+                    id="bookMessage"
+                    class="message">
+                </div>
 
 
-        </div>
+                <div
+                    id="bookList"
+                    class="book-list">
 
-    </main>
+                </div>
 
-</div>
+            </div>
+
+        </section>
 
 
+        <!-- ==================================
+             ADD BOOK
+        ================================== -->
 
-<!-- =========================
+        <section
+            id="addBook"
+            class="admin-section">
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2 id="formTitle">
+                        Add New Book
+                    </h2>
+
+                </div>
+
+
+                <div
+                    id="formMessage"
+                    class="message">
+                </div>
+
+
+                <form id="bookForm">
+
+                    <input
+                        type="hidden"
+                        id="bookId">
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Book Title *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bookTitle"
+                                required
+                                placeholder="Enter book title">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Author *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bookAuthor"
+                                required
+                                placeholder="Author name">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Category
+                            </label>
+
+                            <select id="bookCategory">
+
+                                <option value="All">
+                                    All
+                                </option>
+
+                                <option value="Naat">
+                                    Naat
+                                </option>
+
+                                <option value="Manqabat">
+                                    Manqabat
+                                </option>
+
+                                <option value="Hamd">
+                                    Hamd
+                                </option>
+
+                                <option value="Maqala">
+                                    Maqala
+                                </option>
+
+                                <option value="Kulliyat">
+                                    Kulliyat
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Book Cover URL
+                            </label>
+
+                            <input
+                                type="url"
+                                id="bookCover"
+                                placeholder="https://...">
+
+                            <img
+                                id="coverPreview"
+                                class="cover-preview"
+                                alt="Cover Preview">
+
+                        </div>
+
+
+                        <div class="form-group full">
+
+                            <label>
+                                Description *
+                            </label>
+
+                            <textarea
+                                id="bookDescription"
+                                required
+                                placeholder="Write book description..."></textarea>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Read Book URL
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bookUrl"
+                                placeholder="book.html">
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                PDF URL
+                            </label>
+
+                            <input
+                                type="text"
+                                id="bookPdf"
+                                placeholder="book.pdf">
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-buttons">
+
+                        <button
+                            type="submit"
+                            class="save-btn"
+                            id="saveBookBtn">
+
+                            <i class="fas fa-save"></i>
+
+                            Save Book
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="clear-btn"
+                            id="clearFormBtn">
+
+                            Clear
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================
+             NOTIFICATIONS
+        ================================== -->
+
+        <section
+            id="notifications"
+            class="admin-section">
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <h2>
+                        Send Notification
+                    </h2>
+
+                </div>
+
+
+                <div
+                    id="notificationMessage"
+                    class="message">
+                </div>
+
+
+                <div class="notification-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Notification Title *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="notificationTitle"
+                            placeholder="New book available">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Message *
+                        </label>
+
+                        <textarea
+                            id="notificationText"
+                            placeholder="Write notification..."></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="notification-btn"
+                    id="sendNotification">
+
+                    <i class="fas fa-paper-plane"></i>
+
+                    Send Notification
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+
+<!-- ==========================================
      FIREBASE
-========================= -->
+========================================== -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
@@ -1322,791 +1598,7 @@ body{
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 
-<script>
-
-/* =========================================
-   FIREBASE CONFIG
-========================================= */
-
-/*
-   IMPORTANT:
-
-   Yahan apni Firebase Web App ki config
-   paste karni hai.
-
-   Firebase Console:
-   Project Settings
-   ->
-   Your apps
-   ->
-   Web App
-*/
-
-const firebaseConfig = {
-
-    apiKey:
-        "YOUR_API_KEY",
-
-    authDomain:
-        "YOUR_PROJECT.firebaseapp.com",
-
-    projectId:
-        "YOUR_PROJECT_ID",
-
-    storageBucket:
-        "YOUR_PROJECT.firebasestorage.app",
-
-    messagingSenderId:
-        "YOUR_MESSAGING_SENDER_ID",
-
-    appId:
-        "YOUR_APP_ID"
-
-};
-
-
-firebase.initializeApp(firebaseConfig);
-
-
-const auth =
-    firebase.auth();
-
-const db =
-    firebase.firestore();
-
-
-
-/* =========================================
-   LOGIN
-========================================= */
-
-function adminLogin(){
-
-    const email =
-        document.getElementById(
-            "loginEmail"
-        ).value.trim();
-
-    const password =
-        document.getElementById(
-            "loginPassword"
-        ).value;
-
-
-    const error =
-        document.getElementById(
-            "loginError"
-        );
-
-
-    error.innerText = "";
-
-
-    auth.signInWithEmailAndPassword(
-        email,
-        password
-    )
-
-    .then(() => {
-
-        showAdmin();
-
-    })
-
-    .catch((err) => {
-
-        console.error(err);
-
-        error.innerText =
-            "Login failed: " +
-            err.message;
-
-    });
-
-}
-
-
-
-/* =========================================
-   AUTH STATE
-========================================= */
-
-auth.onAuthStateChanged(
-    function(user){
-
-        if(user){
-
-            showAdmin();
-
-        }else{
-
-            document
-            .getElementById("loginPage")
-            .style.display="flex";
-
-            document
-            .getElementById("adminPage")
-            .style.display="none";
-
-        }
-
-    }
-);
-
-
-
-/* =========================================
-   SHOW ADMIN
-========================================= */
-
-function showAdmin(){
-
-    document
-    .getElementById("loginPage")
-    .style.display="none";
-
-    document
-    .getElementById("adminPage")
-    .style.display="block";
-
-    loadBooks();
-
-}
-
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
-function logout(){
-
-    auth.signOut();
-
-}
-
-
-
-/* =========================================
-   SECTIONS
-========================================= */
-
-function showSection(
-    sectionId,
-    button
-){
-
-    document
-    .querySelectorAll(".admin-section")
-    .forEach(function(section){
-
-        section.style.display="none";
-
-    });
-
-
-    document
-    .getElementById(sectionId)
-    .style.display="block";
-
-
-    document
-    .querySelectorAll(
-        ".sidebar-menu button"
-    )
-    .forEach(function(btn){
-
-        btn.classList.remove("active");
-
-    });
-
-
-    if(button){
-
-        button.classList.add("active");
-
-    }
-
-
-    if(sectionId==="books"){
-
-        loadBooks();
-
-    }
-
-}
-
-
-
-/* =========================================
-   LOAD BOOKS
-========================================= */
-
-async function loadBooks(){
-
-    const list =
-        document.getElementById(
-            "bookList"
-        );
-
-
-    if(!list) return;
-
-
-    list.innerHTML =
-        "<p>Loading books...</p>";
-
-
-    try{
-
-        const snapshot =
-            await db
-            .collection("books")
-            .orderBy(
-                "title"
-            )
-            .get();
-
-
-        list.innerHTML="";
-
-
-        document
-        .getElementById(
-            "totalBooks"
-        )
-        .innerText =
-            snapshot.size;
-
-
-        if(snapshot.empty){
-
-            list.innerHTML =
-                "<p>No books found.</p>";
-
-            return;
-
-        }
-
-
-        snapshot.forEach(
-            function(doc){
-
-                const book =
-                    doc.data();
-
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-                card.className =
-                    "book-card";
-
-
-                card.innerHTML = `
-
-                    <img
-                        src="${
-                            book.cover ||
-                            '../logo.png'
-                        }"
-                        alt="${escapeHtml(
-                            book.title ||
-                            'Book'
-                        )}"
-                        onerror="this.src='../logo.png'"
-                    >
-
-                    <div class="book-card-body">
-
-                        <h3>
-                            ${
-                                escapeHtml(
-                                    book.title ||
-                                    "Untitled"
-                                )
-                            }
-                        </h3>
-
-                        <p>
-                            ${
-                                escapeHtml(
-                                    book.author ||
-                                    "Unknown Author"
-                                )
-                            }
-                        </p>
-
-                        <div class="book-actions">
-
-                            <button
-                                class="edit-btn"
-                                onclick="editBook('${doc.id}')">
-
-                                <i class="fas fa-pen"></i>
-                                Edit
-
-                            </button>
-
-                            <button
-                                class="delete-btn"
-                                onclick="deleteBook('${doc.id}')">
-
-                                <i class="fas fa-trash"></i>
-                                Delete
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-
-                list.appendChild(card);
-
-            }
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        list.innerHTML =
-            "<p>Books load nahi ho sake.</p>";
-
-    }
-
-}
-
-
-
-/* =========================================
-   EDIT BOOK
-========================================= */
-
-async function editBook(id){
-
-    try{
-
-        const doc =
-            await db
-            .collection("books")
-            .doc(id)
-            .get();
-
-
-        if(!doc.exists){
-
-            alert(
-                "Book not found."
-            );
-
-            return;
-
-        }
-
-
-        const book =
-            doc.data();
-
-
-        document
-        .getElementById("bookId")
-        .value=id;
-
-
-        document
-        .getElementById("bookTitle")
-        .value =
-            book.title || "";
-
-
-        document
-        .getElementById("bookAuthor")
-        .value =
-            book.author || "";
-
-
-        document
-        .getElementById("bookCategory")
-        .value =
-            book.category || "All";
-
-
-        document
-        .getElementById("bookCover")
-        .value =
-            book.cover || "";
-
-
-        document
-        .getElementById(
-            "bookDescription"
-        )
-        .value =
-            book.description || "";
-
-
-        document
-        .getElementById("bookUrl")
-        .value =
-            book.url || "";
-
-
-        document
-        .getElementById("bookPdf")
-        .value =
-            book.pdf || "";
-
-
-        document
-        .getElementById("formTitle")
-        .innerText =
-            "Edit Book";
-
-
-        updateCoverPreview();
-
-
-        showSection(
-            "addBook"
-        );
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Book edit nahi ho saki."
-        );
-
-    }
-
-}
-
-
-
-/* =========================================
-   SAVE BOOK
-========================================= */
-
-document
-.getElementById("bookForm")
-.addEventListener(
-    "submit",
-    async function(e){
-
-        e.preventDefault();
-
-
-        const id =
-            document
-            .getElementById(
-                "bookId"
-            ).value.trim();
-
-
-        const data = {
-
-            title:
-                document
-                .getElementById(
-                    "bookTitle"
-                ).value.trim(),
-
-            author:
-                document
-                .getElementById(
-                    "bookAuthor"
-                ).value.trim(),
-
-            category:
-                document
-                .getElementById(
-                    "bookCategory"
-                ).value,
-
-            cover:
-                document
-                .getElementById(
-                    "bookCover"
-                ).value.trim(),
-
-            description:
-                document
-                .getElementById(
-                    "bookDescription"
-                ).value.trim(),
-
-            url:
-                document
-                .getElementById(
-                    "bookUrl"
-                ).value.trim(),
-
-            pdf:
-                document
-                .getElementById(
-                    "bookPdf"
-                ).value.trim(),
-
-            updatedAt:
-                firebase.firestore.FieldValue.serverTimestamp()
-
-        };
-
-
-        const message =
-            document
-            .getElementById(
-                "formMessage"
-            );
-
-
-        try{
-
-            if(id){
-
-                await db
-                .collection("books")
-                .doc(id)
-                .update(data);
-
-
-                showMessage(
-                    message,
-                    "Book successfully updated.",
-                    "success"
-                );
-
-            }else{
-
-                data.createdAt =
-                    firebase.firestore
-                    .FieldValue
-                    .serverTimestamp();
-
-
-                await db
-                .collection("books")
-                .add(data);
-
-
-                showMessage(
-                    message,
-                    "Book successfully added.",
-                    "success"
-                );
-
-            }
-
-
-            clearForm();
-
-            loadBooks();
-
-
-        }catch(error){
-
-            console.error(error);
-
-            showMessage(
-                message,
-                "Error: " +
-                error.message,
-                "error"
-            );
-
-        }
-
-    }
-);
-
-
-
-/* =========================================
-   DELETE
-========================================= */
-
-async function deleteBook(id){
-
-    const confirmDelete =
-        confirm(
-            "Kya aap is book ko delete karna chahte hain?"
-        );
-
-
-    if(!confirmDelete){
-
-        return;
-
-    }
-
-
-    try{
-
-        await db
-        .collection("books")
-        .doc(id)
-        .delete();
-
-
-        loadBooks();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            "Delete failed: " +
-            error.message
-        );
-
-    }
-
-}
-
-
-
-/* =========================================
-   CLEAR FORM
-========================================= */
-
-function clearForm(){
-
-    document
-    .getElementById(
-        "bookForm"
-    ).reset();
-
-
-    document
-    .getElementById(
-        "bookId"
-    ).value="";
-
-
-    document
-    .getElementById(
-        "formTitle"
-    ).innerText =
-        "Add New Book";
-
-
-    const preview =
-        document
-        .getElementById(
-            "coverPreview"
-        );
-
-
-    preview.style.display="none";
-
-}
-
-
-
-/* =========================================
-   COVER PREVIEW
-========================================= */
-
-document
-.getElementById(
-    "bookCover"
-)
-.addEventListener(
-    "input",
-    updateCoverPreview
-);
-
-
-function updateCoverPreview(){
-
-    const url =
-        document
-        .getElementById(
-            "bookCover"
-        ).value.trim();
-
-
-    const preview =
-        document
-        .getElementById(
-            "coverPreview"
-        );
-
-
-    if(!url){
-
-        preview.style.display="none";
-
-        return;
-
-    }
-
-
-    preview.src=url;
-
-    preview.style.display="block";
-
-}
-
-
-
-/* =========================================
-   MESSAGE
-========================================= */
-
-function showMessage(
-    element,
-    text,
-    type
-){
-
-    element.innerText=text;
-
-    element.className =
-        "message " + type;
-
-
-    setTimeout(
-        function(){
-
-            element.className="message";
-
-        },
-        4000
-    );
-
-}
-
-
-
-/* =========================================
-   ESCAPE HTML
-========================================= */
-
-function escapeHtml(text){
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-    div.textContent=text;
-
-    return div.innerHTML;
-
-}
-
-</script>
+<script src="admin.js"></script>
 
 </body>
-
 </html>
