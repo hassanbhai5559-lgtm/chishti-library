@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -21,7 +22,11 @@
 
     <title>Chishti Reader — ChishtiLibrary.com</title>
 
-    <!-- Reader CSS -->
+
+    <!-- =====================================================
+         READER CSS
+    ====================================================== -->
+
     <link
         rel="stylesheet"
         href="./reader.css"
@@ -29,11 +34,12 @@
 
 </head>
 
+
 <body>
 
     <!-- =====================================================
-         CHISHTI READER
-         ===================================================== -->
+         MAIN READER
+    ====================================================== -->
 
     <main
         id="readerApp"
@@ -41,9 +47,10 @@
         aria-label="ChishtiLibrary digital book reader"
     >
 
+
         <!-- =================================================
-             TOP BAR
-             ================================================= -->
+             HEADER
+        ================================================== -->
 
         <header
             id="readerHeader"
@@ -57,7 +64,7 @@
                 </div>
 
                 <div class="reader-brand-title">
-                    Chishti Reader
+                    CHISHTI READER
                 </div>
 
             </div>
@@ -74,19 +81,14 @@
 
 
         <!-- =================================================
-             BOOK AREA
-             ================================================= -->
+             READER AREA
+        ================================================== -->
 
         <section
             id="readerArea"
             class="reader-area"
             aria-label="Book page"
         >
-
-    
-
-
-            <!-- PDF Page -->
 
             <div
                 id="bookViewport"
@@ -98,15 +100,13 @@
                     class="page-wrapper"
                 >
 
-                    <!-- PDF.js renders here -->
-
                     <canvas
                         id="pdfCanvas"
                         aria-label="Current book page"
                     ></canvas>
 
 
-                    <!-- Watermark -->
+                    <!-- Watermark shown while reading -->
 
                     <div
                         id="pageWatermark"
@@ -120,18 +120,52 @@
 
             </div>
 
+
+            <!-- =================================================
+                 ERROR SCREEN
+            ================================================== -->
+
+            <div
+                id="errorScreen"
+                class="error-screen"
+                hidden
+            >
+
+                <div class="error-icon">
+                    ⚠
+                </div>
+
+                <h2>
+                    Unable to open book
+                </h2>
+
+                <p id="errorMessage">
+                    The selected PDF could not be loaded.
+                </p>
+
+                <button
+                    id="retryButton"
+                    class="error-retry-button"
+                    type="button"
+                >
+                    Try Again
+                </button>
+
+            </div>
+
         </section>
 
 
         <!-- =================================================
-             BOTTOM CONTROLS
-             ================================================= -->
+             READER CONTROLS
+        ================================================== -->
 
         <nav
             id="readerControls"
             class="reader-controls"
             aria-label="Book controls"
         >
+
 
             <!-- Previous -->
 
@@ -142,13 +176,8 @@
                 title="Previous page"
                 aria-label="Previous page"
             >
-                <span aria-hidden="true">
-                    ←
-                </span>
-
-                <span>
-                    Previous
-                </span>
+                <span aria-hidden="true">←</span>
+                <span class="button-label">Previous</span>
             </button>
 
 
@@ -173,7 +202,7 @@
                     min="1"
                     value="1"
                     inputmode="numeric"
-                    aria-label="Current page number"
+                    aria-label="Current page"
                 >
 
                 <span aria-hidden="true">
@@ -199,15 +228,8 @@
                 title="Next page"
                 aria-label="Next page"
             >
-
-                <span>
-                    Next
-                </span>
-
-                <span aria-hidden="true">
-                    →
-                </span>
-
+                <span class="button-label">Next</span>
+                <span aria-hidden="true">→</span>
             </button>
 
 
@@ -232,7 +254,7 @@
             </button>
 
 
-            <!-- Zoom Level -->
+            <!-- Zoom -->
 
             <button
                 id="resetZoomButton"
@@ -241,9 +263,11 @@
                 title="Reset zoom"
                 aria-label="Reset zoom"
             >
+
                 <span id="zoomLevel">
                     100%
                 </span>
+
             </button>
 
 
@@ -259,12 +283,85 @@
                 +
             </button>
 
+
+            <!-- Divider -->
+
+            <span
+                class="control-divider"
+                aria-hidden="true"
+            ></span>
+
+
+            <!-- Theme -->
+
+            <button
+                id="themeButton"
+                class="control-button"
+                type="button"
+                title="Change theme"
+                aria-label="Change reader theme"
+            >
+                ◐
+            </button>
+
+
+            <!-- Fullscreen -->
+
+            <button
+                id="fullscreenButton"
+                class="control-button"
+                type="button"
+                title="Fullscreen"
+                aria-label="Fullscreen"
+            >
+                ⛶
+            </button>
+
+
+            <!-- Print -->
+
+            <button
+                id="printButton"
+                class="control-button"
+                type="button"
+                title="Print book"
+                aria-label="Print book"
+            >
+                🖨
+            </button>
+
+
+            <!-- Watermarked Download -->
+
+            <button
+                id="downloadButton"
+                class="control-button"
+                type="button"
+                title="Download with watermark"
+                aria-label="Download with watermark"
+            >
+                ↓
+            </button>
+
+
+            <!-- Subscriber Download -->
+
+            <button
+                id="cleanDownloadButton"
+                class="control-button premium-button"
+                type="button"
+                title="Subscriber clean download"
+                aria-label="Subscriber clean download"
+            >
+                ★
+            </button>
+
         </nav>
 
 
         <!-- =================================================
-             SCREEN READER STATUS
-             ================================================= -->
+             STATUS
+        ================================================== -->
 
         <div
             id="readerStatus"
@@ -278,7 +375,7 @@
 
     <!-- =====================================================
          PDF.JS
-         ===================================================== -->
+    ====================================================== -->
 
     <script
         type="module"
@@ -287,123 +384,24 @@
 
 
     <!-- =====================================================
+         PDF-LIB
+         Used for watermark PDF generation
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"
+    ></script>
+
+
+    <!-- =====================================================
          CHISHTI READER JS
-         ===================================================== -->
+    ====================================================== -->
 
     <script
         type="module"
         src="./reader.js"
     ></script>
-<!-- =========================================
-     READER
-========================================= -->
 
-<div id="readerMode" class="reader-mode">
-
-    <div id="readerContent" class="reader-content">
-
-        <!-- YAHAN BOOK KA CONTENT AAYEGA -->
-
-        <h1 id="readerTitle">
-            Chishti Library
-        </h1>
-
-        <p>
-            Book reading area...
-        </p>
-
-    </div>
-
-
-    <!-- READER CONTROLS -->
-
-    <div class="reader-controls">
-
-        <!-- Previous Page -->
-
-        <button
-            id="readerPrev"
-            type="button"
-            title="Previous Page"
-            aria-label="Previous Page"
-        >
-            <i class="fas fa-chevron-left"></i>
-        </button>
-
-
-        <!-- Page -->
-
-        <div
-            id="readerPage"
-            class="reader-page"
-        >
-            1 / 1
-        </div>
-
-
-        <!-- Next Page -->
-
-        <button
-            id="readerNext"
-            type="button"
-            title="Next Page"
-            aria-label="Next Page"
-        >
-            <i class="fas fa-chevron-right"></i>
-        </button>
-
-
-        <!-- Font Decrease -->
-
-        <button
-            id="readerFontMinus"
-            type="button"
-            title="Decrease Text Size"
-            aria-label="Decrease Text Size"
-        >
-            A-
-        </button>
-
-
-        <!-- Font Increase -->
-
-        <button
-            id="readerFontPlus"
-            type="button"
-            title="Increase Text Size"
-            aria-label="Increase Text Size"
-        >
-            A+
-        </button>
-
-
-        <!-- Theme Swap -->
-
-        <button
-            id="readerTheme"
-            type="button"
-            title="Change Reader Theme"
-            aria-label="Change Reader Theme"
-        >
-            <i class="fas fa-adjust"></i>
-        </button>
-
-
-        <!-- Close -->
-
-        <button
-            id="readerClose"
-            class="reader-close"
-            type="button"
-            title="Close Reader"
-            aria-label="Close Reader"
-        >
-            <i class="fas fa-xmark"></i>
-        </button>
-
-    </div>
-
-</div>
-    
 </body>
+
 </html>
