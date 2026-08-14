@@ -1931,3 +1931,12 @@ FOOTER SOCIAL LINKS
     }
 
 }
+/* =========================================
+   FIX - BOOKS & CONTACT PAGE VISIBILITY
+========================================= */
+
+.library-page section,
+.contact-page section {
+    opacity: 1 !important;
+    transform: none !important;
+}
