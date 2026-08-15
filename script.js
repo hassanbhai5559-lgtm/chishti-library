@@ -1085,3 +1085,184 @@ console.log("✅ Downloads");
 console.log("✅ Responsive");
 
 console.log("🚀 Production Ready");
+
+/* =========================
+   BOOK SORTING
+========================= */
+
+let currentBooks = [];
+let currentCategory = "All";
+let currentSort = "latest";
+
+
+function sortBooks(sortType) {
+
+    currentSort = sortType;
+
+    /* Active button */
+
+    document.querySelectorAll(".sort-btn").forEach(function (button) {
+        button.classList.remove("active");
+    });
+
+    const clickedButton =
+        document.querySelector(
+            `.sort-btn[onclick="sortBooks('${sortType}')"]`
+        );
+
+    if (clickedButton) {
+        clickedButton.classList.add("active");
+    }
+
+    renderSortedBooks();
+}
+
+
+function renderSortedBooks() {
+
+    let books = [...currentBooks];
+
+    /* =========================
+       CATEGORY FILTER
+    ========================= */
+
+    if (
+        currentCategory &&
+        currentCategory.toLowerCase() !== "all"
+    ) {
+
+        books = books.filter(function (book) {
+
+            const category =
+                String(
+                    book.category ||
+                    book.type ||
+                    book.genre ||
+                    ""
+                ).toLowerCase();
+
+            return category === currentCategory.toLowerCase();
+
+        });
+
+    }
+
+
+    /* =========================
+       LATEST
+    ========================= */
+
+    if (currentSort === "latest") {
+
+        books.sort(function (a, b) {
+
+            const dateA =
+                new Date(
+                    a.date ||
+                    a.createdAt ||
+                    a.uploadDate ||
+                    a.publishedDate ||
+                    0
+                );
+
+            const dateB =
+                new Date(
+                    b.date ||
+                    b.createdAt ||
+                    b.uploadDate ||
+                    b.publishedDate ||
+                    0
+                );
+
+            return dateB - dateA;
+
+        });
+
+    }
+
+
+    /* =========================
+       OLDEST
+    ========================= */
+
+    else if (currentSort === "oldest") {
+
+        books.sort(function (a, b) {
+
+            const dateA =
+                new Date(
+                    a.date ||
+                    a.createdAt ||
+                    a.uploadDate ||
+                    a.publishedDate ||
+                    0
+                );
+
+            const dateB =
+                new Date(
+                    b.date ||
+                    b.createdAt ||
+                    b.uploadDate ||
+                    b.publishedDate ||
+                    0
+                );
+
+            return dateA - dateB;
+
+        });
+
+    }
+
+
+    /* =========================
+       MOST LIKED
+    ========================= */
+
+    else if (currentSort === "liked") {
+
+        books.sort(function (a, b) {
+
+            return (
+                Number(b.likes || 0) -
+                Number(a.likes || 0)
+            );
+
+        });
+
+    }
+
+
+    /* =========================
+       POPULAR
+    ========================= */
+
+    else if (currentSort === "popular") {
+
+        books.sort(function (a, b) {
+
+            const popularA =
+                Number(a.views || 0) +
+                Number(a.likes || 0) * 3 +
+                Number(a.downloads || 0) * 2 +
+                Number(a.shares || 0) * 2;
+
+            const popularB =
+                Number(b.views || 0) +
+                Number(b.likes || 0) * 3 +
+                Number(b.downloads || 0) * 2 +
+                Number(b.shares || 0) * 2;
+
+            return popularB - popularA;
+
+        });
+
+    }
+
+
+    /* =========================
+       DISPLAY
+    ========================= */
+
+    displayBooks(books);
+
+}
