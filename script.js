@@ -91,31 +91,30 @@ async function updateVisitorCounter() {
         document.getElementById("visitorCounter");
 
     if (!visitorCounter) {
+        console.error("❌ Visitor counter element not found");
         return;
     }
 
-    /* Firebase check */
+    if (typeof firebase === "undefined") {
+        console.error("❌ Firebase SDK not loaded");
+        visitorCounter.innerText = "0";
+        return;
+    }
 
     if (typeof db === "undefined") {
-
-        console.error(
-            "Firebase Firestore is not initialized."
-        );
-
+        console.error("❌ Firestore database not initialized");
         visitorCounter.innerText = "0";
-
         return;
     }
 
     try {
 
-        const visitorRef =
-            db.collection("counter")
-              .doc("visitors");
-
+        const visitorRef = db
+            .collection("counter")
+            .doc("visitors");
 
         /* =========================
-           GET VISITOR DOCUMENT
+           GET COUNTER
         ========================= */
 
         const snapshot =
@@ -133,8 +132,7 @@ async function updateVisitorCounter() {
                 count: 1,
 
                 updatedAt:
-                    firebase.firestore
-                    .FieldValue
+                    firebase.firestore.FieldValue
                     .serverTimestamp()
 
             });
@@ -146,12 +144,16 @@ async function updateVisitorCounter() {
 
             visitorCounter.innerText = "1";
 
+            console.log(
+                "✅ Visitor counter created: 1"
+            );
+
             return;
         }
 
 
         /* =========================
-           CHECK CURRENT SESSION
+           CHECK SESSION
         ========================= */
 
         const alreadyCounted =
@@ -169,13 +171,11 @@ async function updateVisitorCounter() {
             await visitorRef.update({
 
                 count:
-                    firebase.firestore
-                    .FieldValue
+                    firebase.firestore.FieldValue
                     .increment(1),
 
                 updatedAt:
-                    firebase.firestore
-                    .FieldValue
+                    firebase.firestore.FieldValue
                     .serverTimestamp()
 
             });
@@ -185,6 +185,9 @@ async function updateVisitorCounter() {
                 "true"
             );
 
+            console.log(
+                "✅ New visitor counted"
+            );
         }
 
 
@@ -195,15 +198,15 @@ async function updateVisitorCounter() {
         const latest =
             await visitorRef.get();
 
+        const data =
+            latest.data();
 
         const count =
-            Number(
-                latest.data()?.count
-            ) || 0;
+            Number(data?.count) || 0;
 
 
         /* =========================
-           ANIMATE NUMBER
+           SHOW COUNTER
         ========================= */
 
         animateVisitorCount(
@@ -211,18 +214,21 @@ async function updateVisitorCounter() {
             count
         );
 
+        console.log(
+            "👁 Total Visitors:",
+            count
+        );
+
 
     } catch (error) {
 
         console.error(
-            "Visitor counter error:",
+            "❌ Visitor Counter Error:",
             error
         );
 
         visitorCounter.innerText = "0";
-
     }
-
 }
 
 
@@ -238,46 +244,36 @@ function animateVisitorCount(
     const number =
         Number(target) || 0;
 
-
     if (number <= 0) {
 
         element.innerText = "0";
-
         return;
-
     }
-
 
     let current = 0;
 
     const duration = 1000;
-
     const steps = 40;
 
     const increment =
         number / steps;
-
 
     const timer =
         setInterval(() => {
 
             current += increment;
 
-
             if (current >= number) {
 
                 current = number;
 
                 clearInterval(timer);
-
             }
-
 
             element.innerText =
                 Math.floor(current);
 
         }, duration / steps);
-
 }
 
 
