@@ -9,20 +9,14 @@
 <title>Authors | Chishti Library</title>
 
 <meta name="description"
-content="Meet the authors, scholars and writers of Chishti Library.">
+content="Meet the scholars, writers and authors of Chishti Library.">
 
 <meta name="author"
 content="Chishti Library">
 
-<!-- GOOGLE SITE VERIFICATION -->
-<meta name="google-site-verification"
-content="dnI7e07V0xtGoWxgsCqJy-lDkwCFmeaiSlrK6uHToDgkc">
-
-<!-- FAVICON -->
 <link rel="icon" type="image/png" href="./logo.png">
 <link rel="apple-touch-icon" href="./logo.png">
 
-<!-- GOOGLE FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -30,843 +24,906 @@ content="dnI7e07V0xtGoWxgsCqJy-lDkwCFmeaiSlrK6uHToDgkc">
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
 rel="stylesheet">
 
-<!-- FONT AWESOME -->
 <link
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-<!-- MAIN CSS -->
 <link rel="stylesheet" href="./style.css">
-
 
 <style>
 
-/* =========================================
+/* =====================================================
    AUTHORS PAGE
-========================================= */
+===================================================== */
 
 .authors-page {
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+    font-family: "Poppins", sans-serif;
+    color: #2b0000;
+}
 
-    min-height:100vh;
 
-    background:#f5f5f5;
+/* =====================================================
+   HERO BANNER
+===================================================== */
 
-    font-family:'Poppins',sans-serif;
+.authors-banner {
+
+    position: relative;
+
+    width: 100%;
+
+    min-height: 500px;
+
+    overflow: hidden;
+
+    background: #240000;
 
 }
 
 
-/* =========================================
-   HERO
-========================================= */
+.authors-banner-image {
 
-.authors-hero {
+    position: absolute;
 
-    min-height:430px;
+    inset: 0;
 
-    display:flex;
+    width: 100%;
 
-    align-items:center;
+    height: 100%;
 
-    justify-content:center;
+    object-fit: cover;
 
-    text-align:center;
+    object-position: center center;
 
-    padding:100px 20px 130px;
+    display: block;
 
-    position:relative;
+}
 
-    overflow:hidden;
+
+.authors-banner-overlay {
+
+    position: absolute;
+
+    inset: 0;
 
     background:
-    linear-gradient(
-        135deg,
-        #260000,
-        #600000,
-        #160000
-    );
+        linear-gradient(
+            90deg,
+            rgba(20,0,0,.82),
+            rgba(45,0,0,.48),
+            rgba(0,0,0,.30)
+        );
 
 }
 
 
-.authors-hero::before {
+.authors-banner-content {
 
-    content:"";
+    position: relative;
 
-    position:absolute;
+    z-index: 2;
 
-    width:520px;
+    min-height: 500px;
 
-    height:520px;
+    display: flex;
 
-    border-radius:50%;
+    flex-direction: column;
 
-    background:rgba(255,255,255,.04);
+    align-items: center;
 
-    top:-280px;
+    justify-content: center;
 
-    left:-170px;
+    text-align: center;
 
-}
-
-
-.authors-hero::after {
-
-    content:"";
-
-    position:absolute;
-
-    width:450px;
-
-    height:450px;
-
-    border-radius:50%;
-
-    background:rgba(255,255,255,.04);
-
-    bottom:-260px;
-
-    right:-150px;
+    padding: 70px 20px;
 
 }
 
 
-.authors-hero-content {
+.authors-banner-logo {
 
-    position:relative;
+    width: 95px;
 
-    z-index:2;
+    height: 95px;
 
-    max-width:850px;
+    object-fit: contain;
 
-}
-
-
-.authors-hero-logo {
-
-    width:105px;
-
-    height:105px;
-
-    object-fit:contain;
-
-    margin-bottom:20px;
+    margin-bottom: 18px;
 
     filter:
-    drop-shadow(
-        0 8px 20px rgba(0,0,0,.5)
-    );
+        drop-shadow(
+            0 8px 25px rgba(0,0,0,.65)
+        );
 
 }
 
 
 .authors-label {
 
-    display:inline-flex;
+    display: inline-flex;
 
-    align-items:center;
+    align-items: center;
 
-    gap:9px;
+    gap: 8px;
 
-    padding:9px 18px;
+    padding: 9px 18px;
 
-    border-radius:30px;
+    border-radius: 30px;
 
-    background:rgba(255,255,255,.10);
+    background: rgba(255,255,255,.12);
 
-    border:1px solid rgba(255,255,255,.22);
+    border: 1px solid rgba(255,255,255,.25);
 
-    color:#fff;
+    color: #fff;
 
-    font-size:13px;
+    font-size: 13px;
 
-    font-weight:600;
+    font-weight: 700;
 
-    letter-spacing:1px;
+    letter-spacing: 1px;
 
-    margin-bottom:18px;
+    margin-bottom: 17px;
 
-}
-
-
-.authors-hero h1 {
-
-    color:#fff;
-
-    font-size:clamp(40px,6vw,70px);
-
-    margin:0 0 15px;
-
-    font-weight:800;
+    backdrop-filter: blur(8px);
 
 }
 
 
-.authors-hero p {
+.authors-banner-content h1 {
 
-    color:rgba(255,255,255,.85);
+    margin: 0 0 12px;
 
-    max-width:680px;
+    color: #fff;
 
-    margin:auto;
+    font-size: clamp(42px, 6vw, 72px);
 
-    line-height:1.8;
+    line-height: 1.1;
 
-    font-size:16px;
+    font-weight: 800;
+
+    text-shadow:
+        0 5px 25px rgba(0,0,0,.55);
 
 }
 
 
-/* =========================================
+.authors-banner-content p {
+
+    max-width: 720px;
+
+    margin: 0 auto;
+
+    color: rgba(255,255,255,.90);
+
+    font-size: 16px;
+
+    line-height: 1.8;
+
+}
+
+
+/* =====================================================
    AUTHORS SECTION
-========================================= */
+===================================================== */
 
 .authors-section {
 
-    max-width:1200px;
+    position: relative;
 
-    margin:-70px auto 0;
+    z-index: 5;
 
-    padding:0 20px 80px;
+    max-width: 1250px;
 
-    position:relative;
+    margin: -70px auto 0;
 
-    z-index:10;
+    padding: 0 20px 80px;
 
 }
 
 
-.authors-main-card {
+.authors-container {
 
-    background:#fff;
+    background: #fff;
 
-    border-radius:28px;
+    border-radius: 28px;
 
-    padding:45px;
+    padding: 45px;
 
     box-shadow:
-    0 25px 70px rgba(0,0,0,.18);
+        0 25px 70px rgba(0,0,0,.16);
 
-    border:
-    1px solid rgba(0,0,0,.08);
+    border: 1px solid #e8e8e8;
 
 }
 
 
 .authors-title {
 
-    text-align:center;
+    text-align: center;
 
-    margin-bottom:40px;
+    margin-bottom: 42px;
 
 }
 
 
 .authors-title h2 {
 
-    color:#2b0000;
+    margin: 0 0 10px;
 
-    font-size:32px;
+    color: #2b0000;
 
-    margin:0 0 10px;
+    font-size: 34px;
 
-    font-weight:800;
+    font-weight: 800;
 
 }
 
 
 .authors-title p {
 
-    color:#666;
+    margin: 0;
 
-    margin:0;
+    color: #777;
 
-    font-size:15px;
+    font-size: 15px;
 
 }
 
 
-/* =========================================
+/* =====================================================
    AUTHOR GRID
-========================================= */
+===================================================== */
 
 .author-grid {
 
-    display:grid;
+    display: grid;
 
     grid-template-columns:
-    repeat(2,1fr);
+        repeat(2, minmax(0, 1fr));
 
-    gap:28px;
+    gap: 30px;
 
 }
 
 
-/* =========================================
+/* =====================================================
    AUTHOR CARD
-========================================= */
+===================================================== */
 
 .author-card {
 
-    background:#fafafa;
+    position: relative;
 
-    border:
-    1px solid #e8e8e8;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fafafa
+        );
 
-    border-radius:24px;
+    border: 1px solid #e7e7e7;
 
-    padding:28px;
+    border-radius: 25px;
 
-    text-align:center;
+    padding: 30px;
+
+    text-align: center;
+
+    overflow: hidden;
 
     transition:
-    transform .3s ease,
-    box-shadow .3s ease,
-    border-color .3s ease;
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+
+}
+
+
+.author-card::before {
+
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    right: 0;
+
+    height: 5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #2b0000,
+            #8b0000,
+            #d4a500
+        );
 
 }
 
 
 .author-card:hover {
 
-    transform:translateY(-7px);
+    transform: translateY(-8px);
+
+    border-color: #6b0000;
 
     box-shadow:
-    0 18px 45px rgba(0,0,0,.14);
-
-    border-color:#6b0000;
+        0 20px 50px rgba(43,0,0,.15);
 
 }
 
 
-/* =========================================
+/* =====================================================
    AUTHOR IMAGE
-========================================= */
+===================================================== */
 
 .author-image-wrap {
 
-    width:150px;
+    width: 175px;
 
-    height:150px;
+    height: 175px;
 
-    margin:0 auto 20px;
+    margin: 8px auto 22px;
 
-    border-radius:50%;
+    padding: 5px;
 
-    padding:5px;
+    border-radius: 50%;
 
     background:
-    linear-gradient(
-        135deg,
-        #2b0000,
-        #8b0000
-    );
+        linear-gradient(
+            135deg,
+            #250000,
+            #850000,
+            #d4a500
+        );
+
+    box-shadow:
+        0 12px 30px rgba(43,0,0,.20);
 
 }
 
 
 .author-image {
 
-    width:100%;
+    width: 100%;
 
-    height:100%;
+    height: 100%;
 
-    border-radius:50%;
+    display: block;
 
-    object-fit:cover;
+    border-radius: 50%;
 
-    display:block;
+    object-fit: cover;
 
-    border:4px solid #fff;
+    object-position: center;
+
+    background: #eee;
+
+    border: 5px solid #fff;
 
 }
 
 
+/* =====================================================
+   AUTHOR TEXT
+===================================================== */
+
 .author-card h2 {
 
-    color:#2b0000;
+    margin: 5px 0 5px;
 
-    margin:8px 0 5px;
+    color: #2b0000;
 
-    font-size:22px;
+    font-size: 22px;
 
-    font-weight:800;
+    line-height: 1.4;
+
+    font-weight: 800;
 
 }
 
 
 .author-card h3 {
 
-    color:#777;
+    margin: 0 0 14px;
 
-    margin:0 0 13px;
+    color: #777;
 
-    font-size:17px;
+    font-size: 17px;
 
-    font-weight:500;
-
-}
-
-
-.author-card > p {
-
-    color:#666;
-
-    line-height:1.7;
-
-    font-size:14px;
-
-    margin:0 auto 20px;
-
-    max-width:450px;
+    font-weight: 500;
 
 }
 
 
-/* =========================================
-   SOCIAL
-========================================= */
+.author-card-description {
+
+    max-width: 500px;
+
+    margin: 0 auto 20px;
+
+    color: #666;
+
+    font-size: 14px;
+
+    line-height: 1.75;
+
+}
+
+
+/* =====================================================
+   SOCIAL BUTTONS
+===================================================== */
 
 .author-social {
 
-    display:flex;
+    display: flex;
 
-    justify-content:center;
+    align-items: center;
 
-    gap:10px;
+    justify-content: center;
 
-    margin-bottom:25px;
+    gap: 10px;
+
+    margin-bottom: 25px;
 
 }
 
 
 .author-social a {
 
-    width:40px;
+    width: 42px;
 
-    height:40px;
+    height: 42px;
 
-    border-radius:50%;
+    display: flex;
 
-    display:flex;
+    align-items: center;
 
-    align-items:center;
+    justify-content: center;
 
-    justify-content:center;
+    border-radius: 50%;
 
-    text-decoration:none;
+    background: #2b0000;
 
-    color:#fff;
+    color: #fff;
 
-    background:#2b0000;
+    text-decoration: none;
 
-    transition:.3s;
+    transition: .3s ease;
 
 }
 
 
 .author-social a:hover {
 
-    transform:translateY(-4px);
+    transform: translateY(-4px);
 
-    background:#650000;
+    background: #700000;
+
+    box-shadow:
+        0 8px 20px rgba(43,0,0,.20);
 
 }
 
 
-/* =========================================
-   BOOK PREVIEW
-========================================= */
+/* =====================================================
+   FEATURED BOOK
+===================================================== */
 
 .author-book {
 
-    margin-top:20px;
+    padding-top: 22px;
 
-    padding-top:22px;
-
-    border-top:1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 
 }
 
 
 .author-book-label {
 
-    display:inline-flex;
+    display: inline-flex;
 
-    align-items:center;
+    align-items: center;
 
-    gap:7px;
+    gap: 7px;
 
-    color:#777;
+    margin-bottom: 15px;
 
-    font-size:12px;
+    color: #777;
 
-    font-weight:700;
+    font-size: 12px;
 
-    letter-spacing:.8px;
+    font-weight: 700;
 
-    margin-bottom:15px;
+    letter-spacing: .8px;
 
 }
 
 
 .book-preview {
 
-    display:flex;
+    display: flex;
 
-    align-items:center;
+    align-items: center;
 
-    gap:18px;
+    gap: 17px;
 
-    text-align:left;
+    padding: 14px;
 
-    background:#fff;
+    background: #fff;
 
-    border:1px solid #e8e8e8;
+    border: 1px solid #e5e5e5;
 
-    border-radius:18px;
+    border-radius: 18px;
 
-    padding:14px;
+    text-align: left;
 
 }
 
 
 .book-preview-cover {
 
-    width:82px;
+    width: 82px;
 
-    height:110px;
+    height: 110px;
 
-    flex-shrink:0;
+    flex-shrink: 0;
 
-    border-radius:9px;
+    overflow: hidden;
 
-    overflow:hidden;
+    border-radius: 9px;
 
-    background:#eee;
+    background: #eee;
 
 }
 
 
 .book-preview-cover img {
 
-    width:100%;
+    width: 100%;
 
-    height:100%;
+    height: 100%;
 
-    object-fit:cover;
+    object-fit: cover;
+
+    display: block;
 
 }
 
 
 .book-preview-info {
 
-    min-width:0;
+    min-width: 0;
 
-    flex:1;
+    flex: 1;
 
 }
 
 
 .book-preview-info h4 {
 
-    color:#2b0000;
+    margin: 0 0 7px;
 
-    font-size:16px;
+    color: #2b0000;
 
-    margin:0 0 6px;
+    font-size: 16px;
 
-    line-height:1.4;
+    line-height: 1.4;
 
 }
 
 
 .book-category {
 
-    display:inline-block;
+    display: inline-block;
 
-    color:#777;
+    margin-bottom: 10px;
 
-    font-size:12px;
+    color: #777;
 
-    margin-bottom:12px;
+    font-size: 12px;
 
 }
 
 
 .read-book-btn {
 
-    display:inline-flex;
+    display: inline-flex;
 
-    align-items:center;
+    align-items: center;
 
-    justify-content:center;
+    justify-content: center;
 
-    gap:7px;
+    gap: 7px;
 
-    padding:9px 16px;
+    padding: 9px 15px;
 
-    border-radius:25px;
+    border-radius: 25px;
 
-    background:#2b0000;
+    background: #2b0000;
 
-    color:#fff;
+    color: #fff;
 
-    text-decoration:none;
+    text-decoration: none;
 
-    font-size:12px;
+    font-size: 12px;
 
-    font-weight:700;
+    font-weight: 700;
 
-    transition:.3s;
+    transition: .3s ease;
 
 }
 
 
 .read-book-btn:hover {
 
-    background:#650000;
+    background: #700000;
 
-    transform:translateY(-2px);
+    transform: translateY(-2px);
 
 }
 
 
-/* =========================================
-   LOADING / NO BOOK
-========================================= */
+/* =====================================================
+   BOOK LOADING
+===================================================== */
 
 .books-loading {
 
-    padding:18px;
+    padding: 18px;
 
-    color:#777;
+    border-radius: 15px;
 
-    font-size:13px;
+    background: #f7f7f7;
+
+    color: #777;
+
+    font-size: 13px;
 
 }
 
 
 .no-book {
 
-    padding:18px;
+    padding: 18px;
 
-    border-radius:15px;
+    border-radius: 15px;
 
-    background:#f5f5f5;
+    background: #f7f7f7;
 
-    color:#888;
+    color: #888;
 
-    font-size:13px;
+    font-size: 13px;
 
 }
 
 
 .no-book i {
 
-    margin-right:6px;
+    margin-right: 6px;
 
 }
 
 
-/* =========================================
+/* =====================================================
    FOOTER
-========================================= */
+===================================================== */
 
 .authors-footer {
 
-    text-align:center;
+    padding: 55px 20px;
 
-    padding:50px 20px;
+    background: #2b0000;
 
-    background:#2b0000;
+    color: #fff;
 
-    color:#fff;
+    text-align: center;
 
 }
 
 
 .authors-footer img {
 
-    width:75px;
+    width: 75px;
 
-    height:75px;
+    height: 75px;
 
-    object-fit:contain;
+    object-fit: contain;
 
-    margin-bottom:10px;
+    margin-bottom: 10px;
 
 }
 
 
 .authors-footer h2 {
 
-    margin:5px 0;
+    margin: 5px 0;
 
-    font-size:24px;
+    font-size: 24px;
 
 }
 
 
 .authors-footer p {
 
-    color:rgba(255,255,255,.75);
+    margin: 7px 0 20px;
 
-    margin:7px 0 20px;
+    color: rgba(255,255,255,.75);
 
 }
 
 
 .footer-social {
 
-    display:flex;
+    display: flex;
 
-    justify-content:center;
+    justify-content: center;
 
-    align-items:center;
+    align-items: center;
 
-    gap:15px;
+    gap: 14px;
 
 }
 
 
 .footer-social a {
 
-    width:45px;
+    width: 45px;
 
-    height:45px;
+    height: 45px;
 
-    border-radius:50%;
+    display: flex;
 
-    display:flex;
+    align-items: center;
 
-    align-items:center;
+    justify-content: center;
 
-    justify-content:center;
+    border-radius: 50%;
 
-    color:#fff;
+    color: #fff;
 
-    text-decoration:none;
+    text-decoration: none;
 
-    background:rgba(255,255,255,.12);
+    background: rgba(255,255,255,.12);
 
-    font-size:19px;
-
-    transition:.3s;
+    transition: .3s;
 
 }
 
 
 .footer-social a:hover {
 
-    transform:translateY(-5px);
+    transform: translateY(-4px);
 
-    background:rgba(255,255,255,.23);
+    background: rgba(255,255,255,.23);
 
 }
 
 
-/* =========================================
+/* =====================================================
    MOBILE
-========================================= */
+===================================================== */
 
-@media (max-width:850px) {
+@media (max-width: 900px) {
 
     .author-grid {
 
-        grid-template-columns:1fr;
+        grid-template-columns: 1fr;
 
     }
 
-    .authors-main-card {
+    .authors-container {
 
-        padding:30px 18px;
+        padding: 32px 20px;
+
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    .authors-banner {
+
+        min-height: 430px;
+
+    }
+
+    .authors-banner-content {
+
+        min-height: 430px;
+
+        padding: 60px 18px;
+
+    }
+
+    .authors-banner-logo {
+
+        width: 80px;
+
+        height: 80px;
+
+    }
+
+    .authors-banner-content h1 {
+
+        font-size: 42px;
+
+    }
+
+    .authors-banner-content p {
+
+        font-size: 14px;
 
     }
 
     .authors-section {
 
-        margin-top:-50px;
+        margin-top: -45px;
+
+        padding-left: 14px;
+
+        padding-right: 14px;
 
     }
 
-}
+    .authors-container {
 
+        padding: 28px 14px;
 
-@media (max-width:600px) {
-
-    .authors-hero {
-
-        min-height:350px;
-
-        padding:70px 18px 100px;
-
-    }
-
-    .authors-hero-logo {
-
-        width:85px;
-
-        height:85px;
-
-    }
-
-    .authors-hero h1 {
-
-        font-size:42px;
-
-    }
-
-    .authors-hero p {
-
-        font-size:14px;
+        border-radius: 22px;
 
     }
 
     .authors-title h2 {
 
-        font-size:26px;
+        font-size: 27px;
 
     }
 
     .author-card {
 
-        padding:22px 16px;
+        padding: 25px 16px;
 
     }
 
-    .book-preview {
+    .author-image-wrap {
 
-        align-items:flex-start;
+        width: 150px;
 
-    }
-
-    .book-preview-cover {
-
-        width:70px;
-
-        height:95px;
+        height: 150px;
 
     }
 
 }
 
 
-@media (max-width:400px) {
+@media (max-width: 430px) {
+
+    .authors-banner-content h1 {
+
+        font-size: 35px;
+
+    }
 
     .book-preview {
 
-        flex-direction:column;
+        flex-direction: column;
 
-        text-align:center;
-
-        align-items:center;
+        text-align: center;
 
     }
 
     .book-preview-info {
 
-        width:100%;
+        width: 100%;
 
     }
 
@@ -880,9 +937,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <body class="authors-page">
 
 
-<!-- =========================================
+<!-- =====================================================
      NAVBAR
-========================================= -->
+===================================================== -->
 
 <nav class="navbar">
 
@@ -912,69 +969,53 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
         <li>
             <a href="./index.html">
-
                 <i class="fas fa-house"></i>
-
                 Home
-
             </a>
         </li>
-
 
         <li>
             <a href="./books.html">
-
                 <i class="fas fa-book"></i>
-
                 Books
-
             </a>
         </li>
-
 
         <li>
             <a
                 href="./authors.html"
                 class="active"
             >
-
                 <i class="fas fa-feather-alt"></i>
-
                 Authors
-
             </a>
         </li>
-
 
         <li>
             <a href="./developer.html">
-
                 <i class="fas fa-code"></i>
-
                 Developer
-
             </a>
         </li>
-
 
         <li>
             <a href="./contact.html">
-
                 <i class="fas fa-phone"></i>
-
                 Contact
-
             </a>
         </li>
 
+        <li>
+            <a href="./login.html">
+                <i class="fas fa-right-to-bracket"></i>
+                Login
+            </a>
+        </li>
 
         <li>
-            <a href="./admin/index.html">
-
+            <a href="./admin">
                 <i class="fas fa-user-shield"></i>
-
                 Admin Login
-
             </a>
         </li>
 
@@ -990,19 +1031,30 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </nav>
 
 
-<!-- =========================================
-     HERO
-========================================= -->
+<!-- =====================================================
+     BROTHERS BANNER
+===================================================== -->
 
-<section class="authors-hero">
+<section class="authors-banner">
 
-    <div class="authors-hero-content">
+    <img
+        src="./all brother.png"
+        class="authors-banner-image"
+        alt="Chishti Library Scholars"
+        onerror="this.style.display='none';"
+    >
+
+    <div class="authors-banner-overlay"></div>
+
+
+    <div class="authors-banner-content">
 
         <img
             src="./logo.png"
-            class="authors-hero-logo"
+            class="authors-banner-logo"
             alt="Chishti Library Logo"
         >
+
 
         <div class="authors-label">
 
@@ -1012,17 +1064,17 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
         </div>
 
+
         <h1>
-
             Our Authors
-
         </h1>
+
 
         <p>
 
             Meet the scholars, writers and researchers
-            whose Islamic literary works are available
-            in Chishti Library.
+            whose Islamic literary works are preserved
+            and presented in Chishti Library.
 
         </p>
 
@@ -1031,13 +1083,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </section>
 
 
-<!-- =========================================
-     AUTHORS
-========================================= -->
+<!-- =====================================================
+     AUTHORS SECTION
+===================================================== -->
 
 <section class="authors-section">
 
-    <div class="authors-main-card">
+    <div class="authors-container">
+
 
         <div class="authors-title">
 
@@ -1046,7 +1099,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             </h2>
 
             <p>
-                Explore an author's work and read their books online.
+                Explore the authors and discover their
+                literary works in Chishti Library.
             </p>
 
         </div>
@@ -1055,9 +1109,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         <div class="author-grid">
 
 
-            <!-- AUTHOR 1 -->
+            <!-- =================================================
+                 AUTHOR 1
+            ================================================== -->
 
-            <div class="author-card">
+            <article class="author-card">
 
                 <div class="author-image-wrap">
 
@@ -1065,41 +1121,50 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         src="./hazrat allama saim chishti.jfif"
                         class="author-image"
                         alt="Hazrat Allama Saim Chishti"
+                        loading="eager"
+                        onerror="this.src='./logo.png';"
                     >
 
                 </div>
+
 
                 <h2>
                     Hazrat Allama Saim Chishti
                 </h2>
 
+
                 <h3>
                     حضرت علامہ صائم چشتی
                 </h3>
 
-                <p>
+
+                <p class="author-card-description">
+
                     Islamic Scholar, Naat Writer,
                     Researcher, Author and Founder
                     of numerous literary works.
+
                 </p>
+
 
                 <div class="author-social">
 
-                    <a href="./books.html"
-                       title="Books">
-
+                    <a
+                        href="./books.html"
+                        title="View Books"
+                    >
                         <i class="fas fa-book-open"></i>
-
                     </a>
 
-                    <a href="./contact.html"
-                       title="Contact">
-
+                    <a
+                        href="./contact.html"
+                        title="Contact"
+                    >
                         <i class="fas fa-envelope"></i>
-
                     </a>
 
                 </div>
+
 
                 <div class="author-book">
 
@@ -1110,6 +1175,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         FEATURED BOOK
 
                     </div>
+
 
                     <div
                         class="book-result"
@@ -1128,12 +1194,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
                 </div>
 
-            </div>
+            </article>
 
 
-            <!-- AUTHOR 2 -->
+            <!-- =================================================
+                 AUTHOR 2
+            ================================================== -->
 
-            <div class="author-card">
+            <article class="author-card">
 
                 <div class="author-image-wrap">
 
@@ -1141,40 +1209,49 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         src="./latif sajid chishti.jpeg"
                         class="author-image"
                         alt="Latif Sajid Chishti"
+                        loading="lazy"
+                        onerror="this.src='./logo.png';"
                     >
 
                 </div>
+
 
                 <h2>
                     Latif Sajid Chishti
                 </h2>
 
+
                 <h3>
                     لطیف ساجد چشتی
                 </h3>
 
-                <p>
-                    Islamic Writer, Researcher and
-                    Digital Library Contributor.
+
+                <p class="author-card-description">
+
+                    Islamic Writer, Researcher
+                    and Digital Library Contributor.
+
                 </p>
+
 
                 <div class="author-social">
 
-                    <a href="./books.html"
-                       title="Books">
-
+                    <a
+                        href="./books.html"
+                        title="View Books"
+                    >
                         <i class="fas fa-book-open"></i>
-
                     </a>
 
-                    <a href="./contact.html"
-                       title="Contact">
-
+                    <a
+                        href="./contact.html"
+                        title="Contact"
+                    >
                         <i class="fas fa-envelope"></i>
-
                     </a>
 
                 </div>
+
 
                 <div class="author-book">
 
@@ -1185,6 +1262,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         FEATURED BOOK
 
                     </div>
+
 
                     <div
                         class="book-result"
@@ -1203,12 +1281,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
                 </div>
 
-            </div>
+            </article>
 
 
-            <!-- AUTHOR 3 -->
+            <!-- =================================================
+                 AUTHOR 3
+            ================================================== -->
 
-            <div class="author-card">
+            <article class="author-card">
 
                 <div class="author-image-wrap">
 
@@ -1216,40 +1296,49 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         src="./shafiq mujhid chishti.png"
                         class="author-image"
                         alt="Shafiq Mujhid Chishti"
+                        loading="lazy"
+                        onerror="this.src='./logo.png';"
                     >
 
                 </div>
+
 
                 <h2>
                     Shafiq Mujhid Chishti
                 </h2>
 
+
                 <h3>
                     شفیق مجاہد چشتی
                 </h3>
 
-                <p>
+
+                <p class="author-card-description">
+
                     Islamic Scholar, Researcher,
                     Writer and Contributor.
+
                 </p>
+
 
                 <div class="author-social">
 
-                    <a href="./books.html"
-                       title="Books">
-
+                    <a
+                        href="./books.html"
+                        title="View Books"
+                    >
                         <i class="fas fa-book-open"></i>
-
                     </a>
 
-                    <a href="./contact.html"
-                       title="Contact">
-
+                    <a
+                        href="./contact.html"
+                        title="Contact"
+                    >
                         <i class="fas fa-envelope"></i>
-
                     </a>
 
                 </div>
+
 
                 <div class="author-book">
 
@@ -1260,6 +1349,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         FEATURED BOOK
 
                     </div>
+
 
                     <div
                         class="book-result"
@@ -1278,53 +1368,64 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
                 </div>
 
-            </div>
+            </article>
 
 
-            <!-- AUTHOR 4 -->
+            <!-- =================================================
+                 AUTHOR 4
+            ================================================== -->
 
-            <div class="author-card">
+            <article class="author-card">
 
                 <div class="author-image-wrap">
 
                     <img
-                        src="./touseef haider.png"
+                        src="./touseef haider chishti.jpg"
                         class="author-image"
                         alt="Touseef Haider"
+                        loading="lazy"
+                        onerror="this.src='./logo.png';"
                     >
 
                 </div>
+
 
                 <h2>
                     Touseef Haider
                 </h2>
 
+
                 <h3>
                     توصیف حیدر چشتی
                 </h3>
 
-                <p>
+
+                <p class="author-card-description">
+
                     Islamic Researcher, Writer and
                     Digital Contributor of Chishti Library.
+
                 </p>
+
 
                 <div class="author-social">
 
-                    <a href="./books.html"
-                       title="Books">
-
+                    <a
+                        href="./books.html"
+                        title="View Books"
+                    >
                         <i class="fas fa-book-open"></i>
-
                     </a>
 
-                    <a href="./contact.html"
-                       title="Contact">
-
+                    <a
+                        href="./contact.html"
+                        title="Contact"
+                    >
                         <i class="fas fa-envelope"></i>
-
                     </a>
 
                 </div>
+
 
                 <div class="author-book">
 
@@ -1335,6 +1436,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
                         FEATURED BOOK
 
                     </div>
+
 
                     <div
                         class="book-result"
@@ -1353,7 +1455,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
                 </div>
 
-            </div>
+            </article>
 
 
         </div>
@@ -1363,9 +1465,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </section>
 
 
-<!-- =========================================
+<!-- =====================================================
      FOOTER
-========================================= -->
+===================================================== -->
 
 <footer class="authors-footer">
 
@@ -1382,6 +1484,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         Digital Islamic Library
     </p>
 
+
     <div class="footer-social">
 
         <a
@@ -1390,10 +1493,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             rel="noopener noreferrer"
             aria-label="Facebook"
         >
-
             <i class="fab fa-facebook-f"></i>
-
         </a>
+
 
         <a
             href="https://www.youtube.com/@Saimtv5"
@@ -1401,10 +1503,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             rel="noopener noreferrer"
             aria-label="YouTube"
         >
-
             <i class="fab fa-youtube"></i>
-
         </a>
+
 
         <a
             href="https://www.facebook.com/saimchishtiofficial"
@@ -1412,12 +1513,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
             rel="noopener noreferrer"
             aria-label="Saim Chishti Official Facebook"
         >
-
             <i class="fab fa-facebook-f"></i>
-
         </a>
 
     </div>
+
 
     <p style="margin-top:20px;">
 
@@ -1428,40 +1528,44 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </footer>
 
 
-<!-- =========================================
+<!-- =====================================================
      JAVASCRIPT
-========================================= -->
+===================================================== -->
 
 <script>
 
-/* =========================================
+/* =====================================================
    MOBILE MENU
-========================================= */
+===================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const menuBtn =
+    const menuButton =
         document.querySelector(".mobile-menu");
 
     const menu =
         document.querySelector(".menu");
 
-    if (menuBtn && menu) {
 
-        menuBtn.addEventListener("click", function () {
+    if (menuButton && menu) {
 
-            menu.classList.toggle("show");
+        menuButton.addEventListener(
+            "click",
+            function () {
 
-        });
+                menu.classList.toggle("show");
+
+            }
+        );
 
     }
 
 });
 
 
-/* =========================================
+/* =====================================================
    NORMALIZE TEXT
-========================================= */
+===================================================== */
 
 function normalizeText(value) {
 
@@ -1472,9 +1576,9 @@ function normalizeText(value) {
 }
 
 
-/* =========================================
-   GET BOOK AUTHOR
-========================================= */
+/* =====================================================
+   GET AUTHOR
+===================================================== */
 
 function getBookAuthor(book) {
 
@@ -1491,9 +1595,9 @@ function getBookAuthor(book) {
 }
 
 
-/* =========================================
-   GET BOOK TITLE
-========================================= */
+/* =====================================================
+   GET TITLE
+===================================================== */
 
 function getBookTitle(book) {
 
@@ -1508,9 +1612,9 @@ function getBookTitle(book) {
 }
 
 
-/* =========================================
-   GET BOOK COVER
-========================================= */
+/* =====================================================
+   GET COVER
+===================================================== */
 
 function getBookCover(book) {
 
@@ -1527,9 +1631,9 @@ function getBookCover(book) {
 }
 
 
-/* =========================================
+/* =====================================================
    GET CATEGORY
-========================================= */
+===================================================== */
 
 function getBookCategory(book) {
 
@@ -1543,9 +1647,9 @@ function getBookCategory(book) {
 }
 
 
-/* =========================================
-   GET BOOK LINK
-========================================= */
+/* =====================================================
+   GET LINK
+===================================================== */
 
 function getBookLink(book) {
 
@@ -1565,58 +1669,58 @@ function getBookLink(book) {
 }
 
 
-/* =========================================
+/* =====================================================
    FIND AUTHOR BOOK
-========================================= */
+===================================================== */
 
 function findAuthorBook(books, authorName) {
 
     const target =
         normalizeText(authorName);
 
+
     if (!target) {
-
         return null;
-
     }
 
 
-    /* EXACT MATCH */
+    /* EXACT */
 
-    let match = books.find(function (book) {
+    let match =
+        books.find(function (book) {
 
-        const bookAuthor =
-            normalizeText(
-                getBookAuthor(book)
-            );
+            const author =
+                normalizeText(
+                    getBookAuthor(book)
+                );
 
-        return bookAuthor === target;
+            return author === target;
 
-    });
+        });
 
 
     if (match) {
-
         return match;
-
     }
 
 
-    /* PARTIAL MATCH */
+    /* PARTIAL */
 
-    match = books.find(function (book) {
+    match =
+        books.find(function (book) {
 
-        const bookAuthor =
-            normalizeText(
-                getBookAuthor(book)
+            const author =
+                normalizeText(
+                    getBookAuthor(book)
+                );
+
+
+            return (
+                author.includes(target) ||
+                target.includes(author)
             );
 
-        return (
-            bookAuthor.includes(target) ||
-            target.includes(bookAuthor)
-        );
-
-    });
+        });
 
 
     return match || null;
@@ -1624,9 +1728,9 @@ function findAuthorBook(books, authorName) {
 }
 
 
-/* =========================================
+/* =====================================================
    ESCAPE HTML
-========================================= */
+===================================================== */
 
 function escapeHtml(value) {
 
@@ -1640,9 +1744,9 @@ function escapeHtml(value) {
 }
 
 
-/* =========================================
+/* =====================================================
    SHOW BOOK
-========================================= */
+===================================================== */
 
 function showAuthorBook(element, book) {
 
@@ -1661,7 +1765,6 @@ function showAuthorBook(element, book) {
         `;
 
         return;
-
     }
 
 
@@ -1696,21 +1799,14 @@ function showAuthorBook(element, book) {
             <div class="book-preview-info">
 
                 <h4>
-
                     ${escapeHtml(title)}
-
                 </h4>
 
-
                 <span class="book-category">
-
                     ${escapeHtml(category)}
-
                 </span>
 
-
                 <br>
-
 
                 <a
                     href="${escapeHtml(link)}"
@@ -1732,9 +1828,9 @@ function showAuthorBook(element, book) {
 }
 
 
-/* =========================================
-   LOAD BOOKS.JSON
-========================================= */
+/* =====================================================
+   LOAD BOOKS
+===================================================== */
 
 async function loadAuthorBooks() {
 
@@ -1745,9 +1841,7 @@ async function loadAuthorBooks() {
 
 
     if (!results.length) {
-
         return;
-
     }
 
 
@@ -1757,7 +1851,7 @@ async function loadAuthorBooks() {
             await fetch(
                 "./books.json",
                 {
-                    cache:"no-store"
+                    cache: "no-store"
                 }
             );
 
@@ -1778,16 +1872,11 @@ async function loadAuthorBooks() {
         let books = [];
 
 
-        /* ARRAY FORMAT */
-
         if (Array.isArray(data)) {
 
             books = data;
 
         }
-
-
-        /* { books: [] } FORMAT */
 
         else if (
             data &&
@@ -1797,9 +1886,6 @@ async function loadAuthorBooks() {
             books = data.books;
 
         }
-
-
-        /* { data: [] } FORMAT */
 
         else if (
             data &&
@@ -1832,9 +1918,7 @@ async function loadAuthorBooks() {
         });
 
 
-    }
-
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "Author books error:",
@@ -1863,9 +1947,9 @@ async function loadAuthorBooks() {
 }
 
 
-/* =========================================
+/* =====================================================
    START
-========================================= */
+===================================================== */
 
 loadAuthorBooks();
 
