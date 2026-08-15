@@ -680,13 +680,28 @@ FOOTER
 
 
 <!-- Firebase -->
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-<!-- Main JavaScript -->
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
+    authDomain: "chishti-library.firebaseapp.com",
+    projectId: "chishti-library",
+    storageBucket: "chishti-library.firebasestorage.app",
+    messagingSenderId: "103447043162",
+    appId: "1:103447043162:web:f242cd2670aaa9786e8c63",
+    measurementId: "G-833P7N3LNT"
+};
 
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
+console.log("Firebase connected:", firebase.app().options.projectId);
+</script>
+
+<!-- Main JS -->
 <script src="script.js"></script>
-
 </body>
 </html>
