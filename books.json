@@ -222,5 +222,19 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id": 19,
+    "title": "Al batool",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "seerat",
+    "cover": "Al-batool.png",
+    "pdf": "Al-batool.pdf",
+    "description": "A seerat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
+    
