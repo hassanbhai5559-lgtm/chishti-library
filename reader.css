@@ -1,8 +1,32 @@
 /* =========================================================
-   CHISHTI LIBRARY READER
+   CHISHTI LIBRARY
    reader.css
-   FULL RESPONSIVE VERSION
+   LIBRARY MAROON + GOLD THEME
 ========================================================= */
+
+
+/* =========================================================
+   LIBRARY COLORS
+========================================================= */
+
+:root {
+
+    --library-maroon: #4B0000;
+
+    --library-deep-maroon: #350000;
+
+    --library-gold: #D4A500;
+
+    --library-white: #FFFFFF;
+
+    --reader-background: #4B0000;
+
+    --reader-surface: #350000;
+
+    --reader-accent: #D4A500;
+
+    --reader-text: #FFFFFF;
+}
 
 
 /* =========================================================
@@ -15,23 +39,36 @@
     padding: 0;
 }
 
+
 html,
 body {
+
     width: 100%;
     height: 100%;
+
     margin: 0;
     padding: 0;
 }
 
+
 body {
+
     overflow: hidden;
-    background: #000;
-    color: #fff;
+
+    background:
+        var(--reader-background);
+
+    color:
+        var(--reader-text);
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
 }
 
 
@@ -40,18 +77,26 @@ body {
 ========================================================= */
 
 .reader-app {
+
     position: fixed;
+
     inset: 0;
 
     width: 100%;
     height: 100dvh;
 
     display: flex;
+
     flex-direction: column;
 
     overflow: hidden;
 
-    background: #000;
+    background:
+        linear-gradient(
+            135deg,
+            var(--library-deep-maroon),
+            var(--library-maroon)
+        );
 }
 
 
@@ -60,22 +105,33 @@ body {
 ========================================================= */
 
 .reader-header {
+
     position: relative;
 
     width: 100%;
+
     height: 58px;
 
     flex: 0 0 58px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     padding: 0 22px;
 
-    background: #050505;
+    background:
+        var(--library-deep-maroon);
 
-    border-bottom: 1px solid #222;
+    border-bottom:
+        1px solid
+        rgba(212, 165, 0, 0.45);
+
+    box-shadow:
+        0 3px 18px
+        rgba(0, 0, 0, 0.35);
 
     z-index: 100;
 }
@@ -86,33 +142,46 @@ body {
 ========================================================= */
 
 .reader-brand {
+
     min-width: 0;
 
     display: flex;
+
     flex-direction: column;
 
     gap: 2px;
 }
 
+
 .reader-brand-name {
-    color: #d2ad68;
+
+    color:
+        var(--library-gold);
 
     font-size: 14px;
-    font-weight: 700;
 
-    letter-spacing: 0.02em;
+    font-weight: 800;
+
+    letter-spacing: 0.03em;
 
     white-space: nowrap;
+
+    text-shadow:
+        0 1px 5px
+        rgba(0, 0, 0, 0.35);
 }
 
+
 .reader-brand-title {
-    color: #777;
+
+    color:
+        rgba(255, 255, 255, 0.68);
 
     font-size: 10px;
 
     text-transform: uppercase;
 
-    letter-spacing: 0.12em;
+    letter-spacing: 0.15em;
 }
 
 
@@ -121,6 +190,7 @@ body {
 ========================================================= */
 
 .book-title {
+
     max-width: 55%;
 
     overflow: hidden;
@@ -129,11 +199,12 @@ body {
 
     white-space: nowrap;
 
-    color: #eee;
+    color:
+        var(--library-white);
 
     font-size: 14px;
 
-    font-weight: 500;
+    font-weight: 600;
 
     text-align: right;
 }
@@ -144,6 +215,7 @@ body {
 ========================================================= */
 
 .reader-area {
+
     position: relative;
 
     flex: 1 1 auto;
@@ -157,9 +229,14 @@ body {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    background: #000;
+    background:
+        var(--reader-background);
+
+    transition:
+        background 0.3s ease;
 }
 
 
@@ -168,6 +245,7 @@ body {
 ========================================================= */
 
 .book-viewport {
+
     position: relative;
 
     width: 100%;
@@ -179,6 +257,7 @@ body {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     overflow: auto;
@@ -188,32 +267,42 @@ body {
     scrollbar-width: thin;
 
     scrollbar-color:
-        #555
-        #111;
+        var(--library-gold)
+        var(--library-deep-maroon);
 }
 
 
 /* =========================================================
-   WEBKIT SCROLLBAR
+   SCROLLBAR
 ========================================================= */
 
 .book-viewport::-webkit-scrollbar {
+
     width: 8px;
     height: 8px;
 }
 
+
 .book-viewport::-webkit-scrollbar-track {
-    background: #111;
+
+    background:
+        var(--library-deep-maroon);
 }
 
+
 .book-viewport::-webkit-scrollbar-thumb {
-    background: #555;
+
+    background:
+        var(--library-gold);
 
     border-radius: 20px;
 }
 
+
 .book-viewport::-webkit-scrollbar-thumb:hover {
-    background: #777;
+
+    background:
+        #E6B800;
 }
 
 
@@ -222,6 +311,7 @@ body {
 ========================================================= */
 
 .page-wrapper {
+
     position: relative;
 
     flex: 0 0 auto;
@@ -229,15 +319,24 @@ body {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    background: #fff;
+    background:
+        var(--library-white);
 
     overflow: hidden;
 
+    border:
+        3px solid
+        rgba(212, 165, 0, 0.65);
+
     box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.75),
-        0 3px 10px rgba(0, 0, 0, 0.5);
+        0 18px 50px
+        rgba(0, 0, 0, 0.65),
+
+        0 0 0 1px
+        rgba(255, 255, 255, 0.08);
 }
 
 
@@ -246,11 +345,13 @@ body {
 ========================================================= */
 
 #pdfCanvas {
+
     display: block;
 
     max-width: none;
 
-    background: #fff;
+    background:
+        var(--library-white);
 
     user-select: none;
 
@@ -261,10 +362,11 @@ body {
 
 
 /* =========================================================
-   WATERMARK
+   LARGE WATERMARK
 ========================================================= */
 
 .page-watermark {
+
     position: absolute;
 
     left: 50%;
@@ -274,7 +376,7 @@ body {
 
     transform:
         translate(-50%, -50%)
-        rotate(-28deg);
+        rotate(-30deg);
 
     pointer-events: none;
 
@@ -282,18 +384,24 @@ body {
 
     white-space: nowrap;
 
-    color: rgba(70, 20, 30, 0.11);
+    color:
+        rgba(75, 0, 0, 0.18);
 
     font-family:
         Georgia,
         "Times New Roman",
         serif;
 
-    font-size: clamp(16px, 2vw, 28px);
+    font-size:
+        clamp(32px, 5vw, 70px);
 
-    font-weight: 700;
+    font-weight: 800;
 
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
+
+    text-shadow:
+        0 1px 0
+        rgba(212, 165, 0, 0.10);
 }
 
 
@@ -302,24 +410,28 @@ body {
 ========================================================= */
 
 .reader-controls {
+
     position: fixed;
 
     left: 50%;
     bottom: 14px;
 
-    transform: translateX(-50%);
+    transform:
+        translateX(-50%);
 
     z-index: 99999;
 
     width: max-content;
 
-    max-width: calc(100vw - 24px);
+    max-width:
+        calc(100vw - 24px);
 
     min-height: 58px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     flex-wrap: nowrap;
@@ -329,21 +441,30 @@ body {
     padding: 8px 10px;
 
     background:
-        rgba(45, 0, 0, 0.96);
+        linear-gradient(
+            135deg,
+            rgba(75, 0, 0, 0.98),
+            rgba(53, 0, 0, 0.98)
+        );
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.08);
+        rgba(212, 165, 0, 0.45);
 
     border-radius: 15px;
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, 0.55),
-        0 3px 12px rgba(0, 0, 0, 0.4);
+        0 12px 40px
+        rgba(0, 0, 0, 0.55),
 
-    backdrop-filter: blur(10px);
+        0 0 25px
+        rgba(75, 0, 0, 0.25);
 
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -351,16 +472,18 @@ body {
     scrollbar-width: none;
 }
 
+
 .reader-controls::-webkit-scrollbar {
     display: none;
 }
 
 
 /* =========================================================
-   ALL CONTROL BUTTONS
+   BUTTONS
 ========================================================= */
 
 .reader-controls button {
+
     flex: 0 0 auto;
 
     min-width: 42px;
@@ -377,67 +500,79 @@ body {
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.10);
+        rgba(212, 165, 0, 0.28);
 
     border-radius: 7px;
 
     background:
-        rgba(255, 255, 255, 0.10);
+        rgba(255, 255, 255, 0.08);
 
-    color: #fff;
+    color:
+        var(--library-white);
 
     font-family: inherit;
 
     font-size: 12px;
 
-    font-weight: 600;
+    font-weight: 700;
 
     white-space: nowrap;
 
     cursor: pointer;
 
     transition:
-        background 0.15s ease,
-        border-color 0.15s ease,
-        transform 0.15s ease,
-        color 0.15s ease;
+        background 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
 
 /* =========================================================
-   BUTTON HOVER
+   HOVER
 ========================================================= */
 
 .reader-controls button:hover:not(:disabled) {
+
     background:
-        rgba(255, 255, 255, 0.20);
+        var(--library-gold);
 
     border-color:
-        rgba(210, 173, 104, 0.65);
+        var(--library-gold);
 
-    color: #e0bd72;
+    color:
+        var(--library-deep-maroon);
 
-    transform: translateY(-1px);
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 4px 14px
+        rgba(212, 165, 0, 0.28);
 }
 
 
 /* =========================================================
-   BUTTON ACTIVE
+   ACTIVE
 ========================================================= */
 
 .reader-controls button:active:not(:disabled) {
-    transform: scale(0.96);
+
+    transform:
+        scale(0.96);
 }
 
 
 /* =========================================================
-   BUTTON FOCUS
+   FOCUS
 ========================================================= */
 
 .reader-controls button:focus-visible {
+
     outline:
         2px solid
-        #c9a45c;
+        var(--library-gold);
 
     outline-offset: 2px;
 }
@@ -448,6 +583,7 @@ body {
 ========================================================= */
 
 .reader-controls button:disabled {
+
     opacity: 0.35;
 
     cursor: not-allowed;
@@ -462,6 +598,7 @@ body {
 
 #previousPageButton,
 #nextPageButton {
+
     min-width: 88px;
 }
 
@@ -471,6 +608,7 @@ body {
 ========================================================= */
 
 .page-counter {
+
     flex: 0 0 auto;
 
     height: 38px;
@@ -484,7 +622,8 @@ body {
 
     padding: 0 2px;
 
-    color: #aaa;
+    color:
+        rgba(255, 255, 255, 0.75);
 
     font-size: 12px;
 
@@ -497,6 +636,7 @@ body {
 ========================================================= */
 
 .page-number-input {
+
     width: 46px;
     height: 38px;
 
@@ -504,15 +644,17 @@ body {
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.12);
+        rgba(212, 165, 0, 0.38);
 
     border-radius: 7px;
 
     outline: none;
 
-    background: #101010;
+    background:
+        var(--library-deep-maroon);
 
-    color: #fff;
+    color:
+        var(--library-white);
 
     text-align: center;
 
@@ -520,28 +662,32 @@ body {
 
     font-size: 12px;
 
-    font-weight: 600;
+    font-weight: 700;
 }
 
+
 .page-number-input:focus {
-    border-color: #a17c40;
+
+    border-color:
+        var(--library-gold);
 
     box-shadow:
         0 0 0 2px
-        rgba(201, 164, 92, 0.12);
+        rgba(212, 165, 0, 0.18);
 }
 
 
-/* Remove number arrows */
-
 .page-number-input::-webkit-inner-spin-button,
 .page-number-input::-webkit-outer-spin-button {
+
     margin: 0;
 
     -webkit-appearance: none;
 }
 
+
 .page-number-input {
+
     appearance: textfield;
 }
 
@@ -551,9 +697,11 @@ body {
 ========================================================= */
 
 .total-pages {
+
     min-width: 24px;
 
-    color: #bbb;
+    color:
+        rgba(255, 255, 255, 0.78);
 
     text-align: center;
 }
@@ -564,6 +712,7 @@ body {
 ========================================================= */
 
 .control-divider {
+
     flex: 0 0 1px;
 
     width: 1px;
@@ -572,59 +721,43 @@ body {
 
     margin: 0 3px;
 
-    background: rgba(255, 255, 255, 0.12);
+    background:
+        rgba(212, 165, 0, 0.35);
 }
 
 
 /* =========================================================
-   ZOOM BUTTON
+   ZOOM
 ========================================================= */
 
 .zoom-button {
+
     width: 38px;
 
-    min-width: 38px !important;
+    min-width:
+        38px !important;
 
-    padding: 0 !important;
+    padding:
+        0 !important;
 
-    font-size: 18px !important;
+    font-size:
+        18px !important;
 
-    font-weight: 400 !important;
+    font-weight:
+        400 !important;
 }
 
-
-/* =========================================================
-   ZOOM LEVEL
-========================================================= */
 
 .zoom-level {
-    min-width: 58px !important;
 
-    padding: 0 9px !important;
+    min-width:
+        58px !important;
 
-    color: #d2ad68 !important;
-}
+    padding:
+        0 9px !important;
 
-
-/* =========================================================
-   EXTRA BUTTONS
-   Ready for:
-   Download
-   Print
-   Fullscreen
-   Swipe
-========================================================= */
-
-.reader-extra-controls {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 7px;
-
-    flex: 0 0 auto;
+    color:
+        var(--library-gold) !important;
 }
 
 
@@ -632,16 +765,39 @@ body {
    DOWNLOAD
 ========================================================= */
 
-#downloadButton,
-.download-button {
+#downloadButton {
+
     background:
-        rgba(0, 110, 55, 0.35) !important;
+        rgba(0, 105, 55, 0.35);
 }
 
-#downloadButton:hover,
-.download-button:hover {
+
+#downloadButton:hover:not(:disabled) {
+
     background:
-        rgba(0, 140, 70, 0.55) !important;
+        var(--library-gold);
+}
+
+
+/* =========================================================
+   CLEAN DOWNLOAD
+========================================================= */
+
+#cleanDownloadButton {
+
+    background:
+        rgba(100, 100, 100, 0.20);
+
+    color:
+        rgba(255, 255, 255, 0.45);
+}
+
+
+#cleanDownloadButton:disabled {
+
+    opacity: 0.25;
+
+    cursor: not-allowed;
 }
 
 
@@ -649,10 +805,10 @@ body {
    PRINT
 ========================================================= */
 
-#printButton,
-.print-button {
+#printButton {
+
     background:
-        rgba(60, 60, 60, 0.65) !important;
+        rgba(255, 255, 255, 0.08);
 }
 
 
@@ -660,38 +816,32 @@ body {
    FULLSCREEN
 ========================================================= */
 
-#fullscreenButton,
-.fullscreen-button {
+#fullscreenButton {
+
     background:
-        rgba(55, 55, 90, 0.55) !important;
+        rgba(212, 165, 0, 0.12);
+
+    color:
+        var(--library-gold);
 }
 
 
 /* =========================================================
-   SWIPE / TWO PAGE
+   THEME BUTTON
 ========================================================= */
 
-#swipeButton,
-.swipe-button {
+#themeButton {
+
     background:
-        rgba(100, 65, 20, 0.50) !important;
-}
+        var(--library-gold);
 
+    color:
+        var(--library-deep-maroon);
 
-/* =========================================================
-   CLOSE BUTTON
-========================================================= */
+    border-color:
+        var(--library-gold);
 
-.reader-close {
-    background:
-        #8b0000 !important;
-
-    color: #fff !important;
-}
-
-.reader-close:hover {
-    background:
-        #c40000 !important;
+    font-size: 17px;
 }
 
 
@@ -700,6 +850,7 @@ body {
 ========================================================= */
 
 .error-screen {
+
     position: absolute;
 
     inset: 0;
@@ -711,35 +862,64 @@ body {
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
     gap: 12px;
 
     padding: 30px;
 
-    background: #000;
+    background:
+        var(--library-deep-maroon);
 
     text-align: center;
 }
+
 
 .error-screen[hidden] {
     display: none;
 }
 
+
 .error-screen h2 {
-    color: #eee;
+
+    color:
+        var(--library-white);
 
     font-size: 20px;
 }
 
+
 .error-screen p {
+
     max-width: 450px;
 
-    color: #888;
+    color:
+        rgba(255, 255, 255, 0.65);
 
     font-size: 13px;
 
     line-height: 1.6;
+}
+
+
+.error-retry-button {
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        var(--library-gold);
+
+    color:
+        var(--library-deep-maroon);
+
+    font-weight: 700;
+
+    cursor: pointer;
 }
 
 
@@ -748,6 +928,7 @@ body {
 ========================================================= */
 
 .sr-only {
+
     position: absolute;
 
     width: 1px;
@@ -771,6 +952,7 @@ body {
 ========================================================= */
 
 .reader-mode {
+
     position: fixed;
 
     inset: 0;
@@ -779,12 +961,14 @@ body {
 
     display: none;
 
-    background: #fff;
+    background:
+        var(--library-deep-maroon);
 
     overflow-y: auto;
 
     overflow-x: hidden;
 }
+
 
 .reader-mode.active {
     display: block;
@@ -796,6 +980,7 @@ body {
 ========================================================= */
 
 .reader-content {
+
     width: 100%;
 
     max-width: 850px;
@@ -809,38 +994,35 @@ body {
         25px
         120px;
 
-    color: #222;
+    color:
+        #222;
 
-    background: #fff;
+    background:
+        var(--library-white);
 
     font-size: 18px;
 
     line-height: 1.9;
 }
 
-.reader-content.dark {
-    background: #181818;
 
-    color: #eee;
+.reader-content.dark {
+
+    background:
+        var(--library-deep-maroon);
+
+    color:
+        var(--library-white);
 }
+
 
 .reader-content.sepia {
-    background: #f4ecd8;
 
-    color: #3d3528;
-}
+    background:
+        #F4ECD8;
 
-
-/* =========================================================
-   READER MODE BACKGROUNDS
-========================================================= */
-
-.reader-mode.dark-bg {
-    background: #181818;
-}
-
-.reader-mode.sepia-bg {
-    background: #f4ecd8;
+    color:
+        #3D3528;
 }
 
 
@@ -851,6 +1033,7 @@ body {
 @media (max-width: 800px) {
 
     .reader-header {
+
         height: 54px;
 
         flex-basis: 54px;
@@ -870,6 +1053,7 @@ body {
 
 
     .book-title {
+
         max-width: 50%;
 
         font-size: 12px;
@@ -882,6 +1066,7 @@ body {
 
 
     .reader-controls {
+
         bottom: 10px;
 
         gap: 5px;
@@ -891,6 +1076,7 @@ body {
 
 
     .reader-controls button {
+
         height: 38px;
 
         min-width: 40px;
@@ -901,12 +1087,24 @@ body {
 
     #previousPageButton,
     #nextPageButton {
+
         min-width: 78px;
     }
 
 
     .page-number-input {
         height: 38px;
+    }
+
+
+    .page-watermark {
+
+        font-size:
+            clamp(
+                28px,
+                7vw,
+                55px
+            );
     }
 }
 
@@ -918,6 +1116,7 @@ body {
 @media (max-width: 600px) {
 
     .reader-header {
+
         height: 50px;
 
         flex-basis: 50px;
@@ -937,6 +1136,7 @@ body {
 
 
     .book-title {
+
         max-width: 52%;
 
         font-size: 11px;
@@ -948,21 +1148,19 @@ body {
     }
 
 
-    /*
-     * IMPORTANT:
-     * Controls remain in ONE HORIZONTAL LINE.
-     */
-
     .reader-controls {
+
         left: 50%;
 
         right: auto;
 
         bottom: 8px;
 
-        width: calc(100vw - 14px);
+        width:
+            calc(100vw - 14px);
 
-        max-width: calc(100vw - 14px);
+        max-width:
+            calc(100vw - 14px);
 
         min-height: 50px;
 
@@ -980,11 +1178,13 @@ body {
 
         flex-wrap: nowrap;
 
-        transform: translateX(-50%);
+        transform:
+            translateX(-50%);
     }
 
 
     .reader-controls button {
+
         height: 38px;
 
         min-height: 38px;
@@ -997,23 +1197,17 @@ body {
     }
 
 
-    /*
-     * Previous / Next compact
-     */
-
     #previousPageButton,
     #nextPageButton {
+
         min-width: 65px;
 
         padding: 0 7px;
     }
 
 
-    /*
-     * Page counter
-     */
-
     .page-counter {
+
         height: 38px;
 
         gap: 4px;
@@ -1023,6 +1217,7 @@ body {
 
 
     .page-number-input {
+
         width: 40px;
 
         min-width: 40px;
@@ -1036,61 +1231,61 @@ body {
 
 
     .total-pages {
+
         min-width: 20px;
 
         font-size: 11px;
     }
 
 
-    /*
-     * Divider hidden on mobile
-     */
-
     .control-divider {
         display: none;
     }
 
 
-    /*
-     * Zoom
-     */
-
     .zoom-button {
+
         width: 36px;
 
-        min-width: 36px !important;
+        min-width:
+            36px !important;
 
-        font-size: 17px !important;
+        font-size:
+            17px !important;
     }
 
 
     .zoom-level {
-        min-width: 50px !important;
+
+        min-width:
+            50px !important;
 
         width: 50px;
 
-        padding: 0 5px !important;
+        padding:
+            0 5px !important;
 
-        font-size: 10px !important;
+        font-size:
+            10px !important;
     }
 
-
-    /*
-     * Watermark
-     */
 
     .page-watermark {
-        font-size: 13px;
 
-        letter-spacing: 0.05em;
+        font-size:
+            clamp(
+                22px,
+                8vw,
+                42px
+            );
+
+        letter-spacing:
+            0.045em;
     }
 
 
-    /*
-     * Reader mode
-     */
-
     .reader-content {
+
         padding:
             60px
             16px
@@ -1110,9 +1305,12 @@ body {
 @media (max-width: 380px) {
 
     .reader-controls {
-        width: calc(100vw - 8px);
 
-        max-width: calc(100vw - 8px);
+        width:
+            calc(100vw - 8px);
+
+        max-width:
+            calc(100vw - 8px);
 
         bottom: 5px;
 
@@ -1125,6 +1323,7 @@ body {
 
 
     .reader-controls button {
+
         height: 36px;
 
         min-height: 36px;
@@ -1139,6 +1338,7 @@ body {
 
     #previousPageButton,
     #nextPageButton {
+
         min-width: 58px;
 
         padding: 0 5px;
@@ -1146,6 +1346,7 @@ body {
 
 
     .page-number-input {
+
         width: 36px;
 
         min-width: 36px;
@@ -1157,27 +1358,32 @@ body {
 
 
     .zoom-button {
+
         width: 34px;
 
-        min-width: 34px !important;
+        min-width:
+            34px !important;
     }
 
 
     .zoom-level {
+
         width: 46px;
 
-        min-width: 46px !important;
+        min-width:
+            46px !important;
     }
 }
 
 
 /* =========================================================
-   LANDSCAPE MOBILE
+   LANDSCAPE
 ========================================================= */
 
 @media (max-width: 900px) and (orientation: landscape) {
 
     .reader-header {
+
         height: 44px;
 
         flex-basis: 44px;
@@ -1185,6 +1391,7 @@ body {
 
 
     .reader-controls {
+
         bottom: 5px;
 
         min-height: 46px;
@@ -1194,6 +1401,7 @@ body {
 
 
     .reader-controls button {
+
         height: 34px;
 
         min-height: 34px;
@@ -1207,20 +1415,25 @@ body {
 
 
 /* =========================================================
-   TOUCH DEVICES
+   TOUCH
 ========================================================= */
 
 @media (pointer: coarse) {
 
     .reader-controls button {
-        -webkit-tap-highlight-color: transparent;
 
-        touch-action: manipulation;
+        -webkit-tap-highlight-color:
+            transparent;
+
+        touch-action:
+            manipulation;
     }
 
 
     .book-viewport {
-        touch-action: pan-x pan-y;
+
+        touch-action:
+            pan-x pan-y;
     }
 }
 
@@ -1230,11 +1443,14 @@ body {
 ========================================================= */
 
 :fullscreen .reader-app {
+
     width: 100vw;
     height: 100dvh;
 }
 
+
 :-webkit-full-screen .reader-app {
+
     width: 100vw;
     height: 100dvh;
 }
@@ -1249,6 +1465,7 @@ body {
     *,
     *::before,
     *::after {
+
         transition: none !important;
 
         animation: none !important;
