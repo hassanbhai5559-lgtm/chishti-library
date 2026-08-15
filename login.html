@@ -5,17 +5,15 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Login | Chishti Library</title>
 
+    <link rel="icon" type="image/png" href="logo.png">
+
     <link
-        rel="icon"
-        type="image/png"
-        href="logo.png"
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
 
     <link
@@ -34,11 +32,6 @@
         rel="stylesheet"
     >
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
-
     <style>
 
         * {
@@ -46,7 +39,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
 
         body {
 
@@ -72,19 +64,17 @@
 
         }
 
-
         .login-page {
 
             width: 100%;
 
             display: flex;
 
-            justify-content: center;
-
             align-items: center;
 
-        }
+            justify-content: center;
 
+        }
 
         .login-box {
 
@@ -92,20 +82,19 @@
 
             max-width: 430px;
 
-            background: #ffffff;
+            background: #fff;
 
-            border-radius: 25px;
+            border-radius: 24px;
 
             padding: 35px 30px;
+
+            text-align: center;
 
             box-shadow:
                 0 25px 70px
                 rgba(0,0,0,.35);
 
-            text-align: center;
-
         }
-
 
         .logo {
 
@@ -119,7 +108,6 @@
 
         }
 
-
         h1 {
 
             color: #2b0000;
@@ -129,7 +117,6 @@
             margin-bottom: 5px;
 
         }
-
 
         .subtitle {
 
@@ -141,7 +128,6 @@
 
         }
 
-
         .input-group {
 
             text-align: left;
@@ -150,21 +136,17 @@
 
         }
 
-
         .input-group label {
 
             display: block;
 
-            font-size: 14px;
-
             font-weight: 600;
+
+            font-size: 14px;
 
             margin-bottom: 7px;
 
-            color: #333;
-
         }
-
 
         .input-box {
 
@@ -172,8 +154,7 @@
 
         }
 
-
-        .input-box i {
+        .input-box > i {
 
             position: absolute;
 
@@ -186,7 +167,6 @@
             color: #777;
 
         }
-
 
         .input-box input {
 
@@ -204,10 +184,7 @@
 
             font-size: 14px;
 
-            transition: .2s;
-
         }
-
 
         .input-box input:focus {
 
@@ -219,12 +196,11 @@
 
         }
 
-
         .password-toggle {
 
             position: absolute;
 
-            right: 14px;
+            right: 12px;
 
             top: 50%;
 
@@ -238,10 +214,13 @@
 
             cursor: pointer;
 
-            font-size: 15px;
-
         }
 
+        button {
+
+            font-family: inherit;
+
+        }
 
         .main-btn {
 
@@ -251,44 +230,31 @@
 
             background: #2b0000;
 
-            color: white;
+            color: #fff;
 
             padding: 14px;
 
             border-radius: 12px;
 
-            font-family: inherit;
-
             font-weight: 700;
 
             cursor: pointer;
 
-            transition: .2s;
-
-            margin-top: 5px;
-
         }
-
 
         .main-btn:hover {
 
             background: #4b0000;
 
-            transform: translateY(-1px);
-
         }
 
-
-        .main-btn:disabled {
+        button:disabled {
 
             opacity: .65;
 
             cursor: not-allowed;
 
-            transform: none;
-
         }
-
 
         .divider {
 
@@ -306,21 +272,18 @@
 
         }
 
-
         .divider::before,
-
         .divider::after {
 
             content: "";
-
-            flex: 1;
 
             height: 1px;
 
             background: #ddd;
 
-        }
+            flex: 1;
 
+        }
 
         .google-btn {
 
@@ -330,36 +293,23 @@
 
             border: 1px solid #ddd;
 
-            background: white;
+            background: #fff;
 
             color: #333;
 
             border-radius: 12px;
 
-            font-family: inherit;
-
             font-weight: 600;
 
             cursor: pointer;
 
-            transition: .2s;
-
         }
-
 
         .google-btn:hover {
 
             background: #f7f7f7;
 
         }
-
-
-        .google-btn i {
-
-            margin-right: 8px;
-
-        }
-
 
         .guest-btn {
 
@@ -369,13 +319,11 @@
 
             border: none;
 
-            background: #f1f1f1;
+            background: #eee;
 
             color: #333;
 
             border-radius: 12px;
-
-            font-family: inherit;
 
             font-weight: 600;
 
@@ -383,17 +331,13 @@
 
             margin-top: 10px;
 
-            transition: .2s;
-
         }
-
 
         .guest-btn:hover {
 
-            background: #e5e5e5;
+            background: #e3e3e3;
 
         }
-
 
         .message {
 
@@ -401,53 +345,27 @@
 
             margin-top: 15px;
 
-            padding: 11px 13px;
+            padding: 12px;
 
             border-radius: 10px;
 
             font-size: 13px;
 
-            line-height: 1.5;
-
             text-align: left;
 
-            background: #fff0f0;
+            line-height: 1.5;
 
         }
 
-
-        .login-footer {
+        .footer {
 
             margin-top: 22px;
 
-            font-size: 12px;
-
             color: #888;
 
-        }
-
-
-        .login-footer a {
-
-            color: #2b0000;
-
-            text-decoration: none;
-
-            font-weight: 600;
+            font-size: 12px;
 
         }
-
-
-        .security-note {
-
-            margin-top: 15px;
-
-            font-size: 11px;
-
-            color: #999;
-
-        }
-
 
         @media(max-width:480px) {
 
@@ -457,19 +375,9 @@
 
             }
 
-
             .login-box {
 
                 padding: 30px 20px;
-
-                border-radius: 20px;
-
-            }
-
-
-            h1 {
-
-                font-size: 24px;
 
             }
 
@@ -483,15 +391,10 @@
 <body>
 
 
-<div
-    class="login-page"
-    id="loginPage"
->
+<div class="login-page">
 
     <div class="login-box">
 
-
-        <!-- LOGO -->
 
         <img
             src="logo.png"
@@ -509,7 +412,6 @@
         <p class="subtitle">
             Sign in to continue
         </p>
-
 
 
         <!-- EMAIL -->
@@ -536,7 +438,6 @@
         </div>
 
 
-
         <!-- PASSWORD -->
 
         <div class="input-group">
@@ -560,7 +461,6 @@
                     type="button"
                     class="password-toggle"
                     id="passwordToggle"
-                    aria-label="Show password"
                 >
 
                     <i class="fas fa-eye"></i>
@@ -570,7 +470,6 @@
             </div>
 
         </div>
-
 
 
         <!-- EMAIL LOGIN -->
@@ -588,16 +487,12 @@
         </button>
 
 
-
-        <!-- DIVIDER -->
-
         <div class="divider">
             OR
         </div>
 
 
-
-        <!-- GOOGLE LOGIN -->
+        <!-- GOOGLE -->
 
         <button
             type="button"
@@ -612,8 +507,7 @@
         </button>
 
 
-
-        <!-- GUEST LOGIN -->
+        <!-- GUEST -->
 
         <button
             type="button"
@@ -628,7 +522,6 @@
         </button>
 
 
-
         <!-- MESSAGE -->
 
         <div
@@ -637,23 +530,11 @@
         ></div>
 
 
+        <div class="footer">
 
-        <div class="login-footer">
-
-            By continuing, you agree to use
-            Chishti Library responsibly.
+            Secure login powered by Firebase
 
         </div>
-
-
-        <div class="security-note">
-
-            <i class="fas fa-shield-halved"></i>
-
-            Secure authentication powered by Firebase
-
-        </div>
-
 
     </div>
 
@@ -661,113 +542,22 @@
 
 
 
-<!-- =====================================================
-     FIREBASE
-     IMPORTANT:
-     Firebase SDK MUST COME BEFORE login.js
-===================================================== -->
-
+<!-- =================================================
+     FIREBASE COMPAT SDK
+     IMPORTANT: login.js KE BAAD nahi,
+     PEHLE load hoga
+================================================= -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 
-
-<!-- =====================================================
-     YOUR LOGIN JS
-===================================================== -->
+<!-- YOUR JS -->
 
 <script src="login.js"></script>
-
-
-
-<!-- =====================================================
-     PASSWORD SHOW / HIDE
-===================================================== -->
-
-<script>
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        const password =
-            document.getElementById(
-                "loginPassword"
-            );
-
-
-        const toggle =
-            document.getElementById(
-                "passwordToggle"
-            );
-
-
-        if (
-            password &&
-            toggle
-        ) {
-
-            toggle.addEventListener(
-                "click",
-                function() {
-
-                    const icon =
-                        toggle.querySelector(
-                            "i"
-                        );
-
-
-                    if (
-                        password.type ===
-                        "password"
-                    ) {
-
-                        password.type =
-                            "text";
-
-
-                        icon.classList.remove(
-                            "fa-eye"
-                        );
-
-
-                        icon.classList.add(
-                            "fa-eye-slash"
-                        );
-
-
-                    } else {
-
-                        password.type =
-                            "password";
-
-
-                        icon.classList.remove(
-                            "fa-eye-slash"
-                        );
-
-
-                        icon.classList.add(
-                            "fa-eye"
-                        );
-
-                    }
-
-                }
-            );
-
-        }
-
-    }
-);
-
-</script>
 
 
 </body>
