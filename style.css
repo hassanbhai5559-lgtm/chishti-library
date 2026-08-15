@@ -2181,3 +2181,92 @@ section,
     color: #fff !important;
 }
 </style>
+
+/* =========================================
+   FORCE AUTHORS PAGE VISIBILITY / FIX
+========================================= */
+
+.authors-page {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.authors-page section,
+.authors-hero,
+.authors-hero-content,
+.authors-section,
+.authors-main-card,
+.author-grid,
+.author-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.authors-hero {
+    position: relative !important;
+    min-height: 430px !important;
+    background: linear-gradient(
+        135deg,
+        #260000,
+        #600000,
+        #160000
+    ) !important;
+}
+
+.authors-hero-content {
+    position: relative !important;
+    z-index: 100 !important;
+}
+
+.authors-section {
+    position: relative !important;
+    z-index: 100 !important;
+}
+
+.author-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 28px !important;
+}
+
+.author-card {
+    display: block !important;
+    background: #fff !important;
+    color: #222 !important;
+}
+
+.author-image-wrap {
+    display: block !important;
+    width: 150px !important;
+    height: 150px !important;
+    margin: 0 auto 20px !important;
+}
+
+.author-image {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.authors-hero h1,
+.authors-hero p,
+.authors-label,
+.authors-hero-logo,
+.authors-title,
+.author-card h2,
+.author-card h3,
+.author-card p {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+@media (max-width: 850px) {
+    .author-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
