@@ -1,17 +1,17 @@
 /* =========================================================
    CHISHTI LIBRARY
    login.js
-   Firebase Login System
-   ========================================================= */
+========================================================= */
 
 
 /* =========================================================
    FIREBASE CONFIG
-   ========================================================= */
+========================================================= */
 
 const firebaseConfig = {
 
-    apiKey: "PASTE_YOUR_FIREBASE_API_KEY_HERE",
+    apiKey:
+        "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
 
     authDomain:
         "chishti-library.firebaseapp.com",
@@ -35,14 +35,29 @@ const firebaseConfig = {
 
 
 /* =========================================================
-   FIREBASE INITIALIZE
-   ========================================================= */
+   CHECK FIREBASE
+========================================================= */
 
-if (!firebase.apps.length) {
+if (typeof firebase === "undefined") {
 
-    firebase.initializeApp(firebaseConfig);
+    console.error(
+        "Firebase SDK load nahi hua."
+    );
+
+    throw new Error(
+        "Firebase SDK is not loaded."
+    );
 
 }
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+firebase.initializeApp(
+    firebaseConfig
+);
 
 
 const auth =
@@ -54,54 +69,86 @@ const db =
 
 
 /* =========================================================
-   ELEMENT HELPER
-   ========================================================= */
+   ELEMENTS
+========================================================= */
 
-function getElement(id) {
+const emailInput =
+    document.getElementById(
+        "loginEmail"
+    );
 
-    return document.getElementById(id);
 
-}
+const passwordInput =
+    document.getElementById(
+        "loginPassword"
+    );
+
+
+const emailLoginBtn =
+    document.getElementById(
+        "emailLoginBtn"
+    );
+
+
+const googleLoginBtn =
+    document.getElementById(
+        "googleLoginBtn"
+    );
+
+
+const guestLoginBtn =
+    document.getElementById(
+        "guestLoginBtn"
+    );
+
+
+const passwordToggle =
+    document.getElementById(
+        "passwordToggle"
+    );
+
+
+const errorBox =
+    document.getElementById(
+        "loginError"
+    );
 
 
 /* =========================================================
    MESSAGE
-   ========================================================= */
+========================================================= */
 
-function showMessage(message, type = "error") {
+function showMessage(
+    message,
+    success = false
+) {
 
-    const errorBox =
-        getElement("loginError");
-
-    const messageBox =
-        getElement("loginMessage");
-
-
-    const box =
-        errorBox || messageBox;
+    if (!errorBox) return;
 
 
-    if (!box) {
-
-        alert(message);
-
-        return;
-
-    }
+    errorBox.innerText =
+        message;
 
 
-    box.textContent = message;
+    errorBox.style.display =
+        "block";
 
-    box.style.display = "block";
 
+    if (success) {
 
-    if (type === "success") {
+        errorBox.style.background =
+            "#e9f9ef";
 
-        box.style.color = "#16803c";
+        errorBox.style.color =
+            "#16803c";
 
     } else {
 
-        box.style.color = "#b00000";
+        errorBox.style.background =
+            "#fff0f0";
+
+        errorBox.style.color =
+            "#b00000";
 
     }
 
@@ -109,53 +156,41 @@ function showMessage(message, type = "error") {
 
 
 /* =========================================================
-   CLEAR MESSAGE
-   ========================================================= */
+   HIDE MESSAGE
+========================================================= */
 
-function clearMessage() {
+function hideMessage() {
 
-    const errorBox =
-        getElement("loginError");
+    if (!errorBox) return;
 
-    const messageBox =
-        getElement("loginMessage");
+    errorBox.innerText = "";
 
-
-    if (errorBox) {
-
-        errorBox.textContent = "";
-
-        errorBox.style.display = "none";
-
-    }
-
-
-    if (messageBox) {
-
-        messageBox.textContent = "";
-
-        messageBox.style.display = "none";
-
-    }
+    errorBox.style.display =
+        "none";
 
 }
 
 
 /* =========================================================
    BUTTON LOADING
-   ========================================================= */
+========================================================= */
 
-function setButtonLoading(button, loading, text) {
+function setLoading(
+    button,
+    loading,
+    text
+) {
 
     if (!button) return;
 
 
     if (loading) {
 
-        button.dataset.oldText =
-            button.innerHTML;
+        button.disabled =
+            true;
 
-        button.disabled = true;
+        button.dataset.original =
+            button.innerHTML;
 
         button.innerHTML =
             '<i class="fas fa-spinner fa-spin"></i> ' +
@@ -163,12 +198,15 @@ function setButtonLoading(button, loading, text) {
 
     } else {
 
-        button.disabled = false;
+        button.disabled =
+            false;
 
-        if (button.dataset.oldText) {
+        if (
+            button.dataset.original
+        ) {
 
             button.innerHTML =
-                button.dataset.oldText;
+                button.dataset.original;
 
         }
 
@@ -178,180 +216,12 @@ function setButtonLoading(button, loading, text) {
 
 
 /* =========================================================
-   GOOGLE LOGIN
-   ========================================================= */
-
-async function googleLogin() {
-
-    clearMessage();
-
-
-    const button =
-        getElement("googleLoginBtn");
-
-
-    setButtonLoading(
-        button,
-        true,
-        "Connecting..."
-    );
-
-
-    try {
-
-        const provider =
-            new firebase.auth.GoogleAuthProvider();
-
-
-        provider.setCustomParameters({
-
-            prompt: "select_account"
-
-        });
-
-
-        const result =
-            await auth.signInWithPopup(provider);
-
-
-        const user =
-            result.user;
-
-
-        console.log(
-            "Google login successful:",
-            user.email
-        );
-
-
-        await saveUser(user, "google");
-
-
-        showMessage(
-            "Google login successful. Redirecting...",
-            "success"
-        );
-
-
-        redirectAfterLogin(user);
-
-
-    } catch (error) {
-
-        console.error(
-            "Google login error:",
-            error
-        );
-
-
-        showFirebaseError(error);
-
-    }
-
-
-    setButtonLoading(
-        button,
-        false
-    );
-
-}
-
-
-/* =========================================================
-   GUEST / ANONYMOUS LOGIN
-   ========================================================= */
-
-async function guestLogin() {
-
-    clearMessage();
-
-
-    const button =
-        getElement("guestLoginBtn");
-
-
-    setButtonLoading(
-        button,
-        true,
-        "Entering..."
-    );
-
-
-    try {
-
-        const result =
-            await auth.signInAnonymously();
-
-
-        const user =
-            result.user;
-
-
-        console.log(
-            "Guest login successful:",
-            user.uid
-        );
-
-
-        await saveUser(user, "guest");
-
-
-        showMessage(
-            "Guest login successful. Redirecting...",
-            "success"
-        );
-
-
-        redirectAfterLogin(user);
-
-
-    } catch (error) {
-
-        console.error(
-            "Guest login error:",
-            error
-        );
-
-
-        showFirebaseError(error);
-
-    }
-
-
-    setButtonLoading(
-        button,
-        false
-    );
-
-}
-
-
-/* =========================================================
-   EMAIL / PASSWORD LOGIN
-   ========================================================= */
+   EMAIL LOGIN
+========================================================= */
 
 async function emailLogin() {
 
-    clearMessage();
-
-
-    const emailInput =
-        getElement("loginEmail");
-
-
-    const passwordInput =
-        getElement("loginPassword");
-
-
-    if (!emailInput || !passwordInput) {
-
-        showMessage(
-            "Email/password fields nahi mile."
-        );
-
-        return;
-
-    }
+    hideMessage();
 
 
     const email =
@@ -388,13 +258,8 @@ async function emailLogin() {
     }
 
 
-    const button =
-        getElement("emailLoginBtn") ||
-        getElement("loginBtn");
-
-
-    setButtonLoading(
-        button,
+    setLoading(
+        emailLoginBtn,
         true,
         "Logging in..."
     );
@@ -402,33 +267,20 @@ async function emailLogin() {
 
     try {
 
-        const result =
-            await auth.signInWithEmailAndPassword(
+        await auth
+            .signInWithEmailAndPassword(
                 email,
                 password
             );
 
 
-        const user =
-            result.user;
-
-
-        console.log(
-            "Email login successful:",
-            user.email
-        );
-
-
-        await saveUser(user, "email");
-
-
         showMessage(
             "Login successful. Redirecting...",
-            "success"
+            true
         );
 
 
-        redirectAfterLogin(user);
+        redirectUser();
 
 
     } catch (error) {
@@ -439,107 +291,128 @@ async function emailLogin() {
         );
 
 
-        showFirebaseError(error);
+        let message =
+            "Login failed.";
+
+
+        if (
+            error.code ===
+            "auth/invalid-email"
+        ) {
+
+            message =
+                "Invalid email address.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/user-not-found"
+        ) {
+
+            message =
+                "No account found with this email.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/wrong-password"
+        ) {
+
+            message =
+                "Incorrect password.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/invalid-credential"
+        ) {
+
+            message =
+                "Email or password is incorrect.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/too-many-requests"
+        ) {
+
+            message =
+                "Too many attempts. Try again later.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/api-key-not-valid"
+        ) {
+
+            message =
+                "Firebase API key is invalid. Check your Firebase Web App configuration.";
+
+        }
+
+        else {
+
+            message =
+                error.message;
+
+        }
+
+
+        showMessage(
+            message
+        );
+
+
+        setLoading(
+            emailLoginBtn,
+            false
+        );
 
     }
-
-
-    setButtonLoading(
-        button,
-        false
-    );
 
 }
 
 
 /* =========================================================
-   CREATE USER ACCOUNT
-   ========================================================= */
+   GOOGLE LOGIN
+========================================================= */
 
-async function registerUser() {
+async function googleLogin() {
 
-    clearMessage();
-
-
-    const emailInput =
-        getElement("registerEmail") ||
-        getElement("loginEmail");
+    hideMessage();
 
 
-    const passwordInput =
-        getElement("registerPassword") ||
-        getElement("loginPassword");
-
-
-    if (!emailInput || !passwordInput) {
-
-        showMessage(
-            "Registration fields nahi mile."
-        );
-
-        return;
-
-    }
-
-
-    const email =
-        emailInput.value.trim();
-
-
-    const password =
-        passwordInput.value;
-
-
-    if (!email) {
-
-        showMessage(
-            "Please enter your email."
-        );
-
-        return;
-
-    }
-
-
-    if (!password) {
-
-        showMessage(
-            "Please enter a password."
-        );
-
-        return;
-
-    }
-
-
-    if (password.length < 6) {
-
-        showMessage(
-            "Password kam az kam 6 characters ka hona chahiye."
-        );
-
-        return;
-
-    }
-
-
-    const button =
-        getElement("registerBtn");
-
-
-    setButtonLoading(
-        button,
+    setLoading(
+        googleLoginBtn,
         true,
-        "Creating..."
+        "Connecting..."
     );
 
 
     try {
 
+        const provider =
+            new firebase
+            .auth
+            .GoogleAuthProvider();
+
+
+        provider.setCustomParameters({
+
+            prompt:
+                "select_account"
+
+        });
+
+
         const result =
-            await auth.createUserWithEmailAndPassword(
-                email,
-                password
+            await auth.signInWithPopup(
+                provider
             );
 
 
@@ -548,49 +421,206 @@ async function registerUser() {
 
 
         console.log(
-            "Account created:",
+            "Google login:",
             user.email
         );
 
 
-        await saveUser(user, "email");
-
-
-        showMessage(
-            "Account created successfully.",
-            "success"
+        await saveUser(
+            user,
+            "google"
         );
 
 
-        redirectAfterLogin(user);
+        showMessage(
+            "Google login successful. Redirecting...",
+            true
+        );
+
+
+        redirectUser();
 
 
     } catch (error) {
 
         console.error(
-            "Registration error:",
+            "Google login error:",
             error
         );
 
 
-        showFirebaseError(error);
+        let message =
+            "Google login failed.";
+
+
+        if (
+            error.code ===
+            "auth/popup-closed-by-user"
+        ) {
+
+            message =
+                "Google login window was closed.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/popup-blocked"
+        ) {
+
+            message =
+                "Popup blocked. Please allow popups.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/api-key-not-valid"
+        ) {
+
+            message =
+                "Firebase API key invalid hai. Firebase Console ki current Web App config check karo.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/unauthorized-domain"
+        ) {
+
+            message =
+                "This website domain Firebase Authentication mein authorized nahi hai.";
+
+        }
+
+        else {
+
+            message =
+                error.message;
+
+        }
+
+
+        showMessage(
+            message
+        );
+
+
+        setLoading(
+            googleLoginBtn,
+            false
+        );
 
     }
-
-
-    setButtonLoading(
-        button,
-        false
-    );
 
 }
 
 
 /* =========================================================
-   SAVE USER IN FIRESTORE
-   ========================================================= */
+   GUEST LOGIN
+========================================================= */
 
-async function saveUser(user, provider) {
+async function guestLogin() {
+
+    hideMessage();
+
+
+    setLoading(
+        guestLoginBtn,
+        true,
+        "Connecting..."
+    );
+
+
+    try {
+
+        const result =
+            await auth
+            .signInAnonymously();
+
+
+        const user =
+            result.user;
+
+
+        await saveUser(
+            user,
+            "guest"
+        );
+
+
+        showMessage(
+            "Guest login successful. Redirecting...",
+            true
+        );
+
+
+        redirectUser();
+
+
+    } catch (error) {
+
+        console.error(
+            "Guest login error:",
+            error
+        );
+
+
+        let message =
+            "Guest login failed.";
+
+
+        if (
+            error.code ===
+            "auth/operation-not-allowed"
+        ) {
+
+            message =
+                "Anonymous Authentication Firebase Console mein enable nahi hai.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/api-key-not-valid"
+        ) {
+
+            message =
+                "Firebase API key invalid hai.";
+
+        }
+
+        else {
+
+            message =
+                error.message;
+
+        }
+
+
+        showMessage(
+            message
+        );
+
+
+        setLoading(
+            guestLoginBtn,
+            false
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE USER
+========================================================= */
+
+async function saveUser(
+    user,
+    provider
+) {
 
     if (!user) return;
 
@@ -607,53 +637,55 @@ async function saveUser(user, provider) {
             await userRef.get();
 
 
-        const data = {
-
-            uid:
-                user.uid,
-
-            provider:
-                provider,
-
-            email:
-                user.email || "",
-
-            displayName:
-                user.displayName || "Guest",
-
-            photoURL:
-                user.photoURL || "",
-
-            lastLogin:
-                firebase.firestore
-                .FieldValue
-                .serverTimestamp()
-
-        };
-
-
         if (!userDoc.exists) {
 
-            data.createdAt =
-                firebase.firestore
-                .FieldValue
-                .serverTimestamp();
+            await userRef.set({
+
+                uid:
+                    user.uid,
+
+                email:
+                    user.email || "",
+
+                name:
+                    user.displayName ||
+                    "Guest",
+
+                photoURL:
+                    user.photoURL || "",
+
+                provider:
+                    provider,
+
+                createdAt:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp(),
+
+                lastLogin:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
+
+            });
+
+        } else {
+
+            await userRef.update({
+
+                lastLogin:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
+
+            });
 
         }
-
-
-        await userRef.set(
-            data,
-            {
-                merge: true
-            }
-        );
-
 
     } catch (error) {
 
         console.error(
-            "User Firestore save error:",
+            "Save user error:",
             error
         );
 
@@ -663,308 +695,127 @@ async function saveUser(user, provider) {
 
 
 /* =========================================================
-   LOGIN REDIRECT
-   ========================================================= */
+   REDIRECT
+========================================================= */
 
-function redirectAfterLogin(user) {
+function redirectUser() {
 
-    /*
-       Normal users ko home page par bhejna.
-       Agar tumhari home file index.html nahi hai
-       to yahan filename change kar dena.
-    */
+    setTimeout(
+        function() {
 
+            window.location.href =
+                "index.html";
 
-    const currentPath =
-        window.location.pathname.toLowerCase();
-
-
-    if (
-        currentPath.includes("admin") ||
-        currentPath.includes("admin-login")
-    ) {
-
-        window.location.href =
-            "admin.html";
-
-        return;
-
-    }
-
-
-    window.location.href =
-        "index.html";
-
-}
-
-
-/* =========================================================
-   LOGOUT
-   ========================================================= */
-
-async function logoutUser() {
-
-    try {
-
-        await auth.signOut();
-
-
-        window.location.href =
-            "login.html";
-
-
-    } catch (error) {
-
-        console.error(
-            "Logout error:",
-            error
-        );
-
-        showFirebaseError(error);
-
-    }
-
-}
-
-
-/* =========================================================
-   AUTH STATE
-   ========================================================= */
-
-auth.onAuthStateChanged(
-    function(user) {
-
-        console.log(
-            "Auth state:",
-            user
-                ? user.email || "Guest"
-                : "Logged out"
-        );
-
-
-        /*
-           Agar already login hai to
-           login page par dobara form na dikhaye.
-        */
-
-
-        if (user) {
-
-            const loginPage =
-                getElement("loginPage");
-
-
-            if (loginPage) {
-
-                loginPage.classList.add(
-                    "logged-in"
-                );
-
-            }
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   FIREBASE ERROR HANDLER
-   ========================================================= */
-
-function showFirebaseError(error) {
-
-    let message =
-        "Login failed. Please try again.";
-
-
-    switch (error.code) {
-
-        case "auth/api-key-not-valid":
-
-            message =
-                "Firebase API key invalid hai. login.js mein Firebase Console wali exact API key paste karo.";
-
-            break;
-
-
-        case "auth/invalid-api-key":
-
-            message =
-                "Firebase API key invalid hai. Firebase Console se correct API key copy karo.";
-
-            break;
-
-
-        case "auth/popup-closed-by-user":
-
-            message =
-                "Google login popup close kar diya gaya.";
-
-            break;
-
-
-        case "auth/popup-blocked":
-
-            message =
-                "Browser ne Google login popup block kar diya. Popups allow karo.";
-
-            break;
-
-
-        case "auth/cancelled-popup-request":
-
-            message =
-                "Google login request cancel ho gayi.";
-
-            break;
-
-
-        case "auth/network-request-failed":
-
-            message =
-                "Internet/network problem. Connection check karo.";
-
-            break;
-
-
-        case "auth/operation-not-allowed":
-
-            message =
-                "Firebase Console mein ye login method enabled nahi hai.";
-
-            break;
-
-
-        case "auth/unauthorized-domain":
-
-            message =
-                "Is website domain ko Firebase Authentication ke Authorized Domains mein add karo.";
-
-            break;
-
-
-        case "auth/user-not-found":
-
-            message =
-                "Is email ka account Firebase mein nahi mila.";
-
-            break;
-
-
-        case "auth/wrong-password":
-
-            message =
-                "Password incorrect hai.";
-
-            break;
-
-
-        case "auth/invalid-credential":
-
-            message =
-                "Email ya password incorrect hai.";
-
-            break;
-
-
-        case "auth/email-already-in-use":
-
-            message =
-                "Is email se account pehle se bana hua hai.";
-
-            break;
-
-
-        case "auth/weak-password":
-
-            message =
-                "Password kam az kam 6 characters ka hona chahiye.";
-
-            break;
-
-
-        case "auth/invalid-email":
-
-            message =
-                "Email address valid nahi hai.";
-
-            break;
-
-
-        case "auth/too-many-requests":
-
-            message =
-                "Bohat zyada login attempts ho gaye. Thori der baad try karo.";
-
-            break;
-
-
-        case "auth/operation-not-supported-in-this-environment":
-
-            message =
-                "Ye login method current environment mein supported nahi hai.";
-
-            break;
-
-
-        case "auth/argument-error":
-
-            message =
-                "Firebase configuration ya login arguments mein problem hai.";
-
-            break;
-
-
-        case "auth/invalid-credential":
-
-            message =
-                "Login credentials invalid hain.";
-
-            break;
-
-
-        default:
-
-            if (error.message) {
-
-                message =
-                    error.message;
-
-            }
-
-    }
-
-
-    showMessage(
-        message,
-        "error"
+        },
+        700
     );
 
 }
 
 
 /* =========================================================
-   ENTER KEY LOGIN
-   ========================================================= */
+   PASSWORD SHOW / HIDE
+========================================================= */
 
-document.addEventListener(
-    "keydown",
-    function(event) {
+if (passwordToggle) {
 
-        if (
-            event.key === "Enter"
-        ) {
+    passwordToggle.addEventListener(
+        "click",
+        function() {
 
-            const passwordInput =
-                getElement(
-                    "loginPassword"
-                );
+            const icon =
+                passwordToggle
+                .querySelector("i");
 
 
             if (
-                document.activeElement ===
-                passwordInput
+                passwordInput.type ===
+                "password"
+            ) {
+
+                passwordInput.type =
+                    "text";
+
+
+                icon.classList.remove(
+                    "fa-eye"
+                );
+
+
+                icon.classList.add(
+                    "fa-eye-slash"
+                );
+
+            } else {
+
+                passwordInput.type =
+                    "password";
+
+
+                icon.classList.remove(
+                    "fa-eye-slash"
+                );
+
+
+                icon.classList.add(
+                    "fa-eye"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BUTTON EVENTS
+========================================================= */
+
+if (emailLoginBtn) {
+
+    emailLoginBtn.addEventListener(
+        "click",
+        emailLogin
+    );
+
+}
+
+
+if (googleLoginBtn) {
+
+    googleLoginBtn.addEventListener(
+        "click",
+        googleLogin
+    );
+
+}
+
+
+if (guestLoginBtn) {
+
+    guestLoginBtn.addEventListener(
+        "click",
+        guestLogin
+    );
+
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+if (passwordInput) {
+
+    passwordInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key ===
+                "Enter"
             ) {
 
                 emailLogin();
@@ -972,116 +823,48 @@ document.addEventListener(
             }
 
         }
+    );
+
+}
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+auth.onAuthStateChanged(
+    function(user) {
+
+        if (user) {
+
+            console.log(
+                "Firebase user:",
+                user.email ||
+                "Guest"
+            );
+
+        }
 
     }
 );
 
 
 /* =========================================================
-   BUTTON EVENT LISTENERS
-   ========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-
-        const googleButton =
-            getElement(
-                "googleLoginBtn"
-            );
-
-
-        if (googleButton) {
-
-            googleButton.addEventListener(
-                "click",
-                googleLogin
-            );
-
-        }
-
-
-        const guestButton =
-            getElement(
-                "guestLoginBtn"
-            );
-
-
-        if (guestButton) {
-
-            guestButton.addEventListener(
-                "click",
-                guestLogin
-            );
-
-        }
-
-
-        const emailButton =
-            getElement(
-                "emailLoginBtn"
-            ) ||
-            getElement(
-                "loginBtn"
-            );
-
-
-        if (emailButton) {
-
-            emailButton.addEventListener(
-                "click",
-                emailLogin
-            );
-
-        }
-
-
-        const registerButton =
-            getElement(
-                "registerBtn"
-            );
-
-
-        if (registerButton) {
-
-            registerButton.addEventListener(
-                "click",
-                registerUser
-            );
-
-        }
-
-
-        const logoutButton =
-            getElement(
-                "logoutBtn"
-            );
-
-
-        if (logoutButton) {
-
-            logoutButton.addEventListener(
-                "click",
-                logoutUser
-            );
-
-        }
-
-
-    }
-);
-
-
-/* =========================================================
-   DEBUG INFO
-   ========================================================= */
+   DEBUG
+========================================================= */
 
 console.log(
-    "Chishti Library Login System Loaded"
+    "Chishti Library login.js loaded."
+);
+
+console.log(
+    "Firebase SDK:",
+    typeof firebase
 );
 
 console.log(
     "Firebase Project:",
-    firebaseConfig.projectId
+    firebase.app()
+        .options
+        .projectId
 );
