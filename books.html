@@ -1,1422 +1,2165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>All Books — Chishti Library</title>
+
+<meta name="description"
+content="Chishti Library — Complete Digital Islamic Book Collection">
+
+<meta name="keywords"
+content="Chishti Library, Islamic Books, Naat, Manqabat, Hamd, Kulliyat, Maqala">
+
+<meta name="author"
+content="Chishti Library">
+
+<link rel="icon"
+type="image/png"
+href="./logo.png">
+
+<link rel="apple-touch-icon"
+href="./logo.png">
+
+<link rel="preconnect"
+href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<!-- MAIN BOOK CSS -->
+<link rel="stylesheet"
+href="./book.css">
+
+<!-- FONT AWESOME -->
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+
+<body class="library-page">
+
+
+<!-- =====================================================
+NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <a href="./index.html">
+
+            <img
+            src="./logo.png"
+            alt="Chishti Library Logo">
+
+        </a>
+
+        <div class="logo-text">
+
+            <h2>CHISHTI LIBRARY</h2>
+
+            <span>Digital Library</span>
+
+        </div>
+
+    </div>
+
+
+    <ul class="menu">
+
+        <li>
+            <a href="./index.html">
+                <i class="fas fa-house"></i>
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="./books.html" class="active">
+                <i class="fas fa-book"></i>
+                Books
+            </a>
+        </li>
+
+        <li>
+            <a href="./authors.html">
+                <i class="fas fa-feather-alt"></i>
+                Authors
+            </a>
+        </li>
+
+        <li>
+            <a href="./developer.html">
+                <i class="fas fa-code"></i>
+                Developer
+            </a>
+        </li>
+
+        <li>
+            <a href="./contact.html">
+                <i class="fas fa-phone"></i>
+                Contact
+            </a>
+        </li>
+
+        <li>
+            <a href="./admin/index.html">
+                <i class="fas fa-user-shield"></i>
+                Admin Login
+            </a>
+        </li>
+
+    </ul>
+
+
+    <div class="mobile-menu">
+
+        <i class="fas fa-bars"></i>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+HERO
+===================================================== -->
+
+<section class="hero">
+
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+
+        <img
+        src="./logo.png"
+        class="hero-logo"
+        alt="Chishti Library">
+
+        <h1>
+            ALL BOOKS
+        </h1>
+
+        <h3>
+            Chishti Digital Islamic Library
+        </h3>
+
+        <p>
+            Explore Islamic Books, Naat, Manqabat,
+            Hamd, Kulliyat and Maqala.
+        </p>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <i class="fas fa-search"></i>
+
+            <input
+            type="text"
+            id="bookSearch"
+            placeholder="Search Books..."
+            autocomplete="off">
+
+        </div>
+
+
+        <!-- BOOK COUNTER -->
+
+        <div class="counter-area">
+
+            <div class="counter-card books">
+
+                <i class="fas fa-book-open"></i>
+
+                <h2 id="bookCount">
+                    0
+                </h2>
+
+                <p>
+                    Books
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+CATEGORIES
+===================================================== -->
+
+<section class="categories">
+
+    <h2 class="section-title">
+        Browse Categories
+    </h2>
+
+
+    <div class="category-grid">
+
+        <button
+        class="category active"
+        data-category="all"
+        type="button">
+
+            ALL
+
+        </button>
+
+
+        <button
+        class="category"
+        data-category="naat"
+        type="button">
+
+            NAAT
+
+        </button>
+
+
+        <button
+        class="category"
+        data-category="manqabat"
+        type="button">
+
+            MANQABAT
+
+        </button>
+
+
+        <button
+        class="category"
+        data-category="hamd"
+        type="button">
+
+            HAMD
+
+        </button>
+
+
+        <button
+        class="category"
+        data-category="maqala"
+        type="button">
+
+            MAQALA
+
+        </button>
+
+
+        <button
+        class="category"
+        data-category="kulliyat"
+        type="button">
+
+            KULLIYAT
+
+        </button>
+
+
+        <button
+        class="category"
+        data-category="seerat"
+        type="button">
+
+            SEERAT
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+SORT CATEGORIES
+===================================================== -->
+
+<section class="book-sort-section">
+
+    <h2 class="section-title">
+        Explore Books
+    </h2>
+
+
+    <div class="sort-buttons">
+
+        <button
+        class="sort-btn active"
+        data-sort="newest"
+        type="button">
+
+            <i class="fas fa-clock"></i>
+
+            Newest
+
+        </button>
+
+
+        <button
+        class="sort-btn"
+        data-sort="oldest"
+        type="button">
+
+            <i class="fas fa-history"></i>
+
+            Oldest
+
+        </button>
+
+
+        <button
+        class="sort-btn"
+        data-sort="popular"
+        type="button">
+
+            <i class="fas fa-fire"></i>
+
+            Popular
+
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+BOOKS
+===================================================== -->
+
+<section class="featured-books">
+
+    <h2 class="section-title">
+        All Books
+    </h2>
+
+
+    <div
+    id="booksContainer"
+    class="books-grid">
+
+    </div>
+
+
+    <div
+    id="emptyBooks"
+    class="no-books"
+    style="display:none;">
+
+        <h2>
+            No Books Found
+        </h2>
+
+        <p>
+            Try another search or category.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+FOOTER
+===================================================== -->
+
+<footer>
+
+    <div class="footer-logo">
+
+        <img
+        src="./logo.png"
+        alt="Chishti Library">
+
+        <h2>
+            CHISHTI LIBRARY
+        </h2>
+
+        <p>
+            Digital Islamic Library
+        </p>
+
+    </div>
+
+
+    <div class="footer-social">
+
+        <a
+        href="https://www.facebook.com/profile.php?id=100063724950961"
+        target="_blank"
+        rel="noopener noreferrer">
+
+            <i class="fab fa-facebook-f"></i>
+
+            <span>
+                Facebook
+            </span>
+
+        </a>
+
+
+        <a
+        href="https://www.youtube.com/@Saimtv5"
+        target="_blank"
+        rel="noopener noreferrer">
+
+            <i class="fab fa-youtube"></i>
+
+            <span>
+                YouTube
+            </span>
+
+        </a>
+
+
+        <a
+        href="https://www.facebook.com/saimchishtiofficial"
+        target="_blank"
+        rel="noopener noreferrer">
+
+            <i class="fab fa-facebook-f"></i>
+
+            <span>
+                Saim Chishti Official
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="footer-copy">
+
+        ©
+        <span id="footerYear"></span>
+
+        Chishti Library —
+        All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+SCROLL TOP
+===================================================== -->
+
+<button
+id="scrollTop"
+type="button"
+aria-label="Scroll to top">
+
+    <i class="fas fa-arrow-up"></i>
+
+</button>
+
+
+
+<!-- =====================================================
+FIREBASE
+===================================================== -->
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
 <script>
+
 "use strict";
 
-/* =========================================================
-   FIREBASE
-========================================================= */
 
-const db = firebase.firestore();
+/* =====================================================
+FIREBASE CONFIG
+===================================================== */
+
+const firebaseConfig = {
+
+    apiKey:
+    "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
+
+    authDomain:
+    "chishti-library.firebaseapp.com",
+
+    projectId:
+    "chishti-library",
+
+    storageBucket:
+    "chishti-library.firebasestorage.app",
+
+    messagingSenderId:
+    "103447043162",
+
+    appId:
+    "1:103447043162:web:f242cd2670aaa9786e8c63",
+
+    measurementId:
+    "G-833P7N3LNT"
+
+};
 
 
-/* =========================================================
-   BOOK DATABASE
-========================================================= */
+/* INITIALIZE */
+
+firebase.initializeApp(firebaseConfig);
+
+
+/* FIRESTORE */
+
+const db =
+firebase.firestore();
+
+
+console.log(
+"✅ Firebase connected:",
+firebase.app().options.projectId
+);
+
+
+
+/* =====================================================
+BOOK DATABASE
+===================================================== */
 
 const books = [
 
-    {
-        id: 1,
-        title: "Al-Rehman",
-        author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "Hamd",
-        cover: "al-rehman-cover.png",
-        pdf: "Al Rehman .. Latif Sajid.C.pdf",
-        description: "99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti."
-    },
+{
+id:1,
+title:"Al-Rehman",
+author:"Sahibzada Muhammad Latif Sajid Chishti",
+category:"hamd",
+categoryName:"Hamd",
+cover:"al-rehman-cover.png",
+pdf:"Al Rehman .. Latif Sajid.C.pdf",
+description:"99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti.",
+latest:true
+},
 
-    {
-        id: 2,
-        title: "Husn-e-Kainat",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Naat",
-        cover: "husn-e-kainat-cover.png",
-        pdf: "husn-e-kainat.pdf",
-        description: "Naatiya Kalam by Hazrat Allama Saim Chishti."
-    },
+{
+id:2,
+title:"Husn-e-Kainat",
+author:"Hazrat Allama Saim Chishti",
+category:"naat",
+categoryName:"Naat",
+cover:"husn-e-kainat-cover.png",
+pdf:"husn-e-kainat.pdf",
+description:"Naatiya Kalam by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 3,
-        title: "Shahdaye Karbala",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Manqabat",
-        cover: "shahdaye karbala-cover.png",
-        pdf: "shahdaye-karbala.pdf",
-        description: "Karbala ke shuhada ke fazail par manqabat ki kitab."
-    },
+{
+id:3,
+title:"Shahdaye Karbala",
+author:"Hazrat Allama Saim Chishti",
+category:"manqabat",
+categoryName:"Manqabat",
+cover:"shahdaye karbala-cover.png",
+pdf:"shahdaye-karbala.pdf",
+description:"Karbala ke shuhada ke fazail par manqabat ki kitab."
+},
 
-    {
-        id: 4,
-        title: "Shaheed Ibn-e-Shaheed",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Seerat",
-        cover: "shaheed-ibn-e-shaheed-cover.png",
-        pdf: "shaheed-ibn-e-shaheed.pdf",
-        description: "Historical Manqabat book by Hazrat Allama Saim Chishti."
-    },
+{
+id:4,
+title:"Shaheed Ibn-e-Shaheed",
+author:"Hazrat Allama Saim Chishti",
+category:"seerat",
+categoryName:"Seerat",
+cover:"shaheed-ibn-e-shaheed-cover.png",
+pdf:"shaheed-ibn-e-shaheed.pdf",
+description:"Historical Manqabat book by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 5,
-        title: "Nawaye Saim",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Naat",
-        cover: "Nawaye Saim-cover.png",
-        pdf: "noori.pdf",
-        description: "Naatiya Majmua by Hazrat Allama Saim Chishti."
-    },
+{
+id:5,
+title:"Nawaye Saim",
+author:"Hazrat Allama Saim Chishti",
+category:"naat",
+categoryName:"Naat",
+cover:"Nawaye Saim-cover.png",
+pdf:"noori.pdf",
+description:"Naatiya Majmua by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 6,
-        title: "Kulliyat-e-Saim Chishti",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Kulliyat",
-        cover: "kulliyat e saim chishti-cover.png",
-        pdf: "Kulliyat e Saim Chishti By Allama Saim Chishti.pdf",
-        description: "Complete Kulliyat of Hazrat Allama Saim Chishti."
-    },
+{
+id:6,
+title:"Kulliyat-e-Saim Chishti",
+author:"Hazrat Allama Saim Chishti",
+category:"kulliyat",
+categoryName:"Kulliyat",
+cover:"kulliyat e saim chishti-cover.png",
+pdf:"Kulliyat e Saim Chishti By Allama Saim Chishti.pdf",
+description:"Complete Kulliyat of Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 7,
-        title: "Punjabi Maqala",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Maqala",
-        cover: "allamasaimchishtipunjbimaqala-cover.png",
-        pdf: "allamasaimchishtipunjabimaqala-231010120010-3ca7944b (1).pdf",
-        description: "Punjabi Maqala by Hazrat Allama Saim Chishti."
-    },
+{
+id:7,
+title:"Punjabi Maqala",
+author:"Hazrat Allama Saim Chishti",
+category:"maqala",
+categoryName:"Maqala",
+cover:"allamasaimchishtipunjbimaqala-cover.png",
+pdf:"allamasaimchishtipunjabimaqala-231010120010-3ca7944b (1).pdf",
+description:"Punjabi Maqala by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 8,
-        title: "Armaghan-e-Madina",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Naat",
-        cover: "Armaghan-e-Madina-By-Allama-Saim-Chishti-cover.webp",
-        pdf: "armughan e madina.pdf",
-        description: "Collection of Naats by Hazrat Allama Saim Chishti."
-    },
+{
+id:8,
+title:"Armaghan-e-Madina",
+author:"Hazrat Allama Saim Chishti",
+category:"naat",
+categoryName:"Naat",
+cover:"Armaghan-e-Madina-By-Allama-Saim-Chishti-cover.webp",
+pdf:"armughan e madina.pdf",
+description:"Collection of Naats by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 9,
-        title: "Shan-e-Kainat",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Naat",
-        cover: "naat-cover2.png",
-        pdf: "shan-e-kainat.pdf",
-        description: "Naatiya Collection by Hazrat Allama Saim Chishti."
-    },
+{
+id:9,
+title:"Shan-e-Kainat",
+author:"Hazrat Allama Saim Chishti",
+category:"naat",
+categoryName:"Naat",
+cover:"naat-cover2.png",
+pdf:"shan-e-kainat.pdf",
+description:"Naatiya Collection by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 10,
-        title: "Rehmat Da Khazana",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Naat",
-        cover: "rehmatdakhazana-cover.png",
-        pdf: "rehmatdakhazana.pdf",
-        description: "Naatiya Collection by Hazrat Allama Saim Chishti."
-    },
+{
+id:10,
+title:"Rehmat Da Khazana",
+author:"Hazrat Allama Saim Chishti",
+category:"naat",
+categoryName:"Naat",
+cover:"rehmatdakhazana-cover.png",
+pdf:"rehmatdakhazana.pdf",
+description:"Naatiya Collection by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 11,
-        title: "Madinay Diyan Kaliyan",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Naat",
-        cover: "madinydiankalinyan-cover.png",
-        pdf: "madinydiankalinyan.pdf",
-        description: "Naatiya Collection by Hazrat Allama Saim Chishti."
-    },
+{
+id:11,
+title:"Madinay Diyan Kaliyan",
+author:"Hazrat Allama Saim Chishti",
+category:"naat",
+categoryName:"Naat",
+cover:"madinydiankalinyan-cover.png",
+pdf:"madinydiankalinyan.pdf",
+description:"Naatiya Collection by Hazrat Allama Saim Chishti."
+},
 
-    {
-        id: 12,
-        title: "Darooda Di Dali",
-        author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "Naat",
-        cover: "darooda di dali-cover..png",
-        pdf: "Darooda Di Dali Pdf.pdf",
-        description: "A Punjabi Naatiya book by Sahibzada Muhammad Latif Sajid Chishti."
-    },
+{
+id:12,
+title:"Darooda Di Dali",
+author:"Sahibzada Muhammad Latif Sajid Chishti",
+category:"naat",
+categoryName:"Naat",
+cover:"darooda di dali-cover..png",
+pdf:"Darooda Di Dali Pdf.pdf",
+description:"A Punjabi Naatiya book by Sahibzada Muhammad Latif Sajid Chishti.",
+latest:true
+},
 
-    {
-        id: 13,
-        title: "Sbhy Hamdan Ne Rab Sohnay",
-        author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "Hamd",
-        cover: "Sbhy Hamdan Ne Rab Sohnay-cover.jpeg",
-        pdf: "Sbhy Hamdan Ne Rab Sohnay.pdf",
-        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
-    },
+{
+id:13,
+title:"Sbhy Hamdan Ne Rab Sohnay",
+author:"Sahibzada Muhammad Latif Sajid Chishti",
+category:"hamd",
+categoryName:"Hamd",
+cover:"Sbhy Hamdan Ne Rab Sohnay-cover.jpeg",
+pdf:"Sbhy Hamdan Ne Rab Sohnay.pdf",
+description:"A Hamd book by Sahibzada Muhammad Latif Sajid Chishti.",
+latest:true
+},
 
-    {
-        id: 14,
-        title: "Saqi e Baghdad",
-        author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "Manqabat",
-        cover: "Saqi e Baghdad.cover.jpeg",
-        pdf: "Saqi e Baghdad ....Final.pdf",
-        description: "A Manqabat book by Sahibzada Muhammad Latif Sajid Chishti."
-    },
+{
+id:14,
+title:"Saqi e Baghdad",
+author:"Sahibzada Muhammad Latif Sajid Chishti",
+category:"manqabat",
+categoryName:"Manqabat",
+cover:"Saqi e Baghdad.cover.jpeg",
+pdf:"Saqi e Baghdad ....Final.pdf",
+description:"A Manqabat book by Sahibzada Muhammad Latif Sajid Chishti.",
+latest:true
+},
 
-    {
-        id: 15,
-        title: "Rab de rang niraly hamdya punjabi",
-        author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "Hamd",
-        cover: "Rab de rang niraly hamdya-cover.jpeg",
-        pdf: "Rab de rang niraly hamdya punjabi.pdf",
-        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
-    },
+{
+id:15,
+title:"Rab de rang niraly hamdya punjabi",
+author:"Sahibzada Muhammad Latif Sajid Chishti",
+category:"hamd",
+categoryName:"Hamd",
+cover:"Rab de rang niraly hamdya-cover.jpeg",
+pdf:"Rab de rang niraly hamdya punjabi.pdf",
+description:"A Hamd book by Sahibzada Muhammad Latif Sajid Chishti.",
+latest:true
+},
 
-    {
-        id: 16,
-        title: "Hammad Hico",
-        author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "Hamd",
-        cover: "Hammad Hico-cover.jpeg",
-        pdf: "Hamad Hico Book.pdf",
-        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
-    },
+{
+id:16,
+title:"Hammad Hico",
+author:"Sahibzada Muhammad Latif Sajid Chishti",
+category:"hamd",
+categoryName:"Hamd",
+cover:"Hammad Hico-cover.jpeg",
+pdf:"Hamad Hico Book.pdf",
+description:"A Hamd book by Sahibzada Muhammad Latif Sajid Chishti.",
+latest:true
+},
 
-    {
-        id: 17,
-        title: "Mazhar E noor e Khuda",
-        author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "Hamd",
-        cover: "Mazhar E noor e Khuda-cover.png",
-        pdf: "Mazhar E noor e Khuda.pdf",
-        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
-    },
+{
+id:17,
+title:"Mazhar E noor e Khuda",
+author:"Sahibzada Muhammad Latif Sajid Chishti",
+category:"hamd",
+categoryName:"Hamd",
+cover:"Mazhar E noor e Khuda-cover.png",
+pdf:"Mazhar E noor e Khuda.pdf",
+description:"A Hamd book by Sahibzada Muhammad Latif Sajid Chishti.",
+latest:true
+},
 
-    {
-        id: 18,
-        title: "Ali Ali Hai",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Manqabat",
-        cover: "ALI ALI HAI-COVER.png",
-        pdf: "ALI ALI HAI BOOK SAIM CHISHTI BOOKS.pdf",
-        description: "Manqabat-e-Hazrat Ali by Allama Saim Chishti."
-    },
+{
+id:18,
+title:"Ali Ali Hai",
+author:"Hazrat Allama Saim Chishti",
+category:"manqabat",
+categoryName:"Manqabat",
+cover:"ALI ALI HAI-COVER.png",
+pdf:"ALI ALI HAI BOOK SAIM CHISHTI BOOKS.pdf",
+description:"Manqabat book by Hazrat Allama Saim Chishti.",
+latest:true
+},
 
-    {
-        id: 19,
-        title: "Al Batool",
-        author: "Hazrat Allama Saim Chishti",
-        category: "Seerat",
-        cover: "Al-batool-cover.png",
-        pdf: "AL-batool.pdf",
-        description: "A Seerat book by Hazrat Allama Saim Chishti."
-    }
+{
+id:19,
+title:"Al Batool",
+author:"Hazrat Allama Saim Chishti",
+category:"seerat",
+categoryName:"Seerat",
+cover:"Al-batool-cover.png",
+pdf:"AL-batool.pdf",
+description:"A Seerat book by Hazrat Allama Saim Chishti.",
+latest:true
+}
 
 ];
 
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+
+/* =====================================================
+ELEMENTS
+===================================================== */
 
 const booksContainer =
-    document.getElementById("booksContainer");
+document.getElementById("booksContainer");
 
 const bookSearch =
-    document.getElementById("bookSearch");
+document.getElementById("bookSearch");
 
 const bookCount =
-    document.getElementById("bookCount");
+document.getElementById("bookCount");
 
 const emptyBooks =
-    document.getElementById("emptyBooks");
+document.getElementById("emptyBooks");
+
+const footerYear =
+document.getElementById("footerYear");
 
 
-let currentCategory = "all";
-let currentSort = "newest";
+let currentCategory =
+"all";
 
-let firebaseBooks = {};
-
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
+let currentSort =
+"newest";
 
 
-/* =========================================================
-   FIREBASE BOOK ID
-   Automatic document ID based on book ID
-========================================================= */
 
-function firebaseBookRef(book) {
+/* =====================================================
+ESCAPE HTML
+===================================================== */
 
-    return db
-        .collection("books")
-        .doc(String(book.id));
+function escapeHTML(value){
+
+return String(value ?? "")
+.replaceAll("&","&amp;")
+.replaceAll("<","&lt;")
+.replaceAll(">","&gt;")
+.replaceAll('"',"&quot;")
+.replaceAll("'","&#039;");
 
 }
 
 
-/* =========================================================
-   CREATE FIREBASE BOOK
-========================================================= */
 
-async function createFirebaseBooks() {
+/* =====================================================
+FIREBASE BOOK DOCUMENT
+===================================================== */
 
-    try {
+function bookDoc(book){
 
-        const batch = db.batch();
-
-        books.forEach(book => {
-
-            const ref =
-                firebaseBookRef(book);
-
-            const existing =
-                firebaseBooks[book.id] || {};
-
-            batch.set(
-                ref,
-                {
-
-                    bookId: book.id,
-
-                    title: book.title,
-
-                    author: book.author,
-
-                    category: book.category,
-
-                    cover: book.cover,
-
-                    pdf: book.pdf,
-
-                    description: book.description,
-
-                    views:
-                        Number(existing.views || 0),
-
-                    likes:
-                        Number(existing.likes || 0),
-
-                    shares:
-                        Number(existing.shares || 0),
-
-                    comments:
-                        Number(existing.comments || 0),
-
-                    downloads:
-                        Number(existing.downloads || 0),
-
-                    createdAt:
-                        existing.createdAt ||
-                        firebase.firestore.FieldValue.serverTimestamp(),
-
-                    updatedAt:
-                        firebase.firestore.FieldValue.serverTimestamp()
-
-                },
-
-                { merge: true }
-            );
-
-        });
-
-        await batch.commit();
-
-        console.log(
-            "✅ Firebase books synchronized"
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Firebase sync error:",
-            error
-        );
-
-    }
+return db
+.collection("books")
+.doc("book-" + book.id);
 
 }
 
 
-/* =========================================================
-   LOAD FIREBASE BOOKS
-========================================================= */
 
-async function loadFirebaseBooks() {
+/* =====================================================
+INITIALIZE FIREBASE BOOK
+===================================================== */
 
-    try {
+async function initializeBook(book){
 
-        const snapshot =
-            await db
-                .collection("books")
-                .get();
+try{
 
-        firebaseBooks = {};
+const ref =
+bookDoc(book);
 
-        snapshot.forEach(doc => {
+const snap =
+await ref.get();
 
-            const data =
-                doc.data();
 
-            firebaseBooks[
-                String(data.bookId)
-            ] = {
+if(!snap.exists){
 
-                ...data,
+await ref.set({
 
-                firebaseId:
-                    doc.id
+id:book.id,
 
-            };
+title:book.title,
 
-        });
+author:book.author,
 
-        await createFirebaseBooks();
+category:book.categoryName,
 
-        renderBooks();
+cover:book.cover,
 
-    } catch (error) {
+pdf:book.pdf,
 
-        console.error(
-            "Firebase loading error:",
-            error
-        );
+description:book.description,
 
-        renderBooks();
+views:0,
 
-    }
+likes:0,
+
+shares:0,
+
+comments:0,
+
+downloads:0,
+
+createdAt:
+firebase.firestore.FieldValue.serverTimestamp()
+
+});
+
+console.log(
+"Created Firebase book:",
+book.title
+);
+
+}
+
+}catch(error){
+
+console.error(
+"Firebase initialization error:",
+error
+);
+
+}
 
 }
 
 
-/* =========================================================
-   GET STATS
-========================================================= */
 
-function getBookStats(book) {
+/* =====================================================
+GET BOOK STATS
+===================================================== */
 
-    const data =
-        firebaseBooks[book.id] || {};
+async function getBookStats(book){
 
-    return {
+try{
 
-        views:
-            Number(data.views || 0),
+const snap =
+await bookDoc(book).get();
 
-        likes:
-            Number(data.likes || 0),
 
-        shares:
-            Number(data.shares || 0),
+if(!snap.exists){
 
-        comments:
-            Number(data.comments || 0),
+await initializeBook(book);
 
-        downloads:
-            Number(data.downloads || 0)
+return {
 
-    };
+views:0,
+likes:0,
+shares:0,
+comments:0,
+downloads:0
+
+};
 
 }
 
 
-/* =========================================================
-   FIREBASE COUNTER
-========================================================= */
+const data =
+snap.data() || {};
+
+
+return {
+
+views:Number(data.views || 0),
+
+likes:Number(data.likes || 0),
+
+shares:Number(data.shares || 0),
+
+comments:Number(data.comments || 0),
+
+downloads:Number(data.downloads || 0)
+
+};
+
+}catch(error){
+
+console.error(
+"Stats error:",
+error
+);
+
+return {
+
+views:0,
+likes:0,
+shares:0,
+comments:0,
+downloads:0
+
+};
+
+}
+
+}
+
+
+
+/* =====================================================
+INCREMENT FIREBASE COUNTER
+===================================================== */
 
 async function incrementCounter(
-    bookId,
-    counter
-) {
+book,
+field
+){
 
-    try {
+try{
 
-        const ref =
-            firebaseBookRef(
-                books.find(
-                    book =>
-                        String(book.id) ===
-                        String(bookId)
-                )
-            );
-
-        await ref.set(
-
-            {
-
-                [counter]:
-                    firebase.firestore.FieldValue.increment(1),
-
-                updatedAt:
-                    firebase.firestore.FieldValue.serverTimestamp()
-
-            },
-
-            { merge: true }
-
-        );
+const ref =
+bookDoc(book);
 
 
-        if (!firebaseBooks[bookId]) {
+await ref.set({
 
-            firebaseBooks[bookId] = {};
+[field]:
+firebase.firestore.FieldValue.increment(1)
 
-        }
-
-
-        firebaseBooks[bookId][counter] =
-            Number(
-                firebaseBooks[bookId][counter] || 0
-            ) + 1;
+},{
+merge:true
+});
 
 
-        renderBooks();
+console.log(
+field,
+"updated:",
+book.title
+);
 
+}catch(error){
 
-    } catch (error) {
+console.error(
+"Counter error:",
+error
+);
 
-        console.error(
-            `Failed to update ${counter}:`,
-            error
-        );
-
-    }
+}
 
 }
 
 
-/* =========================================================
-   LIKE
-========================================================= */
 
-async function likeBook(bookId) {
+/* =====================================================
+CREATE BOOK CARD
+===================================================== */
 
-    await incrementCounter(
-        bookId,
-        "likes"
-    );
+function createBookCard(book){
+
+const card =
+document.createElement("article");
+
+card.className =
+"book-card";
+
+card.dataset.bookId =
+book.id;
+
+
+card.innerHTML = `
+
+<div class="book-cover">
+
+<img
+src="${escapeHTML(book.cover)}"
+alt="${escapeHTML(book.title)}"
+loading="lazy"
+onerror="this.src='./logo.png'"
+>
+
+
+<span class="book-category">
+
+${escapeHTML(book.categoryName)}
+
+</span>
+
+
+<div class="book-cover-overlay">
+
+<button
+class="read-button"
+type="button"
+data-action="read"
+data-book-id="${book.id}">
+
+<i class="fa-solid fa-book-open"></i>
+
+Read Book
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="book-card-content">
+
+<h2>
+${escapeHTML(book.title)}
+</h2>
+
+
+<p class="book-author">
+
+<i class="fa-solid fa-user-pen"></i>
+
+${escapeHTML(book.author)}
+
+</p>
+
+
+<p class="book-description">
+
+${escapeHTML(book.description)}
+
+</p>
+
+
+<div
+class="book-stats"
+data-stats="${book.id}">
+
+<div>
+<i class="fa-solid fa-eye"></i>
+<span class="views">0</span>
+</div>
+
+<div>
+<i class="fa-solid fa-heart"></i>
+<span class="likes">0</span>
+</div>
+
+<div>
+<i class="fa-solid fa-share-nodes"></i>
+<span class="shares">0</span>
+</div>
+
+<div>
+<i class="fa-solid fa-comment"></i>
+<span class="comments">0</span>
+</div>
+
+<div>
+<i class="fa-solid fa-download"></i>
+<span class="downloads">0</span>
+</div>
+
+</div>
+
+
+<div class="book-actions">
+
+<button
+class="action-btn like-btn"
+data-action="like"
+data-book-id="${book.id}"
+type="button">
+
+<i class="fa-solid fa-heart"></i>
+
+Like
+
+</button>
+
+
+<button
+class="action-btn share-btn"
+data-action="share"
+data-book-id="${book.id}"
+type="button">
+
+<i class="fa-solid fa-share-nodes"></i>
+
+Share
+
+</button>
+
+
+<button
+class="action-btn comment-btn"
+data-action="comment"
+data-book-id="${book.id}"
+type="button">
+
+<i class="fa-solid fa-comment"></i>
+
+Comment
+
+</button>
+
+
+<button
+class="action-btn download-btn"
+data-action="download"
+data-book-id="${book.id}"
+type="button">
+
+<i class="fa-solid fa-download"></i>
+
+Download
+
+</button>
+
+</div>
+
+
+<div class="book-card-footer">
+
+<span>
+
+<i class="fa-solid fa-book"></i>
+
+Digital Edition
+
+</span>
+
+
+<button
+class="open-book-button"
+data-action="read"
+data-book-id="${book.id}"
+type="button">
+
+Open
+
+<i class="fa-solid fa-arrow-right"></i>
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+return card;
 
 }
 
 
-/* =========================================================
-   SHARE
-========================================================= */
 
-async function shareBook(bookId) {
+/* =====================================================
+UPDATE STATS UI
+===================================================== */
 
-    const book =
-        books.find(
-            item =>
-                String(item.id) ===
-                String(bookId)
-        );
+async function updateCardStats(
+book,
+card
+){
 
-    if (!book) return;
+const stats =
+await getBookStats(book);
 
 
-    const url =
-        window.location.origin +
-        window.location.pathname +
-        "?book=" +
-        encodeURIComponent(book.id);
+const statsBox =
+card.querySelector(
+`[data-stats="${book.id}"]`
+);
 
 
-    try {
+if(!statsBox)
+return;
 
-        if (
-            navigator.share
-        ) {
 
-            await navigator.share({
+statsBox.querySelector(".views")
+.textContent =
+formatNumber(stats.views);
 
-                title:
-                    book.title,
 
-                text:
-                    `${book.title} — Chishti Library`,
+statsBox.querySelector(".likes")
+.textContent =
+formatNumber(stats.likes);
 
-                url:
-                    url
 
-            });
+statsBox.querySelector(".shares")
+.textContent =
+formatNumber(stats.shares);
 
-        } else {
 
-            await navigator.clipboard.writeText(
-                url
-            );
+statsBox.querySelector(".comments")
+.textContent =
+formatNumber(stats.comments);
 
-            alert(
-                "Book link copied!"
-            );
 
-        }
-
-        await incrementCounter(
-            bookId,
-            "shares"
-        );
-
-    } catch (error) {
-
-        if (
-            error.name !==
-            "AbortError"
-        ) {
-
-            console.error(
-                error
-            );
-
-        }
-
-    }
+statsBox.querySelector(".downloads")
+.textContent =
+formatNumber(stats.downloads);
 
 }
 
 
-/* =========================================================
-   DOWNLOAD
-========================================================= */
 
-async function downloadBook(bookId) {
+/* =====================================================
+FORMAT NUMBER
+===================================================== */
 
-    const book =
-        books.find(
-            item =>
-                String(item.id) ===
-                String(bookId)
-        );
+function formatNumber(number){
 
-    if (!book) return;
+number =
+Number(number || 0);
 
+if(number >= 1000000)
+return (
+(number / 1000000)
+.toFixed(1)
+.replace(".0","") +
+"M"
+);
 
-    await incrementCounter(
-        bookId,
-        "downloads"
-    );
+if(number >= 1000)
+return (
+(number / 1000)
+.toFixed(1)
+.replace(".0","") +
+"K"
+);
 
-
-    const link =
-        document.createElement("a");
-
-    link.href =
-        book.pdf;
-
-    link.download =
-        book.pdf;
-
-    document.body.appendChild(
-        link
-    );
-
-    link.click();
-
-    link.remove();
+return String(number);
 
 }
 
 
-/* =========================================================
-   COMMENT
-========================================================= */
 
-async function commentBook(bookId) {
+/* =====================================================
+OPEN BOOK
+===================================================== */
 
-    const text =
-        prompt(
-            "Apna comment likhein:"
-        );
+async function openBook(bookId){
 
-
-    if (
-        !text ||
-        !text.trim()
-    ) {
-
-        return;
-
-    }
+const book =
+books.find(
+item =>
+String(item.id) ===
+String(bookId)
+);
 
 
-    try {
-
-        await db
-            .collection("books")
-            .doc(String(bookId))
-            .collection("comments")
-            .add({
-
-                text:
-                    text.trim(),
-
-                createdAt:
-                    firebase.firestore.FieldValue.serverTimestamp()
-
-            });
+if(!book)
+return;
 
 
-        await incrementCounter(
-            bookId,
-            "comments"
-        );
+const extension =
+String(book.pdf || "")
+.split("?")[0]
+.split(".")
+.pop()
+.toLowerCase();
 
 
-        alert(
-            "Comment added successfully!"
-        );
+if(extension !== "pdf"){
 
+alert(
+"This book does not have a valid PDF."
+);
 
-    } catch (error) {
-
-        console.error(
-            "Comment error:",
-            error
-        );
-
-    }
+return;
 
 }
 
 
-/* =========================================================
-   OPEN BOOK — SAME READ BUTTON STYLE
-========================================================= */
+/* VIEW COUNTER */
 
-function openBook(bookId) {
-
-    const book =
-        books.find(
-            item =>
-                String(item.id) ===
-                String(bookId)
-        );
+await incrementCounter(
+book,
+"views"
+);
 
 
-    if (!book) {
+/* READER */
 
-        console.error(
-            "Book not found:",
-            bookId
-        );
-
-        return;
-
-    }
+const readerURL =
+"./reader.html?book=" +
+encodeURIComponent(book.pdf);
 
 
-    const pdfFile =
-        String(book.pdf || "")
-            .trim();
-
-
-    if (!pdfFile) {
-
-        alert(
-            "Is book ki PDF file configured nahi hai."
-        );
-
-        return;
-
-    }
-
-
-    const extension =
-        pdfFile
-            .split("?")[0]
-            .split(".")
-            .pop()
-            .toLowerCase();
-
-
-    if (extension !== "pdf") {
-
-        alert(
-            "Is book ki valid PDF file nahi mili."
-        );
-
-        return;
-
-    }
-
-
-    /*
-     * VIEW COUNTER
-     */
-
-    incrementCounter(
-        bookId,
-        "views"
-    );
-
-
-    /*
-     * EXACT SAME READER
-     */
-
-    const readerURL =
-        "./reader.html?book=" +
-        encodeURIComponent(
-            pdfFile
-        );
-
-
-    window.location.href =
-        readerURL;
+window.location.href =
+readerURL;
 
 }
 
 
-/* =========================================================
-   CREATE BOOK CARD
-========================================================= */
 
-function createBookCard(book) {
+/* =====================================================
+LIKE
+===================================================== */
 
-    const stats =
-        getBookStats(book);
+async function likeBook(bookId){
 
+const book =
+books.find(
+item =>
+String(item.id) ===
+String(bookId)
+);
 
-    const card =
-        document.createElement(
-            "article"
-        );
+if(!book)
+return;
 
 
-    card.className =
-        "book-card";
+/*
+Prevent repeated likes
+for same browser
+*/
 
+const key =
+"chishti-liked-" +
+book.id;
 
-    card.innerHTML = `
 
-        <div class="book-cover">
+if(localStorage.getItem(key)){
 
-            <img
-                src="${escapeHTML(book.cover)}"
-                alt="${escapeHTML(book.title)}"
-                loading="lazy"
-                onerror="this.src='./logo.png'"
-            >
+alert(
+"You already liked this book ❤️"
+);
 
-            <span class="book-category">
-
-                ${escapeHTML(book.category)}
-
-            </span>
-
-
-            <!-- SAME READ BUTTON -->
-
-            <div class="book-cover-overlay">
-
-                <button
-                    class="read-button"
-                    type="button"
-                    data-action="read"
-                    data-book-id="${escapeHTML(book.id)}"
-                >
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    Read Book
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <div class="book-card-content">
-
-            <h2>
-
-                ${escapeHTML(book.title)}
-
-            </h2>
-
-
-            <p class="book-author">
-
-                <i class="fa-solid fa-user-pen"></i>
-
-                ${escapeHTML(book.author)}
-
-            </p>
-
-
-            <p class="book-description">
-
-                ${escapeHTML(book.description)}
-
-            </p>
-
-
-            <!-- COUNTERS -->
-
-            <div class="book-stats">
-
-                <span title="Views">
-
-                    <i class="fa-solid fa-eye"></i>
-
-                    ${stats.views}
-
-                </span>
-
-
-                <button
-                    type="button"
-                    data-action="like"
-                    data-book-id="${book.id}"
-                    title="Like"
-                >
-
-                    <i class="fa-solid fa-heart"></i>
-
-                    ${stats.likes}
-
-                </button>
-
-
-                <button
-                    type="button"
-                    data-action="share"
-                    data-book-id="${book.id}"
-                    title="Share"
-                >
-
-                    <i class="fa-solid fa-share-nodes"></i>
-
-                    ${stats.shares}
-
-                </button>
-
-
-                <button
-                    type="button"
-                    data-action="comment"
-                    data-book-id="${book.id}"
-                    title="Comments"
-                >
-
-                    <i class="fa-solid fa-comment"></i>
-
-                    ${stats.comments}
-
-                </button>
-
-
-                <button
-                    type="button"
-                    data-action="download"
-                    data-book-id="${book.id}"
-                    title="Download"
-                >
-
-                    <i class="fa-solid fa-download"></i>
-
-                    ${stats.downloads}
-
-                </button>
-
-            </div>
-
-
-            <div class="book-card-footer">
-
-                <span>
-
-                    <i class="fa-solid fa-book"></i>
-
-                    Digital Edition
-
-                </span>
-
-
-                <button
-                    class="open-book-button"
-                    type="button"
-                    data-action="read"
-                    data-book-id="${book.id}"
-                >
-
-                    Read Book
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    return card;
+return;
 
 }
 
 
-/* =========================================================
-   RENDER BOOKS
-========================================================= */
-
-function renderBooks() {
-
-    const query =
-        bookSearch
-            ? bookSearch.value
-                .trim()
-                .toLowerCase()
-            : "";
+await incrementCounter(
+book,
+"likes"
+);
 
 
-    let filteredBooks =
-        books.filter(book => {
-
-            const categoryMatch =
-                currentCategory === "all" ||
-                book.category.toLowerCase() ===
-                currentCategory.toLowerCase();
+localStorage.setItem(
+key,
+"true"
+);
 
 
-            const searchText =
-                (
-
-                    book.title +
-                    " " +
-                    book.author +
-                    " " +
-                    book.category +
-                    " " +
-                    book.description
-
-                ).toLowerCase();
-
-
-            return (
-
-                categoryMatch &&
-
-                (
-                    !query ||
-                    searchText.includes(
-                        query
-                    )
-                )
-
-            );
-
-        });
-
-
-    /*
-     * SORTING
-     */
-
-    if (currentSort === "oldest") {
-
-        filteredBooks.sort(
-            (a, b) =>
-                Number(a.id) -
-                Number(b.id)
-        );
-
-    }
-
-
-    if (currentSort === "newest") {
-
-        filteredBooks.sort(
-            (a, b) =>
-                Number(b.id) -
-                Number(a.id)
-        );
-
-    }
-
-
-    if (currentSort === "popular") {
-
-        filteredBooks.sort(
-            (a, b) => {
-
-                const A =
-                    getBookStats(a);
-
-                const B =
-                    getBookStats(b);
-
-
-                const scoreA =
-                    A.views +
-                    (A.likes * 3) +
-                    (A.shares * 4) +
-                    (A.comments * 2) +
-                    (A.downloads * 5);
-
-
-                const scoreB =
-                    B.views +
-                    (B.likes * 3) +
-                    (B.shares * 4) +
-                    (B.comments * 2) +
-                    (B.downloads * 5);
-
-
-                return scoreB - scoreA;
-
-            }
-        );
-
-    }
-
-
-    booksContainer.innerHTML = "";
-
-
-    if (bookCount) {
-
-        bookCount.textContent =
-            filteredBooks.length;
-
-    }
-
-
-    if (!filteredBooks.length) {
-
-        if (emptyBooks) {
-
-            emptyBooks.style.display =
-                "block";
-
-        }
-
-        return;
-
-    }
-
-
-    if (emptyBooks) {
-
-        emptyBooks.style.display =
-            "none";
-
-    }
-
-
-    const fragment =
-        document.createDocumentFragment();
-
-
-    filteredBooks.forEach(
-        book => {
-
-            fragment.appendChild(
-                createBookCard(book)
-            );
-
-        }
-    );
-
-
-    booksContainer.appendChild(
-        fragment
-    );
+refreshSingleCard(book);
 
 }
 
 
-/* =========================================================
-   BOOK ACTIONS
-========================================================= */
+
+/* =====================================================
+SHARE
+===================================================== */
+
+async function shareBook(bookId){
+
+const book =
+books.find(
+item =>
+String(item.id) ===
+String(bookId)
+);
+
+if(!book)
+return;
+
+
+await incrementCounter(
+book,
+"shares"
+);
+
+
+const url =
+window.location.origin +
+window.location.pathname +
+"?book=" +
+encodeURIComponent(book.id);
+
+
+try{
+
+if(navigator.share){
+
+await navigator.share({
+
+title:
+book.title,
+
+text:
+"Read " +
+book.title +
+" on Chishti Library",
+
+url:url
+
+});
+
+}else{
+
+await navigator.clipboard.writeText(
+url
+);
+
+alert(
+"Book link copied!"
+);
+
+}
+
+}catch(error){
+
+console.log(
+"Share cancelled."
+);
+
+}
+
+
+refreshSingleCard(book);
+
+}
+
+
+
+/* =====================================================
+COMMENT
+===================================================== */
+
+async function commentBook(bookId){
+
+const book =
+books.find(
+item =>
+String(item.id) ===
+String(bookId)
+);
+
+if(!book)
+return;
+
+
+const comment =
+prompt(
+"Write your comment for " +
+book.title
+);
+
+
+if(!comment ||
+!comment.trim())
+return;
+
+
+/*
+Simple counter for now.
+Actual comments can later
+be stored in a comments
+subcollection.
+*/
+
+await incrementCounter(
+book,
+"comments"
+);
+
+
+alert(
+"Thank you! Your comment has been recorded."
+);
+
+
+refreshSingleCard(book);
+
+}
+
+
+
+/* =====================================================
+DOWNLOAD
+===================================================== */
+
+async function downloadBook(bookId){
+
+const book =
+books.find(
+item =>
+String(item.id) ===
+String(bookId)
+);
+
+if(!book)
+return;
+
+
+await incrementCounter(
+book,
+"downloads"
+);
+
+
+const link =
+document.createElement("a");
+
+
+link.href =
+book.pdf;
+
+
+link.download =
+book.pdf;
+
+
+document.body.appendChild(
+link
+);
+
+link.click();
+
+link.remove();
+
+
+refreshSingleCard(book);
+
+}
+
+
+
+/* =====================================================
+REFRESH SINGLE CARD
+===================================================== */
+
+async function refreshSingleCard(book){
+
+const card =
+booksContainer.querySelector(
+`.book-card[data-book-id="${book.id}"]`
+);
+
+
+if(card){
+
+await updateCardStats(
+book,
+card
+);
+
+}
+
+}
+
+
+
+/* =====================================================
+BOOK CLICK EVENTS
+===================================================== */
 
 booksContainer.addEventListener(
-    "click",
-    function(event) {
+"click",
+async function(event){
 
-        const button =
-            event.target.closest(
-                "[data-action]"
-            );
-
-
-        if (!button) return;
-
-
-        const bookId =
-            button.dataset.bookId;
-
-
-        const action =
-            button.dataset.action;
-
-
-        if (action === "read") {
-
-            openBook(
-                bookId
-            );
-
-        }
-
-
-        if (action === "like") {
-
-            likeBook(
-                bookId
-            );
-
-        }
-
-
-        if (action === "share") {
-
-            shareBook(
-                bookId
-            );
-
-        }
-
-
-        if (action === "comment") {
-
-            commentBook(
-                bookId
-            );
-
-        }
-
-
-        if (action === "download") {
-
-            downloadBook(
-                bookId
-            );
-
-        }
-
-    }
+const button =
+event.target.closest(
+"[data-action]"
 );
 
 
-/* =========================================================
-   SEARCH
-========================================================= */
+if(!button)
+return;
 
-if (bookSearch) {
 
-    bookSearch.addEventListener(
-        "input",
-        renderBooks
-    );
+const bookId =
+button.dataset.bookId;
+
+
+const action =
+button.dataset.action;
+
+
+if(action === "read"){
+
+await openBook(bookId);
+
+}
+
+else if(action === "like"){
+
+await likeBook(bookId);
+
+}
+
+else if(action === "share"){
+
+await shareBook(bookId);
+
+}
+
+else if(action === "comment"){
+
+await commentBook(bookId);
+
+}
+
+else if(action === "download"){
+
+await downloadBook(bookId);
+
+}
+
+});
+
+
+
+/* =====================================================
+SORT BOOKS
+===================================================== */
+
+function sortBooks(list){
+
+const sorted =
+[...list];
+
+
+if(currentSort === "newest"){
+
+sorted.sort(
+(a,b) =>
+Number(b.id) -
+Number(a.id)
+);
 
 }
 
 
-/* =========================================================
-   CATEGORY BUTTONS
-========================================================= */
+else if(currentSort === "oldest"){
+
+sorted.sort(
+(a,b) =>
+Number(a.id) -
+Number(b.id)
+);
+
+}
+
+
+else if(currentSort === "popular"){
+
+/*
+Popular sorting is loaded
+from Firebase below.
+*/
+
+return sorted;
+
+}
+
+
+return sorted;
+
+}
+
+
+
+/* =====================================================
+POPULAR SORT
+===================================================== */
+
+async function sortPopular(list){
+
+const result = [];
+
+
+for(const book of list){
+
+const stats =
+await getBookStats(book);
+
+
+result.push({
+
+book:book,
+
+score:
+
+stats.views +
+(stats.likes * 3) +
+(stats.shares * 4) +
+(stats.downloads * 5)
+
+});
+
+}
+
+
+result.sort(
+(a,b) =>
+b.score -
+a.score
+);
+
+
+return result.map(
+item =>
+item.book
+);
+
+}
+
+
+
+/* =====================================================
+RENDER BOOKS
+===================================================== */
+
+async function renderBooks(){
+
+const query =
+bookSearch
+.value
+.trim()
+.toLowerCase();
+
+
+let filtered =
+books.filter(book => {
+
+const categoryMatch =
+currentCategory === "all" ||
+book.category === currentCategory;
+
+
+const searchText = (
+
+book.title +
+" " +
+book.author +
+" " +
+book.categoryName +
+" " +
+book.description
+
+).toLowerCase();
+
+
+const searchMatch =
+!query ||
+searchText.includes(query);
+
+
+return (
+categoryMatch &&
+searchMatch
+);
+
+});
+
+
+if(currentSort === "popular"){
+
+filtered =
+await sortPopular(
+filtered
+);
+
+}else{
+
+filtered =
+sortBooks(
+filtered
+);
+
+}
+
+
+booksContainer.innerHTML =
+"";
+
+
+bookCount.textContent =
+filtered.length;
+
+
+if(!filtered.length){
+
+emptyBooks.style.display =
+"block";
+
+return;
+
+}
+
+
+emptyBooks.style.display =
+"none";
+
+
+const fragment =
+document.createDocumentFragment();
+
+
+filtered.forEach(book => {
+
+const card =
+createBookCard(book);
+
+
+fragment.appendChild(card);
+
+});
+
+
+booksContainer.appendChild(
+fragment
+);
+
+
+/*
+Load Firebase stats
+for every visible book
+*/
+
+for(const book of filtered){
+
+const card =
+booksContainer.querySelector(
+`.book-card[data-book-id="${book.id}"]`
+);
+
+if(card){
+
+updateCardStats(
+book,
+card
+);
+
+}
+
+}
+
+}
+
+
+
+/* =====================================================
+SEARCH
+===================================================== */
+
+bookSearch.addEventListener(
+"input",
+renderBooks
+);
+
+
+
+/* =====================================================
+CATEGORY FILTER
+===================================================== */
 
 document
-    .querySelectorAll(
-        ".category"
-    )
-    .forEach(button => {
+.querySelectorAll(".category")
+.forEach(button => {
 
-        button.addEventListener(
-            "click",
-            function() {
+button.addEventListener(
+"click",
+function(){
 
-                document
-                    .querySelectorAll(
-                        ".category"
-                    )
-                    .forEach(item => {
-
-                        item.classList.remove(
-                            "active"
-                        );
-
-                    });
+document
+.querySelectorAll(".category")
+.forEach(item =>
+item.classList.remove(
+"active"
+)
+);
 
 
-                this.classList.add(
-                    "active"
-                );
+this.classList.add(
+"active"
+);
 
 
-                currentCategory =
-                    this.dataset.category;
+currentCategory =
+this.dataset.category;
 
 
-                renderBooks();
+renderBooks();
 
-            }
-        );
+});
 
-    });
-
-
-/* =========================================================
-   ADD SORT CATEGORIES
-========================================================= */
-
-const categoryGrid =
-    document.querySelector(
-        ".category-grid"
-    );
+});
 
 
-if (categoryGrid) {
 
-    const sortHTML = `
+/* =====================================================
+SORT BUTTONS
+===================================================== */
 
-        <div class="book-sort-buttons">
+document
+.querySelectorAll(".sort-btn")
+.forEach(button => {
 
-            <button
-                class="sort-button active"
-                data-sort="newest"
-                type="button"
-            >
+button.addEventListener(
+"click",
+function(){
 
-                <i class="fa-solid fa-clock"></i>
-
-                NEWEST
-
-            </button>
-
-
-            <button
-                class="sort-button"
-                data-sort="oldest"
-                type="button"
-            >
-
-                <i class="fa-solid fa-clock-rotate-left"></i>
-
-                OLDEST
-
-            </button>
+document
+.querySelectorAll(".sort-btn")
+.forEach(item =>
+item.classList.remove(
+"active"
+)
+);
 
 
-            <button
-                class="sort-button"
-                data-sort="popular"
-                type="button"
-            >
-
-                <i class="fa-solid fa-fire"></i>
-
-                POPULAR
-
-            </button>
-
-        </div>
-
-    `;
+this.classList.add(
+"active"
+);
 
 
-    categoryGrid.insertAdjacentHTML(
-        "afterend",
-        sortHTML
-    );
+currentSort =
+this.dataset.sort;
 
 
-    document
-        .querySelectorAll(
-            ".sort-button"
-        )
-        .forEach(button => {
+renderBooks();
 
-            button.addEventListener(
-                "click",
-                function() {
+});
 
-                    document
-                        .querySelectorAll(
-                            ".sort-button"
-                        )
-                        .forEach(item => {
-
-                            item.classList.remove(
-                                "active"
-                            );
-
-                        });
+});
 
 
-                    this.classList.add(
-                        "active"
-                    );
 
-
-                    currentSort =
-                        this.dataset.sort;
-
-
-                    renderBooks();
-
-                }
-            );
-
-        });
-
-}
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
+/* =====================================================
+MOBILE MENU
+===================================================== */
 
 const mobileMenu =
-    document.querySelector(
-        ".mobile-menu"
-    );
+document.querySelector(
+".mobile-menu"
+);
 
 const menu =
-    document.querySelector(
-        ".menu"
-    );
+document.querySelector(
+".menu"
+);
 
 
-if (mobileMenu && menu) {
+if(mobileMenu && menu){
 
-    mobileMenu.addEventListener(
-        "click",
-        function() {
+mobileMenu.addEventListener(
+"click",
+function(){
 
-            menu.classList.toggle(
-                "show"
-            );
+menu.classList.toggle(
+"show"
+);
 
-        }
-    );
+});
 
 }
 
 
-/* =========================================================
-   START
-========================================================= */
 
-loadFirebaseBooks();
+/* =====================================================
+SCROLL TOP
+===================================================== */
+
+const scrollTop =
+document.getElementById(
+"scrollTop"
+);
+
+
+if(scrollTop){
+
+window.addEventListener(
+"scroll",
+function(){
+
+scrollTop.style.display =
+window.scrollY > 300
+? "block"
+: "none";
+
+});
+
+
+scrollTop.addEventListener(
+"click",
+function(){
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+});
+
+}
+
+
+
+/* =====================================================
+FOOTER YEAR
+===================================================== */
+
+footerYear.textContent =
+new Date().getFullYear();
+
+
+
+/* =====================================================
+INITIALIZE FIREBASE BOOKS
+===================================================== */
+
+async function initializeAllBooks(){
+
+console.log(
+"🔥 Initializing Firebase books..."
+);
+
+
+for(const book of books){
+
+await initializeBook(
+book
+);
+
+}
 
 
 console.log(
-    "📚 CHISHTI LIBRARY BOOKS"
+"✅ Firebase books ready"
+);
+
+}
+
+
+
+/* =====================================================
+START
+===================================================== */
+
+async function startLibrary(){
+
+await initializeAllBooks();
+
+await renderBooks();
+
+
+console.log(
+"===================================="
 );
 
 console.log(
-    "🔥 Firebase counters enabled"
+"📚 CHISHTI LIBRARY"
 );
+
+console.log(
+"🔥 Firebase Counters Active"
+);
+
+console.log(
+"👁 Views"
+);
+
+console.log(
+"❤️ Likes"
+);
+
+console.log(
+"🔗 Shares"
+);
+
+console.log(
+"💬 Comments"
+);
+
+console.log(
+"⬇ Downloads"
+);
+
+console.log(
+"📚 Books:",
+books.length
+);
+
+console.log(
+"🚀 Books Page Ready"
+);
+
+}
+
+
+startLibrary();
 
 </script>
+
+
+</body>
+
+</html>
