@@ -100,19 +100,22 @@ async function updateVisitorCounter() {
         visitorCounter.innerText = "0";
         return;
     }
+if (!window.db) {
 
-    if (typeof db === "undefined") {
-        console.error("❌ Firestore database not initialized");
-        visitorCounter.innerText = "0";
-        return;
-    }
+    console.error(
+        "❌ Firestore database not initialized"
+    );
+
+    visitorCounter.innerText = "0";
+
+    return;
+}
 
     try {
 
-        const visitorRef = db
-            .collection("counter")
-            .doc("visitors");
-
+        const visitorRef = window.db
+    .collection("counter")
+    .doc("visitors");
         /* =========================
            GET COUNTER
         ========================= */
