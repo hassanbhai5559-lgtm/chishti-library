@@ -662,46 +662,101 @@ FOOTER
     </div>
 
 </footer>
-<!-- Scroll Top -->
 
-<button id="scrollTop">
+<!-- =========================
+SCROLL TO TOP
+========================= -->
 
-    <i class="fas fa-arrow-up"></i>
-
-</button>
-
-<!-- Scroll Top -->
-
-<button id="scrollTop">
+<button id="scrollTop" type="button" aria-label="Scroll to top">
 
     <i class="fas fa-arrow-up"></i>
 
 </button>
 
 
-<!-- Firebase -->
+<!-- =========================
+FIREBASE
+========================= -->
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
+
 <script>
-const firebaseConfig = {
-    apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
-    authDomain: "chishti-library.firebaseapp.com",
-    projectId: "chishti-library",
-    storageBucket: "chishti-library.firebasestorage.app",
-    messagingSenderId: "103447043162",
-    appId: "1:103447043162:web:f242cd2670aaa9786e8c63",
-    measurementId: "G-833P7N3LNT"
-};
 
-firebase.initializeApp(firebaseConfig);
+    /* =========================
+       FIREBASE CONFIG
+    ========================= */
 
-const db = firebase.firestore();
+    const firebaseConfig = {
 
-console.log("Firebase connected:", firebase.app().options.projectId);
+        apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
+
+        authDomain: "chishti-library.firebaseapp.com",
+
+        projectId: "chishti-library",
+
+        storageBucket: "chishti-library.firebasestorage.app",
+
+        messagingSenderId: "103447043162",
+
+        appId: "1:103447043162:web:f242cd2670aaa9786e8c63",
+
+        measurementId: "G-833P7N3LNT"
+
+    };
+
+
+    /* =========================
+       INITIALIZE FIREBASE
+    ========================= */
+
+    try {
+
+        firebase.initializeApp(
+            firebaseConfig
+        );
+
+
+        /* =========================
+           FIRESTORE DATABASE
+        ========================= */
+
+        const db =
+            firebase.firestore();
+
+
+        console.log(
+            "✅ Firebase connected:",
+            firebase.app().options.projectId
+        );
+
+
+        console.log(
+            "✅ Firestore initialized successfully"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Firebase initialization error:",
+            error
+        );
+
+    }
+
 </script>
 
-<!-- Main JS -->
+
+<!-- =========================
+MAIN JAVASCRIPT
+========================= -->
+
 <script src="script.js"></script>
+
+
 </body>
+
 </html>
