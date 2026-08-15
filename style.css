@@ -2159,3 +2159,25 @@ FOOTER SOCIAL LINKS
     }
 
 }
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background: #350000 !important;
+    color: #fff !important;
+}
+
+body {
+    min-height: 100vh;
+}
+
+main,
+section,
+.author-page,
+.authors-page {
+    background: #350000 !important;
+    color: #fff !important;
+}
+</style>
