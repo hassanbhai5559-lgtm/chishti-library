@@ -1474,7 +1474,8 @@ body {
     }
 }
 /* =========================================================
-   CHISHTI LIBRARY — PAGE FLIP ANIMATION
+   CHISHTI LIBRARY — REAL PAGE FLIP ADD-ON
+   Paste at END of reader.css
 ========================================================= */
 
 #bookViewport {
@@ -1484,208 +1485,188 @@ body {
 }
 
 #pageWrapper {
-    position: relative;
     transform-style: preserve-3d;
-    backface-visibility: hidden;
-}
-
-#pdfCanvas {
-    display: block;
     transform-origin: center center;
     backface-visibility: hidden;
-    will-change: transform, opacity, filter;
+    will-change: transform;
 }
 
+/* Flip stage created by reader.js */
+.chishti-flip-stage {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1800px;
+    overflow: hidden;
+}
 
-/* NEXT PAGE */
+.chishti-flip-sheet {
+    position: relative;
+    transform-style: preserve-3d;
+    transform-origin: left center;
+    backface-visibility: hidden;
+    box-shadow:
+        0 12px 35px rgba(0, 0, 0, 0.35),
+        0 3px 12px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    will-change: transform;
+}
 
-#pdfCanvas.page-flip-next {
+.chishti-flip-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    backface-visibility: hidden;
+}
+
+.chishti-flip-face canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.chishti-flip-back {
+    transform: rotateY(180deg);
+}
+
+/* Page shadow during flip */
+.chishti-flip-sheet::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,0.20),
+            transparent 25%,
+            transparent 75%,
+            rgba(0,0,0,0.12)
+        );
+    opacity: 0.5;
+}
+
+/* Forward */
+.chishti-flip-forward {
     animation:
-        chishtiFlipNext
-        620ms
+        chishtiPageFlipForward
+        650ms
         cubic-bezier(.22,.61,.36,1)
-        both;
+        forwards;
 }
 
-
-/* PREVIOUS PAGE */
-
-#pdfCanvas.page-flip-prev {
+/* Backward */
+.chishti-flip-backward {
+    transform-origin: right center;
     animation:
-        chishtiFlipPrev
-        620ms
+        chishtiPageFlipBackward
+        650ms
         cubic-bezier(.22,.61,.36,1)
-        both;
+        forwards;
 }
 
-
-/* Forward page turn */
-
-@keyframes chishtiFlipNext {
+@keyframes chishtiPageFlipForward {
 
     0% {
         transform:
-            perspective(1800px)
             rotateY(0deg)
-            translateX(0)
-            scale(1);
-
-        opacity: 1;
-
-        filter:
-            brightness(1);
+            translateZ(0);
     }
 
-    25% {
+    45% {
         transform:
-            perspective(1800px)
-            rotateY(-18deg)
-            translateX(-2%)
-            scale(.985);
-
-        opacity: .92;
-
-        filter:
-            brightness(.92);
-    }
-
-    55% {
-        transform:
-            perspective(1800px)
-            rotateY(-42deg)
-            translateX(-5%)
-            scale(.96);
-
-        opacity: .72;
-
-        filter:
-            brightness(.82);
-    }
-
-    78% {
-        transform:
-            perspective(1800px)
-            rotateY(12deg)
-            translateX(2%)
-            scale(.985);
-
-        opacity: .88;
-
-        filter:
-            brightness(.94);
+            rotateY(-88deg)
+            translateZ(35px);
     }
 
     100% {
         transform:
-            perspective(1800px)
-            rotateY(0deg)
-            translateX(0)
-            scale(1);
-
-        opacity: 1;
-
-        filter:
-            brightness(1);
+            rotateY(-180deg)
+            translateZ(0);
     }
 }
 
-
-/* Backward page turn */
-
-@keyframes chishtiFlipPrev {
+@keyframes chishtiPageFlipBackward {
 
     0% {
         transform:
-            perspective(1800px)
             rotateY(0deg)
-            translateX(0)
-            scale(1);
-
-        opacity: 1;
-
-        filter:
-            brightness(1);
+            translateZ(0);
     }
 
-    25% {
+    45% {
         transform:
-            perspective(1800px)
-            rotateY(18deg)
-            translateX(2%)
-            scale(.985);
-
-        opacity: .92;
-
-        filter:
-            brightness(.92);
-    }
-
-    55% {
-        transform:
-            perspective(1800px)
-            rotateY(42deg)
-            translateX(5%)
-            scale(.96);
-
-        opacity: .72;
-
-        filter:
-            brightness(.82);
-    }
-
-    78% {
-        transform:
-            perspective(1800px)
-            rotateY(-12deg)
-            translateX(-2%)
-            scale(.985);
-
-        opacity: .88;
-
-        filter:
-            brightness(.94);
+            rotateY(88deg)
+            translateZ(35px);
     }
 
     100% {
         transform:
-            perspective(1800px)
-            rotateY(0deg)
-            translateX(0)
-            scale(1);
-
-        opacity: 1;
-
-        filter:
-            brightness(1);
+            rotateY(180deg)
+            translateZ(0);
     }
 }
 
+/* Small page edge */
+.chishti-page-edge {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    pointer-events: none;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.18),
+            rgba(255,255,255,.55),
+            rgba(0,0,0,.12)
+        );
+    opacity: .75;
+}
+
+.chishti-page-edge-right {
+    right: -4px;
+}
+
+.chishti-page-edge-left {
+    left: -4px;
+}
+
+/* During flip don't allow accidental selection */
+.chishti-is-flipping {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
 
 /* Mobile */
-
 @media (max-width: 700px) {
 
     #bookViewport {
-        perspective: 1000px;
+        perspective: 1200px;
     }
 
-    #pdfCanvas.page-flip-next {
-        animation-duration: 500ms;
+    .chishti-flip-stage {
+        perspective: 1200px;
     }
 
-    #pdfCanvas.page-flip-prev {
-        animation-duration: 500ms;
+    .chishti-flip-sheet {
+        max-width: 96vw;
+        max-height: 88vh;
     }
 }
 
-
 /* Reduced motion accessibility */
-
 @media (prefers-reduced-motion: reduce) {
 
-    #pdfCanvas.page-flip-next,
-    #pdfCanvas.page-flip-prev {
-        animation-duration: 1ms;
+    .chishti-flip-forward,
+    .chishti-flip-backward {
+        animation-duration: 1ms !important;
     }
-
 }
