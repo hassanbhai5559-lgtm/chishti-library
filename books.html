@@ -1,495 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>All Books — Chishti Library</title>
-
-    <meta name="description"
-          content="Chishti Library — Complete Digital Islamic Book Collection">
-
-    <meta name="keywords"
-          content="Chishti Library, Islamic Books, Naat, Manqabat, Hamd, Kulliyat">
-
-    <meta name="author"
-          content="Chishti Library">
-
-    <!-- GOOGLE SITE VERIFICATION -->
-    <meta name="google-site-verification"
-          content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc">
-
-    <!-- FAVICON / LOGO -->
-    <link rel="icon"
-          type="image/png"
-          href="./logo.png">
-
-    <link rel="apple-touch-icon"
-          href="./logo.png">
-
-    <!-- GOOGLE FONT -->
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-    <!-- MAIN CSS -->
-    <link rel="stylesheet"
-          href="./style.css">
-
-    <!-- FONT AWESOME -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-</head>
-
-
-<body class="library-page">
-
-
-<!-- =====================================================
-     NAVBAR
-===================================================== -->
-
-<nav class="navbar">
-
-    <!-- LOGO -->
-
-    <div class="logo">
-
-        <a href="./index.html">
-
-            <img
-                src="./logo.png"
-                alt="Chishti Library Logo"
-            >
-
-        </a>
-
-        <div class="logo-text">
-
-            <h2>CHISHTI LIBRARY</h2>
-
-            <span>Digital Library</span>
-
-        </div>
-
-    </div>
-
-
-    <!-- MENU -->
-
-    <ul class="menu">
-
-        <li>
-
-            <a href="./index.html">
-
-                <i class="fas fa-house"></i>
-
-                Home
-
-            </a>
-
-        </li>
-
-
-        <li>
-
-            <a href="./books.html"
-               class="active">
-
-                <i class="fas fa-book"></i>
-
-                Books
-
-            </a>
-
-        </li>
-
-
-        <li>
-
-            <a href="./authors.html">
-
-                <i class="fas fa-feather-alt"></i>
-
-                Authors
-
-            </a>
-
-        </li>
-
-
-        <li>
-
-            <a href="./developer.html">
-
-                <i class="fas fa-code"></i>
-
-                Developer
-
-            </a>
-
-        </li>
-
-
-        <li>
-
-            <a href="./contact.html">
-
-                <i class="fas fa-phone"></i>
-
-                Contact
-
-            </a>
-
-        </li>
-
-
-        <li>
-
-            <a href="./admin/index.html">
-
-                <i class="fas fa-user-shield"></i>
-
-                Admin Login
-
-            </a>
-
-        </li>
-
-    </ul>
-
-
-    <!-- MOBILE MENU -->
-
-    <div class="mobile-menu">
-
-        <i class="fas fa-bars"></i>
-
-    </div>
-
-</nav>
-
-
-
-<!-- =====================================================
-     PAGE HERO
-===================================================== -->
-
-<section class="hero">
-
-    <div class="hero-overlay"></div>
-
-    <div class="hero-content">
-
-        <img
-            src="./logo.png"
-            class="hero-logo"
-            alt="Chishti Library"
-        >
-
-        <h1>
-            ALL BOOKS
-        </h1>
-
-        <h3>
-            Chishti Digital Islamic Library
-        </h3>
-
-        <p>
-            Explore Islamic Books, Naat, Manqabat,
-            Hamd, Kulliyat and Maqala.
-        </p>
-
-
-        <!-- SEARCH -->
-
-        <div class="search-box">
-
-            <i class="fas fa-search"></i>
-
-            <input
-                type="text"
-                id="bookSearch"
-                placeholder="Search Books..."
-                autocomplete="off"
-            >
-
-        </div>
-
-
-        <!-- BOOK COUNTER -->
-
-        <div class="counter-area">
-
-            <div class="counter-card books">
-
-                <i class="fas fa-book-open"></i>
-
-                <h2 id="bookCount">
-                    0
-                </h2>
-
-                <p>
-                    Books
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     CATEGORIES
-===================================================== -->
-
-<section class="categories">
-
-    <h2 class="section-title">
-        Browse Categories
-    </h2>
-
-
-    <div class="category-grid">
-
-        <button
-            class="category active"
-            data-category="all"
-            type="button"
-        >
-            ALL
-        </button>
-
-
-        <button
-            class="category"
-            data-category="naat"
-            type="button"
-        >
-            NAAT
-        </button>
-
-
-        <button
-            class="category"
-            data-category="manqabat"
-            type="button"
-        >
-            MANQABAT
-        </button>
-
-
-        <button
-            class="category"
-            data-category="hamd"
-            type="button"
-        >
-            HAMD
-        </button>
-
-
-        <button
-            class="category"
-            data-category="maqala"
-            type="button"
-        >
-            MAQALA
-        </button>
-
-
-        <button
-            class="category"
-            data-category="kulliyat"
-            type="button"
-        >
-            KULLIYAT
-        </button>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     BOOKS
-===================================================== -->
-
-<section class="featured-books">
-
-    <h2 class="section-title">
-        All Books
-    </h2>
-
-
-    <div
-        id="booksContainer"
-        class="books-grid"
-    >
-
-    </div>
-
-
-    <!-- EMPTY -->
-
-    <div
-        id="emptyBooks"
-        class="no-books"
-        style="display:none;"
-    >
-
-        <h2>
-            No Books Found
-        </h2>
-
-        <p>
-            Try another search or category.
-        </p>
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
-<footer>
-
-    <div class="footer-logo">
-
-        <img
-            src="./logo.png"
-            alt="Chishti Library"
-        >
-
-        <h2>
-            CHISHTI LIBRARY
-        </h2>
-
-        <p>
-            Digital Islamic Library
-        </p>
-
-    </div>
-
-
-    <!-- SOCIAL LINKS -->
-
-    <div class="footer-social">
-
-        <a
-            href="https://www.facebook.com/profile.php?id=100063724950961"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook"
-            title="Facebook"
-        >
-
-            <i class="fab fa-facebook-f"></i>
-
-            <span>
-                Facebook
-            </span>
-
-        </a>
-
-
-        <a
-            href="https://www.youtube.com/@Saimtv5"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="YouTube"
-            title="YouTube"
-        >
-
-            <i class="fab fa-youtube"></i>
-
-            <span>
-                YouTube
-            </span>
-
-        </a>
-
-
-        <a
-            href="https://www.facebook.com/saimchishtiofficial"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Saim Chishti Official Facebook"
-            title="Saim Chishti Official"
-        >
-
-            <i class="fab fa-facebook-f"></i>
-
-            <span>
-                Saim Chishti Official
-            </span>
-
-        </a>
-
-    </div>
-
-
-    <div class="footer-copy">
-
-        ©
-        <span id="footerYear"></span>
-
-        Chishti Library —
-        All Rights Reserved.
-
-    </div>
-
-</footer>
-
-
-
-<!-- =====================================================
-     SCROLL TOP
-===================================================== -->
-
-<button id="scrollTop">
-
-    <i class="fas fa-arrow-up"></i>
-
-</button>
-
-
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
 <script>
-
 "use strict";
 
+/* =========================================================
+   FIREBASE
+========================================================= */
 
-/* =====================================================
+const db = firebase.firestore();
+
+
+/* =========================================================
    BOOK DATABASE
-   COVER = IMAGE
-   PDF   = PDF ONLY
-===================================================== */
+========================================================= */
 
 const books = [
 
@@ -497,177 +18,198 @@ const books = [
         id: 1,
         title: "Al-Rehman",
         author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "hamd",
-        categoryName: "Hamd",
+        category: "Hamd",
         cover: "al-rehman-cover.png",
         pdf: "Al Rehman .. Latif Sajid.C.pdf",
-        description:
-            "99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti."
+        description: "99 Names of Allah Book Series by Sahibzada Muhammad Latif Sajid Chishti."
     },
-
 
     {
         id: 2,
         title: "Husn-e-Kainat",
         author: "Hazrat Allama Saim Chishti",
-        category: "naat",
-        categoryName: "Naat",
+        category: "Naat",
         cover: "husn-e-kainat-cover.png",
         pdf: "husn-e-kainat.pdf",
-        description:
-            "Naatiya Kalam by Hazrat Allama Saim Chishti."
+        description: "Naatiya Kalam by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 3,
         title: "Shahdaye Karbala",
         author: "Hazrat Allama Saim Chishti",
-        category: "manqabat",
-        categoryName: "Manqabat",
+        category: "Manqabat",
         cover: "shahdaye karbala-cover.png",
         pdf: "shahdaye-karbala.pdf",
-        description:
-            "Karbala ke shuhada ke fazail par manqabat ki kitab."
+        description: "Karbala ke shuhada ke fazail par manqabat ki kitab."
     },
-
 
     {
         id: 4,
         title: "Shaheed Ibn-e-Shaheed",
         author: "Hazrat Allama Saim Chishti",
-        category: "manqabat",
-        categoryName: "Manqabat",
+        category: "Seerat",
         cover: "shaheed-ibn-e-shaheed-cover.png",
         pdf: "shaheed-ibn-e-shaheed.pdf",
-        description:
-            "Historical Manqabat book by Hazrat Allama Saim Chishti."
+        description: "Historical Manqabat book by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 5,
         title: "Nawaye Saim",
         author: "Hazrat Allama Saim Chishti",
-        category: "naat",
-        categoryName: "Naat",
+        category: "Naat",
         cover: "Nawaye Saim-cover.png",
         pdf: "noori.pdf",
-        description:
-            "Naatiya Majmua by Hazrat Allama Saim Chishti."
+        description: "Naatiya Majmua by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 6,
         title: "Kulliyat-e-Saim Chishti",
         author: "Hazrat Allama Saim Chishti",
-        category: "kulliyat",
-        categoryName: "Kulliyat",
+        category: "Kulliyat",
         cover: "kulliyat e saim chishti-cover.png",
         pdf: "Kulliyat e Saim Chishti By Allama Saim Chishti.pdf",
-        description:
-            "Complete Kulliyat of Hazrat Allama Saim Chishti."
+        description: "Complete Kulliyat of Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 7,
         title: "Punjabi Maqala",
         author: "Hazrat Allama Saim Chishti",
-        category: "maqala",
-        categoryName: "Maqala",
+        category: "Maqala",
         cover: "allamasaimchishtipunjbimaqala-cover.png",
         pdf: "allamasaimchishtipunjabimaqala-231010120010-3ca7944b (1).pdf",
-        description:
-            "Punjabi Maqala by Hazrat Allama Saim Chishti."
+        description: "Punjabi Maqala by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 8,
         title: "Armaghan-e-Madina",
         author: "Hazrat Allama Saim Chishti",
-        category: "naat",
-        categoryName: "Naat",
+        category: "Naat",
         cover: "Armaghan-e-Madina-By-Allama-Saim-Chishti-cover.webp",
         pdf: "armughan e madina.pdf",
-        description:
-            "Collection of Naats by Hazrat Allama Saim Chishti."
+        description: "Collection of Naats by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 9,
         title: "Shan-e-Kainat",
         author: "Hazrat Allama Saim Chishti",
-        category: "naat",
-        categoryName: "Naat",
+        category: "Naat",
         cover: "naat-cover2.png",
         pdf: "shan-e-kainat.pdf",
-        description:
-            "Naatiya Collection by Hazrat Allama Saim Chishti."
+        description: "Naatiya Collection by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 10,
         title: "Rehmat Da Khazana",
         author: "Hazrat Allama Saim Chishti",
-        category: "naat",
-        categoryName: "Naat",
+        category: "Naat",
         cover: "rehmatdakhazana-cover.png",
         pdf: "rehmatdakhazana.pdf",
-        description:
-            "Naatiya Collection by Hazrat Allama Saim Chishti."
+        description: "Naatiya Collection by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 11,
         title: "Madinay Diyan Kaliyan",
         author: "Hazrat Allama Saim Chishti",
-        category: "naat",
-        categoryName: "Naat",
+        category: "Naat",
         cover: "madinydiankalinyan-cover.png",
         pdf: "madinydiankalinyan.pdf",
-        description:
-            "Naatiya Collection by Hazrat Allama Saim Chishti."
+        description: "Naatiya Collection by Hazrat Allama Saim Chishti."
     },
-
 
     {
         id: 12,
         title: "Darooda Di Dali",
         author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "hamd",
-        categoryName: "Hamd",
-        cover: "darooda di dali-cover.png",
+        category: "Naat",
+        cover: "darooda di dali-cover..png",
         pdf: "Darooda Di Dali Pdf.pdf",
-        description:
-            "A Punjabi Naatiya book by Sahibzada Muhammad Latif Sajid Chishti."
+        description: "A Punjabi Naatiya book by Sahibzada Muhammad Latif Sajid Chishti."
     },
-
 
     {
         id: 13,
         title: "Sbhy Hamdan Ne Rab Sohnay",
         author: "Sahibzada Muhammad Latif Sajid Chishti",
-        category: "hamd",
-        categoryName: "Hamd",
+        category: "Hamd",
         cover: "Sbhy Hamdan Ne Rab Sohnay-cover.jpeg",
         pdf: "Sbhy Hamdan Ne Rab Sohnay.pdf",
-        description:
-            "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
+        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
+    },
+
+    {
+        id: 14,
+        title: "Saqi e Baghdad",
+        author: "Sahibzada Muhammad Latif Sajid Chishti",
+        category: "Manqabat",
+        cover: "Saqi e Baghdad.cover.jpeg",
+        pdf: "Saqi e Baghdad ....Final.pdf",
+        description: "A Manqabat book by Sahibzada Muhammad Latif Sajid Chishti."
+    },
+
+    {
+        id: 15,
+        title: "Rab de rang niraly hamdya punjabi",
+        author: "Sahibzada Muhammad Latif Sajid Chishti",
+        category: "Hamd",
+        cover: "Rab de rang niraly hamdya-cover.jpeg",
+        pdf: "Rab de rang niraly hamdya punjabi.pdf",
+        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
+    },
+
+    {
+        id: 16,
+        title: "Hammad Hico",
+        author: "Sahibzada Muhammad Latif Sajid Chishti",
+        category: "Hamd",
+        cover: "Hammad Hico-cover.jpeg",
+        pdf: "Hamad Hico Book.pdf",
+        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
+    },
+
+    {
+        id: 17,
+        title: "Mazhar E noor e Khuda",
+        author: "Sahibzada Muhammad Latif Sajid Chishti",
+        category: "Hamd",
+        cover: "Mazhar E noor e Khuda-cover.png",
+        pdf: "Mazhar E noor e Khuda.pdf",
+        description: "A Hamd book by Sahibzada Muhammad Latif Sajid Chishti."
+    },
+
+    {
+        id: 18,
+        title: "Ali Ali Hai",
+        author: "Hazrat Allama Saim Chishti",
+        category: "Manqabat",
+        cover: "ALI ALI HAI-COVER.png",
+        pdf: "ALI ALI HAI BOOK SAIM CHISHTI BOOKS.pdf",
+        description: "Manqabat-e-Hazrat Ali by Allama Saim Chishti."
+    },
+
+    {
+        id: 19,
+        title: "Al Batool",
+        author: "Hazrat Allama Saim Chishti",
+        category: "Seerat",
+        cover: "Al-batool-cover.png",
+        pdf: "AL-batool.pdf",
+        description: "A Seerat book by Hazrat Allama Saim Chishti."
     }
 
 ];
 
 
-
-/* =====================================================
+/* =========================================================
    ELEMENTS
-===================================================== */
+========================================================= */
 
 const booksContainer =
     document.getElementById("booksContainer");
@@ -681,22 +223,20 @@ const bookCount =
 const emptyBooks =
     document.getElementById("emptyBooks");
 
-const footerYear =
-    document.getElementById("footerYear");
-
-
 
 let currentCategory = "all";
+let currentSort = "newest";
+
+let firebaseBooks = {};
 
 
-
-/* =====================================================
+/* =========================================================
    ESCAPE HTML
-===================================================== */
+========================================================= */
 
 function escapeHTML(value) {
 
-    return String(value)
+    return String(value ?? "")
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
@@ -706,15 +246,548 @@ function escapeHTML(value) {
 }
 
 
+/* =========================================================
+   FIREBASE BOOK ID
+   Automatic document ID based on book ID
+========================================================= */
 
-/* =====================================================
+function firebaseBookRef(book) {
+
+    return db
+        .collection("books")
+        .doc(String(book.id));
+
+}
+
+
+/* =========================================================
+   CREATE FIREBASE BOOK
+========================================================= */
+
+async function createFirebaseBooks() {
+
+    try {
+
+        const batch = db.batch();
+
+        books.forEach(book => {
+
+            const ref =
+                firebaseBookRef(book);
+
+            const existing =
+                firebaseBooks[book.id] || {};
+
+            batch.set(
+                ref,
+                {
+
+                    bookId: book.id,
+
+                    title: book.title,
+
+                    author: book.author,
+
+                    category: book.category,
+
+                    cover: book.cover,
+
+                    pdf: book.pdf,
+
+                    description: book.description,
+
+                    views:
+                        Number(existing.views || 0),
+
+                    likes:
+                        Number(existing.likes || 0),
+
+                    shares:
+                        Number(existing.shares || 0),
+
+                    comments:
+                        Number(existing.comments || 0),
+
+                    downloads:
+                        Number(existing.downloads || 0),
+
+                    createdAt:
+                        existing.createdAt ||
+                        firebase.firestore.FieldValue.serverTimestamp(),
+
+                    updatedAt:
+                        firebase.firestore.FieldValue.serverTimestamp()
+
+                },
+
+                { merge: true }
+            );
+
+        });
+
+        await batch.commit();
+
+        console.log(
+            "✅ Firebase books synchronized"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Firebase sync error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD FIREBASE BOOKS
+========================================================= */
+
+async function loadFirebaseBooks() {
+
+    try {
+
+        const snapshot =
+            await db
+                .collection("books")
+                .get();
+
+        firebaseBooks = {};
+
+        snapshot.forEach(doc => {
+
+            const data =
+                doc.data();
+
+            firebaseBooks[
+                String(data.bookId)
+            ] = {
+
+                ...data,
+
+                firebaseId:
+                    doc.id
+
+            };
+
+        });
+
+        await createFirebaseBooks();
+
+        renderBooks();
+
+    } catch (error) {
+
+        console.error(
+            "Firebase loading error:",
+            error
+        );
+
+        renderBooks();
+
+    }
+
+}
+
+
+/* =========================================================
+   GET STATS
+========================================================= */
+
+function getBookStats(book) {
+
+    const data =
+        firebaseBooks[book.id] || {};
+
+    return {
+
+        views:
+            Number(data.views || 0),
+
+        likes:
+            Number(data.likes || 0),
+
+        shares:
+            Number(data.shares || 0),
+
+        comments:
+            Number(data.comments || 0),
+
+        downloads:
+            Number(data.downloads || 0)
+
+    };
+
+}
+
+
+/* =========================================================
+   FIREBASE COUNTER
+========================================================= */
+
+async function incrementCounter(
+    bookId,
+    counter
+) {
+
+    try {
+
+        const ref =
+            firebaseBookRef(
+                books.find(
+                    book =>
+                        String(book.id) ===
+                        String(bookId)
+                )
+            );
+
+        await ref.set(
+
+            {
+
+                [counter]:
+                    firebase.firestore.FieldValue.increment(1),
+
+                updatedAt:
+                    firebase.firestore.FieldValue.serverTimestamp()
+
+            },
+
+            { merge: true }
+
+        );
+
+
+        if (!firebaseBooks[bookId]) {
+
+            firebaseBooks[bookId] = {};
+
+        }
+
+
+        firebaseBooks[bookId][counter] =
+            Number(
+                firebaseBooks[bookId][counter] || 0
+            ) + 1;
+
+
+        renderBooks();
+
+
+    } catch (error) {
+
+        console.error(
+            `Failed to update ${counter}:`,
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LIKE
+========================================================= */
+
+async function likeBook(bookId) {
+
+    await incrementCounter(
+        bookId,
+        "likes"
+    );
+
+}
+
+
+/* =========================================================
+   SHARE
+========================================================= */
+
+async function shareBook(bookId) {
+
+    const book =
+        books.find(
+            item =>
+                String(item.id) ===
+                String(bookId)
+        );
+
+    if (!book) return;
+
+
+    const url =
+        window.location.origin +
+        window.location.pathname +
+        "?book=" +
+        encodeURIComponent(book.id);
+
+
+    try {
+
+        if (
+            navigator.share
+        ) {
+
+            await navigator.share({
+
+                title:
+                    book.title,
+
+                text:
+                    `${book.title} — Chishti Library`,
+
+                url:
+                    url
+
+            });
+
+        } else {
+
+            await navigator.clipboard.writeText(
+                url
+            );
+
+            alert(
+                "Book link copied!"
+            );
+
+        }
+
+        await incrementCounter(
+            bookId,
+            "shares"
+        );
+
+    } catch (error) {
+
+        if (
+            error.name !==
+            "AbortError"
+        ) {
+
+            console.error(
+                error
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+async function downloadBook(bookId) {
+
+    const book =
+        books.find(
+            item =>
+                String(item.id) ===
+                String(bookId)
+        );
+
+    if (!book) return;
+
+
+    await incrementCounter(
+        bookId,
+        "downloads"
+    );
+
+
+    const link =
+        document.createElement("a");
+
+    link.href =
+        book.pdf;
+
+    link.download =
+        book.pdf;
+
+    document.body.appendChild(
+        link
+    );
+
+    link.click();
+
+    link.remove();
+
+}
+
+
+/* =========================================================
+   COMMENT
+========================================================= */
+
+async function commentBook(bookId) {
+
+    const text =
+        prompt(
+            "Apna comment likhein:"
+        );
+
+
+    if (
+        !text ||
+        !text.trim()
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await db
+            .collection("books")
+            .doc(String(bookId))
+            .collection("comments")
+            .add({
+
+                text:
+                    text.trim(),
+
+                createdAt:
+                    firebase.firestore.FieldValue.serverTimestamp()
+
+            });
+
+
+        await incrementCounter(
+            bookId,
+            "comments"
+        );
+
+
+        alert(
+            "Comment added successfully!"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Comment error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   OPEN BOOK — SAME READ BUTTON STYLE
+========================================================= */
+
+function openBook(bookId) {
+
+    const book =
+        books.find(
+            item =>
+                String(item.id) ===
+                String(bookId)
+        );
+
+
+    if (!book) {
+
+        console.error(
+            "Book not found:",
+            bookId
+        );
+
+        return;
+
+    }
+
+
+    const pdfFile =
+        String(book.pdf || "")
+            .trim();
+
+
+    if (!pdfFile) {
+
+        alert(
+            "Is book ki PDF file configured nahi hai."
+        );
+
+        return;
+
+    }
+
+
+    const extension =
+        pdfFile
+            .split("?")[0]
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+
+    if (extension !== "pdf") {
+
+        alert(
+            "Is book ki valid PDF file nahi mili."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * VIEW COUNTER
+     */
+
+    incrementCounter(
+        bookId,
+        "views"
+    );
+
+
+    /*
+     * EXACT SAME READER
+     */
+
+    const readerURL =
+        "./reader.html?book=" +
+        encodeURIComponent(
+            pdfFile
+        );
+
+
+    window.location.href =
+        readerURL;
+
+}
+
+
+/* =========================================================
    CREATE BOOK CARD
-===================================================== */
+========================================================= */
 
 function createBookCard(book) {
 
+    const stats =
+        getBookStats(book);
+
+
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
+
 
     card.className =
         "book-card";
@@ -731,19 +804,21 @@ function createBookCard(book) {
                 onerror="this.src='./logo.png'"
             >
 
-
             <span class="book-category">
 
-                ${escapeHTML(book.categoryName)}
+                ${escapeHTML(book.category)}
 
             </span>
 
+
+            <!-- SAME READ BUTTON -->
 
             <div class="book-cover-overlay">
 
                 <button
                     class="read-button"
                     type="button"
+                    data-action="read"
                     data-book-id="${escapeHTML(book.id)}"
                 >
 
@@ -783,6 +858,77 @@ function createBookCard(book) {
             </p>
 
 
+            <!-- COUNTERS -->
+
+            <div class="book-stats">
+
+                <span title="Views">
+
+                    <i class="fa-solid fa-eye"></i>
+
+                    ${stats.views}
+
+                </span>
+
+
+                <button
+                    type="button"
+                    data-action="like"
+                    data-book-id="${book.id}"
+                    title="Like"
+                >
+
+                    <i class="fa-solid fa-heart"></i>
+
+                    ${stats.likes}
+
+                </button>
+
+
+                <button
+                    type="button"
+                    data-action="share"
+                    data-book-id="${book.id}"
+                    title="Share"
+                >
+
+                    <i class="fa-solid fa-share-nodes"></i>
+
+                    ${stats.shares}
+
+                </button>
+
+
+                <button
+                    type="button"
+                    data-action="comment"
+                    data-book-id="${book.id}"
+                    title="Comments"
+                >
+
+                    <i class="fa-solid fa-comment"></i>
+
+                    ${stats.comments}
+
+                </button>
+
+
+                <button
+                    type="button"
+                    data-action="download"
+                    data-book-id="${book.id}"
+                    title="Download"
+                >
+
+                    <i class="fa-solid fa-download"></i>
+
+                    ${stats.downloads}
+
+                </button>
+
+            </div>
+
+
             <div class="book-card-footer">
 
                 <span>
@@ -797,10 +943,11 @@ function createBookCard(book) {
                 <button
                     class="open-book-button"
                     type="button"
-                    data-book-id="${escapeHTML(book.id)}"
+                    data-action="read"
+                    data-book-id="${book.id}"
                 >
 
-                    Open
+                    Read Book
 
                     <i class="fa-solid fa-arrow-right"></i>
 
@@ -818,142 +965,9 @@ function createBookCard(book) {
 }
 
 
-
-/* =====================================================
-   OPEN BOOK
-   IMPORTANT:
-   COVER IS NEVER USED HERE.
-   ONLY PDF IS SENT TO READER.
-===================================================== */
-
-function openBook(bookId) {
-
-    const book =
-        books.find(
-            item =>
-                String(item.id) ===
-                String(bookId)
-        );
-
-
-    if (!book) {
-
-        console.error(
-            "Book not found:",
-            bookId
-        );
-
-        return;
-
-    }
-
-
-    const pdfFile =
-        String(book.pdf || "").trim();
-
-
-    if (!pdfFile) {
-
-        alert(
-            "Is book ki PDF file configured nahi hai."
-        );
-
-        return;
-
-    }
-
-
-    /*
-     * SAFETY CHECK
-     *
-     * PNG / JPG / JPEG / WEBP
-     * kabhi reader ko nahi bheji jayengi.
-     */
-
-    const extension =
-        pdfFile
-            .split("?")[0]
-            .split(".")
-            .pop()
-            .toLowerCase();
-
-
-    if (extension !== "pdf") {
-
-        console.error(
-            "Invalid PDF filename:",
-            pdfFile
-        );
-
-        alert(
-            "Is book ki valid PDF file nahi mili."
-        );
-
-        return;
-
-    }
-
-
-    /*
-     * EXACT READER URL
-     */
-
-    const readerURL =
-        "./reader.html?book=" +
-        encodeURIComponent(pdfFile);
-
-
-    console.log(
-        "PDF:",
-        pdfFile
-    );
-
-    console.log(
-        "Reader:",
-        readerURL
-    );
-
-
-    window.location.href =
-        readerURL;
-
-}
-
-
-
-/* =====================================================
-   BOOK CLICK
-===================================================== */
-
-booksContainer.addEventListener(
-    "click",
-    function(event) {
-
-        const button =
-            event.target.closest(
-                "[data-book-id]"
-            );
-
-
-        if (!button) {
-
-            return;
-
-        }
-
-
-        openBook(
-            button.dataset.bookId
-        );
-
-    }
-);
-
-
-
-/* =====================================================
+/* =========================================================
    RENDER BOOKS
-===================================================== */
+========================================================= */
 
 function renderBooks() {
 
@@ -965,37 +979,105 @@ function renderBooks() {
             : "";
 
 
-    const filteredBooks =
+    let filteredBooks =
         books.filter(book => {
 
             const categoryMatch =
                 currentCategory === "all" ||
-                book.category === currentCategory;
+                book.category.toLowerCase() ===
+                currentCategory.toLowerCase();
 
 
             const searchText =
                 (
+
                     book.title +
                     " " +
                     book.author +
                     " " +
-                    book.categoryName +
+                    book.category +
                     " " +
                     book.description
+
                 ).toLowerCase();
 
 
-            const searchMatch =
-                !query ||
-                searchText.includes(query);
-
-
             return (
+
                 categoryMatch &&
-                searchMatch
+
+                (
+                    !query ||
+                    searchText.includes(
+                        query
+                    )
+                )
+
             );
 
         });
+
+
+    /*
+     * SORTING
+     */
+
+    if (currentSort === "oldest") {
+
+        filteredBooks.sort(
+            (a, b) =>
+                Number(a.id) -
+                Number(b.id)
+        );
+
+    }
+
+
+    if (currentSort === "newest") {
+
+        filteredBooks.sort(
+            (a, b) =>
+                Number(b.id) -
+                Number(a.id)
+        );
+
+    }
+
+
+    if (currentSort === "popular") {
+
+        filteredBooks.sort(
+            (a, b) => {
+
+                const A =
+                    getBookStats(a);
+
+                const B =
+                    getBookStats(b);
+
+
+                const scoreA =
+                    A.views +
+                    (A.likes * 3) +
+                    (A.shares * 4) +
+                    (A.comments * 2) +
+                    (A.downloads * 5);
+
+
+                const scoreB =
+                    B.views +
+                    (B.likes * 3) +
+                    (B.shares * 4) +
+                    (B.comments * 2) +
+                    (B.downloads * 5);
+
+
+                return scoreB - scoreA;
+
+            }
+        );
+
+    }
 
 
     booksContainer.innerHTML = "";
@@ -1035,13 +1117,15 @@ function renderBooks() {
         document.createDocumentFragment();
 
 
-    filteredBooks.forEach(book => {
+    filteredBooks.forEach(
+        book => {
 
-        fragment.appendChild(
-            createBookCard(book)
-        );
+            fragment.appendChild(
+                createBookCard(book)
+            );
 
-    });
+        }
+    );
 
 
     booksContainer.appendChild(
@@ -1051,10 +1135,82 @@ function renderBooks() {
 }
 
 
+/* =========================================================
+   BOOK ACTIONS
+========================================================= */
 
-/* =====================================================
+booksContainer.addEventListener(
+    "click",
+    function(event) {
+
+        const button =
+            event.target.closest(
+                "[data-action]"
+            );
+
+
+        if (!button) return;
+
+
+        const bookId =
+            button.dataset.bookId;
+
+
+        const action =
+            button.dataset.action;
+
+
+        if (action === "read") {
+
+            openBook(
+                bookId
+            );
+
+        }
+
+
+        if (action === "like") {
+
+            likeBook(
+                bookId
+            );
+
+        }
+
+
+        if (action === "share") {
+
+            shareBook(
+                bookId
+            );
+
+        }
+
+
+        if (action === "comment") {
+
+            commentBook(
+                bookId
+            );
+
+        }
+
+
+        if (action === "download") {
+
+            downloadBook(
+                bookId
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    SEARCH
-===================================================== */
+========================================================= */
 
 if (bookSearch) {
 
@@ -1066,13 +1222,14 @@ if (bookSearch) {
 }
 
 
-
-/* =====================================================
-   CATEGORY FILTER
-===================================================== */
+/* =========================================================
+   CATEGORY BUTTONS
+========================================================= */
 
 document
-    .querySelectorAll(".category")
+    .querySelectorAll(
+        ".category"
+    )
     .forEach(button => {
 
         button.addEventListener(
@@ -1080,7 +1237,9 @@ document
             function() {
 
                 document
-                    .querySelectorAll(".category")
+                    .querySelectorAll(
+                        ".category"
+                    )
                     .forEach(item => {
 
                         item.classList.remove(
@@ -1107,16 +1266,126 @@ document
     });
 
 
+/* =========================================================
+   ADD SORT CATEGORIES
+========================================================= */
 
-/* =====================================================
+const categoryGrid =
+    document.querySelector(
+        ".category-grid"
+    );
+
+
+if (categoryGrid) {
+
+    const sortHTML = `
+
+        <div class="book-sort-buttons">
+
+            <button
+                class="sort-button active"
+                data-sort="newest"
+                type="button"
+            >
+
+                <i class="fa-solid fa-clock"></i>
+
+                NEWEST
+
+            </button>
+
+
+            <button
+                class="sort-button"
+                data-sort="oldest"
+                type="button"
+            >
+
+                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                OLDEST
+
+            </button>
+
+
+            <button
+                class="sort-button"
+                data-sort="popular"
+                type="button"
+            >
+
+                <i class="fa-solid fa-fire"></i>
+
+                POPULAR
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    categoryGrid.insertAdjacentHTML(
+        "afterend",
+        sortHTML
+    );
+
+
+    document
+        .querySelectorAll(
+            ".sort-button"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                function() {
+
+                    document
+                        .querySelectorAll(
+                            ".sort-button"
+                        )
+                        .forEach(item => {
+
+                            item.classList.remove(
+                                "active"
+                            );
+
+                        });
+
+
+                    this.classList.add(
+                        "active"
+                    );
+
+
+                    currentSort =
+                        this.dataset.sort;
+
+
+                    renderBooks();
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =========================================================
    MOBILE MENU
-===================================================== */
+========================================================= */
 
 const mobileMenu =
-    document.querySelector(".mobile-menu");
+    document.querySelector(
+        ".mobile-menu"
+    );
 
 const menu =
-    document.querySelector(".menu");
+    document.querySelector(
+        ".menu"
+    );
 
 
 if (mobileMenu && menu) {
@@ -1135,126 +1404,19 @@ if (mobileMenu && menu) {
 }
 
 
-
-/* =====================================================
-   SCROLL TOP
-===================================================== */
-
-const scrollTop =
-    document.getElementById("scrollTop");
-
-
-if (scrollTop) {
-
-    window.addEventListener(
-        "scroll",
-        function() {
-
-            scrollTop.style.display =
-                window.scrollY > 300
-                    ? "block"
-                    : "none";
-
-        }
-    );
-
-
-    scrollTop.addEventListener(
-        "click",
-        function() {
-
-            window.scrollTo({
-
-                top: 0,
-
-                behavior: "smooth"
-
-            });
-
-        }
-    );
-
-}
-
-
-
-/* =====================================================
-   FOOTER YEAR
-===================================================== */
-
-if (footerYear) {
-
-    footerYear.textContent =
-        new Date().getFullYear();
-
-}
-
-
-
-/* =====================================================
-   IMAGE FALLBACK
-===================================================== */
-
-document
-    .querySelectorAll("img")
-    .forEach(img => {
-
-        img.addEventListener(
-            "error",
-            function() {
-
-                if (
-                    this.src.indexOf(
-                        "logo.png"
-                    ) === -1
-                ) {
-
-                    this.src =
-                        "./logo.png";
-
-                }
-
-            }
-        );
-
-    });
-
-
-
-/* =====================================================
+/* =========================================================
    START
-===================================================== */
+========================================================= */
 
-renderBooks();
+loadFirebaseBooks();
 
 
 console.log(
-    "===================================="
+    "📚 CHISHTI LIBRARY BOOKS"
 );
 
 console.log(
-    "📚 CHISHTI LIBRARY"
-);
-
-console.log(
-    "✅ Books Loaded:",
-    books.length
-);
-
-console.log(
-    "✅ Cover = Image"
-);
-
-console.log(
-    "✅ Reader = PDF"
-);
-
-console.log(
-    "🚀 Books Page Ready"
+    "🔥 Firebase counters enabled"
 );
 
 </script>
-
-</body>
-
-</html>
