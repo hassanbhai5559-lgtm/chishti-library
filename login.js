@@ -1,8 +1,33 @@
 /* ==================================================
    CHISHTI LIBRARY
-   NORMAL USER GOOGLE LOGIN
-   login.js
+   USER LOGIN
+   GOOGLE AUTHENTICATION
 ================================================== */
+
+
+/* ==================================================
+   FIREBASE IMPORTS
+================================================== */
+
+import { initializeApp } from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    onAuthStateChanged,
+    signInAnonymously
+} from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    setDoc,
+    serverTimestamp
+} from
+    "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 /* ==================================================
@@ -12,22 +37,25 @@
 const firebaseConfig = {
 
     apiKey:
-        "YOUR_API_KEY",
+        "AIzaSy0d4HlfzHbInFRMgtjosgSbGgoBxNwFbGU",
 
     authDomain:
-        "YOUR_PROJECT.firebaseapp.com",
+        "chishti-library.firebaseapp.com",
 
     projectId:
-        "YOUR_PROJECT_ID",
+        "chishti-library",
 
     storageBucket:
-        "YOUR_PROJECT.firebasestorage.app",
+        "chishti-library.firebasestorage.app",
 
     messagingSenderId:
-        "YOUR_MESSAGING_SENDER_ID",
+        "103447043162",
 
     appId:
-        "YOUR_APP_ID"
+        "1:103447043162:web:f242cd2670aaa9786e8c63",
+
+    measurementId:
+        "G-833P7N3LNT"
 
 };
 
@@ -36,20 +64,36 @@ const firebaseConfig = {
    INITIALIZE FIREBASE
 ================================================== */
 
-if (!firebase.apps.length) {
+const app =
+    initializeApp(firebaseConfig);
 
-    firebase.initializeApp(
-        firebaseConfig
-    );
 
-}
-
+/* ==================================================
+   FIREBASE AUTH
+================================================== */
 
 const auth =
-    firebase.auth();
+    getAuth(app);
+
+
+/* ==================================================
+   FIRESTORE
+================================================== */
 
 const db =
-    firebase.firestore();
+    getFirestore(app);
+
+
+/* ==================================================
+   GOOGLE PROVIDER
+================================================== */
+
+const googleProvider =
+    new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+    prompt: "select_account"
+});
 
 
 /* ==================================================
@@ -61,14 +105,19 @@ const googleLoginBtn =
         "googleLoginBtn"
     );
 
-const googleButtonText =
+const guestBtn =
     document.getElementById(
-        "googleButtonText"
+        "guestBtn"
     );
 
 const messageBox =
     document.getElementById(
         "message"
+    );
+
+const loadingBox =
+    document.getElementById(
+        "loading"
     );
 
 
@@ -78,10 +127,10 @@ const messageBox =
 
 function showMessage(
     text,
-    type
+    type = "error"
 ) {
 
-    messageBox.textContent =
+    messageBox.innerText =
         text;
 
     messageBox.className =
@@ -90,10 +139,13 @@ function showMessage(
 }
 
 
+/* ==================================================
+   CLEAR MESSAGE
+================================================== */
+
 function clearMessage() {
 
-    messageBox.textContent =
-        "";
+    messageBox.innerText = "";
 
     messageBox.className =
         "message";
@@ -102,26 +154,34 @@ function clearMessage() {
 
 
 /* ==================================================
-   BUTTON LOADING
+   LOADING
 ================================================== */
 
-function setGoogleLoading(
+function setLoading(
     loading
 ) {
 
-    googleLoginBtn.disabled =
-        loading;
-
-
     if (loading) {
 
-        googleButtonText.textContent =
-            "Signing in...";
+        loadingBox.style.display =
+            "block";
+
+        googleLoginBtn.disabled =
+            true;
+
+        guestBtn.disabled =
+            true;
 
     } else {
 
-        googleButtonText.textContent =
-            "Continue with Google";
+        loadingBox.style.display =
+            "none";
+
+        googleLoginBtn.disabled =
+            false;
+
+        guestBtn.disabled =
+            false;
 
     }
 
@@ -129,7 +189,7 @@ function setGoogleLoading(
 
 
 /* ==================================================
-   SAVE USER
+   SAVE USER IN FIRESTORE
 ================================================== */
 
 async function saveUser(
@@ -137,66 +197,56 @@ async function saveUser(
 ) {
 
     if (!user) {
-
         return;
-
     }
 
+    try {
 
-    const userRef =
-        db
-        .collection("users")
-        .doc(user.uid);
+        const userRef =
+            doc(
+                db,
+                "users",
+                user.uid
+            );
 
+        await setDoc(
+            userRef,
+            {
 
-    const userData = {
+                uid:
+                    user.uid,
 
-        uid:
-            user.uid,
+                name:
+                    user.displayName || "User",
 
-        name:
-            user.displayName ||
-            "Library User",
+                email:
+                    user.email || "",
 
-        email:
-            user.email ||
-            "",
+                photoURL:
+                    user.photoURL || "",
 
-        photoURL:
-            user.photoURL ||
-            "",
+                lastLogin:
+                    serverTimestamp()
 
-        provider:
-            "google",
+            },
+            {
+                merge: true
+            }
+        );
 
-        updatedAt:
-            firebase.firestore
-            .FieldValue
-            .serverTimestamp()
+    } catch (error) {
 
-    };
+        console.error(
+            "Firestore user save error:",
+            error
+        );
 
-
-    const existingUser =
-        await userRef.get();
-
-
-    if (!existingUser.exists) {
-
-        userData.createdAt =
-            firebase.firestore
-            .FieldValue
-            .serverTimestamp();
+        /*
+         User login should still work even
+         if Firestore rules are not ready.
+        */
 
     }
-
-
-    await userRef.set(
-        userData,
-        {
-            merge: true
-        }
-    );
 
 }
 
@@ -209,58 +259,37 @@ async function googleLogin() {
 
     clearMessage();
 
-    setGoogleLoading(
-        true
-    );
-
+    setLoading(true);
 
     try {
 
-        const provider =
-            new firebase.auth
-            .GoogleAuthProvider();
-
-
-        provider.setCustomParameters({
-
-            prompt:
-                "select_account"
-
-        });
-
-
         const result =
-            await auth
-            .signInWithPopup(
-                provider
+            await signInWithPopup(
+                auth,
+                googleProvider
             );
-
 
         const user =
             result.user;
-
 
         await saveUser(
             user
         );
 
-
         showMessage(
-            "Login successful. Welcome!",
+            "Login successful. Redirecting...",
             "success"
         );
 
-
         setTimeout(
-            function() {
+            () => {
 
                 window.location.href =
                     "index.html";
 
             },
-            600
+            700
         );
-
 
     } catch (error) {
 
@@ -269,29 +298,63 @@ async function googleLogin() {
             error
         );
 
+        setLoading(false);
+
+        let errorMessage =
+            "Google login failed.";
 
         if (
             error.code ===
             "auth/popup-closed-by-user"
         ) {
 
-            clearMessage();
-
-        } else {
-
-            showMessage(
-                getErrorMessage(
-                    error
-                ),
-                "error"
-            );
+            errorMessage =
+                "Login window close kar di gayi.";
 
         }
 
-    } finally {
+        else if (
+            error.code ===
+            "auth/popup-blocked"
+        ) {
 
-        setGoogleLoading(
-            false
+            errorMessage =
+                "Browser ne Google login popup block kar diya. Popup allow karein.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/unauthorized-domain"
+        ) {
+
+            errorMessage =
+                "Ye website Firebase Authorized Domains mein add nahi hai.";
+
+        }
+
+        else if (
+            error.code ===
+            "auth/operation-not-allowed"
+        ) {
+
+            errorMessage =
+                "Firebase mein Google Sign-In abhi enabled nahi hai.";
+
+        }
+
+        else if (
+            error.message
+        ) {
+
+            errorMessage =
+                error.message;
+
+        }
+
+        showMessage(
+            errorMessage,
+            "error"
         );
 
     }
@@ -300,48 +363,58 @@ async function googleLogin() {
 
 
 /* ==================================================
-   ERROR MESSAGE
+   GUEST LOGIN
 ================================================== */
 
-function getErrorMessage(
-    error
-) {
+async function guestLogin() {
 
-    switch (
-        error.code
-    ) {
+    clearMessage();
 
-        case "auth/popup-blocked":
+    setLoading(true);
 
-            return "Google login popup was blocked. Please allow popups for this website.";
+    try {
 
-
-        case "auth/cancelled-popup-request":
-
-            return "Login request was cancelled.";
-
-
-        case "auth/network-request-failed":
-
-            return "Network error. Please check your internet connection.";
-
-
-        case "auth/unauthorized-domain":
-
-            return "This website domain is not authorized in Firebase Authentication.";
-
-
-        case "auth/operation-not-allowed":
-
-            return "Google Sign-In is not enabled in Firebase Authentication.";
-
-
-        default:
-
-            return (
-                error.message ||
-                "Google login failed. Please try again."
+        const result =
+            await signInAnonymously(
+                auth
             );
+
+        const user =
+            result.user;
+
+        await saveUser(
+            user
+        );
+
+        showMessage(
+            "Guest login successful. Redirecting...",
+            "success"
+        );
+
+        setTimeout(
+            () => {
+
+                window.location.href =
+                    "index.html";
+
+            },
+            700
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Guest login error:",
+            error
+        );
+
+        setLoading(false);
+
+        showMessage(
+            "Guest login failed: " +
+            error.message,
+            "error"
+        );
 
     }
 
@@ -349,7 +422,7 @@ function getErrorMessage(
 
 
 /* ==================================================
-   GOOGLE BUTTON
+   BUTTON EVENTS
 ================================================== */
 
 googleLoginBtn.addEventListener(
@@ -358,12 +431,19 @@ googleLoginBtn.addEventListener(
 );
 
 
+guestBtn.addEventListener(
+    "click",
+    guestLogin
+);
+
+
 /* ==================================================
-   CHECK CURRENT LOGIN
+   AUTH STATE
 ================================================== */
 
-auth.onAuthStateChanged(
-    function(user) {
+onAuthStateChanged(
+    auth,
+    async (user) => {
 
         if (!user) {
 
@@ -371,15 +451,36 @@ auth.onAuthStateChanged(
 
         }
 
-
         /*
-           Agar user pehle se Google se
-           login hai to login page par
-           dobara na rukao.
+           If user is already logged in,
+           don't show login page again.
         */
 
-        window.location.href =
-            "index.html";
+        console.log(
+            "Current user:",
+            user.email ||
+            "Guest"
+        );
+
+    }
+);
+
+
+/* ==================================================
+   ENTER KEY
+================================================== */
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            googleLogin();
+
+        }
 
     }
 );
@@ -390,5 +491,5 @@ auth.onAuthStateChanged(
 ================================================== */
 
 console.log(
-    "Chishti Library Google Login Ready"
+    "Chishti Library User Login Ready"
 );
