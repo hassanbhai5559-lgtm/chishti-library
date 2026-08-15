@@ -79,25 +79,43 @@ if (scrollBtn) {
 
 }
 
-/*=========================
-  VISITOR COUNTER
-=========================*/
+/*=========================================
+CHISHTI LIBRARY
+VISITOR COUNTER
+FIREBASE FIRESTORE
+=========================================*/
 
 async function updateVisitorCounter() {
 
     const visitorCounter =
         document.getElementById("visitorCounter");
 
-    if (!visitorCounter) return;
+    if (!visitorCounter) {
+        return;
+    }
+
+    /* Firebase check */
+
+    if (typeof db === "undefined") {
+
+        console.error(
+            "Firebase Firestore is not initialized."
+        );
+
+        visitorCounter.innerText = "0";
+
+        return;
+    }
 
     try {
 
         const visitorRef =
-            db.collection("counter").doc("visitors");
+            db.collection("counter")
+              .doc("visitors");
 
 
         /* =========================
-           GET CURRENT DOCUMENT
+           GET VISITOR DOCUMENT
         ========================= */
 
         const snapshot =
@@ -105,13 +123,20 @@ async function updateVisitorCounter() {
 
 
         /* =========================
-           CREATE DOCUMENT IF MISSING
+           FIRST VISITOR
         ========================= */
 
         if (!snapshot.exists) {
 
             await visitorRef.set({
-                count: 1
+
+                count: 1,
+
+                updatedAt:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
+
             });
 
             sessionStorage.setItem(
@@ -126,7 +151,7 @@ async function updateVisitorCounter() {
 
 
         /* =========================
-           CHECK THIS SESSION
+           CHECK CURRENT SESSION
         ========================= */
 
         const alreadyCounted =
@@ -136,7 +161,7 @@ async function updateVisitorCounter() {
 
 
         /* =========================
-           NEW VISITOR
+           NEW SESSION VISITOR
         ========================= */
 
         if (!alreadyCounted) {
@@ -144,7 +169,14 @@ async function updateVisitorCounter() {
             await visitorRef.update({
 
                 count:
-                    firebase.firestore.FieldValue.increment(1)
+                    firebase.firestore
+                    .FieldValue
+                    .increment(1),
+
+                updatedAt:
+                    firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
 
             });
 
@@ -157,40 +189,27 @@ async function updateVisitorCounter() {
 
 
         /* =========================
-           GET UPDATED COUNT
+           GET FINAL COUNT
         ========================= */
 
-        const latestSnapshot =
+        const latest =
             await visitorRef.get();
 
 
-        const visitors =
+        const count =
             Number(
-                latestSnapshot.data().count
+                latest.data()?.count
             ) || 0;
 
 
         /* =========================
-           ANIMATION
+           ANIMATE NUMBER
         ========================= */
 
-        let current = 0;
-
-        const animation =
-            setInterval(function () {
-
-                current++;
-
-                visitorCounter.innerText =
-                    current;
-
-                if (current >= visitors) {
-
-                    clearInterval(animation);
-
-                }
-
-            }, 25);
+        animateVisitorCount(
+            visitorCounter,
+            count
+        );
 
 
     } catch (error) {
@@ -207,12 +226,73 @@ async function updateVisitorCounter() {
 }
 
 
-/* =========================
-   START COUNTER
-========================= */
+/*=========================================
+VISITOR NUMBER ANIMATION
+=========================================*/
 
-updateVisitorCounter();
+function animateVisitorCount(
+    element,
+    target
+) {
 
+    const number =
+        Number(target) || 0;
+
+
+    if (number <= 0) {
+
+        element.innerText = "0";
+
+        return;
+
+    }
+
+
+    let current = 0;
+
+    const duration = 1000;
+
+    const steps = 40;
+
+    const increment =
+        number / steps;
+
+
+    const timer =
+        setInterval(() => {
+
+            current += increment;
+
+
+            if (current >= number) {
+
+                current = number;
+
+                clearInterval(timer);
+
+            }
+
+
+            element.innerText =
+                Math.floor(current);
+
+        }, duration / steps);
+
+}
+
+
+/*=========================================
+START VISITOR COUNTER
+=========================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        updateVisitorCounter();
+
+    }
+);
 /*=========================
 GLOBAL VARIABLES
 =========================*/
