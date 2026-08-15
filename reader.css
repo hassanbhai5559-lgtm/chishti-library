@@ -1670,3 +1670,540 @@ body {
         animation-duration: 1ms !important;
     }
 }
+/* =========================================================
+   CHISHTI LIBRARY
+   REAL 3D PAGE CURL
+========================================================= */
+
+#bookViewport {
+    perspective: 1800px;
+    perspective-origin: center center;
+    overflow: hidden;
+    position: relative;
+    touch-action: pan-y;
+}
+
+
+/* =========================================================
+   BOOK
+========================================================= */
+
+.real-flip-book {
+    position: relative;
+    margin: auto;
+
+    transform-style: preserve-3d;
+
+    perspective: 1800px;
+
+    isolation: isolate;
+
+    overflow: visible;
+}
+
+
+/* =========================================================
+   STATIC PAGE
+========================================================= */
+
+.flip-static-page {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    background-color: #fff;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.38),
+        0 4px 12px rgba(0,0,0,.24);
+
+    border-radius: 2px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   FLIP CANVAS
+========================================================= */
+
+.flip-page {
+    position: absolute;
+
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: fill;
+
+    background: #fff;
+
+    transform-style: preserve-3d;
+
+    backface-visibility: hidden;
+
+    -webkit-backface-visibility: hidden;
+
+    transform-origin: center left;
+
+    z-index: 5;
+
+    pointer-events: none;
+
+    box-shadow:
+        0 14px 35px rgba(0,0,0,.35);
+}
+
+
+/* =========================================================
+   FRONT
+========================================================= */
+
+.flip-front {
+    left: 0;
+
+    transform-origin: left center;
+
+    z-index: 7;
+}
+
+
+/* =========================================================
+   BACK
+========================================================= */
+
+.flip-back {
+    left: 0;
+
+    transform-origin: right center;
+
+    transform: rotateY(180deg);
+
+    z-index: 6;
+}
+
+
+/* =========================================================
+   PAGE EDGE
+========================================================= */
+
+.flip-front::after,
+.flip-back::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    width: 5px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   SHADOW
+========================================================= */
+
+.flip-shadow {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    z-index: 20;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.38),
+            rgba(0,0,0,.18) 22%,
+            transparent 48%,
+            rgba(0,0,0,.16) 78%,
+            rgba(0,0,0,.32)
+        );
+
+    filter: blur(8px);
+
+    transform:
+        translateZ(20px)
+        scaleX(.98);
+
+    transition:
+        opacity .25s ease;
+}
+
+
+/* =========================================================
+   NEXT PAGE
+   1 -> 2
+   2 -> 3
+========================================================= */
+
+.real-flip-book.flip-next
+.flip-front {
+
+    animation:
+        realPageCurlNext
+        2s
+        cubic-bezier(.22,.61,.36,1)
+        forwards;
+}
+
+
+.real-flip-book.flip-next
+.flip-back {
+
+    animation:
+        realPageBackNext
+        2s
+        cubic-bezier(.22,.61,.36,1)
+        forwards;
+}
+
+
+.real-flip-book.flip-next
+.flip-shadow {
+
+    animation:
+        flipShadowNext
+        2s
+        ease-in-out
+        forwards;
+}
+
+
+/* =========================================================
+   PREVIOUS PAGE
+   3 -> 2
+   2 -> 1
+========================================================= */
+
+.real-flip-book.flip-prev
+.flip-front {
+
+    animation:
+        realPageCurlPrev
+        2s
+        cubic-bezier(.22,.61,.36,1)
+        forwards;
+}
+
+
+.real-flip-book.flip-prev
+.flip-back {
+
+    animation:
+        realPageBackPrev
+        2s
+        cubic-bezier(.22,.61,.36,1)
+        forwards;
+}
+
+
+.real-flip-book.flip-prev
+.flip-shadow {
+
+    animation:
+        flipShadowPrev
+        2s
+        ease-in-out
+        forwards;
+}
+
+
+/* =========================================================
+   NEXT CURL
+========================================================= */
+
+@keyframes realPageCurlNext {
+
+    0% {
+        transform:
+            rotateY(0deg)
+            translateZ(0)
+            scaleX(1);
+
+        box-shadow:
+            0 18px 40px rgba(0,0,0,.34);
+    }
+
+    20% {
+        transform:
+            rotateY(-28deg)
+            translateZ(45px)
+            scaleX(.98);
+
+        box-shadow:
+            18px 12px 30px rgba(0,0,0,.30);
+    }
+
+    50% {
+        transform:
+            rotateY(-90deg)
+            translateZ(75px)
+            scaleX(.92);
+
+        box-shadow:
+            35px 12px 40px rgba(0,0,0,.28);
+    }
+
+    75% {
+        transform:
+            rotateY(-145deg)
+            translateZ(50px)
+            scaleX(.96);
+
+        box-shadow:
+            20px 10px 28px rgba(0,0,0,.24);
+    }
+
+    100% {
+        transform:
+            rotateY(-180deg)
+            translateZ(0)
+            scaleX(1);
+
+        box-shadow:
+            none;
+    }
+}
+
+
+/* =========================================================
+   NEXT BACK
+========================================================= */
+
+@keyframes realPageBackNext {
+
+    0% {
+        transform:
+            rotateY(180deg);
+    }
+
+    50% {
+        transform:
+            rotateY(90deg);
+    }
+
+    100% {
+        transform:
+            rotateY(0deg);
+    }
+}
+
+
+/* =========================================================
+   PREVIOUS CURL
+========================================================= */
+
+@keyframes realPageCurlPrev {
+
+    0% {
+        transform:
+            rotateY(0deg)
+            translateZ(0)
+            scaleX(1);
+    }
+
+    20% {
+        transform:
+            rotateY(28deg)
+            translateZ(45px)
+            scaleX(.98);
+    }
+
+    50% {
+        transform:
+            rotateY(90deg)
+            translateZ(75px)
+            scaleX(.92);
+    }
+
+    75% {
+        transform:
+            rotateY(145deg)
+            translateZ(50px)
+            scaleX(.96);
+    }
+
+    100% {
+        transform:
+            rotateY(180deg)
+            translateZ(0)
+            scaleX(1);
+    }
+}
+
+
+/* =========================================================
+   PREVIOUS BACK
+========================================================= */
+
+@keyframes realPageBackPrev {
+
+    0% {
+        transform:
+            rotateY(-180deg);
+    }
+
+    50% {
+        transform:
+            rotateY(-90deg);
+    }
+
+    100% {
+        transform:
+            rotateY(0deg);
+    }
+}
+
+
+/* =========================================================
+   NEXT SHADOW
+========================================================= */
+
+@keyframes flipShadowNext {
+
+    0% {
+        opacity: 0;
+        transform:
+            translateX(0)
+            scaleX(.75);
+    }
+
+    25% {
+        opacity: .32;
+        transform:
+            translateX(8%)
+            scaleX(.95);
+    }
+
+    50% {
+        opacity: .62;
+        transform:
+            translateX(20%)
+            scaleX(1.05);
+    }
+
+    75% {
+        opacity: .30;
+        transform:
+            translateX(35%)
+            scaleX(.92);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translateX(50%)
+            scaleX(.7);
+    }
+}
+
+
+/* =========================================================
+   PREVIOUS SHADOW
+========================================================= */
+
+@keyframes flipShadowPrev {
+
+    0% {
+        opacity: 0;
+        transform:
+            translateX(0)
+            scaleX(.75);
+    }
+
+    25% {
+        opacity: .32;
+        transform:
+            translateX(-8%)
+            scaleX(.95);
+    }
+
+    50% {
+        opacity: .62;
+        transform:
+            translateX(-20%)
+            scaleX(1.05);
+    }
+
+    75% {
+        opacity: .30;
+        transform:
+            translateX(-35%)
+            scaleX(.92);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translateX(-50%)
+            scaleX(.7);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #bookViewport {
+        perspective:
+            1100px;
+    }
+
+    .real-flip-book {
+        perspective:
+            1100px;
+    }
+
+    .flip-shadow {
+        filter:
+            blur(5px);
+    }
+}
+
+
+/* =========================================================
+   REDUCE MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .real-flip-book.flip-next
+    .flip-front,
+    .real-flip-book.flip-next
+    .flip-back,
+    .real-flip-book.flip-next
+    .flip-shadow,
+    .real-flip-book.flip-prev
+    .flip-front,
+    .real-flip-book.flip-prev
+    .flip-back,
+    .real-flip-book.flip-prev
+    .flip-shadow {
+
+        animation-duration:
+            .35s !important;
+    }
+}
