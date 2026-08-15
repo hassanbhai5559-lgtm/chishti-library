@@ -1,8 +1,8 @@
 /* =========================================================
    CHISHTI LIBRARY
    reader.js
-   FULL PDF READER
-   WATERMARK DOWNLOAD + LIBRARY THEME
+   REAL 3D PDF PAGE-FLIP READER
+   WATERMARK DOWNLOAD + PRINT + THEME
 ========================================================= */
 
 import * as pdfjsLib from
@@ -54,7 +54,10 @@ function getPDFURL() {
 
     } catch (error) {
 
-        console.error("PDF URL error:", error);
+        console.error(
+            "PDF URL error:",
+            error
+        );
 
         return "";
     }
@@ -64,29 +67,31 @@ function getPDFURL() {
 const PDF_URL = getPDFURL();
 
 
-console.log("RAW BOOK:", rawBook);
-console.log("PDF URL:", PDF_URL);
-
-
 /* =========================================================
    SETTINGS
 ========================================================= */
 
-const MIN_ZOOM = 0.5;
-const MAX_ZOOM = 3;
+const MIN_ZOOM = 0.65;
+const MAX_ZOOM = 2;
 const ZOOM_STEP = 0.1;
 const DEFAULT_ZOOM = 1;
 
+const FLIP_DURATION = 720;
+
+const SWIPE_THRESHOLD = 55;
+
 
 /* =========================================================
-   CHISHTI LIBRARY THEME
+   LIBRARY THEME
 ========================================================= */
 
 const LIBRARY_THEME = {
+
     maroon: "#4B0000",
     deepMaroon: "#350000",
     gold: "#D4A500",
     white: "#FFFFFF"
+
 };
 
 
@@ -162,18 +167,6 @@ const cleanDownloadButton =
 
 
 /* =========================================================
-   CANVAS
-========================================================= */
-
-const context =
-    pdfCanvas
-        ? pdfCanvas.getContext("2d", {
-            alpha: false
-        })
-        : null;
-
-
-/* =========================================================
    STATE
 ========================================================= */
 
@@ -185,15 +178,22 @@ let pageCount = 0;
 
 let zoom = DEFAULT_ZOOM;
 
-let currentRenderTask = null;
+let isFlipping = false;
+
+let flipDirection = "next";
+
+let flipTimer = null;
+
+let resizeTimer = null;
 
 
 /* =========================================================
-   SWIPE
+   TOUCH STATE
 ========================================================= */
 
 let touchStartX = 0;
 let touchStartY = 0;
+
 let touchEndX = 0;
 let touchEndY = 0;
 
@@ -203,6 +203,7 @@ let touchEndY = 0;
 ========================================================= */
 
 const themes = [
+
     {
         name: "Maroon",
         background: "#4B0000",
@@ -210,6 +211,7 @@ const themes = [
         accent: "#D4A500",
         text: "#FFFFFF"
     },
+
     {
         name: "Deep Maroon",
         background: "#350000",
@@ -217,6 +219,7 @@ const themes = [
         accent: "#D4A500",
         text: "#FFFFFF"
     },
+
     {
         name: "Gold",
         background: "#D4A500",
@@ -224,23 +227,219 @@ const themes = [
         accent: "#FFFFFF",
         text: "#FFFFFF"
     }
+
 ];
 
 let currentTheme = 0;
 
 
 /* =========================================================
-   APPLY THEME
+   FLIP BOOK ELEMENTS
+========================================================= */
+
+let flipBook = null;
+
+let flipCurrentPage = null;
+
+let flipNextPage = null;
+
+let flipCurrentCanvas = null;
+
+let flipNextCanvas = null;
+
+let flipShadow = null;
+
+
+/* =========================================================
+   CREATE FLIP BOOK
+========================================================= */
+
+function createFlipBook() {
+
+    if (!bookViewport) {
+        return;
+    }
+
+    /*
+     * Existing old canvas is hidden.
+     * The new flip-book owns the visible reader.
+     */
+
+    if (pdfCanvas) {
+        pdfCanvas.style.display = "none";
+    }
+
+    if (pageWrapper) {
+        pageWrapper.style.display = "none";
+    }
+
+
+    flipBook =
+        document.getElementById(
+            "chishtiFlipBook"
+        );
+
+
+    if (!flipBook) {
+
+        flipBook =
+            document.createElement("div");
+
+        flipBook.id =
+            "chishtiFlipBook";
+
+        flipBook.className =
+            "chishti-flip-book";
+
+        bookViewport.appendChild(
+            flipBook
+        );
+    }
+
+
+    flipBook.innerHTML = "";
+
+
+    /*
+     * Book shell
+     */
+
+    const bookShell =
+        document.createElement("div");
+
+    bookShell.className =
+        "chishti-book-shell";
+
+
+    /*
+     * Back cover
+     */
+
+    const backCover =
+        document.createElement("div");
+
+    backCover.className =
+        "chishti-book-cover chishti-book-back";
+
+
+    /*
+     * Page stack
+     */
+
+    const pageStack =
+        document.createElement("div");
+
+    pageStack.className =
+        "chishti-page-stack";
+
+
+    /*
+     * Current page
+     */
+
+    flipCurrentPage =
+        document.createElement("div");
+
+    flipCurrentPage.className =
+        "chishti-flip-page chishti-current-page";
+
+    flipCurrentPage.dataset.page =
+        "1";
+
+
+    flipCurrentCanvas =
+        document.createElement("canvas");
+
+    flipCurrentCanvas.className =
+        "chishti-page-canvas";
+
+
+    flipCurrentPage.appendChild(
+        flipCurrentCanvas
+    );
+
+
+    /*
+     * Next page
+     */
+
+    flipNextPage =
+        document.createElement("div");
+
+    flipNextPage.className =
+        "chishti-flip-page chishti-next-page";
+
+    flipNextPage.dataset.page =
+        "2";
+
+
+    flipNextCanvas =
+        document.createElement("canvas");
+
+    flipNextCanvas.className =
+        "chishti-page-canvas";
+
+
+    flipNextPage.appendChild(
+        flipNextCanvas
+    );
+
+
+    /*
+     * Shadow
+     */
+
+    flipShadow =
+        document.createElement("div");
+
+    flipShadow.className =
+        "chishti-flip-shadow";
+
+
+    pageStack.appendChild(
+        flipNextPage
+    );
+
+    pageStack.appendChild(
+        flipCurrentPage
+    );
+
+    pageStack.appendChild(
+        flipShadow
+    );
+
+
+    bookShell.appendChild(
+        backCover
+    );
+
+    bookShell.appendChild(
+        pageStack
+    );
+
+    flipBook.appendChild(
+        bookShell
+    );
+}
+
+
+/* =========================================================
+   THEME
 ========================================================= */
 
 function applyTheme(index) {
 
     currentTheme =
-        (index + themes.length) %
+        (
+            index +
+            themes.length
+        ) %
         themes.length;
+
 
     const theme =
         themes[currentTheme];
+
 
     document.documentElement.style.setProperty(
         "--library-maroon",
@@ -282,9 +481,12 @@ function applyTheme(index) {
         theme.text
     );
 
+
     document.body.dataset.theme =
-        theme.name.toLowerCase()
+        theme.name
+            .toLowerCase()
             .replace(/\s+/g, "-");
+
 
     if (themeButton) {
 
@@ -297,6 +499,7 @@ function applyTheme(index) {
         );
     }
 
+
     localStorage.setItem(
         "chishtiReaderTheme",
         String(currentTheme)
@@ -305,7 +508,7 @@ function applyTheme(index) {
 
 
 /* =========================================================
-   LOAD SAVED THEME
+   LOAD THEME
 ========================================================= */
 
 function loadTheme() {
@@ -317,6 +520,7 @@ function loadTheme() {
             )
         );
 
+
     if (
         Number.isInteger(saved) &&
         saved >= 0 &&
@@ -325,6 +529,7 @@ function loadTheme() {
 
         currentTheme = saved;
     }
+
 
     applyTheme(currentTheme);
 }
@@ -344,6 +549,7 @@ if (themeButton) {
                 currentTheme + 1
             );
 
+
             announce(
                 `Reader theme changed to ${themes[currentTheme].name}.`
             );
@@ -362,6 +568,7 @@ function setBookTitle() {
         return;
     }
 
+
     if (!rawBook) {
 
         bookTitle.textContent =
@@ -369,6 +576,7 @@ function setBookTitle() {
 
         return;
     }
+
 
     try {
 
@@ -378,21 +586,36 @@ function setBookTitle() {
                 .split("/")
                 .pop() || "";
 
+
         const decodedFilename =
-            decodeURIComponent(filename);
+            decodeURIComponent(
+                filename
+            );
+
 
         const title =
             decodedFilename
-                .replace(/\.pdf$/i, "")
-                .replace(/[-_]+/g, " ")
+                .replace(
+                    /\.pdf$/i,
+                    ""
+                )
+                .replace(
+                    /[-_]+/g,
+                    " "
+                )
                 .trim();
 
+
         bookTitle.textContent =
-            title || "Digital Book";
+            title ||
+            "Digital Book";
 
     } catch (error) {
 
-        console.error("Title error:", error);
+        console.error(
+            "Title error:",
+            error
+        );
 
         bookTitle.textContent =
             "Digital Book";
@@ -407,7 +630,9 @@ function setBookTitle() {
 function announce(message) {
 
     if (readerStatus) {
-        readerStatus.textContent = message;
+
+        readerStatus.textContent =
+            message;
     }
 }
 
@@ -418,14 +643,23 @@ function announce(message) {
 
 function showError(message) {
 
-    console.error("Reader error:", message);
+    console.error(
+        "Reader error:",
+        message
+    );
+
 
     if (errorMessage) {
-        errorMessage.textContent = message;
+
+        errorMessage.textContent =
+            message;
     }
 
+
     if (errorScreen) {
-        errorScreen.hidden = false;
+
+        errorScreen.hidden =
+            false;
     }
 }
 
@@ -433,7 +667,9 @@ function showError(message) {
 function hideError() {
 
     if (errorScreen) {
-        errorScreen.hidden = true;
+
+        errorScreen.hidden =
+            true;
     }
 }
 
@@ -445,39 +681,48 @@ function hideError() {
 function updateUI() {
 
     if (pageNumberInput) {
-        pageNumberInput.value = currentPage;
+
+        pageNumberInput.value =
+            currentPage;
     }
+
 
     if (totalPages) {
-        totalPages.textContent = pageCount;
+
+        totalPages.textContent =
+            pageCount;
     }
 
+
     if (zoomLevel) {
+
         zoomLevel.textContent =
             `${Math.round(zoom * 100)}%`;
     }
+
 
     if (previousPageButton) {
 
         previousPageButton.disabled =
             !pdfDocument ||
-            currentPage <= 1;
+            currentPage <= 1 ||
+            isFlipping;
     }
+
 
     if (nextPageButton) {
 
         nextPageButton.disabled =
             !pdfDocument ||
-            currentPage >= pageCount;
+            currentPage >= pageCount ||
+            isFlipping;
     }
 
-    /*
-     * Clean download is intentionally disabled.
-     */
 
     if (cleanDownloadButton) {
 
-        cleanDownloadButton.disabled = true;
+        cleanDownloadButton.disabled =
+            true;
 
         cleanDownloadButton.title =
             "Clean download is not available";
@@ -491,39 +736,44 @@ function updateUI() {
 
 
 /* =========================================================
-   CALCULATE SCALE
+   CALCULATE FLIP PAGE SCALE
 ========================================================= */
 
-function calculateScale(page) {
+async function getPageSize(page) {
 
-    if (!bookViewport) {
-        return zoom;
-    }
-
-    const baseViewport =
+    const viewport =
         page.getViewport({
             scale: 1
         });
 
+
     const availableWidth =
         Math.max(
-            200,
-            bookViewport.clientWidth - 30
+            260,
+            bookViewport
+                ? bookViewport.clientWidth - 40
+                : viewport.width
         );
+
 
     const availableHeight =
         Math.max(
-            200,
-            bookViewport.clientHeight - 30
+            300,
+            bookViewport
+                ? bookViewport.clientHeight - 40
+                : viewport.height
         );
+
 
     const widthScale =
         availableWidth /
-        baseViewport.width;
+        viewport.width;
+
 
     const heightScale =
         availableHeight /
-        baseViewport.height;
+        viewport.height;
+
 
     const fitScale =
         Math.min(
@@ -531,175 +781,623 @@ function calculateScale(page) {
             heightScale
         );
 
+
     return Math.max(
-        0.25,
+        0.35,
         fitScale * zoom
     );
 }
 
 
 /* =========================================================
-   CANCEL RENDER
+   RENDER PDF PAGE TO CANVAS
 ========================================================= */
 
-function cancelCurrentRender() {
+async function renderPDFPage(
+    pageNumber,
+    canvas
+) {
 
-    if (!currentRenderTask) {
+    if (
+        !pdfDocument ||
+        !canvas
+    ) {
+
         return;
     }
 
-    try {
 
-        currentRenderTask.cancel();
-
-    } catch (error) {
-
-        console.warn(
-            "Render cancel error:",
-            error
+    const page =
+        await pdfDocument.getPage(
+            pageNumber
         );
-    }
 
-    currentRenderTask = null;
+
+    const scale =
+        await getPageSize(
+            page
+        );
+
+
+    const viewport =
+        page.getViewport({
+            scale
+        });
+
+
+    const pixelRatio =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+
+    canvas.width =
+        Math.ceil(
+            viewport.width *
+            pixelRatio
+        );
+
+
+    canvas.height =
+        Math.ceil(
+            viewport.height *
+            pixelRatio
+        );
+
+
+    canvas.style.width =
+        `${viewport.width}px`;
+
+
+    canvas.style.height =
+        `${viewport.height}px`;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d",
+            {
+                alpha: false
+            }
+        );
+
+
+    ctx.setTransform(
+        pixelRatio,
+        0,
+        0,
+        pixelRatio,
+        0,
+        0
+    );
+
+
+    ctx.fillStyle =
+        "#FFFFFF";
+
+
+    ctx.fillRect(
+        0,
+        0,
+        viewport.width,
+        viewport.height
+    );
+
+
+    await page.render({
+
+        canvasContext:
+            ctx,
+
+        viewport:
+            viewport
+
+    }).promise;
+
+
+    return {
+
+        width:
+            viewport.width,
+
+        height:
+            viewport.height
+    };
 }
 
 
 /* =========================================================
-   RENDER PAGE
+   SET PAGE DIMENSIONS
 ========================================================= */
 
-async function renderPage(pageNumber) {
+function setFlipDimensions(
+    width,
+    height
+) {
 
-    if (
-        !pdfDocument ||
-        !pdfCanvas ||
-        !context
-    ) {
+    if (!flipBook) {
         return;
     }
 
-    pageNumber =
-        Math.max(
-            1,
-            Math.min(
-                Number(pageNumber) || 1,
-                pageCount
-            )
-        );
 
-    cancelCurrentRender();
+    flipBook.style.setProperty(
+        "--book-page-width",
+        `${width}px`
+    );
+
+
+    flipBook.style.setProperty(
+        "--book-page-height",
+        `${height}px`
+    );
+
+
+    flipBook.style.width =
+        `${width}px`;
+
+
+    flipBook.style.height =
+        `${height}px`;
+}
+
+
+/* =========================================================
+   LOAD CURRENT PAGE
+========================================================= */
+
+async function loadCurrentFlipPage() {
+
+    if (
+        !pdfDocument ||
+        !flipCurrentCanvas
+    ) {
+
+        return;
+    }
+
 
     try {
 
-        const page =
-            await pdfDocument.getPage(
-                pageNumber
+        const size =
+            await renderPDFPage(
+                currentPage,
+                flipCurrentCanvas
             );
 
-        const scale =
-            calculateScale(page);
 
-        const viewport =
-            page.getViewport({
-                scale
-            });
+        if (size) {
 
-        const pixelRatio =
-            Math.min(
-                window.devicePixelRatio || 1,
-                2
+            setFlipDimensions(
+                size.width,
+                size.height
             );
-
-        pdfCanvas.width =
-            Math.floor(
-                viewport.width *
-                pixelRatio
-            );
-
-        pdfCanvas.height =
-            Math.floor(
-                viewport.height *
-                pixelRatio
-            );
-
-        pdfCanvas.style.width =
-            `${viewport.width}px`;
-
-        pdfCanvas.style.height =
-            `${viewport.height}px`;
-
-        if (pageWrapper) {
-
-            pageWrapper.style.width =
-                `${viewport.width}px`;
-
-            pageWrapper.style.height =
-                `${viewport.height}px`;
         }
 
-        context.setTransform(
-            pixelRatio,
-            0,
-            0,
-            pixelRatio,
-            0,
-            0
-        );
 
-        context.fillStyle =
-            "#FFFFFF";
+        flipCurrentPage.dataset.page =
+            String(currentPage);
 
-        context.fillRect(
-            0,
-            0,
-            viewport.width,
-            viewport.height
-        );
-
-        currentRenderTask =
-            page.render({
-
-                canvasContext:
-                    context,
-
-                viewport:
-                    viewport
-            });
-
-        await currentRenderTask.promise;
-
-        currentRenderTask = null;
-
-        currentPage = pageNumber;
-
-        updateUI();
 
         announce(
             `Page ${currentPage} of ${pageCount}`
         );
 
+
     } catch (error) {
 
-        if (
-            error?.name ===
-            "RenderingCancelledException"
-        ) {
-            return;
-        }
-
         console.error(
-            "PDF render error:",
+            "Current page render error:",
             error
         );
+
 
         showError(
             "This PDF page could not be rendered."
         );
+    }
+}
+
+
+/* =========================================================
+   LOAD NEXT PAGE BEHIND CURRENT PAGE
+========================================================= */
+
+async function prepareNextPage() {
+
+    if (
+        !pdfDocument ||
+        !flipNextCanvas
+    ) {
+
+        return;
+    }
+
+
+    const next =
+        currentPage < pageCount
+            ? currentPage + 1
+            : currentPage;
+
+
+    try {
+
+        await renderPDFPage(
+            next,
+            flipNextCanvas
+        );
+
+
+        flipNextPage.dataset.page =
+            String(next);
+
+    } catch (error) {
+
+        console.error(
+            "Next page render error:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   LOAD BOTH PAGES
+========================================================= */
+
+async function renderFlipBook() {
+
+    if (!pdfDocument) {
+        return;
+    }
+
+
+    await loadCurrentFlipPage();
+
+    await prepareNextPage();
+
+    updateUI();
+}
+
+
+/* =========================================================
+   NEXT PAGE FLIP
+========================================================= */
+
+async function nextPage() {
+
+    if (
+        !pdfDocument ||
+        isFlipping ||
+        currentPage >= pageCount
+    ) {
+
+        return;
+    }
+
+
+    isFlipping = true;
+
+    flipDirection = "next";
+
+    updateUI();
+
+
+    const nextPageNumber =
+        currentPage + 1;
+
+
+    try {
+
+        /*
+         * Render next page first.
+         */
+
+        await renderPDFPage(
+            nextPageNumber,
+            flipNextCanvas
+        );
+
+
+        flipNextPage.dataset.page =
+            String(nextPageNumber);
+
+
+        /*
+         * Prepare visual state.
+         */
+
+        flipCurrentPage.classList.remove(
+            "flip-backward",
+            "flip-forward"
+        );
+
+
+        flipCurrentPage.classList.add(
+            "flip-forward"
+        );
+
+
+        flipShadow.classList.add(
+            "active"
+        );
+
+
+        announce(
+            `Turning to page ${nextPageNumber}...`
+        );
+
+
+        await wait(
+            FLIP_DURATION
+        );
+
+
+        /*
+         * Swap page canvases.
+         */
+
+        const oldCanvas =
+            flipCurrentCanvas;
+
+        flipCurrentCanvas =
+            flipNextCanvas;
+
+        flipNextCanvas =
+            oldCanvas;
+
+
+        const oldPage =
+            flipCurrentPage;
+
+        flipCurrentPage =
+            flipNextPage;
+
+        flipNextPage =
+            oldPage;
+
+
+        flipCurrentPage.classList.remove(
+            "flip-forward",
+            "flip-backward"
+        );
+
+
+        flipCurrentPage.classList.add(
+            "chishti-current-page"
+        );
+
+
+        flipNextPage.classList.remove(
+            "chishti-current-page"
+        );
+
+
+        currentPage =
+            nextPageNumber;
+
+
+        /*
+         * Reset page transform.
+         */
+
+        flipNextPage.style.transform =
+            "";
+
+
+        flipShadow.classList.remove(
+            "active"
+        );
+
+
+        /*
+         * Put new upcoming page behind.
+         */
+
+        await prepareNextPage();
+
+
+        updateUI();
+
+
+        announce(
+            `Page ${currentPage} of ${pageCount}`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Page flip error:",
+            error
+        );
 
     } finally {
 
-        currentRenderTask = null;
+        isFlipping = false;
+
+        flipCurrentPage.classList.remove(
+            "flip-forward",
+            "flip-backward"
+        );
+
+        flipShadow.classList.remove(
+            "active"
+        );
+
+        updateUI();
     }
+}
+
+
+/* =========================================================
+   PREVIOUS PAGE FLIP
+========================================================= */
+
+async function previousPage() {
+
+    if (
+        !pdfDocument ||
+        isFlipping ||
+        currentPage <= 1
+    ) {
+
+        return;
+    }
+
+
+    isFlipping = true;
+
+    flipDirection = "previous";
+
+    updateUI();
+
+
+    const previousPageNumber =
+        currentPage - 1;
+
+
+    try {
+
+        /*
+         * Render previous page
+         * into the hidden canvas.
+         */
+
+        await renderPDFPage(
+            previousPageNumber,
+            flipNextCanvas
+        );
+
+
+        flipNextPage.dataset.page =
+            String(previousPageNumber);
+
+
+        flipCurrentPage.classList.remove(
+            "flip-forward",
+            "flip-backward"
+        );
+
+
+        flipCurrentPage.classList.add(
+            "flip-backward"
+        );
+
+
+        flipShadow.classList.add(
+            "active"
+        );
+
+
+        announce(
+            `Turning back to page ${previousPageNumber}...`
+        );
+
+
+        await wait(
+            FLIP_DURATION
+        );
+
+
+        const oldCanvas =
+            flipCurrentCanvas;
+
+        flipCurrentCanvas =
+            flipNextCanvas;
+
+        flipNextCanvas =
+            oldCanvas;
+
+
+        const oldPage =
+            flipCurrentPage;
+
+        flipCurrentPage =
+            flipNextPage;
+
+        flipNextPage =
+            oldPage;
+
+
+        flipCurrentPage.classList.remove(
+            "flip-forward",
+            "flip-backward"
+        );
+
+
+        flipCurrentPage.classList.add(
+            "chishti-current-page"
+        );
+
+
+        flipNextPage.classList.remove(
+            "chishti-current-page"
+        );
+
+
+        currentPage =
+            previousPageNumber;
+
+
+        flipNextPage.style.transform =
+            "";
+
+
+        flipShadow.classList.remove(
+            "active"
+        );
+
+
+        await prepareNextPage();
+
+
+        updateUI();
+
+
+        announce(
+            `Page ${currentPage} of ${pageCount}`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Previous page flip error:",
+            error
+        );
+
+    } finally {
+
+        isFlipping = false;
+
+        flipCurrentPage.classList.remove(
+            "flip-forward",
+            "flip-backward"
+        );
+
+        flipShadow.classList.remove(
+            "active"
+        );
+
+        updateUI();
+    }
+}
+
+
+/* =========================================================
+   WAIT
+========================================================= */
+
+function wait(ms) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                ms
+            )
+    );
 }
 
 
@@ -707,18 +1405,26 @@ async function renderPage(pageNumber) {
    GO TO PAGE
 ========================================================= */
 
-function goToPage(value) {
+async function goToPage(value) {
 
     if (!pdfDocument) {
         return;
     }
 
+
     let page =
-        parseInt(value, 10);
+        parseInt(
+            value,
+            10
+        );
+
 
     if (!Number.isFinite(page)) {
-        page = currentPage;
+
+        page =
+            currentPage;
     }
+
 
     page =
         Math.max(
@@ -729,45 +1435,52 @@ function goToPage(value) {
             )
         );
 
-    renderPage(page);
-}
-
-
-/* =========================================================
-   PREVIOUS
-========================================================= */
-
-function previousPage() {
 
     if (
-        !pdfDocument ||
-        currentPage <= 1
+        page === currentPage
     ) {
+
+        updateUI();
+
         return;
     }
 
-    goToPage(
-        currentPage - 1
-    );
-}
+
+    /*
+     * For direct page input we don't
+     * animate through every page.
+     */
+
+    isFlipping = true;
+
+    updateUI();
 
 
-/* =========================================================
-   NEXT
-========================================================= */
+    try {
 
-function nextPage() {
+        currentPage =
+            page;
 
-    if (
-        !pdfDocument ||
-        currentPage >= pageCount
-    ) {
-        return;
+
+        flipCurrentPage.classList.remove(
+            "flip-forward",
+            "flip-backward"
+        );
+
+
+        await renderFlipBook();
+
+
+        announce(
+            `Page ${currentPage} of ${pageCount}`
+        );
+
+    } finally {
+
+        isFlipping = false;
+
+        updateUI();
     }
-
-    goToPage(
-        currentPage + 1
-    );
 }
 
 
@@ -788,10 +1501,13 @@ function zoomIn() {
             )
         );
 
+
     updateUI();
 
+
     if (pdfDocument) {
-        renderPage(currentPage);
+
+        renderFlipBook();
     }
 }
 
@@ -809,22 +1525,29 @@ function zoomOut() {
             )
         );
 
+
     updateUI();
 
+
     if (pdfDocument) {
-        renderPage(currentPage);
+
+        renderFlipBook();
     }
 }
 
 
 function resetZoom() {
 
-    zoom = DEFAULT_ZOOM;
+    zoom =
+        DEFAULT_ZOOM;
+
 
     updateUI();
 
+
     if (pdfDocument) {
-        renderPage(currentPage);
+
+        renderFlipBook();
     }
 }
 
@@ -837,6 +1560,7 @@ async function loadPDF() {
 
     hideError();
 
+
     if (!PDF_URL) {
 
         showError(
@@ -846,31 +1570,44 @@ async function loadPDF() {
         return;
     }
 
-    cancelCurrentRender();
 
     try {
 
         setBookTitle();
 
-        console.log(
-            "Loading PDF:",
-            PDF_URL
+
+        announce(
+            "Loading digital book..."
         );
+
+
+        createFlipBook();
+
 
         const loadingTask =
             pdfjsLib.getDocument({
-                url: PDF_URL
+
+                url:
+                    PDF_URL
+
             });
+
 
         pdfDocument =
             await loadingTask.promise;
 
+
         pageCount =
             pdfDocument.numPages;
 
-        currentPage = 1;
 
-        zoom = DEFAULT_ZOOM;
+        currentPage =
+            1;
+
+
+        zoom =
+            DEFAULT_ZOOM;
+
 
         console.log(
             "PDF loaded:",
@@ -878,13 +1615,17 @@ async function loadPDF() {
             "pages"
         );
 
+
         updateUI();
+
+
+        await renderFlipBook();
+
 
         announce(
             `Page 1 of ${pageCount}`
         );
 
-        await renderPage(1);
 
     } catch (error) {
 
@@ -893,11 +1634,19 @@ async function loadPDF() {
             error
         );
 
-        pdfDocument = null;
-        pageCount = 0;
-        currentPage = 1;
+
+        pdfDocument =
+            null;
+
+        pageCount =
+            0;
+
+        currentPage =
+            1;
+
 
         updateUI();
+
 
         if (
             error?.name ===
@@ -919,6 +1668,7 @@ Check the exact PDF filename and path.`
             return;
         }
 
+
         if (
             error?.name ===
             "InvalidPDFException"
@@ -930,6 +1680,7 @@ Check the exact PDF filename and path.`
 
             return;
         }
+
 
         showError(
             "PDF could not be loaded. Check the PDF URL and filename."
@@ -951,18 +1702,9 @@ const WATERMARK_SUBTEXT =
 const WATERMARK_OPACITY =
     0.22;
 
-const WATERMARK_COLOR =
-    PDFLib?.rgb
-        ? PDFLib.rgb(
-            0.29,
-            0,
-            0
-        )
-        : null;
-
 
 /* =========================================================
-   GET SAFE FILE NAME
+   GET SAFE DOWNLOAD NAME
 ========================================================= */
 
 function getDownloadFileName() {
@@ -974,15 +1716,22 @@ function getDownloadFileName() {
             .pop() ||
         "chishti-library-book.pdf";
 
+
     try {
+
         filename =
-            decodeURIComponent(filename);
+            decodeURIComponent(
+                filename
+            );
+
     } catch (error) {
+
         console.warn(
             "Filename decode error:",
             error
         );
     }
+
 
     filename =
         filename.replace(
@@ -990,242 +1739,239 @@ function getDownloadFileName() {
             ""
         );
 
-    return `${filename}-ChishtiLibrary-Watermarked.pdf`;
+
+    return (
+        `${filename}-ChishtiLibrary-Watermarked.pdf`
+    );
 }
 
 
 /* =========================================================
-   WATERMARK PDF DOWNLOAD
+   CREATE WATERMARKED PDF
 ========================================================= */
 
-async function downloadWatermarkedPDF() {
+async function createWatermarkedPDF() {
 
     if (!PDF_URL) {
 
-        alert(
+        throw new Error(
             "No PDF selected."
         );
-
-        return;
     }
+
 
     if (
         typeof PDFLib ===
         "undefined"
     ) {
 
-        alert(
-            "PDF watermark system is not available. Please refresh the page."
+        throw new Error(
+            "PDF-LIB is not available."
+        );
+    }
+
+
+    const response =
+        await fetch(
+            PDF_URL,
+            {
+                cache:
+                    "no-store"
+            }
         );
 
+
+    if (!response.ok) {
+
+        throw new Error(
+            `PDF download failed: ${response.status}`
+        );
+    }
+
+
+    const pdfBytes =
+        await response.arrayBuffer();
+
+
+    const pdfDoc =
+        await PDFLib.PDFDocument.load(
+            pdfBytes
+        );
+
+
+    const font =
+        await pdfDoc.embedFont(
+            PDFLib.StandardFonts.HelveticaBold
+        );
+
+
+    const pages =
+        pdfDoc.getPages();
+
+
+    for (
+        const page of pages
+    ) {
+
+        const {
+            width,
+            height
+        } =
+            page.getSize();
+
+
+        const fontSize =
+            Math.max(
+                30,
+                Math.min(
+                    58,
+                    Math.min(
+                        width,
+                        height
+                    ) * 0.065
+                )
+            );
+
+
+        const mainWidth =
+            font.widthOfTextAtSize(
+                WATERMARK_TEXT,
+                fontSize
+            );
+
+
+        page.drawText(
+            WATERMARK_TEXT,
+            {
+
+                x:
+                    (
+                        width -
+                        mainWidth
+                    ) / 2,
+
+                y:
+                    (
+                        height -
+                        fontSize
+                    ) / 2,
+
+                size:
+                    fontSize,
+
+                font:
+                    font,
+
+                color:
+                    PDFLib.rgb(
+                        0.29,
+                        0,
+                        0
+                    ),
+
+                opacity:
+                    WATERMARK_OPACITY,
+
+                rotate:
+                    PDFLib.degrees(
+                        -32
+                    )
+            }
+        );
+
+
+        const subSize =
+            Math.max(
+                14,
+                fontSize * 0.42
+            );
+
+
+        const subWidth =
+            font.widthOfTextAtSize(
+                WATERMARK_SUBTEXT,
+                subSize
+            );
+
+
+        page.drawText(
+            WATERMARK_SUBTEXT,
+            {
+
+                x:
+                    (
+                        width -
+                        subWidth
+                    ) / 2,
+
+                y:
+                    (
+                        height -
+                        fontSize
+                    ) / 2 -
+                    fontSize * 0.85,
+
+                size:
+                    subSize,
+
+                font:
+                    font,
+
+                color:
+                    PDFLib.rgb(
+                        0.83,
+                        0.65,
+                        0
+                    ),
+
+                opacity:
+                    0.20,
+
+                rotate:
+                    PDFLib.degrees(
+                        -32
+                    )
+            }
+        );
+    }
+
+
+    return pdfDoc.save();
+}
+
+
+/* =========================================================
+   DOWNLOAD WATERMARKED PDF
+========================================================= */
+
+async function downloadWatermarkedPDF() {
+
+    if (!downloadButton) {
         return;
     }
 
+
     const originalText =
-        downloadButton
-            ? downloadButton.innerHTML
-            : "";
+        downloadButton.innerHTML;
+
 
     try {
 
-        if (downloadButton) {
+        downloadButton.disabled =
+            true;
 
-            downloadButton.disabled = true;
 
-            downloadButton.innerHTML =
-                "⏳";
-        }
+        downloadButton.innerHTML =
+            "⏳";
+
 
         announce(
             "Preparing watermarked PDF..."
         );
 
-        /*
-         * Fetch original PDF.
-         */
-
-        const response =
-            await fetch(
-                PDF_URL,
-                {
-                    cache: "no-store"
-                }
-            );
-
-        if (!response.ok) {
-
-            throw new Error(
-                `PDF download failed: ${response.status}`
-            );
-        }
-
-        const pdfBytes =
-            await response.arrayBuffer();
-
-
-        /*
-         * Load with PDF-LIB.
-         */
-
-        const pdfDoc =
-            await PDFLib.PDFDocument.load(
-                pdfBytes
-            );
-
-
-        /*
-         * Embed standard font.
-         */
-
-        const font =
-            await pdfDoc.embedFont(
-                PDFLib.StandardFonts.HelveticaBold
-            );
-
-
-        /*
-         * Watermark every page.
-         */
-
-        const pages =
-            pdfDoc.getPages();
-
-
-        for (
-            let i = 0;
-            i < pages.length;
-            i++
-        ) {
-
-            const page =
-                pages[i];
-
-            const {
-                width,
-                height
-            } =
-                page.getSize();
-
-
-            /*
-             * Main watermark
-             */
-
-            const fontSize =
-                Math.max(
-                    30,
-                    Math.min(
-                        58,
-                        Math.min(
-                            width,
-                            height
-                        ) * 0.065
-                    )
-                );
-
-
-            const mainWidth =
-                font.widthOfTextAtSize(
-                    WATERMARK_TEXT,
-                    fontSize
-                );
-
-
-            page.drawText(
-                WATERMARK_TEXT,
-                {
-                    x:
-                        (width -
-                            mainWidth) / 2,
-
-                    y:
-                        (height -
-                            fontSize) / 2,
-
-                    size:
-                        fontSize,
-
-                    font:
-                        font,
-
-                    color:
-                        WATERMARK_COLOR ||
-                        PDFLib.rgb(
-                            0.29,
-                            0,
-                            0
-                        ),
-
-                    opacity:
-                        WATERMARK_OPACITY,
-
-                    rotate:
-                        PDFLib.degrees(-32)
-                }
-            );
-
-
-            /*
-             * Second smaller watermark.
-             */
-
-            const subSize =
-                Math.max(
-                    14,
-                    fontSize * 0.42
-                );
-
-
-            const subWidth =
-                font.widthOfTextAtSize(
-                    WATERMARK_SUBTEXT,
-                    subSize
-                );
-
-
-            page.drawText(
-                WATERMARK_SUBTEXT,
-                {
-                    x:
-                        (width -
-                            subWidth) / 2,
-
-                    y:
-                        (
-                            height -
-                            fontSize
-                        ) / 2 -
-                        fontSize * 0.85,
-
-                    size:
-                        subSize,
-
-                    font:
-                        font,
-
-                    color:
-                        PDFLib.rgb(
-                            0.83,
-                            0.65,
-                            0
-                        ),
-
-                    opacity:
-                        0.20,
-
-                    rotate:
-                        PDFLib.degrees(-32)
-                }
-            );
-        }
-
-
-        /*
-         * Save final watermarked PDF.
-         */
 
         const finalBytes =
-            await pdfDoc.save();
+            await createWatermarkedPDF();
 
 
         const blob =
@@ -1245,17 +1991,26 @@ async function downloadWatermarkedPDF() {
 
 
         const link =
-            document.createElement("a");
+            document.createElement(
+                "a"
+            );
+
 
         link.href =
             blobURL;
 
+
         link.download =
             getDownloadFileName();
 
-        document.body.appendChild(link);
+
+        document.body.appendChild(
+            link
+        );
+
 
         link.click();
+
 
         link.remove();
 
@@ -1276,6 +2031,7 @@ async function downloadWatermarkedPDF() {
             "Watermarked PDF downloaded successfully."
         );
 
+
     } catch (error) {
 
         console.error(
@@ -1283,23 +2039,26 @@ async function downloadWatermarkedPDF() {
             error
         );
 
+
         alert(
             "Watermarked PDF could not be created. Please try again."
         );
+
 
         announce(
             "Watermarked PDF download failed."
         );
 
+
     } finally {
 
-        if (downloadButton) {
+        downloadButton.disabled =
+            false;
 
-            downloadButton.disabled = false;
 
-            downloadButton.innerHTML =
-                originalText || "↓";
-        }
+        downloadButton.innerHTML =
+            originalText || "↓";
+
 
         updateUI();
     }
@@ -1320,7 +2079,7 @@ if (downloadButton) {
 
 
 /* =========================================================
-   CLEAN DOWNLOAD BLOCKED
+   CLEAN DOWNLOAD
 ========================================================= */
 
 if (cleanDownloadButton) {
@@ -1332,6 +2091,7 @@ if (cleanDownloadButton) {
             alert(
                 "Clean download is not available. Please use the watermarked download."
             );
+
         }
     );
 }
@@ -1339,36 +2099,9 @@ if (cleanDownloadButton) {
 
 /* =========================================================
    PRINT
-   Uses watermarked PDF instead of original.
 ========================================================= */
 
 async function printCurrentBook() {
-
-    if (!PDF_URL) {
-
-        alert(
-            "No PDF selected."
-        );
-
-        return;
-    }
-
-    /*
-     * Create temporary watermarked PDF.
-     * Printing the original PDF directly is intentionally avoided.
-     */
-
-    if (
-        typeof PDFLib ===
-        "undefined"
-    ) {
-
-        alert(
-            "Watermark system is not available."
-        );
-
-        return;
-    }
 
     try {
 
@@ -1376,91 +2109,10 @@ async function printCurrentBook() {
             "Preparing watermarked document for printing..."
         );
 
-        const response =
-            await fetch(PDF_URL);
-
-        if (!response.ok) {
-            throw new Error(
-                "Unable to fetch PDF."
-            );
-        }
-
-        const pdfBytes =
-            await response.arrayBuffer();
-
-        const pdfDoc =
-            await PDFLib.PDFDocument.load(
-                pdfBytes
-            );
-
-        const font =
-            await pdfDoc.embedFont(
-                PDFLib.StandardFonts.HelveticaBold
-            );
-
-        const pages =
-            pdfDoc.getPages();
-
-        for (
-            const page of pages
-        ) {
-
-            const {
-                width,
-                height
-            } = page.getSize();
-
-            const size =
-                Math.max(
-                    30,
-                    Math.min(
-                        58,
-                        Math.min(
-                            width,
-                            height
-                        ) * 0.065
-                    )
-                );
-
-            const textWidth =
-                font.widthOfTextAtSize(
-                    WATERMARK_TEXT,
-                    size
-                );
-
-            page.drawText(
-                WATERMARK_TEXT,
-                {
-                    x:
-                        (width -
-                            textWidth) / 2,
-
-                    y:
-                        (height -
-                            size) / 2,
-
-                    size,
-
-                    font,
-
-                    color:
-                        PDFLib.rgb(
-                            0.29,
-                            0,
-                            0
-                        ),
-
-                    opacity:
-                        0.22,
-
-                    rotate:
-                        PDFLib.degrees(-32)
-                }
-            );
-        }
 
         const finalBytes =
-            await pdfDoc.save();
+            await createWatermarkedPDF();
+
 
         const blob =
             new Blob(
@@ -1471,8 +2123,12 @@ async function printCurrentBook() {
                 }
             );
 
+
         const url =
-            URL.createObjectURL(blob);
+            URL.createObjectURL(
+                blob
+            );
+
 
         const printWindow =
             window.open(
@@ -1480,16 +2136,22 @@ async function printCurrentBook() {
                 "_blank"
             );
 
+
         if (!printWindow) {
 
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(
+                url
+            );
+
 
             alert(
                 "Please allow popups to print the book."
             );
 
+
             return;
         }
+
 
         printWindow.addEventListener(
             "load",
@@ -1499,8 +2161,11 @@ async function printCurrentBook() {
                     function () {
 
                         try {
+
                             printWindow.print();
+
                         } catch (error) {
+
                             console.warn(
                                 "Print error:",
                                 error
@@ -1513,9 +2178,11 @@ async function printCurrentBook() {
             }
         );
 
+
         announce(
             "Watermarked document ready for printing."
         );
+
 
     } catch (error) {
 
@@ -1523,6 +2190,7 @@ async function printCurrentBook() {
             "Print error:",
             error
         );
+
 
         alert(
             "Watermarked print could not be prepared."
@@ -1551,13 +2219,17 @@ async function toggleFullscreen() {
             "readerApp"
         );
 
+
     if (!reader) {
         return;
     }
 
+
     try {
 
-        if (!document.fullscreenElement) {
+        if (
+            !document.fullscreenElement
+        ) {
 
             await reader.requestFullscreen();
 
@@ -1565,6 +2237,7 @@ async function toggleFullscreen() {
 
             await document.exitFullscreen();
         }
+
 
     } catch (error) {
 
@@ -1598,9 +2271,11 @@ if (swipeButton) {
             if (bookViewport) {
 
                 bookViewport.scrollIntoView({
-                    behavior: "smooth"
+                    behavior:
+                        "smooth"
                 });
             }
+
 
             announce(
                 "Swipe navigation is enabled."
@@ -1622,14 +2297,13 @@ if (previousPageButton) {
     );
 }
 
+
 if (nextPageButton) {
 
     nextPageButton.addEventListener(
         "click",
         nextPage
     );
-
-
 }
 
 
@@ -1645,6 +2319,7 @@ if (zoomOutButton) {
     );
 }
 
+
 if (resetZoomButton) {
 
     resetZoomButton.addEventListener(
@@ -1652,6 +2327,7 @@ if (resetZoomButton) {
         resetZoom
     );
 }
+
 
 if (zoomInButton) {
 
@@ -1675,8 +2351,10 @@ if (pageNumberInput) {
             goToPage(
                 this.value
             );
+
         }
     );
+
 
     pageNumberInput.addEventListener(
         "keydown",
@@ -1689,9 +2367,11 @@ if (pageNumberInput) {
 
                 event.preventDefault();
 
+
                 goToPage(
                     this.value
                 );
+
 
                 this.blur();
             }
@@ -1711,123 +2391,120 @@ document.addEventListener(
         const active =
             document.activeElement;
 
+
         const typing =
             active &&
             (
-                active.tagName === "INPUT" ||
-                active.tagName === "TEXTAREA" ||
+                active.tagName ===
+                    "INPUT" ||
+                active.tagName ===
+                    "TEXTAREA" ||
                 active.isContentEditable
             );
+
 
         if (typing) {
             return;
         }
 
-        if (
-            event.key === "ArrowLeft"
-        ) {
 
-            event.preventDefault();
+        switch (event.key) {
 
-            previousPage();
+            case "ArrowLeft":
 
-            return;
+                event.preventDefault();
+
+                previousPage();
+
+                break;
+
+
+            case "ArrowRight":
+
+                event.preventDefault();
+
+                nextPage();
+
+                break;
+
+
+            case "+":
+
+            case "=":
+
+                event.preventDefault();
+
+                zoomIn();
+
+                break;
+
+
+            case "-":
+
+                event.preventDefault();
+
+                zoomOut();
+
+                break;
+
+
+            case "0":
+
+                event.preventDefault();
+
+                resetZoom();
+
+                break;
+
+
+            case "Home":
+
+                event.preventDefault();
+
+                goToPage(1);
+
+                break;
+
+
+            case "End":
+
+                event.preventDefault();
+
+                goToPage(pageCount);
+
+                break;
+
+
+            case "f":
+
+            case "F":
+
+                event.preventDefault();
+
+                toggleFullscreen();
+
+                break;
+
+
+            case "t":
+
+            case "T":
+
+                event.preventDefault();
+
+                applyTheme(
+                    currentTheme + 1
+                );
+
+                break;
         }
 
-        if (
-            event.key === "ArrowRight"
-        ) {
-
-            event.preventDefault();
-
-            nextPage();
-
-            return;
-        }
-
-        if (
-            event.key === "+" ||
-            event.key === "="
-        ) {
-
-            event.preventDefault();
-
-            zoomIn();
-
-            return;
-        }
-
-        if (
-            event.key === "-"
-        ) {
-
-            event.preventDefault();
-
-            zoomOut();
-
-            return;
-        }
-
-        if (
-            event.key === "0"
-        ) {
-
-            event.preventDefault();
-
-            resetZoom();
-
-            return;
-        }
-
-        if (
-            event.key === "Home"
-        ) {
-
-            event.preventDefault();
-
-            goToPage(1);
-
-            return;
-        }
-
-        if (
-            event.key === "End"
-        ) {
-
-            event.preventDefault();
-
-            goToPage(pageCount);
-
-            return;
-        }
-
-        if (
-            event.key === "f" ||
-            event.key === "F"
-        ) {
-
-            toggleFullscreen();
-
-            return;
-        }
-
-        if (
-            event.key === "t" ||
-            event.key === "T"
-        ) {
-
-            applyTheme(
-                currentTheme + 1
-            );
-
-            return;
-        }
     }
 );
 
 
 /* =========================================================
-   MOBILE SWIPE
+   TOUCH START
 ========================================================= */
 
 if (bookViewport) {
@@ -1840,18 +2517,22 @@ if (bookViewport) {
                 !event.touches ||
                 !event.touches.length
             ) {
+
                 return;
             }
 
+
             touchStartX =
                 event.touches[0].clientX;
+
 
             touchStartY =
                 event.touches[0].clientY;
 
         },
         {
-            passive: true
+            passive:
+                true
         }
     );
 
@@ -1864,20 +2545,25 @@ if (bookViewport) {
                 !event.changedTouches ||
                 !event.changedTouches.length
             ) {
+
                 return;
             }
+
 
             touchEndX =
                 event.changedTouches[0].clientX;
 
+
             touchEndY =
                 event.changedTouches[0].clientY;
+
 
             handleSwipe();
 
         },
         {
-            passive: true
+            passive:
+                true
         }
     );
 }
@@ -1893,31 +2579,35 @@ function handleSwipe() {
         touchEndX -
         touchStartX;
 
+
     const deltaY =
         touchEndY -
         touchStartY;
 
+
     if (
-        Math.abs(deltaX) < 60
+        Math.abs(deltaX) <
+        SWIPE_THRESHOLD
     ) {
+
         return;
     }
+
 
     if (
         Math.abs(deltaX) <
         Math.abs(deltaY)
     ) {
+
         return;
     }
+
 
     if (deltaX < 0) {
 
         nextPage();
 
-        return;
-    }
-
-    if (deltaX > 0) {
+    } else {
 
         previousPage();
     }
@@ -1925,10 +2615,79 @@ function handleSwipe() {
 
 
 /* =========================================================
-   RESIZE
+   MOUSE DRAG / CLICK PAGE TURN
 ========================================================= */
 
-let resizeTimer = null;
+if (bookViewport) {
+
+    bookViewport.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                isFlipping ||
+                !pdfDocument
+            ) {
+
+                return;
+            }
+
+
+            /*
+             * Ignore controls.
+             */
+
+            if (
+                event.target.closest(
+                    "button,input,a"
+                )
+            ) {
+
+                return;
+            }
+
+
+            const rect =
+                bookViewport.getBoundingClientRect();
+
+
+            const x =
+                event.clientX -
+                rect.left;
+
+
+            /*
+             * Right side = next.
+             * Left side = previous.
+             */
+
+            if (
+                x >
+                rect.width * 0.62
+            ) {
+
+                nextPage();
+
+                return;
+            }
+
+
+            if (
+                x <
+                rect.width * 0.38
+            ) {
+
+                previousPage();
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
 
 window.addEventListener(
     "resize",
@@ -1938,19 +2697,21 @@ window.addEventListener(
             resizeTimer
         );
 
+
         resizeTimer =
             setTimeout(
                 function () {
 
-                    if (pdfDocument) {
+                    if (
+                        pdfDocument &&
+                        !isFlipping
+                    ) {
 
-                        renderPage(
-                            currentPage
-                        );
+                        renderFlipBook();
                     }
 
                 },
-                180
+                220
             );
     }
 );
@@ -1969,13 +2730,11 @@ window.addEventListener(
 
                 if (pdfDocument) {
 
-                    renderPage(
-                        currentPage
-                    );
+                    renderFlipBook();
                 }
 
             },
-            300
+            350
         );
     }
 );
@@ -1994,29 +2753,28 @@ document.addEventListener(
 
                 if (pdfDocument) {
 
-                    renderPage(
-                        currentPage
-                    );
+                    renderFlipBook();
                 }
 
             },
-            200
+            250
         );
     }
 );
 
 
 /* =========================================================
-   PREVENT CANVAS DRAG
+   RETRY
 ========================================================= */
 
-if (pdfCanvas) {
+if (retryButton) {
 
-    pdfCanvas.addEventListener(
-        "dragstart",
-        function (event) {
+    retryButton.addEventListener(
+        "click",
+        function () {
 
-            event.preventDefault();
+            loadPDF();
+
         }
     );
 }
@@ -2029,6 +2787,8 @@ if (pdfCanvas) {
 loadTheme();
 
 setBookTitle();
+
+createFlipBook();
 
 updateUI();
 
