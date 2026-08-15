@@ -1,0 +1,76 @@
+.book-stats {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.book-stats span,
+.book-stats button {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.book-stats button:hover {
+    transform: translateY(-2px);
+}
+
+.book-sort-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.sort-button {
+    border: 1px solid rgba(212,175,55,.45);
+    background: transparent;
+    color: inherit;
+    padding: 10px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: Poppins, sans-serif;
+    font-weight: 600;
+}
+
+.sort-button.active,
+.sort-button:hover {
+    background: #d4af37;
+    color: #3b0000;
+}
+
+.book-cover-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: .3s ease;
+}
+
+.book-cover:hover .book-cover-overlay {
+    opacity: 1;
+}
+
+.read-button {
+    border: none;
+    padding: 12px 22px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: Poppins, sans-serif;
+    font-weight: 600;
+}
+
+.open-book-button {
+    cursor: pointer;
+}
