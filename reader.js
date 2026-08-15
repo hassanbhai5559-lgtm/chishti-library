@@ -2031,340 +2031,810 @@ updateUI();
 loadPDF();
 
 /* =========================================================
-   CHISHTI LIBRARY — REAL PAGE FLIP ANIMATION
-   PASTE THIS AT THE VERY END OF reader.js
+   REAL PAGE FLIP ENGINE
+   1 -> 2 -> 3
+   2 SECOND CURL
+   SHADOW + SOUND
 ========================================================= */
 
-(function initPageFlipAnimation() {
+const FLIP_DURATION = 2000;
 
-    if (!bookViewport || !pdfCanvas) return;
+let isFlipping = false;
+let flipDirection = 0;
+let flipFromPage = 1;
+let flipToPage = 1;
 
-    let flipBusy = false;
+let flipFrontCanvas = null;
+let flipBackCanvas = null;
 
-    function flipAnimation(direction, callback) {
+let flipSound = null;
 
-        if (flipBusy) return;
-
-        flipBusy = true;
-
-        const canvas =
-            pdfCanvas;
-
-        canvas.classList.remove(
-            "page-flip-next",
-            "page-flip-prev"
-        );
-
-        /* Restart CSS animation */
-        void canvas.offsetWidth;
-
-        canvas.classList.add(
-            direction === "next"
-                ? "page-flip-next"
-                : "page-flip-prev"
-        );
-
-        setTimeout(() => {
-
-            if (typeof callback === "function") {
-                callback();
-            }
-
-        }, 180);
-
-        setTimeout(() => {
-
-            canvas.classList.remove(
-                "page-flip-next",
-                "page-flip-prev"
-            );
-
-            flipBusy = false;
-
-        }, 620);
-    }
-
-
-    /*
-     * Replace normal navigation with animated navigation.
-     */
-
-    const originalNextPage =
-        window.nextPage;
-
-    const originalPreviousPage =
-        window.previousPage;
-
-
-    /*
-     * Capture clicks on existing buttons.
-     */
-
-    if (nextPageButton) {
-
-        nextPageButton.addEventListener(
-            "click",
-            function () {
-
-                if (
-                    !pdfDocument ||
-                    currentPage >= pageCount ||
-                    flipBusy
-                ) {
-                    return;
-                }
-
-                flipAnimation(
-                    "next",
-                    function () {
-                        goToPage(currentPage + 1);
-                    }
-                );
-
-            },
-            true
-        );
-
-    }
-
-
-    if (previousPageButton) {
-
-        previousPageButton.addEventListener(
-            "click",
-            function () {
-
-                if (
-                    !pdfDocument ||
-                    currentPage <= 1 ||
-                    flipBusy
-                ) {
-                    return;
-                }
-
-                flipAnimation(
-                    "prev",
-                    function () {
-                        goToPage(currentPage - 1);
-                    }
-                );
-
-            },
-            true
-        );
-
-    }
-
-
-    /*
-     * Touch swipe animation.
-     */
-
-    if (bookViewport) {
-
-        bookViewport.addEventListener(
-            "touchend",
-            function () {
-
-                if (flipBusy) return;
-
-                const deltaX =
-                    touchEndX - touchStartX;
-
-                const deltaY =
-                    touchEndY - touchStartY;
-
-                if (
-                    Math.abs(deltaX) < 60 ||
-                    Math.abs(deltaX) <
-                    Math.abs(deltaY)
-                ) {
-                    return;
-                }
-
-                if (deltaX < 0) {
-
-                    if (
-                        pdfDocument &&
-                        currentPage < pageCount
-                    ) {
-
-                        flipAnimation(
-                            "next",
-                            () => {
-                                goToPage(
-                                    currentPage + 1
-                                );
-                            }
-                        );
-                    }
-
-                } else {
-
-                    if (
-                        pdfDocument &&
-                        currentPage > 1
-                    ) {
-
-                        flipAnimation(
-                            "prev",
-                            () => {
-                                goToPage(
-                                    currentPage - 1
-                                );
-                            }
-                        );
-                    }
-                }
-
-            },
-            {
-                passive: true
-            }
-        );
-
-    }
-
-})();
 
 /* =========================================================
-   CHISHTI LIBRARY — VOICE READER
-   PASTE AT END OF reader.js
+   CREATE FLIP SOUND
 ========================================================= */
 
-(function initChishtiVoiceReader() {
+function createFlipSound() {
 
-    if (!("speechSynthesis" in window)) {
-        console.warn(
-            "Speech synthesis is not supported."
+    if (flipSound) {
+        return flipSound;
+    }
+
+    /*
+     * Web Audio synthetic paper sound.
+     * No external audio file required.
+     */
+
+    const AudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+    if (!AudioContext) {
+        return null;
+    }
+
+    const audioContext =
+        new AudioContext();
+
+    flipSound = {
+        context: audioContext
+    };
+
+    return flipSound;
+}
+
+
+/* =========================================================
+   PLAY PAGE FLIP SOUND
+========================================================= */
+
+function playFlipSound() {
+
+    try {
+
+        const sound =
+            createFlipSound();
+
+        if (!sound) {
+            return;
+        }
+
+        const ctx =
+            sound.context;
+
+        if (ctx.state === "suspended") {
+            ctx.resume();
+        }
+
+        const duration = 0.35;
+
+        const buffer =
+            ctx.createBuffer(
+                1,
+                ctx.sampleRate * duration,
+                ctx.sampleRate
+            );
+
+        const data =
+            buffer.getChannelData(0);
+
+        for (
+            let i = 0;
+            i < data.length;
+            i++
+        ) {
+
+            const fade =
+                1 -
+                i / data.length;
+
+            data[i] =
+                (
+                    Math.random() * 2 - 1
+                ) *
+                fade *
+                0.16;
+        }
+
+        const source =
+            ctx.createBufferSource();
+
+        const filter =
+            ctx.createBiquadFilter();
+
+        const gain =
+            ctx.createGain();
+
+        source.buffer =
+            buffer;
+
+        filter.type =
+            "bandpass";
+
+        filter.frequency.value =
+            1700;
+
+        filter.Q.value =
+            0.7;
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            ctx.currentTime
         );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.32,
+            ctx.currentTime + 0.025
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            ctx.currentTime + duration
+        );
+
+        source
+            .connect(filter)
+            .connect(gain)
+            .connect(ctx.destination);
+
+        source.start();
+
+    } catch (error) {
+
+        console.warn(
+            "Flip sound error:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   CREATE FLIP DOM
+========================================================= */
+
+function createFlipDOM() {
+
+    if (!bookViewport) {
         return;
     }
 
-    let voiceEnabled = false;
-
-    function speak(text) {
-
-        if (!voiceEnabled) return;
-
-        window.speechSynthesis.cancel();
-
-        const utterance =
-            new SpeechSynthesisUtterance(text);
-
-        utterance.rate = 0.95;
-        utterance.pitch = 1;
-        utterance.volume = 1;
-
-        utterance.lang = "en-US";
-
-        window.speechSynthesis.speak(
-            utterance
-        );
-    }
-
-
-    /*
-     * Voice button automatically create karega
-     * agar HTML mein button nahi hai.
-     */
-
-    let voiceButton =
+    let flipBook =
         document.getElementById(
-            "voiceButton"
+            "realFlipBook"
         );
 
-    if (!voiceButton) {
-
-        voiceButton =
-            document.createElement("button");
-
-        voiceButton.id =
-            "voiceButton";
-
-        voiceButton.type =
-            "button";
-
-        voiceButton.textContent =
-            "🔊 Voice";
-
-        voiceButton.title =
-            "Toggle voice";
-
-        voiceButton.setAttribute(
-            "aria-label",
-            "Toggle voice reader"
-        );
-
-        const toolbar =
-            document.querySelector(
-                ".reader-toolbar"
-            ) ||
-            document.querySelector(
-                "#readerApp"
-            );
-
-        if (toolbar) {
-            toolbar.appendChild(
-                voiceButton
-            );
-        }
+    if (flipBook) {
+        return flipBook;
     }
 
+    flipBook =
+        document.createElement("div");
 
-    voiceButton.addEventListener(
-        "click",
-        function () {
+    flipBook.id =
+        "realFlipBook";
 
-            voiceEnabled =
-                !voiceEnabled;
+    flipBook.className =
+        "real-flip-book";
 
-            if (voiceEnabled) {
+    const basePage =
+        document.createElement("div");
 
-                voiceButton.textContent =
-                    "🔊 Voice ON";
+    basePage.className =
+        "flip-static-page";
 
-                speak(
-                    `Page ${currentPage} of ${pageCount}`
-                );
+    basePage.id =
+        "flipStaticPage";
 
-                announce(
-                    "Voice reader enabled."
-                );
+    const front =
+        document.createElement("canvas");
 
-            } else {
+    front.className =
+        "flip-page flip-front";
 
-                window.speechSynthesis.cancel();
+    const back =
+        document.createElement("canvas");
 
-                voiceButton.textContent =
-                    "🔇 Voice OFF";
+    back.className =
+        "flip-page flip-back";
 
-                announce(
-                    "Voice reader disabled."
-                );
-            }
+    const shadow =
+        document.createElement("div");
 
-        }
+    shadow.className =
+        "flip-shadow";
+
+    flipBook.appendChild(
+        basePage
     );
 
+    flipBook.appendChild(
+        front
+    );
+
+    flipBook.appendChild(
+        back
+    );
+
+    flipBook.appendChild(
+        shadow
+    );
+
+    bookViewport.appendChild(
+        flipBook
+    );
+
+    flipFrontCanvas =
+        front;
+
+    flipBackCanvas =
+        back;
+
+    return flipBook;
+}
+
+
+/* =========================================================
+   GET FLIP CANVAS CONTEXT
+========================================================= */
+
+function getFlipContext(canvas) {
+
+    return canvas.getContext(
+        "2d",
+        {
+            alpha: false
+        }
+    );
+}
+
+
+/* =========================================================
+   RENDER PAGE TO CANVAS
+========================================================= */
+
+async function renderPageToCanvas(
+    pageNumber,
+    canvas
+) {
+
+    if (
+        !pdfDocument ||
+        !canvas
+    ) {
+        return null;
+    }
+
+    const page =
+        await pdfDocument.getPage(
+            pageNumber
+        );
+
+    const scale =
+        calculateScale(page);
+
+    const viewport =
+        page.getViewport({
+            scale
+        });
+
+    const ratio =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
+
+    canvas.width =
+        Math.floor(
+            viewport.width * ratio
+        );
+
+    canvas.height =
+        Math.floor(
+            viewport.height * ratio
+        );
+
+    canvas.style.width =
+        `${viewport.width}px`;
+
+    canvas.style.height =
+        `${viewport.height}px`;
+
+    const ctx =
+        getFlipContext(canvas);
+
+    ctx.setTransform(
+        ratio,
+        0,
+        0,
+        ratio,
+        0,
+        0
+    );
+
+    ctx.fillStyle =
+        "#FFFFFF";
+
+    ctx.fillRect(
+        0,
+        0,
+        viewport.width,
+        viewport.height
+    );
+
+    const task =
+        page.render({
+            canvasContext: ctx,
+            viewport
+        });
+
+    await task.promise;
+
+    return {
+        width:
+            viewport.width,
+
+        height:
+            viewport.height
+    };
+}
+
+
+/* =========================================================
+   SHOW NORMAL PAGE
+========================================================= */
+
+async function showStaticPage(
+    pageNumber
+) {
+
+    createFlipDOM();
+
+    const flipBook =
+        document.getElementById(
+            "realFlipBook"
+        );
+
+    const staticPage =
+        document.getElementById(
+            "flipStaticPage"
+        );
+
+    if (!flipBook || !staticPage) {
+        return;
+    }
+
+    const tempCanvas =
+        document.createElement(
+            "canvas"
+        );
+
+    const size =
+        await renderPageToCanvas(
+            pageNumber,
+            tempCanvas
+        );
+
+    if (!size) {
+        return;
+    }
+
+    staticPage.style.width =
+        `${size.width}px`;
+
+    staticPage.style.height =
+        `${size.height}px`;
+
+    staticPage.style.backgroundImage =
+        `url(${tempCanvas.toDataURL()})`;
+
+    staticPage.style.backgroundSize =
+        "100% 100%";
+
+    staticPage.style.backgroundRepeat =
+        "no-repeat";
+
+    staticPage.style.backgroundColor =
+        "#fff";
+
+    flipBook.style.width =
+        `${size.width}px`;
+
+    flipBook.style.height =
+        `${size.height}px`;
+
+    flipBook.style.setProperty(
+        "--page-width",
+        `${size.width}px`
+    );
+
+    flipBook.style.setProperty(
+        "--page-height",
+        `${size.height}px`
+    );
+}
+
+
+/* =========================================================
+   REAL PAGE CURL
+========================================================= */
+
+async function flipToPage(
+    targetPage,
+    direction
+) {
+
+    if (
+        !pdfDocument ||
+        isFlipping
+    ) {
+        return;
+    }
+
+    targetPage =
+        Math.max(
+            1,
+            Math.min(
+                targetPage,
+                pageCount
+            )
+        );
+
+    if (
+        targetPage === currentPage
+    ) {
+        return;
+    }
 
     /*
-     * Existing announce() ko voice ke saath connect.
+     * IMPORTANT:
+     *
+     * Next:
+     * 1 -> 2
+     * 2 -> 3
+     *
+     * Previous:
+     * 3 -> 2
+     * 2 -> 1
      */
 
-    const originalAnnounce =
-        announce;
+    isFlipping = true;
 
-    window.announce =
-        function(message) {
+    flipDirection =
+        direction;
 
-            originalAnnounce(message);
+    flipFromPage =
+        currentPage;
 
-            if (voiceEnabled) {
-                speak(message);
+    flipToPage =
+        targetPage;
+
+    createFlipDOM();
+
+    const flipBook =
+        document.getElementById(
+            "realFlipBook"
+        );
+
+    const staticPage =
+        document.getElementById(
+            "flipStaticPage"
+        );
+
+    if (
+        !flipBook ||
+        !staticPage
+    ) {
+        isFlipping = false;
+        return;
+    }
+
+    try {
+
+        const currentCanvas =
+            document.createElement(
+                "canvas"
+            );
+
+        const targetCanvas =
+            document.createElement(
+                "canvas"
+            );
+
+        const currentSize =
+            await renderPageToCanvas(
+                flipFromPage,
+                currentCanvas
+            );
+
+        await renderPageToCanvas(
+            flipToPage,
+            targetCanvas
+        );
+
+        if (!currentSize) {
+            isFlipping = false;
+            return;
+        }
+
+        flipFrontCanvas.width =
+            currentCanvas.width;
+
+        flipFrontCanvas.height =
+            currentCanvas.height;
+
+        flipBackCanvas.width =
+            targetCanvas.width;
+
+        flipBackCanvas.height =
+            targetCanvas.height;
+
+        flipFrontCanvas.style.width =
+            `${currentSize.width}px`;
+
+        flipFrontCanvas.style.height =
+            `${currentSize.height}px`;
+
+        flipBackCanvas.style.width =
+            `${currentSize.width}px`;
+
+        flipBackCanvas.style.height =
+            `${currentSize.height}px`;
+
+        const frontContext =
+            getFlipContext(
+                flipFrontCanvas
+            );
+
+        const backContext =
+            getFlipContext(
+                flipBackCanvas
+            );
+
+        frontContext.drawImage(
+            currentCanvas,
+            0,
+            0
+        );
+
+        backContext.drawImage(
+            targetCanvas,
+            0,
+            0
+        );
+
+        staticPage.style.backgroundImage =
+            direction > 0
+                ? `url(${targetCanvas.toDataURL()})`
+                : `url(${currentCanvas.toDataURL()})`;
+
+        flipBook.style.width =
+            `${currentSize.width}px`;
+
+        flipBook.style.height =
+            `${currentSize.height}px`;
+
+        flipBook.classList.remove(
+            "flip-next",
+            "flip-prev"
+        );
+
+        /*
+         * Force browser reflow.
+         */
+
+        void flipBook.offsetWidth;
+
+        flipBook.classList.add(
+            direction > 0
+                ? "flip-next"
+                : "flip-prev"
+        );
+
+        /*
+         * Sound starts with the page movement.
+         */
+
+        playFlipSound();
+
+        announce(
+            direction > 0
+                ? `Turning to page ${flipToPage} of ${pageCount}`
+                : `Returning to page ${flipToPage} of ${pageCount}`
+        );
+
+        await new Promise(
+            resolve => {
+
+                setTimeout(
+                    resolve,
+                    FLIP_DURATION
+                );
+
             }
-        };
+        );
+
+        currentPage =
+            flipToPage;
+
+        updateUI();
+
+        await showStaticPage(
+            currentPage
+        );
+
+        flipBook.classList.remove(
+            "flip-next",
+            "flip-prev"
+        );
+
+        announce(
+            `Page ${currentPage} of ${pageCount}`
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Page flip error:",
+            error
+        );
+
+        await showStaticPage(
+            currentPage
+        );
+
+    } finally {
+
+        isFlipping = false;
+    }
+}
 
 
-})();
+/* =========================================================
+   REPLACE NEXT PAGE
+========================================================= */
 
+function nextPage() {
+
+    if (
+        !pdfDocument ||
+        isFlipping ||
+        currentPage >= pageCount
+    ) {
+        return;
+    }
+
+    /*
+     * EXACTLY ONE PAGE FORWARD.
+     *
+     * 1 -> 2
+     * 2 -> 3
+     * 3 -> 4
+     */
+
+    flipToPage(
+        currentPage + 1,
+        1
+    );
+}
+
+
+/* =========================================================
+   REPLACE PREVIOUS PAGE
+========================================================= */
+
+function previousPage() {
+
+    if (
+        !pdfDocument ||
+        isFlipping ||
+        currentPage <= 1
+    ) {
+        return;
+    }
+
+    /*
+     * EXACTLY ONE PAGE BACK.
+     *
+     * 3 -> 2
+     * 2 -> 1
+     */
+
+    flipToPage(
+        currentPage - 1,
+        -1
+    );
+}
+
+
+/* =========================================================
+   REPLACE GO TO PAGE
+========================================================= */
+
+function goToPage(value) {
+
+    if (
+        !pdfDocument ||
+        isFlipping
+    ) {
+        return;
+    }
+
+    let page =
+        parseInt(
+            value,
+            10
+        );
+
+    if (!Number.isFinite(page)) {
+        page = currentPage;
+    }
+
+    page =
+        Math.max(
+            1,
+            Math.min(
+                page,
+                pageCount
+            )
+        );
+
+    if (
+        page === currentPage
+    ) {
+        return;
+    }
+
+    /*
+     * Direct page jump does not animate
+     * through every intermediate page.
+     */
+
+    currentPage = page;
+
+    showStaticPage(
+        currentPage
+    );
+
+    updateUI();
+
+    announce(
+        `Page ${currentPage} of ${pageCount}`
+    );
+}
+
+
+/* =========================================================
+   REPLACE LOAD PDF FINAL RENDER
+========================================================= */
+
+async function renderPage(
+    pageNumber
+) {
+
+    if (!pdfDocument) {
+        return;
+    }
+
+    pageNumber =
+        Math.max(
+            1,
+            Math.min(
+                Number(pageNumber) || 1,
+                pageCount
+            )
+        );
+
+    currentPage =
+        pageNumber;
+
+    await showStaticPage(
+        currentPage
+    );
+
+    updateUI();
+
+    announce(
+        `Page ${currentPage} of ${pageCount}`
+    );
+}
