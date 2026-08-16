@@ -235,6 +235,20 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+    
+},
+  {
+    "id":20,
+    "title": "Kabe da kaba  ",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "cover.png",
+    "pdf": "kabe da kaba.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
     
