@@ -2392,3 +2392,16 @@ body {
     }
 
 }
+#bookmarkBtn.active {
+    background: #d4af37 !important;
+    color: #3b0000 !important;
+}
+
+#bookmarkBtn.active i {
+    color: #3b0000 !important;
+}
+
+#shareBtn:hover,
+#bookmarkBtn:hover {
+    transform: translateY(-2px);
+}
