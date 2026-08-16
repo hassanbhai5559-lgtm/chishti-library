@@ -2207,3 +2207,188 @@ body {
             .35s !important;
     }
 }
+/* =========================================
+   CHISHTI READER EXTRA CONTROLS
+========================================= */
+
+.reader-extra-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px auto;
+    padding: 12px;
+}
+
+.reader-extra-controls button {
+    border: 1px solid rgba(212,175,55,.45);
+    background: #3b0000;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: Poppins, sans-serif;
+    font-size: 14px;
+    transition: .25s ease;
+}
+
+.reader-extra-controls button:hover {
+    background: #7a0000;
+    transform: translateY(-2px);
+}
+
+.reader-extra-controls button.active {
+    background: #d4af37;
+    color: #2b0000;
+}
+
+.reader-extra-controls button i {
+    margin-right: 6px;
+}
+
+
+/* =========================================
+   BOOKMARK PANEL
+========================================= */
+
+.bookmarks-panel {
+    position: fixed;
+    top: 0;
+    right: -360px;
+    width: 340px;
+    height: 100vh;
+    background: #210000;
+    color: white;
+    z-index: 99999;
+    box-shadow: -5px 0 25px rgba(0,0,0,.5);
+    transition: right .3s ease;
+    overflow-y: auto;
+}
+
+.bookmarks-panel.show {
+    right: 0;
+}
+
+.bookmarks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    border-bottom: 1px solid rgba(212,175,55,.3);
+}
+
+.bookmarks-header h3 {
+    margin: 0;
+    color: #d4af37;
+}
+
+.bookmarks-header button {
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#bookmarksList {
+    padding: 15px;
+}
+
+.bookmark-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(212,175,55,.25);
+    border-radius: 8px;
+    background: #3b0000;
+}
+
+.bookmark-page-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: white;
+    text-align: left;
+    cursor: pointer;
+}
+
+.delete-bookmark {
+    border: none;
+    background: transparent;
+    color: #ff7777;
+    cursor: pointer;
+}
+
+.no-bookmarks {
+    text-align: center;
+    opacity: .7;
+}
+
+
+/* =========================================
+   SHARE MESSAGE
+========================================= */
+
+.share-message {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(20px);
+    background: #d4af37;
+    color: #210000;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s;
+    z-index: 100000;
+}
+
+.share-message.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+
+/* =========================================
+   2 PAGE MODE
+========================================= */
+
+.reader-two-page {
+    display: flex !important;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.reader-two-page canvas,
+.reader-two-page .page {
+    width: 48% !important;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .reader-extra-controls {
+        gap: 7px;
+    }
+
+    .reader-extra-controls button {
+        padding: 8px 11px;
+        font-size: 12px;
+    }
+
+    .bookmarks-panel {
+        width: 90%;
+    }
+
+}
