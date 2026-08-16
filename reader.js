@@ -2029,3 +2029,634 @@ setBookTitle();
 updateUI();
 
 loadPDF();
+/* =========================================
+   CHISHTI READER EXTRA FEATURES
+   SHARE + 1/2 PAGE + BOOKMARK
+========================================= */
+
+(function () {
+
+    "use strict";
+
+
+    /* =====================================
+       CURRENT PAGE HELPER
+    ===================================== */
+
+    function getCurrentReaderPage() {
+
+        if (typeof currentPage !== "undefined") {
+            return Number(currentPage) || 1;
+        }
+
+        if (typeof currentPageNumber !== "undefined") {
+            return Number(currentPageNumber) || 1;
+        }
+
+        return 1;
+    }
+
+
+    /* =====================================
+       BOOK IDENTIFIER
+    ===================================== */
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    const currentBook =
+        params.get("book") ||
+        params.get("id") ||
+        "unknown-book";
+
+
+    const bookmarkStorageKey =
+        "chishti_bookmarks_" +
+        currentBook;
+
+
+    /* =====================================
+       SHARE
+    ===================================== */
+
+    const shareBtn =
+        document.getElementById("shareReaderBtn");
+
+    const shareMessage =
+        document.getElementById("shareMessage");
+
+
+    if (shareBtn) {
+
+        shareBtn.addEventListener(
+            "click",
+            async function () {
+
+                const directReaderLink =
+                    window.location.href;
+
+
+                const shareData = {
+
+                    title:
+                        "Chishti Library Reader",
+
+                    text:
+                        "Read this book on Chishti Library",
+
+                    url:
+                        directReaderLink
+
+                };
+
+
+                try {
+
+                    if (
+                        navigator.share
+                    ) {
+
+                        await navigator.share(
+                            shareData
+                        );
+
+                    } else {
+
+                        await navigator.clipboard.writeText(
+                            directReaderLink
+                        );
+
+                        if (shareMessage) {
+
+                            shareMessage.classList.add(
+                                "show"
+                            );
+
+                            setTimeout(
+                                function () {
+
+                                    shareMessage.classList.remove(
+                                        "show"
+                                    );
+
+                                },
+                                2000
+                            );
+
+                        }
+
+                    }
+
+                } catch (error) {
+
+                    console.log(
+                        "Share cancelled."
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       1 PAGE / 2 PAGE
+    ===================================== */
+
+    const onePageBtn =
+        document.getElementById("onePageBtn");
+
+    const twoPageBtn =
+        document.getElementById("twoPageBtn");
+
+
+    function setReaderMode(mode) {
+
+        const reader =
+            document.querySelector(
+                ".reader-container"
+            ) ||
+            document.querySelector(
+                "#pdfViewer"
+            ) ||
+            document.querySelector(
+                ".pdf-viewer"
+            );
+
+
+        if (mode === "2") {
+
+            if (reader) {
+
+                reader.classList.add(
+                    "reader-two-page"
+                );
+
+            }
+
+            if (onePageBtn) {
+                onePageBtn.classList.remove(
+                    "active"
+                );
+            }
+
+            if (twoPageBtn) {
+                twoPageBtn.classList.add(
+                    "active"
+                );
+            }
+
+
+            localStorage.setItem(
+                "chishti_reader_mode",
+                "2"
+            );
+
+        } else {
+
+            if (reader) {
+
+                reader.classList.remove(
+                    "reader-two-page"
+                );
+
+            }
+
+            if (onePageBtn) {
+                onePageBtn.classList.add(
+                    "active"
+                );
+            }
+
+            if (twoPageBtn) {
+                twoPageBtn.classList.remove(
+                    "active"
+                );
+            }
+
+
+            localStorage.setItem(
+                "chishti_reader_mode",
+                "1"
+            );
+
+        }
+
+    }
+
+
+    if (onePageBtn) {
+
+        onePageBtn.addEventListener(
+            "click",
+            function () {
+
+                setReaderMode("1");
+
+            }
+        );
+
+    }
+
+
+    if (twoPageBtn) {
+
+        twoPageBtn.addEventListener(
+            "click",
+            function () {
+
+                setReaderMode("2");
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       BOOKMARK STORAGE
+    ===================================== */
+
+    function getBookmarks() {
+
+        try {
+
+            return JSON.parse(
+                localStorage.getItem(
+                    bookmarkStorageKey
+                )
+            ) || [];
+
+        } catch {
+
+            return [];
+
+        }
+
+    }
+
+
+    function saveBookmarks(bookmarks) {
+
+        localStorage.setItem(
+            bookmarkStorageKey,
+            JSON.stringify(bookmarks)
+        );
+
+    }
+
+
+    /* =====================================
+       ADD BOOKMARK
+    ===================================== */
+
+    const bookmarkBtn =
+        document.getElementById("bookmarkBtn");
+
+
+    if (bookmarkBtn) {
+
+        bookmarkBtn.addEventListener(
+            "click",
+            function () {
+
+                const page =
+                    getCurrentReaderPage();
+
+
+                let bookmarks =
+                    getBookmarks();
+
+
+                const exists =
+                    bookmarks.some(
+                        item =>
+                            Number(item.page) ===
+                            Number(page)
+                    );
+
+
+                if (!exists) {
+
+                    bookmarks.push({
+
+                        page: page,
+
+                        createdAt:
+                            Date.now()
+
+                    });
+
+
+                    bookmarks.sort(
+                        (a, b) =>
+                            a.page - b.page
+                    );
+
+
+                    saveBookmarks(
+                        bookmarks
+                    );
+
+                }
+
+
+                renderBookmarks();
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       BOOKMARK LIST
+    ===================================== */
+
+    const bookmarksPanel =
+        document.getElementById(
+            "bookmarksPanel"
+        );
+
+    const bookmarksList =
+        document.getElementById(
+            "bookmarksList"
+        );
+
+
+    function renderBookmarks() {
+
+        if (!bookmarksList) {
+            return;
+        }
+
+
+        const bookmarks =
+            getBookmarks();
+
+
+        if (!bookmarks.length) {
+
+            bookmarksList.innerHTML = `
+
+                <p class="no-bookmarks">
+                    No bookmarks yet.
+                </p>
+
+            `;
+
+            return;
+
+        }
+
+
+        bookmarksList.innerHTML =
+            bookmarks.map(
+                function (bookmark) {
+
+                    return `
+
+                        <div
+                            class="bookmark-item"
+                        >
+
+                            <button
+                                class="bookmark-page-btn"
+                                data-bookmark-page="${bookmark.page}"
+                            >
+
+                                <i class="fas fa-bookmark"></i>
+
+                                Page ${bookmark.page}
+
+                            </button>
+
+
+                            <button
+                                class="delete-bookmark"
+                                data-delete-bookmark="${bookmark.page}"
+                                title="Delete bookmark"
+                            >
+
+                                <i class="fas fa-trash"></i>
+
+                            </button>
+
+                        </div>
+
+                    `;
+
+                }
+            ).join("");
+
+    }
+
+
+    /* =====================================
+       BOOKMARK PANEL
+    ===================================== */
+
+    const showBookmarksBtn =
+        document.getElementById(
+            "showBookmarksBtn"
+        );
+
+    const closeBookmarksBtn =
+        document.getElementById(
+            "closeBookmarksBtn"
+        );
+
+
+    if (showBookmarksBtn) {
+
+        showBookmarksBtn.addEventListener(
+            "click",
+            function () {
+
+                renderBookmarks();
+
+                if (bookmarksPanel) {
+
+                    bookmarksPanel.classList.add(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (closeBookmarksBtn) {
+
+        closeBookmarksBtn.addEventListener(
+            "click",
+            function () {
+
+                if (bookmarksPanel) {
+
+                    bookmarksPanel.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       BOOKMARK CLICK / DELETE
+    ===================================== */
+
+    if (bookmarksList) {
+
+        bookmarksList.addEventListener(
+            "click",
+            function (event) {
+
+                const pageButton =
+                    event.target.closest(
+                        "[data-bookmark-page]"
+                    );
+
+
+                const deleteButton =
+                    event.target.closest(
+                        "[data-delete-bookmark]"
+                    );
+
+
+                /* GO TO PAGE */
+
+                if (pageButton) {
+
+                    const page =
+                        Number(
+                            pageButton.dataset.bookmarkPage
+                        );
+
+
+                    /*
+                     * Agar tumhare existing reader
+                     * mein goToPage() function hai,
+                     * automatically use hoga.
+                     */
+
+                    if (
+                        typeof goToPage ===
+                        "function"
+                    ) {
+
+                        goToPage(page);
+
+                    }
+
+                    else if (
+                        typeof renderPage ===
+                        "function"
+                    ) {
+
+                        renderPage(page);
+
+                    }
+
+                    else if (
+                        typeof showPage ===
+                        "function"
+                    ) {
+
+                        showPage(page);
+
+                    }
+
+                    else {
+
+                        console.log(
+                            "Bookmark page:",
+                            page
+                        );
+
+                    }
+
+
+                    if (bookmarksPanel) {
+
+                        bookmarksPanel.classList.remove(
+                            "show"
+                        );
+
+                    }
+
+                }
+
+
+                /* DELETE */
+
+                if (deleteButton) {
+
+                    const page =
+                        Number(
+                            deleteButton.dataset.deleteBookmark
+                        );
+
+
+                    const bookmarks =
+                        getBookmarks().filter(
+                            item =>
+                                Number(item.page) !==
+                                page
+                        );
+
+
+                    saveBookmarks(
+                        bookmarks
+                    );
+
+
+                    renderBookmarks();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* =====================================
+       RESTORE READER MODE
+    ===================================== */
+
+    const savedMode =
+        localStorage.getItem(
+            "chishti_reader_mode"
+        ) || "1";
+
+
+    setTimeout(
+        function () {
+
+            setReaderMode(
+                savedMode
+            );
+
+            renderBookmarks();
+
+        },
+        300
+    );
+
+
+    console.log(
+        "✅ Chishti Reader Extra Controls Ready"
+    );
+
+})();
