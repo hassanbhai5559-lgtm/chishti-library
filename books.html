@@ -3,46 +3,64 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    <title>All Books — Chishti Library</title>
+<title>All Books — Chishti Library</title>
 
-    <meta name="description"
-          content="Chishti Library — Complete Digital Islamic Book Collection">
+<meta name="description"
+      content="Chishti Library — Complete Digital Islamic Book Collection">
 
-    <meta name="keywords"
-          content="Chishti Library, Islamic Books, Naat, Manqabat, Hamd, Kulliyat">
+<meta name="keywords"
+      content="Chishti Library, Islamic Books, Naat, Manqabat, Hamd, Kulliyat">
 
-    <meta name="author"
-          content="Chishti Library">
+<meta name="author"
+      content="Chishti Library">
 
-    <link rel="icon" type="image/png" href="./logo.png">
+<link rel="icon"
+      type="image/png"
+      href="./logo.png">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="apple-touch-icon"
+      href="./logo.png">
 
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet">
+<!-- GOOGLE FONT -->
 
-    <link rel="stylesheet"
-          href="./book.css">
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
 
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+
+<!-- FONT AWESOME -->
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+<!-- BOOK CSS -->
+
+<link rel="stylesheet"
+      href="./book.css">
 
 </head>
 
 
-<body>
+<body class="library-page">
 
 
 <!-- =====================================================
-     NAVBAR
+NAVBAR
 ===================================================== -->
 
 <nav class="navbar">
@@ -51,8 +69,9 @@
 
         <a href="./index.html">
 
-            <img src="./logo.png"
-                 alt="Chishti Library Logo">
+            <img
+                src="./logo.png"
+                alt="Chishti Library Logo">
 
         </a>
 
@@ -77,7 +96,8 @@
         </li>
 
         <li>
-            <a href="./books.html" class="active">
+            <a href="./books.html"
+               class="active">
                 <i class="fas fa-book"></i>
                 Books
             </a>
@@ -105,6 +125,13 @@
         </li>
 
         <li>
+            <a href="./login.html">
+                <i class="fas fa-right-to-bracket"></i>
+                Login
+            </a>
+        </li>
+
+        <li>
             <a href="./admin/index.html">
                 <i class="fas fa-user-shield"></i>
                 Admin Login
@@ -125,7 +152,7 @@
 
 
 <!-- =====================================================
-     HERO
+HERO
 ===================================================== -->
 
 <section class="hero">
@@ -134,19 +161,24 @@
 
     <div class="hero-content">
 
-        <img src="./logo.png"
-             class="hero-logo"
-             alt="Chishti Library">
+        <img
+            src="./logo.png"
+            class="hero-logo"
+            alt="Chishti Library">
 
         <h1>ALL BOOKS</h1>
 
-        <h3>Chishti Digital Islamic Library</h3>
+        <h3>
+            Chishti Digital Islamic Library
+        </h3>
 
         <p>
             Explore Islamic Books, Naat, Manqabat,
             Hamd, Kulliyat and Maqala.
         </p>
 
+
+        <!-- SEARCH -->
 
         <div class="search-box">
 
@@ -161,37 +193,21 @@
         </div>
 
 
+        <!-- BOOK COUNT -->
+
         <div class="counter-area">
 
-            <div class="counter-card">
+            <div class="counter-card books">
 
                 <i class="fas fa-book-open"></i>
 
-                <h2 id="bookCount">0</h2>
+                <h2 id="bookCount">
+                    0
+                </h2>
 
-                <p>Books</p>
-
-            </div>
-
-
-            <div class="counter-card">
-
-                <i class="fas fa-eye"></i>
-
-                <h2 id="totalViews">0</h2>
-
-                <p>Views</p>
-
-            </div>
-
-
-            <div class="counter-card">
-
-                <i class="fas fa-heart"></i>
-
-                <h2 id="totalLikes">0</h2>
-
-                <p>Likes</p>
+                <p>
+                    Books
+                </p>
 
             </div>
 
@@ -204,57 +220,94 @@
 
 
 <!-- =====================================================
-     CATEGORIES
+CATEGORIES
 ===================================================== -->
 
 <section class="categories">
 
     <h2 class="section-title">
-        Browse Books
+        Browse Categories
     </h2>
 
 
     <div class="category-grid">
 
-        <button class="category active"
-                data-category="all">
+        <button
+            class="category active"
+            data-category="all"
+            type="button">
             ALL
         </button>
 
-        <button class="category"
-                data-category="Naat">
+        <button
+            class="category"
+            data-category="naat"
+            type="button">
             NAAT
         </button>
 
-        <button class="category"
-                data-category="Manqabat">
+        <button
+            class="category"
+            data-category="manqabat"
+            type="button">
             MANQABAT
         </button>
 
-        <button class="category"
-                data-category="Hamd">
+        <button
+            class="category"
+            data-category="hamd"
+            type="button">
             HAMD
         </button>
 
-        <button class="category"
-                data-category="Maqala">
+        <button
+            class="category"
+            data-category="maqala"
+            type="button">
             MAQALA
         </button>
 
-        <button class="category"
-                data-category="Kulliyat">
+        <button
+            class="category"
+            data-category="kulliyat"
+            type="button">
             KULLIYAT
+        </button>
+
+        <button
+            class="category"
+            data-category="seerat"
+            type="button">
+            SEERAT
         </button>
 
     </div>
 
+</section>
 
-    <!-- SORT -->
 
-    <div class="sort-area">
 
-        <button class="sort-btn active"
-                data-sort="newest">
+<!-- =====================================================
+SORT
+===================================================== -->
+
+<section class="book-sorting">
+
+    <div class="sort-title">
+
+        <i class="fas fa-filter"></i>
+
+        Sort Books
+
+    </div>
+
+
+    <div class="sort-buttons">
+
+        <button
+            class="sort-button active"
+            data-sort="newest"
+            type="button">
 
             <i class="fas fa-clock"></i>
             Newest
@@ -262,8 +315,10 @@
         </button>
 
 
-        <button class="sort-btn"
-                data-sort="oldest">
+        <button
+            class="sort-button"
+            data-sort="oldest"
+            type="button">
 
             <i class="fas fa-history"></i>
             Oldest
@@ -271,8 +326,10 @@
         </button>
 
 
-        <button class="sort-btn"
-                data-sort="popular">
+        <button
+            class="sort-button"
+            data-sort="popular"
+            type="button">
 
             <i class="fas fa-fire"></i>
             Popular
@@ -286,7 +343,7 @@
 
 
 <!-- =====================================================
-     BOOKS
+BOOKS
 ===================================================== -->
 
 <section class="featured-books">
@@ -296,28 +353,20 @@
     </h2>
 
 
-    <div id="firebaseStatus"
-         class="firebase-status">
-
-        <i class="fas fa-circle-notch fa-spin"></i>
-
-        Connecting to Firebase...
-
+    <div
+        id="booksContainer"
+        class="books-grid">
     </div>
 
 
-    <div id="booksContainer"
-         class="books-grid">
+    <div
+        id="emptyBooks"
+        class="no-books"
+        style="display:none;">
 
-    </div>
-
-
-    <div id="emptyBooks"
-         class="no-books">
-
-        <i class="fas fa-book-open"></i>
-
-        <h2>No Books Found</h2>
+        <h2>
+            No Books Found
+        </h2>
 
         <p>
             Try another search or category.
@@ -330,28 +379,52 @@
 
 
 <!-- =====================================================
-     FOOTER
+LOGIN STATUS
+===================================================== -->
+
+<div
+    id="loginStatus"
+    class="login-status">
+
+    <i class="fas fa-user"></i>
+
+    <span id="loginStatusText">
+        Checking login...
+    </span>
+
+</div>
+
+
+
+<!-- =====================================================
+FOOTER
 ===================================================== -->
 
 <footer>
 
     <div class="footer-logo">
 
-        <img src="./logo.png"
-             alt="Chishti Library">
+        <img
+            src="./logo.png"
+            alt="Chishti Library">
 
-        <h2>CHISHTI LIBRARY</h2>
+        <h2>
+            CHISHTI LIBRARY
+        </h2>
 
-        <p>Digital Islamic Library</p>
+        <p>
+            Digital Islamic Library
+        </p>
 
     </div>
 
 
     <div class="footer-social">
 
-        <a href="https://www.facebook.com/profile.php?id=100063724950961"
-           target="_blank"
-           rel="noopener noreferrer">
+        <a
+            href="https://www.facebook.com/profile.php?id=100063724950961"
+            target="_blank"
+            rel="noopener noreferrer">
 
             <i class="fab fa-facebook-f"></i>
 
@@ -360,9 +433,10 @@
         </a>
 
 
-        <a href="https://www.youtube.com/@Saimtv5"
-           target="_blank"
-           rel="noopener noreferrer">
+        <a
+            href="https://www.youtube.com/@Saimtv5"
+            target="_blank"
+            rel="noopener noreferrer">
 
             <i class="fab fa-youtube"></i>
 
@@ -371,9 +445,10 @@
         </a>
 
 
-        <a href="https://www.facebook.com/saimchishtiofficial"
-           target="_blank"
-           rel="noopener noreferrer">
+        <a
+            href="https://www.facebook.com/saimchishtiofficial"
+            target="_blank"
+            rel="noopener noreferrer">
 
             <i class="fab fa-facebook-f"></i>
 
@@ -386,9 +461,11 @@
 
     <div class="footer-copy">
 
-        © <span id="footerYear"></span>
+        ©
+        <span id="footerYear"></span>
 
-        Chishti Library — All Rights Reserved.
+        Chishti Library —
+        All Rights Reserved.
 
     </div>
 
@@ -397,11 +474,13 @@
 
 
 <!-- =====================================================
-     SCROLL TOP
+SCROLL TOP
 ===================================================== -->
 
-<button id="scrollTop"
-        aria-label="Scroll to top">
+<button
+    id="scrollTop"
+    type="button"
+    aria-label="Scroll to top">
 
     <i class="fas fa-arrow-up"></i>
 
@@ -410,18 +489,28 @@
 
 
 <!-- =====================================================
-     FIREBASE SDK
+FIREBASE
 ===================================================== -->
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script
+src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
+</script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script
+src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js">
+</script>
+
+<script
+src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js">
+</script>
 
 
+<!-- FIREBASE CONFIG -->
 
-<!-- =====================================================
-     MAIN BOOK JS
-===================================================== -->
+<script src="./firebase.js"></script>
+
+
+<!-- BOOK SYSTEM -->
 
 <script src="./book.js"></script>
 
