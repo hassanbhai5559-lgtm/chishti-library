@@ -249,6 +249,19 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id":21,
+    "title": "Madinangina ",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "Madinangin.png",
+    "pdf": "Madinangina.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
     
