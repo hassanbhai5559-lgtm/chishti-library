@@ -261,6 +261,19 @@
     "views": 0,
     "likes": 0,
     "downloads": 0,
+    "latest": true    
+},
+  {
+    "id":22,
+    "title": "noor da chashma ",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "noor da chashma-cover.png",
+    "pdf": "noor da chashma.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
     "latest": true
   }
 ]
