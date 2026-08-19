@@ -1,870 +1,765 @@
-/* =========================================================
-   CHISHTI LIBRARY
-   login.js
-========================================================= */
+"use strict";
+
+/*
+|--------------------------------------------------------------------------
+| CHISHTI LIBRARY LOGIN SYSTEM
+|--------------------------------------------------------------------------
+| Requires firebase.js to initialize:
+| firebase
+| firebase.auth()
+| firebase.firestore()
+|--------------------------------------------------------------------------
+*/
 
 
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
+document.addEventListener("DOMContentLoaded", function () {
 
-const firebaseConfig = {
+    const loginForm =
+        document.getElementById("loginForm");
 
-    apiKey:
-        "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
+    const emailInput =
+        document.getElementById("email");
 
-    authDomain:
-        "chishti-library.firebaseapp.com",
+    const passwordInput =
+        document.getElementById("password");
 
-    projectId:
-        "chishti-library",
+    const loginButton =
+        document.getElementById("loginButton");
 
-    storageBucket:
-        "chishti-library.firebasestorage.app",
+    const googleButton =
+        document.getElementById("googleButton");
 
-    messagingSenderId:
-        "103447043162",
+    const logoutButton =
+        document.getElementById("logoutButton");
 
-    appId:
-        "1:103447043162:web:f242cd2670aaa9786e8c63",
+    const continueButton =
+        document.getElementById("continueButton");
 
-    measurementId:
-        "G-833P7N3LNT"
+    const showPassword =
+        document.getElementById("showPassword");
 
-};
+    const loginError =
+        document.getElementById("loginError");
 
+    const successMessage =
+        document.getElementById("successMessage");
 
-/* =========================================================
-   CHECK FIREBASE
-========================================================= */
+    const loginBox =
+        document.getElementById("loginBox");
 
-if (typeof firebase === "undefined") {
+    const loggedInBox =
+        document.getElementById("loggedInBox");
 
-    console.error(
-        "Firebase SDK load nahi hua."
-    );
+    const currentUserEmail =
+        document.getElementById("currentUserEmail");
 
-    throw new Error(
-        "Firebase SDK is not loaded."
-    );
-
-}
+    const year =
+        document.getElementById("year");
 
 
-/* =========================================================
-   INITIALIZE
-========================================================= */
+    if (year) {
 
-firebase.initializeApp(
-    firebaseConfig
-);
-
-
-const auth =
-    firebase.auth();
-
-
-const db =
-    firebase.firestore();
-
-
-/* =========================================================
-   ELEMENTS
-========================================================= */
-
-const emailInput =
-    document.getElementById(
-        "loginEmail"
-    );
-
-
-const passwordInput =
-    document.getElementById(
-        "loginPassword"
-    );
-
-
-const emailLoginBtn =
-    document.getElementById(
-        "emailLoginBtn"
-    );
-
-
-const googleLoginBtn =
-    document.getElementById(
-        "googleLoginBtn"
-    );
-
-
-const guestLoginBtn =
-    document.getElementById(
-        "guestLoginBtn"
-    );
-
-
-const passwordToggle =
-    document.getElementById(
-        "passwordToggle"
-    );
-
-
-const errorBox =
-    document.getElementById(
-        "loginError"
-    );
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
-
-function showMessage(
-    message,
-    success = false
-) {
-
-    if (!errorBox) return;
-
-
-    errorBox.innerText =
-        message;
-
-
-    errorBox.style.display =
-        "block";
-
-
-    if (success) {
-
-        errorBox.style.background =
-            "#e9f9ef";
-
-        errorBox.style.color =
-            "#16803c";
-
-    } else {
-
-        errorBox.style.background =
-            "#fff0f0";
-
-        errorBox.style.color =
-            "#b00000";
+        year.textContent =
+            new Date().getFullYear();
 
     }
 
-}
 
+    /*
+    |--------------------------------------------------------------------------
+    | CHECK FIREBASE
+    |--------------------------------------------------------------------------
+    */
 
-/* =========================================================
-   HIDE MESSAGE
-========================================================= */
+    if (
+        typeof firebase === "undefined" ||
+        !firebase.apps ||
+        !firebase.apps.length
+    ) {
 
-function hideMessage() {
-
-    if (!errorBox) return;
-
-    errorBox.innerText = "";
-
-    errorBox.style.display =
-        "none";
-
-}
-
-
-/* =========================================================
-   BUTTON LOADING
-========================================================= */
-
-function setLoading(
-    button,
-    loading,
-    text
-) {
-
-    if (!button) return;
-
-
-    if (loading) {
-
-        button.disabled =
-            true;
-
-        button.dataset.original =
-            button.innerHTML;
-
-        button.innerHTML =
-            '<i class="fas fa-spinner fa-spin"></i> ' +
-            text;
-
-    } else {
-
-        button.disabled =
-            false;
-
-        if (
-            button.dataset.original
-        ) {
-
-            button.innerHTML =
-                button.dataset.original;
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   EMAIL LOGIN
-========================================================= */
-
-async function emailLogin() {
-
-    hideMessage();
-
-
-    const email =
-        emailInput.value.trim();
-
-
-    const password =
-        passwordInput.value;
-
-
-    if (!email) {
-
-        showMessage(
-            "Please enter your email."
+        showError(
+            "Firebase load nahi hua. firebase.js check karo."
         );
-
-        emailInput.focus();
 
         return;
 
     }
 
 
-    if (!password) {
+    let auth;
 
-        showMessage(
-            "Please enter your password."
+    let db;
+
+
+    try {
+
+        auth =
+            firebase.auth();
+
+        db =
+            firebase.firestore();
+
+    } catch (error) {
+
+        console.error(
+            "Firebase error:",
+            error
         );
 
-        passwordInput.focus();
+        showError(
+            "Firebase initialize nahi hua."
+        );
 
         return;
 
     }
 
 
-    setLoading(
-        emailLoginBtn,
-        true,
-        "Logging in..."
-    );
+    /*
+    |--------------------------------------------------------------------------
+    | ERROR MESSAGE
+    |--------------------------------------------------------------------------
+    */
 
+    function showError(message) {
 
-    try {
+        if (!loginError) return;
 
-        await auth
-            .signInWithEmailAndPassword(
-                email,
-                password
-            );
+        loginError.textContent =
+            message;
 
-
-        showMessage(
-            "Login successful. Redirecting...",
-            true
-        );
-
-
-        redirectUser();
-
-
-    } catch (error) {
-
-        console.error(
-            "Email login error:",
-            error
-        );
-
-
-        let message =
-            "Login failed.";
-
-
-        if (
-            error.code ===
-            "auth/invalid-email"
-        ) {
-
-            message =
-                "Invalid email address.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/user-not-found"
-        ) {
-
-            message =
-                "No account found with this email.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/wrong-password"
-        ) {
-
-            message =
-                "Incorrect password.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/invalid-credential"
-        ) {
-
-            message =
-                "Email or password is incorrect.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/too-many-requests"
-        ) {
-
-            message =
-                "Too many attempts. Try again later.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/api-key-not-valid"
-        ) {
-
-            message =
-                "Firebase API key is invalid. Check your Firebase Web App configuration.";
-
-        }
-
-        else {
-
-            message =
-                error.message;
-
-        }
-
-
-        showMessage(
-            message
-        );
-
-
-        setLoading(
-            emailLoginBtn,
-            false
-        );
+        loginError.style.display =
+            "block";
 
     }
 
-}
 
+    function hideError() {
 
-/* =========================================================
-   GOOGLE LOGIN
-========================================================= */
+        if (!loginError) return;
 
-async function googleLogin() {
+        loginError.textContent =
+            "";
 
-    hideMessage();
-
-
-    setLoading(
-        googleLoginBtn,
-        true,
-        "Connecting..."
-    );
-
-
-    try {
-
-        const provider =
-            new firebase
-            .auth
-            .GoogleAuthProvider();
-
-
-        provider.setCustomParameters({
-
-            prompt:
-                "select_account"
-
-        });
-
-
-        const result =
-            await auth.signInWithPopup(
-                provider
-            );
-
-
-        const user =
-            result.user;
-
-
-        console.log(
-            "Google login:",
-            user.email
-        );
-
-
-        await saveUser(
-            user,
-            "google"
-        );
-
-
-        showMessage(
-            "Google login successful. Redirecting...",
-            true
-        );
-
-
-        redirectUser();
-
-
-    } catch (error) {
-
-        console.error(
-            "Google login error:",
-            error
-        );
-
-
-        let message =
-            "Google login failed.";
-
-
-        if (
-            error.code ===
-            "auth/popup-closed-by-user"
-        ) {
-
-            message =
-                "Google login window was closed.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/popup-blocked"
-        ) {
-
-            message =
-                "Popup blocked. Please allow popups.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/api-key-not-valid"
-        ) {
-
-            message =
-                "Firebase API key invalid hai. Firebase Console ki current Web App config check karo.";
-
-        }
-
-        else if (
-            error.code ===
-            "auth/unauthorized-domain"
-        ) {
-
-            message =
-                "This website domain Firebase Authentication mein authorized nahi hai.";
-
-        }
-
-        else {
-
-            message =
-                error.message;
-
-        }
-
-
-        showMessage(
-            message
-        );
-
-
-        setLoading(
-            googleLoginBtn,
-            false
-        );
+        loginError.style.display =
+            "none";
 
     }
 
-}
 
+    /*
+    |--------------------------------------------------------------------------
+    | SUCCESS
+    |--------------------------------------------------------------------------
+    */
 
-/* =========================================================
-   GUEST LOGIN
-========================================================= */
+    function showSuccess(message) {
 
-async function guestLogin() {
+        if (!successMessage) return;
 
-    hideMessage();
+        const span =
+            successMessage.querySelector("span");
 
+        if (span) {
 
-    setLoading(
-        guestLoginBtn,
-        true,
-        "Connecting..."
-    );
-
-
-    try {
-
-        const result =
-            await auth
-            .signInAnonymously();
-
-
-        const user =
-            result.user;
-
-
-        await saveUser(
-            user,
-            "guest"
-        );
-
-
-        showMessage(
-            "Guest login successful. Redirecting...",
-            true
-        );
-
-
-        redirectUser();
-
-
-    } catch (error) {
-
-        console.error(
-            "Guest login error:",
-            error
-        );
-
-
-        let message =
-            "Guest login failed.";
-
-
-        if (
-            error.code ===
-            "auth/operation-not-allowed"
-        ) {
-
-            message =
-                "Anonymous Authentication Firebase Console mein enable nahi hai.";
+            span.textContent =
+                message;
 
         }
 
-        else if (
-            error.code ===
-            "auth/api-key-not-valid"
-        ) {
-
-            message =
-                "Firebase API key invalid hai.";
-
-        }
-
-        else {
-
-            message =
-                error.message;
-
-        }
-
-
-        showMessage(
-            message
-        );
-
-
-        setLoading(
-            guestLoginBtn,
-            false
-        );
+        successMessage.style.display =
+            "flex";
 
     }
 
-}
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOADING
+    |--------------------------------------------------------------------------
+    */
+
+    function setLoading(loading) {
+
+        if (loginButton) {
+
+            loginButton.disabled =
+                loading;
+
+            loginButton.innerHTML =
+                loading
+
+                    ? '<i class="fas fa-spinner fa-spin"></i> Logging in...'
+
+                    : '<i class="fas fa-right-to-bracket"></i> <span>Login</span>';
+
+        }
 
 
-/* =========================================================
-   SAVE USER
-========================================================= */
+        if (googleButton) {
 
-async function saveUser(
-    user,
-    provider
-) {
+            googleButton.disabled =
+                loading;
 
-    if (!user) return;
+        }
+
+    }
 
 
-    try {
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE / UPDATE USER PROFILE
+    |--------------------------------------------------------------------------
+    */
+
+    async function saveUserProfile(user) {
+
+        if (!user || !db) {
+            return;
+        }
+
 
         const userRef =
             db
-            .collection("users")
-            .doc(user.uid);
+                .collection("users")
+                .doc(user.uid);
 
 
-        const userDoc =
-            await userRef.get();
+        const data = {
+
+            uid: user.uid,
+
+            email:
+                user.email || "",
+
+            displayName:
+                user.displayName ||
+                "",
+
+            photoURL:
+                user.photoURL ||
+                "",
+
+            lastLogin:
+                firebase.firestore.FieldValue.serverTimestamp()
+
+        };
 
 
-        if (!userDoc.exists) {
+        try {
 
-            await userRef.set({
+            const snapshot =
+                await userRef.get();
 
-                uid:
-                    user.uid,
 
-                email:
-                    user.email || "",
+            if (!snapshot.exists) {
 
-                name:
-                    user.displayName ||
-                    "Guest",
+                data.createdAt =
+                    firebase.firestore.FieldValue
+                        .serverTimestamp();
 
-                photoURL:
-                    user.photoURL || "",
+                data.likes =
+                    0;
 
-                provider:
-                    provider,
+                data.comments =
+                    0;
 
-                createdAt:
-                    firebase.firestore
-                    .FieldValue
-                    .serverTimestamp(),
+                data.shares =
+                    0;
 
-                lastLogin:
-                    firebase.firestore
-                    .FieldValue
-                    .serverTimestamp()
+                data.views =
+                    0;
 
-            });
+            }
 
-        } else {
 
-            await userRef.update({
+            await userRef.set(
+                data,
+                {
+                    merge: true
+                }
+            );
 
-                lastLogin:
-                    firebase.firestore
-                    .FieldValue
-                    .serverTimestamp()
 
-            });
+        } catch (error) {
+
+            /*
+             * Profile save failure should not
+             * prevent successful login.
+             */
+
+            console.warn(
+                "User profile save error:",
+                error
+            );
 
         }
 
-    } catch (error) {
+    }
 
-        console.error(
-            "Save user error:",
-            error
+
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW LOGGED-IN USER
+    |--------------------------------------------------------------------------
+    */
+
+    function showLoggedInUser(user) {
+
+        if (!user) {
+            return;
+        }
+
+
+        if (loginBox) {
+
+            loginBox.style.display =
+                "none";
+
+        }
+
+
+        if (loggedInBox) {
+
+            loggedInBox.style.display =
+                "block";
+
+        }
+
+
+        if (currentUserEmail) {
+
+            currentUserEmail.textContent =
+                user.email ||
+                user.displayName ||
+                "Logged in user";
+
+        }
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW LOGIN FORM
+    |--------------------------------------------------------------------------
+    */
+
+    function showLoginForm() {
+
+        if (loginBox) {
+
+            loginBox.style.display =
+                "block";
+
+        }
+
+
+        if (loggedInBox) {
+
+            loggedInBox.style.display =
+                "none";
+
+        }
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | EMAIL LOGIN
+    |--------------------------------------------------------------------------
+    */
+
+    if (loginForm) {
+
+        loginForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+                hideError();
+
+                const email =
+                    emailInput
+                        ? emailInput.value.trim()
+                        : "";
+
+                const password =
+                    passwordInput
+                        ? passwordInput.value
+                        : "";
+
+
+                if (!email || !password) {
+
+                    showError(
+                        "Email aur password dono enter karo."
+                    );
+
+                    return;
+
+                }
+
+
+                setLoading(true);
+
+
+                try {
+
+                    const result =
+                        await auth.signInWithEmailAndPassword(
+                            email,
+                            password
+                        );
+
+
+                    await saveUserProfile(
+                        result.user
+                    );
+
+
+                    showSuccess(
+                        "Login successful!"
+                    );
+
+
+                    setTimeout(
+                        function () {
+
+                            window.location.href =
+                                "./index.html";
+
+                        },
+                        800
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Email login error:",
+                        error
+                    );
+
+
+                    let message =
+                        "Login failed. Email ya password check karo.";
+
+
+                    switch (error.code) {
+
+                        case "auth/invalid-email":
+
+                            message =
+                                "Email address valid nahi hai.";
+
+                            break;
+
+
+                        case "auth/user-not-found":
+
+                            message =
+                                "Is email ka account nahi mila.";
+
+                            break;
+
+
+                        case "auth/wrong-password":
+
+                            message =
+                                "Password incorrect hai.";
+
+                            break;
+
+
+                        case "auth/invalid-credential":
+
+                            message =
+                                "Email ya password incorrect hai.";
+
+                            break;
+
+
+                        case "auth/user-disabled":
+
+                            message =
+                                "Ye account disabled hai.";
+
+                            break;
+
+
+                        case "auth/too-many-requests":
+
+                            message =
+                                "Bohat zyada login attempts. Thori dair baad try karo.";
+
+                            break;
+
+                    }
+
+
+                    showError(message);
+
+                } finally {
+
+                    setLoading(false);
+
+                }
+
+            }
         );
 
     }
 
-}
+
+    /*
+    |--------------------------------------------------------------------------
+    | GOOGLE LOGIN
+    |--------------------------------------------------------------------------
+    */
+
+    if (googleButton) {
+
+        googleButton.addEventListener(
+            "click",
+            async function () {
+
+                hideError();
+
+                setLoading(true);
 
 
-/* =========================================================
-   REDIRECT
-========================================================= */
+                try {
 
-function redirectUser() {
-
-    setTimeout(
-        function() {
-
-            window.location.href =
-                "index.html";
-
-        },
-        700
-    );
-
-}
+                    const provider =
+                        new firebase.auth.GoogleAuthProvider();
 
 
-/* =========================================================
-   PASSWORD SHOW / HIDE
-========================================================= */
+                    provider.setCustomParameters({
 
-if (passwordToggle) {
+                        prompt: "select_account"
 
-    passwordToggle.addEventListener(
-        "click",
-        function() {
-
-            const icon =
-                passwordToggle
-                .querySelector("i");
+                    });
 
 
-            if (
-                passwordInput.type ===
-                "password"
-            ) {
+                    const result =
+                        await auth.signInWithPopup(
+                            provider
+                        );
+
+
+                    await saveUserProfile(
+                        result.user
+                    );
+
+
+                    showSuccess(
+                        "Google login successful!"
+                    );
+
+
+                    setTimeout(
+                        function () {
+
+                            window.location.href =
+                                "./index.html";
+
+                        },
+                        800
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Google login error:",
+                        error
+                    );
+
+
+                    if (
+                        error.code ===
+                        "auth/popup-closed-by-user"
+                    ) {
+
+                        showError(
+                            "Google login cancel kar diya gaya."
+                        );
+
+                    } else {
+
+                        showError(
+                            "Google login failed."
+                        );
+
+                    }
+
+                } finally {
+
+                    setLoading(false);
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOGOUT
+    |--------------------------------------------------------------------------
+    */
+
+    if (logoutButton) {
+
+        logoutButton.addEventListener(
+            "click",
+            async function () {
+
+                try {
+
+                    await auth.signOut();
+
+                    showLoginForm();
+
+                    hideError();
+
+                    if (emailInput) {
+
+                        emailInput.value =
+                            "";
+
+                    }
+
+                    if (passwordInput) {
+
+                        passwordInput.value =
+                            "";
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Logout error:",
+                        error
+                    );
+
+                    showError(
+                        "Logout nahi ho saka."
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CONTINUE TO LIBRARY
+    |--------------------------------------------------------------------------
+    */
+
+    if (continueButton) {
+
+        continueButton.addEventListener(
+            "click",
+            function () {
+
+                window.location.href =
+                    "./index.html";
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PASSWORD VISIBILITY
+    |--------------------------------------------------------------------------
+    */
+
+    if (showPassword && passwordInput) {
+
+        showPassword.addEventListener(
+            "click",
+            function () {
+
+                const hidden =
+                    passwordInput.type ===
+                    "password";
+
 
                 passwordInput.type =
-                    "text";
+                    hidden
+                        ? "text"
+                        : "password";
 
 
-                icon.classList.remove(
-                    "fa-eye"
+                this.innerHTML =
+                    hidden
+
+                        ? '<i class="fas fa-eye-slash"></i>'
+
+                        : '<i class="fas fa-eye"></i>';
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | AUTH STATE
+    |--------------------------------------------------------------------------
+    */
+
+    auth.onAuthStateChanged(
+        async function (user) {
+
+            console.log(
+                "Auth state:",
+                user
+                    ? user.email
+                    : "Guest"
+            );
+
+
+            if (user) {
+
+                await saveUserProfile(
+                    user
                 );
 
 
-                icon.classList.add(
-                    "fa-eye-slash"
+                /*
+                 * Agar already logged in hai,
+                 * login form ki jagah user box show hoga.
+                 */
+
+                showLoggedInUser(
+                    user
                 );
 
             } else {
 
-                passwordInput.type =
-                    "password";
-
-
-                icon.classList.remove(
-                    "fa-eye-slash"
-                );
-
-
-                icon.classList.add(
-                    "fa-eye"
-                );
+                showLoginForm();
 
             }
 
         }
     );
 
-}
 
-
-/* =========================================================
-   BUTTON EVENTS
-========================================================= */
-
-if (emailLoginBtn) {
-
-    emailLoginBtn.addEventListener(
-        "click",
-        emailLogin
-    );
-
-}
-
-
-if (googleLoginBtn) {
-
-    googleLoginBtn.addEventListener(
-        "click",
-        googleLogin
-    );
-
-}
-
-
-if (guestLoginBtn) {
-
-    guestLoginBtn.addEventListener(
-        "click",
-        guestLogin
-    );
-
-}
-
-
-/* =========================================================
-   ENTER KEY
-========================================================= */
-
-if (passwordInput) {
-
-    passwordInput.addEventListener(
-        "keydown",
-        function(event) {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                emailLogin();
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   AUTH STATE
-========================================================= */
-
-auth.onAuthStateChanged(
-    function(user) {
-
-        if (user) {
-
-            console.log(
-                "Firebase user:",
-                user.email ||
-                "Guest"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   DEBUG
-========================================================= */
-
-console.log(
-    "Chishti Library login.js loaded."
-);
-
-console.log(
-    "Firebase SDK:",
-    typeof firebase
-);
-
-console.log(
-    "Firebase Project:",
-    firebase.app()
-        .options
-        .projectId
-);
+});
