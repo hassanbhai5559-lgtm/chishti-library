@@ -275,6 +275,33 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id":23,
+    "title": "Allama saim zinda hai",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "allama saim zinda hai-cover .png",
+    "pdf": "allama saim zinda hai.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
+
+},
+  {
+    "id":24,
+    "title": "Kalam e Saim",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": " kalam e saim-cover.png",
+    "pdf": "Kalam e Saim.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
-    
+
