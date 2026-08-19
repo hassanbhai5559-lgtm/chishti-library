@@ -1,148 +1,1570 @@
-<!-- =========================
-     Developer Section
-========================= -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="ChishtiLibrary.com Digital Books"
-    >
+    <meta name="description"
+          content="Chishti Library Developer — About the developer, project history, mission and Chishti Library journey.">
 
-    <title>ChishtiLibrary.com — Books</title>
+    <meta name="keywords"
+          content="Chishti Library, Developer, Saim Chishti, Islamic Library, Digital Library">
+
+    <meta name="author"
+          content="Chishti Library">
+
+    <title>Developer — Chishti Library</title>
+
+    <link rel="icon"
+          type="image/png"
+          href="./logo.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
     <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link
         rel="stylesheet"
-        href="./develaper.css"
-    >
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        /* =====================================================
+           CHISHTI LIBRARY
+           DEVELOPER PAGE
+           ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+
+            --bg: #080808;
+            --bg-two: #101010;
+
+            --card: #151515;
+            --card-two: #1b1b1b;
+
+            --maroon: #720000;
+            --maroon-dark: #350000;
+
+            --gold: #d4af37;
+            --gold-light: #f1d875;
+
+            --white: #ffffff;
+            --text: #eeeeee;
+            --muted: #a7a7a7;
+
+            --border: rgba(212, 175, 55, 0.18);
+
+            --shadow:
+                0 25px 70px rgba(0, 0, 0, 0.55);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            font-family: "Poppins", sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(114, 0, 0, 0.20),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(212, 175, 55, 0.08),
+                    transparent 32%
+                ),
+                var(--bg);
+
+            color: var(--text);
+
+            min-height: 100vh;
+
+            overflow-x: hidden;
+        }
+
+        /* =====================================================
+           BACKGROUND
+           ===================================================== */
+
+        .background-glow {
+
+            position: fixed;
+
+            width: 420px;
+            height: 420px;
+
+            border-radius: 50%;
+
+            filter: blur(120px);
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+        .glow-one {
+
+            top: -200px;
+            left: -180px;
+
+            background:
+                rgba(114, 0, 0, 0.25);
+        }
+
+        .glow-two {
+
+            right: -200px;
+            bottom: -200px;
+
+            background:
+                rgba(212, 175, 55, 0.10);
+        }
+
+        /* =====================================================
+           NAVBAR
+           ===================================================== */
+
+        .navbar {
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+
+            height: 72px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 6%;
+
+            background:
+                rgba(8, 8, 8, 0.90);
+
+            border-bottom:
+                1px solid rgba(255, 255, 255, 0.06);
+
+            backdrop-filter: blur(18px);
+        }
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            color: var(--white);
+
+            text-decoration: none;
+        }
+
+        .brand img {
+
+            width: 43px;
+            height: 43px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+        }
+
+        .brand span {
+
+            font-size: 18px;
+
+            font-weight: 800;
+        }
+
+        .brand span strong {
+
+            color: var(--gold);
+        }
+
+        .nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 24px;
+        }
+
+        .nav-links a {
+
+            color: #cfcfcf;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            transition: 0.25s;
+        }
+
+        .nav-links a:hover {
+
+            color: var(--gold);
+        }
+
+        /* =====================================================
+           HERO
+           ===================================================== */
+
+        .hero {
+
+            max-width: 1150px;
+
+            margin: auto;
+
+            padding:
+                90px 25px
+                70px;
+
+            display: grid;
+
+            grid-template-columns:
+                0.9fr 1.1fr;
+
+            gap: 70px;
+
+            align-items: center;
+        }
+
+        .developer-image-area {
+
+            display: flex;
+
+            justify-content: center;
+        }
+
+        .developer-image {
+
+            width: 260px;
+            height: 260px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border:
+                3px solid
+                var(--gold);
+
+            padding: 7px;
+
+            background: var(--card);
+
+            box-shadow:
+                0 0 0 12px
+                rgba(212, 175, 55, 0.05),
+
+                0 25px 70px
+                rgba(0, 0, 0, 0.60);
+        }
+
+        .developer-image-placeholder {
+
+            width: 260px;
+            height: 260px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            border:
+                3px solid
+                var(--gold);
+
+            background:
+                linear-gradient(
+                    145deg,
+                    var(--maroon-dark),
+                    #101010
+                );
+
+            box-shadow:
+                0 0 0 12px
+                rgba(212, 175, 55, 0.05),
+
+                0 25px 70px
+                rgba(0, 0, 0, 0.60);
+        }
+
+        .developer-image-placeholder i {
+
+            font-size: 90px;
+
+            color: var(--gold);
+        }
+
+        .hero-content .tag {
+
+            display: inline-flex;
+
+            padding: 7px 13px;
+
+            border-radius: 50px;
+
+            background:
+                rgba(212, 175, 55, 0.08);
+
+            border:
+                1px solid
+                rgba(212, 175, 55, 0.20);
+
+            color: var(--gold);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+        }
+
+        .hero-content h1 {
+
+            margin-top: 18px;
+
+            font-size: clamp(36px, 5vw, 58px);
+
+            line-height: 1.08;
+
+            font-weight: 800;
+
+            color: var(--white);
+        }
+
+        .hero-content h1 span {
+
+            color: var(--gold);
+        }
+
+        .hero-content .intro {
+
+            margin-top: 18px;
+
+            color: var(--muted);
+
+            font-size: 15px;
+
+            line-height: 1.9;
+
+            max-width: 650px;
+        }
+
+        /* =====================================================
+           URDU
+           ===================================================== */
+
+        .urdu {
+
+            font-family:
+                "Noto Nastaliq Urdu",
+                serif;
+
+            direction: rtl;
+
+            line-height: 2.5;
+        }
+
+        .urdu-box {
+
+            margin-top: 22px;
+
+            padding: 20px 22px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(114, 0, 0, 0.10);
+
+            border-right:
+                3px solid
+                var(--gold);
+
+            color: #e7e7e7;
+
+            font-size: 17px;
+        }
+
+        .roman-box {
+
+            margin-top: 15px;
+
+            padding: 17px 20px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(255, 255, 255, 0.025);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.07);
+
+            color: #c5c5c5;
+
+            font-size: 14px;
+
+            line-height: 1.8;
+        }
+
+        /* =====================================================
+           STATS
+           ===================================================== */
+
+        .stats {
+
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 0 25px 70px;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+        .stat-card {
+
+            padding: 25px;
+
+            text-align: center;
+
+            background:
+                rgba(255, 255, 255, 0.025);
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 17px;
+
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(212, 175, 55, 0.4);
+        }
+
+        .stat-card i {
+
+            color: var(--gold);
+
+            font-size: 24px;
+
+            margin-bottom: 10px;
+        }
+
+        .stat-card h3 {
+
+            color: var(--white);
+
+            font-size: 17px;
+
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           SECTIONS
+           ===================================================== */
+
+        .section {
+
+            max-width: 1050px;
+
+            margin: auto;
+
+            padding:
+                35px 25px
+                80px;
+        }
+
+        .section-title {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+        .section-title span {
+
+            color: var(--gold);
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+        }
+
+        .section-title h2 {
+
+            margin-top: 8px;
+
+            font-size: 30px;
+
+            color: var(--white);
+        }
+
+        .section-title p {
+
+            margin-top: 8px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+        /* =====================================================
+           CARDS
+           ===================================================== */
+
+        .info-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 20px;
+        }
+
+        .info-card {
+
+            padding: 28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.035),
+                    rgba(255,255,255,0.012)
+                );
+
+            border:
+                1px solid
+                var(--border);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.22);
+        }
+
+        .info-card .icon {
+
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                rgba(212, 175, 55, 0.09);
+
+            color: var(--gold);
+
+            font-size: 20px;
+
+            margin-bottom: 18px;
+        }
+
+        .info-card h3 {
+
+            font-size: 18px;
+
+            color: var(--white);
+
+            margin-bottom: 12px;
+        }
+
+        .info-card p {
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.9;
+        }
+
+        /* =====================================================
+           BIRTH OF LIBRARY
+           ===================================================== */
+
+        .birth-card {
+
+            padding: 42px 30px;
+
+            text-align: center;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(114,0,0,0.18),
+                    rgba(212,175,55,0.04)
+                );
+
+            border:
+                1px solid
+                rgba(212,175,55,0.25);
+
+            box-shadow: var(--shadow);
+        }
+
+        .birth-icon {
+
+            width: 70px;
+            height: 70px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                rgba(212,175,55,0.10);
+
+            border:
+                1px solid
+                rgba(212,175,55,0.3);
+
+            color: var(--gold);
+
+            font-size: 28px;
+        }
+
+        .birth-card h2 {
+
+            margin-top: 20px;
+
+            font-size: 27px;
+
+            color: var(--white);
+        }
+
+        .birth-date {
+
+            margin-top: 14px;
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            color: var(--gold);
+        }
+
+        .birth-time {
+
+            margin-top: 5px;
+
+            color: #c9c9c9;
+
+            font-size: 14px;
+        }
+
+        /* =====================================================
+           TIMELINE
+           ===================================================== */
+
+        .timeline {
+
+            position: relative;
+
+            max-width: 800px;
+
+            margin: auto;
+        }
+
+        .timeline::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 20px;
+
+            top: 0;
+            bottom: 0;
+
+            width: 1px;
+
+            background:
+                rgba(212,175,55,0.25);
+        }
+
+        .timeline-item {
+
+            position: relative;
+
+            padding-left: 65px;
+
+            margin-bottom: 35px;
+        }
+
+        .timeline-dot {
+
+            position: absolute;
+
+            left: 9px;
+
+            top: 5px;
+
+            width: 23px;
+            height: 23px;
+
+            border-radius: 50%;
+
+            background:
+                var(--maroon);
+
+            border:
+                2px solid
+                var(--gold);
+
+            box-shadow:
+                0 0 0 5px
+                rgba(212,175,55,0.06);
+        }
+
+        .timeline-item h3 {
+
+            color: var(--white);
+
+            font-size: 17px;
+        }
+
+        .timeline-item .date {
+
+            display: block;
+
+            margin: 5px 0 9px;
+
+            color: var(--gold);
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+        .timeline-item p {
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+        /* =====================================================
+           MISSION
+           ===================================================== */
+
+        .mission {
+
+            text-align: center;
+
+            max-width: 850px;
+
+            margin: auto;
+        }
+
+        .mission p {
+
+            color: #c8c8c8;
+
+            font-size: 15px;
+
+            line-height: 2;
+
+            margin-top: 15px;
+        }
+
+        .mission strong {
+
+            color: var(--gold);
+        }
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+
+        footer {
+
+            padding:
+                35px 20px;
+
+            text-align: center;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,0.06);
+
+            background:
+                rgba(0,0,0,0.25);
+        }
+
+        footer img {
+
+            width: 42px;
+            height: 42px;
+
+            object-fit: contain;
+
+            border-radius: 50%;
+
+            margin-bottom: 10px;
+        }
+
+        footer p {
+
+            color: #888;
+
+            font-size: 11px;
+
+            line-height: 1.8;
+        }
+
+        footer strong {
+
+            color: var(--gold);
+        }
+
+        /* =====================================================
+           MOBILE
+           ===================================================== */
+
+        @media (max-width: 800px) {
+
+            .navbar {
+
+                padding: 0 20px;
+            }
+
+            .nav-links {
+
+                display: none;
+            }
+
+            .hero {
+
+                grid-template-columns: 1fr;
+
+                text-align: center;
+
+                padding-top: 60px;
+
+                gap: 40px;
+            }
+
+            .hero-content .intro {
+
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .urdu-box {
+
+                text-align: right;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .hero {
+
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .developer-image,
+            .developer-image-placeholder {
+
+                width: 210px;
+                height: 210px;
+            }
+
+            .developer-image-placeholder i {
+
+                font-size: 70px;
+            }
+
+            .hero-content h1 {
+
+                font-size: 35px;
+            }
+
+            .section {
+
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .birth-card {
+
+                padding:
+                    32px 20px;
+            }
+        }
+
+    </style>
 
 </head>
 
+
 <body>
-<section id="developer" class="developer-section">
 
-    <div class="container">
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
 
-        <div class="developer-card">
 
-            <div class="developer-image">
+    <!-- =====================================================
+         NAVBAR
+         ===================================================== -->
 
-                <img src="images/developer.jpg" alt="Ali Hassan">
+    <nav class="navbar">
 
-            </div>
+        <a href="./index.html"
+           class="brand">
 
-            <div class="developer-content">
+            <img src="./logo.png"
+                 alt="Chishti Library">
 
-                <h2>👨‍💻 About the Developer</h2>
+            <span>
+                Chishti <strong>Library</strong>
+            </span>
 
-                <h3>Ali Hassan</h3>
+        </a>
 
-                <p class="developer-role">
-                    Developer of Chishti Library & Chishti AI
-                </p>
 
-                <p>
-                    <strong>Ali Hassan</strong> is the grandson of
-                    <strong>Sahibzada Muhammad Latif Sajid Chishti</strong>,
-                    son of <strong>Hafiz Owais Aftab</strong>, and the
-                    great-grandson of
-                    <strong>Hazrat Allama Saim Chishti (رحمہ اللہ علیہ)</strong>.
-                </p>
+        <div class="nav-links">
 
-                <hr>
+            <a href="./index.html">
+                Home
+            </a>
 
-                <h3>💻 My Journey</h3>
+            <a href="./books.html">
+                Books
+            </a>
 
-                <p>
-                    Mera naam <strong>Ali Hassan</strong> hai.
-                </p>
+            <a href="./authors.html">
+                Authors
+            </a>
 
-                <p>
-                    Ek din mere <strong>Dada Abu</strong> ne mujh se kaha:
-                </p>
-
-                <blockquote>
-
-                    "Koi cheez banao."
-
-                </blockquote>
-
-                <p>
-                    Us waqt mujhe web development ke baare mein kuch bhi
-                    nahi pata tha, lekin mere andar kuch naya seekhne ka
-                    jazba tha.
-                </p>
-
-                <p>
-                    Maine unka mobile liya aur internet par search karna
-                    shuru kiya. YouTube par free website banana seekha aur
-                    lagbhag 30 minutes tak videos dekhta raha.
-                </p>
-
-                <p>
-                    Uske baad maine apne Chachu ka computer on kiya aur
-                    ChatGPT ki madad se coding shuru ki.
-                    Lagbhag 2–3 ghante baad maine apne Dada Abu se kaha:
-                </p>
-
-                <blockquote>
-
-                    "Website ban gayi hai."
-
-                </blockquote>
-
-                <p>
-                    Jab website khuli to usme sirf <strong>3 boxes</strong>
-                    the. Do boxes par <strong>Unknown</strong> likha tha aur
-                    teesre box par
-                    <strong>Kalam Saim Chishti</strong>.
-                </p>
-
-                <p>
-                    Shayad woh website bohot simple thi, lekin mere liye
-                    wahi meri pehli kamyabi thi. Usi din se mera web
-                    development ka safar shuru hua.
-                </p>
-
-                <p>
-                    Roz kuch naya seekhta gaya, naye projects banata gaya,
-                    aur dheere dheere web development meri zindagi ka hissa
-                    ban gaya.
-                </p>
-
-                <p>
-                    Aaj usi safar ka nateeja
-                    <strong>Chishti Library</strong> aur
-                    <strong>Chishti AI</strong> hai.
-                </p>
-
-                <p>
-                    Mera maqsad sirf websites banana nahi, balke
-                    <strong>Hazrat Allama Saim Chishti (رحمہ اللہ علیہ)</strong>
-                    ke ilmi virsay ko digital soorat mein mehfooz karna aur
-                    duniya bhar ke logon tak pohanchana hai.
-                </p>
-
-                <blockquote>
-
-                    "Har badi kahani ek chhote se qadam se shuru hoti hai.
-                    Meri kahani bhi sirf 3 boxes wali ek chhoti si website
-                    se shuru hui."
-
-                </blockquote>
-
-            </div>
+            <a href="./developer.html">
+                Developer
+            </a>
 
         </div>
 
-    </div>
+    </nav>
 
-</section>
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="developer-image-area">
+
+                <!--
+                    Agar developer ki image hai to
+                    neeche placeholder ko image se replace kar dena.
+
+                    Example:
+                    <img src="./developer.png"
+                         class="developer-image"
+                         alt="Developer">
+                -->
+
+                <div class="developer-image-placeholder">
+
+                    <i class="fa-solid fa-code"></i>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-content">
+
+                <span class="tag">
+                    Chishti Library Developer
+                </span>
+
+
+                <h1>
+                    The Mind Behind
+                    <span>Chishti Library</span>
+                </h1>
+
+
+                <p class="intro">
+                    Chishti Library is a digital Islamic library
+                    project created with the vision of preserving,
+                    organizing and making Islamic literature easier
+                    to discover and read online.
+                </p>
+
+
+                <!-- Urdu -->
+
+                <div class="urdu-box urdu">
+
+                    یہ لائبریری اسلامی کتب، نعت، حمد،
+                    منقبت اور اسلامی علمی مواد کو
+                    ڈیجیٹل انداز میں محفوظ کرنے اور
+                    لوگوں تک آسانی سے پہنچانے کی ایک کوشش ہے۔
+
+                </div>
+
+
+                <!-- Roman Urdu -->
+
+                <div class="roman-box">
+
+                    <strong>Roman Urdu:</strong><br>
+
+                    Chishti Library aik digital Islamic
+                    library project hai jiska maqsad
+                    Islami kitaabon aur ilm ko digital
+                    form mein mehfooz karna aur logon
+                    tak asani se pohanchana hai.
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             STATS
+             ===================================================== -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <h3>30 July</h3>
+
+                <p>Birthday</p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-cake-candles"></i>
+
+                <h3>12 Years</h3>
+
+                <p>Birthday milestone</p>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <h3>10 June 2026</h3>
+
+                <p>Chishti Library Birth</p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             DEVELOPER INFO
+             ===================================================== -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <span>Developer</span>
+
+                <h2>About the Developer</h2>
+
+                <p>
+                    Urdu aur Roman English mein introduction
+                </p>
+
+            </div>
+
+
+            <div class="info-grid">
+
+
+                <article class="info-card">
+
+                    <div class="icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+
+                    <h3>About Me</h3>
+
+                    <p>
+                        Main Chishti Library ka developer hoon.
+                        Is project ko technology aur Islamic
+                        knowledge ko combine karne ke idea ke
+                        saath develop kiya gaya hai.
+                    </p>
+
+                    <div class="urdu">
+
+                        میں چشتی لائبریری کا ڈویلپر ہوں۔
+                        یہ پروجیکٹ ٹیکنالوجی اور اسلامی
+                        علم کو ایک ساتھ لانے کے مقصد سے
+                        بنایا گیا ہے۔
+
+                    </div>
+
+                </article>
+
+
+                <article class="info-card">
+
+                    <div class="icon">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+
+                    <h3>What I Build</h3>
+
+                    <p>
+                        HTML, CSS, JavaScript, Firebase,
+                        digital book readers, search systems,
+                        AI chatbot systems and modern web
+                        interfaces are part of the project.
+                    </p>
+
+                    <div class="urdu">
+
+                        اس پروجیکٹ میں ویب ڈویلپمنٹ،
+                        ڈیجیٹل بک ریڈر، سرچ سسٹم،
+                        فائر بیس اور اے آئی چیٹ بوٹ
+                        جیسے فیچرز شامل ہیں۔
+
+                    </div>
+
+                </article>
+
+
+                <article class="info-card">
+
+                    <div class="icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <h3>The Idea</h3>
+
+                    <p>
+                        The idea is to make Islamic books
+                        easier to find, read and explore
+                        through a clean digital library.
+                    </p>
+
+                    <div class="urdu">
+
+                        مقصد یہ ہے کہ اسلامی کتب کو تلاش،
+                        پڑھنا اور دریافت کرنا ایک آسان
+                        اور خوبصورت ڈیجیٹل تجربہ بن جائے۔
+
+                    </div>
+
+                </article>
+
+
+                <article class="info-card">
+
+                    <div class="icon">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+
+                    <h3>Why Chishti Library?</h3>
+
+                    <p>
+                        Because valuable Islamic literature
+                        should be preserved digitally and
+                        made accessible to future generations.
+                    </p>
+
+                    <div class="urdu">
+
+                        قیمتی اسلامی علمی اور ادبی مواد کو
+                        ڈیجیٹل طور پر محفوظ کرنا اور آنے
+                        والی نسلوں تک پہنچانا اس پروجیکٹ
+                        کی ایک اہم وجہ ہے۔
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BIRTH OF CHISHTI LIBRARY
+             ===================================================== -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <span>Our Beginning</span>
+
+                <h2>Birth of Chishti Library</h2>
+
+                <p>
+                    The beginning of the journey
+                </p>
+
+            </div>
+
+
+            <div class="birth-card">
+
+                <div class="birth-icon">
+
+                    <i class="fa-solid fa-book-quran"></i>
+
+                </div>
+
+
+                <h2>
+                    Chishti Library Was Born
+                </h2>
+
+
+                <div class="birth-date">
+                    10 June 2026
+                </div>
+
+
+                <div class="birth-time">
+                    9:00 PM
+                </div>
+
+
+                <div class="urdu-box urdu">
+
+                    چشتی لائبریری کی پیدائش
+                    10 جون 2026 کو رات 9:00 بجے ہوئی۔
+
+                </div>
+
+
+                <div class="roman-box">
+
+                    <strong>Roman Urdu:</strong><br>
+
+                    Chishti Library ki bunyaad
+                    10 June 2026 ko raat 9:00 baje
+                    rakhi gayi. Yahin se is digital
+                    Islamic library ka safar shuru hua.
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             JOURNEY
+             ===================================================== -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <span>Journey</span>
+
+                <h2>Chishti Library Journey</h2>
+
+                <p>
+                    From an idea to a digital library
+                </p>
+
+            </div>
+
+
+            <div class="timeline">
+
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <h3>
+                        The Idea
+                    </h3>
+
+                    <span class="date">
+                        Before the first version
+                    </span>
+
+                    <p>
+                        The idea of creating a dedicated
+                        digital Islamic library was formed.
+                    </p>
+
+                </div>
+
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <h3>
+                        Chishti Library Born
+                    </h3>
+
+                    <span class="date">
+                        10 June 2026 — 9:00 PM
+                    </span>
+
+                    <p>
+                        The Chishti Library project officially
+                        began as a digital library project.
+                    </p>
+
+                </div>
+
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <h3>
+                        Digital Book System
+                    </h3>
+
+                    <span class="date">
+                        Development
+                    </span>
+
+                    <p>
+                        Books, categories, covers and online
+                        reading features started becoming
+                        part of the library.
+                    </p>
+
+                </div>
+
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <h3>
+                        Chishti Reader
+                    </h3>
+
+                    <span class="date">
+                        Development
+                    </span>
+
+                    <p>
+                        A dedicated digital PDF reading
+                        experience was added for library books.
+                    </p>
+
+                </div>
+
+
+                <div class="timeline-item">
+
+                    <div class="timeline-dot"></div>
+
+                    <h3>
+                        Chishti AI
+                    </h3>
+
+                    <span class="date">
+                        Future / Development
+                    </span>
+
+                    <p>
+                        The library is being developed with
+                        an AI knowledge system to help users
+                        explore the library and its books.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             MISSION
+             ===================================================== -->
+
+        <section class="section">
+
+            <div class="section-title">
+
+                <span>Mission</span>
+
+                <h2>Our Mission</h2>
+
+            </div>
+
+
+            <div class="mission">
+
+                <p>
+                    Chishti Library aims to create a modern
+                    digital space where people can
+                    <strong>discover, read and explore</strong>
+                    Islamic literature in an organized way.
+                </p>
+
+
+                <div class="urdu-box urdu">
+
+                    چشتی لائبریری کا مقصد ایک ایسا جدید
+                    ڈیجیٹل پلیٹ فارم بنانا ہے جہاں لوگ
+                    اسلامی کتب اور علمی مواد کو آسانی،
+                    خوبصورتی اور ترتیب کے ساتھ تلاش
+                    اور مطالعہ کر سکیں۔
+
+                </div>
+
+
+                <div class="roman-box">
+
+                    <strong>Roman Urdu:</strong><br>
+
+                    Chishti Library ka mission aik aisa
+                    modern digital platform banana hai
+                    jahan Islami kitaabon aur ilm ko
+                    asani se search, read aur explore
+                    kiya ja sake.
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <img src="./logo.png"
+             alt="Chishti Library Logo">
+
+        <p>
+
+            <strong>Chishti Library</strong>
+            — Digital Islamic Library
+
+            <br>
+
+            Born on
+            <strong>10 June 2026 — 9:00 PM</strong>
+
+            <br><br>
+
+            © 2026 Chishti Library.
+            All rights reserved.
+
+        </p>
+
+    </footer>
+
+
+</body>
+
+</html>
