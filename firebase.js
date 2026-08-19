@@ -168,3 +168,43 @@ console.log(
 console.log(
     "===================================="
 );
+
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    getApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+const auth = getAuth(getApp());
+
+const loginNav = document.getElementById("loginNav");
+
+onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+
+        const email = user.email || "User";
+
+        loginNav.innerHTML = `
+            <i class="fa-solid fa-envelope"></i>
+            <span>${email}</span>
+        `;
+
+        loginNav.href = "#";
+        loginNav.classList.add("user-email");
+
+    } else {
+
+        loginNav.innerHTML = `
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Login</span>
+        `;
+
+        loginNav.href = "./login.html";
+        loginNav.classList.remove("user-email");
+    }
+});
