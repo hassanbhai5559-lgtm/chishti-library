@@ -1630,35 +1630,6 @@ if (resetFilters) {
 }
 
 
-/*
-|--------------------------------------------------------------------------
-| GLOBAL IMAGE FALLBACK
-|--------------------------------------------------------------------------
-*/
-
-document
-    .querySelectorAll("img")
-    .forEach(function (image) {
-
-        image.addEventListener(
-            "error",
-            function () {
-
-                if (
-                    !this.src.includes(
-                        "logo.png"
-                    )
-                ) {
-
-                    this.src =
-                        "./logo.png";
-
-                }
-
-            }
-        );
-
-    });
 
 </script>
 
