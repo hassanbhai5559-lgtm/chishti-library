@@ -5,559 +5,312 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Login | Chishti Library</title>
+    <title>Login — Chishti Library</title>
 
-    <link rel="icon" type="image/png" href="logo.png">
+    <meta name="description"
+          content="Login to Chishti Library">
+
+    <link rel="icon"
+          type="image/png"
+          href="./logo.png">
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <style>
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-
-            min-height: 100vh;
-
-            font-family: Poppins, sans-serif;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #210000,
-                    #570000,
-                    #160000
-                );
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding: 20px;
-
-        }
-
-        .login-page {
-
-            width: 100%;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-        }
-
-        .login-box {
-
-            width: 100%;
-
-            max-width: 430px;
-
-            background: #fff;
-
-            border-radius: 24px;
-
-            padding: 35px 30px;
-
-            text-align: center;
-
-            box-shadow:
-                0 25px 70px
-                rgba(0,0,0,.35);
-
-        }
-
-        .logo {
-
-            width: 90px;
-
-            height: 90px;
-
-            object-fit: contain;
-
-            margin-bottom: 12px;
-
-        }
-
-        h1 {
-
-            color: #2b0000;
-
-            font-size: 28px;
-
-            margin-bottom: 5px;
-
-        }
-
-        .subtitle {
-
-            color: #777;
-
-            font-size: 14px;
-
-            margin-bottom: 25px;
-
-        }
-
-        .input-group {
-
-            text-align: left;
-
-            margin-bottom: 17px;
-
-        }
-
-        .input-group label {
-
-            display: block;
-
-            font-weight: 600;
-
-            font-size: 14px;
-
-            margin-bottom: 7px;
-
-        }
-
-        .input-box {
-
-            position: relative;
-
-        }
-
-        .input-box > i {
-
-            position: absolute;
-
-            left: 14px;
-
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            color: #777;
-
-        }
-
-        .input-box input {
-
-            width: 100%;
-
-            padding: 13px 42px;
-
-            border: 1px solid #ddd;
-
-            border-radius: 12px;
-
-            outline: none;
-
-            font-family: inherit;
-
-            font-size: 14px;
-
-        }
-
-        .input-box input:focus {
-
-            border-color: #2b0000;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(43,0,0,.08);
-
-        }
-
-        .password-toggle {
-
-            position: absolute;
-
-            right: 12px;
-
-            top: 50%;
-
-            transform: translateY(-50%);
-
-            border: none;
-
-            background: transparent;
-
-            color: #777;
-
-            cursor: pointer;
-
-        }
-
-        button {
-
-            font-family: inherit;
-
-        }
-
-        .main-btn {
-
-            width: 100%;
-
-            border: none;
-
-            background: #2b0000;
-
-            color: #fff;
-
-            padding: 14px;
-
-            border-radius: 12px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
-        }
-
-        .main-btn:hover {
-
-            background: #4b0000;
-
-        }
-
-        button:disabled {
-
-            opacity: .65;
-
-            cursor: not-allowed;
-
-        }
-
-        .divider {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            margin: 22px 0;
-
-            color: #999;
-
-            font-size: 12px;
-
-        }
-
-        .divider::before,
-        .divider::after {
-
-            content: "";
-
-            height: 1px;
-
-            background: #ddd;
-
-            flex: 1;
-
-        }
-
-        .google-btn {
-
-            width: 100%;
-
-            padding: 13px;
-
-            border: 1px solid #ddd;
-
-            background: #fff;
-
-            color: #333;
-
-            border-radius: 12px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-        }
-
-        .google-btn:hover {
-
-            background: #f7f7f7;
-
-        }
-
-        .guest-btn {
-
-            width: 100%;
-
-            padding: 13px;
-
-            border: none;
-
-            background: #eee;
-
-            color: #333;
-
-            border-radius: 12px;
-
-            font-weight: 600;
-
-            cursor: pointer;
-
-            margin-top: 10px;
-
-        }
-
-        .guest-btn:hover {
-
-            background: #e3e3e3;
-
-        }
-
-        .message {
-
-            display: none;
-
-            margin-top: 15px;
-
-            padding: 12px;
-
-            border-radius: 10px;
-
-            font-size: 13px;
-
-            text-align: left;
-
-            line-height: 1.5;
-
-        }
-
-        .footer {
-
-            margin-top: 22px;
-
-            color: #888;
-
-            font-size: 12px;
-
-        }
-
-        @media(max-width:480px) {
-
-            body {
-
-                padding: 12px;
-
-            }
-
-            .login-box {
-
-                padding: 30px 20px;
-
-            }
-
-        }
-
-    </style>
+    <link rel="stylesheet"
+          href="./login.css">
 
 </head>
 
 
 <body>
 
-
 <div class="login-page">
 
-    <div class="login-box">
+    <div class="login-background"></div>
+
+    <div class="login-container">
+
+        <a href="./index.html"
+           class="back-home">
+
+            <i class="fas fa-arrow-left"></i>
+
+            Back to Library
+
+        </a>
 
 
-        <img
-            src="logo.png"
-            class="logo"
-            alt="Chishti Library"
-            onerror="this.style.display='none'"
-        >
+        <div class="login-card">
 
+            <div class="login-logo">
 
-        <h1>
-            Chishti Library
-        </h1>
-
-
-        <p class="subtitle">
-            Sign in to continue
-        </p>
-
-
-        <!-- EMAIL -->
-
-        <div class="input-group">
-
-            <label for="loginEmail">
-                Email
-            </label>
-
-            <div class="input-box">
-
-                <i class="fas fa-envelope"></i>
-
-                <input
-                    type="email"
-                    id="loginEmail"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                >
+                <img
+                    src="./logo.png"
+                    alt="Chishti Library">
 
             </div>
 
-        </div>
+
+            <h1>
+                CHISHTI LIBRARY
+            </h1>
 
 
-        <!-- PASSWORD -->
+            <h2>
+                Welcome Back
+            </h2>
 
-        <div class="input-group">
 
-            <label for="loginPassword">
-                Password
-            </label>
+            <p class="login-description">
+                Login to like books, comment, share
+                and keep your library activity connected.
+            </p>
 
-            <div class="input-box">
 
-                <i class="fas fa-lock"></i>
+            <!-- USER ALREADY LOGGED IN -->
 
-                <input
-                    type="password"
-                    id="loginPassword"
-                    placeholder="Enter your password"
-                    autocomplete="current-password"
-                >
+            <div
+                id="loggedInBox"
+                class="logged-in-box"
+                style="display:none;">
+
+                <div class="user-avatar">
+
+                    <i class="fas fa-user"></i>
+
+                </div>
+
+
+                <h3>
+                    You are already logged in
+                </h3>
+
+
+                <p id="currentUserEmail">
+                    user@example.com
+                </p>
+
 
                 <button
-                    type="button"
-                    class="password-toggle"
-                    id="passwordToggle"
-                >
+                    id="continueButton"
+                    class="main-button"
+                    type="button">
 
-                    <i class="fas fa-eye"></i>
+                    <i class="fas fa-book-open"></i>
+
+                    Continue to Library
+
+                </button>
+
+
+                <button
+                    id="logoutButton"
+                    class="logout-button"
+                    type="button">
+
+                    <i class="fas fa-right-from-bracket"></i>
+
+                    Logout
 
                 </button>
 
             </div>
 
+
+            <!-- LOGIN FORM -->
+
+            <div id="loginBox">
+
+                <form id="loginForm">
+
+                    <div class="input-group">
+
+                        <label for="email">
+
+                            Email Address
+
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fas fa-envelope"></i>
+
+                            <input
+                                id="email"
+                                type="email"
+                                placeholder="Enter your email"
+                                autocomplete="email"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="password">
+
+                            Password
+
+                        </label>
+
+
+                        <div class="input-wrapper">
+
+                            <i class="fas fa-lock"></i>
+
+                            <input
+                                id="password"
+                                type="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required>
+
+
+                            <button
+                                id="showPassword"
+                                class="password-button"
+                                type="button"
+                                aria-label="Show password">
+
+                                <i class="fas fa-eye"></i>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="loginError"
+                        class="message error"
+                        style="display:none;">
+
+                    </div>
+
+
+                    <button
+                        id="loginButton"
+                        class="main-button"
+                        type="submit">
+
+                        <i class="fas fa-right-to-bracket"></i>
+
+                        <span>
+                            Login
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+                <div class="divider">
+
+                    <span>
+                        OR
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="googleButton"
+                    class="google-button"
+                    type="button">
+
+                    <i class="fab fa-google"></i>
+
+                    Continue with Google
+
+                </button>
+
+
+                <p class="signup-text">
+
+                    Don't have an account?
+
+                    <a href="./signup.html">
+                        Create Account
+                    </a>
+
+                </p>
+
+            </div>
+
+
+            <!-- SUCCESS -->
+
+            <div
+                id="successMessage"
+                class="message success"
+                style="display:none;">
+
+                <i class="fas fa-circle-check"></i>
+
+                <span>
+                    Login successful!
+                </span>
+
+            </div>
+
         </div>
 
 
-        <!-- EMAIL LOGIN -->
+        <p class="copyright">
 
-        <button
-            type="button"
-            class="main-btn"
-            id="emailLoginBtn"
-        >
+            © <span id="year"></span>
+            Chishti Library
 
-            <i class="fas fa-right-to-bracket"></i>
-
-            Login
-
-        </button>
-
-
-        <div class="divider">
-            OR
-        </div>
-
-
-        <!-- GOOGLE -->
-
-        <button
-            type="button"
-            class="google-btn"
-            id="googleLoginBtn"
-        >
-
-            <i class="fab fa-google"></i>
-
-            Continue with Google
-
-        </button>
-
-
-        <!-- GUEST -->
-
-        <button
-            type="button"
-            class="guest-btn"
-            id="guestLoginBtn"
-        >
-
-            <i class="fas fa-user"></i>
-
-            Continue as Guest
-
-        </button>
-
-
-        <!-- MESSAGE -->
-
-        <div
-            id="loginError"
-            class="message"
-        ></div>
-
-
-        <div class="footer">
-
-            Secure login powered by Firebase
-
-        </div>
+        </p>
 
     </div>
 
 </div>
 
 
+<!-- FIREBASE -->
 
-<!-- =================================================
-     FIREBASE COMPAT SDK
-     IMPORTANT: login.js KE BAAD nahi,
-     PEHLE load hoga
-================================================= -->
+<script
+    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
+</script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script
+    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js">
+</script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script
+    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js">
+</script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<!-- YOUR FIREBASE CONFIG -->
+
+<script src="./firebase.js"></script>
 
 
-<!-- YOUR JS -->
+<!-- LOGIN SYSTEM -->
 
-<script src="login.js"></script>
+<script src="./login.js"></script>
 
 
 </body>
