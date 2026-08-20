@@ -3187,6 +3187,137 @@ async function increaseShareCount(
 
 }
 
+/* =========================================================
+   👁️ FINAL BOOK VIEW COUNTER
+========================================================= */
+
+async function recordBookView(bookId) {
+
+    if (!firebaseSocialReady()) {
+        return;
+    }
+
+    const id = String(bookId);
+
+    /* Same session mein duplicate view nahi */
+
+    const storageKey =
+        "chishti_library_view_" + id;
+
+    if (
+        sessionStorage.getItem(storageKey)
+    ) {
+        return;
+    }
+
+    try {
+
+        const bookRef =
+            window.db
+                .collection("books")
+                .doc(id);
+
+
+        /* Firebase +1 */
+
+        await bookRef.set(
+
+            {
+                views:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1),
+
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            },
+
+            {
+                merge: true
+            }
+
+        );
+
+
+        /* Mark this session */
+
+        sessionStorage.setItem(
+            storageKey,
+            "1"
+        );
+
+
+        /* Update screen immediately */
+
+        document
+            .querySelectorAll(
+                `.view-count[data-book-id="${CSS.escape(id)}"]`
+            )
+            .forEach(function(counter) {
+
+                counter.textContent =
+                    Number(
+                        counter.textContent || 0
+                    ) + 1;
+
+            });
+
+
+        console.log(
+            "👁️ View +1:",
+            id
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ View Counter Error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   📖 READ ONLINE = VIEW
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const readButton =
+            event.target.closest(
+                ".read-btn"
+            );
+
+        if (!readButton) {
+            return;
+        }
+
+
+        const bookId =
+            readButton.dataset.bookId;
+
+
+        if (!bookId) {
+            return;
+        }
+
+
+        recordBookView(
+            bookId
+        );
+
+    }
+);
 
 /* =========================================================
    READY
