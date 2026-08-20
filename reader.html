@@ -24,6 +24,16 @@
 
 
     <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- =====================================================
          READER CSS
     ====================================================== -->
 
@@ -167,7 +177,9 @@
         >
 
 
-            <!-- Previous -->
+            <!-- =================================================
+                 PREVIOUS
+            ================================================== -->
 
             <button
                 id="previousPageButton"
@@ -176,12 +188,21 @@
                 title="Previous page"
                 aria-label="Previous page"
             >
-                <span aria-hidden="true">←</span>
-                <span class="button-label">Previous</span>
+
+                <span aria-hidden="true">
+                    ←
+                </span>
+
+                <span class="button-label">
+                    Previous
+                </span>
+
             </button>
 
 
-            <!-- Page Counter -->
+            <!-- =================================================
+                 PAGE COUNTER
+            ================================================== -->
 
             <div
                 class="page-counter"
@@ -218,42 +239,73 @@
 
             </div>
 
-<!-- Next -->
-<button
-    id="nextPageButton"
-    class="control-button"
-    type="button"
-    title="Next page"
-    aria-label="Next page"
->
-    <span class="button-label">Next</span>
-    <span aria-hidden="true">→</span>
-</button>
+
+            <!-- =================================================
+                 NEXT
+            ================================================== -->
+
+            <button
+                id="nextPageButton"
+                class="control-button"
+                type="button"
+                title="Next page"
+                aria-label="Next page"
+            >
+
+                <span class="button-label">
+                    Next
+                </span>
+
+                <span aria-hidden="true">
+                    →
+                </span>
+
+            </button>
 
 
-<!-- Bookmark -->
-<button
-    id="bookmarkBtn"
-    class="control-button icon-button"
-    type="button"
-    title="Bookmark current page"
-    aria-label="Bookmark current page"
->
-    <i class="far fa-bookmark"></i>
-</button>
+            <!-- =================================================
+                 BOOKMARK
+            ================================================== -->
+
+            <button
+                id="bookmarkBtn"
+                class="control-button icon-button"
+                type="button"
+                title="Bookmark current page"
+                aria-label="Bookmark current page"
+            >
+
+                <i
+                    class="far fa-bookmark"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
 
 
-<!-- Share -->
-<button
-    id="shareBtn"
-    class="control-button icon-button"
-    type="button"
-    title="Share this page"
-    aria-label="Share this page"
->
-    <i class="fas fa-share-nodes"></i>
-</button>
-            <!-- Divider -->
+            <!-- =================================================
+                 SHARE
+            ================================================== -->
+
+            <button
+                id="shareBtn"
+                class="control-button icon-button"
+                type="button"
+                title="Share this page"
+                aria-label="Share this page"
+            >
+
+                <i
+                    class="fas fa-share-nodes"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
+
+
+            <!-- =================================================
+                 DIVIDER
+            ================================================== -->
 
             <span
                 class="control-divider"
@@ -261,7 +313,9 @@
             ></span>
 
 
-            <!-- Zoom Out -->
+            <!-- =================================================
+                 ZOOM OUT
+            ================================================== -->
 
             <button
                 id="zoomOutButton"
@@ -274,7 +328,9 @@
             </button>
 
 
-            <!-- Zoom -->
+            <!-- =================================================
+                 ZOOM
+            ================================================== -->
 
             <button
                 id="resetZoomButton"
@@ -291,7 +347,9 @@
             </button>
 
 
-            <!-- Zoom In -->
+            <!-- =================================================
+                 ZOOM IN
+            ================================================== -->
 
             <button
                 id="zoomInButton"
@@ -304,7 +362,9 @@
             </button>
 
 
-            <!-- Divider -->
+            <!-- =================================================
+                 DIVIDER
+            ================================================== -->
 
             <span
                 class="control-divider"
@@ -312,7 +372,9 @@
             ></span>
 
 
-            <!-- Theme -->
+            <!-- =================================================
+                 THEME
+            ================================================== -->
 
             <button
                 id="themeButton"
@@ -325,7 +387,9 @@
             </button>
 
 
-            <!-- Fullscreen -->
+            <!-- =================================================
+                 FULLSCREEN
+            ================================================== -->
 
             <button
                 id="fullscreenButton"
@@ -338,7 +402,9 @@
             </button>
 
 
-            <!-- Print -->
+            <!-- =================================================
+                 PRINT
+            ================================================== -->
 
             <button
                 id="printButton"
@@ -351,7 +417,9 @@
             </button>
 
 
-            <!-- Watermarked Download -->
+            <!-- =================================================
+                 WATERMARKED DOWNLOAD
+            ================================================== -->
 
             <button
                 id="downloadButton"
@@ -364,7 +432,9 @@
             </button>
 
 
-            <!-- Subscriber Download -->
+            <!-- =================================================
+                 SUBSCRIBER DOWNLOAD
+            ================================================== -->
 
             <button
                 id="cleanDownloadButton"
@@ -417,78 +487,11 @@
          CHISHTI READER JS
     ====================================================== -->
 
-<!-- =========================================
-     CHISHTI READER EXTRA CONTROLS
-========================================= -->
-
-<div class="reader-extra-controls">
-
-    <button id="shareReaderBtn" type="button">
-        <i class="fas fa-share-nodes"></i>
-        Share
-    </button>
-
-    <button id="onePageBtn" type="button" class="active">
-        <i class="fas fa-file"></i>
-        1 Page
-    </button>
-
-    <button id="twoPageBtn" type="button">
-        <i class="fas fa-book-open"></i>
-        2 Pages
-    </button>
-
-    <button id="bookmarkBtn" type="button">
-        <i class="fas fa-bookmark"></i>
-        Bookmark
-    </button>
-
-    <button id="showBookmarksBtn" type="button">
-        <i class="fas fa-bookmark"></i>
-        My Bookmarks
-    </button>
-
-</div>
-
-
-<!-- BOOKMARK PANEL -->
-
-<div id="bookmarksPanel" class="bookmarks-panel">
-
-    <div class="bookmarks-header">
-
-        <h3>
-            <i class="fas fa-bookmark"></i>
-            My Bookmarks
-        </h3>
-
-        <button id="closeBookmarksBtn" type="button">
-            <i class="fas fa-times"></i>
-        </button>
-
-    </div>
-
-    <div id="bookmarksList">
-
-        <p class="no-bookmarks">
-            No bookmarks yet.
-        </p>
-
-    </div>
-
-</div>
-
-
-<!-- SHARE MESSAGE -->
-
-<div id="shareMessage" class="share-message">
-    Link copied!
-</div>
-    
     <script
         type="module"
         src="./reader.js"
     ></script>
+
 
 </body>
 
