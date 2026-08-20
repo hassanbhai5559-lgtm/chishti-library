@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
 
     <meta name="viewport"
@@ -17,6 +15,11 @@
           type="image/png"
           href="./logo.png">
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Google Font -->
     <link rel="preconnect"
           href="https://fonts.googleapis.com">
 
@@ -24,295 +27,213 @@
           href="https://fonts.gstatic.com"
           crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- Firebase COMPAT -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+    <!-- Your Firebase -->
+    <script src="./firebase.js"></script>
+
+    <!-- Login CSS -->
     <link rel="stylesheet"
           href="./login.css">
-
 </head>
-
 
 <body>
 
-<div class="login-page">
-
-    <div class="login-background"></div>
-
-    <div class="login-container">
-
-        <a href="./index.html"
-           class="back-home">
-
-            <i class="fas fa-arrow-left"></i>
-
-            Back to Library
-
-        </a>
-
+    <main class="login-page">
 
         <div class="login-card">
 
-            <div class="login-logo">
+            <!-- Logo -->
+            <div class="logo-box">
 
-                <img
-                    src="./logo.png"
-                    alt="Chishti Library">
+                <img src="./logo.png"
+                     alt="Chishti Library Logo">
 
             </div>
 
 
+            <!-- Heading -->
             <h1>
-                CHISHTI LIBRARY
+                Welcome Back
             </h1>
 
-
-            <h2>
-                Welcome Back
-            </h2>
-
-
-            <p class="login-description">
-                Login to like books, comment, share
-                and keep your library activity connected.
+            <p class="subtitle">
+                Login to Chishti Library
             </p>
 
 
-            <!-- USER ALREADY LOGGED IN -->
+            <!-- Message -->
+            <div id="message"
+                 class="message">
+            </div>
 
-            <div
-                id="loggedInBox"
-                class="logged-in-box"
-                style="display:none;">
 
-                <div class="user-avatar">
+            <!-- Login Form -->
+            <form id="loginForm">
 
-                    <i class="fas fa-user"></i>
+                <!-- Email -->
+                <div class="input-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
 
                 </div>
 
 
-                <h3>
-                    You are already logged in
-                </h3>
+                <!-- Password -->
+                <div class="input-group">
 
+                    <label for="password">
+                        Password
+                    </label>
 
-                <p id="currentUserEmail">
-                    user@example.com
-                </p>
+                    <div class="input-box">
 
+                        <i class="fa-solid fa-lock"></i>
 
-                <button
-                    id="continueButton"
-                    class="main-button"
-                    type="button">
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
 
-                    <i class="fas fa-book-open"></i>
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="password-toggle"
+                            aria-label="Show password">
 
-                    Continue to Library
+                            <i class="fa-solid fa-eye"></i>
 
-                </button>
-
-
-                <button
-                    id="logoutButton"
-                    class="logout-button"
-                    type="button">
-
-                    <i class="fas fa-right-from-bracket"></i>
-
-                    Logout
-
-                </button>
-
-            </div>
-
-
-            <!-- LOGIN FORM -->
-
-            <div id="loginBox">
-
-                <form id="loginForm">
-
-                    <div class="input-group">
-
-                        <label for="email">
-
-                            Email Address
-
-                        </label>
-
-
-                        <div class="input-wrapper">
-
-                            <i class="fas fa-envelope"></i>
-
-                            <input
-                                id="email"
-                                type="email"
-                                placeholder="Enter your email"
-                                autocomplete="email"
-                                required>
-
-                        </div>
+                        </button>
 
                     </div>
 
-
-                    <div class="input-group">
-
-                        <label for="password">
-
-                            Password
-
-                        </label>
+                </div>
 
 
-                        <div class="input-wrapper">
-
-                            <i class="fas fa-lock"></i>
-
-                            <input
-                                id="password"
-                                type="password"
-                                placeholder="Enter your password"
-                                autocomplete="current-password"
-                                required>
-
-
-                            <button
-                                id="showPassword"
-                                class="password-button"
-                                type="button"
-                                aria-label="Show password">
-
-                                <i class="fas fa-eye"></i>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        id="loginError"
-                        class="message error"
-                        style="display:none;">
-
-                    </div>
-
+                <!-- Forgot Password -->
+                <div class="forgot-row">
 
                     <button
-                        id="loginButton"
-                        class="main-button"
-                        type="submit">
+                        type="button"
+                        id="forgotPassword"
+                        class="forgot-button">
 
-                        <i class="fas fa-right-to-bracket"></i>
-
-                        <span>
-                            Login
-                        </span>
+                        Forgot Password?
 
                     </button>
 
-                </form>
-
-
-                <div class="divider">
-
-                    <span>
-                        OR
-                    </span>
-
                 </div>
 
 
+                <!-- Login -->
                 <button
-                    id="googleButton"
-                    class="google-button"
-                    type="button">
+                    type="submit"
+                    id="loginButton"
+                    class="login-button">
 
-                    <i class="fab fa-google"></i>
-
-                    Continue with Google
+                    <span id="loginButtonText">
+                        Login
+                    </span>
 
                 </button>
 
+            </form>
 
-                <p class="signup-text">
 
-                    Don't have an account?
+            <!-- Divider -->
+            <div class="divider">
 
-                    <a href="./signup.html">
-                        Create Account
-                    </a>
-
-                </p>
+                <span>OR</span>
 
             </div>
 
 
-            <!-- SUCCESS -->
+            <!-- Google -->
+            <button
+                type="button"
+                id="googleButton"
+                class="google-button">
 
-            <div
-                id="successMessage"
-                class="message success"
-                style="display:none;">
-
-                <i class="fas fa-circle-check"></i>
+                <i class="fa-brands fa-google"></i>
 
                 <span>
-                    Login successful!
+                    Continue with Google
+                </span>
+
+            </button>
+
+
+            <!-- Signup -->
+            <p class="signup-text">
+
+                Don't have an account?
+
+                <button
+                    type="button"
+                    id="signupButton"
+                    class="signup-button">
+
+                    Create Account
+
+                </button>
+
+            </p>
+
+
+            <!-- Continue without login -->
+            <button
+                type="button"
+                id="continueButton"
+                class="continue-button">
+
+                Continue as Guest
+
+            </button>
+
+
+            <!-- Footer -->
+            <div class="login-footer">
+
+                <span>
+                    © Chishti Library
                 </span>
 
             </div>
 
         </div>
 
-
-        <p class="copyright">
-
-            © <span id="year"></span>
-            Chishti Library
-
-        </p>
-
-    </div>
-
-</div>
+    </main>
 
 
-<!-- FIREBASE -->
-
-<script
-    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
-</script>
-
-<script
-    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js">
-</script>
-
-<script
-    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js">
-</script>
-
-
-<!-- YOUR FIREBASE CONFIG -->
-
-<script src="./firebase.js"></script>
-
-
-<!-- LOGIN SYSTEM -->
-
-<script src="./login.js"></script>
-
+    <!-- Login JS -->
+    <script src="./login.js"></script>
 
 </body>
-
 </html>
