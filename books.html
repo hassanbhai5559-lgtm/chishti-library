@@ -8,30 +8,16 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>All Books — Chishti Library</title>
+    <title>Books — Chishti Library</title>
 
     <meta name="description"
-          content="Chishti Library — Complete Digital Islamic Book Collection">
+          content="Explore all Islamic books in Chishti Library">
 
-    <meta name="keywords"
-          content="Chishti Library, Islamic Books, Saim Chishti, Naat, Manqabat, Hamd, Kulliyat">
-
-    <meta name="author"
-          content="Chishti Library">
-
-    <!-- Google Site Verification -->
-    <meta name="google-site-verification"
-          content="dnI7e07V0xtGoWxgsCqJy-lDkwCFaiSlrK6uHToDgkc">
-
-    <!-- Favicon -->
     <link rel="icon"
           type="image/png"
           href="./logo.png">
 
-    <link rel="apple-touch-icon"
-          href="./logo.png">
-
-    <!-- Google Font -->
+    <!-- Poppins -->
     <link rel="preconnect"
           href="https://fonts.googleapis.com">
 
@@ -39,14 +25,22 @@
           href="https://fonts.gstatic.com"
           crossorigin>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+    <!-- Main Firebase -->
+    <script src="./firebase.js"></script>
 
     <!-- Books CSS -->
     <link rel="stylesheet"
@@ -55,242 +49,145 @@
 </head>
 
 
-<body class="library-page">
+<body>
 
 
-<!-- =====================================================
-     LOADING SCREEN
-===================================================== -->
-
-<div id="pageLoader"
-     class="page-loader">
-
-    <div class="loader-content">
-
-        <img
-            src="./logo.png"
-            alt="Chishti Library"
-            class="loader-logo"
-        >
-
-        <div class="loader-spinner"></div>
-
-        <h3>
-            CHISHTI LIBRARY
-        </h3>
-
-        <p>
-            Loading Books...
-        </p>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
+<!-- =================================================
      NAVBAR
-===================================================== -->
+================================================= -->
 
-<nav class="navbar">
+<header class="navbar">
 
-    <!-- LOGO -->
+    <div class="nav-left">
 
-    <div class="logo">
+        <a href="./index.html"
+           class="brand">
 
-        <a href="./index.html">
+            <img src="./logo.png"
+                 alt="Chishti Library">
 
-            <img
-                src="./logo.png"
-                alt="Chishti Library Logo"
-            >
+            <div>
+
+                <h2>
+                    CHISHTI LIBRARY
+                </h2>
+
+                <span>
+                    Digital Library
+                </span>
+
+            </div>
 
         </a>
 
-        <div class="logo-text">
-
-            <h2>
-                CHISHTI LIBRARY
-            </h2>
-
-            <span>
-                Digital Library
-            </span>
-
-        </div>
-
     </div>
 
 
-    <!-- MENU -->
+    <nav class="nav-links">
 
-    <ul class="menu"
-        id="mainMenu">
+        <a href="./index.html">
+            <i class="fa-solid fa-house"></i>
+            Home
+        </a>
 
-        <li>
+        <a href="./books.html"
+           class="active">
+            <i class="fa-solid fa-book"></i>
+            Books
+        </a>
 
-            <a href="./index.html">
+        <a href="./authors.html">
+            <i class="fa-solid fa-feather"></i>
+            Authors
+        </a>
 
-                <i class="fas fa-house"></i>
+        <a href="./developer.html">
+            <i class="fa-solid fa-code"></i>
+            Developer
+        </a>
 
-                Home
+        <a href="./index.html#contact">
+            <i class="fa-solid fa-phone"></i>
+            Contact
+        </a>
 
-            </a>
+        <a href="./login.html"
+           id="loginNav">
 
-        </li>
+            <i class="fa-solid fa-right-to-bracket"></i>
 
+            <span>
+                Login
+            </span>
 
-        <li>
+        </a>
 
-            <a href="./books.html"
-               class="active">
+        <a href="./admin-login.html">
 
-                <i class="fas fa-book"></i>
+            <i class="fa-solid fa-user-shield"></i>
 
-                Books
+            Admin Login
 
-            </a>
+        </a>
 
-        </li>
-
-
-        <li>
-
-            <a href="./authors.html">
-
-                <i class="fas fa-feather-alt"></i>
-
-                Authors
-
-            </a>
-
-        </li>
-
-
-        <li>
-
-            <a href="./developer.html">
-
-                <i class="fas fa-code"></i>
-
-                Developer
-
-            </a>
-
-        </li>
+    </nav>
 
 
-        <li>
+    <button id="mobileMenu"
+            class="mobile-menu">
 
-            <a href="./contact.html">
-
-                <i class="fas fa-phone"></i>
-
-                Contact
-
-            </a>
-
-        </li>
-
-
-        <li>
-
-            <a href="./admin/index.html">
-
-                <i class="fas fa-user-shield"></i>
-
-                Admin Login
-
-            </a>
-
-        </li>
-
-    </ul>
-
-
-    <!-- MOBILE MENU -->
-
-    <button
-        class="mobile-menu"
-        id="mobileMenu"
-        type="button"
-        aria-label="Open menu"
-        aria-expanded="false">
-
-        <i class="fas fa-bars"></i>
+        <i class="fa-solid fa-bars"></i>
 
     </button>
 
-</nav>
+</header>
 
 
 
-<!-- =====================================================
-     USER / LOGIN BAR
-===================================================== -->
+<!-- =================================================
+     HERO
+================================================= -->
 
-<section class="user-bar">
+<section class="books-hero">
 
-    <div class="user-bar-inner">
+    <div class="hero-glow"></div>
 
-        <div class="user-info">
+    <img src="./logo.png"
+         class="hero-logo"
+         alt="Chishti Library">
 
-            <span
-                id="userStatusIcon"
-                class="user-status-icon">
+    <h1>
+        CHISHTI LIBRARY
+    </h1>
 
-                <i class="fas fa-user"></i>
+    <h3>
+        Digital Islamic Library
+    </h3>
 
-            </span>
-
-
-            <div class="user-text">
-
-                <strong id="userStatusText">
-
-                    Guest User
-
-                </strong>
-
-                <small id="userEmailText">
-
-                    Login to like, comment and share
-
-                </small>
-
-            </div>
-
-        </div>
+    <p>
+        Explore Islamic Books, Naat, Manqabat,
+        Hamd, Maqala and Research Works.
+    </p>
 
 
-        <div class="user-actions">
+    <!-- SEARCH -->
 
-            <button
-                id="loginButton"
-                class="login-button"
+    <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Books, Authors or Categories..."
+            autocomplete="off">
+
+        <button id="clearSearch"
                 type="button">
 
-                <i class="fas fa-right-to-bracket"></i>
+            <i class="fa-solid fa-xmark"></i>
 
-                Login
-
-            </button>
-
-
-            <button
-                id="logoutButton"
-                class="logout-button"
-                type="button"
-                style="display:none;">
-
-                <i class="fas fa-right-from-bracket"></i>
-
-                Logout
-
-            </button>
-
-        </div>
+        </button>
 
     </div>
 
@@ -298,117 +195,68 @@
 
 
 
-<!-- =====================================================
-     HERO
-===================================================== -->
+<!-- =================================================
+     BOOK STATISTICS
+================================================= -->
 
-<section class="hero">
+<section class="stats">
 
-    <div class="hero-overlay"></div>
+    <div class="stat-card">
 
+        <i class="fa-solid fa-book-open"></i>
 
-    <div class="hero-content">
+        <strong id="bookCounter">
+            0
+        </strong>
 
-        <img
-            src="./logo.png"
-            class="hero-logo"
-            alt="Chishti Library"
-        >
+        <span>
+            Books
+        </span>
 
-
-        <h1>
-            ALL BOOKS
-        </h1>
+    </div>
 
 
-        <h3>
-            Chishti Digital Islamic Library
-        </h3>
+    <div class="stat-card">
+
+        <i class="fa-solid fa-heart"></i>
+
+        <strong id="likesCounter">
+            0
+        </strong>
+
+        <span>
+            Likes
+        </span>
+
+    </div>
 
 
-        <p>
-            Explore Islamic Books, Naat, Manqabat,
-            Hamd, Kulliyat and Maqala.
-        </p>
+    <div class="stat-card">
+
+        <i class="fa-solid fa-eye"></i>
+
+        <strong id="viewsCounter">
+            0
+        </strong>
+
+        <span>
+            Views
+        </span>
+
+    </div>
 
 
-        <!-- SEARCH -->
+    <div class="stat-card">
 
-        <div class="search-box">
+        <i class="fa-solid fa-users"></i>
 
-            <i class="fas fa-search"></i>
+        <strong id="usersCounter">
+            0
+        </strong>
 
-            <input
-                type="text"
-                id="bookSearch"
-                placeholder="Search Books..."
-                autocomplete="off"
-                aria-label="Search books"
-            >
-
-            <button
-                id="clearSearch"
-                class="clear-search"
-                type="button"
-                aria-label="Clear search"
-                title="Clear search">
-
-                <i class="fas fa-xmark"></i>
-
-            </button>
-
-        </div>
-
-
-        <!-- BOOK COUNTER -->
-
-        <div class="counter-area">
-
-            <div class="counter-card books">
-
-                <i class="fas fa-book-open"></i>
-
-                <h2 id="bookCount">
-                    0
-                </h2>
-
-                <p>
-                    Books
-                </p>
-
-            </div>
-
-
-            <div class="counter-card">
-
-                <i class="fas fa-eye"></i>
-
-                <h2 id="totalViews">
-                    0
-                </h2>
-
-                <p>
-                    Views
-                </p>
-
-            </div>
-
-
-            <div class="counter-card">
-
-                <i class="fas fa-heart"></i>
-
-                <h2 id="totalLikes">
-                    0
-                </h2>
-
-                <p>
-                    Likes
-                </p>
-
-            </div>
-
-        </div>
+        <span>
+            Readers
+        </span>
 
     </div>
 
@@ -416,145 +264,91 @@
 
 
 
-<!-- =====================================================
-     BOOK FILTER / SORT
-===================================================== -->
+<!-- =================================================
+     CATEGORIES
+================================================= -->
 
-<section class="book-tools">
+<section class="library-section">
 
-    <div class="book-tools-inner">
+    <h2 class="section-title">
+        Browse Categories
+    </h2>
 
-
-        <!-- CATEGORIES -->
-
-        <div class="category-section">
-
-            <h2 class="section-title small-title">
-
-                <i class="fas fa-layer-group"></i>
-
-                Categories
-
-            </h2>
+    <p class="section-subtitle">
+        Find your favorite Islamic books
+    </p>
 
 
-            <div class="category-grid">
+    <div class="categories">
 
-                <button
-                    class="category active"
-                    data-category="all"
-                    type="button">
+        <button class="category active"
+                data-category="All">
 
-                    ALL
+            <i class="fa-solid fa-layer-group"></i>
 
-                </button>
+            All
 
-
-                <button
-                    class="category"
-                    data-category="naat"
-                    type="button">
-
-                    NAAT
-
-                </button>
+        </button>
 
 
-                <button
-                    class="category"
-                    data-category="manqabat"
-                    type="button">
+        <button class="category"
+                data-category="Naat">
 
-                    MANQABAT
+            <i class="fa-solid fa-mosque"></i>
 
-                </button>
+            Naat
 
-
-                <button
-                    class="category"
-                    data-category="hamd"
-                    type="button">
-
-                    HAMD
-
-                </button>
+        </button>
 
 
-                <button
-                    class="category"
-                    data-category="maqala"
-                    type="button">
+        <button class="category"
+                data-category="Manqabat">
 
-                    MAQALA
+            <i class="fa-solid fa-star-and-crescent"></i>
 
-                </button>
+            Manqabat
 
-
-                <button
-                    class="category"
-                    data-category="kulliyat"
-                    type="button">
-
-                    KULLIYAT
-
-                </button>
+        </button>
 
 
-                <button
-                    class="category"
-                    data-category="seerat"
-                    type="button">
+        <button class="category"
+                data-category="Hamd">
 
-                    SEERAT
+            <i class="fa-solid fa-heart"></i>
 
-                </button>
+            Hamd
 
-            </div>
-
-        </div>
+        </button>
 
 
-        <!-- SORT -->
+        <button class="category"
+                data-category="Maqala">
 
-        <div class="sort-section">
+            <i class="fa-solid fa-file-lines"></i>
 
-            <label
-                for="bookSort">
+            Maqala
 
-                <i class="fas fa-arrow-down-wide-short"></i>
-
-                Sort Books
-
-            </label>
+        </button>
 
 
-            <select
-                id="bookSort"
-                class="book-sort">
+        <button class="category"
+                data-category="Seerat">
 
-                <option value="newest">
-                    Newest
-                </option>
+            <i class="fa-solid fa-book-quran"></i>
 
-                <option value="oldest">
-                    Oldest
-                </option>
+            Seerat
 
-                <option value="popular">
-                    Popular
-                </option>
+        </button>
 
-                <option value="most-liked">
-                    Most Liked
-                </option>
 
-                <option value="most-viewed">
-                    Most Viewed
-                </option>
+        <button class="category"
+                data-category="Kulliyat">
 
-            </select>
+            <i class="fa-solid fa-books"></i>
 
-        </div>
+            Kulliyat
+
+        </button>
 
     </div>
 
@@ -562,25 +356,71 @@
 
 
 
-<!-- =====================================================
-     BOOKS SECTION
-===================================================== -->
+<!-- =================================================
+     SORTING
+================================================= -->
 
-<section class="featured-books">
+<section class="sorting-section">
 
-    <div class="books-heading">
+    <button class="sort-btn active"
+            data-sort="latest">
+
+        <i class="fa-solid fa-clock"></i>
+
+        Latest
+
+    </button>
+
+
+    <button class="sort-btn"
+            data-sort="oldest">
+
+        <i class="fa-solid fa-hourglass-start"></i>
+
+        Oldest
+
+    </button>
+
+
+    <button class="sort-btn"
+            data-sort="liked">
+
+        <i class="fa-solid fa-heart"></i>
+
+        Most Liked
+
+    </button>
+
+
+    <button class="sort-btn"
+            data-sort="popular">
+
+        <i class="fa-solid fa-fire"></i>
+
+        Popular
+
+    </button>
+
+</section>
+
+
+
+<!-- =================================================
+     BOOKS
+================================================= -->
+
+<section class="library-section books-section">
+
+    <div class="section-heading">
 
         <div>
 
             <h2 class="section-title">
-
-                <i class="fas fa-books"></i>
-
                 All Books
-
             </h2>
 
-            <p id="resultsText">
+            <p class="section-subtitle"
+               id="resultsText">
 
                 Loading books...
 
@@ -588,16 +428,18 @@
 
         </div>
 
+    </div>
 
-        <div class="firebase-status"
-             id="firebaseStatus">
 
-            <span class="status-dot"></span>
+    <div id="booksContainer"
+         class="books-grid">
 
-            <span id="firebaseStatusText">
+        <div class="loader">
 
-                Connecting...
+            <i class="fa-solid fa-spinner fa-spin"></i>
 
+            <span>
+                Loading Books...
             </span>
 
         </div>
@@ -605,68 +447,19 @@
     </div>
 
 
-    <!-- BOOKS -->
+    <div id="noBooks"
+         class="no-books"
+         hidden>
 
-    <div
-        id="booksContainer"
-        class="books-grid">
-
-    </div>
-
-
-    <!-- LOADING -->
-
-    <div
-        id="booksLoading"
-        class="books-loading">
-
-        <div class="book-loading-spinner"></div>
+        <i class="fa-solid fa-book-open"></i>
 
         <h3>
-            Loading Books
-        </h3>
-
-        <p>
-            Please wait...
-        </p>
-
-    </div>
-
-
-    <!-- EMPTY -->
-
-    <div
-        id="emptyBooks"
-        class="no-books"
-        style="display:none;">
-
-        <div class="empty-icon">
-
-            <i class="fas fa-book-open"></i>
-
-        </div>
-
-
-        <h2>
             No Books Found
-        </h2>
-
+        </h3>
 
         <p>
             Try another search or category.
         </p>
-
-
-        <button
-            id="resetFilters"
-            type="button"
-            class="reset-button">
-
-            <i class="fas fa-rotate-left"></i>
-
-            Reset Filters
-
-        </button>
 
     </div>
 
@@ -674,429 +467,20 @@
 
 
 
-<!-- =====================================================
-     LOGIN MODAL
-===================================================== -->
-
-<div
-    id="loginModal"
-    class="modal"
-    aria-hidden="true">
-
-    <div class="modal-overlay"
-         data-close-modal></div>
-
-
-    <div class="modal-box">
-
-        <button
-            id="closeLoginModal"
-            class="modal-close"
-            type="button"
-            aria-label="Close">
-
-            <i class="fas fa-xmark"></i>
-
-        </button>
-
-
-        <div class="modal-icon">
-
-            <i class="fas fa-user-lock"></i>
-
-        </div>
-
-
-        <h2>
-            Login to Chishti Library
-        </h2>
-
-
-        <p>
-            Login to like books, comment and use
-            your personal library features.
-        </p>
-
-
-        <form id="loginForm">
-
-            <div class="input-group">
-
-                <label for="loginEmail">
-
-                    Email
-
-                </label>
-
-
-                <div class="input-wrap">
-
-                    <i class="fas fa-envelope"></i>
-
-                    <input
-                        id="loginEmail"
-                        type="email"
-                        placeholder="Enter your email"
-                        autocomplete="email"
-                        required
-                    >
-
-                </div>
-
-            </div>
-
-
-            <div class="input-group">
-
-                <label for="loginPassword">
-
-                    Password
-
-                </label>
-
-
-                <div class="input-wrap">
-
-                    <i class="fas fa-lock"></i>
-
-                    <input
-                        id="loginPassword"
-                        type="password"
-                        placeholder="Enter your password"
-                        autocomplete="current-password"
-                        required
-                    >
-
-
-                    <button
-                        id="togglePassword"
-                        type="button"
-                        class="password-toggle"
-                        aria-label="Show password">
-
-                        <i class="fas fa-eye"></i>
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div
-                id="loginError"
-                class="form-error"
-                style="display:none;">
-
-            </div>
-
-
-            <button
-                id="loginSubmit"
-                class="login-submit"
-                type="submit">
-
-                <i class="fas fa-right-to-bracket"></i>
-
-                Login
-
-            </button>
-
-        </form>
-
-
-        <div class="login-divider">
-
-            <span>
-                OR
-            </span>
-
-        </div>
-
-
-        <button
-            id="googleLoginButton"
-            class="google-login"
-            type="button">
-
-            <i class="fab fa-google"></i>
-
-            Continue with Google
-
-        </button>
-
-
-        <p class="login-note">
-
-            Your account is protected by Firebase
-            Authentication.
-
-        </p>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     COMMENT MODAL
-===================================================== -->
-
-<div
-    id="commentModal"
-    class="modal"
-    aria-hidden="true">
-
-    <div class="modal-overlay"
-         data-close-comment></div>
-
-
-    <div class="modal-box comment-modal-box">
-
-        <button
-            id="closeCommentModal"
-            class="modal-close"
-            type="button">
-
-            <i class="fas fa-xmark"></i>
-
-        </button>
-
-
-        <div class="comment-header">
-
-            <div class="comment-book-icon">
-
-                <i class="fas fa-comments"></i>
-
-            </div>
-
-
-            <div>
-
-                <h2>
-                    Comments
-                </h2>
-
-                <p id="commentBookTitle">
-                    Book Comments
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- COMMENTS -->
-
-        <div
-            id="commentsList"
-            class="comments-list">
-
-            <div class="comments-loading">
-
-                Loading comments...
-
-            </div>
-
-        </div>
-
-
-        <!-- COMMENT FORM -->
-
-        <form id="commentForm"
-              class="comment-form">
-
-            <textarea
-                id="commentInput"
-                rows="3"
-                maxlength="1000"
-                placeholder="Write your comment..."
-                required></textarea>
-
-
-            <div class="comment-form-bottom">
-
-                <span id="commentLoginHint">
-
-                    Login required
-
-                </span>
-
-
-                <button
-                    id="submitComment"
-                    type="submit">
-
-                    <i class="fas fa-paper-plane"></i>
-
-                    Comment
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     SHARE MODAL
-===================================================== -->
-
-<div
-    id="shareModal"
-    class="modal"
-    aria-hidden="true">
-
-    <div class="modal-overlay"
-         data-close-share></div>
-
-
-    <div class="modal-box share-modal-box">
-
-        <button
-            id="closeShareModal"
-            class="modal-close"
-            type="button">
-
-            <i class="fas fa-xmark"></i>
-
-        </button>
-
-
-        <div class="share-icon">
-
-            <i class="fas fa-share-nodes"></i>
-
-        </div>
-
-
-        <h2>
-            Share Book
-        </h2>
-
-
-        <p id="shareBookTitle">
-            Share this book
-        </p>
-
-
-        <div class="share-url-box">
-
-            <input
-                id="shareUrl"
-                type="text"
-                readonly
-            >
-
-
-            <button
-                id="copyShareUrl"
-                type="button"
-                title="Copy link">
-
-                <i class="fas fa-copy"></i>
-
-            </button>
-
-        </div>
-
-
-        <div class="share-buttons">
-
-            <button
-                id="nativeShareButton"
-                type="button"
-                class="share-native">
-
-                <i class="fas fa-share-nodes"></i>
-
-                Share
-
-            </button>
-
-
-            <button
-                id="copyShareButton"
-                type="button"
-                class="share-copy">
-
-                <i class="fas fa-link"></i>
-
-                Copy Link
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     TOAST
-===================================================== -->
-
-<div
-    id="toast"
-    class="toast"
-    role="status"
-    aria-live="polite">
-
-    <i id="toastIcon"
-       class="fas fa-circle-check"></i>
-
-    <span id="toastMessage">
-        Done
-    </span>
-
-</div>
-
-
-
-<!-- =====================================================
-     SCROLL TOP
-===================================================== -->
-
-<button
-    id="scrollTop"
-    class="scroll-top"
-    type="button"
-    aria-label="Scroll to top"
-    title="Back to top">
-
-    <i class="fas fa-arrow-up"></i>
-
-</button>
-
-
-
-<!-- =====================================================
+<!-- =================================================
      FOOTER
-===================================================== -->
+================================================= -->
 
 <footer>
 
     <div class="footer-logo">
 
-        <img
-            src="./logo.png"
-            alt="Chishti Library"
-        >
-
+        <img src="./logo.png"
+             alt="Chishti Library">
 
         <h2>
             CHISHTI LIBRARY
         </h2>
-
 
         <p>
             Digital Islamic Library
@@ -1105,530 +489,20 @@
     </div>
 
 
-    <!-- SOCIAL LINKS -->
+    <p class="copyright">
 
-    <div class="footer-social">
-
-        <a
-            href="https://www.facebook.com/profile.php?id=100063724950961"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Facebook">
-
-            <i class="fab fa-facebook-f"></i>
-
-            <span>
-                Facebook
-            </span>
-
-        </a>
-
-
-        <a
-            href="https://www.youtube.com/@Saimtv5"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="YouTube">
-
-            <i class="fab fa-youtube"></i>
-
-            <span>
-                YouTube
-            </span>
-
-        </a>
-
-
-        <a
-            href="https://www.facebook.com/saimchishtiofficial"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Saim Chishti Official">
-
-            <i class="fab fa-facebook-f"></i>
-
-            <span>
-                Saim Chishti Official
-            </span>
-
-        </a>
-
-    </div>
-
-
-    <!-- FOOTER COPY -->
-
-    <div class="footer-copy">
-
-        ©
-        <span id="footerYear"></span>
-
-        Chishti Library —
-
+        © <span id="year"></span>
+        Chishti Library.
         All Rights Reserved.
 
-    </div>
+    </p>
 
 </footer>
 
 
 
-<!-- =====================================================
-     FIREBASE SDK
-     COMPAT VERSION
-===================================================== -->
-
-<script
-    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js">
-</script>
-
-
-<script
-    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js">
-</script>
-
-
-<script
-    src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js">
-</script>
-
-
-
-<!-- =====================================================
-     FIREBASE CONFIG
-     YOUR firebase.js
-===================================================== -->
-
-<script src="./firebase.js"></script>
-
-
-
-<!-- =====================================================
-     BOOK SYSTEM
-     YOUR book.js
-===================================================== -->
-
+<!-- Books JS -->
 <script src="./book.js"></script>
-
-
-
-<!-- =====================================================
-     BASIC FALLBACK JS
-===================================================== -->
-
-
-/*
-|--------------------------------------------------------------------------
-| FOOTER YEAR
-|--------------------------------------------------------------------------
-*/
-
-const footerYear =
-    document.getElementById("footerYear");
-
-if (footerYear) {
-
-    footerYear.textContent =
-        new Date().getFullYear();
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| MOBILE MENU
-|--------------------------------------------------------------------------
-*/
-
-const mobileMenu =
-    document.getElementById("mobileMenu");
-
-const mainMenu =
-    document.getElementById("mainMenu");
-
-
-if (mobileMenu && mainMenu) {
-
-    mobileMenu.addEventListener(
-        "click",
-        function () {
-
-            const opened =
-                mainMenu.classList.toggle("show");
-
-            mobileMenu.setAttribute(
-                "aria-expanded",
-                opened ? "true" : "false"
-            );
-
-        }
-    );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| SCROLL TOP
-|--------------------------------------------------------------------------
-*/
-
-const scrollTop =
-    document.getElementById("scrollTop");
-
-
-if (scrollTop) {
-
-    window.addEventListener(
-        "scroll",
-        function () {
-
-            if (window.scrollY > 350) {
-
-                scrollTop.classList.add("show");
-
-            } else {
-
-                scrollTop.classList.remove("show");
-
-            }
-
-        }
-    );
-
-
-    scrollTop.addEventListener(
-        "click",
-        function () {
-
-            window.scrollTo({
-
-                top: 0,
-
-                behavior: "smooth"
-
-            });
-
-        }
-    );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| PASSWORD SHOW / HIDE
-|--------------------------------------------------------------------------
-*/
-
-const togglePassword =
-    document.getElementById("togglePassword");
-
-const loginPassword =
-    document.getElementById("loginPassword");
-
-
-if (togglePassword && loginPassword) {
-
-    togglePassword.addEventListener(
-        "click",
-        function () {
-
-            const isPassword =
-                loginPassword.type === "password";
-
-
-            loginPassword.type =
-                isPassword
-                    ? "text"
-                    : "password";
-
-
-            this.innerHTML =
-                isPassword
-                    ? '<i class="fas fa-eye-slash"></i>'
-                    : '<i class="fas fa-eye"></i>';
-
-        }
-    );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| SEARCH CLEAR
-|--------------------------------------------------------------------------
-*/
-
-const clearSearch =
-    document.getElementById("clearSearch");
-
-const bookSearch =
-    document.getElementById("bookSearch");
-
-
-if (clearSearch && bookSearch) {
-
-    clearSearch.addEventListener(
-        "click",
-        function () {
-
-            bookSearch.value = "";
-
-            bookSearch.dispatchEvent(
-                new Event("input")
-            );
-
-            bookSearch.focus();
-
-        }
-    );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| MODAL HELPERS
-|--------------------------------------------------------------------------
-*/
-
-function openModal(id) {
-
-    const modal =
-        document.getElementById(id);
-
-    if (!modal) return;
-
-    modal.classList.add("show");
-
-    modal.setAttribute(
-        "aria-hidden",
-        "false"
-    );
-
-    document.body.classList.add(
-        "modal-open"
-    );
-
-}
-
-
-function closeModal(id) {
-
-    const modal =
-        document.getElementById(id);
-
-    if (!modal) return;
-
-    modal.classList.remove("show");
-
-    modal.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-    document.body.classList.remove(
-        "modal-open"
-    );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| LOGIN MODAL
-|--------------------------------------------------------------------------
-*/
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const closeLoginModal =
-    document.getElementById("closeLoginModal");
-
-
-if (loginButton) {
-
-    loginButton.addEventListener(
-        "click",
-        function () {
-
-            openModal("loginModal");
-
-        }
-    );
-
-}
-
-
-if (closeLoginModal) {
-
-    closeLoginModal.addEventListener(
-        "click",
-        function () {
-
-            closeModal("loginModal");
-
-        }
-    );
-
-}
-
-
-/*
-|--------------------------------------------------------------------------
-| CLOSE MODALS BY OVERLAY
-|--------------------------------------------------------------------------
-*/
-
-document
-    .querySelectorAll("[data-close-modal]")
-    .forEach(function (element) {
-
-        element.addEventListener(
-            "click",
-            function () {
-
-                closeModal("loginModal");
-
-            }
-        );
-
-    });
-
-
-document
-    .querySelectorAll("[data-close-comment]")
-    .forEach(function (element) {
-
-        element.addEventListener(
-            "click",
-            function () {
-
-                closeModal("commentModal");
-
-            }
-        );
-
-    });
-
-
-document
-    .querySelectorAll("[data-close-share]")
-    .forEach(function (element) {
-
-        element.addEventListener(
-            "click",
-            function () {
-
-                closeModal("shareModal");
-
-            }
-        );
-
-    });
-
-
-/*
-|--------------------------------------------------------------------------
-| ESCAPE KEY
-|--------------------------------------------------------------------------
-*/
-
-document.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (event.key !== "Escape") {
-            return;
-        }
-
-
-        closeModal("loginModal");
-
-        closeModal("commentModal");
-
-        closeModal("shareModal");
-
-    }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| RESET FILTERS
-|--------------------------------------------------------------------------
-*/
-
-const resetFilters =
-    document.getElementById("resetFilters");
-
-
-if (resetFilters) {
-
-    resetFilters.addEventListener(
-        "click",
-        function () {
-
-            if (bookSearch) {
-
-                bookSearch.value = "";
-
-            }
-
-
-            const sort =
-                document.getElementById("bookSort");
-
-            if (sort) {
-
-                sort.value = "newest";
-
-            }
-
-
-            document
-                .querySelectorAll(".category")
-                .forEach(function (button) {
-
-                    button.classList.remove(
-                        "active"
-                    );
-
-                });
-
-
-            const allCategory =
-                document.querySelector(
-                    '[data-category="all"]'
-                );
-
-
-            if (allCategory) {
-
-                allCategory.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            bookSearch &&
-                bookSearch.dispatchEvent(
-                    new Event("input")
-                );
-
-        }
-    );
-
-}
-
-
-
-</script>
-
 
 </body>
 
