@@ -383,6 +383,15 @@ function byId(id) {
 
 console.log("✅ Script Part 1 Loaded");
 
+function escapeSocialHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 /* =====================================================
    CHISHTI LIBRARY
    RESPONSIVE BOOK CARDS
