@@ -302,6 +302,19 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id":25,
+    "title": "baharan muskrappy",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": " baharhan muskrappy-cover.png",
+    "pdf": "baharan-muskrappy.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
 
