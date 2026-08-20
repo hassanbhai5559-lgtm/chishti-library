@@ -315,6 +315,19 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id":26,
+    "title": "Kuliyat e Saim urdu",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "kulyat urdu titile.pdf",
+    "pdf": "Kuliyat e Saim Urdu.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
 
