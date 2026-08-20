@@ -383,83 +383,256 @@ function byId(id) {
 
 console.log("✅ Script Part 1 Loaded");
 
-/*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
-PART 2
-DISPLAY BOOKS + SEARCH + FILTER
-=========================================*/
+/* =====================================================
+   CHISHTI LIBRARY
+   RESPONSIVE BOOK CARDS
+   LIKE • COMMENT • SHARE
+===================================================== */
 
 function displayBooks(books) {
 
-    const container = document.getElementById("booksContainer");
+    const container =
+        document.getElementById("booksContainer");
 
     if (!container) return;
 
     container.innerHTML = "";
 
-    if (books.length === 0) {
+    if (!books || books.length === 0) {
 
         container.innerHTML = `
-        <div class="no-books">
-            <h2>No Books Found</h2>
-            <p>Try another search.</p>
-        </div>
+            <div class="no-books">
+                <h2>No Books Found</h2>
+                <p>Try another search.</p>
+            </div>
         `;
 
         return;
     }
 
-    books.forEach(book => {
+
+    books.forEach(function(book) {
+
+        /*
+        ---------------------------------------------
+        BOOK ID
+        ---------------------------------------------
+        */
+
+        const socialBookId =
+            String(
+                book.id ||
+                book.slug ||
+                book.pdf ||
+                book.title
+            )
+            .replace(/[\/\\]/g, "_");
+
+
+        const likes =
+            Number(book.likes || 0);
+
+        const comments =
+            Number(book.comments || 0);
+
+        const shares =
+            Number(book.shares || 0);
+
 
         container.innerHTML += `
 
-        <div class="book-card">
+        <article
+            class="book-card"
+            data-book-id="${escapeSocialHTML(socialBookId)}"
+        >
 
-            <img src="${book.cover}"
-                 alt="${book.title}"
-                 loading="lazy">
+            <!-- BOOK COVER -->
+
+            <div class="book-cover-wrap">
+
+                <img
+                    src="${escapeSocialHTML(book.cover)}"
+                    alt="${escapeSocialHTML(book.title)}"
+                    loading="lazy"
+                    class="book-cover"
+                >
+
+            </div>
+
+
+            <!-- BOOK CONTENT -->
 
             <div class="book-content">
 
                 <span class="book-category">
-                    ${book.category}
+
+                    ${escapeSocialHTML(
+                        book.category || "Islamic Book"
+                    )}
+
                 </span>
 
-                <h2>${book.title}</h2>
 
-                <h3>${book.author}</h3>
+                <h2 class="book-title">
 
-                <p>${book.description}</p>
+                    ${escapeSocialHTML(
+                        book.title || "Untitled Book"
+                    )}
+
+                </h2>
+
+
+                <h3 class="book-author">
+
+                    ${escapeSocialHTML(
+                        book.author || "Chishti Library"
+                    )}
+
+                </h3>
+
+
+                <p class="book-description">
+
+                    ${escapeSocialHTML(
+                        book.description || ""
+                    )}
+
+                </p>
+
+
+                <!-- BOOK STATS -->
 
                 <div class="book-meta">
 
-                    <span>👁 ${book.views || 0}</span>
+                    <span>
+                        <i class="fa-solid fa-eye"></i>
+                        ${Number(book.views || 0)}
+                    </span>
 
-                    <span>❤️ ${book.likes || 0}</span>
+                    <span>
+                        <i class="fa-solid fa-heart"></i>
+                        ${likes}
+                    </span>
 
-                    <span>⬇ ${book.downloads || 0}</span>
+                    <span>
+                        <i class="fa-solid fa-download"></i>
+                        ${Number(book.downloads || 0)}
+                    </span>
 
                 </div>
 
+
+                <!-- ❤️ 💬 📤 SOCIAL ACTIONS -->
+
+                <div class="social-actions">
+
+                    <!-- LIKE -->
+
+                    <button
+                        type="button"
+                        class="social-btn like-btn"
+                        data-book-id="${escapeSocialHTML(socialBookId)}"
+                        aria-label="Like this book"
+                    >
+
+                        <span class="icon-wrap">
+
+                            <i class="fa-regular fa-heart"></i>
+
+                            <span class="like-burst"></span>
+
+                        </span>
+
+                        <span class="action-count">
+                            ${likes}
+                        </span>
+
+                    </button>
+
+
+                    <!-- COMMENT -->
+
+                    <button
+                        type="button"
+                        class="social-btn comment-btn"
+                        data-book-id="${escapeSocialHTML(socialBookId)}"
+                        aria-label="Comments"
+                    >
+
+                        <span class="icon-wrap">
+
+                            <i class="fa-regular fa-comment"></i>
+
+                        </span>
+
+                        <span class="action-count">
+                            ${comments}
+                        </span>
+
+                    </button>
+
+
+                    <!-- SHARE -->
+
+                    <button
+                        type="button"
+                        class="social-btn share-btn"
+                        data-book-id="${escapeSocialHTML(socialBookId)}"
+                        aria-label="Share book"
+                    >
+
+                        <span class="icon-wrap">
+
+                            <i class="fa-solid fa-share-nodes"></i>
+
+                        </span>
+
+                        <span class="action-count">
+                            ${shares}
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- MAIN BUTTONS -->
+
                 <div class="book-buttons">
 
-                    <a href="reader.html?book=${encodeURIComponent(book.pdf)}"
-                       class="btn">
-                        📖 Read Online
+                    <a
+                        href="reader.html?book=${encodeURIComponent(
+                            book.pdf || ""
+                        )}"
+                        class="btn read-btn"
+                    >
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                        Read Online
+
                     </a>
 
-                    <a href="${book.pdf}"
-                       download
-                       class="btn">
-                        ⬇ Download
+
+                    <a
+                        href="${escapeSocialHTML(
+                            book.pdf || "#"
+                        )}"
+                        download
+                        class="btn download-btn"
+                    >
+
+                        <i class="fa-solid fa-download"></i>
+
+                        Download
+
                     </a>
 
                 </div>
 
             </div>
 
-        </div>
+        </article>
 
         `;
 
