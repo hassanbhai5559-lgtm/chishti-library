@@ -711,61 +711,17 @@ SCROLL TO TOP
 
 </button>
 
-<!-- =========================
-FIREBASE
-========================= -->
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
 <script>
-
 const firebaseConfig = {
-
-    apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
-
+    apiKey: "...",
     authDomain: "chishti-library.firebaseapp.com",
-
     projectId: "chishti-library",
-
     storageBucket: "chishti-library.firebasestorage.app",
-
     messagingSenderId: "103447043162",
-
-    appId: "1:103447043162:web:f242cd2670aaa9786e8c63",
-
+    appId: "...",
     measurementId: "G-833P7N3LNT"
-
 };
-
-
-/* =========================
-INITIALIZE FIREBASE
-========================= */
-
-firebase.initializeApp(firebaseConfig);
-
-
-/* =========================
-MAKE FIRESTORE GLOBAL
-========================= */
-
-window.db = firebase.firestore();
-
-
-console.log(
-    "✅ Firebase connected:",
-    firebase.app().options.projectId
-);
-
-console.log(
-    "✅ Firestore initialized successfully"
-);
-
 </script>
-
-
 <!-- =========================
 MAIN JS
 ========================= -->
