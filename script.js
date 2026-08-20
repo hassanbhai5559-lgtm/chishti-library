@@ -392,27 +392,39 @@ function escapeSocialHTML(value) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 }
-/* =====================================================
+/* =========================================================
    CHISHTI LIBRARY
-   RESPONSIVE BOOK CARDS
-   LIKE • COMMENT • SHARE
-===================================================== */
+   BOOK DISPLAY SYSTEM
+   LIKE • COMMENT • SHARE • VIEWS
+========================================================= */
 
 function displayBooks(books) {
 
     const container =
         document.getElementById("booksContainer");
 
-    if (!container) return;
+    if (!container) {
+        console.error(
+            "❌ booksContainer not found"
+        );
+        return;
+    }
+
 
     container.innerHTML = "";
+
 
     if (!books || books.length === 0) {
 
         container.innerHTML = `
             <div class="no-books">
+                <i class="fa-solid fa-book-open"></i>
+
                 <h2>No Books Found</h2>
-                <p>Try another search.</p>
+
+                <p>
+                    Try another search.
+                </p>
             </div>
         `;
 
@@ -422,198 +434,309 @@ function displayBooks(books) {
 
     books.forEach(function(book) {
 
-        /*
-        ---------------------------------------------
-        BOOK ID
-        ---------------------------------------------
-        */
+        /* =========================================
+           BOOK ID
+        ========================================= */
 
-        const socialBookId =
-            String(
-                book.id ||
-                book.slug ||
-                book.pdf ||
-                book.title
-            )
-            .replace(/[\/\\]/g, "_");
+        const bookId =
+            getBookKey(book);
+
+
+        /* =========================================
+           BOOK DATA
+        ========================================= */
+
+        const title =
+            book.title ||
+            "Untitled Book";
+
+
+        const author =
+            book.author ||
+            "Chishti Library";
+
+
+        const category =
+            book.category ||
+            "Islamic Book";
+
+
+        const description =
+            book.description ||
+            "Read this book online at Chishti Library.";
+
+
+        const cover =
+            book.cover ||
+            "./logo.png";
+
+
+        const pdf =
+            book.pdf ||
+            "";
+
+
+        const views =
+            Number(book.views || 0);
 
 
         const likes =
             Number(book.likes || 0);
 
+
         const comments =
             Number(book.comments || 0);
+
 
         const shares =
             Number(book.shares || 0);
 
 
-        container.innerHTML += `
+        const downloads =
+            Number(book.downloads || 0);
 
-        <article
-            class="book-card"
-            data-book-id="${escapeSocialHTML(socialBookId)}"
-        >
 
-            <!-- BOOK COVER -->
+        /* =========================================
+           CARD
+        ========================================= */
+
+        const card =
+            document.createElement(
+                "article"
+            );
+
+
+        card.className =
+            "book-card";
+
+
+        card.dataset.bookId =
+            bookId;
+
+
+        card.innerHTML = `
+
+            <!-- ===============================
+                 BOOK COVER
+            ================================ -->
 
             <div class="book-cover-wrap">
 
                 <img
-                    src="${escapeSocialHTML(book.cover)}"
-                    alt="${escapeSocialHTML(book.title)}"
-                    loading="lazy"
+                    src="${escapeSocialHTML(cover)}"
+                    alt="${escapeSocialHTML(title)}"
                     class="book-cover"
+                    loading="lazy"
                 >
 
             </div>
 
 
-            <!-- BOOK CONTENT -->
+            <!-- ===============================
+                 BOOK CONTENT
+            ================================ -->
 
             <div class="book-content">
+
+
+                <!-- CATEGORY -->
 
                 <span class="book-category">
 
                     ${escapeSocialHTML(
-                        book.category || "Islamic Book"
+                        category
                     )}
 
                 </span>
 
 
+                <!-- TITLE -->
+
                 <h2 class="book-title">
 
                     ${escapeSocialHTML(
-                        book.title || "Untitled Book"
+                        title
                     )}
 
                 </h2>
 
 
+                <!-- AUTHOR -->
+
                 <h3 class="book-author">
 
+                    <i class="fa-solid fa-user-pen"></i>
+
                     ${escapeSocialHTML(
-                        book.author || "Chishti Library"
+                        author
                     )}
 
                 </h3>
 
 
+                <!-- DESCRIPTION -->
+
                 <p class="book-description">
 
                     ${escapeSocialHTML(
-                        book.description || ""
+                        description
                     )}
 
                 </p>
 
 
-                <!-- BOOK STATS -->
+                <!-- =================================
+                     BOOK STATS
+                ================================== -->
 
                 <div class="book-meta">
 
-                    <span>
+
+                    <!-- VIEWS -->
+
+                    <span class="book-stat">
+
                         <i class="fa-solid fa-eye"></i>
-                        ${Number(book.views || 0)}
+
+                        <span
+                            class="view-count"
+                            data-book-id="${escapeSocialHTML(
+                                bookId
+                            )}"
+                        >
+
+                            ${views}
+
+                        </span>
+
                     </span>
 
-                    <span>
+
+                    <!-- LIKES -->
+
+                    <span class="book-stat">
+
                         <i class="fa-solid fa-heart"></i>
-                        ${likes}
+
+                        <span class="like-meta-count">
+
+                            ${likes}
+
+                        </span>
+
                     </span>
 
-                    <span>
+
+                    <!-- DOWNLOADS -->
+
+                    <span class="book-stat">
+
                         <i class="fa-solid fa-download"></i>
-                        ${Number(book.downloads || 0)}
+
+                        <span>
+
+                            ${downloads}
+
+                        </span>
+
                     </span>
 
                 </div>
 
 
-                <!-- ❤️ 💬 📤 SOCIAL ACTIONS -->
+                <!-- =================================
+                     SOCIAL ACTIONS
+                ================================== -->
 
                 <div class="social-actions">
 
-                    <!-- LIKE -->
+
+                    <!-- ❤️ LIKE -->
 
                     <button
                         type="button"
                         class="social-btn like-btn"
-                        data-book-id="${escapeSocialHTML(socialBookId)}"
-                        aria-label="Like this book"
+                        data-book-id="${escapeSocialHTML(
+                            bookId
+                        )}"
+                        aria-label="Like book"
                     >
 
-                        <span class="icon-wrap">
-
-                            <i class="fa-regular fa-heart"></i>
-
-                            <span class="like-burst"></span>
-
-                        </span>
+                        <i class="fa-regular fa-heart"></i>
 
                         <span class="action-count">
+
                             ${likes}
+
                         </span>
 
                     </button>
 
 
-                    <!-- COMMENT -->
+                    <!-- 💬 COMMENT -->
 
                     <button
                         type="button"
                         class="social-btn comment-btn"
-                        data-book-id="${escapeSocialHTML(socialBookId)}"
-                        aria-label="Comments"
+                        data-book-id="${escapeSocialHTML(
+                            bookId
+                        )}"
+                        aria-label="Comment on book"
                     >
 
-                        <span class="icon-wrap">
-
-                            <i class="fa-regular fa-comment"></i>
-
-                        </span>
+                        <i class="fa-regular fa-comment"></i>
 
                         <span class="action-count">
+
                             ${comments}
+
                         </span>
 
                     </button>
 
 
-                    <!-- SHARE -->
+                    <!-- 📤 SHARE -->
 
                     <button
                         type="button"
                         class="social-btn share-btn"
-                        data-book-id="${escapeSocialHTML(socialBookId)}"
+                        data-book-id="${escapeSocialHTML(
+                            bookId
+                        )}"
                         aria-label="Share book"
                     >
 
-                        <span class="icon-wrap">
-
-                            <i class="fa-solid fa-share-nodes"></i>
-
-                        </span>
+                        <i class="fa-solid fa-share-nodes"></i>
 
                         <span class="action-count">
+
                             ${shares}
+
                         </span>
 
                     </button>
 
+
                 </div>
 
 
-                <!-- MAIN BUTTONS -->
+                <!-- =================================
+                     BOOK BUTTONS
+                ================================== -->
 
                 <div class="book-buttons">
 
+
+                    <!-- READ ONLINE -->
+
                     <a
                         href="reader.html?book=${encodeURIComponent(
-                            book.pdf || ""
+                            pdf
                         )}"
                         class="btn read-btn"
+                        data-book-id="${escapeSocialHTML(
+                            bookId
+                        )}"
                     >
 
                         <i class="fa-solid fa-book-open"></i>
@@ -623,12 +746,17 @@ function displayBooks(books) {
                     </a>
 
 
+                    <!-- DOWNLOAD -->
+
                     <a
                         href="${escapeSocialHTML(
-                            book.pdf || "#"
+                            pdf || "#"
                         )}"
-                        download
                         class="btn download-btn"
+                        download
+                        data-book-id="${escapeSocialHTML(
+                            bookId
+                        )}"
                     >
 
                         <i class="fa-solid fa-download"></i>
@@ -639,13 +767,43 @@ function displayBooks(books) {
 
                 </div>
 
-            </div>
 
-        </article>
+            </div>
 
         `;
 
+
+        /* =========================================
+           ADD CARD
+        ========================================= */
+
+        container.appendChild(
+            card
+        );
+
     });
+
+
+    /* =============================================
+       LOAD FIREBASE COUNTERS
+    ============================================== */
+
+    if (
+        typeof loadFirebaseBookStats ===
+        "function"
+    ) {
+
+        loadFirebaseBookStats(
+            books
+        );
+
+    }
+
+
+    console.log(
+        "📚 Books displayed:",
+        books.length
+    );
 
 }
 /*=========================
@@ -1449,45 +1607,23 @@ function renderSortedBooks() {
 
 }
 
-/* =====================================================
+/* =========================================================
    CHISHTI LIBRARY
+   FINAL FIREBASE SOCIAL SYSTEM
    ❤️ LIKE
    💬 COMMENT
-   🔖 BOOKMARK
    📤 SHARE
-===================================================== */
-
-let activeCommentBookId = null;
-let activeShareBook = null;
+   👁️ VIEWS
+========================================================= */
 
 
-/* =====================================================
-   LOGIN CHECK
-===================================================== */
-
-function socialLoginRequired() {
-
-    if (window.currentFirebaseUser) {
-        return true;
-    }
-
-    if (typeof window.requireLogin === "function") {
-        window.requireLogin();
-    } else {
-        alert("Please login first.");
-    }
-
-    return false;
-}
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+/* =========================================================
+   HELPER
+========================================================= */
 
 function escapeSocialHTML(value) {
 
-    return String(value || "")
+    return String(value ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -1496,263 +1632,782 @@ function escapeSocialHTML(value) {
 }
 
 
-/* =====================================================
-   ❤️ LIKE SYSTEM
-===================================================== */
+/* =========================================================
+   BOOK ID
+========================================================= */
 
-document.addEventListener("click", async function(event) {
+function getBookKey(book) {
 
-    const button =
-        event.target.closest(".like-btn");
+    if (book.id) {
+        return String(book.id);
+    }
 
-    if (!button) return;
+    if (book.slug) {
+        return String(book.slug);
+    }
 
-    if (!socialLoginRequired()) return;
+    if (book.pdf) {
 
-    const bookId =
-        button.dataset.bookId;
+        return String(book.pdf)
+            .split("/")
+            .pop()
+            .replace(/\.[^/.]+$/, "")
+            .replace(/[^a-zA-Z0-9_-]/g, "-")
+            .toLowerCase();
 
-    const user =
-        window.currentFirebaseUser;
+    }
 
-    if (!window.db) {
-        console.error("Firebase Firestore not ready.");
+    return String(book.title || "book")
+        .replace(/[^a-zA-Z0-9_-]/g, "-")
+        .toLowerCase();
+}
+
+
+/* =========================================================
+   FIREBASE READY CHECK
+========================================================= */
+
+function firebaseSocialReady() {
+
+    if (
+        !window.db ||
+        !window.firebaseReady
+    ) {
+
+        console.warn(
+            "⚠️ Firebase is not ready."
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+/* =========================================================
+   LOAD BOOK STATS
+========================================================= */
+
+async function loadFirebaseBookStats(books) {
+
+    if (!firebaseSocialReady()) {
         return;
     }
 
-    const bookRef =
-        window.db
-            .collection("books")
-            .doc(bookId);
+    for (const book of books) {
 
-    const likeRef =
-        bookRef
-            .collection("likes")
-            .doc(user.uid);
+        const bookId =
+            getBookKey(book);
 
-    try {
+        try {
 
-        const likeSnap =
-            await likeRef.get();
+            const ref =
+                window.db
+                    .collection("books")
+                    .doc(bookId);
 
-        const countElement =
-            button.querySelector(".action-count");
+            const snapshot =
+                await ref.get();
 
-        let count =
-            Number(
-                countElement?.textContent || 0
-            );
+            if (!snapshot.exists) {
+                continue;
+            }
+
+            const data =
+                snapshot.data();
 
 
-        /* =========================
-           UNLIKE
-        ========================= */
+            /* VIEWS */
 
-        if (likeSnap.exists) {
+            document
+                .querySelectorAll(
+                    `.view-count[data-book-id="${CSS.escape(bookId)}"]`
+                )
+                .forEach(function(element) {
 
-            await likeRef.delete();
+                    element.textContent =
+                        Number(data.views || 0);
 
-            await bookRef.set(
-                {
-                    likes:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(-1)
-                },
-                {
-                    merge: true
-                }
-            );
+                });
 
-            button.classList.remove("liked");
 
-            count = Math.max(0, count - 1);
+            /* LIKES */
+
+            document
+                .querySelectorAll(
+                    `.like-btn[data-book-id="${CSS.escape(bookId)}"]`
+                )
+                .forEach(function(button) {
+
+                    const count =
+                        button.querySelector(
+                            ".action-count"
+                        );
+
+                    if (count) {
+
+                        count.textContent =
+                            Number(data.likes || 0);
+
+                    }
+
+                });
+
+
+            /* COMMENTS */
+
+            document
+                .querySelectorAll(
+                    `.comment-btn[data-book-id="${CSS.escape(bookId)}"]`
+                )
+                .forEach(function(button) {
+
+                    const count =
+                        button.querySelector(
+                            ".action-count"
+                        );
+
+                    if (count) {
+
+                        count.textContent =
+                            Number(data.comments || 0);
+
+                    }
+
+                });
+
+
+            /* SHARES */
+
+            document
+                .querySelectorAll(
+                    `.share-btn[data-book-id="${CSS.escape(bookId)}"]`
+                )
+                .forEach(function(button) {
+
+                    const count =
+                        button.querySelector(
+                            ".action-count"
+                        );
+
+                    if (count) {
+
+                        count.textContent =
+                            Number(data.shares || 0);
+
+                    }
+
+                });
 
         }
 
+        catch (error) {
 
-        /* =========================
-           LIKE
-        ========================= */
+            console.error(
+                "❌ Stats Load Error:",
+                bookId,
+                error
+            );
 
-        else {
+        }
 
-            await likeRef.set({
+    }
 
-                uid: user.uid,
+}
 
-                createdAt:
+
+/* =========================================================
+   👁️ BOOK VIEW
+========================================================= */
+
+async function recordBookView(bookId) {
+
+    if (!firebaseSocialReady()) {
+        return;
+    }
+
+
+    const storageKey =
+        "chishti_view_" + bookId;
+
+
+    /* Same session = don't count again */
+
+    if (
+        sessionStorage.getItem(
+            storageKey
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const ref =
+            window.db
+                .collection("books")
+                .doc(String(bookId));
+
+
+        await ref.set(
+
+            {
+
+                views:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1),
+
+                updatedAt:
                     firebase.firestore
                         .FieldValue
                         .serverTimestamp()
 
+            },
+
+            {
+                merge: true
+            }
+
+        );
+
+
+        sessionStorage.setItem(
+            storageKey,
+            "1"
+        );
+
+
+        /* Update visible counter */
+
+        document
+            .querySelectorAll(
+                `.view-count[data-book-id="${CSS.escape(String(bookId))}"]`
+            )
+            .forEach(function(element) {
+
+                element.textContent =
+                    Number(
+                        element.textContent || 0
+                    ) + 1;
+
             });
 
-            await bookRef.set(
-                {
-                    likes:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(1)
-                },
-                {
-                    merge: true
-                }
-            );
 
-            button.classList.add("liked");
-
-            /* ❤️ BIG ANIMATION */
-
-            button.classList.remove("animate");
-
-            void button.offsetWidth;
-
-            button.classList.add("animate");
-
-            setTimeout(() => {
-
-                button.classList.remove("animate");
-
-            }, 800);
-
-            count++;
-
-        }
-
-
-        if (countElement) {
-
-            countElement.textContent =
-                count;
-
-        }
+        console.log(
+            "👁️ View recorded:",
+            bookId
+        );
 
     }
 
     catch (error) {
 
         console.error(
-            "❤️ Like Error:",
+            "❌ View Error:",
             error
         );
 
     }
 
-});
-
-
-/* =====================================================
-   💬 COMMENT MODAL
-===================================================== */
-
-const commentModal =
-    document.getElementById("commentModal");
-
-const commentsList =
-    document.getElementById("commentsList");
-
-const commentForm =
-    document.getElementById("commentForm");
-
-const commentInput =
-    document.getElementById("commentInput");
-
-const closeComments =
-    document.getElementById("closeComments");
-
-
-/* OPEN COMMENTS */
-
-document.addEventListener("click", async function(event) {
-
-    const button =
-        event.target.closest(".comment-btn");
-
-    if (!button) return;
-
-    activeCommentBookId =
-        button.dataset.bookId;
-
-    button.classList.add("open");
-
-    if (commentModal) {
-
-        commentModal.classList.add("show");
-
-    }
-
-    await loadComments(
-        activeCommentBookId
-    );
-
-});
-
-
-/* CLOSE */
-
-if (closeComments) {
-
-    closeComments.addEventListener(
-        "click",
-        function() {
-
-            commentModal.classList.remove(
-                "show"
-            );
-
-        }
-    );
-
 }
 
 
-/* CLICK OUTSIDE */
+/* =========================================================
+   📖 READ ONLINE = VIEW
+========================================================= */
 
-if (commentModal) {
+document.addEventListener(
+    "click",
+    function(event) {
 
-    commentModal.addEventListener(
-        "click",
-        function(event) {
+        const button =
+            event.target.closest(
+                ".read-btn"
+            );
 
-            if (
-                event.target ===
-                commentModal
-            ) {
+        if (!button) {
+            return;
+        }
 
-                commentModal.classList.remove(
-                    "show"
+
+        const card =
+            button.closest(
+                ".book-card"
+            );
+
+        if (!card) {
+            return;
+        }
+
+
+        const bookId =
+            card.dataset.bookId;
+
+
+        if (bookId) {
+
+            recordBookView(
+                bookId
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ❤️ LIKE SYSTEM
+========================================================= */
+
+document.addEventListener(
+    "click",
+    async function(event) {
+
+        const button =
+            event.target.closest(
+                ".like-btn"
+            );
+
+        if (!button) {
+            return;
+        }
+
+
+        /* LOGIN REQUIRED */
+
+        if (
+            !window.currentFirebaseUser
+        ) {
+
+            alert(
+                "Please login first to like this book."
+            );
+
+            window.location.href =
+                "./login.html";
+
+            return;
+
+        }
+
+
+        if (!firebaseSocialReady()) {
+            return;
+        }
+
+
+        const bookId =
+            button.dataset.bookId;
+
+
+        if (!bookId) {
+            return;
+        }
+
+
+        const uid =
+            window.currentFirebaseUser.uid;
+
+
+        const likeRef =
+            window.db
+                .collection("books")
+                .doc(bookId)
+                .collection("likes")
+                .doc(uid);
+
+
+        const bookRef =
+            window.db
+                .collection("books")
+                .doc(bookId);
+
+
+        try {
+
+            const likeSnapshot =
+                await likeRef.get();
+
+
+            /* =========================
+               UNLIKE
+            ========================= */
+
+            if (likeSnapshot.exists) {
+
+                await likeRef.delete();
+
+
+                await bookRef.set(
+
+                    {
+
+                        likes:
+                            firebase.firestore
+                                .FieldValue
+                                .increment(-1)
+
+                    },
+
+                    {
+                        merge: true
+                    }
+
+                );
+
+
+                button.classList.remove(
+                    "liked"
+                );
+
+
+                const icon =
+                    button.querySelector(
+                        "i"
+                    );
+
+
+                if (icon) {
+
+                    icon.className =
+                        "fa-regular fa-heart";
+
+                }
+
+
+                updateSocialCounter(
+                    button,
+                    -1
+                );
+
+
+                console.log(
+                    "💔 Book unliked"
+                );
+
+            }
+
+
+            /* =========================
+               LIKE
+            ========================= */
+
+            else {
+
+                await likeRef.set({
+
+                    uid:
+                        uid,
+
+                    createdAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+
+                await bookRef.set(
+
+                    {
+
+                        likes:
+                            firebase.firestore
+                                .FieldValue
+                                .increment(1)
+
+                    },
+
+                    {
+                        merge: true
+                    }
+
+                );
+
+
+                button.classList.add(
+                    "liked"
+                );
+
+
+                const icon =
+                    button.querySelector(
+                        "i"
+                    );
+
+
+                if (icon) {
+
+                    icon.className =
+                        "fa-solid fa-heart";
+
+                }
+
+
+                updateSocialCounter(
+                    button,
+                    1
+                );
+
+
+                /* Animation */
+
+                button.classList.add(
+                    "like-pop"
+                );
+
+
+                setTimeout(
+                    function() {
+
+                        button.classList.remove(
+                            "like-pop"
+                        );
+
+                    },
+                    400
+                );
+
+
+                console.log(
+                    "❤️ Book liked"
                 );
 
             }
 
         }
-    );
+
+        catch (error) {
+
+            console.error(
+                "❌ Like Error:",
+                error
+            );
+
+            alert(
+                "Like could not be updated."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SOCIAL COUNTER
+========================================================= */
+
+function updateSocialCounter(
+    button,
+    change
+) {
+
+    const counter =
+        button.querySelector(
+            ".action-count"
+        );
+
+
+    if (!counter) {
+        return;
+    }
+
+
+    const current =
+        Number(
+            counter.textContent || 0
+        );
+
+
+    counter.textContent =
+        Math.max(
+            0,
+            current + change
+        );
 
 }
 
 
-/* =====================================================
+/* =========================================================
+   💬 COMMENT SYSTEM
+========================================================= */
+
+let activeCommentBookId =
+    null;
+
+
+/* OPEN COMMENT */
+
+document.addEventListener(
+    "click",
+    async function(event) {
+
+        const button =
+            event.target.closest(
+                ".comment-btn"
+            );
+
+        if (!button) {
+            return;
+        }
+
+
+        activeCommentBookId =
+            button.dataset.bookId;
+
+
+        if (!activeCommentBookId) {
+            return;
+        }
+
+
+        const modal =
+            document.getElementById(
+                "commentModal"
+            );
+
+
+        if (modal) {
+
+            modal.classList.add(
+                "show"
+            );
+
+        }
+
+
+        const input =
+            document.getElementById(
+                "commentInput"
+            );
+
+
+        if (input) {
+
+            setTimeout(
+                function() {
+
+                    input.focus();
+
+                },
+                200
+            );
+
+        }
+
+
+        await loadFirebaseComments(
+            activeCommentBookId
+        );
+
+    }
+);
+
+
+/* CLOSE COMMENT */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const close =
+            event.target.closest(
+                "#closeComments"
+            );
+
+        if (!close) {
+            return;
+        }
+
+
+        const modal =
+            document.getElementById(
+                "commentModal"
+            );
+
+
+        if (modal) {
+
+            modal.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+/* CLICK OUTSIDE COMMENT */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "commentModal"
+            );
+
+
+        if (
+            modal &&
+            event.target === modal
+        ) {
+
+            modal.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    LOAD COMMENTS
-===================================================== */
+========================================================= */
 
-async function loadComments(bookId) {
+async function loadFirebaseComments(
+    bookId
+) {
 
-    if (!commentsList) return;
+    const list =
+        document.getElementById(
+            "commentsList"
+        );
 
-    commentsList.innerHTML = `
 
-        <p style="
-            text-align:center;
-            color:#aaa;
-            padding:20px;
-        ">
+    if (!list) {
+        return;
+    }
 
+
+    if (!firebaseSocialReady()) {
+
+        list.innerHTML = `
+            <p class="comment-error">
+                Firebase is not connected.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    list.innerHTML = `
+        <p class="comment-loading">
             <i class="fa-solid fa-spinner fa-spin"></i>
             Loading comments...
-
         </p>
-
     `;
 
 
@@ -1761,7 +2416,7 @@ async function loadComments(bookId) {
         const snapshot =
             await window.db
                 .collection("books")
-                .doc(bookId)
+                .doc(String(bookId))
                 .collection("comments")
                 .orderBy(
                     "createdAt",
@@ -1772,19 +2427,18 @@ async function loadComments(bookId) {
 
         if (snapshot.empty) {
 
-            commentsList.innerHTML = `
+            list.innerHTML = `
+                <div class="no-comments">
 
-                <p style="
-                    text-align:center;
-                    color:#aaa;
-                    padding:20px;
-                ">
+                    <i class="fa-regular fa-comments"></i>
 
-                    No comments yet ❤️<br>
-                    Be the first to comment!
+                    <p>No comments yet.</p>
 
-                </p>
+                    <small>
+                        Be the first to comment ❤️
+                    </small>
 
+                </div>
             `;
 
             return;
@@ -1792,76 +2446,114 @@ async function loadComments(bookId) {
         }
 
 
-        commentsList.innerHTML = "";
+        list.innerHTML = "";
 
 
-        snapshot.forEach(function(doc) {
+        snapshot.forEach(
+            function(doc) {
 
-            const data =
-                doc.data();
-
-
-            const comment =
-                document.createElement("div");
+                const data =
+                    doc.data();
 
 
-            comment.className =
-                "comment-item";
+                let date =
+                    "";
 
 
-            comment.innerHTML = `
+                if (
+                    data.createdAt &&
+                    data.createdAt.toDate
+                ) {
 
-                <div class="comment-user">
+                    date =
+                        data.createdAt
+                            .toDate()
+                            .toLocaleString();
 
-                    <i class="fa-solid fa-user"></i>
-
-                    ${escapeSocialHTML(
-                        data.name ||
-                        data.email ||
-                        "Reader"
-                    )}
-
-                </div>
-
-                <div class="comment-text">
-
-                    ${escapeSocialHTML(
-                        data.text
-                    )}
-
-                </div>
-
-            `;
+                }
 
 
-            commentsList.appendChild(
-                comment
-            );
+                const item =
+                    document.createElement(
+                        "div"
+                    );
 
-        });
+
+                item.className =
+                    "comment-item";
+
+
+                item.innerHTML = `
+
+                    <div class="comment-top">
+
+                        <div class="comment-avatar">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+                        <div>
+
+                            <div class="comment-user">
+
+                                ${escapeSocialHTML(
+                                    data.name ||
+                                    "Reader"
+                                )}
+
+                            </div>
+
+                            <div class="comment-date">
+
+                                ${escapeSocialHTML(
+                                    date
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="comment-text">
+
+                        ${escapeSocialHTML(
+                            data.text
+                        )}
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(
+                    item
+                );
+
+            }
+        );
 
     }
 
     catch (error) {
 
         console.error(
-            "💬 Comment Load Error:",
+            "❌ Comment Load Error:",
             error
         );
 
 
-        commentsList.innerHTML = `
+        list.innerHTML = `
+            <div class="comment-error">
 
-            <p style="
-                text-align:center;
-                color:#aaa;
-                padding:20px;
-            ">
+                <i class="fa-solid fa-triangle-exclamation"></i>
 
-                Unable to load comments.
+                <p>
+                    Comments could not be loaded.
+                </p>
 
-            </p>
-
+            </div>
         `;
 
     }
@@ -1869,340 +2561,513 @@ async function loadComments(bookId) {
 }
 
 
-/* =====================================================
-   ➕ ADD COMMENT
-===================================================== */
+/* =========================================================
+   POST COMMENT
+========================================================= */
 
-if (commentForm) {
+document.addEventListener(
+    "submit",
+    async function(event) {
 
-    commentForm.addEventListener(
-        "submit",
-        async function(event) {
+        const form =
+            event.target.closest(
+                "#commentForm"
+            );
 
-            event.preventDefault();
-
-            if (!socialLoginRequired()) {
-                return;
-            }
-
-
-            const text =
-                commentInput.value.trim();
+        if (!form) {
+            return;
+        }
 
 
-            if (!text) {
-                return;
-            }
+        event.preventDefault();
 
 
-            if (!activeCommentBookId) {
-                return;
-            }
+        /* LOGIN */
+
+        if (
+            !window.currentFirebaseUser
+        ) {
+
+            alert(
+                "Please login first to comment."
+            );
+
+            window.location.href =
+                "./login.html";
+
+            return;
+
+        }
 
 
-            const user =
-                window.currentFirebaseUser;
+        if (!activeCommentBookId) {
+
+            alert(
+                "Book not selected."
+            );
+
+            return;
+
+        }
 
 
-            try {
+        const input =
+            document.getElementById(
+                "commentInput"
+            );
 
-                await window.db
-                    .collection("books")
-                    .doc(activeCommentBookId)
-                    .collection("comments")
-                    .add({
 
-                        uid:
-                            user.uid,
+        if (!input) {
+            return;
+        }
 
-                        name:
-                            user.displayName ||
-                            user.email ||
-                            "Reader",
 
-                        email:
-                            user.email ||
-                            "",
+        const text =
+            input.value.trim();
 
-                        text:
-                            text,
 
-                        createdAt:
+        if (!text) {
+
+            return;
+
+        }
+
+
+        if (text.length > 500) {
+
+            alert(
+                "Comment must be 500 characters or less."
+            );
+
+            return;
+
+        }
+
+
+        if (!firebaseSocialReady()) {
+
+            alert(
+                "Firebase is not connected."
+            );
+
+            return;
+
+        }
+
+
+        const user =
+            window.currentFirebaseUser;
+
+
+        const submitButton =
+            form.querySelector(
+                "button[type='submit']"
+            );
+
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                true;
+
+            submitButton.innerHTML =
+                `<i class="fa-solid fa-spinner fa-spin"></i>`;
+
+        }
+
+
+        try {
+
+            await window.db
+                .collection("books")
+                .doc(String(activeCommentBookId))
+                .collection("comments")
+                .add({
+
+                    uid:
+                        user.uid,
+
+                    name:
+                        user.displayName ||
+                        user.email ||
+                        "Reader",
+
+                    email:
+                        user.email ||
+                        "",
+
+                    text:
+                        text,
+
+                    createdAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+
+            /* BOOK COMMENT COUNTER */
+
+            await window.db
+                .collection("books")
+                .doc(String(activeCommentBookId))
+                .set(
+
+                    {
+
+                        comments:
                             firebase.firestore
                                 .FieldValue
-                                .serverTimestamp()
+                                .increment(1)
 
-                    });
+                    },
 
+                    {
+                        merge: true
+                    }
 
-                commentInput.value = "";
-
-
-                await loadComments(
-                    activeCommentBookId
                 );
 
 
-                /* UPDATE COMMENT COUNT */
+            input.value = "";
 
-                const button =
-                    document.querySelector(
-                        `.comment-btn[data-book-id="${CSS.escape(
-                            activeCommentBookId
-                        )}"]`
+
+            await loadFirebaseComments(
+                activeCommentBookId
+            );
+
+
+            /* CARD COUNTER */
+
+            const button =
+                document.querySelector(
+                    `.comment-btn[data-book-id="${CSS.escape(
+                        String(activeCommentBookId)
+                    )}"]`
+                );
+
+
+            if (button) {
+
+                updateSocialCounter(
+                    button,
+                    1
+                );
+
+            }
+
+
+            console.log(
+                "💬 Comment added"
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "❌ Comment Error:",
+                error
+            );
+
+            alert(
+                "Comment could not be posted."
+            );
+
+        }
+
+        finally {
+
+            if (submitButton) {
+
+                submitButton.disabled =
+                    false;
+
+                submitButton.innerHTML =
+                    `<i class="fa-solid fa-paper-plane"></i>`;
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   📤 SHARE SYSTEM
+========================================================= */
+
+let activeShareBookId =
+    null;
+
+
+/* SHARE BUTTON */
+
+document.addEventListener(
+    "click",
+    async function(event) {
+
+        const button =
+            event.target.closest(
+                ".share-btn"
+            );
+
+        if (!button) {
+            return;
+        }
+
+
+        activeShareBookId =
+            button.dataset.bookId;
+
+
+        if (!activeShareBookId) {
+            return;
+        }
+
+
+        const book =
+            allBooks.find(
+                function(item) {
+
+                    return String(
+                        getBookKey(item)
+                    ) === String(
+                        activeShareBookId
                     );
 
-
-                if (button) {
-
-                    const count =
-                        button.querySelector(
-                            ".action-count"
-                        );
-
-
-                    if (count) {
-
-                        count.textContent =
-                            Number(
-                                count.textContent || 0
-                            ) + 1;
-
-                    }
-
                 }
+            );
+
+
+        if (!book) {
+
+            console.error(
+                "❌ Book not found."
+            );
+
+            return;
+
+        }
+
+
+        const url =
+            new URL(
+                "reader.html?book=" +
+                encodeURIComponent(
+                    book.pdf || ""
+                ),
+                window.location.href
+            ).href;
+
+
+        const shareData = {
+
+            title:
+                book.title ||
+                "Chishti Library",
+
+            text:
+                `Read "${book.title}" on Chishti Library`,
+
+            url:
+                url
+
+        };
+
+
+        /* MOBILE SHARE */
+
+        if (
+            navigator.share
+        ) {
+
+            try {
+
+                await navigator.share(
+                    shareData
+                );
+
+
+                await increaseShareCount(
+                    activeShareBookId
+                );
+
+
+                return;
 
             }
 
             catch (error) {
 
-                console.error(
-                    "💬 Add Comment Error:",
-                    error
-                );
+                if (
+                    error.name ===
+                    "AbortError"
+                ) {
 
-                alert(
-                    "Comment could not be posted."
-                );
+                    return;
+
+                }
 
             }
 
         }
-    );
-
-}
 
 
-/* =====================================================
-   📤 SHARE SYSTEM
-===================================================== */
+        /* DESKTOP POPUP */
 
-const sharePopup =
-    document.getElementById("sharePopup");
-
-const copyBookLink =
-    document.getElementById("copyBookLink");
-
-
-document.addEventListener("click", function(event) {
-
-    const button =
-        event.target.closest(".share-btn");
-
-    if (!button) return;
-
-
-    const bookId =
-        button.dataset.bookId;
-
-
-    /*
-       allBooks tumhare existing
-       script.js ka books array hai.
-    */
-
-    if (!Array.isArray(window.allBooks) &&
-        !Array.isArray(allBooks)) {
-
-        console.error(
-            "Books array not found."
-        );
-
-        return;
-
-    }
-
-
-    const books =
-        Array.isArray(window.allBooks)
-            ? window.allBooks
-            : allBooks;
-
-
-    const book =
-        books.find(function(item) {
-
-            return String(item.id) ===
-                String(bookId);
-
-        });
-
-
-    if (!book) {
-
-        console.error(
-            "Book not found:",
-            bookId
-        );
-
-        return;
-
-    }
-
-
-    activeShareBook =
-        book;
-
-
-    button.classList.add(
-        "shared"
-    );
-
-
-    if (sharePopup) {
-
-        sharePopup.classList.add(
-            "show"
-        );
-
-    }
-
-});
-
-
-/* =====================================================
-   SHARE OPTIONS
-===================================================== */
-
-document.addEventListener("click", async function(event) {
-
-    const button =
-        event.target.closest(
-            ".share-option"
-        );
-
-    if (!button) return;
-
-    if (!activeShareBook) return;
-
-
-    const book =
-        activeShareBook;
-
-
-    const url =
-        new URL(
-            "reader.html?book=" +
-            encodeURIComponent(
-                book.pdf
-            ),
-            window.location.href
-        ).href;
-
-
-    const text =
-        `Read "${book.title}" on Chishti Library`;
-
-
-    const type =
-        button.dataset.share;
-
-
-    let shareURL = "";
-
-
-    if (type === "whatsapp") {
-
-        shareURL =
-            "https://wa.me/?text=" +
-            encodeURIComponent(
-                text + " " + url
+        const popup =
+            document.getElementById(
+                "sharePopup"
             );
 
-    }
 
+        if (popup) {
 
-    else if (type === "facebook") {
+            popup.classList.add(
+                "show"
+            );
 
-        shareURL =
-            "https://www.facebook.com/sharer/sharer.php?u=" +
-            encodeURIComponent(url);
-
-    }
-
-
-    else if (type === "telegram") {
-
-        shareURL =
-            "https://t.me/share/url?url=" +
-            encodeURIComponent(url) +
-            "&text=" +
-            encodeURIComponent(text);
+        }
 
     }
+);
 
 
-    else if (type === "twitter") {
+/* =========================================================
+   SHARE OPTIONS
+========================================================= */
 
-        shareURL =
-            "https://twitter.com/intent/tweet?text=" +
-            encodeURIComponent(text) +
-            "&url=" +
-            encodeURIComponent(url);
+document.addEventListener(
+    "click",
+    async function(event) {
 
-    }
+        const option =
+            event.target.closest(
+                ".share-option"
+            );
 
-
-    if (shareURL) {
-
-        window.open(
-            shareURL,
-            "_blank",
-            "noopener,noreferrer"
-        );
-
-    }
+        if (!option) {
+            return;
+        }
 
 
-    await incrementShare(book);
-
-});
-
-
-/* =====================================================
-   📋 COPY LINK
-===================================================== */
-
-if (copyBookLink) {
-
-    copyBookLink.addEventListener(
-        "click",
-        async function() {
-
-            if (!activeShareBook) {
-                return;
-            }
+        if (!activeShareBookId) {
+            return;
+        }
 
 
-            const url =
-                new URL(
-                    "reader.html?book=" +
-                    encodeURIComponent(
-                        activeShareBook.pdf
-                    ),
-                    window.location.href
-                ).href;
+        const book =
+            allBooks.find(
+                function(item) {
 
+                    return String(
+                        getBookKey(item)
+                    ) === String(
+                        activeShareBookId
+                    );
+
+                }
+            );
+
+
+        if (!book) {
+            return;
+        }
+
+
+        const url =
+            new URL(
+                "reader.html?book=" +
+                encodeURIComponent(
+                    book.pdf || ""
+                ),
+                window.location.href
+            ).href;
+
+
+        const text =
+            `Read "${book.title}" on Chishti Library`;
+
+
+        const type =
+            option.dataset.share;
+
+
+        let shareUrl =
+            "";
+
+
+        if (
+            type ===
+            "whatsapp"
+        ) {
+
+            shareUrl =
+                "https://wa.me/?text=" +
+                encodeURIComponent(
+                    text + "\n" + url
+                );
+
+        }
+
+
+        else if (
+            type ===
+            "facebook"
+        ) {
+
+            shareUrl =
+                "https://www.facebook.com/sharer/sharer.php?u=" +
+                encodeURIComponent(
+                    url
+                );
+
+        }
+
+
+        else if (
+            type ===
+            "telegram"
+        ) {
+
+            shareUrl =
+                "https://t.me/share/url?url=" +
+                encodeURIComponent(
+                    url
+                ) +
+                "&text=" +
+                encodeURIComponent(
+                    text
+                );
+
+        }
+
+
+        else if (
+            type ===
+            "twitter"
+        ) {
+
+            shareUrl =
+                "https://twitter.com/intent/tweet?text=" +
+                encodeURIComponent(
+                    text
+                ) +
+                "&url=" +
+                encodeURIComponent(
+                    url
+                );
+
+        }
+
+
+        else if (
+            type ===
+            "copy"
+        ) {
 
             try {
 
@@ -2211,81 +3076,60 @@ if (copyBookLink) {
                 );
 
 
-                copyBookLink.innerHTML = `
-
-                    <i class="fa-solid fa-check"></i>
-
-                    Link Copied!
-
-                `;
+                alert(
+                    "Link copied! 🔗"
+                );
 
 
-                setTimeout(
-                    function() {
-
-                        copyBookLink.innerHTML = `
-
-                            <i class="fa-solid fa-link"></i>
-
-                            Copy Book Link
-
-                        `;
-
-                    },
-                    1600
+                await increaseShareCount(
+                    activeShareBookId
                 );
 
             }
 
             catch (error) {
 
-                console.error(
-                    "Copy Link Error:",
-                    error
+                prompt(
+                    "Copy this link:",
+                    url
                 );
 
             }
 
-        }
-    );
 
-}
-
-
-/* =====================================================
-   CLOSE SHARE
-===================================================== */
-
-if (sharePopup) {
-
-    sharePopup.addEventListener(
-        "click",
-        function(event) {
-
-            if (
-                event.target ===
-                sharePopup
-            ) {
-
-                sharePopup.classList.remove(
-                    "show"
-                );
-
-            }
+            return;
 
         }
-    );
-
-}
 
 
-/* =====================================================
-   SHARE COUNTER
-===================================================== */
+        if (shareUrl) {
 
-async function incrementShare(book) {
+            window.open(
+                shareUrl,
+                "_blank",
+                "noopener,noreferrer"
+            );
 
-    if (!window.db) {
+
+            await increaseShareCount(
+                activeShareBookId
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SHARE COUNT
+========================================================= */
+
+async function increaseShareCount(
+    bookId
+) {
+
+    if (!firebaseSocialReady()) {
         return;
     }
 
@@ -2294,8 +3138,9 @@ async function incrementShare(book) {
 
         await window.db
             .collection("books")
-            .doc(String(book.id))
+            .doc(String(bookId))
             .set(
+
                 {
 
                     shares:
@@ -2304,8 +3149,28 @@ async function incrementShare(book) {
                             .increment(1)
 
                 },
+
                 {
                     merge: true
+                }
+
+            );
+
+
+        document
+            .querySelectorAll(
+                `.share-btn[data-book-id="${CSS.escape(
+                    String(bookId)
+                )}"]`
+            )
+            .forEach(
+                function(button) {
+
+                    updateSocialCounter(
+                        button,
+                        1
+                    );
+
                 }
             );
 
@@ -2314,7 +3179,7 @@ async function incrementShare(book) {
     catch (error) {
 
         console.error(
-            "📤 Share Counter Error:",
+            "❌ Share Count Error:",
             error
         );
 
@@ -2322,6 +3187,18 @@ async function incrementShare(book) {
 
 }
 
+
+/* =========================================================
+   READY
+========================================================= */
+
+console.log(
+    "======================================"
+);
+
+console.log(
+    "🔥 CHISHTI LIBRARY SOCIAL SYSTEM"
+);
 
 console.log(
     "❤️ Like System Ready"
@@ -2332,9 +3209,17 @@ console.log(
 );
 
 console.log(
-    "🔖 Bookmark System Ready"
+    "📤 Share System Ready"
 );
 
 console.log(
-    "📤 Share System Ready"
+    "👁️ View System Ready"
+);
+
+console.log(
+    "🔥 Firebase Social System Loaded"
+);
+
+console.log(
+    "======================================"
 );
