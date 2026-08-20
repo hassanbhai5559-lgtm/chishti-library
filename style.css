@@ -2792,3 +2792,417 @@ section,
     }
 
 }
+
+/* =====================================================
+   CHISHTI LIBRARY
+   BOOK CARD + MOBILE TOUCH UI
+===================================================== */
+
+.book-card {
+    width: 100%;
+    max-width: 360px;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #151515;
+    border: 1px solid rgba(255,255,255,.08);
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(212,175,55,.4);
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.35);
+}
+
+
+/* COVER */
+
+.book-cover-wrap {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #0b0b0b;
+}
+
+.book-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s ease;
+}
+
+.book-card:hover .book-cover {
+    transform: scale(1.04);
+}
+
+
+/* CONTENT */
+
+.book-content {
+    padding: 20px;
+}
+
+.book-category {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(212,175,55,.12);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.book-title {
+    margin: 13px 0 6px;
+    font-size: 21px;
+    line-height: 1.35;
+}
+
+.book-author {
+    margin: 0 0 12px;
+    color: var(--gold);
+    font-size: 14px;
+}
+
+.book-description {
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.6;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* STATS */
+
+.book-meta {
+    display: flex;
+    gap: 18px;
+    margin: 16px 0;
+    color: #999;
+    font-size: 12px;
+}
+
+.book-meta span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.book-meta i {
+    color: var(--gold);
+}
+
+
+/* =====================================================
+   ❤️ 💬 📤 SOCIAL BUTTONS
+===================================================== */
+
+.social-actions {
+    display: flex;
+    width: 100%;
+    gap: 9px;
+    margin: 14px 0;
+}
+
+.social-btn {
+    flex: 1;
+    min-height: 48px;
+
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+
+    background: #220000;
+    color: #ddd;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    color: var(--gold);
+    border-color: rgba(212,175,55,.5);
+}
+
+.social-btn:active {
+    transform: scale(.94);
+}
+
+
+/* LIKE */
+
+.like-btn.liked {
+    color: #ff4161;
+    background: rgba(255,65,97,.12);
+    border-color: rgba(255,65,97,.4);
+}
+
+.like-btn.liked i {
+    font-weight: 900;
+    filter:
+        drop-shadow(0 0 7px rgba(255,65,97,.7));
+}
+
+
+/* COMMENT */
+
+.comment-btn.open {
+    color: var(--gold);
+    background: rgba(212,175,55,.12);
+}
+
+
+/* SHARE */
+
+.share-btn.shared {
+    color: var(--gold);
+}
+
+
+/* NUMBER */
+
+.action-count {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   READ + DOWNLOAD
+===================================================== */
+
+.book-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.book-buttons .btn {
+    flex: 1;
+
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    border-radius: 13px;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+/* =====================================================
+   📱 MOBILE
+===================================================== */
+
+@media (max-width: 768px) {
+
+    .featured-books {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+
+    #booksContainer {
+        display: grid;
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 14px;
+    }
+
+
+    .book-card {
+        max-width: none;
+        border-radius: 18px;
+    }
+
+
+    .book-content {
+        padding: 14px;
+    }
+
+
+    .book-title {
+        font-size: 17px;
+    }
+
+
+    .book-author {
+        font-size: 12px;
+    }
+
+
+    .book-description {
+        font-size: 12px;
+        -webkit-line-clamp: 2;
+    }
+
+
+    .book-meta {
+        gap: 9px;
+        font-size: 11px;
+    }
+
+
+    /* BIGGER TOUCH BUTTONS */
+
+    .social-actions {
+        gap: 7px;
+    }
+
+
+    .social-btn {
+        min-height: 52px;
+        border-radius: 14px;
+        font-size: 17px;
+    }
+
+
+    .action-count {
+        font-size: 13px;
+    }
+
+
+    .book-buttons {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+
+    .book-buttons .btn {
+        min-height: 52px;
+        font-size: 14px;
+    }
+
+}
+
+
+/* =====================================================
+   📱 SMALL PHONES
+===================================================== */
+
+@media (max-width: 480px) {
+
+    #booksContainer {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+
+    .book-content {
+        padding: 11px;
+    }
+
+
+    .book-title {
+        font-size: 15px;
+    }
+
+
+    .book-author {
+        font-size: 11px;
+    }
+
+
+    .book-category {
+        font-size: 9px;
+        padding: 5px 8px;
+    }
+
+
+    .book-meta {
+        gap: 6px;
+        font-size: 10px;
+    }
+
+
+    /* TOUCH FRIENDLY */
+
+    .social-btn {
+        min-height: 50px;
+        padding: 0 5px;
+    }
+
+
+    .social-btn i {
+        font-size: 16px;
+    }
+
+
+    .action-count {
+        font-size: 12px;
+    }
+
+
+    .book-buttons .btn {
+        min-height: 50px;
+        font-size: 12px;
+    }
+
+}
+
+
+/* =====================================================
+   📱 VERY SMALL SCREEN
+===================================================== */
+
+@media (max-width: 360px) {
+
+    #booksContainer {
+        grid-template-columns: 1fr;
+    }
+
+
+    .book-card {
+        max-width: 100%;
+    }
+
+
+    .book-title {
+        font-size: 18px;
+    }
+
+
+    .social-btn {
+        min-height: 54px;
+        font-size: 18px;
+    }
+
+}
