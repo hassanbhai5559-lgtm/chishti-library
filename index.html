@@ -710,25 +710,29 @@ SCROLL TO TOP
     <i class="fas fa-arrow-up"></i>
 
 </button>
-
-<script>
-const firebaseConfig = {
-    apiKey: "...",
-    authDomain: "chishti-library.firebaseapp.com",
-    projectId: "chishti-library",
-    storageBucket: "chishti-library.firebasestorage.app",
-    messagingSenderId: "103447043162",
-    appId: "...",
-    measurementId: "G-833P7N3LNT"
-};
-</script>
 <!-- =========================
-MAIN JS
+     FIREBASE SDK
+========================= -->
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
+<!-- =========================
+     CHISHTI FIREBASE
 ========================= -->
 
 <script src="./firebase.js"></script>
-<script src="./script.js"></script>
 
+
+<!-- =========================
+     MAIN JS
+========================= -->
+
+<script src="./script.js"></script>
 <!-- COMMENTS MODAL -->
 <div id="commentModal" class="comment-modal">
 
