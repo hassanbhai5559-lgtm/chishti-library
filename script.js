@@ -1266,3 +1266,893 @@ function renderSortedBooks() {
     displayBooks(books);
 
 }
+
+/* =====================================================
+   CHISHTI LIBRARY
+   ❤️ LIKE
+   💬 COMMENT
+   🔖 BOOKMARK
+   📤 SHARE
+===================================================== */
+
+let activeCommentBookId = null;
+let activeShareBook = null;
+
+
+/* =====================================================
+   LOGIN CHECK
+===================================================== */
+
+function socialLoginRequired() {
+
+    if (window.currentFirebaseUser) {
+        return true;
+    }
+
+    if (typeof window.requireLogin === "function") {
+        window.requireLogin();
+    } else {
+        alert("Please login first.");
+    }
+
+    return false;
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeSocialHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =====================================================
+   ❤️ LIKE SYSTEM
+===================================================== */
+
+document.addEventListener("click", async function(event) {
+
+    const button =
+        event.target.closest(".like-btn");
+
+    if (!button) return;
+
+    if (!socialLoginRequired()) return;
+
+    const bookId =
+        button.dataset.bookId;
+
+    const user =
+        window.currentFirebaseUser;
+
+    if (!window.db) {
+        console.error("Firebase Firestore not ready.");
+        return;
+    }
+
+    const bookRef =
+        window.db
+            .collection("books")
+            .doc(bookId);
+
+    const likeRef =
+        bookRef
+            .collection("likes")
+            .doc(user.uid);
+
+    try {
+
+        const likeSnap =
+            await likeRef.get();
+
+        const countElement =
+            button.querySelector(".action-count");
+
+        let count =
+            Number(
+                countElement?.textContent || 0
+            );
+
+
+        /* =========================
+           UNLIKE
+        ========================= */
+
+        if (likeSnap.exists) {
+
+            await likeRef.delete();
+
+            await bookRef.set(
+                {
+                    likes:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(-1)
+                },
+                {
+                    merge: true
+                }
+            );
+
+            button.classList.remove("liked");
+
+            count = Math.max(0, count - 1);
+
+        }
+
+
+        /* =========================
+           LIKE
+        ========================= */
+
+        else {
+
+            await likeRef.set({
+
+                uid: user.uid,
+
+                createdAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            });
+
+            await bookRef.set(
+                {
+                    likes:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1)
+                },
+                {
+                    merge: true
+                }
+            );
+
+            button.classList.add("liked");
+
+            /* ❤️ BIG ANIMATION */
+
+            button.classList.remove("animate");
+
+            void button.offsetWidth;
+
+            button.classList.add("animate");
+
+            setTimeout(() => {
+
+                button.classList.remove("animate");
+
+            }, 800);
+
+            count++;
+
+        }
+
+
+        if (countElement) {
+
+            countElement.textContent =
+                count;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❤️ Like Error:",
+            error
+        );
+
+    }
+
+});
+
+
+/* =====================================================
+   💬 COMMENT MODAL
+===================================================== */
+
+const commentModal =
+    document.getElementById("commentModal");
+
+const commentsList =
+    document.getElementById("commentsList");
+
+const commentForm =
+    document.getElementById("commentForm");
+
+const commentInput =
+    document.getElementById("commentInput");
+
+const closeComments =
+    document.getElementById("closeComments");
+
+
+/* OPEN COMMENTS */
+
+document.addEventListener("click", async function(event) {
+
+    const button =
+        event.target.closest(".comment-btn");
+
+    if (!button) return;
+
+    activeCommentBookId =
+        button.dataset.bookId;
+
+    button.classList.add("open");
+
+    if (commentModal) {
+
+        commentModal.classList.add("show");
+
+    }
+
+    await loadComments(
+        activeCommentBookId
+    );
+
+});
+
+
+/* CLOSE */
+
+if (closeComments) {
+
+    closeComments.addEventListener(
+        "click",
+        function() {
+
+            commentModal.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+/* CLICK OUTSIDE */
+
+if (commentModal) {
+
+    commentModal.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target ===
+                commentModal
+            ) {
+
+                commentModal.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD COMMENTS
+===================================================== */
+
+async function loadComments(bookId) {
+
+    if (!commentsList) return;
+
+    commentsList.innerHTML = `
+
+        <p style="
+            text-align:center;
+            color:#aaa;
+            padding:20px;
+        ">
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Loading comments...
+
+        </p>
+
+    `;
+
+
+    try {
+
+        const snapshot =
+            await window.db
+                .collection("books")
+                .doc(bookId)
+                .collection("comments")
+                .orderBy(
+                    "createdAt",
+                    "desc"
+                )
+                .get();
+
+
+        if (snapshot.empty) {
+
+            commentsList.innerHTML = `
+
+                <p style="
+                    text-align:center;
+                    color:#aaa;
+                    padding:20px;
+                ">
+
+                    No comments yet ❤️<br>
+                    Be the first to comment!
+
+                </p>
+
+            `;
+
+            return;
+
+        }
+
+
+        commentsList.innerHTML = "";
+
+
+        snapshot.forEach(function(doc) {
+
+            const data =
+                doc.data();
+
+
+            const comment =
+                document.createElement("div");
+
+
+            comment.className =
+                "comment-item";
+
+
+            comment.innerHTML = `
+
+                <div class="comment-user">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    ${escapeSocialHTML(
+                        data.name ||
+                        data.email ||
+                        "Reader"
+                    )}
+
+                </div>
+
+                <div class="comment-text">
+
+                    ${escapeSocialHTML(
+                        data.text
+                    )}
+
+                </div>
+
+            `;
+
+
+            commentsList.appendChild(
+                comment
+            );
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "💬 Comment Load Error:",
+            error
+        );
+
+
+        commentsList.innerHTML = `
+
+            <p style="
+                text-align:center;
+                color:#aaa;
+                padding:20px;
+            ">
+
+                Unable to load comments.
+
+            </p>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   ➕ ADD COMMENT
+===================================================== */
+
+if (commentForm) {
+
+    commentForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            if (!socialLoginRequired()) {
+                return;
+            }
+
+
+            const text =
+                commentInput.value.trim();
+
+
+            if (!text) {
+                return;
+            }
+
+
+            if (!activeCommentBookId) {
+                return;
+            }
+
+
+            const user =
+                window.currentFirebaseUser;
+
+
+            try {
+
+                await window.db
+                    .collection("books")
+                    .doc(activeCommentBookId)
+                    .collection("comments")
+                    .add({
+
+                        uid:
+                            user.uid,
+
+                        name:
+                            user.displayName ||
+                            user.email ||
+                            "Reader",
+
+                        email:
+                            user.email ||
+                            "",
+
+                        text:
+                            text,
+
+                        createdAt:
+                            firebase.firestore
+                                .FieldValue
+                                .serverTimestamp()
+
+                    });
+
+
+                commentInput.value = "";
+
+
+                await loadComments(
+                    activeCommentBookId
+                );
+
+
+                /* UPDATE COMMENT COUNT */
+
+                const button =
+                    document.querySelector(
+                        `.comment-btn[data-book-id="${CSS.escape(
+                            activeCommentBookId
+                        )}"]`
+                    );
+
+
+                if (button) {
+
+                    const count =
+                        button.querySelector(
+                            ".action-count"
+                        );
+
+
+                    if (count) {
+
+                        count.textContent =
+                            Number(
+                                count.textContent || 0
+                            ) + 1;
+
+                    }
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "💬 Add Comment Error:",
+                    error
+                );
+
+                alert(
+                    "Comment could not be posted."
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   📤 SHARE SYSTEM
+===================================================== */
+
+const sharePopup =
+    document.getElementById("sharePopup");
+
+const copyBookLink =
+    document.getElementById("copyBookLink");
+
+
+document.addEventListener("click", function(event) {
+
+    const button =
+        event.target.closest(".share-btn");
+
+    if (!button) return;
+
+
+    const bookId =
+        button.dataset.bookId;
+
+
+    /*
+       allBooks tumhare existing
+       script.js ka books array hai.
+    */
+
+    if (!Array.isArray(window.allBooks) &&
+        !Array.isArray(allBooks)) {
+
+        console.error(
+            "Books array not found."
+        );
+
+        return;
+
+    }
+
+
+    const books =
+        Array.isArray(window.allBooks)
+            ? window.allBooks
+            : allBooks;
+
+
+    const book =
+        books.find(function(item) {
+
+            return String(item.id) ===
+                String(bookId);
+
+        });
+
+
+    if (!book) {
+
+        console.error(
+            "Book not found:",
+            bookId
+        );
+
+        return;
+
+    }
+
+
+    activeShareBook =
+        book;
+
+
+    button.classList.add(
+        "shared"
+    );
+
+
+    if (sharePopup) {
+
+        sharePopup.classList.add(
+            "show"
+        );
+
+    }
+
+});
+
+
+/* =====================================================
+   SHARE OPTIONS
+===================================================== */
+
+document.addEventListener("click", async function(event) {
+
+    const button =
+        event.target.closest(
+            ".share-option"
+        );
+
+    if (!button) return;
+
+    if (!activeShareBook) return;
+
+
+    const book =
+        activeShareBook;
+
+
+    const url =
+        new URL(
+            "reader.html?book=" +
+            encodeURIComponent(
+                book.pdf
+            ),
+            window.location.href
+        ).href;
+
+
+    const text =
+        `Read "${book.title}" on Chishti Library`;
+
+
+    const type =
+        button.dataset.share;
+
+
+    let shareURL = "";
+
+
+    if (type === "whatsapp") {
+
+        shareURL =
+            "https://wa.me/?text=" +
+            encodeURIComponent(
+                text + " " + url
+            );
+
+    }
+
+
+    else if (type === "facebook") {
+
+        shareURL =
+            "https://www.facebook.com/sharer/sharer.php?u=" +
+            encodeURIComponent(url);
+
+    }
+
+
+    else if (type === "telegram") {
+
+        shareURL =
+            "https://t.me/share/url?url=" +
+            encodeURIComponent(url) +
+            "&text=" +
+            encodeURIComponent(text);
+
+    }
+
+
+    else if (type === "twitter") {
+
+        shareURL =
+            "https://twitter.com/intent/tweet?text=" +
+            encodeURIComponent(text) +
+            "&url=" +
+            encodeURIComponent(url);
+
+    }
+
+
+    if (shareURL) {
+
+        window.open(
+            shareURL,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    }
+
+
+    await incrementShare(book);
+
+});
+
+
+/* =====================================================
+   📋 COPY LINK
+===================================================== */
+
+if (copyBookLink) {
+
+    copyBookLink.addEventListener(
+        "click",
+        async function() {
+
+            if (!activeShareBook) {
+                return;
+            }
+
+
+            const url =
+                new URL(
+                    "reader.html?book=" +
+                    encodeURIComponent(
+                        activeShareBook.pdf
+                    ),
+                    window.location.href
+                ).href;
+
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    url
+                );
+
+
+                copyBookLink.innerHTML = `
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Link Copied!
+
+                `;
+
+
+                setTimeout(
+                    function() {
+
+                        copyBookLink.innerHTML = `
+
+                            <i class="fa-solid fa-link"></i>
+
+                            Copy Book Link
+
+                        `;
+
+                    },
+                    1600
+                );
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Copy Link Error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE SHARE
+===================================================== */
+
+if (sharePopup) {
+
+    sharePopup.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                event.target ===
+                sharePopup
+            ) {
+
+                sharePopup.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SHARE COUNTER
+===================================================== */
+
+async function incrementShare(book) {
+
+    if (!window.db) {
+        return;
+    }
+
+
+    try {
+
+        await window.db
+            .collection("books")
+            .doc(String(book.id))
+            .set(
+                {
+
+                    shares:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1)
+
+                },
+                {
+                    merge: true
+                }
+            );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "📤 Share Counter Error:",
+            error
+        );
+
+    }
+
+}
+
+
+console.log(
+    "❤️ Like System Ready"
+);
+
+console.log(
+    "💬 Comment System Ready"
+);
+
+console.log(
+    "🔖 Bookmark System Ready"
+);
+
+console.log(
+    "📤 Share System Ready"
+);
