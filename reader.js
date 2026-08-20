@@ -2,7 +2,19 @@
    CHISHTI LIBRARY
    reader.js
    FULL PDF READER
-   WATERMARK DOWNLOAD + LIBRARY THEME
+
+   INCLUDED:
+   ✅ PDF.js Reader
+   ✅ Previous / Next
+   ✅ Page Counter
+   ✅ Zoom
+   ✅ Theme
+   ✅ Fullscreen
+   ✅ Print with watermark
+   ✅ Watermarked Download
+   ✅ Mobile Swipe
+   ✅ Bookmark Current Page
+   ✅ Share Current Page
 ========================================================= */
 
 import * as pdfjsLib from
@@ -18,7 +30,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
 
 /* =========================================================
-   GET URL PARAMETERS
+   URL PARAMETERS
 ========================================================= */
 
 const params =
@@ -54,18 +66,29 @@ function getPDFURL() {
 
     } catch (error) {
 
-        console.error("PDF URL error:", error);
+        console.error(
+            "PDF URL error:",
+            error
+        );
 
         return "";
     }
 }
 
 
-const PDF_URL = getPDFURL();
+const PDF_URL =
+    getPDFURL();
 
 
-console.log("RAW BOOK:", rawBook);
-console.log("PDF URL:", PDF_URL);
+console.log(
+    "RAW BOOK:",
+    rawBook
+);
+
+console.log(
+    "PDF URL:",
+    PDF_URL
+);
 
 
 /* =========================================================
@@ -79,14 +102,23 @@ const DEFAULT_ZOOM = 1;
 
 
 /* =========================================================
-   CHISHTI LIBRARY THEME
+   LIBRARY THEME
 ========================================================= */
 
 const LIBRARY_THEME = {
-    maroon: "#4B0000",
-    deepMaroon: "#350000",
-    gold: "#D4A500",
-    white: "#FFFFFF"
+
+    maroon:
+        "#4B0000",
+
+    deepMaroon:
+        "#350000",
+
+    gold:
+        "#D4A500",
+
+    white:
+        "#FFFFFF"
+
 };
 
 
@@ -95,70 +127,119 @@ const LIBRARY_THEME = {
 ========================================================= */
 
 const bookTitle =
-    document.getElementById("bookTitle");
+    document.getElementById(
+        "bookTitle"
+    );
 
 const bookViewport =
-    document.getElementById("bookViewport");
+    document.getElementById(
+        "bookViewport"
+    );
 
 const pageWrapper =
-    document.getElementById("pageWrapper");
+    document.getElementById(
+        "pageWrapper"
+    );
 
 const pdfCanvas =
-    document.getElementById("pdfCanvas");
+    document.getElementById(
+        "pdfCanvas"
+    );
 
 const previousPageButton =
-    document.getElementById("previousPageButton");
+    document.getElementById(
+        "previousPageButton"
+    );
 
 const nextPageButton =
-    document.getElementById("nextPageButton");
+    document.getElementById(
+        "nextPageButton"
+    );
 
 const pageNumberInput =
-    document.getElementById("pageNumberInput");
+    document.getElementById(
+        "pageNumberInput"
+    );
 
 const totalPages =
-    document.getElementById("totalPages");
+    document.getElementById(
+        "totalPages"
+    );
 
 const zoomOutButton =
-    document.getElementById("zoomOutButton");
+    document.getElementById(
+        "zoomOutButton"
+    );
 
 const resetZoomButton =
-    document.getElementById("resetZoomButton");
+    document.getElementById(
+        "resetZoomButton"
+    );
 
 const zoomInButton =
-    document.getElementById("zoomInButton");
+    document.getElementById(
+        "zoomInButton"
+    );
 
 const zoomLevel =
-    document.getElementById("zoomLevel");
+    document.getElementById(
+        "zoomLevel"
+    );
 
 const errorScreen =
-    document.getElementById("errorScreen");
+    document.getElementById(
+        "errorScreen"
+    );
 
 const errorMessage =
-    document.getElementById("errorMessage");
+    document.getElementById(
+        "errorMessage"
+    );
 
 const retryButton =
-    document.getElementById("retryButton");
+    document.getElementById(
+        "retryButton"
+    );
 
 const readerStatus =
-    document.getElementById("readerStatus");
+    document.getElementById(
+        "readerStatus"
+    );
 
 const downloadButton =
-    document.getElementById("downloadButton");
+    document.getElementById(
+        "downloadButton"
+    );
 
 const printButton =
-    document.getElementById("printButton");
+    document.getElementById(
+        "printButton"
+    );
 
 const fullscreenButton =
-    document.getElementById("fullscreenButton");
-
-const swipeButton =
-    document.getElementById("swipeButton");
+    document.getElementById(
+        "fullscreenButton"
+    );
 
 const themeButton =
-    document.getElementById("themeButton");
+    document.getElementById(
+        "themeButton"
+    );
 
 const cleanDownloadButton =
-    document.getElementById("cleanDownloadButton");
+    document.getElementById(
+        "cleanDownloadButton"
+    );
+
+const bookmarkButton =
+    document.getElementById(
+        "bookmarkBtn"
+    );
+
+const shareButton =
+    document.getElementById(
+        "shareBtn"
+    );
 
 
 /* =========================================================
@@ -167,9 +248,12 @@ const cleanDownloadButton =
 
 const context =
     pdfCanvas
-        ? pdfCanvas.getContext("2d", {
-            alpha: false
-        })
+        ? pdfCanvas.getContext(
+            "2d",
+            {
+                alpha: false
+            }
+        )
         : null;
 
 
@@ -177,19 +261,24 @@ const context =
    STATE
 ========================================================= */
 
-let pdfDocument = null;
+let pdfDocument =
+    null;
 
-let currentPage = 1;
+let currentPage =
+    1;
 
-let pageCount = 0;
+let pageCount =
+    0;
 
-let zoom = DEFAULT_ZOOM;
+let zoom =
+    DEFAULT_ZOOM;
 
-let currentRenderTask = null;
+let currentRenderTask =
+    null;
 
 
 /* =========================================================
-   SWIPE
+   MOBILE SWIPE STATE
 ========================================================= */
 
 let touchStartX = 0;
@@ -199,34 +288,78 @@ let touchEndY = 0;
 
 
 /* =========================================================
-   THEME STATE
+   THEME
 ========================================================= */
 
 const themes = [
+
     {
-        name: "Maroon",
-        background: "#4B0000",
-        surface: "#350000",
-        accent: "#D4A500",
-        text: "#FFFFFF"
+        name:
+            "Maroon",
+
+        background:
+            "#4B0000",
+
+        surface:
+            "#350000",
+
+        accent:
+            "#D4A500",
+
+        text:
+            "#FFFFFF"
     },
+
     {
-        name: "Deep Maroon",
-        background: "#350000",
-        surface: "#4B0000",
-        accent: "#D4A500",
-        text: "#FFFFFF"
+        name:
+            "Deep Maroon",
+
+        background:
+            "#350000",
+
+        surface:
+            "#4B0000",
+
+        accent:
+            "#D4A500",
+
+        text:
+            "#FFFFFF"
     },
+
     {
-        name: "Gold",
-        background: "#D4A500",
-        surface: "#4B0000",
-        accent: "#FFFFFF",
-        text: "#FFFFFF"
+        name:
+            "Gold",
+
+        background:
+            "#D4A500",
+
+        surface:
+            "#4B0000",
+
+        accent:
+            "#FFFFFF",
+
+        text:
+            "#FFFFFF"
     }
+
 ];
 
-let currentTheme = 0;
+
+let currentTheme =
+    0;
+
+
+/* =========================================================
+   BOOKMARK STORAGE KEY
+========================================================= */
+
+const bookmarkKey =
+    "chishti_bookmark_" +
+    encodeURIComponent(
+        rawBook || "current-book"
+    );
 
 
 /* =========================================================
@@ -236,11 +369,15 @@ let currentTheme = 0;
 function applyTheme(index) {
 
     currentTheme =
-        (index + themes.length) %
+        (
+            index +
+            themes.length
+        ) %
         themes.length;
 
     const theme =
         themes[currentTheme];
+
 
     document.documentElement.style.setProperty(
         "--library-maroon",
@@ -282,9 +419,15 @@ function applyTheme(index) {
         theme.text
     );
 
+
     document.body.dataset.theme =
-        theme.name.toLowerCase()
-            .replace(/\s+/g, "-");
+        theme.name
+            .toLowerCase()
+            .replace(
+                /\s+/g,
+                "-"
+            );
+
 
     if (themeButton) {
 
@@ -295,17 +438,20 @@ function applyTheme(index) {
             "aria-label",
             `Theme: ${theme.name}. Click to change theme`
         );
+
     }
+
 
     localStorage.setItem(
         "chishtiReaderTheme",
         String(currentTheme)
     );
+
 }
 
 
 /* =========================================================
-   LOAD SAVED THEME
+   LOAD THEME
 ========================================================= */
 
 function loadTheme() {
@@ -317,16 +463,23 @@ function loadTheme() {
             )
         );
 
+
     if (
         Number.isInteger(saved) &&
         saved >= 0 &&
         saved < themes.length
     ) {
 
-        currentTheme = saved;
+        currentTheme =
+            saved;
+
     }
 
-    applyTheme(currentTheme);
+
+    applyTheme(
+        currentTheme
+    );
+
 }
 
 
@@ -347,8 +500,10 @@ if (themeButton) {
             announce(
                 `Reader theme changed to ${themes[currentTheme].name}.`
             );
+
         }
     );
+
 }
 
 
@@ -362,13 +517,16 @@ function setBookTitle() {
         return;
     }
 
+
     if (!rawBook) {
 
         bookTitle.textContent =
             "No book selected";
 
         return;
+
     }
+
 
     try {
 
@@ -378,25 +536,43 @@ function setBookTitle() {
                 .split("/")
                 .pop() || "";
 
+
         const decodedFilename =
-            decodeURIComponent(filename);
+            decodeURIComponent(
+                filename
+            );
+
 
         const title =
             decodedFilename
-                .replace(/\.pdf$/i, "")
-                .replace(/[-_]+/g, " ")
+                .replace(
+                    /\.pdf$/i,
+                    ""
+                )
+                .replace(
+                    /[-_]+/g,
+                    " "
+                )
                 .trim();
 
+
         bookTitle.textContent =
-            title || "Digital Book";
+            title ||
+            "Digital Book";
+
 
     } catch (error) {
 
-        console.error("Title error:", error);
+        console.error(
+            "Title error:",
+            error
+        );
 
         bookTitle.textContent =
             "Digital Book";
+
     }
+
 }
 
 
@@ -407,8 +583,12 @@ function setBookTitle() {
 function announce(message) {
 
     if (readerStatus) {
-        readerStatus.textContent = message;
+
+        readerStatus.textContent =
+            message;
+
     }
+
 }
 
 
@@ -418,23 +598,418 @@ function announce(message) {
 
 function showError(message) {
 
-    console.error("Reader error:", message);
+    console.error(
+        "Reader error:",
+        message
+    );
+
 
     if (errorMessage) {
-        errorMessage.textContent = message;
+
+        errorMessage.textContent =
+            message;
+
     }
 
+
     if (errorScreen) {
-        errorScreen.hidden = false;
+
+        errorScreen.hidden =
+            false;
+
     }
+
 }
 
 
 function hideError() {
 
     if (errorScreen) {
-        errorScreen.hidden = true;
+
+        errorScreen.hidden =
+            true;
+
     }
+
+}
+
+
+/* =========================================================
+   UPDATE BOOKMARK UI
+========================================================= */
+
+function updateBookmarkButton() {
+
+    if (!bookmarkButton) {
+        return;
+    }
+
+
+    const savedPage =
+        Number(
+            localStorage.getItem(
+                bookmarkKey
+            )
+        );
+
+
+    if (
+        savedPage &&
+        savedPage === currentPage
+    ) {
+
+        bookmarkButton.classList.add(
+            "active"
+        );
+
+
+        bookmarkButton.innerHTML =
+            '<i class="fas fa-bookmark" aria-hidden="true"></i>';
+
+
+        bookmarkButton.title =
+            `Remove bookmark from page ${currentPage}`;
+
+
+        bookmarkButton.setAttribute(
+            "aria-label",
+            `Remove bookmark from page ${currentPage}`
+        );
+
+
+    } else {
+
+        bookmarkButton.classList.remove(
+            "active"
+        );
+
+
+        bookmarkButton.innerHTML =
+            '<i class="far fa-bookmark" aria-hidden="true"></i>';
+
+
+        bookmarkButton.title =
+            `Bookmark page ${currentPage}`;
+
+
+        bookmarkButton.setAttribute(
+            "aria-label",
+            `Bookmark page ${currentPage}`
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOOKMARK BUTTON
+========================================================= */
+
+if (bookmarkButton) {
+
+    bookmarkButton.addEventListener(
+        "click",
+        function () {
+
+            const savedPage =
+                Number(
+                    localStorage.getItem(
+                        bookmarkKey
+                    )
+                );
+
+
+            if (
+                savedPage === currentPage
+            ) {
+
+                localStorage.removeItem(
+                    bookmarkKey
+                );
+
+
+                announce(
+                    `Bookmark removed from page ${currentPage}.`
+                );
+
+
+            } else {
+
+                localStorage.setItem(
+                    bookmarkKey,
+                    String(currentPage)
+                );
+
+
+                announce(
+                    `Page ${currentPage} bookmarked.`
+                );
+
+            }
+
+
+            updateBookmarkButton();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   GET BOOK NAME FOR SHARE
+========================================================= */
+
+function getShareBookName() {
+
+    if (!rawBook) {
+
+        return "Chishti Library";
+
+    }
+
+
+    try {
+
+        const filename =
+            rawBook
+                .split("?")[0]
+                .split("/")
+                .pop() || "";
+
+
+        return decodeURIComponent(
+            filename
+        )
+            .replace(
+                /\.pdf$/i,
+                ""
+            )
+            .replace(
+                /[-_]+/g,
+                " "
+            )
+            .trim() ||
+            "Chishti Library";
+
+
+    } catch (error) {
+
+        return "Chishti Library";
+
+    }
+
+}
+
+
+/* =========================================================
+   SHARE BOOK / CURRENT PAGE
+========================================================= */
+
+async function shareCurrentPage() {
+
+    const shareURL =
+        new URL(
+            window.location.href
+        );
+
+
+    /*
+     * Current page URL mein save.
+     */
+
+    shareURL.searchParams.set(
+        "page",
+        String(currentPage)
+    );
+
+
+    const bookName =
+        getShareBookName();
+
+
+    const shareData = {
+
+        title:
+            `${bookName} — Chishti Library`,
+
+        text:
+            `Read "${bookName}" on Chishti Library — Page ${currentPage}`,
+
+        url:
+            shareURL.href
+
+    };
+
+
+    /*
+     * Mobile / supported browser.
+     */
+
+    if (
+        navigator.share
+    ) {
+
+        try {
+
+            await navigator.share(
+                shareData
+            );
+
+
+            announce(
+                "Book shared successfully."
+            );
+
+
+            return;
+
+
+        } catch (error) {
+
+            /*
+             * User ne share popup close kiya.
+             */
+
+            if (
+                error &&
+                error.name ===
+                "AbortError"
+            ) {
+
+                return;
+
+            }
+
+            console.warn(
+                "Native share failed:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Desktop clipboard fallback.
+     */
+
+    try {
+
+        if (
+            navigator.clipboard &&
+            window.isSecureContext
+        ) {
+
+            await navigator.clipboard.writeText(
+                shareURL.href
+            );
+
+
+            announce(
+                "Reader link copied."
+            );
+
+
+            alert(
+                `✅ Reader link copied!\n\nPage ${currentPage} ka direct link copy ho gaya.`
+            );
+
+
+            return;
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Clipboard error:",
+            error
+        );
+
+    }
+
+
+    /*
+     * Old browser fallback.
+     */
+
+    try {
+
+        const temporaryInput =
+            document.createElement(
+                "input"
+            );
+
+
+        temporaryInput.value =
+            shareURL.href;
+
+
+        temporaryInput.style.position =
+            "fixed";
+
+        temporaryInput.style.opacity =
+            "0";
+
+
+        document.body.appendChild(
+            temporaryInput
+        );
+
+
+        temporaryInput.select();
+
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        temporaryInput.remove();
+
+
+        announce(
+            "Reader link copied."
+        );
+
+
+        alert(
+            `✅ Reader link copied!\n\nPage ${currentPage} ka direct link copy ho gaya.`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Share fallback error:",
+            error
+        );
+
+
+        prompt(
+            "Copy this reader link:",
+            shareURL.href
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SHARE BUTTON
+========================================================= */
+
+if (shareButton) {
+
+    shareButton.addEventListener(
+        "click",
+        shareCurrentPage
+    );
+
 }
 
 
@@ -445,39 +1020,57 @@ function hideError() {
 function updateUI() {
 
     if (pageNumberInput) {
-        pageNumberInput.value = currentPage;
+
+        pageNumberInput.value =
+            currentPage;
+
     }
+
 
     if (totalPages) {
-        totalPages.textContent = pageCount;
+
+        totalPages.textContent =
+            pageCount;
+
     }
 
+
     if (zoomLevel) {
+
         zoomLevel.textContent =
-            `${Math.round(zoom * 100)}%`;
+            `${Math.round(
+                zoom * 100
+            )}%`;
+
     }
+
 
     if (previousPageButton) {
 
         previousPageButton.disabled =
             !pdfDocument ||
             currentPage <= 1;
+
     }
+
 
     if (nextPageButton) {
 
         nextPageButton.disabled =
             !pdfDocument ||
             currentPage >= pageCount;
+
     }
 
+
     /*
-     * Clean download is intentionally disabled.
+     * Clean download intentionally disabled.
      */
 
     if (cleanDownloadButton) {
 
-        cleanDownloadButton.disabled = true;
+        cleanDownloadButton.disabled =
+            true;
 
         cleanDownloadButton.title =
             "Clean download is not available";
@@ -486,7 +1079,12 @@ function updateUI() {
             "aria-disabled",
             "true"
         );
+
     }
+
+
+    updateBookmarkButton();
+
 }
 
 
@@ -497,13 +1095,17 @@ function updateUI() {
 function calculateScale(page) {
 
     if (!bookViewport) {
+
         return zoom;
+
     }
+
 
     const baseViewport =
         page.getViewport({
             scale: 1
         });
+
 
     const availableWidth =
         Math.max(
@@ -511,19 +1113,23 @@ function calculateScale(page) {
             bookViewport.clientWidth - 30
         );
 
+
     const availableHeight =
         Math.max(
             200,
             bookViewport.clientHeight - 30
         );
 
+
     const widthScale =
         availableWidth /
         baseViewport.width;
 
+
     const heightScale =
         availableHeight /
         baseViewport.height;
+
 
     const fitScale =
         Math.min(
@@ -531,10 +1137,12 @@ function calculateScale(page) {
             heightScale
         );
 
+
     return Math.max(
         0.25,
         fitScale * zoom
     );
+
 }
 
 
@@ -545,8 +1153,11 @@ function calculateScale(page) {
 function cancelCurrentRender() {
 
     if (!currentRenderTask) {
+
         return;
+
     }
+
 
     try {
 
@@ -558,9 +1169,13 @@ function cancelCurrentRender() {
             "Render cancel error:",
             error
         );
+
     }
 
-    currentRenderTask = null;
+
+    currentRenderTask =
+        null;
+
 }
 
 
@@ -575,8 +1190,11 @@ async function renderPage(pageNumber) {
         !pdfCanvas ||
         !context
     ) {
+
         return;
+
     }
+
 
     pageNumber =
         Math.max(
@@ -587,7 +1205,9 @@ async function renderPage(pageNumber) {
             )
         );
 
+
     cancelCurrentRender();
+
 
     try {
 
@@ -596,13 +1216,18 @@ async function renderPage(pageNumber) {
                 pageNumber
             );
 
+
         const scale =
-            calculateScale(page);
+            calculateScale(
+                page
+            );
+
 
         const viewport =
             page.getViewport({
                 scale
             });
+
 
         const pixelRatio =
             Math.min(
@@ -610,11 +1235,13 @@ async function renderPage(pageNumber) {
                 2
             );
 
+
         pdfCanvas.width =
             Math.floor(
                 viewport.width *
                 pixelRatio
             );
+
 
         pdfCanvas.height =
             Math.floor(
@@ -622,11 +1249,14 @@ async function renderPage(pageNumber) {
                 pixelRatio
             );
 
+
         pdfCanvas.style.width =
             `${viewport.width}px`;
 
+
         pdfCanvas.style.height =
             `${viewport.height}px`;
+
 
         if (pageWrapper) {
 
@@ -635,7 +1265,9 @@ async function renderPage(pageNumber) {
 
             pageWrapper.style.height =
                 `${viewport.height}px`;
+
         }
+
 
         context.setTransform(
             pixelRatio,
@@ -646,8 +1278,10 @@ async function renderPage(pageNumber) {
             0
         );
 
+
         context.fillStyle =
             "#FFFFFF";
+
 
         context.fillRect(
             0,
@@ -655,6 +1289,7 @@ async function renderPage(pageNumber) {
             viewport.width,
             viewport.height
         );
+
 
         currentRenderTask =
             page.render({
@@ -664,19 +1299,28 @@ async function renderPage(pageNumber) {
 
                 viewport:
                     viewport
+
             });
+
 
         await currentRenderTask.promise;
 
-        currentRenderTask = null;
 
-        currentPage = pageNumber;
+        currentRenderTask =
+            null;
+
+
+        currentPage =
+            pageNumber;
+
 
         updateUI();
+
 
         announce(
             `Page ${currentPage} of ${pageCount}`
         );
+
 
     } catch (error) {
 
@@ -684,22 +1328,30 @@ async function renderPage(pageNumber) {
             error?.name ===
             "RenderingCancelledException"
         ) {
+
             return;
+
         }
+
 
         console.error(
             "PDF render error:",
             error
         );
 
+
         showError(
             "This PDF page could not be rendered."
         );
 
+
     } finally {
 
-        currentRenderTask = null;
+        currentRenderTask =
+            null;
+
     }
+
 }
 
 
@@ -710,15 +1362,28 @@ async function renderPage(pageNumber) {
 function goToPage(value) {
 
     if (!pdfDocument) {
+
         return;
+
     }
+
 
     let page =
-        parseInt(value, 10);
+        parseInt(
+            value,
+            10
+        );
 
-    if (!Number.isFinite(page)) {
-        page = currentPage;
+
+    if (
+        !Number.isFinite(page)
+    ) {
+
+        page =
+            currentPage;
+
     }
+
 
     page =
         Math.max(
@@ -729,12 +1394,16 @@ function goToPage(value) {
             )
         );
 
-    renderPage(page);
+
+    renderPage(
+        page
+    );
+
 }
 
 
 /* =========================================================
-   PREVIOUS
+   PREVIOUS PAGE
 ========================================================= */
 
 function previousPage() {
@@ -743,17 +1412,21 @@ function previousPage() {
         !pdfDocument ||
         currentPage <= 1
     ) {
+
         return;
+
     }
+
 
     goToPage(
         currentPage - 1
     );
+
 }
 
 
 /* =========================================================
-   NEXT
+   NEXT PAGE
 ========================================================= */
 
 function nextPage() {
@@ -762,17 +1435,21 @@ function nextPage() {
         !pdfDocument ||
         currentPage >= pageCount
     ) {
+
         return;
+
     }
+
 
     goToPage(
         currentPage + 1
     );
+
 }
 
 
 /* =========================================================
-   ZOOM
+   ZOOM IN
 ========================================================= */
 
 function zoomIn() {
@@ -788,13 +1465,24 @@ function zoomIn() {
             )
         );
 
+
     updateUI();
 
+
     if (pdfDocument) {
-        renderPage(currentPage);
+
+        renderPage(
+            currentPage
+        );
+
     }
+
 }
 
+
+/* =========================================================
+   ZOOM OUT
+========================================================= */
 
 function zoomOut() {
 
@@ -809,23 +1497,42 @@ function zoomOut() {
             )
         );
 
+
     updateUI();
 
+
     if (pdfDocument) {
-        renderPage(currentPage);
+
+        renderPage(
+            currentPage
+        );
+
     }
+
 }
 
 
+/* =========================================================
+   RESET ZOOM
+========================================================= */
+
 function resetZoom() {
 
-    zoom = DEFAULT_ZOOM;
+    zoom =
+        DEFAULT_ZOOM;
+
 
     updateUI();
 
+
     if (pdfDocument) {
-        renderPage(currentPage);
+
+        renderPage(
+            currentPage
+        );
+
     }
+
 }
 
 
@@ -837,6 +1544,7 @@ async function loadPDF() {
 
     hideError();
 
+
     if (!PDF_URL) {
 
         showError(
@@ -844,33 +1552,73 @@ async function loadPDF() {
         );
 
         return;
+
     }
 
+
     cancelCurrentRender();
+
 
     try {
 
         setBookTitle();
+
 
         console.log(
             "Loading PDF:",
             PDF_URL
         );
 
+
         const loadingTask =
             pdfjsLib.getDocument({
-                url: PDF_URL
+
+                url:
+                    PDF_URL
+
             });
+
 
         pdfDocument =
             await loadingTask.promise;
 
+
         pageCount =
             pdfDocument.numPages;
 
-        currentPage = 1;
 
-        zoom = DEFAULT_ZOOM;
+        /*
+         * If URL contains ?page=5,
+         * open page 5.
+         */
+
+        const urlPage =
+            parseInt(
+                params.get("page"),
+                10
+            );
+
+
+        if (
+            Number.isFinite(urlPage) &&
+            urlPage >= 1 &&
+            urlPage <= pageCount
+        ) {
+
+            currentPage =
+                urlPage;
+
+        } else {
+
+            currentPage =
+                1;
+
+        }
+
+
+        zoom =
+            DEFAULT_ZOOM;
+
 
         console.log(
             "PDF loaded:",
@@ -878,13 +1626,19 @@ async function loadPDF() {
             "pages"
         );
 
+
         updateUI();
 
+
         announce(
-            `Page 1 of ${pageCount}`
+            `Page ${currentPage} of ${pageCount}`
         );
 
-        await renderPage(1);
+
+        await renderPage(
+            currentPage
+        );
+
 
     } catch (error) {
 
@@ -893,11 +1647,19 @@ async function loadPDF() {
             error
         );
 
-        pdfDocument = null;
-        pageCount = 0;
-        currentPage = 1;
+
+        pdfDocument =
+            null;
+
+        pageCount =
+            0;
+
+        currentPage =
+            1;
+
 
         updateUI();
+
 
         if (
             error?.name ===
@@ -917,7 +1679,9 @@ Check the exact PDF filename and path.`
             );
 
             return;
+
         }
+
 
         if (
             error?.name ===
@@ -929,12 +1693,30 @@ Check the exact PDF filename and path.`
             );
 
             return;
+
         }
+
 
         showError(
             "PDF could not be loaded. Check the PDF URL and filename."
         );
+
     }
+
+}
+
+
+/* =========================================================
+   RETRY BUTTON
+========================================================= */
+
+if (retryButton) {
+
+    retryButton.addEventListener(
+        "click",
+        loadPDF
+    );
+
 }
 
 
@@ -952,13 +1734,18 @@ const WATERMARK_OPACITY =
     0.22;
 
 const WATERMARK_COLOR =
-    typeof PDFLib !== "undefined" && PDFLib.rgb
-        ? PDFLib.rgb(0.29, 0, 0)
+    typeof PDFLib !== "undefined" &&
+    PDFLib.rgb
+        ? PDFLib.rgb(
+            0.29,
+            0,
+            0
+        )
         : null;
 
 
 /* =========================================================
-   GET SAFE FILE NAME
+   SAFE DOWNLOAD FILE NAME
 ========================================================= */
 
 function getDownloadFileName() {
@@ -970,15 +1757,23 @@ function getDownloadFileName() {
             .pop() ||
         "chishti-library-book.pdf";
 
+
     try {
+
         filename =
-            decodeURIComponent(filename);
+            decodeURIComponent(
+                filename
+            );
+
     } catch (error) {
+
         console.warn(
             "Filename decode error:",
             error
         );
+
     }
+
 
     filename =
         filename.replace(
@@ -986,12 +1781,16 @@ function getDownloadFileName() {
             ""
         );
 
-    return `${filename}-ChishtiLibrary-Watermarked.pdf`;
+
+    return (
+        `${filename}-ChishtiLibrary-Watermarked.pdf`
+    );
+
 }
 
 
 /* =========================================================
-   WATERMARK PDF DOWNLOAD
+   WATERMARKED PDF DOWNLOAD
 ========================================================= */
 
 async function downloadWatermarkedPDF() {
@@ -1003,7 +1802,9 @@ async function downloadWatermarkedPDF() {
         );
 
         return;
+
     }
+
 
     if (
         typeof PDFLib ===
@@ -1015,53 +1816,56 @@ async function downloadWatermarkedPDF() {
         );
 
         return;
+
     }
+
 
     const originalText =
         downloadButton
             ? downloadButton.innerHTML
             : "";
 
+
     try {
 
         if (downloadButton) {
 
-            downloadButton.disabled = true;
+            downloadButton.disabled =
+                true;
 
             downloadButton.innerHTML =
                 "⏳";
+
         }
+
 
         announce(
             "Preparing watermarked PDF..."
         );
 
-        /*
-         * Fetch original PDF.
-         */
 
         const response =
             await fetch(
                 PDF_URL,
                 {
-                    cache: "no-store"
+                    cache:
+                        "no-store"
                 }
             );
+
 
         if (!response.ok) {
 
             throw new Error(
                 `PDF download failed: ${response.status}`
             );
+
         }
+
 
         const pdfBytes =
             await response.arrayBuffer();
 
-
-        /*
-         * Load with PDF-LIB.
-         */
 
         const pdfDoc =
             await PDFLib.PDFDocument.load(
@@ -1069,19 +1873,11 @@ async function downloadWatermarkedPDF() {
             );
 
 
-        /*
-         * Embed standard font.
-         */
-
         const font =
             await pdfDoc.embedFont(
                 PDFLib.StandardFonts.HelveticaBold
             );
 
-
-        /*
-         * Watermark every page.
-         */
 
         const pages =
             pdfDoc.getPages();
@@ -1096,16 +1892,13 @@ async function downloadWatermarkedPDF() {
             const page =
                 pages[i];
 
+
             const {
                 width,
                 height
             } =
                 page.getSize();
 
-
-            /*
-             * Main watermark
-             */
 
             const fontSize =
                 Math.max(
@@ -1130,13 +1923,18 @@ async function downloadWatermarkedPDF() {
             page.drawText(
                 WATERMARK_TEXT,
                 {
+
                     x:
-                        (width -
-                            mainWidth) / 2,
+                        (
+                            width -
+                            mainWidth
+                        ) / 2,
 
                     y:
-                        (height -
-                            fontSize) / 2,
+                        (
+                            height -
+                            fontSize
+                        ) / 2,
 
                     size:
                         fontSize,
@@ -1156,14 +1954,13 @@ async function downloadWatermarkedPDF() {
                         WATERMARK_OPACITY,
 
                     rotate:
-                        PDFLib.degrees(-32)
+                        PDFLib.degrees(
+                            -32
+                        )
+
                 }
             );
 
-
-            /*
-             * Second smaller watermark.
-             */
 
             const subSize =
                 Math.max(
@@ -1182,9 +1979,12 @@ async function downloadWatermarkedPDF() {
             page.drawText(
                 WATERMARK_SUBTEXT,
                 {
+
                     x:
-                        (width -
-                            subWidth) / 2,
+                        (
+                            width -
+                            subWidth
+                        ) / 2,
 
                     y:
                         (
@@ -1210,15 +2010,15 @@ async function downloadWatermarkedPDF() {
                         0.20,
 
                     rotate:
-                        PDFLib.degrees(-32)
+                        PDFLib.degrees(
+                            -32
+                        )
+
                 }
             );
+
         }
 
-
-        /*
-         * Save final watermarked PDF.
-         */
 
         const finalBytes =
             await pdfDoc.save();
@@ -1241,17 +2041,26 @@ async function downloadWatermarkedPDF() {
 
 
         const link =
-            document.createElement("a");
+            document.createElement(
+                "a"
+            );
+
 
         link.href =
             blobURL;
 
+
         link.download =
             getDownloadFileName();
 
-        document.body.appendChild(link);
+
+        document.body.appendChild(
+            link
+        );
+
 
         link.click();
+
 
         link.remove();
 
@@ -1272,6 +2081,7 @@ async function downloadWatermarkedPDF() {
             "Watermarked PDF downloaded successfully."
         );
 
+
     } catch (error) {
 
         console.error(
@@ -1279,26 +2089,35 @@ async function downloadWatermarkedPDF() {
             error
         );
 
+
         alert(
             "Watermarked PDF could not be created. Please try again."
         );
+
 
         announce(
             "Watermarked PDF download failed."
         );
 
+
     } finally {
 
         if (downloadButton) {
 
-            downloadButton.disabled = false;
+            downloadButton.disabled =
+                false;
 
             downloadButton.innerHTML =
-                originalText || "↓";
+                originalText ||
+                "↓";
+
         }
 
+
         updateUI();
+
     }
+
 }
 
 
@@ -1312,6 +2131,7 @@ if (downloadButton) {
         "click",
         downloadWatermarkedPDF
     );
+
 }
 
 
@@ -1328,14 +2148,15 @@ if (cleanDownloadButton) {
             alert(
                 "Clean download is not available. Please use the watermarked download."
             );
+
         }
     );
+
 }
 
 
 /* =========================================================
-   PRINT
-   Uses watermarked PDF instead of original.
+   PRINT WATERMARKED BOOK
 ========================================================= */
 
 async function printCurrentBook() {
@@ -1347,12 +2168,9 @@ async function printCurrentBook() {
         );
 
         return;
+
     }
 
-    /*
-     * Create temporary watermarked PDF.
-     * Printing the original PDF directly is intentionally avoided.
-     */
 
     if (
         typeof PDFLib ===
@@ -1364,7 +2182,9 @@ async function printCurrentBook() {
         );
 
         return;
+
     }
+
 
     try {
 
@@ -1372,30 +2192,41 @@ async function printCurrentBook() {
             "Preparing watermarked document for printing..."
         );
 
+
         const response =
-            await fetch(PDF_URL);
+            await fetch(
+                PDF_URL
+            );
+
 
         if (!response.ok) {
+
             throw new Error(
                 "Unable to fetch PDF."
             );
+
         }
+
 
         const pdfBytes =
             await response.arrayBuffer();
+
 
         const pdfDoc =
             await PDFLib.PDFDocument.load(
                 pdfBytes
             );
 
+
         const font =
             await pdfDoc.embedFont(
                 PDFLib.StandardFonts.HelveticaBold
             );
 
+
         const pages =
             pdfDoc.getPages();
+
 
         for (
             const page of pages
@@ -1404,7 +2235,9 @@ async function printCurrentBook() {
             const {
                 width,
                 height
-            } = page.getSize();
+            } =
+                page.getSize();
+
 
             const size =
                 Math.max(
@@ -1418,26 +2251,37 @@ async function printCurrentBook() {
                     )
                 );
 
+
             const textWidth =
                 font.widthOfTextAtSize(
                     WATERMARK_TEXT,
                     size
                 );
 
+
             page.drawText(
                 WATERMARK_TEXT,
                 {
+
                     x:
-                        (width -
-                            textWidth) / 2,
+                        (
+                            width -
+                            textWidth
+                        ) / 2,
 
                     y:
-                        (height -
-                            size) / 2,
+                        (
+                            height -
+                            size
+                        ) / 2,
 
-                    size,
+                    size:
 
-                    font,
+                        size,
+
+                    font:
+
+                        font,
 
                     color:
                         PDFLib.rgb(
@@ -1450,13 +2294,19 @@ async function printCurrentBook() {
                         0.22,
 
                     rotate:
-                        PDFLib.degrees(-32)
+                        PDFLib.degrees(
+                            -32
+                        )
+
                 }
             );
+
         }
+
 
         const finalBytes =
             await pdfDoc.save();
+
 
         const blob =
             new Blob(
@@ -1467,8 +2317,12 @@ async function printCurrentBook() {
                 }
             );
 
+
         const url =
-            URL.createObjectURL(blob);
+            URL.createObjectURL(
+                blob
+            );
+
 
         const printWindow =
             window.open(
@@ -1476,16 +2330,23 @@ async function printCurrentBook() {
                 "_blank"
             );
 
+
         if (!printWindow) {
 
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(
+                url
+            );
+
 
             alert(
                 "Please allow popups to print the book."
             );
 
+
             return;
+
         }
+
 
         printWindow.addEventListener(
             "load",
@@ -1495,23 +2356,30 @@ async function printCurrentBook() {
                     function () {
 
                         try {
+
                             printWindow.print();
+
                         } catch (error) {
+
                             console.warn(
                                 "Print error:",
                                 error
                             );
+
                         }
 
                     },
                     1000
                 );
+
             }
         );
+
 
         announce(
             "Watermarked document ready for printing."
         );
+
 
     } catch (error) {
 
@@ -1520,12 +2388,19 @@ async function printCurrentBook() {
             error
         );
 
+
         alert(
             "Watermarked print could not be prepared."
         );
+
     }
+
 }
 
+
+/* =========================================================
+   PRINT BUTTON
+========================================================= */
 
 if (printButton) {
 
@@ -1533,6 +2408,7 @@ if (printButton) {
         "click",
         printCurrentBook
     );
+
 }
 
 
@@ -1547,19 +2423,26 @@ async function toggleFullscreen() {
             "readerApp"
         );
 
+
     if (!reader) {
+
         return;
+
     }
+
 
     try {
 
-        if (!document.fullscreenElement) {
+        if (
+            !document.fullscreenElement
+        ) {
 
             await reader.requestFullscreen();
 
         } else {
 
             await document.exitFullscreen();
+
         }
 
     } catch (error) {
@@ -1568,9 +2451,15 @@ async function toggleFullscreen() {
             "Fullscreen not available:",
             error
         );
+
     }
+
 }
 
+
+/* =========================================================
+   FULLSCREEN BUTTON
+========================================================= */
 
 if (fullscreenButton) {
 
@@ -1578,31 +2467,7 @@ if (fullscreenButton) {
         "click",
         toggleFullscreen
     );
-}
 
-
-/* =========================================================
-   SWIPE BUTTON
-========================================================= */
-
-if (swipeButton) {
-
-    swipeButton.addEventListener(
-        "click",
-        function () {
-
-            if (bookViewport) {
-
-                bookViewport.scrollIntoView({
-                    behavior: "smooth"
-                });
-            }
-
-            announce(
-                "Swipe navigation is enabled."
-            );
-        }
-    );
 }
 
 
@@ -1616,7 +2481,9 @@ if (previousPageButton) {
         "click",
         previousPage
     );
+
 }
+
 
 if (nextPageButton) {
 
@@ -1624,7 +2491,6 @@ if (nextPageButton) {
         "click",
         nextPage
     );
-
 
 }
 
@@ -1639,7 +2505,9 @@ if (zoomOutButton) {
         "click",
         zoomOut
     );
+
 }
+
 
 if (resetZoomButton) {
 
@@ -1647,7 +2515,9 @@ if (resetZoomButton) {
         "click",
         resetZoom
     );
+
 }
+
 
 if (zoomInButton) {
 
@@ -1655,6 +2525,7 @@ if (zoomInButton) {
         "click",
         zoomIn
     );
+
 }
 
 
@@ -1671,8 +2542,10 @@ if (pageNumberInput) {
             goToPage(
                 this.value
             );
+
         }
     );
+
 
     pageNumberInput.addEventListener(
         "keydown",
@@ -1685,14 +2558,19 @@ if (pageNumberInput) {
 
                 event.preventDefault();
 
+
                 goToPage(
                     this.value
                 );
 
+
                 this.blur();
+
             }
+
         }
     );
+
 }
 
 
@@ -1707,20 +2585,30 @@ document.addEventListener(
         const active =
             document.activeElement;
 
+
         const typing =
             active &&
             (
-                active.tagName === "INPUT" ||
-                active.tagName === "TEXTAREA" ||
+                active.tagName ===
+                "INPUT" ||
+
+                active.tagName ===
+                "TEXTAREA" ||
+
                 active.isContentEditable
             );
 
+
         if (typing) {
+
             return;
+
         }
 
+
         if (
-            event.key === "ArrowLeft"
+            event.key ===
+            "ArrowLeft"
         ) {
 
             event.preventDefault();
@@ -1728,10 +2616,13 @@ document.addEventListener(
             previousPage();
 
             return;
+
         }
 
+
         if (
-            event.key === "ArrowRight"
+            event.key ===
+            "ArrowRight"
         ) {
 
             event.preventDefault();
@@ -1739,7 +2630,9 @@ document.addEventListener(
             nextPage();
 
             return;
+
         }
+
 
         if (
             event.key === "+" ||
@@ -1751,7 +2644,9 @@ document.addEventListener(
             zoomIn();
 
             return;
+
         }
+
 
         if (
             event.key === "-"
@@ -1762,7 +2657,9 @@ document.addEventListener(
             zoomOut();
 
             return;
+
         }
+
 
         if (
             event.key === "0"
@@ -1773,7 +2670,9 @@ document.addEventListener(
             resetZoom();
 
             return;
+
         }
+
 
         if (
             event.key === "Home"
@@ -1781,10 +2680,14 @@ document.addEventListener(
 
             event.preventDefault();
 
-            goToPage(1);
+            goToPage(
+                1
+            );
 
             return;
+
         }
+
 
         if (
             event.key === "End"
@@ -1792,10 +2695,14 @@ document.addEventListener(
 
             event.preventDefault();
 
-            goToPage(pageCount);
+            goToPage(
+                pageCount
+            );
 
             return;
+
         }
+
 
         if (
             event.key === "f" ||
@@ -1805,7 +2712,9 @@ document.addEventListener(
             toggleFullscreen();
 
             return;
+
         }
+
 
         if (
             event.key === "t" ||
@@ -1817,7 +2726,9 @@ document.addEventListener(
             );
 
             return;
+
         }
+
     }
 );
 
@@ -1836,11 +2747,15 @@ if (bookViewport) {
                 !event.touches ||
                 !event.touches.length
             ) {
+
                 return;
+
             }
+
 
             touchStartX =
                 event.touches[0].clientX;
+
 
             touchStartY =
                 event.touches[0].clientY;
@@ -1860,14 +2775,19 @@ if (bookViewport) {
                 !event.changedTouches ||
                 !event.changedTouches.length
             ) {
+
                 return;
+
             }
+
 
             touchEndX =
                 event.changedTouches[0].clientX;
 
+
             touchEndY =
                 event.changedTouches[0].clientY;
+
 
             handleSwipe();
 
@@ -1876,6 +2796,7 @@ if (bookViewport) {
             passive: true
         }
     );
+
 }
 
 
@@ -1889,34 +2810,46 @@ function handleSwipe() {
         touchEndX -
         touchStartX;
 
+
     const deltaY =
         touchEndY -
         touchStartY;
 
+
     if (
         Math.abs(deltaX) < 60
     ) {
+
         return;
+
     }
+
 
     if (
         Math.abs(deltaX) <
         Math.abs(deltaY)
     ) {
+
         return;
+
     }
+
 
     if (deltaX < 0) {
 
         nextPage();
 
         return;
+
     }
+
 
     if (deltaX > 0) {
 
         previousPage();
+
     }
+
 }
 
 
@@ -1924,7 +2857,9 @@ function handleSwipe() {
    RESIZE
 ========================================================= */
 
-let resizeTimer = null;
+let resizeTimer =
+    null;
+
 
 window.addEventListener(
     "resize",
@@ -1933,6 +2868,7 @@ window.addEventListener(
         clearTimeout(
             resizeTimer
         );
+
 
         resizeTimer =
             setTimeout(
@@ -1943,11 +2879,13 @@ window.addEventListener(
                         renderPage(
                             currentPage
                         );
+
                     }
 
                 },
                 180
             );
+
     }
 );
 
@@ -1968,11 +2906,13 @@ window.addEventListener(
                     renderPage(
                         currentPage
                     );
+
                 }
 
             },
             300
         );
+
     }
 );
 
@@ -1993,11 +2933,13 @@ document.addEventListener(
                     renderPage(
                         currentPage
                     );
+
                 }
 
             },
             200
         );
+
     }
 );
 
@@ -2013,13 +2955,15 @@ if (pdfCanvas) {
         function (event) {
 
             event.preventDefault();
+
         }
     );
+
 }
 
 
 /* =========================================================
-   START
+   START READER
 ========================================================= */
 
 loadTheme();
@@ -2029,267 +2973,48 @@ setBookTitle();
 updateUI();
 
 loadPDF();
-/* =========================================
-   CHISHTI READER — BOOKMARK + SHARE
-========================================= */
 
-(function () {
 
-    const bookmarkBtn = document.getElementById("bookmarkBtn");
-    const shareBtn = document.getElementById("shareBtn");
+/* =========================================================
+   READY
+========================================================= */
 
-    const params = new URLSearchParams(window.location.search);
+console.log(
+    "======================================"
+);
 
-    const bookKey =
-        params.get("book") ||
-        params.get("pdf") ||
-        "current-book";
+console.log(
+    "📚 CHISHTI LIBRARY READER"
+);
 
-    const bookmarkKey =
-        "chishti_bookmark_" + bookKey;
+console.log(
+    "✅ PDF Reader Ready"
+);
 
+console.log(
+    "✅ Bookmark System Ready"
+);
 
-    /* =========================================
-       CURRENT PAGE
-    ========================================= */
+console.log(
+    "✅ Share System Ready"
+);
 
-    function getReaderPage() {
+console.log(
+    "✅ Zoom Ready"
+);
 
-        if (
-            typeof currentPage !== "undefined" &&
-            Number(currentPage) > 0
-        ) {
-            return Number(currentPage);
-        }
+console.log(
+    "✅ Theme Ready"
+);
 
-        if (
-            typeof currentPageNumber !== "undefined" &&
-            Number(currentPageNumber) > 0
-        ) {
-            return Number(currentPageNumber);
-        }
+console.log(
+    "✅ Fullscreen Ready"
+);
 
-        const text =
-            document.body.innerText.match(
-                /\b(\d+)\s*\/\s*\d+\b/
-            );
+console.log(
+    "✅ Watermarked Download Ready"
+);
 
-        return text
-            ? Number(text[1])
-            : 1;
-    }
-
-
-    /* =========================================
-       BOOKMARK
-    ========================================= */
-
-    function updateBookmark() {
-
-        if (!bookmarkBtn) return;
-
-        const saved =
-            localStorage.getItem(bookmarkKey);
-
-        const page =
-            getReaderPage();
-
-
-        if (
-            saved &&
-            Number(saved) === page
-        ) {
-
-            bookmarkBtn.classList.add("active");
-
-            bookmarkBtn.innerHTML =
-                '<i class="fas fa-bookmark"></i>';
-
-            bookmarkBtn.title =
-                "Remove Bookmark";
-
-        } else {
-
-            bookmarkBtn.classList.remove("active");
-
-            bookmarkBtn.innerHTML =
-                '<i class="far fa-bookmark"></i>';
-
-            bookmarkBtn.title =
-                "Bookmark Page " + page;
-
-        }
-
-    }
-
-
-    if (bookmarkBtn) {
-
-        bookmarkBtn.addEventListener(
-            "click",
-            function () {
-
-                const page =
-                    getReaderPage();
-
-                const saved =
-                    localStorage.getItem(bookmarkKey);
-
-
-                if (
-                    saved &&
-                    Number(saved) === page
-                ) {
-
-                    localStorage.removeItem(
-                        bookmarkKey
-                    );
-
-                    console.log(
-                        "🔖 Bookmark removed"
-                    );
-
-                } else {
-
-                    localStorage.setItem(
-                        bookmarkKey,
-                        String(page)
-                    );
-
-                    console.log(
-                        "🔖 Bookmark saved:",
-                        page
-                    );
-
-                }
-
-                updateBookmark();
-
-            }
-        );
-
-    }
-
-
-    /* =========================================
-       SHARE
-       DIRECT READER LINK
-    ========================================= */
-
-    if (shareBtn) {
-
-        shareBtn.addEventListener(
-            "click",
-            async function () {
-
-                const page =
-                    getReaderPage();
-
-                const shareURL =
-                    new URL(
-                        window.location.href
-                    );
-
-                /*
-                 * Current page bhi URL mein save hogi
-                 */
-                shareURL.searchParams.set(
-                    "page",
-                    page
-                );
-
-
-                const shareData = {
-
-                    title:
-                        "Chishti Library",
-
-                    text:
-                        "Read this book on Chishti Library — Page " +
-                        page,
-
-                    url:
-                        shareURL.href
-
-                };
-
-
-                /* Mobile / supported browsers */
-
-                if (
-                    navigator.share
-                ) {
-
-                    try {
-
-                        await navigator.share(
-                            shareData
-                        );
-
-                        console.log(
-                            "✅ Book shared"
-                        );
-
-                        return;
-
-                    } catch (error) {
-
-                        if (
-                            error.name ===
-                            "AbortError"
-                        ) {
-                            return;
-                        }
-
-                    }
-
-                }
-
-
-                /* Desktop fallback */
-
-                try {
-
-                    await navigator.clipboard.writeText(
-                        shareURL.href
-                    );
-
-                    alert(
-                        "✅ Reader link copied!\n\nPage " +
-                        page +
-                        " ka direct link copy ho gaya."
-                    );
-
-                } catch (error) {
-
-                    prompt(
-                        "Copy this reader link:",
-                        shareURL.href
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =========================================
-       KEEP BOOKMARK STATUS UPDATED
-    ========================================= */
-
-    setInterval(
-        updateBookmark,
-        500
-    );
-
-
-    updateBookmark();
-
-
-    console.log(
-        "✅ Bookmark + Share system ready"
-    );
-
-})();
+console.log(
+    "======================================"
+);
