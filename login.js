@@ -1,765 +1,717 @@
 "use strict";
 
 /*
-|--------------------------------------------------------------------------
-| CHISHTI LIBRARY LOGIN SYSTEM
-|--------------------------------------------------------------------------
-| Requires firebase.js to initialize:
-| firebase
-| firebase.auth()
-| firebase.firestore()
-|--------------------------------------------------------------------------
+=========================================================
+CHISHTI LIBRARY - LOGIN SYSTEM
+=========================================================
+
+IMPORTANT:
+
+Firebase configuration is NOT written here.
+
+firebase.js handles:
+
+- Firebase initialization
+- Firebase Auth
+- Firestore
+- Current user
+- Auth state
+
+This file only handles the LOGIN PAGE.
+=========================================================
 */
 
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    const loginForm =
-        document.getElementById("loginForm");
-
-    const emailInput =
-        document.getElementById("email");
-
-    const passwordInput =
-        document.getElementById("password");
-
-    const loginButton =
-        document.getElementById("loginButton");
-
-    const googleButton =
-        document.getElementById("googleButton");
-
-    const logoutButton =
-        document.getElementById("logoutButton");
-
-    const continueButton =
-        document.getElementById("continueButton");
-
-    const showPassword =
-        document.getElementById("showPassword");
-
-    const loginError =
-        document.getElementById("loginError");
-
-    const successMessage =
-        document.getElementById("successMessage");
-
-    const loginBox =
-        document.getElementById("loginBox");
-
-    const loggedInBox =
-        document.getElementById("loggedInBox");
-
-    const currentUserEmail =
-        document.getElementById("currentUserEmail");
-
-    const year =
-        document.getElementById("year");
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
 
-    if (year) {
+        /*
+        =================================================
+        ELEMENTS
+        =================================================
+        */
 
-        year.textContent =
-            new Date().getFullYear();
+        const loginForm =
+            document.getElementById("loginForm");
 
-    }
+        const emailInput =
+            document.getElementById("email");
 
+        const passwordInput =
+            document.getElementById("password");
 
-    /*
-    |--------------------------------------------------------------------------
-    | CHECK FIREBASE
-    |--------------------------------------------------------------------------
-    */
+        const loginButton =
+            document.getElementById("loginButton");
 
-    if (
-        typeof firebase === "undefined" ||
-        !firebase.apps ||
-        !firebase.apps.length
-    ) {
+        const loginButtonText =
+            document.getElementById("loginButtonText");
 
-        showError(
-            "Firebase load nahi hua. firebase.js check karo."
-        );
+        const googleButton =
+            document.getElementById("googleButton");
 
-        return;
+        const forgotPassword =
+            document.getElementById("forgotPassword");
 
-    }
+        const signupButton =
+            document.getElementById("signupButton");
 
+        const continueButton =
+            document.getElementById("continueButton");
 
-    let auth;
+        const togglePassword =
+            document.getElementById("togglePassword");
 
-    let db;
-
-
-    try {
-
-        auth =
-            firebase.auth();
-
-        db =
-            firebase.firestore();
-
-    } catch (error) {
-
-        console.error(
-            "Firebase error:",
-            error
-        );
-
-        showError(
-            "Firebase initialize nahi hua."
-        );
-
-        return;
-
-    }
+        const messageBox =
+            document.getElementById("message");
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | ERROR MESSAGE
-    |--------------------------------------------------------------------------
-    */
+        /*
+        =================================================
+        MESSAGE SYSTEM
+        =================================================
+        */
 
-    function showError(message) {
+        function showMessage(
+            message,
+            type = "error"
+        ) {
 
-        if (!loginError) return;
+            if (!messageBox) {
+                return;
+            }
 
-        loginError.textContent =
-            message;
-
-        loginError.style.display =
-            "block";
-
-    }
-
-
-    function hideError() {
-
-        if (!loginError) return;
-
-        loginError.textContent =
-            "";
-
-        loginError.style.display =
-            "none";
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SUCCESS
-    |--------------------------------------------------------------------------
-    */
-
-    function showSuccess(message) {
-
-        if (!successMessage) return;
-
-        const span =
-            successMessage.querySelector("span");
-
-        if (span) {
-
-            span.textContent =
+            messageBox.textContent =
                 message;
+
+            messageBox.className =
+                "message " + type;
+
+            messageBox.style.display =
+                "block";
 
         }
 
-        successMessage.style.display =
-            "flex";
 
-    }
+        function hideMessage() {
+
+            if (!messageBox) {
+                return;
+            }
+
+            messageBox.textContent = "";
+
+            messageBox.className =
+                "message";
+
+            messageBox.style.display =
+                "none";
+
+        }
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | LOADING
-    |--------------------------------------------------------------------------
-    */
+        /*
+        =================================================
+        LOADING
+        =================================================
+        */
 
-    function setLoading(loading) {
+        function setLoginLoading(
+            loading
+        ) {
 
-        if (loginButton) {
+            if (!loginButton) {
+                return;
+            }
+
 
             loginButton.disabled =
                 loading;
 
-            loginButton.innerHTML =
-                loading
 
-                    ? '<i class="fas fa-spinner fa-spin"></i> Logging in...'
+            if (loading) {
 
-                    : '<i class="fas fa-right-to-bracket"></i> <span>Login</span>';
+                loginButtonText.innerHTML = `
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    Logging in...
+                `;
 
-        }
+            } else {
 
-
-        if (googleButton) {
-
-            googleButton.disabled =
-                loading;
-
-        }
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CREATE / UPDATE USER PROFILE
-    |--------------------------------------------------------------------------
-    */
-
-    async function saveUserProfile(user) {
-
-        if (!user || !db) {
-            return;
-        }
-
-
-        const userRef =
-            db
-                .collection("users")
-                .doc(user.uid);
-
-
-        const data = {
-
-            uid: user.uid,
-
-            email:
-                user.email || "",
-
-            displayName:
-                user.displayName ||
-                "",
-
-            photoURL:
-                user.photoURL ||
-                "",
-
-            lastLogin:
-                firebase.firestore.FieldValue.serverTimestamp()
-
-        };
-
-
-        try {
-
-            const snapshot =
-                await userRef.get();
-
-
-            if (!snapshot.exists) {
-
-                data.createdAt =
-                    firebase.firestore.FieldValue
-                        .serverTimestamp();
-
-                data.likes =
-                    0;
-
-                data.comments =
-                    0;
-
-                data.shares =
-                    0;
-
-                data.views =
-                    0;
+                loginButtonText.textContent =
+                    "Login";
 
             }
 
-
-            await userRef.set(
-                data,
-                {
-                    merge: true
-                }
-            );
-
-
-        } catch (error) {
-
-            /*
-             * Profile save failure should not
-             * prevent successful login.
-             */
-
-            console.warn(
-                "User profile save error:",
-                error
-            );
-
-        }
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SHOW LOGGED-IN USER
-    |--------------------------------------------------------------------------
-    */
-
-    function showLoggedInUser(user) {
-
-        if (!user) {
-            return;
         }
 
 
-        if (loginBox) {
+        /*
+        =================================================
+        PASSWORD SHOW / HIDE
+        =================================================
+        */
 
-            loginBox.style.display =
-                "none";
+        if (togglePassword) {
 
-        }
+            togglePassword.addEventListener(
+                "click",
+                function () {
 
+                    const isPassword =
+                        passwordInput.type ===
+                        "password";
 
-        if (loggedInBox) {
 
-            loggedInBox.style.display =
-                "block";
+                    if (isPassword) {
 
-        }
+                        passwordInput.type =
+                            "text";
 
+                        togglePassword.innerHTML =
+                            '<i class="fa-solid fa-eye-slash"></i>';
 
-        if (currentUserEmail) {
-
-            currentUserEmail.textContent =
-                user.email ||
-                user.displayName ||
-                "Logged in user";
-
-        }
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | SHOW LOGIN FORM
-    |--------------------------------------------------------------------------
-    */
-
-    function showLoginForm() {
-
-        if (loginBox) {
-
-            loginBox.style.display =
-                "block";
-
-        }
-
-
-        if (loggedInBox) {
-
-            loggedInBox.style.display =
-                "none";
-
-        }
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | EMAIL LOGIN
-    |--------------------------------------------------------------------------
-    */
-
-    if (loginForm) {
-
-        loginForm.addEventListener(
-            "submit",
-            async function (event) {
-
-                event.preventDefault();
-
-                hideError();
-
-                const email =
-                    emailInput
-                        ? emailInput.value.trim()
-                        : "";
-
-                const password =
-                    passwordInput
-                        ? passwordInput.value
-                        : "";
-
-
-                if (!email || !password) {
-
-                    showError(
-                        "Email aur password dono enter karo."
-                    );
-
-                    return;
-
-                }
-
-
-                setLoading(true);
-
-
-                try {
-
-                    const result =
-                        await auth.signInWithEmailAndPassword(
-                            email,
-                            password
-                        );
-
-
-                    await saveUserProfile(
-                        result.user
-                    );
-
-
-                    showSuccess(
-                        "Login successful!"
-                    );
-
-
-                    setTimeout(
-                        function () {
-
-                            window.location.href =
-                                "./index.html";
-
-                        },
-                        800
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Email login error:",
-                        error
-                    );
-
-
-                    let message =
-                        "Login failed. Email ya password check karo.";
-
-
-                    switch (error.code) {
-
-                        case "auth/invalid-email":
-
-                            message =
-                                "Email address valid nahi hai.";
-
-                            break;
-
-
-                        case "auth/user-not-found":
-
-                            message =
-                                "Is email ka account nahi mila.";
-
-                            break;
-
-
-                        case "auth/wrong-password":
-
-                            message =
-                                "Password incorrect hai.";
-
-                            break;
-
-
-                        case "auth/invalid-credential":
-
-                            message =
-                                "Email ya password incorrect hai.";
-
-                            break;
-
-
-                        case "auth/user-disabled":
-
-                            message =
-                                "Ye account disabled hai.";
-
-                            break;
-
-
-                        case "auth/too-many-requests":
-
-                            message =
-                                "Bohat zyada login attempts. Thori dair baad try karo.";
-
-                            break;
-
-                    }
-
-
-                    showError(message);
-
-                } finally {
-
-                    setLoading(false);
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | GOOGLE LOGIN
-    |--------------------------------------------------------------------------
-    */
-
-    if (googleButton) {
-
-        googleButton.addEventListener(
-            "click",
-            async function () {
-
-                hideError();
-
-                setLoading(true);
-
-
-                try {
-
-                    const provider =
-                        new firebase.auth.GoogleAuthProvider();
-
-
-                    provider.setCustomParameters({
-
-                        prompt: "select_account"
-
-                    });
-
-
-                    const result =
-                        await auth.signInWithPopup(
-                            provider
-                        );
-
-
-                    await saveUserProfile(
-                        result.user
-                    );
-
-
-                    showSuccess(
-                        "Google login successful!"
-                    );
-
-
-                    setTimeout(
-                        function () {
-
-                            window.location.href =
-                                "./index.html";
-
-                        },
-                        800
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Google login error:",
-                        error
-                    );
-
-
-                    if (
-                        error.code ===
-                        "auth/popup-closed-by-user"
-                    ) {
-
-                        showError(
-                            "Google login cancel kar diya gaya."
+                        togglePassword.setAttribute(
+                            "aria-label",
+                            "Hide password"
                         );
 
                     } else {
 
-                        showError(
-                            "Google login failed."
+                        passwordInput.type =
+                            "password";
+
+                        togglePassword.innerHTML =
+                            '<i class="fa-solid fa-eye"></i>';
+
+                        togglePassword.setAttribute(
+                            "aria-label",
+                            "Show password"
                         );
 
                     }
 
-                } finally {
-
-                    setLoading(false);
-
                 }
-
-            }
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | LOGOUT
-    |--------------------------------------------------------------------------
-    */
-
-    if (logoutButton) {
-
-        logoutButton.addEventListener(
-            "click",
-            async function () {
-
-                try {
-
-                    await auth.signOut();
-
-                    showLoginForm();
-
-                    hideError();
-
-                    if (emailInput) {
-
-                        emailInput.value =
-                            "";
-
-                    }
-
-                    if (passwordInput) {
-
-                        passwordInput.value =
-                            "";
-
-                    }
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Logout error:",
-                        error
-                    );
-
-                    showError(
-                        "Logout nahi ho saka."
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CONTINUE TO LIBRARY
-    |--------------------------------------------------------------------------
-    */
-
-    if (continueButton) {
-
-        continueButton.addEventListener(
-            "click",
-            function () {
-
-                window.location.href =
-                    "./index.html";
-
-            }
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PASSWORD VISIBILITY
-    |--------------------------------------------------------------------------
-    */
-
-    if (showPassword && passwordInput) {
-
-        showPassword.addEventListener(
-            "click",
-            function () {
-
-                const hidden =
-                    passwordInput.type ===
-                    "password";
-
-
-                passwordInput.type =
-                    hidden
-                        ? "text"
-                        : "password";
-
-
-                this.innerHTML =
-                    hidden
-
-                        ? '<i class="fas fa-eye-slash"></i>'
-
-                        : '<i class="fas fa-eye"></i>';
-
-            }
-        );
-
-    }
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | AUTH STATE
-    |--------------------------------------------------------------------------
-    */
-
-    auth.onAuthStateChanged(
-        async function (user) {
-
-            console.log(
-                "Auth state:",
-                user
-                    ? user.email
-                    : "Guest"
             );
 
-
-            if (user) {
-
-                await saveUserProfile(
-                    user
-                );
+        }
 
 
-                /*
-                 * Agar already logged in hai,
-                 * login form ki jagah user box show hoga.
-                 */
+        /*
+        =================================================
+        EMAIL + PASSWORD LOGIN
+        =================================================
+        */
 
-                showLoggedInUser(
-                    user
-                );
+        if (loginForm) {
 
-            } else {
+            loginForm.addEventListener(
+                "submit",
+                async function (event) {
 
-                showLoginForm();
+                    event.preventDefault();
 
-            }
+                    hideMessage();
+
+
+                    const email =
+                        emailInput.value.trim();
+
+                    const password =
+                        passwordInput.value;
+
+
+                    if (!email) {
+
+                        showMessage(
+                            "Please enter your email."
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (!password) {
+
+                        showMessage(
+                            "Please enter your password."
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (
+                        !window.auth
+                    ) {
+
+                        showMessage(
+                            "Firebase Authentication is not ready."
+                        );
+
+                        console.error(
+                            "window.auth is missing."
+                        );
+
+                        return;
+
+                    }
+
+
+                    setLoginLoading(true);
+
+
+                    try {
+
+                        await window.auth
+                            .signInWithEmailAndPassword(
+                                email,
+                                password
+                            );
+
+
+                        showMessage(
+                            "Login successful! Welcome to Chishti Library.",
+                            "success"
+                        );
+
+
+                        /*
+                        ---------------------------------
+                        REDIRECT
+                        ---------------------------------
+                        */
+
+                        setTimeout(
+                            function () {
+
+                                window.location.href =
+                                    "./books.html";
+
+                            },
+                            700
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Login Error:",
+                            error
+                        );
+
+
+                        let message =
+                            "Login failed. Please try again.";
+
+
+                        switch (
+                            error.code
+                        ) {
+
+                            case
+                                "auth/user-not-found":
+
+                                message =
+                                    "No account found with this email.";
+
+                                break;
+
+
+                            case
+                                "auth/wrong-password":
+
+                                message =
+                                    "Incorrect password.";
+
+                                break;
+
+
+                            case
+                                "auth/invalid-credential":
+
+                                message =
+                                    "Email or password is incorrect.";
+
+                                break;
+
+
+                            case
+                                "auth/invalid-email":
+
+                                message =
+                                    "Please enter a valid email.";
+
+                                break;
+
+
+                            case
+                                "auth/user-disabled":
+
+                                message =
+                                    "This account has been disabled.";
+
+                                break;
+
+
+                            case
+                                "auth/too-many-requests":
+
+                                message =
+                                    "Too many attempts. Please try again later.";
+
+                                break;
+
+                        }
+
+
+                        showMessage(
+                            message
+                        );
+
+
+                    } finally {
+
+                        setLoginLoading(
+                            false
+                        );
+
+                    }
+
+                }
+            );
 
         }
-    );
 
 
-});
+        /*
+        =================================================
+        GOOGLE LOGIN
+        =================================================
+        */
+
+        if (googleButton) {
+
+            googleButton.addEventListener(
+                "click",
+                async function () {
+
+                    hideMessage();
+
+
+                    if (!window.auth) {
+
+                        showMessage(
+                            "Firebase Authentication is not ready."
+                        );
+
+                        return;
+
+                    }
+
+
+                    googleButton.disabled =
+                        true;
+
+
+                    googleButton.innerHTML = `
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        Connecting...
+                    `;
+
+
+                    try {
+
+                        const provider =
+                            new firebase.auth.GoogleAuthProvider();
+
+
+                        await window.auth
+                            .signInWithPopup(
+                                provider
+                            );
+
+
+                        showMessage(
+                            "Google login successful!",
+                            "success"
+                        );
+
+
+                        setTimeout(
+                            function () {
+
+                                window.location.href =
+                                    "./books.html";
+
+                            },
+                            700
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Google Login Error:",
+                            error
+                        );
+
+
+                        let message =
+                            "Google login failed.";
+
+
+                        if (
+                            error.code ===
+                            "auth/popup-closed-by-user"
+                        ) {
+
+                            message =
+                                "Google login was cancelled.";
+
+                        }
+
+
+                        if (
+                            error.code ===
+                            "auth/popup-blocked"
+                        ) {
+
+                            message =
+                                "Your browser blocked the Google login popup.";
+
+                        }
+
+
+                        showMessage(
+                            message
+                        );
+
+
+                    } finally {
+
+                        googleButton.disabled =
+                            false;
+
+                        googleButton.innerHTML = `
+                            <i class="fa-brands fa-google"></i>
+                            <span>
+                                Continue with Google
+                            </span>
+                        `;
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /*
+        =================================================
+        FORGOT PASSWORD
+        =================================================
+        */
+
+        if (forgotPassword) {
+
+            forgotPassword.addEventListener(
+                "click",
+                async function () {
+
+                    hideMessage();
+
+
+                    const email =
+                        emailInput.value.trim();
+
+
+                    if (!email) {
+
+                        showMessage(
+                            "Enter your email first, then click Forgot Password."
+                        );
+
+                        emailInput.focus();
+
+                        return;
+
+                    }
+
+
+                    if (!window.auth) {
+
+                        showMessage(
+                            "Firebase Authentication is not ready."
+                        );
+
+                        return;
+
+                    }
+
+
+                    try {
+
+                        await window.auth
+                            .sendPasswordResetEmail(
+                                email
+                            );
+
+
+                        showMessage(
+                            "Password reset email sent. Check your inbox.",
+                            "success"
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Password Reset Error:",
+                            error
+                        );
+
+
+                        let message =
+                            "Could not send password reset email.";
+
+
+                        if (
+                            error.code ===
+                            "auth/user-not-found"
+                        ) {
+
+                            message =
+                                "No account found with this email.";
+
+                        }
+
+
+                        if (
+                            error.code ===
+                            "auth/invalid-email"
+                        ) {
+
+                            message =
+                                "Please enter a valid email.";
+
+                        }
+
+
+                        showMessage(
+                            message
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /*
+        =================================================
+        CREATE ACCOUNT
+        =================================================
+        */
+
+        if (signupButton) {
+
+            signupButton.addEventListener(
+                "click",
+                function () {
+
+                    window.location.href =
+                        "./signup.html";
+
+                }
+            );
+
+        }
+
+
+        /*
+        =================================================
+        CONTINUE AS GUEST
+        =================================================
+        */
+
+        if (continueButton) {
+
+            continueButton.addEventListener(
+                "click",
+                function () {
+
+                    window.location.href =
+                        "./books.html";
+
+                }
+            );
+
+        }
+
+
+        /*
+        =================================================
+        IF USER IS ALREADY LOGGED IN
+        =================================================
+        */
+
+        window.addEventListener(
+            "firebaseAuthChanged",
+            function (event) {
+
+                const user =
+                    event.detail.user;
+
+
+                if (user) {
+
+                    console.log(
+                        "Already logged in:",
+                        user.email || user.uid
+                    );
+
+                }
+
+            }
+        );
+
+
+        /*
+        =================================================
+        READY
+        =================================================
+        */
+
+        console.log(
+            "===================================="
+        );
+
+        console.log(
+            "🔐 CHISHTI LIBRARY LOGIN"
+        );
+
+        console.log(
+            "✅ Login system ready"
+        );
+
+        console.log(
+            "✅ Google login ready"
+        );
+
+        console.log(
+            "✅ Password reset ready"
+        );
+
+        console.log(
+            "===================================="
+        );
+
+    }
+);
