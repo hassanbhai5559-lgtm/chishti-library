@@ -354,5 +354,45 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+  
+},
+  {
+    "id":29,
+    "title": "Ya Muhammad",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "Ya Muhammad-cover.png",
+    "pdf": "Ya Mohammad.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
+ },
+  {
+    "id":30,
+    "title": "Mushkil Kusha",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "mushkil kusha.png",
+    "pdf": "Mushkil Kusha.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
+},
+  {
+    "id":31,
+    "title": "Asna Al Matalib",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "Asna Al matalib-cover.png",
+    "pdf": "Asna Al Matalib.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
