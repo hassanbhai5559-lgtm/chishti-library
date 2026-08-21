@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Chishti AI — ChishtiLibrary.com"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4B0000"
+    >
+
+    <title>Chishti AI — ChishtiLibrary.com</title>
+
+
+    <!-- Font Awesome -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+
+    <!-- Chishti AI CSS -->
+
+    <link
+        rel="stylesheet"
+        href="./ai.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div
+        id="aiApp"
+        class="ai-app"
+    >
+
+
+        <!-- =========================================
+             HEADER
+        ========================================== -->
+
+        <header class="ai-header">
+
+            <div class="ai-brand">
+
+                <div class="ai-logo">
+                    <i class="fas fa-book-quran"></i>
+                </div>
+
+                <div>
+
+                    <div class="ai-brand-name">
+                        ChishtiLibrary.com
+                    </div>
+
+                    <div class="ai-brand-subtitle">
+                        CHISHTI AI
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="ai-header-right">
+
+                <div
+                    id="loginStatus"
+                    class="login-status"
+                >
+                    <i class="fas fa-user"></i>
+                    <span>Guest</span>
+                </div>
+
+                <button
+                    id="newChatButton"
+                    class="header-button"
+                    type="button"
+                    title="New Chat"
+                >
+                    <i class="fas fa-plus"></i>
+                    <span>New Chat</span>
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================================
+             MAIN
+        ========================================== -->
+
+        <main class="ai-main">
+
+
+            <!-- =====================================
+                 WELCOME
+            ====================================== -->
+
+            <section
+                id="welcomeScreen"
+                class="welcome-screen"
+            >
+
+                <div class="welcome-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+
+                <h1>
+                    Welcome to Chishti AI
+                </h1>
+
+                <p>
+                    Your intelligent assistant for
+                    ChishtiLibrary.com
+                </p>
+
+
+                <div class="command-grid">
+
+                    <button
+                        class="command-card"
+                        data-command="search "
+                        type="button"
+                    >
+
+                        <i class="fas fa-search"></i>
+
+                        <strong>
+                            Search Books
+                        </strong>
+
+                        <span>
+                            Find books in the library
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="command-card"
+                        data-command="open "
+                        type="button"
+                    >
+
+                        <i class="fas fa-book-open"></i>
+
+                        <strong>
+                            Open Book
+                        </strong>
+
+                        <span>
+                            Open a book directly
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="command-card"
+                        data-command="help"
+                        type="button"
+                    >
+
+                        <i class="fas fa-circle-question"></i>
+
+                        <strong>
+                            Commands
+                        </strong>
+
+                        <span>
+                            See available commands
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="command-card"
+                        data-command="my bookmarks"
+                        type="button"
+                    >
+
+                        <i class="fas fa-bookmark"></i>
+
+                        <strong>
+                            Bookmarks
+                        </strong>
+
+                        <span>
+                            View your saved pages
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 CHAT
+            ====================================== -->
+
+            <section
+                id="chatContainer"
+                class="chat-container"
+                aria-live="polite"
+            ></section>
+
+
+            <!-- =====================================
+                 TYPING
+            ====================================== -->
+
+            <div
+                id="typingIndicator"
+                class="typing-indicator"
+                hidden
+            >
+
+                <div class="typing-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+
+                <div class="typing-bubble">
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </div>
+
+            </div>
+
+
+        </main>
+
+
+        <!-- =========================================
+             INPUT AREA
+        ========================================== -->
+
+        <footer class="ai-footer">
+
+            <div class="input-wrapper">
+
+                <textarea
+                    id="messageInput"
+                    class="message-input"
+                    rows="1"
+                    maxlength="1000"
+                    placeholder="Ask Chishti AI or type: open book name..."
+                    aria-label="Message Chishti AI"
+                ></textarea>
+
+
+                <button
+                    id="sendButton"
+                    class="send-button"
+                    type="button"
+                    title="Send"
+                    aria-label="Send message"
+                >
+
+                    <i class="fas fa-paper-plane"></i>
+
+                </button>
+
+            </div>
+
+
+            <div class="footer-hint">
+
+                Try:
+                <code>open book Shahnameh</code>
+                <span>•</span>
+                <code>search Yusuf</code>
+                <span>•</span>
+                <code>help</code>
+
+            </div>
+
+        </footer>
+
+
+    </div>
+
+
+    <!-- =========================================
+         FIREBASE
+    ========================================== -->
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
+    <!-- =========================================
+         FIREBASE CONFIG
+         Same project as Chishti Library
+    ========================================== -->
+
+    <script>
+
+        const firebaseConfig = {
+
+            apiKey:
+                "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
+
+            authDomain:
+                "chishti-library.firebaseapp.com",
+
+            projectId:
+                "chishti-library",
+
+            storageBucket:
+                "chishti-library.firebasestorage.app",
+
+            messagingSenderId:
+                "103447043162",
+
+            appId:
+                "1:103447043162:web:f242cd2670aaa9786e8c63",
+
+            measurementId:
+                "G-833P7N3LNT"
+        };
+
+
+        if (!firebase.apps.length) {
+
+            firebase.initializeApp(
+                firebaseConfig
+            );
+
+        }
+
+
+        window.db =
+            firebase.firestore();
+
+        window.auth =
+            firebase.auth();
+
+    </script>
+
+
+    <!-- =========================================
+         CHISHTI AI JS
+    ========================================== -->
+
+    <script
+        src="./ai.js"
+    ></script>
+
+
+</body>
+
+</html>
