@@ -1,0 +1,1103 @@
+/* =========================================================
+   CHISHTI AI
+   ChishtiLibrary.com
+========================================================= */
+
+:root {
+
+    --maroon: #4B0000;
+    --deep-maroon: #350000;
+
+    --gold: #D4A500;
+    --light-gold: #F0CF55;
+
+    --white: #FFFFFF;
+    --black: #160000;
+
+    --background: #f7f3ed;
+    --surface: #ffffff;
+
+    --text: #241414;
+    --muted: #786868;
+
+    --border: rgba(75, 0, 0, 0.12);
+
+    --shadow:
+        0 10px 35px rgba(53, 0, 0, 0.10);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+
+    box-sizing: border-box;
+
+    margin: 0;
+
+    padding: 0;
+
+}
+
+
+html,
+body {
+
+    width: 100%;
+
+    height: 100%;
+
+}
+
+
+body {
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        var(--background);
+
+    color:
+        var(--text);
+
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.ai-app {
+
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.ai-header {
+
+    height: 74px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--deep-maroon),
+            var(--maroon)
+        );
+
+    color:
+        var(--white);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding:
+        0 28px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.18);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 50;
+
+}
+
+
+.ai-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+}
+
+
+.ai-logo {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 12px;
+
+    background:
+        var(--gold);
+
+    color:
+        var(--maroon);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 21px;
+
+}
+
+
+.ai-brand-name {
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+}
+
+
+.ai-brand-subtitle {
+
+    color:
+        var(--light-gold);
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    font-weight: 800;
+
+    margin-top: 2px;
+
+}
+
+
+.ai-header-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.login-status {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding:
+        8px 12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.18);
+
+    border-radius: 20px;
+
+    font-size: 13px;
+
+}
+
+
+.header-button {
+
+    border: none;
+
+    background:
+        rgba(255,255,255,.10);
+
+    color:
+        white;
+
+    padding:
+        10px 14px;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+}
+
+
+.header-button:hover {
+
+    background:
+        rgba(255,255,255,.18);
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.ai-main {
+
+    width: 100%;
+
+    max-width: 1050px;
+
+    margin: 0 auto;
+
+    flex: 1;
+
+    padding:
+        35px 20px 140px;
+
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+.welcome-screen {
+
+    text-align: center;
+
+    padding:
+        30px 10px 15px;
+
+}
+
+
+.welcome-icon {
+
+    width: 76px;
+
+    height: 76px;
+
+    margin:
+        0 auto 18px;
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--maroon),
+            var(--deep-maroon)
+        );
+
+    color:
+        var(--gold);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 34px;
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.welcome-screen h1 {
+
+    color:
+        var(--maroon);
+
+    font-size: 34px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.welcome-screen p {
+
+    color:
+        var(--muted);
+
+    font-size: 15px;
+
+}
+
+
+/* =========================================================
+   COMMAND GRID
+========================================================= */
+
+.command-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-top: 30px;
+
+}
+
+
+.command-card {
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 15px;
+
+    padding: 20px 14px;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    color:
+        var(--text);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(75,0,0,.05);
+
+    transition:
+        .2s ease;
+
+}
+
+
+.command-card:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(212,165,0,.55);
+
+    box-shadow:
+        var(--shadow);
+
+}
+
+
+.command-card i {
+
+    color:
+        var(--gold);
+
+    font-size: 22px;
+
+}
+
+
+.command-card strong {
+
+    color:
+        var(--maroon);
+
+}
+
+
+.command-card span {
+
+    font-size: 12px;
+
+    color:
+        var(--muted);
+
+    line-height: 1.4;
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+.chat-container {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+
+.chat-message {
+
+    display: flex;
+
+    gap: 11px;
+
+    max-width: 85%;
+
+}
+
+
+.chat-message.user {
+
+    margin-left: auto;
+
+    flex-direction: row-reverse;
+
+}
+
+
+.chat-avatar {
+
+    width: 38px;
+
+    height: 38px;
+
+    min-width: 38px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        var(--maroon);
+
+    color:
+        var(--gold);
+
+}
+
+
+.chat-message.user .chat-avatar {
+
+    background:
+        var(--gold);
+
+    color:
+        var(--maroon);
+
+}
+
+
+.message-bubble {
+
+    padding:
+        12px 15px;
+
+    border-radius:
+        14px;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.04);
+
+    line-height: 1.55;
+
+    font-size: 14px;
+
+}
+
+
+.chat-message.user .message-bubble {
+
+    background:
+        var(--maroon);
+
+    color:
+        white;
+
+    border:
+        none;
+
+}
+
+
+/* =========================================================
+   BOOK RESULTS
+========================================================= */
+
+.book-results {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+}
+
+
+.book-card {
+
+    background:
+        #fffdf9;
+
+    border:
+        1px solid
+        rgba(212,165,0,.30);
+
+    border-radius: 12px;
+
+    padding: 13px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.book-card-icon {
+
+    width: 42px;
+
+    height: 50px;
+
+    border-radius: 7px;
+
+    background:
+        var(--maroon);
+
+    color:
+        var(--gold);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+}
+
+
+.book-card-info {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+.book-card-title {
+
+    color:
+        var(--maroon);
+
+    font-weight: 700;
+
+    font-size: 14px;
+
+    word-break: break-word;
+
+}
+
+
+.book-card-meta {
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+
+    margin-top: 3px;
+
+}
+
+
+.open-book-button {
+
+    border:
+        none;
+
+    background:
+        var(--maroon);
+
+    color:
+        white;
+
+    padding:
+        9px 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.open-book-button:hover {
+
+    background:
+        var(--deep-maroon);
+
+}
+
+
+/* =========================================================
+   TYPING
+========================================================= */
+
+.typing-indicator {
+
+    display: flex;
+
+    gap: 10px;
+
+    align-items: center;
+
+    margin-top: 15px;
+
+}
+
+
+.typing-avatar {
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 12px;
+
+    background:
+        var(--maroon);
+
+    color:
+        var(--gold);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.typing-bubble {
+
+    padding:
+        13px 15px;
+
+    background:
+        white;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius: 14px;
+
+    display: flex;
+
+    gap: 4px;
+
+}
+
+
+.typing-bubble span {
+
+    width: 6px;
+
+    height: 6px;
+
+    border-radius: 50%;
+
+    background:
+        var(--gold);
+
+    animation:
+        typing 1s infinite;
+
+}
+
+
+.typing-bubble span:nth-child(2) {
+
+    animation-delay:
+        .15s;
+
+}
+
+
+.typing-bubble span:nth-child(3) {
+
+    animation-delay:
+        .3s;
+
+}
+
+
+@keyframes typing {
+
+    0%,
+    60%,
+    100% {
+
+        transform:
+            translateY(0);
+
+        opacity:
+            .4;
+
+    }
+
+    30% {
+
+        transform:
+            translateY(-4px);
+
+        opacity:
+            1;
+
+    }
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.ai-footer {
+
+    position: fixed;
+
+    bottom: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    background:
+        rgba(247,243,237,.95);
+
+    backdrop-filter:
+        blur(14px);
+
+    border-top:
+        1px solid
+        var(--border);
+
+    padding:
+        12px 20px 15px;
+
+    z-index: 40;
+
+}
+
+
+.input-wrapper {
+
+    max-width: 1050px;
+
+    margin: 0 auto;
+
+    background:
+        white;
+
+    border:
+        1px solid
+        rgba(75,0,0,.16);
+
+    border-radius: 15px;
+
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding:
+        7px 8px 7px 15px;
+
+    box-shadow:
+        0 6px 25px
+        rgba(75,0,0,.08);
+
+}
+
+
+.message-input {
+
+    flex: 1;
+
+    resize: none;
+
+    border: none;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    min-height: 38px;
+
+    max-height: 130px;
+
+    padding:
+        10px 5px;
+
+}
+
+
+.send-button {
+
+    width: 44px;
+
+    height: 44px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background:
+        var(--maroon);
+
+    color:
+        var(--gold);
+
+    cursor: pointer;
+
+    font-size: 16px;
+
+}
+
+
+.send-button:hover {
+
+    background:
+        var(--deep-maroon);
+
+}
+
+
+.send-button:disabled {
+
+    opacity: .5;
+
+    cursor:
+        not-allowed;
+
+}
+
+
+.footer-hint {
+
+    max-width: 1050px;
+
+    margin:
+        7px auto 0;
+
+    text-align: center;
+
+    color:
+        var(--muted);
+
+    font-size: 10px;
+
+}
+
+
+.footer-hint code {
+
+    color:
+        var(--maroon);
+
+    background:
+        rgba(75,0,0,.06);
+
+    padding:
+        3px 5px;
+
+    border-radius: 4px;
+
+}
+
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+[hidden] {
+
+    display:
+        none !important;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 750px) {
+
+    .ai-header {
+
+        height: 64px;
+
+        padding:
+            0 12px;
+
+    }
+
+
+    .ai-brand-name {
+
+        font-size: 13px;
+
+    }
+
+
+    .ai-brand-subtitle {
+
+        font-size: 9px;
+
+    }
+
+
+    .ai-logo {
+
+        width: 38px;
+
+        height: 38px;
+
+        font-size: 17px;
+
+    }
+
+
+    .login-status {
+
+        display: none;
+
+    }
+
+
+    .header-button {
+
+        padding:
+            9px;
+
+    }
+
+
+    .header-button span {
+
+        display: none;
+
+    }
+
+
+    .ai-main {
+
+        padding:
+            22px 12px 145px;
+
+    }
+
+
+    .welcome-screen h1 {
+
+        font-size: 25px;
+
+    }
+
+
+    .command-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+
+    }
+
+
+    .command-card {
+
+        padding:
+            15px 12px;
+
+    }
+
+
+    .chat-message {
+
+        max-width: 94%;
+
+    }
+
+
+    .book-card {
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .open-book-button {
+
+        padding:
+            10px;
+
+    }
+
+
+    .footer-hint {
+
+        display: none;
+
+    }
+
+}
