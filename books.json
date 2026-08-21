@@ -341,5 +341,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id":28,
+    "title": "Noor e Noor",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "noor e noor-cover.png",
+    "pdf": "noor e noor.pdf",
+    "description": "A Naat book by hazrat allama saim chishti",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
