@@ -1,1604 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>Admin Panel | Chishti Library</title>
-
-    <link
-        rel="icon"
-        type="image/png"
-        href="logo.png">
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
-
-    <style>
-
-        *{
-            box-sizing:border-box;
-            margin:0;
-            padding:0;
-        }
-
-        body{
-            font-family:Poppins,sans-serif;
-            background:#f5f5f5;
-            color:#222;
-        }
-
-        button,
-        input,
-        textarea,
-        select{
-            font-family:inherit;
-        }
-
-
-        /* =================================
-           SIDEBAR
-        ================================= */
-
-        .sidebar{
-
-            position:fixed;
-
-            left:0;
-            top:0;
-
-            width:250px;
-            height:100vh;
-
-            background:#2b0000;
-
-            color:white;
-
-            padding:22px 16px;
-
-            z-index:1000;
-
-            overflow-y:auto;
-
-        }
-
-
-        .sidebar-logo{
-
-            text-align:center;
-
-            padding:5px 0 22px;
-
-            border-bottom:
-                1px solid
-                rgba(255,255,255,.15);
-
-        }
-
-
-        .sidebar-logo img{
-
-            width:70px;
-            height:70px;
-
-            object-fit:contain;
-
-        }
-
-
-        .sidebar-logo h2{
-
-            font-size:17px;
-
-            margin-top:8px;
-
-        }
-
-
-        .sidebar-logo span{
-
-            font-size:11px;
-
-            opacity:.7;
-
-        }
-
-
-        .sidebar-menu{
-
-            list-style:none;
-
-            margin-top:22px;
-
-        }
-
-
-        .sidebar-menu li{
-
-            margin-bottom:7px;
-
-        }
-
-
-        .sidebar-menu button{
-
-            width:100%;
-
-            border:none;
-
-            background:transparent;
-
-            color:white;
-
-            padding:13px 14px;
-
-            border-radius:10px;
-
-            text-align:left;
-
-            cursor:pointer;
-
-            transition:.2s;
-
-        }
-
-
-        .sidebar-menu button:hover,
-        .sidebar-menu button.active{
-
-            background:
-                rgba(255,255,255,.13);
-
-        }
-
-
-        .sidebar-menu i{
-
-            width:25px;
-
-        }
-
-
-        /* =================================
-           MAIN
-        ================================= */
-
-        .main{
-
-            margin-left:250px;
-
-            min-height:100vh;
-
-        }
-
-
-        .topbar{
-
-            height:72px;
-
-            background:white;
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:space-between;
-
-            padding:0 28px;
-
-            box-shadow:
-                0 2px 15px
-                rgba(0,0,0,.07);
-
-            position:sticky;
-
-            top:0;
-
-            z-index:100;
-
-        }
-
-
-        .topbar h2{
-
-            color:#2b0000;
-
-            font-size:20px;
-
-        }
-
-
-        .admin-email{
-
-            color:#777;
-
-            font-size:12px;
-
-            margin-right:12px;
-
-        }
-
-
-        .logout-btn{
-
-            border:none;
-
-            background:#2b0000;
-
-            color:white;
-
-            padding:10px 17px;
-
-            border-radius:9px;
-
-            cursor:pointer;
-
-            font-weight:600;
-
-        }
-
-
-        .content{
-
-            padding:28px;
-
-        }
-
-
-        /* =================================
-           SECTIONS
-        ================================= */
-
-        .admin-section{
-
-            display:none;
-
-        }
-
-
-        .admin-section.active{
-
-            display:block;
-
-        }
-
-
-        /* =================================
-           STATS
-        ================================= */
-
-        .stats{
-
-            display:grid;
-
-            grid-template-columns:
-                repeat(4,1fr);
-
-            gap:18px;
-
-            margin-bottom:25px;
-
-        }
-
-
-        .stat-card{
-
-            background:white;
-
-            border-radius:17px;
-
-            padding:22px;
-
-            box-shadow:
-                0 5px 25px
-                rgba(0,0,0,.06);
-
-        }
-
-
-        .stat-card i{
-
-            font-size:25px;
-
-            color:#2b0000;
-
-            margin-bottom:13px;
-
-        }
-
-
-        .stat-card h3{
-
-            color:#2b0000;
-
-            font-size:29px;
-
-            margin-bottom:3px;
-
-        }
-
-
-        .stat-card p{
-
-            color:#777;
-
-            font-size:13px;
-
-        }
-
-
-        /* =================================
-           PANELS
-        ================================= */
-
-        .panel{
-
-            background:white;
-
-            border-radius:18px;
-
-            padding:25px;
-
-            box-shadow:
-                0 5px 25px
-                rgba(0,0,0,.06);
-
-            margin-bottom:22px;
-
-        }
-
-
-        .panel-header{
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:space-between;
-
-            gap:15px;
-
-            margin-bottom:22px;
-
-        }
-
-
-        .panel h2{
-
-            color:#2b0000;
-
-            font-size:21px;
-
-        }
-
-
-        .panel-description{
-
-            color:#777;
-
-            font-size:14px;
-
-            line-height:1.7;
-
-        }
-
-
-        /* =================================
-           SEARCH
-        ================================= */
-
-        .search-box{
-
-            position:relative;
-
-            width:280px;
-
-        }
-
-
-        .search-box i{
-
-            position:absolute;
-
-            left:13px;
-
-            top:50%;
-
-            transform:
-                translateY(-50%);
-
-            color:#777;
-
-        }
-
-
-        .search-box input{
-
-            width:100%;
-
-            padding:11px 13px 11px 38px;
-
-            border:1px solid #ddd;
-
-            border-radius:10px;
-
-            outline:none;
-
-        }
-
-
-        .search-box input:focus{
-
-            border-color:#2b0000;
-
-        }
-
-
-        /* =================================
-           BOOK GRID
-        ================================= */
-
-        .book-list{
-
-            display:grid;
-
-            grid-template-columns:
-                repeat(3,1fr);
-
-            gap:18px;
-
-        }
-
-
-        .book-card{
-
-            background:white;
-
-            border:1px solid #eee;
-
-            border-radius:16px;
-
-            overflow:hidden;
-
-        }
-
-
-        .book-cover{
-
-            width:100%;
-
-            height:220px;
-
-            object-fit:cover;
-
-            background:#eee;
-
-            display:block;
-
-        }
-
-
-        .book-card-body{
-
-            padding:17px;
-
-        }
-
-
-        .book-card h3{
-
-            color:#2b0000;
-
-            font-size:16px;
-
-            margin-bottom:5px;
-
-        }
-
-
-        .book-author{
-
-            color:#777;
-
-            font-size:13px;
-
-            margin-bottom:4px;
-
-        }
-
-
-        .book-category{
-
-            display:inline-block;
-
-            background:#f2e8e8;
-
-            color:#2b0000;
-
-            padding:4px 8px;
-
-            border-radius:6px;
-
-            font-size:11px;
-
-            margin-bottom:14px;
-
-        }
-
-
-        .book-actions{
-
-            display:flex;
-
-            gap:8px;
-
-        }
-
-
-        .book-actions button{
-
-            flex:1;
-
-            border:none;
-
-            padding:9px;
-
-            border-radius:8px;
-
-            cursor:pointer;
-
-            font-weight:600;
-
-        }
-
-
-        .edit-btn{
-
-            background:#2b0000;
-
-            color:white;
-
-        }
-
-
-        .delete-btn{
-
-            background:#f3eeee;
-
-            color:#b00000;
-
-        }
-
-
-        /* =================================
-           FORM
-        ================================= */
-
-        .form-grid{
-
-            display:grid;
-
-            grid-template-columns:
-                repeat(2,1fr);
-
-            gap:18px;
-
-        }
-
-
-        .form-group{
-
-            display:flex;
-
-            flex-direction:column;
-
-            gap:7px;
-
-        }
-
-
-        .form-group.full{
-
-            grid-column:1/-1;
-
-        }
-
-
-        .form-group label{
-
-            font-weight:600;
-
-            font-size:13px;
-
-        }
-
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select{
-
-            width:100%;
-
-            padding:12px;
-
-            border:1px solid #ddd;
-
-            border-radius:10px;
-
-            outline:none;
-
-            background:white;
-
-        }
-
-
-        .form-group textarea{
-
-            min-height:125px;
-
-            resize:vertical;
-
-        }
-
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus{
-
-            border-color:#2b0000;
-
-        }
-
-
-        .cover-preview{
-
-            width:120px;
-
-            height:160px;
-
-            object-fit:cover;
-
-            border-radius:9px;
-
-            border:1px solid #ddd;
-
-            margin-top:5px;
-
-            display:none;
-
-        }
-
-
-        .form-buttons{
-
-            display:flex;
-
-            gap:10px;
-
-            margin-top:20px;
-
-        }
-
-
-        .save-btn,
-        .clear-btn{
-
-            border:none;
-
-            padding:12px 20px;
-
-            border-radius:9px;
-
-            cursor:pointer;
-
-            font-weight:600;
-
-        }
-
-
-        .save-btn{
-
-            background:#2b0000;
-
-            color:white;
-
-        }
-
-
-        .clear-btn{
-
-            background:#eee;
-
-            color:#222;
-
-        }
-
-
-        /* =================================
-           NOTIFICATION
-        ================================= */
-
-        .notification-grid{
-
-            display:grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap:18px;
-
-        }
-
-
-        .notification-grid textarea{
-
-            min-height:120px;
-
-        }
-
-
-        .notification-btn{
-
-            margin-top:18px;
-
-            background:#2b0000;
-
-            color:white;
-
-            border:none;
-
-            padding:12px 20px;
-
-            border-radius:9px;
-
-            cursor:pointer;
-
-            font-weight:600;
-
-        }
-
-
-        /* =================================
-           MESSAGE
-        ================================= */
-
-        .message{
-
-            display:none;
-
-            padding:11px 14px;
-
-            border-radius:9px;
-
-            margin-bottom:18px;
-
-            font-size:13px;
-
-        }
-
-
-        .message.show{
-
-            display:block;
-
-        }
-
-
-        .message.success{
-
-            background:#e9f9ef;
-
-            color:#16803c;
-
-        }
-
-
-        .message.error{
-
-            background:#fff0f0;
-
-            color:#b00000;
-
-        }
-
-
-        /* =================================
-           EMPTY / LOADING
-        ================================= */
-
-        .empty-state{
-
-            text-align:center;
-
-            padding:35px 15px;
-
-            color:#777;
-
-        }
-
-
-        .empty-state i{
-
-            font-size:35px;
-
-            margin-bottom:10px;
-
-            color:#bbb;
-
-        }
-
-
-        /* =================================
-           MOBILE
-        ================================= */
-
-        .mobile-menu-btn{
-
-            display:none;
-
-            border:none;
-
-            background:#2b0000;
-
-            color:white;
-
-            width:40px;
-
-            height:40px;
-
-            border-radius:8px;
-
-            cursor:pointer;
-
-        }
-
-
-        @media(max-width:1100px){
-
-            .stats{
-
-                grid-template-columns:
-                    repeat(2,1fr);
-
-            }
-
-            .book-list{
-
-                grid-template-columns:
-                    repeat(2,1fr);
-
-            }
-
-        }
-
-
-        @media(max-width:800px){
-
-            .sidebar{
-
-                transform:
-                    translateX(-100%);
-
-                transition:.25s;
-
-            }
-
-            .sidebar.open{
-
-                transform:
-                    translateX(0);
-
-            }
-
-            .main{
-
-                margin-left:0;
-
-            }
-
-            .mobile-menu-btn{
-
-                display:block;
-
-            }
-
-            .topbar{
-
-                gap:10px;
-
-            }
-
-            .admin-email{
-
-                display:none;
-
-            }
-
-            .form-grid,
-            .notification-grid{
-
-                grid-template-columns:1fr;
-
-            }
-
-            .form-group.full{
-
-                grid-column:auto;
-
-            }
-
-        }
-
-
-        @media(max-width:600px){
-
-            .content{
-
-                padding:15px;
-
-            }
-
-            .stats{
-
-                grid-template-columns:1fr;
-
-            }
-
-            .book-list{
-
-                grid-template-columns:1fr;
-
-            }
-
-            .panel{
-
-                padding:18px;
-
-            }
-
-            .panel-header{
-
-                align-items:flex-start;
-
-                flex-direction:column;
-
-            }
-
-            .search-box{
-
-                width:100%;
-
-            }
-
-            .topbar{
-
-                padding:0 15px;
-
-            }
-
-        }
-
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chishti AI — Admin Panel</title>
+  <link rel="stylesheet" href="admin.css">
 </head>
-
 
 <body>
 
-
-<!-- ==========================================
-     SIDEBAR
-========================================== -->
-
-<aside class="sidebar" id="sidebar">
-
-    <div class="sidebar-logo">
-
-        <img
-            src="logo.png"
-            alt="Chishti Library"
-            onerror="this.style.display='none'">
-
-        <h2>CHISHTI LIBRARY</h2>
-
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">C</div>
+      <div>
+        <h2>Chishti AI</h2>
         <span>Admin Panel</span>
-
+      </div>
     </div>
 
+    <nav>
+      <button class="nav-btn active" data-section="dashboard">
+        <span>⌂</span> Dashboard
+      </button>
 
-    <ul class="sidebar-menu">
+      <button class="nav-btn" data-section="knowledge">
+        <span>🧠</span> Knowledge
+      </button>
 
-        <li>
+      <button class="nav-btn" data-section="books">
+        <span>📚</span> Books
+      </button>
+    </nav>
 
-            <button
-                class="active"
-                data-section="dashboard">
-
-                <i class="fas fa-chart-line"></i>
-
-                Dashboard
-
-            </button>
-
-        </li>
-
-
-        <li>
-
-            <button
-                data-section="books">
-
-                <i class="fas fa-book"></i>
-
-                Manage Books
-
-            </button>
-
-        </li>
+    <div class="sidebar-bottom">
+      <button id="exportBtn" class="export-btn">⬇ Export JSON</button>
+      <button id="resetBtn" class="reset-btn">Reset Local Data</button>
+    </div>
+  </aside>
 
 
-        <li>
-
-            <button
-                data-section="addBook">
-
-                <i class="fas fa-plus"></i>
-
-                Add / Edit Book
-
-            </button>
-
-        </li>
-
-
-        <li>
-
-            <button
-                data-section="notifications">
-
-                <i class="fas fa-bell"></i>
-
-                Notifications
-
-            </button>
-
-        </li>
-
-
-        <li>
-
-            <button id="sidebarLogout">
-
-                <i class="fas fa-right-from-bracket"></i>
-
-                Logout
-
-            </button>
-
-        </li>
-
-    </ul>
-
-</aside>
-
-
-<!-- ==========================================
-     MAIN
-========================================== -->
-
-<main class="main">
-
+  <main class="main">
 
     <header class="topbar">
+      <div>
+        <h1>Chishti AI</h1>
+        <p>Knowledge Management System</p>
+      </div>
 
-        <div style="display:flex;align-items:center;gap:12px;">
-
-            <button
-                class="mobile-menu-btn"
-                id="mobileMenuBtn">
-
-                <i class="fas fa-bars"></i>
-
-            </button>
-
-            <h2 id="pageTitle">
-                Admin Dashboard
-            </h2>
-
-        </div>
-
-
-        <div style="display:flex;align-items:center;">
-
-            <span
-                class="admin-email"
-                id="adminEmail">
-            </span>
-
-            <button
-                class="logout-btn"
-                id="topLogout">
-
-                <i class="fas fa-right-from-bracket"></i>
-                Logout
-
-            </button>
-
-        </div>
-
+      <div class="status">
+        <span class="status-dot"></span>
+        System Online
+      </div>
     </header>
 
 
-    <div class="content">
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="section active">
 
+      <div class="welcome">
+        <div>
+          <h2>Assalamu Alaikum 👋</h2>
+          <p>Manage Chishti AI knowledge and library data from here.</p>
+        </div>
+      </div>
 
-        <!-- ==================================
-             DASHBOARD
-        ================================== -->
+      <div class="stats">
 
-        <section
-            id="dashboard"
-            class="admin-section active">
+        <div class="stat-card">
+          <div class="stat-icon">🧠</div>
+          <div>
+            <span>Knowledge</span>
+            <strong id="knowledgeCount">0</strong>
+          </div>
+        </div>
 
-            <div class="stats">
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div>
+            <span>Books</span>
+            <strong id="bookCount">0</strong>
+          </div>
+        </div>
 
+        <div class="stat-card">
+          <div class="stat-icon">💬</div>
+          <div>
+            <span>Questions</span>
+            <strong id="questionCount">0</strong>
+          </div>
+        </div>
 
-                <div class="stat-card">
+      </div>
 
-                    <i class="fas fa-book"></i>
+    </section>
 
-                    <h3 id="totalBooks">
-                        0
-                    </h3>
 
-                    <p>
-                        Total Books
-                    </p>
+    <!-- KNOWLEDGE -->
+    <section id="knowledge" class="section">
 
-                </div>
+      <div class="section-header">
+        <div>
+          <h2>Knowledge Base</h2>
+          <p>Add information that Chishti AI can understand.</p>
+        </div>
 
+        <button id="addKnowledgeBtn" class="primary-btn">
+          + Add Knowledge
+        </button>
+      </div>
 
-                <div class="stat-card">
+      <div class="toolbar">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search questions or answers..."
+        >
+      </div>
 
-                    <i class="fas fa-eye"></i>
+      <div class="knowledge-list" id="knowledgeList"></div>
 
-                    <h3 id="totalVisitors">
-                        0
-                    </h3>
+    </section>
 
-                    <p>
-                        Visitors
-                    </p>
 
-                </div>
+    <!-- BOOKS -->
+    <section id="books" class="section">
 
+      <div class="section-header">
+        <div>
+          <h2>Books</h2>
+          <p>Books currently connected with Chishti Library.</p>
+        </div>
+      </div>
 
-                <div class="stat-card">
+      <div id="booksList" class="books-grid"></div>
 
-                    <i class="fas fa-users"></i>
+    </section>
 
-                    <h3 id="totalAuthors">
-                        0
-                    </h3>
+  </main>
 
-                    <p>
-                        Authors
-                    </p>
 
-                </div>
+  <!-- MODAL -->
+  <div id="knowledgeModal" class="modal">
 
+    <div class="modal-box">
 
-                <div class="stat-card">
+      <div class="modal-header">
+        <div>
+          <h2 id="modalTitle">Add Knowledge</h2>
+          <p>Enter a question and its answer.</p>
+        </div>
 
-                    <i class="fas fa-robot"></i>
+        <button id="closeModal" class="close-btn">×</button>
+      </div>
 
-                    <h3 id="aiUsers">
-                        0
-                    </h3>
 
-                    <p>
-                        AI Users
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="panel">
-
-                <h2 style="margin-bottom:10px;">
-                    Welcome to Chishti Library
-                </h2>
-
-                <p class="panel-description">
-
-                    Admin panel se aap books,
-                    authors, categories aur
-                    notifications manage kar sakte hain.
-
-                </p>
-
-            </div>
-
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2>
-                        Latest Books
-                    </h2>
-
-                </div>
-
-                <div
-                    id="latestBooks"
-                    class="book-list">
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==================================
-             BOOKS
-        ================================== -->
-
-        <section
-            id="books"
-            class="admin-section">
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2>
-                        Manage Books
-                    </h2>
-
-                    <div class="search-box">
-
-                        <i class="fas fa-search"></i>
-
-                        <input
-                            type="search"
-                            id="bookSearch"
-                            placeholder="Search books...">
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="bookMessage"
-                    class="message">
-                </div>
-
-
-                <div
-                    id="bookList"
-                    class="book-list">
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==================================
-             ADD BOOK
-        ================================== -->
-
-        <section
-            id="addBook"
-            class="admin-section">
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2 id="formTitle">
-                        Add New Book
-                    </h2>
-
-                </div>
-
-
-                <div
-                    id="formMessage"
-                    class="message">
-                </div>
-
-
-                <form id="bookForm">
-
-                    <input
-                        type="hidden"
-                        id="bookId">
-
-
-                    <div class="form-grid">
-
-
-                        <div class="form-group">
-
-                            <label>
-                                Book Title *
-                            </label>
-
-                            <input
-                                type="text"
-                                id="bookTitle"
-                                required
-                                placeholder="Enter book title">
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                Author *
-                            </label>
-
-                            <input
-                                type="text"
-                                id="bookAuthor"
-                                required
-                                placeholder="Author name">
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                Category
-                            </label>
-
-                            <select id="bookCategory">
-
-                                <option value="All">
-                                    All
-                                </option>
-
-                                <option value="Naat">
-                                    Naat
-                                </option>
-
-                                <option value="Manqabat">
-                                    Manqabat
-                                </option>
-
-                                <option value="Hamd">
-                                    Hamd
-                                </option>
-
-                                <option value="Maqala">
-                                    Maqala
-                                </option>
-
-                                <option value="Kulliyat">
-                                    Kulliyat
-                                </option>
-
-                                <option value="Other">
-                                    Other
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                Book Cover URL
-                            </label>
-
-                            <input
-                                type="url"
-                                id="bookCover"
-                                placeholder="https://...">
-
-                            <img
-                                id="coverPreview"
-                                class="cover-preview"
-                                alt="Cover Preview">
-
-                        </div>
-
-
-                        <div class="form-group full">
-
-                            <label>
-                                Description *
-                            </label>
-
-                            <textarea
-                                id="bookDescription"
-                                required
-                                placeholder="Write book description..."></textarea>
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                Read Book URL
-                            </label>
-
-                            <input
-                                type="text"
-                                id="bookUrl"
-                                placeholder="book.html">
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                PDF URL
-                            </label>
-
-                            <input
-                                type="text"
-                                id="bookPdf"
-                                placeholder="book.pdf">
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-buttons">
-
-                        <button
-                            type="submit"
-                            class="save-btn"
-                            id="saveBookBtn">
-
-                            <i class="fas fa-save"></i>
-
-                            Save Book
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="clear-btn"
-                            id="clearFormBtn">
-
-                            Clear
-
-                        </button>
-
-                    </div>
-
-                </form>
-
-            </div>
-
-        </section>
-
-
-        <!-- ==================================
-             NOTIFICATIONS
-        ================================== -->
-
-        <section
-            id="notifications"
-            class="admin-section">
-
-            <div class="panel">
-
-                <div class="panel-header">
-
-                    <h2>
-                        Send Notification
-                    </h2>
-
-                </div>
-
-
-                <div
-                    id="notificationMessage"
-                    class="message">
-                </div>
-
-
-                <div class="notification-grid">
-
-                    <div class="form-group">
-
-                        <label>
-                            Notification Title *
-                        </label>
-
-                        <input
-                            type="text"
-                            id="notificationTitle"
-                            placeholder="New book available">
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label>
-                            Message *
-                        </label>
-
-                        <textarea
-                            id="notificationText"
-                            placeholder="Write notification..."></textarea>
-
-                    </div>
-
-                </div>
-
-
-                <button
-                    class="notification-btn"
-                    id="sendNotification">
-
-                    <i class="fas fa-paper-plane"></i>
-
-                    Send Notification
-
-                </button>
-
-            </div>
-
-        </section>
-
+      <form id="knowledgeForm">
+
+        <input type="hidden" id="editIndex">
+
+        <label>Question</label>
+        <input
+          type="text"
+          id="questionInput"
+          placeholder="e.g. what is chishti library"
+          required
+        >
+
+        <label>Answer</label>
+        <textarea
+          id="answerInput"
+          rows="7"
+          placeholder="Enter the answer..."
+          required
+        ></textarea>
+
+
+        <div class="modal-actions">
+          <button type="button" id="cancelBtn" class="cancel-btn">
+            Cancel
+          </button>
+
+          <button type="submit" class="primary-btn">
+            Save Knowledge
+          </button>
+        </div>
+
+      </form>
 
     </div>
 
-</main>
+  </div>
 
 
-<!-- ==========================================
-     FIREBASE
-========================================== -->
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-
-<script src="admin.js"></script>
-
+  <script src="admin.js"></script>
 </body>
 </html>
