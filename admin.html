@@ -1,197 +1,430 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chishti AI — Admin Panel</title>
-  <link rel="stylesheet" href="admin.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chishti Library — Admin Panel</title>
+
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="admin.css">
 </head>
 
 <body>
 
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">C</div>
-      <div>
-        <h2>Chishti AI</h2>
-        <span>Admin Panel</span>
-      </div>
-    </div>
+    <!-- =========================
+         LOGIN VIEW
+    ========================== -->
+    <div id="loginView" class="screen center">
 
-    <nav>
-      <button class="nav-btn active" data-section="dashboard">
-        <span>⌂</span> Dashboard
-      </button>
+        <div class="panel login-card">
 
-      <button class="nav-btn" data-section="knowledge">
-        <span>🧠</span> Knowledge
-      </button>
+            <img
+                class="login-logo"
+                src="logo.png"
+                alt="Chishti Library"
+            >
 
-      <button class="nav-btn" data-section="books">
-        <span>📚</span> Books
-      </button>
-    </nav>
+            <h1>CHISHTI LIBRARY</h1>
 
-    <div class="sidebar-bottom">
-      <button id="exportBtn" class="export-btn">⬇ Export JSON</button>
-      <button id="resetBtn" class="reset-btn">Reset Local Data</button>
-    </div>
-  </aside>
+            <p class="muted">
+                Secure Admin Panel
+            </p>
 
+            <form id="loginForm">
 
-  <main class="main">
+                <label>
+                    Email
+                    <input
+                        id="email"
+                        type="email"
+                        autocomplete="username"
+                        required
+                        placeholder="Admin email"
+                    >
+                </label>
 
-    <header class="topbar">
-      <div>
-        <h1>Chishti AI</h1>
-        <p>Knowledge Management System</p>
-      </div>
+                <label>
+                    Password
+                    <input
+                        id="password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                        placeholder="Password"
+                    >
+                </label>
 
-      <div class="status">
-        <span class="status-dot"></span>
-        System Online
-      </div>
-    </header>
+                <button
+                    type="submit"
+                    class="primary wide"
+                >
+                    Sign In
+                </button>
 
+                <div
+                    id="loginError"
+                    class="error"
+                ></div>
 
-    <!-- DASHBOARD -->
-    <section id="dashboard" class="section active">
+            </form>
 
-      <div class="welcome">
-        <div>
-          <h2>Assalamu Alaikum 👋</h2>
-          <p>Manage Chishti AI knowledge and library data from here.</p>
         </div>
-      </div>
-
-      <div class="stats">
-
-        <div class="stat-card">
-          <div class="stat-icon">🧠</div>
-          <div>
-            <span>Knowledge</span>
-            <strong id="knowledgeCount">0</strong>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">📚</div>
-          <div>
-            <span>Books</span>
-            <strong id="bookCount">0</strong>
-          </div>
-        </div>
-
-        <div class="stat-card">
-          <div class="stat-icon">💬</div>
-          <div>
-            <span>Questions</span>
-            <strong id="questionCount">0</strong>
-          </div>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- KNOWLEDGE -->
-    <section id="knowledge" class="section">
-
-      <div class="section-header">
-        <div>
-          <h2>Knowledge Base</h2>
-          <p>Add information that Chishti AI can understand.</p>
-        </div>
-
-        <button id="addKnowledgeBtn" class="primary-btn">
-          + Add Knowledge
-        </button>
-      </div>
-
-      <div class="toolbar">
-        <input
-          type="search"
-          id="searchInput"
-          placeholder="Search questions or answers..."
-        >
-      </div>
-
-      <div class="knowledge-list" id="knowledgeList"></div>
-
-    </section>
-
-
-    <!-- BOOKS -->
-    <section id="books" class="section">
-
-      <div class="section-header">
-        <div>
-          <h2>Books</h2>
-          <p>Books currently connected with Chishti Library.</p>
-        </div>
-      </div>
-
-      <div id="booksList" class="books-grid"></div>
-
-    </section>
-
-  </main>
-
-
-  <!-- MODAL -->
-  <div id="knowledgeModal" class="modal">
-
-    <div class="modal-box">
-
-      <div class="modal-header">
-        <div>
-          <h2 id="modalTitle">Add Knowledge</h2>
-          <p>Enter a question and its answer.</p>
-        </div>
-
-        <button id="closeModal" class="close-btn">×</button>
-      </div>
-
-
-      <form id="knowledgeForm">
-
-        <input type="hidden" id="editIndex">
-
-        <label>Question</label>
-        <input
-          type="text"
-          id="questionInput"
-          placeholder="e.g. what is chishti library"
-          required
-        >
-
-        <label>Answer</label>
-        <textarea
-          id="answerInput"
-          rows="7"
-          placeholder="Enter the answer..."
-          required
-        ></textarea>
-
-
-        <div class="modal-actions">
-          <button type="button" id="cancelBtn" class="cancel-btn">
-            Cancel
-          </button>
-
-          <button type="submit" class="primary-btn">
-            Save Knowledge
-          </button>
-        </div>
-
-      </form>
 
     </div>
 
-  </div>
+
+    <!-- =========================
+         ADMIN APP
+    ========================== -->
+    <div id="app" hidden>
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+
+            <div class="brand">
+
+                <img
+                    src="logo.png"
+                    alt="Chishti Library Logo"
+                >
+
+                <div>
+                    <b>CHISHTI LIBRARY</b>
+                    <span>Admin Panel</span>
+                </div>
+
+            </div>
 
 
-  <script src="admin.js"></script>
+            <div class="top-actions">
+
+                <span
+                    id="adminEmail"
+                    class="muted"
+                ></span>
+
+                <button
+                    id="refreshBtn"
+                    type="button"
+                    class="ghost"
+                >
+                    ↻ Refresh
+                </button>
+
+                <button
+                    id="logoutBtn"
+                    type="button"
+                    class="ghost danger"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+        <main class="container">
+
+            <!-- TOAST -->
+            <div
+                id="toast"
+                class="toast"
+            ></div>
+
+
+            <!-- =========================
+                 STATISTICS
+            ========================== -->
+            <section class="stats">
+
+                <div>
+                    <b id="totalBooks">0</b>
+                    <span>Total Books</span>
+                </div>
+
+                <div>
+                    <b id="latestBooks">0</b>
+                    <span>Latest</span>
+                </div>
+
+                <div>
+                    <b id="totalViews">0</b>
+                    <span>Views</span>
+                </div>
+
+                <div>
+                    <b id="totalLikes">0</b>
+                    <span>Likes</span>
+                </div>
+
+                <div>
+                    <b id="totalDownloads">0</b>
+                    <span>Downloads</span>
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 ADD / EDIT BOOK
+            ========================== -->
+            <section class="panel">
+
+                <div class="head">
+
+                    <div>
+
+                        <h2 id="formTitle">
+                            Add New Book
+                        </h2>
+
+                        <p class="muted">
+                            Add or update books. Data is saved in Firebase.
+                        </p>
+
+                    </div>
+
+                    <button
+                        id="cancelEdit"
+                        type="button"
+                        class="ghost"
+                        hidden
+                    >
+                        Cancel Edit
+                    </button>
+
+                </div>
+
+
+                <!-- BOOK FORM -->
+                <form
+                    id="bookForm"
+                    class="form-grid"
+                >
+
+                    <!-- Hidden Book ID -->
+                    <input
+                        id="bookId"
+                        type="hidden"
+                    >
+
+
+                    <!-- TITLE -->
+                    <label>
+                        Book Title
+
+                        <input
+                            id="title"
+                            type="text"
+                            required
+                            placeholder="Kulliyat e Saim Urdu"
+                        >
+                    </label>
+
+
+                    <!-- AUTHOR -->
+                    <label>
+                        Author
+
+                        <input
+                            id="author"
+                            type="text"
+                            required
+                            placeholder="Hazrat Allama Saim Chishti"
+                        >
+                    </label>
+
+
+                    <!-- CATEGORY -->
+                    <label>
+                        Category
+
+                        <select id="category">
+
+                            <option>Naat</option>
+                            <option>Manqabat</option>
+                            <option>Hamd</option>
+                            <option>Hammad</option>
+                            <option>Seerat</option>
+                            <option>Kulliyat</option>
+                            <option>Maqala</option>
+                            <option>Fiqh</option>
+                            <option>Aqaid</option>
+                            <option>Tareekh</option>
+                            <option>Other</option>
+
+                        </select>
+
+                    </label>
+
+
+                    <!-- DESCRIPTION -->
+                    <label class="full">
+                        Description
+
+                        <textarea
+                            id="description"
+                            rows="4"
+                            required
+                            placeholder="Enter book description..."
+                        ></textarea>
+
+                    </label>
+
+
+                    <!-- COVER IMAGE -->
+                    <label>
+                        Cover Image
+
+                        <input
+                            id="coverFile"
+                            type="file"
+                            accept="image/*"
+                        >
+
+                        <small id="coverInfo">
+                            Choose a new file only when you want to change the cover.
+                        </small>
+
+                    </label>
+
+
+                    <!-- PDF -->
+                    <label>
+                        PDF
+
+                        <input
+                            id="pdfFile"
+                            type="file"
+                            accept="application/pdf,.pdf"
+                        >
+
+                        <small id="pdfInfo">
+                            Choose a new file only when you want to change the PDF.
+                        </small>
+
+                    </label>
+
+
+                    <!-- LATEST -->
+                    <label class="check">
+
+                        <input
+                            id="latest"
+                            type="checkbox"
+                        >
+
+                        Mark as Latest Release
+
+                    </label>
+
+
+                    <!-- SAVE -->
+                    <div>
+
+                        <button
+                            id="saveText"
+                            type="submit"
+                            class="primary"
+                        >
+                            Add Book
+                        </button>
+
+                        <span
+                            id="status"
+                            class="muted"
+                        ></span>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+
+            <!-- =========================
+                 BOOKS SECTION
+            ========================== -->
+            <section class="panel">
+
+                <div class="head books-head">
+
+                    <div>
+
+                        <h2>
+                            Books
+                        </h2>
+
+                        <p class="muted">
+                            Search, edit and delete library books.
+                        </p>
+
+                    </div>
+
+
+                    <!-- SEARCH & FILTER -->
+                    <div class="tools">
+
+                        <input
+                            id="search"
+                            class="search"
+                            type="search"
+                            placeholder="Search title, author, category..."
+                        >
+
+
+                        <select id="categoryFilter">
+
+                            <option value="">
+                                All Categories
+                            </option>
+
+                            <option>Naat</option>
+                            <option>Manqabat</option>
+                            <option>Hamd</option>
+                            <option>Hammad</option>
+                            <option>Seerat</option>
+                            <option>Kulliyat</option>
+                            <option>Maqala</option>
+                            <option>Fiqh</option>
+                            <option>Aqaid</option>
+                            <option>Tareekh</option>
+                            <option>Other</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOOKS WILL LOAD HERE -->
+                <div
+                    id="booksList"
+                    class="books-list"
+                ></div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+    <script
+        type="module"
+        src="admin.js"
+    ></script>
+
 </body>
+
 </html>
