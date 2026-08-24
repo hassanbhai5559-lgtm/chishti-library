@@ -4,187 +4,207 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Chishti AI | Chishti Library</title>
+    <title>Chishti AI</title>
 
-    <meta
-        name="description"
-        content="Chishti AI - Digital Islamic Library Assistant"
-    >
+    <link rel="icon"
+          type="image/png"
+          href="6d587a32-1b31-4895-8a67-e5e3a64257e4.png">
 
-    <link rel="icon" type="image/png" href="./logo.png">
+    <link rel="stylesheet" href="bot.css">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <link rel="stylesheet" href="./bot.css">
+    <!-- Firebase Compat -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+    <script src="firebase.js"></script>
 </head>
 
-<body class="chishti-ai-page">
+<body>
 
-    <main class="ai-app">
+<div class="ai-app">
 
-        <header class="ai-header">
+    <!-- HEADER -->
+    <header class="ai-header">
 
-            <div class="ai-brand">
+        <div class="ai-brand">
 
-                <img
-                    src="./6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
-                    alt="Chishti AI"
-                >
+            <img
+                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                alt="Chishti AI">
 
-                <div>
-                    <h1>CHISHTI AI</h1>
-                    <span>
-                        <i class="fa-solid fa-circle"></i>
-                        Chishti Library Assistant
-                    </span>
-                </div>
-
+            <div>
+                <h1>CHISHTI AI</h1>
+                <span>
+                    <i class="fa-solid fa-circle"></i>
+                    Digital Library Assistant
+                </span>
             </div>
 
-            <div class="ai-user-status" id="aiUserStatus">
-                <i class="fa-solid fa-lock"></i>
-                Checking login...
-            </div>
+        </div>
 
-        </header>
+        <div class="header-actions">
 
+            <button id="voiceToggle"
+                    class="icon-btn"
+                    title="Voice answers">
 
-        <section class="ai-chat">
+                <i class="fa-solid fa-volume-high"></i>
 
-            <div id="botMessages" class="bot-messages">
-
-                <div class="bot-message">
-
-                    <div class="message-avatar">
-                        <img
-                            src="./6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
-                            alt="AI"
-                        >
-                    </div>
-
-                    <div class="message-content">
-                        <strong>Chishti AI</strong>
-
-                        <p>
-                            Assalamu Alaikum 👋
-                            <br><br>
-                            I am Chishti AI, your Chishti Library assistant.
-                            Ask me about books, authors, categories or the library.
-                        </p>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div id="botTyping" class="bot-typing hidden">
-
-                <span></span>
-                <span></span>
-                <span></span>
-
-            </div>
-
-
-            <div class="ai-input-area">
-
-                <button
-                    type="button"
-                    id="voiceBtn"
-                    class="ai-icon-btn"
-                    title="Voice input"
-                    aria-label="Voice input"
-                >
-                    <i class="fa-solid fa-microphone"></i>
-                </button>
-
-
-                <input
-                    type="text"
-                    id="botInput"
-                    placeholder="Ask Chishti AI..."
-                    autocomplete="off"
-                >
-
-
-                <button
-                    type="button"
-                    id="sendBotMessage"
-                    class="ai-send-btn"
-                    title="Send"
-                    aria-label="Send"
-                >
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
-
-            </div>
-
-
-            <div class="voice-status" id="voiceStatus"></div>
-
-            <div class="ai-note">
-
-                <i class="fa-solid fa-shield-halved"></i>
-
-                Chishti AI is available to logged-in users.
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- Login Required Modal -->
-
-    <div id="loginRequiredModal" class="login-modal hidden">
-
-        <div class="login-modal-box">
-
-            <button
-                type="button"
-                id="closeLoginModal"
-                class="modal-close"
-            >
-                <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <div class="modal-icon">
-                <i class="fa-solid fa-lock"></i>
-            </div>
+            <button id="clearChat"
+                    class="icon-btn"
+                    title="Clear chat">
 
-            <h2>Login Required</h2>
+                <i class="fa-solid fa-trash"></i>
 
-            <p>
-                Please login to your Chishti Library account
-                before using Chishti AI.
-            </p>
+            </button>
 
-            <a href="./login.html" class="login-btn">
-                <i class="fa-solid fa-right-to-bracket"></i>
-                Login
+            <a href="index.html"
+               class="home-btn">
+
+                <i class="fa-solid fa-house"></i>
+
+                Library
+
             </a>
 
         </div>
 
-    </div>
+    </header>
 
 
-    <!-- Firebase -->
+    <!-- LOGIN CHECK -->
+    <section id="loginScreen"
+             class="login-screen hidden">
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+        <div class="login-card">
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+            <img
+                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                alt="Chishti AI">
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+            <h2>Login Required</h2>
 
-    <script src="./firebase.js"></script>
+            <p>
+                Chishti AI is available only for
+                logged-in Chishti Library users.
+            </p>
 
-    <script src="./bot.js"></script>
+            <a href="login.html"
+               class="login-btn">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                Login to Continue
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOADING -->
+    <section id="loadingScreen"
+             class="loading-screen">
+
+        <div class="loader"></div>
+
+        <p>Connecting to Chishti AI...</p>
+
+    </section>
+
+
+    <!-- MAIN CHAT -->
+    <main id="chatApp"
+          class="chat-app hidden">
+
+        <div id="chatMessages"
+             class="chat-messages">
+
+        </div>
+
+
+        <!-- QUICK COMMANDS -->
+        <div class="quick-commands">
+
+            <button data-command="What is Chishti Library?">
+                <i class="fa-solid fa-building-columns"></i>
+                Chishti Library
+            </button>
+
+            <button data-command="Show all books">
+                <i class="fa-solid fa-book"></i>
+                All Books
+            </button>
+
+            <button data-command="Show latest books">
+                <i class="fa-solid fa-star"></i>
+                Latest
+            </button>
+
+            <button data-command="Show Kulliyat books">
+                <i class="fa-solid fa-book-open"></i>
+                Kulliyat
+            </button>
+
+        </div>
+
+
+        <!-- INPUT -->
+        <div class="input-area">
+
+            <button id="micButton"
+                    class="mic-btn"
+                    title="Speak">
+
+                <i class="fa-solid fa-microphone"></i>
+
+            </button>
+
+            <input
+                id="chatInput"
+                type="text"
+                autocomplete="off"
+                placeholder="Ask Chishti AI...">
+
+            <button id="sendButton"
+                    class="send-btn">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+            </button>
+
+        </div>
+
+        <div id="voiceStatus"
+             class="voice-status">
+
+        </div>
+
+        <div class="ai-footer">
+
+            <span>
+                <i class="fa-solid fa-shield-halved"></i>
+                Login protected
+            </span>
+
+            <span>
+                Chishti Library AI
+            </span>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="bot.js"></script>
 
 </body>
 </html>
