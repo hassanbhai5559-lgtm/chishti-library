@@ -9,7 +9,7 @@
   },
   {
     "question": "assalamualaikum",
-    "answer": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh! Chishti Library mein khush aamdeed. Main Chishti AI hoon. Aap books, authors aur library ke bare mein pooch sakte hain."
+    "answer": "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh! Chishti Library mein khush aamdeed. Main Chishti AI hoon, aap ki kya madad kar sakta hoon?"
   },
   {
     "question": "assalam o alaikum",
@@ -17,11 +17,11 @@
   },
   {
     "question": "who are you",
-    "answer": "I am Chishti AI, the digital assistant of Chishti Library, designed to help you find Islamic literature, books, authors and library information."
+    "answer": "I am Chishti AI, the digital assistant of Chishti Library, designed to help users find Islamic literature and library resources."
   },
   {
     "question": "what is chishti library",
-    "answer": "Chishti Library is a Digital Islamic Library providing access to Islamic books, Naats, Manqabats, Hamd, Maqala and research resources."
+    "answer": "Chishti Library is a Digital Islamic Library providing access to Islamic books, Naats, Manqabats, Hamd, Maqala and other Islamic literature and research resources."
   },
   {
     "question": "chishti library kya hai",
@@ -29,11 +29,35 @@
   },
   {
     "question": "chishti library kahan hai",
-    "answer": "Chishti Library ek digital online library hai jahan Islamic literature aur digital books online access ki ja sakti hain."
+    "answer": "Chishti Library ek Digital Islamic Library hai. Is website par Islamic books aur literary resources online available hain."
   },
   {
     "question": "chishti library website",
-    "answer": "Chishti Library ki website par Home, Books, Authors, Developer aur Contact sections explore kiye ja sakte hain."
+    "answer": "Chishti Library website par Home, Books, Authors, Developer aur Contact sections available hain."
+  },
+  {
+    "question": "books page",
+    "answer": "Books page par Chishti Library ki digital books dekhi ja sakti hain. Aap books search karke available books read ya download kar sakte hain."
+  },
+  {
+    "question": "books kaise search karein",
+    "answer": "Books search karne ke liye Books page ya website ke search box mein book ka title, author ya keyword enter karein."
+  },
+  {
+    "question": "book kaise read karein",
+    "answer": "Books section mein apni pasand ki book select karein aur Read Online ya View PDF option par click karein."
+  },
+  {
+    "question": "book pdf kaise download karein",
+    "answer": "Agar kisi book ke liye PDF download available hai to book card par Download PDF button se PDF download ki ja sakti hai."
+  },
+  {
+    "question": "is it free",
+    "answer": "Chishti Library ka maqsad Islamic literature ko digital form mein readers tak pohanchana hai. Available resources website par access kiye ja sakte hain."
+  },
+  {
+    "question": "chishti library free hai",
+    "answer": "Ji haan, available Chishti Library resources ko online access karne ki sahulat di jati hai."
   },
   {
     "question": "who is saim chishti",
@@ -41,27 +65,23 @@
   },
   {
     "question": "hazrat allama saim chishti",
-    "answer": "Hazrat Allama Saim Chishti (رحمۃ اللہ علیہ) adabi dunya aur deeni halqon mein Saim Chishti ke naam se mashhoor the aur unki ilmi aur adabi khidmat aham hai."
+    "answer": "Hazrat Allama Saim Chishti (رحمۃ اللہ علیہ) adabi aur deeni halqon mein Saim Chishti ke naam se mashhoor the aur unki ilmi aur adabi khidmat aham hai."
   },
   {
     "question": "allama saim chishti kaun the",
     "answer": "Hazrat Allama Saim Chishti (RA) aik azeem scholar, shaair aur ashiq-e-Rasool the jinhone deen aur adab ki khidmat ki."
   },
   {
-    "question": "saim chishti family",
-    "answer": "Hazrat Allama Saim Chishti (RA) ke teen betay hain: Sahibzada Muhammad Latif Sajid Chishti, Sahibzada Muhammad Shafiq Mujahid Chishti, aur Sahibzada Muhammad Tauseef Haider Chishti."
+    "question": "saim chishti poetry",
+    "answer": "Hazrat Saim Chishti ka kalam Ishq-e-Rasool ﷺ aur Ahl-e-Bait ki mohabbat se bhara hua hai. Unki Naatein aur Manqabat aqeedat se parhi jati hain."
   },
   {
-    "question": "saim chishti sons",
-    "answer": "Hazrat Allama Saim Chishti had three sons: Sahibzada Muhammad Latif Sajid Chishti, Sahibzada Muhammad Shafiq Mujahid Chishti, and Sahibzada Muhammad Tauseef Haider Chishti."
+    "question": "saim chishti books",
+    "answer": "Chishti Library ke current database mein Hazrat Allama Saim Chishti se related kai books available hain. Kisi specific book ka naam poochhein to main live library database mein search kar sakta hoon."
   },
   {
-    "question": "how many sons of hazrat allama saim chishti",
-    "answer": "Hazrat Allama Saim Chishti had three sons: Sahibzada Muhammad Latif Sajid Chishti, Sahibzada Muhammad Shafiq Mujahid Chishti, and Sahibzada Muhammad Tauseef Haider Chishti."
-  },
-  {
-    "question": "sons of saim chishti",
-    "answer": "Allama Saim Chishti had three sons: 1) Sahibzada Muhammad Latif Sajid Chishti, 2) Sahibzada Muhammad Shafiq Mujahid Chishti, and 3) Sahibzada Muhammad Tauseef Haider Chishti."
+    "question": "authors of chishti library",
+    "answer": "Chishti Library mein Hazrat Allama Saim Chishti aur Sahibzada Muhammad Latif Sajid Chishti se related works aur literary material available hain."
   },
   {
     "question": "who is latif sajid chishti",
@@ -84,28 +104,20 @@
     "answer": "Sahibzada Muhammad Tauseef Haider Chishti is the third son of Hazrat Allama Saim Chishti."
   },
   {
-    "question": "authors of chishti library",
-    "answer": "The primary authors featured in Chishti Library are Hazrat Allama Saim Chishti (RA) and Sahibzada Muhammad Latif Sajid Chishti."
-  },
-  {
-    "question": "books available",
-    "answer": "Chishti Library has a collection of Islamic books including Naat, Manqabat, Hamd, Kulliyat, Seerat and Maqala works."
+    "question": "how many sons of hazrat allama saim chishti",
+    "answer": "Hazrat Allama Saim Chishti had three sons: Sahibzada Muhammad Latif Sajid Chishti, Sahibzada Muhammad Shafiq Mujahid Chishti, and Sahibzada Muhammad Tauseef Haider Chishti."
   },
   {
     "question": "kitabein",
-    "answer": "Chishti Library par aapko Naat, Manqabat, Hamd, Kulliyat, Seerat aur Maqala par kutabein milengi."
+    "answer": "Chishti Library par aapko Naat, Manqabat, Hamd, Maqala, Seerat, Kulliyat aur doosri Islamic literature ki kutabein mil sakti hain."
   },
   {
-    "question": "download books",
-    "answer": "To download books, navigate to the Books page, select your desired book, and click the Download PDF button when available."
-  },
-  {
-    "question": "read online",
-    "answer": "Yes! Available books can be read online by opening the book and selecting the Read Online or View PDF option."
+    "question": "islamic books",
+    "answer": "Chishti Library offers Islamic literature including Naat, Manqabat, Hamd, Seerah, history, Aqaid, Fiqh and other subjects where available."
   },
   {
     "question": "naat collection",
-    "answer": "Chishti Library has a collection of Naat books in Urdu and Punjabi, including works associated with Hazrat Allama Saim Chishti (RA)."
+    "answer": "Chishti Library mein Naat books ka collection available hai, including works associated with Hazrat Allama Saim Chishti."
   },
   {
     "question": "naat kya hai",
@@ -113,7 +125,7 @@
   },
   {
     "question": "manqabat kya hai",
-    "answer": "Manqabat woh kalaam hai jismein buzurgan-e-deen, Ahl-e-Bait ya kisi buzurg shakhsiyat ki fazilat aur manqabat bayan ki jati hai."
+    "answer": "Manqabat woh kalaam hai jismein buzurgan-e-deen, Ahl-e-Bait ya kisi buzurg shakhsiyat ki fazilat bayan ki jati hai."
   },
   {
     "question": "hamd kya hai",
@@ -125,23 +137,27 @@
   },
   {
     "question": "islamic literature kya hai",
-    "answer": "Islamic literature mein deen, Quran, Hadith, Seerah, Fiqh, Islamic history, Aqaid, Naat, Manqabat aur doosre Islamic subjects par mabni writings shamil hoti hain."
+    "answer": "Islamic literature mein Quran, Hadith, Seerah, Fiqh, Islamic history, Aqaid, Naat, Manqabat aur doosre Islamic subjects par mabni writings shamil hoti hain."
   },
   {
     "question": "quran kya hai",
-    "answer": "Quran Majeed Allah Ta'ala ki aakhri kitab hai jo hamare pyare Nabi Muhammad ﷺ par nazil hui."
+    "answer": "Quran Majeed Allah Ta'ala ki aakhri kitab hai jo Nabi-e-Kareem Muhammad ﷺ par nazil hui."
+  },
+  {
+    "question": "quran kis par nazil hua",
+    "answer": "Quran Majeed Allah Ta'ala ki aakhri kitab hai jo Nabi-e-Kareem Muhammad ﷺ par nazil hui."
   },
   {
     "question": "hadith kya hai",
-    "answer": "Hadith mein Nabi-e-Kareem ﷺ ke aqwaal, af'aal aur taqreer yani kisi amal ko dekh kar usay barqarar rakhna ya manzoori dena bayan hota hai."
+    "answer": "Hadith mein Nabi-e-Kareem ﷺ ke aqwaal, af'aal aur taqreer yani manzoori ka bayan hota hai."
   },
   {
     "question": "fiqh kya hai",
     "answer": "Fiqh Islamic ahkam aur masail ko samajhne aur unki shar'i tafseel jaanne ka ilm hai."
   },
   {
-    "question": "aqa'id kya hain",
-    "answer": "Aqa'id se murad Islam ke bunyadi beliefs aur imani aqeedon ka ilm hai."
+    "question": "aqaid kya hain",
+    "answer": "Aqaid se murad Islam ke bunyadi beliefs aur imani aqeedon ka ilm hai."
   },
   {
     "question": "allah kaun hai",
@@ -169,11 +185,27 @@
   },
   {
     "question": "imam hussain kaun the",
-    "answer": "Hazrat Imam Hussain (RA) Huzoor Nabi-e-Kareem ﷺ ke pyare nawase aur Hazrat Ali (RA) aur Syeda Fatima (RA) ke bete hain."
+    "answer": "Hazrat Imam Hussain (RA) Huzoor Nabi-e-Kareem ﷺ ke pyare nawase aur Hazrat Ali (RA) aur Syeda Fatima (RA) ke sahibzade hain."
   },
   {
     "question": "ahl e bait meaning",
     "answer": "Ahl-e-Bait refers to the blessed household and family of Prophet Muhammad ﷺ."
+  },
+  {
+    "question": "ahl e bait kaun hain",
+    "answer": "Ahl-e-Bait se murad Nabi-e-Kareem Muhammad ﷺ ke mubarak gharane aur family members hain."
+  },
+  {
+    "question": "hazrat ali kaun the",
+    "answer": "Hazrat Ali (RA) Nabi-e-Kareem ﷺ ke cousin aur damad, Islam ke azeem sahabi aur Hazrat Imam Hasan aur Hazrat Imam Hussain (RA) ke walid hain."
+  },
+  {
+    "question": "hazrat fatima kaun thin",
+    "answer": "Hazrat Fatima al-Zahra (RA) Nabi-e-Kareem ﷺ ki sahibzadi aur Hazrat Ali (RA) ki zawja-e-muhtarma thin."
+  },
+  {
+    "question": "imam hasan kaun the",
+    "answer": "Hazrat Imam Hasan (RA) Nabi-e-Kareem ﷺ ke nawase aur Hazrat Ali (RA) aur Hazrat Fatima al-Zahra (RA) ke sahibzade the."
   },
   {
     "question": "karbala kya hai",
@@ -181,67 +213,7 @@
   },
   {
     "question": "imam hussain ki shahadat",
-    "answer": "Hazrat Imam Hussain (RA) ki shahadat waqia-e-Karbala ka markazi hissa hai aur Muslim ummah ke liye sabr, haq aur qurbani ka azeem paigham rakhti hai."
-  },
-  {
-    "question": "saim chishti books",
-    "answer": "Chishti Library mein Hazrat Allama Saim Chishti se related aur mansoob books available hain. Current library catalogue se specific titles check kiye ja sakte hain."
-  },
-  {
-    "question": "husn e kainat",
-    "answer": "Husn-e-Kainat Hazrat Allama Saim Chishti ki Naatiya kitab hai aur Chishti Library ke collection mein available hai."
-  },
-  {
-    "question": "shahdaye karbala",
-    "answer": "Shahdaye Karbala Hazrat Allama Saim Chishti ki Manqabat category ki kitab hai jo Chishti Library ke collection mein available hai."
-  },
-  {
-    "question": "shaheed ibn e shaheed",
-    "answer": "Shaheed Ibn-e-Shaheed Hazrat Allama Saim Chishti se mansoob kitab hai aur Chishti Library ke current collection mein available hai."
-  },
-  {
-    "question": "ali ali hai",
-    "answer": "Ali Ali Hai Hazrat Allama Saim Chishti ki Manqabat category ki kitab hai aur current Chishti Library catalogue mein available hai."
-  },
-  {
-    "question": "kuliyat e saim",
-    "answer": "Kulliyat-e-Saim Hazrat Allama Saim Chishti ki kulliyat hai. Chishti Library ke catalogue mein Urdu aur doosri Kulliyat-related entries available hain."
-  },
-  {
-    "question": "kulliyat e saim urdu",
-    "answer": "Kulliyat e Saim Urdu Hazrat Allama Saim Chishti ki Urdu Kulliyat hai. Yeh Chishti Library ke current book catalogue mein available hai."
-  },
-  {
-    "question": "kuliyat e saim urdu",
-    "answer": "Kulliyat e Saim Urdu Hazrat Allama Saim Chishti ki Urdu Kulliyat hai. Yeh Chishti Library ke current book catalogue mein available hai."
-  },
-  {
-    "question": "kulliyat urdu",
-    "answer": "Kulliyat e Saim Urdu Hazrat Allama Saim Chishti ki Urdu Kulliyat hai. Yeh Chishti Library ke current book catalogue mein available hai."
-  },
-  {
-    "question": "kuliyat urdu",
-    "answer": "Kulliyat e Saim Urdu Hazrat Allama Saim Chishti ki Urdu Kulliyat hai. Yeh Chishti Library ke current book catalogue mein available hai."
-  },
-  {
-    "question": "darooda di dali",
-    "answer": "Darooda Di Dali Sahibzada Muhammad Latif Sajid Chishti ki Punjabi Naatiya kitab hai aur Chishti Library ke current collection mein available hai."
-  },
-  {
-    "question": "al rehman",
-    "answer": "Al-Rehman Sahibzada Muhammad Latif Sajid Chishti ki 99 Names of Allah book series ki kitab hai aur Chishti Library mein available hai."
-  },
-  {
-    "question": "rab de rang niraly hamdya punjabi",
-    "answer": "Rab de Rang Niraly Hamdya Punjabi Sahibzada Muhammad Latif Sajid Chishti ki Hamd category ki kitab hai."
-  },
-  {
-    "question": "hammad hico",
-    "answer": "Hammad Hico Sahibzada Muhammad Latif Sajid Chishti ki Hamd category ki kitab hai."
-  },
-  {
-    "question": "mazhar e noor e khuda",
-    "answer": "Mazhar E Noor E Khuda Sahibzada Muhammad Latif Sajid Chishti ki Hamd category ki kitab hai."
+    "answer": "Hazrat Imam Hussain (RA) ki shahadat waqia-e-Karbala ka markazi hissa hai aur Muslim ummah ke liye sabr, haq aur qurbani ka paigham rakhti hai."
   },
   {
     "question": "saim tv",
@@ -253,7 +225,7 @@
   },
   {
     "question": "saim tv youtube",
-    "answer": "SAIM TV is available on YouTube and features Islamic content, including Naats, Taqreer and recordings related to Hazrat Allama Saim Chishti (رحمۃ اللہ علیہ)."
+    "answer": "SAIM TV is available on YouTube and features Islamic content related to Hazrat Allama Saim Chishti (رحمۃ اللہ علیہ)."
   },
   {
     "question": "saim chishti youtube",
@@ -264,52 +236,8 @@
     "answer": "You can reach Chishti Library at 0306-7813783, 0300-6674752, or 0302-7190715."
   },
   {
-    "question": "is it free",
-    "answer": "Yes, Chishti Library is a digital library where available books can be accessed online without a subscription fee."
-  },
-  {
-    "question": "chishti library free hai",
-    "answer": "Ji haan, Chishti Library ka maqsad Islamic literature ko digital form mein readers tak pohanchana hai aur available resources ko online access karne ki sahulat di jati hai."
-  },
-  {
-    "question": "books page",
-    "answer": "Books page par Chishti Library ki available digital books dekhi ja sakti hain. Aap book search karke usay online read ya available hone par PDF download kar sakte hain."
-  },
-  {
-    "question": "books kaise search karein",
-    "answer": "Books search karne ke liye Books page ya Home page ke search box mein book ka title, author ya related keyword enter karein."
-  },
-  {
-    "question": "book kaise read karein",
-    "answer": "Books section mein apni pasand ki book select karein aur Read Online ya View PDF option par click karein."
-  },
-  {
-    "question": "book pdf kaise download karein",
-    "answer": "Agar kisi book ke liye PDF download available hai to book card par Download PDF button par click karke PDF download ki ja sakti hai."
-  },
-  {
-    "question": "author kaise dekhein",
-    "answer": "Authors section mein Chishti Library se associated authors aur writers ke profiles aur available information dekhi ja sakti hai."
-  },
-  {
-    "question": "authors page",
-    "answer": "Authors page par Chishti Library ke scholars, writers, researchers aur contributors ke profiles display kiye jate hain."
-  },
-  {
-    "question": "website par kya available hai",
-    "answer": "Chishti Library website par Islamic books, authors information, Naat, Manqabat, Hamd, research material aur digital reading resources available hain."
-  },
-  {
-    "question": "contact kaise karein",
-    "answer": "Aap Chishti Library ke Contact section mein diye gaye WhatsApp numbers ke zariye rabta kar sakte hain."
-  },
-  {
     "question": "whatsapp number",
-    "answer": "Chishti Library se rabtay ke liye WhatsApp numbers hain: 0306-7813783, 0300-6674752 aur 0302-7190715."
-  },
-  {
-    "question": "latest book",
-    "answer": "Website ke Latest Release section mein library ki latest featured books display ki jati hain. Current latest entries ke liye Chishti AI books catalogue ko check karta hai."
+    "answer": "Chishti Library contact numbers are 0306-7813783, 0300-6674752 and 0302-7190715."
   },
   {
     "question": "thanks",
@@ -326,5 +254,13 @@
   {
     "question": "bye",
     "answer": "Allah Hafiz! Please visit Chishti Library again. Have a blessed day."
+  },
+  {
+    "question": "good morning",
+    "answer": "Assalamu Alaikum! Allah Ta'ala aap ka din barkat aur khair se bhar de."
+  },
+  {
+    "question": "good night",
+    "answer": "Allah Hafiz! Allah Ta'ala aap ko aman, sukoon aur barkat ata farmaye."
   }
 ]
