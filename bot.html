@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chishti AI | Chishti Library</title>
+
+    <meta
+        name="description"
+        content="Chishti AI voice assistant for Chishti Library."
+    >
+
+    <link rel="icon" href="./logo.png">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <link rel="stylesheet" href="./bot.css">
+</head>
+
+<body>
+
+    <main class="ai-page">
+
+        <div class="ai-background"></div>
+
+        <section class="ai-container">
+
+            <header class="ai-header">
+
+                <a href="index.html" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                    Library
+                </a>
+
+                <div class="brand">
+
+                    <img
+                        src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                        alt="Chishti AI"
+                    >
+
+                    <div>
+                        <h1>CHISHTI AI</h1>
+                        <span>Digital Islamic Library Assistant</span>
+                    </div>
+
+                </div>
+
+                <div class="status">
+                    <span></span>
+                    Online
+                </div>
+
+            </header>
+
+
+            <section class="ai-main">
+
+                <div class="ai-orb" id="aiOrb">
+
+                    <div class="orb-ring ring-one"></div>
+                    <div class="orb-ring ring-two"></div>
+                    <div class="orb-core">
+                        <img
+                            src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                            alt="AI"
+                        >
+                    </div>
+
+                </div>
+
+                <h2>How can I help you?</h2>
+
+                <p class="subtitle">
+                    Ask about books, authors, Islamic literature,
+                    or use a voice command.
+                </p>
+
+
+                <div class="quick-actions">
+
+                    <button data-command="latest books">
+                        <i class="fas fa-clock"></i>
+                        Latest Books
+                    </button>
+
+                    <button data-command="saim chishti books">
+                        <i class="fas fa-book"></i>
+                        Saim Chishti Books
+                    </button>
+
+                    <button data-command="naat books">
+                        <i class="fas fa-music"></i>
+                        Naat Books
+                    </button>
+
+                    <button data-command="what is chishti library">
+                        <i class="fas fa-circle-info"></i>
+                        Library
+                    </button>
+
+                </div>
+
+
+                <div id="botMessages" class="bot-messages">
+
+                    <div class="message bot">
+
+                        <div class="message-avatar">
+                            <img
+                                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                                alt="AI"
+                            >
+                        </div>
+
+                        <div class="message-content">
+                            Assalamu Alaikum 👋<br><br>
+                            I am <b>Chishti AI</b>.
+                            You can type or speak your question.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="voice-status" id="voiceStatus">
+                    <i class="fas fa-microphone"></i>
+                    <span>Press the microphone and speak</span>
+                </div>
+
+
+                <div class="input-area">
+
+                    <button
+                        id="voiceButton"
+                        class="voice-button"
+                        type="button"
+                        title="Speak"
+                    >
+                        <i class="fas fa-microphone"></i>
+                    </button>
+
+                    <input
+                        id="botInput"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Ask Chishti AI..."
+                    >
+
+                    <button
+                        id="sendButton"
+                        class="send-button"
+                        type="button"
+                        title="Send"
+                    >
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+
+                    <button
+                        id="stopVoiceButton"
+                        class="stop-button"
+                        type="button"
+                        title="Stop speaking"
+                    >
+                        <i class="fas fa-volume-xmark"></i>
+                    </button>
+
+                </div>
+
+                <div class="voice-note">
+                    <i class="fas fa-shield-halved"></i>
+                    Voice recognition uses your browser's speech features.
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <script src="./bot.js"></script>
+
+</body>
+</html>
