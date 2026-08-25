@@ -3354,3 +3354,260 @@ console.log(
 console.log(
     "======================================"
 );
+
+/* =========================================================
+   CHISHTI AI — KNOWLEDGE.JSON CONNECTOR
+   Paste at the END of script.js
+========================================================= */
+
+(function () {
+
+    "use strict";
+
+    let chishtiKnowledge = [];
+    let knowledgeLoaded = false;
+
+    /* -----------------------------------------
+       LOAD KNOWLEDGE.JSON
+    ----------------------------------------- */
+
+    async function loadChishtiKnowledge() {
+
+        try {
+
+            const response = await fetch("./knowledge.json", {
+                cache: "no-store"
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    "knowledge.json not found: " +
+                    response.status
+                );
+            }
+
+            const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                throw new Error(
+                    "knowledge.json must contain an array."
+                );
+            }
+
+            chishtiKnowledge = data;
+
+            knowledgeLoaded = true;
+
+            console.log(
+                "🤖 Chishti AI Knowledge Loaded:",
+                chishtiKnowledge.length,
+                "entries"
+            );
+
+        } catch (error) {
+
+            knowledgeLoaded = false;
+
+            console.error(
+                "❌ Chishti AI Knowledge Error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* -----------------------------------------
+       NORMALIZE TEXT
+    ----------------------------------------- */
+
+    function normalizeText(text) {
+
+        return String(text || "")
+            .toLowerCase()
+            .trim()
+            .replace(/[؟?!.,،؛:;'"`]/g, "")
+            .replace(/\s+/g, " ");
+
+    }
+
+
+    /* -----------------------------------------
+       FIND BEST ANSWER
+    ----------------------------------------- */
+
+    function findKnowledgeAnswer(question) {
+
+        if (!knowledgeLoaded || !chishtiKnowledge.length) {
+            return null;
+        }
+
+        const input = normalizeText(question);
+
+        if (!input) {
+            return null;
+        }
+
+
+        /* Exact match */
+
+        for (const item of chishtiKnowledge) {
+
+            if (
+                normalizeText(item.question) === input
+            ) {
+
+                return item.answer;
+
+            }
+
+        }
+
+
+        /* Contains match */
+
+        for (const item of chishtiKnowledge) {
+
+            const keyword =
+                normalizeText(item.question);
+
+            if (
+                keyword.length >= 3 &&
+                input.includes(keyword)
+            ) {
+
+                return item.answer;
+
+            }
+
+        }
+
+
+        /* Reverse contains */
+
+        for (const item of chishtiKnowledge) {
+
+            const keyword =
+                normalizeText(item.question);
+
+            if (
+                keyword.length >= 3 &&
+                keyword.includes(input)
+            ) {
+
+                return item.answer;
+
+            }
+
+        }
+
+
+        /* Word matching */
+
+        const inputWords =
+            new Set(input.split(" "));
+
+        let bestAnswer = null;
+        let bestScore = 0;
+
+        for (const item of chishtiKnowledge) {
+
+            const keyword =
+                normalizeText(item.question);
+
+            const words =
+                keyword.split(" ");
+
+            let score = 0;
+
+            for (const word of words) {
+
+                if (
+                    word.length > 2 &&
+                    inputWords.has(word)
+                ) {
+
+                    score++;
+
+                }
+
+            }
+
+            if (score > bestScore) {
+
+                bestScore = score;
+                bestAnswer = item.answer;
+
+            }
+
+        }
+
+        if (bestScore >= 1) {
+            return bestAnswer;
+        }
+
+        return null;
+
+    }
+
+
+    /* -----------------------------------------
+       GLOBAL API
+    ----------------------------------------- */
+
+    window.ChishtiKnowledge = {
+
+        getAnswer: findKnowledgeAnswer,
+
+        getAll: function () {
+            return chishtiKnowledge;
+        },
+
+        isLoaded: function () {
+            return knowledgeLoaded;
+        },
+
+        reload: loadChishtiKnowledge
+
+    };
+
+
+    /* -----------------------------------------
+       LOAD NOW
+    ----------------------------------------- */
+
+    loadChishtiKnowledge();
+
+
+    /* -----------------------------------------
+       CHATBOT INTEGRATION
+    ----------------------------------------- */
+
+    window.addEventListener(
+        "chishtiAIQuestion",
+        function (event) {
+
+            const question =
+                event.detail?.question || "";
+
+            const answer =
+                findKnowledgeAnswer(question);
+
+            window.dispatchEvent(
+                new CustomEvent(
+                    "chishtiAIAnswer",
+                    {
+                        detail: {
+                            question: question,
+                            answer: answer
+                        }
+                    }
+                )
+            );
+
+        }
+    );
+
+
+})();
