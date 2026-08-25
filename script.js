@@ -3611,3 +3611,1154 @@ console.log(
 
 
 })();
+
+/* =========================================================
+   CHISHTI AI — FINAL CHAT FIX
+   APPEND THIS AT THE VERY END OF script.js
+
+   IMPORTANT:
+   Do NOT delete your existing script.
+   Do NOT call any function manually.
+========================================================= */
+
+"use strict";
+
+
+/* =========================================================
+   1. CASUAL MESSAGE DETECTOR
+========================================================= */
+
+const CHISHTI_CASUAL_MESSAGES = [
+
+    "hi",
+    "hello",
+    "hey",
+    "hii",
+    "hiii",
+    "helo",
+
+    "salam",
+    "salaam",
+    "assalamualaikum",
+    "assalamu alaikum",
+    "aoa",
+
+    "thanks",
+    "thank you",
+    "thx",
+    "ok",
+    "okay",
+    "bye",
+    "goodbye",
+
+    "good morning",
+    "good evening",
+    "good night"
+
+];
+
+
+function chishtiIsCasualMessage(text) {
+
+    const value =
+        normalize(text);
+
+    return CHISHTI_CASUAL_MESSAGES.includes(value);
+
+}
+
+
+/* =========================================================
+   2. REAL BOOK REQUEST DETECTOR
+========================================================= */
+
+function chishtiIsBookRequest(text) {
+
+    const value =
+        normalize(text);
+
+    const bookWords = [
+
+        "book",
+        "books",
+        "kitab",
+        "kitabain",
+        "kitabein",
+        "kitab dikhao",
+        "kitab batao",
+
+        "show book",
+        "show books",
+        "show all books",
+
+        "read book",
+        "read online",
+
+        "download book",
+        "download pdf",
+
+        "latest book",
+        "latest books",
+        "new book",
+        "new books",
+
+        "search book",
+        "find book",
+
+        "naat",
+        "manqabat",
+        "hamd",
+        "maqala",
+        "seerat",
+
+        "kulliyat",
+        "kuliyat"
+
+    ];
+
+    return bookWords.some(word =>
+        value.includes(
+            normalize(word)
+        )
+    );
+
+}
+
+
+/* =========================================================
+   3. GREETING RESPONSE
+========================================================= */
+
+function chishtiGreetingResponse(text) {
+
+    const value =
+        normalize(text);
+
+
+    if (
+        value === "hi" ||
+        value === "hello" ||
+        value === "hey" ||
+        value === "hii" ||
+        value === "hiii" ||
+        value === "helo"
+    ) {
+
+        return {
+
+            text:
+                "Hi 👋<br><br>" +
+                "Main <strong>Chishti AI</strong> hoon. " +
+                "How can I help you today?",
+
+            books: [],
+
+            speak:
+                "Hi. Main Chishti AI hoon. How can I help you today?"
+
+        };
+
+    }
+
+
+    if (
+        value === "salam" ||
+        value === "salaam" ||
+        value === "assalamualaikum" ||
+        value === "assalamu alaikum" ||
+        value === "aoa"
+    ) {
+
+        return {
+
+            text:
+                "Wa Alaikum Assalam 🌙<br><br>" +
+                "Khush aamdeed! Main <strong>Chishti AI</strong> hoon. " +
+                "Aap kya poochna chahte hain?",
+
+            books: [],
+
+            speak:
+                "Wa Alaikum Assalam. Khush aamdeed. Main Chishti AI hoon. Aap kya poochna chahte hain?"
+
+        };
+
+    }
+
+
+    if (
+        value === "thanks" ||
+        value === "thank you" ||
+        value === "thx"
+    ) {
+
+        return {
+
+            text:
+                "You're welcome 😊<br><br>" +
+                "Agar kisi book ya Chishti Library ke baare mein poochna ho to bata dein.",
+
+            books: [],
+
+            speak:
+                "You're welcome. Agar kisi book ya Chishti Library ke baare mein poochna ho to bata dein."
+
+        };
+
+    }
+
+
+    if (
+        value === "bye" ||
+        value === "goodbye"
+    ) {
+
+        return {
+
+            text:
+                "Allah Hafiz 👋<br><br>" +
+                "Jab bhi zaroorat ho, Chishti AI available hai.",
+
+            books: [],
+
+            speak:
+                "Allah Hafiz. Jab bhi zaroorat ho, Chishti AI available hai."
+
+        };
+
+    }
+
+
+    if (
+        value === "good morning"
+    ) {
+
+        return {
+
+            text:
+                "Good morning ☀️<br><br>" +
+                "How can I help you today?",
+
+            books: [],
+
+            speak:
+                "Good morning. How can I help you today?"
+
+        };
+
+    }
+
+
+    if (
+        value === "good evening"
+    ) {
+
+        return {
+
+            text:
+                "Good evening 🌙<br><br>" +
+                "How can I help you today?",
+
+            books: [],
+
+            speak:
+                "Good evening. How can I help you today?"
+
+        };
+
+    }
+
+
+    if (
+        value === "good night"
+    ) {
+
+        return {
+
+            text:
+                "Good night 🌙<br><br>" +
+                "Allah Hafiz!",
+
+            books: [],
+
+            speak:
+                "Good night. Allah Hafiz."
+
+        };
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   4. PREVENT OLD BOOK SEARCH FOR SIMPLE CHAT
+========================================================= */
+
+async function chishtiProcessMessageFixed(input) {
+
+    const normalized =
+        normalize(input);
+
+
+    /* -----------------------------------------
+       EMPTY
+    ----------------------------------------- */
+
+    if (!normalized) {
+
+        return {
+
+            text:
+                "Ji, bataiye 😊",
+
+            books: [],
+
+            speak:
+                "Ji, bataiye."
+
+        };
+
+    }
+
+
+    /* -----------------------------------------
+       CASUAL MESSAGE FIRST
+       VERY IMPORTANT
+    ----------------------------------------- */
+
+    const casual =
+        chishtiGreetingResponse(normalized);
+
+
+    if (casual) {
+
+        return casual;
+
+    }
+
+
+    /* -----------------------------------------
+       BOOK SEARCH ONLY IF ACTUALLY REQUESTED
+    ----------------------------------------- */
+
+    if (
+        chishtiIsBookRequest(normalized)
+    ) {
+
+        /*
+           ALL BOOKS
+        */
+
+        if (
+            containsAny(normalized, [
+                "show all books",
+                "all books",
+                "list books",
+                "books list",
+                "kitabain dikhao",
+                "kitabein dikhao",
+                "kitab dikhao",
+                "show books"
+            ])
+        ) {
+
+            const result =
+                Array.isArray(books)
+                    ? books.slice(0, 20)
+                    : [];
+
+
+            return {
+
+                text:
+                    `Library database mein <strong>${books.length}</strong> books hain.`,
+
+                books:
+                    removeDuplicateBooks(result),
+
+                speak:
+                    `Library database mein ${books.length} books hain.`
+
+            };
+
+        }
+
+
+        /* -----------------------------------------
+           KULLIYAT
+        ----------------------------------------- */
+
+        if (
+            normalized.includes("kulliyat") ||
+            normalized.includes("kuliyat")
+        ) {
+
+            const result =
+                books.filter(book => {
+
+                    const data =
+                        normalize(
+                            `${book.title || ""} ${book.category || ""} ${book.description || ""}`
+                        );
+
+                    return (
+                        data.includes("kulliyat") ||
+                        data.includes("kuliyat")
+                    );
+
+                });
+
+
+            const unique =
+                removeDuplicateBooks(result);
+
+
+            if (!unique.length) {
+
+                return {
+
+                    text:
+                        "Mujhe abhi database mein Kulliyat ki koi book nahi mili.",
+
+                    books: [],
+
+                    speak:
+                        "Mujhe abhi database mein Kulliyat ki koi book nahi mili."
+
+                };
+
+            }
+
+
+            return {
+
+                text:
+                    `Ji, mujhe <strong>${unique.length}</strong> Kulliyat-related books mili hain:`,
+
+                books:
+                    unique,
+
+                speak:
+                    `Ji, mujhe ${unique.length} Kulliyat-related books mili hain.`
+
+            };
+
+        }
+
+
+        /* -----------------------------------------
+           CATEGORY
+        ----------------------------------------- */
+
+        if (
+            normalized.includes("naat")
+        ) {
+
+            return chishtiCategoryResult("Naat");
+
+        }
+
+
+        if (
+            normalized.includes("manqabat")
+        ) {
+
+            return chishtiCategoryResult("Manqabat");
+
+        }
+
+
+        if (
+            normalized.includes("hamd")
+        ) {
+
+            return chishtiCategoryResult("Hamd");
+
+        }
+
+
+        if (
+            normalized.includes("maqala")
+        ) {
+
+            return chishtiCategoryResult("Maqala");
+
+        }
+
+
+        if (
+            normalized.includes("seerat")
+        ) {
+
+            return chishtiCategoryResult("Seerat");
+
+        }
+
+
+        /* -----------------------------------------
+           LATEST BOOKS
+        ----------------------------------------- */
+
+        if (
+            containsAny(normalized, [
+                "latest book",
+                "latest books",
+                "new book",
+                "new books",
+                "latest release"
+            ])
+        ) {
+
+            const latest =
+                [...books]
+                    .sort((a, b) => {
+
+                        const aTime =
+                            a.createdAt?.seconds ||
+                            a.createdAt ||
+                            0;
+
+                        const bTime =
+                            b.createdAt?.seconds ||
+                            b.createdAt ||
+                            0;
+
+                        return bTime - aTime;
+
+                    })
+                    .slice(0, 8);
+
+
+            return {
+
+                text:
+                    "Ji, ye library ki latest books hain:",
+
+                books:
+                    removeDuplicateBooks(latest),
+
+                speak:
+                    "Ji, ye library ki latest books hain."
+
+            };
+
+        }
+
+
+        /* -----------------------------------------
+           EXACT / PARTIAL BOOK SEARCH
+        ----------------------------------------- */
+
+        const found =
+            searchBooksOnlyWhenRequested(
+                normalized
+            );
+
+
+        if (found.length) {
+
+            return {
+
+                text:
+                    found.length === 1
+                        ? "Ji, mujhe ye book library database mein mili:"
+                        : `Ji, mujhe ${found.length} matching books mili hain:`,
+
+                books:
+                    removeDuplicateBooks(found),
+
+                speak:
+                    found.length === 1
+                        ? `${found[0].title || "Ye book"} library database mein available hai.`
+                        : `${found.length} matching books library database mein mili hain.`
+
+            };
+
+        }
+
+    }
+
+
+    /* =====================================================
+       KNOWLEDGE
+    ===================================================== */
+
+    const knowledgeResult =
+        findKnowledge(normalized);
+
+
+    if (knowledgeResult) {
+
+        return {
+
+            text:
+                knowledgeResult.answer,
+
+            books: [],
+
+            speak:
+                stripHtml(
+                    knowledgeResult.answer
+                )
+
+        };
+
+    }
+
+
+    /* =====================================================
+       COMMANDS
+    ===================================================== */
+
+    if (
+        normalized === "home" ||
+        normalized.includes("go home") ||
+        normalized.includes("open home")
+    ) {
+
+        return {
+
+            text:
+                "Opening Chishti Library home page...",
+
+            books: [],
+
+            speak:
+                "Opening Chishti Library home page.",
+
+            action:
+                "home"
+
+        };
+
+    }
+
+
+    if (
+        normalized === "open books" ||
+        normalized === "books page"
+    ) {
+
+        return {
+
+            text:
+                "Opening Books page...",
+
+            books: [],
+
+            speak:
+                "Opening Books page.",
+
+            action:
+                "books"
+
+        };
+
+    }
+
+
+    /* =====================================================
+       DEFAULT — NO RANDOM BOOK
+    ===================================================== */
+
+    return {
+
+        text:
+            "Ji 😊 Main aapki baat samajhne ki koshish kar raha hoon.<br><br>" +
+            "Aap mujh se <strong>Chishti Library</strong>, " +
+            "authors, Islamic literature ya books ke baare mein pooch sakte hain.",
+
+        books: [],
+
+        speak:
+            "Ji. Main aapki baat samajhne ki koshish kar raha hoon. Aap mujh se Chishti Library, authors, Islamic literature ya books ke baare mein pooch sakte hain."
+
+    };
+
+}
+
+
+/* =========================================================
+   5. CATEGORY SEARCH
+========================================================= */
+
+function chishtiCategoryResult(category) {
+
+    const result =
+        books.filter(book => {
+
+            const data =
+                normalize(
+                    `${book.category || ""} ${book.title || ""}`
+                );
+
+            return data.includes(
+                normalize(category)
+            );
+
+        });
+
+
+    const unique =
+        removeDuplicateBooks(result);
+
+
+    if (!unique.length) {
+
+        return {
+
+            text:
+                `${category} category mein abhi koi book nahi mili.`,
+
+            books: [],
+
+            speak:
+                `${category} category mein abhi koi book nahi mili.`
+
+        };
+
+    }
+
+
+    return {
+
+        text:
+            `<strong>${category}</strong> category mein <strong>${unique.length}</strong> books available hain:`,
+
+        books:
+            unique,
+
+        speak:
+            `${category} category mein ${unique.length} books available hain.`
+
+    };
+
+}
+
+
+/* =========================================================
+   6. BOOK SEARCH
+========================================================= */
+
+function searchBooksOnlyWhenRequested(query) {
+
+    if (!Array.isArray(books) || !books.length) {
+        return [];
+    }
+
+
+    const clean =
+        normalize(query);
+
+
+    /*
+       Remove command words.
+    */
+
+    const searchText =
+        clean
+            .replace(/\b(show|book|books|find|search|read|online|download|pdf)\b/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+
+
+    if (!searchText) {
+        return [];
+    }
+
+
+    const words =
+        searchText
+            .split(" ")
+            .filter(word => word.length >= 3);
+
+
+    if (!words.length) {
+        return [];
+    }
+
+
+    const results =
+        books
+            .map(book => {
+
+                const title =
+                    normalize(book.title || "");
+
+                const author =
+                    normalize(book.author || "");
+
+                const category =
+                    normalize(book.category || "");
+
+                const description =
+                    normalize(book.description || "");
+
+                let score = 0;
+
+
+                if (
+                    title === searchText
+                ) {
+
+                    score += 1000;
+
+                }
+
+
+                if (
+                    title.includes(searchText)
+                ) {
+
+                    score += 300;
+
+                }
+
+
+                if (
+                    author.includes(searchText)
+                ) {
+
+                    score += 100;
+
+                }
+
+
+                if (
+                    category.includes(searchText)
+                ) {
+
+                    score += 80;
+
+                }
+
+
+                words.forEach(word => {
+
+                    if (title.includes(word)) {
+                        score += 50;
+                    }
+
+                    if (author.includes(word)) {
+                        score += 20;
+                    }
+
+                    if (category.includes(word)) {
+                        score += 15;
+                    }
+
+                    if (description.includes(word)) {
+                        score += 5;
+                    }
+
+                });
+
+
+                return {
+                    book,
+                    score
+                };
+
+            })
+            .filter(item => item.score > 0)
+            .sort((a, b) =>
+                b.score - a.score
+            )
+            .slice(0, 10)
+            .map(item => item.book);
+
+
+    return removeDuplicateBooks(results);
+
+}
+
+
+/* =========================================================
+   7. REMOVE DUPLICATE BOOKS
+========================================================= */
+
+function removeDuplicateBooks(list) {
+
+    if (!Array.isArray(list)) {
+        return [];
+    }
+
+
+    const seen =
+        new Set();
+
+
+    return list.filter(book => {
+
+        const key =
+            String(
+                book.firestoreId ||
+                book.id ||
+                book.title ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        if (!key) {
+            return true;
+        }
+
+
+        if (seen.has(key)) {
+            return false;
+        }
+
+
+        seen.add(key);
+
+        return true;
+
+    });
+
+}
+
+
+/* =========================================================
+   8. REPLACE SEND MESSAGE BEHAVIOR
+   CAPTURE PHASE PREVENTS OLD FUNCTION FROM RUNNING
+========================================================= */
+
+function chishtiHandleSend() {
+
+    if (!currentUser) {
+
+        if (
+            typeof requireLogin === "function"
+        ) {
+
+            requireLogin();
+
+        }
+
+        return;
+
+    }
+
+
+    const text =
+        chatInput.value.trim();
+
+
+    if (!text) {
+        return;
+    }
+
+
+    addUserMessage(text);
+
+    chatInput.value = "";
+
+    showTyping();
+
+
+    chishtiProcessMessageFixed(text)
+        .then(answer => {
+
+            removeTyping();
+
+            addBotMessage(
+                answer.text,
+                answer.books || []
+            );
+
+
+            if (
+                answer.action === "home"
+            ) {
+
+                setTimeout(() => {
+                    window.location.href =
+                        "index.html";
+                }, 300);
+
+            }
+
+
+            if (
+                answer.action === "books"
+            ) {
+
+                setTimeout(() => {
+                    window.location.href =
+                        "books.html";
+                }, 300);
+
+            }
+
+
+            if (
+                voiceEnabled &&
+                answer.speak &&
+                typeof speak === "function"
+            ) {
+
+                speak(
+                    answer.speak
+                );
+
+            }
+
+        })
+        .catch(error => {
+
+            console.error(
+                "Chishti AI:",
+                error
+            );
+
+            removeTyping();
+
+            addBotMessage(
+                "Sorry, AI response mein problem aa gayi. Please try again."
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   9. SEND BUTTON FIX
+========================================================= */
+
+if (sendButton) {
+
+    sendButton.addEventListener(
+        "click",
+        function(event) {
+
+            event.preventDefault();
+
+            event.stopImmediatePropagation();
+
+            chishtiHandleSend();
+
+        },
+        true
+    );
+
+}
+
+
+/* =========================================================
+   10. ENTER KEY FIX
+========================================================= */
+
+if (chatInput) {
+
+    chatInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                event.stopImmediatePropagation();
+
+                chishtiHandleSend();
+
+            }
+
+        },
+        true
+    );
+
+}
+
+
+/* =========================================================
+   11. SAFETY: NEVER SHOW BOOKS FOR SIMPLE GREETING
+========================================================= */
+
+if (chatMessages) {
+
+    const observer =
+        new MutationObserver(() => {
+
+            const messages =
+                chatMessages.querySelectorAll(
+                    ".user-message"
+                );
+
+
+            const lastUser =
+                messages[messages.length - 1];
+
+
+            if (!lastUser) {
+                return;
+            }
+
+
+            const text =
+                normalize(
+                    lastUser.textContent
+                );
+
+
+            if (
+                chishtiIsCasualMessage(text)
+            ) {
+
+                /*
+                   We don't remove old legitimate
+                   book results. This only protects
+                   casual-message response generation.
+                */
+
+                console.log(
+                    "Chishti AI: casual message detected → no book search"
+                );
+
+            }
+
+        });
+
+
+    observer.observe(
+        chatMessages,
+        {
+            childList: true
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DONE
+========================================================= */
+
+console.log(
+    "✅ Chishti AI final chat patch loaded"
+);
+
+console.log(
+    "✅ Casual messages protected"
+);
+
+console.log(
+    "✅ Book search only on book requests"
+);
+
+console.log(
+    "✅ Duplicate books protected"
+);
+
+console.log(
+    "✅ No manual function call required"
+);
