@@ -2,11 +2,14 @@
 
 /*
 =========================================================
- CHISHTI AI
- Firebase + Firestore + Knowledge + Voice
- FIXED INTENT PRIORITY
+ CHISHTI AI — COMPLETE BOT.JS
+ Firebase + Firestore + Knowledge JSON + Voice
 =========================================================
 */
+
+/* ========================================================
+   GLOBAL STATE
+======================================================== */
 
 let knowledge = [];
 let books = [];
@@ -14,64 +17,140 @@ let books = [];
 let currentUser = null;
 
 let voiceEnabled = true;
-
 let recognition = null;
 let isListening = false;
+let isSending = false;
 
 
-/* =========================================================
+/* ========================================================
    ELEMENTS
-========================================================= */
+======================================================== */
 
-const loadingScreen = document.getElementById("loadingScreen");
-const loginScreen = document.getElementById("loginScreen");
-const chatApp = document.getElementById("chatApp");
-const chatMessages = document.getElementById("chatMessages");
-const chatInput = document.getElementById("chatInput");
-const sendButton = document.getElementById("sendButton");
-const micButton = document.getElementById("micButton");
-const voiceStatus = document.getElementById("voiceStatus");
-const voiceToggle = document.getElementById("voiceToggle");
-const clearChat = document.getElementById("clearChat");
+let loadingScreen;
+let loginScreen;
+let chatApp;
+let chatMessages;
+let chatInput;
+let sendButton;
+let micButton;
+let voiceStatus;
+let voiceToggle;
+let clearChat;
 
 
-/* =========================================================
-   INITIALIZATION
-========================================================= */
+/* ========================================================
+   DOM READY
+======================================================== */
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    await loadKnowledge();
+    cacheElements();
 
-    setupVoiceRecognition();
+    loadKnowledge();
 
     setupEvents();
+
+    setupVoiceRecognition();
 
     checkFirebaseAuth();
 
 });
 
 
-/* =========================================================
-   KNOWLEDGE.JSON
-========================================================= */
+/* ========================================================
+   CACHE ELEMENTS
+======================================================== */
+
+function cacheElements() {
+
+    loadingScreen =
+        document.getElementById("loadingScreen");
+
+    loginScreen =
+        document.getElementById("loginScreen");
+
+    chatApp =
+        document.getElementById("chatApp");
+
+    chatMessages =
+        document.getElementById("chatMessages");
+
+    chatInput =
+        document.getElementById("chatInput");
+
+    sendButton =
+        document.getElementById("sendButton");
+
+    micButton =
+        document.getElementById("micButton");
+
+    voiceStatus =
+        document.getElementById("voiceStatus");
+
+    voiceToggle =
+        document.getElementById("voiceToggle");
+
+    clearChat =
+        document.getElementById("clearChat");
+
+}
+
+
+/* ========================================================
+   LOAD KNOWLEDGE.JSON
+======================================================== */
 
 async function loadKnowledge() {
 
     try {
 
-        const response = await fetch(
-            "./knowledge.json?v=" + Date.now()
-        );
+        const response =
+            await fetch(
+                "./knowledge.json?v=" +
+                Date.now()
+            );
 
         if (!response.ok) {
-            throw new Error("knowledge.json not found");
+
+            throw new Error(
+                "knowledge.json not found"
+            );
+
         }
 
-        knowledge = await response.json();
+        const data =
+            await response.json();
 
-        if (!Array.isArray(knowledge)) {
+        /*
+        Supports:
+
+        [
+          {...},
+          {...}
+        ]
+
+        OR
+
+        {
+          "knowledge": [...]
+        }
+        */
+
+        if (Array.isArray(data)) {
+
+            knowledge = data;
+
+        } else if (
+            Array.isArray(data.knowledge)
+        ) {
+
+            knowledge =
+                data.knowledge;
+
+        } else {
+
             knowledge = [];
+
         }
 
         console.log(
@@ -79,10 +158,12 @@ async function loadKnowledge() {
             knowledge.length
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
-            "❌ Knowledge loading error:",
+            "❌ Knowledge error:",
             error
         );
 
@@ -93,156 +174,225 @@ async function loadKnowledge() {
 }
 
 
-/* =========================================================
+/* ========================================================
    FIREBASE AUTH
-========================================================= */
+======================================================== */
 
 function checkFirebaseAuth() {
 
     if (
-        typeof firebase === "undefined" ||
+        typeof firebase === "undefined"
+    ) {
+
+        showFirebaseError(
+            "Firebase SDK load nahi hua."
+        );
+
+        return;
+
+    }
+
+
+    if (
         !firebase.apps ||
         !firebase.apps.length
     ) {
 
-        showError(
-            "Firebase is not initialized. Please check firebase.js."
+        showFirebaseError(
+            "Firebase initialize nahi hua. firebase.js check karein."
         );
 
         return;
+
     }
 
-    const auth = firebase.auth();
 
-    auth.onAuthStateChanged(async user => {
+    const auth =
+        firebase.auth();
 
-        if (!user) {
 
-            currentUser = null;
+    auth.onAuthStateChanged(
+        async user => {
 
-            if (loadingScreen)
-                loadingScreen.classList.add("hidden");
+            if (!user) {
+
+                currentUser = null;
+
+                if (loadingScreen)
+                    loadingScreen.classList.add("hidden");
+
+                if (chatApp)
+                    chatApp.classList.add("hidden");
+
+                if (loginScreen)
+                    loginScreen.classList.remove("hidden");
+
+                return;
+
+            }
+
+
+            /*
+            LOGIN SUCCESS
+            */
+
+            currentUser =
+                user;
+
 
             if (loginScreen)
-                loginScreen.classList.remove("hidden");
+                loginScreen.classList.add("hidden");
+
+            if (loadingScreen)
+                loadingScreen.classList.remove("hidden");
 
             if (chatApp)
                 chatApp.classList.add("hidden");
 
-            return;
-        }
 
-        currentUser = user;
-
-        if (loginScreen)
-            loginScreen.classList.add("hidden");
-
-        if (loadingScreen)
-            loadingScreen.classList.remove("hidden");
-
-        if (chatApp)
-            chatApp.classList.add("hidden");
-
-        try {
+            /*
+            LOAD LIVE BOOKS
+            */
 
             await loadBooksFromFirebase();
 
-        } catch (error) {
 
-            console.error(error);
+            if (loadingScreen)
+                loadingScreen.classList.add("hidden");
+
+            if (chatApp)
+                chatApp.classList.remove("hidden");
+
+
+            /*
+            Welcome only once
+            */
+
+            if (
+                chatMessages &&
+                chatMessages.children.length === 0
+            ) {
+
+                showWelcome();
+
+            }
 
         }
-
-        if (loadingScreen)
-            loadingScreen.classList.add("hidden");
-
-        if (chatApp)
-            chatApp.classList.remove("hidden");
-
-        showWelcome();
-
-    });
+    );
 
 }
 
 
-/* =========================================================
-   FIRESTORE BOOKS
-========================================================= */
+/* ========================================================
+   LOAD BOOKS FROM FIRESTORE
+======================================================== */
 
 async function loadBooksFromFirebase() {
 
     books = [];
 
+
     try {
 
-        const db = firebase.firestore();
+        const db =
+            firebase.firestore();
+
 
         const snapshot =
-            await db.collection("books").get();
+            await db
+                .collection("books")
+                .get();
 
-        snapshot.forEach(doc => {
 
-            books.push({
-                firestoreId: doc.id,
-                ...doc.data()
-            });
+        snapshot.forEach(
+            doc => {
 
-        });
+                const data =
+                    doc.data() || {};
+
+                books.push({
+
+                    firestoreId:
+                        doc.id,
+
+                    ...data
+
+                });
+
+            }
+        );
+
 
         console.log(
-            "✅ Books loaded:",
+            "✅ Live books:",
             books.length
         );
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
-            "❌ Firestore books error:",
+            "Firestore books error:",
             error
         );
+
+        books = [];
 
     }
 
 }
 
 
-/* =========================================================
+/* ========================================================
    WELCOME
-========================================================= */
+======================================================== */
 
 function showWelcome() {
 
+    if (!chatMessages)
+        return;
+
+
     if (
-        !chatMessages ||
         chatMessages.children.length > 0
     ) {
+
         return;
+
     }
+
 
     const name =
         currentUser?.displayName ||
         currentUser?.email?.split("@")[0] ||
         "Reader";
 
+
     addBotMessage(
         `Assalamu Alaikum ${escapeHtml(name)} 👋<br><br>
         Main <strong>Chishti AI</strong> hoon.<br><br>
         Aap mujh se Chishti Library, books, authors aur Islamic literature ke bare mein pooch sakte hain.<br><br>
-        <strong>Try:</strong><br>
-        • What is Chishti Library?<br>
-        • Kulliyat e Saim Urdu<br>
-        • Show all books`
+        Aap likh sakte hain:
+        <br>
+        <strong>Hi</strong>
+        <br>
+        <strong>Show Kulliyat books</strong>
+        <br>
+        <strong>Latest books</strong>
+        <br>
+        <strong>Open Books</strong>`
     );
 
 }
 
 
-/* =========================================================
+/* ========================================================
    EVENTS
-========================================================= */
+======================================================== */
 
 function setupEvents() {
+
 
     if (sendButton) {
 
@@ -260,9 +410,15 @@ function setupEvents() {
             "keydown",
             event => {
 
-                if (event.key === "Enter") {
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+
                     event.preventDefault();
+
                     sendMessage();
+
                 }
 
             }
@@ -285,20 +441,7 @@ function setupEvents() {
 
         voiceToggle.addEventListener(
             "click",
-            () => {
-
-                voiceEnabled = !voiceEnabled;
-
-                voiceToggle.innerHTML =
-                    voiceEnabled
-                        ? '<i class="fa-solid fa-volume-high"></i>'
-                        : '<i class="fa-solid fa-volume-xmark"></i>';
-
-                if (!voiceEnabled) {
-                    speechSynthesis.cancel();
-                }
-
-            }
+            toggleVoice
         );
 
     }
@@ -308,28 +451,28 @@ function setupEvents() {
 
         clearChat.addEventListener(
             "click",
-            () => {
-
-                chatMessages.innerHTML = "";
-
-                showWelcome();
-
-            }
+            clearConversation
         );
 
     }
 
 
     document
-        .querySelectorAll(".quick-commands button")
+        .querySelectorAll(
+            ".quick-commands button"
+        )
         .forEach(button => {
 
             button.addEventListener(
                 "click",
                 () => {
 
+                    if (!chatInput)
+                        return;
+
                     chatInput.value =
-                        button.dataset.command;
+                        button.dataset.command ||
+                        button.textContent.trim();
 
                     sendMessage();
 
@@ -341,11 +484,69 @@ function setupEvents() {
 }
 
 
-/* =========================================================
+/* ========================================================
+   VOICE TOGGLE
+======================================================== */
+
+function toggleVoice() {
+
+    voiceEnabled =
+        !voiceEnabled;
+
+
+    if (voiceToggle) {
+
+        voiceToggle.innerHTML =
+            voiceEnabled
+                ? '<i class="fa-solid fa-volume-high"></i>'
+                : '<i class="fa-solid fa-volume-xmark"></i>';
+
+    }
+
+
+    if (!voiceEnabled) {
+
+        window.speechSynthesis?.cancel();
+
+    }
+
+}
+
+
+/* ========================================================
+   CLEAR CHAT
+======================================================== */
+
+function clearConversation() {
+
+    if (!chatMessages)
+        return;
+
+
+    chatMessages.innerHTML = "";
+
+    showWelcome();
+
+}
+
+
+/* ========================================================
    SEND MESSAGE
-========================================================= */
+======================================================== */
 
 async function sendMessage() {
+
+    /*
+    Prevent double clicks
+    */
+
+    if (isSending)
+        return;
+
+
+    /*
+    LOGIN CHECK
+    */
 
     if (!currentUser) {
 
@@ -354,20 +555,31 @@ async function sendMessage() {
         );
 
         return;
+
     }
 
 
     const text =
-        chatInput.value.trim();
+        chatInput?.value.trim() || "";
 
-    if (!text) {
+
+    if (!text)
         return;
-    }
 
+
+    /*
+    Add user message
+    */
 
     addUserMessage(text);
 
-    chatInput.value = "";
+
+    if (chatInput)
+        chatInput.value = "";
+
+
+    isSending = true;
+
 
     showTyping();
 
@@ -377,7 +589,9 @@ async function sendMessage() {
         const answer =
             await processMessage(text);
 
+
         removeTyping();
+
 
         addBotMessage(
             answer.text,
@@ -390,101 +604,522 @@ async function sendMessage() {
             answer.speak
         ) {
 
-            speak(answer.speak);
+            speak(
+                answer.speak
+            );
 
         }
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         console.error(
-            "AI processing error:",
+            "Chishti AI error:",
             error
         );
 
         removeTyping();
 
         addBotMessage(
-            "Sorry, something went wrong while processing your request."
+            "Sorry, AI mein temporary error aa gaya."
         );
 
     }
 
+
+    isSending = false;
+
 }
 
 
-/* =========================================================
-   PROCESS MESSAGE
-   IMPORTANT:
-   KNOWLEDGE FIRST
-   BOOK SEARCH SECOND
-========================================================= */
+/* ========================================================
+   MAIN AI PROCESSOR
+======================================================== */
 
 async function processMessage(input) {
 
-    const normalized =
+    const query =
         normalize(input);
 
 
-    if (!normalized) {
+    if (!query) {
 
         return {
-            text: "Please ask me something.",
-            speak: "Please ask me something."
+            text: "Ji, aap kya poochna chahte hain?",
+            speak: "Ji, aap kya poochna chahte hain?"
         };
 
     }
 
 
-    /* =====================================================
-       1. EXACT KNOWLEDGE MATCH
-       HIGHEST PRIORITY
-    ===================================================== */
+    /*
+    ========================================================
+    1. GREETINGS — MUST COME FIRST
+    ========================================================
+    */
 
-    const exactKnowledge =
-        findExactKnowledge(normalized);
-
-    if (exactKnowledge) {
+    if (isGreeting(query)) {
 
         return {
 
             text:
-                exactKnowledge.answer,
-
-            books: [],
+                getGreetingResponse(),
 
             speak:
-                stripHtml(
-                    exactKnowledge.answer
-                )
+                "Wa Alaikum Assalam. Main Chishti AI hoon. Aap kaise hain? Main aap ki kya madad kar sakta hoon?"
 
         };
 
     }
 
 
-    /* =====================================================
-       2. GREETING PROTECTION
-       NEVER SEARCH BOOKS FOR HI / HELLO
-    ===================================================== */
+    /*
+    ========================================================
+    2. THANK YOU
+    ========================================================
+    */
 
-    if (isGreeting(normalized)) {
+    if (
+        containsAny(query, [
+            "thanks",
+            "thank you",
+            "shukria",
+            "shukriya",
+            "jazakallah",
+            "jazak allah"
+        ])
+    ) {
 
-        const greetingKnowledge =
-            findGreetingKnowledge(normalized);
+        return {
 
-        if (greetingKnowledge) {
+            text:
+                "Khush rahiye! 😊 Agar Chishti Library ke bare mein koi sawal ho to pooch sakte hain.",
+
+            speak:
+                "Khush rahiye. Agar Chishti Library ke bare mein koi sawal ho to pooch sakte hain."
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    3. HOW ARE YOU
+    ========================================================
+    */
+
+    if (
+        containsAny(query, [
+            "how are you",
+            "how r u",
+            "kaise ho",
+            "kese ho",
+            "kia haal hai",
+            "kya haal hai"
+        ])
+    ) {
+
+        return {
+
+            text:
+                "Alhamdulillah, main bilkul theek hoon 😊 Aap ki madad ke liye ready hoon.",
+
+            speak:
+                "Alhamdulillah, main bilkul theek hoon. Aap ki madad ke liye ready hoon."
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    4. IDENTITY
+    ========================================================
+    */
+
+    if (
+        containsAny(query, [
+            "who are you",
+            "what are you",
+            "tum kon ho",
+            "aap kon ho",
+            "ap kon ho",
+            "your name",
+            "tumhara naam",
+            "aap ka naam"
+        ])
+    ) {
+
+        return {
+
+            text:
+                "Main <strong>Chishti AI</strong> hoon — Chishti Library ka AI assistant. Main library ki books, authors aur available knowledge ke bare mein aap ki madad kar sakta hoon.",
+
+            speak:
+                "Main Chishti AI hoon. Chishti Library ka AI assistant."
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    5. COMMANDS
+    ========================================================
+    */
+
+    if (
+        isCommand(query, [
+            "go home",
+            "open home",
+            "home kholo",
+            "home open",
+            "ghar kholo"
+        ])
+    ) {
+
+        navigateTo(
+            "index.html"
+        );
+
+        return {
+
+            text:
+                "Chishti Library Home open kar raha hoon.",
+
+            speak:
+                "Chishti Library Home open kar raha hoon."
+
+        };
+
+    }
+
+
+    if (
+        isCommand(query, [
+            "open books",
+            "books kholo",
+            "book page kholo",
+            "books page kholo"
+        ])
+    ) {
+
+        navigateTo(
+            "books.html"
+        );
+
+        return {
+
+            text:
+                "Books page open kar raha hoon.",
+
+            speak:
+                "Books page open kar raha hoon."
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    6. LOGOUT
+    ========================================================
+    */
+
+    if (
+        containsAny(query, [
+            "logout",
+            "log out",
+            "sign out",
+            "account logout"
+        ])
+    ) {
+
+        try {
+
+            await firebase
+                .auth()
+                .signOut();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+        }
+
+
+        return {
+
+            text:
+                "Aap logout ho gaye hain.",
+
+            speak:
+                "Aap logout ho gaye hain."
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    7. ALL BOOKS
+    ========================================================
+    */
+
+    if (
+        containsAny(query, [
+            "show all books",
+            "all books",
+            "all book",
+            "list books",
+            "books list",
+            "kitni books hain",
+            "kitni kitabain hain",
+            "kitabein dikhao",
+            "kitabain dikhao",
+            "tamam books",
+            "sari books",
+            "saari books"
+        ])
+    ) {
+
+        const result =
+            books.slice(0, 20);
+
+
+        return {
+
+            text:
+                `Library mein <strong>${books.length}</strong> books available hain:`,
+
+            books:
+                result,
+
+            speak:
+                `Library mein ${books.length} books available hain.`
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    8. LATEST BOOKS
+    ========================================================
+    */
+
+    if (
+        containsAny(query, [
+            "latest books",
+            "latest book",
+            "new books",
+            "new book",
+            "latest release",
+            "new release",
+            "nayi books",
+            "nai books",
+            "new kitab"
+        ])
+    ) {
+
+        const latest =
+            getLatestBooks();
+
+
+        return {
+
+            text:
+                latest.length
+                    ? "Ye Chishti Library ki latest available books hain:"
+                    : "Abhi latest books available nahi hain.",
+
+            books:
+                latest,
+
+            speak:
+                latest.length
+                    ? "Ye Chishti Library ki latest available books hain."
+                    : "Abhi latest books available nahi hain."
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    9. CATEGORY COMMANDS
+    ========================================================
+    */
+
+    if (
+        containsAny(query, [
+            "kulliyat",
+            "kuliyat"
+        ])
+    ) {
+
+        return categoryResult(
+            "Kulliyat"
+        );
+
+    }
+
+
+    if (
+        containsAny(query, [
+            "naat",
+            "naats"
+        ])
+    ) {
+
+        return categoryResult(
+            "Naat"
+        );
+
+    }
+
+
+    if (
+        containsAny(query, [
+            "manqabat",
+            "manqib"
+        ])
+    ) {
+
+        return categoryResult(
+            "Manqabat"
+        );
+
+    }
+
+
+    if (
+        containsAny(query, [
+            "hamd",
+            "hamdain"
+        ])
+    ) {
+
+        return categoryResult(
+            "Hamd"
+        );
+
+    }
+
+
+    if (
+        containsAny(query, [
+            "maqala",
+            "maqalat",
+            "article",
+            "articles"
+        ])
+    ) {
+
+        return categoryResult(
+            "Maqala"
+        );
+
+    }
+
+
+    if (
+        containsAny(query, [
+            "seerat",
+            "seerah"
+        ])
+    ) {
+
+        return categoryResult(
+            "Seerat"
+        );
+
+    }
+
+
+    /*
+    ========================================================
+    10. KNOWLEDGE.JSON
+    ========================================================
+    */
+
+    const knowledgeResult =
+        findKnowledge(query);
+
+
+    if (knowledgeResult) {
+
+        return {
+
+            text:
+                safeKnowledgeAnswer(
+                    knowledgeResult.answer ||
+                    knowledgeResult.response ||
+                    knowledgeResult.content ||
+                    ""
+                ),
+
+            speak:
+                stripHtml(
+                    knowledgeResult.answer ||
+                    knowledgeResult.response ||
+                    knowledgeResult.content ||
+                    ""
+                ),
+
+            books: []
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    11. BOOK SEARCH
+    ========================================================
+    */
+
+    const foundBooks =
+        searchBooks(query);
+
+
+    if (
+        foundBooks.length > 0
+    ) {
+
+        /*
+        ONE exact/strong book
+        */
+
+        if (
+            foundBooks.length === 1
+        ) {
+
+            const book =
+                foundBooks[0];
+
 
             return {
 
                 text:
-                    greetingKnowledge.answer,
+                    `Ji, mujhe <strong>${escapeHtml(book.title || "ye book")}</strong> library database mein mil gayi hai:`,
 
-                books: [],
+                books:
+                    [book],
 
                 speak:
-                    stripHtml(
-                        greetingKnowledge.answer
-                    )
+                    `${book.title || "Ye book"} library database mein available hai.`
 
             };
 
@@ -494,322 +1129,88 @@ async function processMessage(input) {
         return {
 
             text:
-                `Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh! 👋<br><br>
-                Welcome to <strong>Chishti Library</strong>.<br>
-                Main Chishti AI hoon. Aap books, authors ya Islamic literature ke bare mein pooch sakte hain.`,
-
-            books: [],
-
-            speak:
-                "Wa Alaikum Assalam wa Rahmatullahi wa Barakatuh. Welcome to Chishti Library. Main Chishti AI hoon."
-
-        };
-
-    }
-
-
-    /* =====================================================
-       3. KNOWLEDGE SEMANTIC / PARTIAL MATCH
-       BEFORE BOOK SEARCH
-    ===================================================== */
-
-    const knowledgeResult =
-        findKnowledge(normalized);
-
-    if (knowledgeResult) {
-
-        return {
-
-            text:
-                knowledgeResult.answer,
-
-            books: [],
-
-            speak:
-                stripHtml(
-                    knowledgeResult.answer
-                )
-
-        };
-
-    }
-
-
-    /* =====================================================
-       4. WEBSITE COMMANDS
-    ===================================================== */
-
-    if (
-        normalized === "home" ||
-        normalized.includes("go home") ||
-        normalized.includes("open home")
-    ) {
-
-        window.location.href = "index.html";
-
-        return {
-
-            text:
-                "Opening Chishti Library home page.",
-
-            speak:
-                "Opening Chishti Library home page."
-
-        };
-
-    }
-
-
-    if (
-        normalized === "open books" ||
-        normalized.includes("open books page")
-    ) {
-
-        window.location.href = "books.html";
-
-        return {
-
-            text:
-                "Opening Books page.",
-
-            speak:
-                "Opening Books page."
-
-        };
-
-    }
-
-
-    if (
-        normalized.includes("logout") ||
-        normalized.includes("log out")
-    ) {
-
-        await firebase.auth().signOut();
-
-        return {
-
-            text:
-                "You have been logged out.",
-
-            speak:
-                "You have been logged out."
-
-        };
-
-    }
-
-
-    /* =====================================================
-       5. SHOW ALL BOOKS
-    ===================================================== */
-
-    if (
-        containsAny(normalized, [
-            "show all books",
-            "all books",
-            "list books",
-            "books list",
-            "kitni books",
-            "kitabein dikhao",
-            "kitaben dikhao",
-            "kitabain dikhao"
-        ])
-    ) {
-
-        const result =
-            books.slice(0, 20);
-
-        return {
-
-            text:
-                `Library database mein <strong>${books.length}</strong> books hain.`,
-
-            books: result,
-
-            speak:
-                `Library database mein ${books.length} books hain.`
-
-        };
-
-    }
-
-
-    /* =====================================================
-       6. LATEST BOOKS
-    ===================================================== */
-
-    if (
-        containsAny(normalized, [
-            "latest",
-            "new books",
-            "latest books",
-            "new book",
-            "latest release"
-        ])
-    ) {
-
-        const latest =
-            [...books]
-                .sort((a, b) => {
-
-                    const da =
-                        a.createdAt?.seconds ||
-                        a.createdAt ||
-                        a.id ||
-                        0;
-
-                    const db =
-                        b.createdAt?.seconds ||
-                        b.createdAt ||
-                        b.id ||
-                        0;
-
-                    return db - da;
-
-                })
-                .slice(0, 8);
-
-
-        return {
-
-            text:
-                "Ye library ki latest available books hain:",
-
-            books: latest,
-
-            speak:
-                "Ye library ki latest available books hain."
-
-        };
-
-    }
-
-
-    /* =====================================================
-       7. CATEGORY REQUEST
-    ===================================================== */
-
-    if (
-        normalized === "naat" ||
-        normalized.includes("naat books") ||
-        normalized.includes("naat collection")
-    ) {
-
-        return categoryResult("Naat");
-
-    }
-
-
-    if (
-        normalized === "manqabat" ||
-        normalized.includes("manqabat books")
-    ) {
-
-        return categoryResult("Manqabat");
-
-    }
-
-
-    if (
-        normalized === "hamd" ||
-        normalized === "hammad" ||
-        normalized.includes("hamd books")
-    ) {
-
-        return categoryResult("Hamd");
-
-    }
-
-
-    if (
-        normalized === "maqala" ||
-        normalized.includes("maqala books")
-    ) {
-
-        return categoryResult("Maqala");
-
-    }
-
-
-    /* =====================================================
-       8. BOOK SEARCH
-       ONLY NOW
-    ===================================================== */
-
-    const foundBooks =
-        searchBooks(normalized);
-
-    if (foundBooks.length > 0) {
-
-        return {
-
-            text:
-                foundBooks.length === 1
-                    ? "Ji, mujhe library database mein ye book mili hai:"
-                    : `Ji, mujhe ${foundBooks.length} matching books mili hain:`,
+                `Ji, mujhe <strong>${foundBooks.length}</strong> matching books mili hain:`,
 
             books:
                 foundBooks,
 
             speak:
-                foundBooks.length === 1
-                    ? `${foundBooks[0].title} library database mein available hai.`
-                    : `${foundBooks.length} matching books library database mein mili hain.`
+                `${foundBooks.length} matching books library database mein mili hain.`
 
         };
 
     }
 
 
-    /* =====================================================
-       9. DEFAULT
-    ===================================================== */
+    /*
+    ========================================================
+    12. AUTHOR QUERY
+    ========================================================
+    */
+
+    if (
+        containsAny(query, [
+            "author",
+            "authors",
+            "writer",
+            "writers",
+            "musannif",
+            "musannifeen"
+        ])
+    ) {
+
+        navigateTo(
+            "authors.html"
+        );
+
+        return {
+
+            text:
+                "Authors page open kar raha hoon.",
+
+            speak:
+                "Authors page open kar raha hoon."
+
+        };
+
+    }
+
+
+    /*
+    ========================================================
+    13. DEFAULT
+    ========================================================
+    */
 
     return {
 
         text:
-            `Sorry, mujhe iska jawab knowledge database mein nahi mila.<br><br>
-            Aap mujh se Chishti Library, authors, Islamic literature ya kisi specific book ke bare mein pooch sakte hain.`,
+            `Ji, main samajhne ki koshish kar raha hoon 😊<br><br>
+            Aap mujh se ye pooch sakte hain:
+            <br><br>
+            • <strong>Hi</strong>
+            <br>
+            • <strong>What is Chishti Library?</strong>
+            <br>
+            • <strong>Show Kulliyat books</strong>
+            <br>
+            • <strong>Latest books</strong>
+            <br>
+            • <strong>Show all books</strong>
+            <br>
+            • <strong>Open Books</strong>`,
 
         speak:
-            "Sorry, mujhe iska jawab knowledge database mein nahi mila."
+            "Ji, main aap ki madad kar sakta hoon. Aap Chishti Library, books, authors ya knowledge ke bare mein pooch sakte hain."
 
     };
 
 }
 
 
-/* =========================================================
-   EXACT KNOWLEDGE
-========================================================= */
-
-function findExactKnowledge(query) {
-
-    for (const item of knowledge) {
-
-        const question =
-            normalize(item.question);
-
-        if (
-            question &&
-            question === query
-        ) {
-
-            return item;
-
-        }
-
-    }
-
-    return null;
-
-}
-
-
-/* =========================================================
-   GREETING DETECTION
-========================================================= */
+/* ========================================================
+   GREETING DETECTOR
+======================================================== */
 
 function isGreeting(query) {
 
@@ -818,196 +1219,229 @@ function isGreeting(query) {
         "hi",
         "hello",
         "hey",
+        "hy",
+        "hii",
+        "hiii",
         "salam",
         "salaam",
-        "aoa",
         "assalamualaikum",
-        "assalam o alaikum",
         "assalamu alaikum",
-        "assalam alaikum",
-
-        "اسلام علیکم",
-        "السلام علیکم",
-        "ہیلو",
-        "ہائے"
-
-    ];
-
-    return greetings.includes(query);
-
-}
-
-
-/* =========================================================
-   FIND GREETING KNOWLEDGE
-========================================================= */
-
-function findGreetingKnowledge(query) {
-
-    const greetingWords = [
-
-        "hi",
-        "hello",
-        "hey",
-        "salam",
-        "salaam",
+        "asalamualaikum",
         "aoa",
-        "assalamualaikum",
-        "assalam o alaikum",
-        "assalamu alaikum",
-        "assalam alaikum",
-        "اسلام علیکم",
-        "السلام علیکم",
-        "ہیلو",
-        "ہائے"
+        "aoa ji",
+        "good morning",
+        "good afternoon",
+        "good evening",
+        "good night"
 
     ];
 
 
-    for (const item of knowledge) {
+    /*
+    Exact greeting
+    */
 
-        const question =
-            normalize(item.question);
+    if (
+        greetings.includes(query)
+    ) {
 
-        if (
-            greetingWords.includes(question) &&
-            question === query
-        ) {
-
-            return item;
-
-        }
+        return true;
 
     }
 
-    return null;
+
+    /*
+    Greeting with punctuation/extra words
+    */
+
+    if (
+        query.startsWith(
+            "assalamualaikum"
+        )
+    ) {
+
+        return true;
+
+    }
+
+
+    return false;
 
 }
 
 
-/* =========================================================
-   CATEGORY
-========================================================= */
+/* ========================================================
+   GREETING RESPONSE
+======================================================== */
+
+function getGreetingResponse() {
+
+    return `
+        Wa Alaikum Assalam 👋
+        <br><br>
+        <strong>Welcome to Chishti AI.</strong>
+        <br><br>
+        Main aap ki kya madad kar sakta hoon?
+    `;
+
+}
+
+
+/* ========================================================
+   CATEGORY RESULT
+======================================================== */
 
 function categoryResult(category) {
 
     const target =
         normalize(category);
 
+
     const result =
-        books.filter(book =>
+        books.filter(book => {
 
-            normalize(
-                book.category || ""
-            ).includes(target)
+            const title =
+                normalize(
+                    book.title || ""
+                );
 
-        );
+            const bookCategory =
+                normalize(
+                    book.category || ""
+                );
+
+            const description =
+                normalize(
+                    book.description || ""
+                );
+
+
+            if (
+                target === "kulliyat"
+            ) {
+
+                return (
+                    bookCategory.includes("kulliyat") ||
+                    bookCategory.includes("kuliyat") ||
+                    title.includes("kulliyat") ||
+                    title.includes("kuliyat")
+                );
+
+            }
+
+
+            return (
+                bookCategory.includes(target) ||
+                title.includes(target) ||
+                description.includes(target)
+            );
+
+        });
 
 
     return {
 
         text:
             result.length
-                ? `<strong>${escapeHtml(category)}</strong> category mein ${result.length} books available hain:`
-                : `${escapeHtml(category)} category mein abhi koi book nahi mili.`,
+                ? `<strong>${escapeHtml(category)}</strong> mein <strong>${result.length}</strong> books available hain:`
+                : `Mujhe abhi <strong>${escapeHtml(category)}</strong> category mein koi book nahi mili.`,
 
         books:
             result,
 
         speak:
             result.length
-                ? `${category} category mein ${result.length} books available hain.`
-                : `${category} category mein koi book nahi mili.`
+                ? `${result.length} ${category} books available hain.`
+                : `Mujhe abhi ${category} category mein koi book nahi mili.`
 
     };
 
 }
 
 
-/* =========================================================
-   SEARCH BOOKS
-   FIXED:
-   NO SHORT WORD MATCH
-========================================================= */
+/* ========================================================
+   BOOK SEARCH
+======================================================== */
 
 function searchBooks(query) {
 
-    if (!books.length) {
-        return [];
-    }
+    /*
+    IMPORTANT FIX:
 
+    Very short words such as:
+
+    hi
+    he
+    in
+    is
+
+    should NEVER search inside book titles.
+
+    This fixes:
+
+    "hi"
+
+    matching:
+
+    "Chishti"
+    */
 
     const clean =
         normalize(query);
 
 
+    if (
+        !clean ||
+        clean.length < 3
+    ) {
+
+        return [];
+
+    }
+
+
     /*
-    Only meaningful words.
-    Words like "hi", "is", "a", "me"
-    cannot trigger a book search.
+    Stop generic words
     */
 
     const stopWords = new Set([
 
-        "a",
-        "an",
         "the",
-        "is",
-        "are",
-        "am",
-        "was",
-        "were",
-        "what",
-        "who",
-        "where",
-        "when",
-        "why",
-        "how",
-        "me",
-        "my",
-        "you",
-        "your",
-        "please",
-        "tell",
-        "about",
-        "show",
-        "give",
-        "find",
+        "and",
+        "for",
         "book",
         "books",
-        "kitab",
-        "kitabein",
-        "kitaben",
-        "mujhe",
-        "kya",
-        "hai",
-        "hain",
-        "ka",
-        "ki",
-        "ke",
-        "main",
-        "mein",
-        "par",
-        "se",
-        "ko"
+        "show",
+        "open",
+        "please",
+        "give",
+        "find",
+        "tell",
+        "about"
+
     ]);
 
 
     const words =
         clean
             .split(" ")
-            .filter(word =>
-                word.length >= 4 &&
-                !stopWords.has(word)
+            .filter(
+                word =>
+                    word.length >= 3 &&
+                    !stopWords.has(word)
             );
 
 
     /*
-    No meaningful words = NO BOOK SEARCH
+    No useful search terms
     */
 
-    if (!words.length) {
+    if (
+        words.length === 0
+    ) {
+
         return [];
+
     }
 
 
@@ -1016,21 +1450,32 @@ function searchBooks(query) {
             .map(book => {
 
                 const title =
-                    normalize(book.title || "");
+                    normalize(
+                        book.title || ""
+                    );
 
                 const author =
-                    normalize(book.author || "");
+                    normalize(
+                        book.author || ""
+                    );
 
                 const category =
-                    normalize(book.category || "");
+                    normalize(
+                        book.category || ""
+                    );
 
                 const description =
-                    normalize(book.description || "");
+                    normalize(
+                        book.description || ""
+                    );
+
 
                 let score = 0;
 
 
-                /* Exact title */
+                /*
+                Exact title
+                */
 
                 if (
                     title === clean
@@ -1041,7 +1486,9 @@ function searchBooks(query) {
                 }
 
 
-                /* Full title */
+                /*
+                Exact phrase
+                */
 
                 if (
                     title.includes(clean)
@@ -1053,26 +1500,56 @@ function searchBooks(query) {
 
 
                 /*
-                Word matching
+                Author exact phrase
+                */
+
+                if (
+                    author.includes(clean)
+                ) {
+
+                    score += 60;
+
+                }
+
+
+                /*
+                Category
+                */
+
+                if (
+                    category.includes(clean)
+                ) {
+
+                    score += 40;
+
+                }
+
+
+                /*
+                Individual words
                 */
 
                 words.forEach(word => {
 
                     /*
-                    Title is strongest
+                    Title gets highest score
                     */
 
                     if (
-                        title.split(" ").includes(word)
+                        title
+                            .split(" ")
+                            .includes(word)
                     ) {
 
-                        score += 50;
+                        score += 35;
 
-                    } else if (
+                    }
+
+                    else if (
                         title.includes(word)
                     ) {
 
-                        score += 25;
+                        score += 20;
 
                     }
 
@@ -1085,7 +1562,7 @@ function searchBooks(query) {
                         author.includes(word)
                     ) {
 
-                        score += 15;
+                        score += 12;
 
                     }
 
@@ -1124,8 +1601,9 @@ function searchBooks(query) {
                 };
 
             })
-            .filter(item =>
-                item.score >= 25
+            .filter(
+                item =>
+                    item.score >= 20
             )
             .sort(
                 (a, b) =>
@@ -1133,7 +1611,8 @@ function searchBooks(query) {
             )
             .slice(0, 10)
             .map(
-                item => item.book
+                item =>
+                    item.book
             );
 
 
@@ -1142,29 +1621,114 @@ function searchBooks(query) {
 }
 
 
-/* =========================================================
+/* ========================================================
+   LATEST BOOKS
+======================================================== */
+
+function getLatestBooks() {
+
+    return [...books]
+        .sort(
+            (a, b) =>
+                getBookDate(b) -
+                getBookDate(a)
+        )
+        .slice(0, 8);
+
+}
+
+
+/* ========================================================
+   BOOK DATE
+======================================================== */
+
+function getBookDate(book) {
+
+    const value =
+        book.createdAt ||
+        book.timestamp ||
+        book.date ||
+        0;
+
+
+    if (
+        value &&
+        typeof value.toMillis === "function"
+    ) {
+
+        return value.toMillis();
+
+    }
+
+
+    if (
+        value &&
+        typeof value.seconds === "number"
+    ) {
+
+        return value.seconds * 1000;
+
+    }
+
+
+    const parsed =
+        Date.parse(value);
+
+
+    if (
+        !Number.isNaN(parsed)
+    ) {
+
+        return parsed;
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* ========================================================
    KNOWLEDGE SEARCH
-========================================================= */
+======================================================== */
 
 function findKnowledge(query) {
 
+    if (
+        !Array.isArray(knowledge) ||
+        !knowledge.length
+    ) {
+
+        return null;
+
+    }
+
+
     let best = null;
+
     let bestScore = 0;
 
 
-    for (const item of knowledge) {
+    for (
+        const item of knowledge
+    ) {
 
         const question =
-            normalize(item.question || "");
+            normalize(
+                item.question ||
+                item.q ||
+                item.title ||
+                ""
+            );
 
 
-        if (!question) {
+        if (!question)
             continue;
-        }
 
 
         /*
-        EXACT
+        Exact match
         */
 
         if (
@@ -1176,32 +1740,25 @@ function findKnowledge(query) {
         }
 
 
-        const questionWords =
-            question
-                .split(" ")
-                .filter(
-                    word => word.length >= 3
-                );
-
-
-        const queryWords =
-            query
-                .split(" ")
-                .filter(
-                    word => word.length >= 3
-                );
-
-
         let score = 0;
 
 
         /*
-        Whole phrase
+        Exact phrase
         */
 
         if (
-            query.length >= 5 &&
             question.includes(query)
+        ) {
+
+            score += 60;
+
+        }
+
+
+        if (
+            query.includes(question) &&
+            question.length >= 5
         ) {
 
             score += 50;
@@ -1209,71 +1766,131 @@ function findKnowledge(query) {
         }
 
 
-        /*
-        Query phrase contains question
-        Only for meaningful questions
-        */
-
-        if (
-            question.length >= 5 &&
-            query.includes(question)
-        ) {
-
-            score += 40;
-
-        }
+        const words =
+            question
+                .split(" ")
+                .filter(
+                    word =>
+                        word.length >= 3
+                );
 
 
-        /*
-        Word matching
-        */
-
-        questionWords.forEach(word => {
+        words.forEach(word => {
 
             if (
-                queryWords.includes(word)
+                query.includes(word)
             ) {
 
-                score += 12;
+                score += 10;
 
             }
 
         });
 
 
-        /*
-        Avoid weak one-word matches.
-        */
-
         if (
             score > bestScore
         ) {
 
-            bestScore = score;
-            best = item;
+            bestScore =
+                score;
+
+            best =
+                item;
 
         }
 
     }
 
 
-    return bestScore >= 30
-        ? best
-        : null;
+    /*
+    Don't return weak/random answers
+    */
+
+    return (
+        bestScore >= 20
+            ? best
+            : null
+    );
 
 }
 
 
-/* =========================================================
+/* ========================================================
+   SAFE KNOWLEDGE ANSWER
+======================================================== */
+
+function safeKnowledgeAnswer(answer) {
+
+    /*
+    Knowledge JSON answers may contain
+    trusted HTML formatting.
+
+    If you don't want HTML,
+    this can later be changed.
+    */
+
+    return String(
+        answer || ""
+    );
+
+}
+
+
+/* ========================================================
+   COMMAND CHECK
+======================================================== */
+
+function isCommand(
+    query,
+    commands
+) {
+
+    return commands.some(
+        command =>
+            query === normalize(command)
+    );
+
+}
+
+
+/* ========================================================
+   CONTAINS ANY
+======================================================== */
+
+function containsAny(
+    text,
+    values
+) {
+
+    return values.some(
+        value =>
+            text.includes(
+                normalize(value)
+            )
+    );
+
+}
+
+
+/* ========================================================
    NORMALIZE
-========================================================= */
+======================================================== */
 
 function normalize(value) {
 
-    return String(value || "")
+    return String(
+        value || ""
+    )
         .toLowerCase()
-        .replace(/[’']/g, "")
-        .replace(/[-_]/g, " ")
+        .replace(
+            /[’']/g,
+            ""
+        )
+        .replace(
+            /[-_]/g,
+            " "
+        )
         .replace(
             /[^\p{L}\p{N}\s]/gu,
             " "
@@ -1287,65 +1904,54 @@ function normalize(value) {
 }
 
 
-/* =========================================================
-   CONTAINS ANY
-========================================================= */
-
-function containsAny(text, values) {
-
-    return values.some(value =>
-
-        text.includes(
-            normalize(value)
-        )
-
-    );
-
-}
-
-
-/* =========================================================
+/* ========================================================
    USER MESSAGE
-========================================================= */
+======================================================== */
 
 function addUserMessage(text) {
 
-    if (!chatMessages) {
+    if (!chatMessages)
         return;
-    }
+
 
     const div =
         document.createElement("div");
 
+
     div.className =
         "message user-message";
+
 
     div.textContent =
         text;
 
-    chatMessages.appendChild(div);
+
+    chatMessages.appendChild(
+        div
+    );
+
 
     scrollChat();
 
 }
 
 
-/* =========================================================
+/* ========================================================
    BOT MESSAGE
-========================================================= */
+======================================================== */
 
 function addBotMessage(
     text,
     resultBooks = []
 ) {
 
-    if (!chatMessages) {
+    if (!chatMessages)
         return;
-    }
 
 
     const wrapper =
         document.createElement("div");
+
 
     wrapper.className =
         "message bot-message";
@@ -1355,39 +1961,49 @@ function addBotMessage(
         text;
 
 
+    /*
+    Add books only if actually requested
+    */
+
     if (
-        resultBooks &&
+        Array.isArray(resultBooks) &&
         resultBooks.length
     ) {
 
         resultBooks
             .slice(0, 10)
-            .forEach(book => {
+            .forEach(
+                book => {
 
-                wrapper.appendChild(
-                    createBookCard(book)
-                );
+                    wrapper.appendChild(
+                        createBookCard(book)
+                    );
 
-            });
+                }
+            );
 
     }
 
 
-    chatMessages.appendChild(wrapper);
+    chatMessages.appendChild(
+        wrapper
+    );
+
 
     scrollChat();
 
 }
 
 
-/* =========================================================
-   BOOK CARD
-========================================================= */
+/* ========================================================
+   CREATE BOOK CARD
+======================================================== */
 
 function createBookCard(book) {
 
     const card =
         document.createElement("div");
+
 
     card.className =
         "book-result";
@@ -1396,6 +2012,8 @@ function createBookCard(book) {
     const cover =
         book.cover ||
         book.coverUrl ||
+        book.image ||
+        book.imageUrl ||
         "logo.png";
 
 
@@ -1406,62 +2024,132 @@ function createBookCard(book) {
 
     const author =
         book.author ||
+        book.authorName ||
         "Unknown Author";
+
+
+    const category =
+        book.category ||
+        "";
 
 
     const pdf =
         book.pdf ||
         book.pdfUrl ||
+        book.downloadUrl ||
         "";
 
 
-    let openLink =
+    const online =
+        book.onlineUrl ||
+        book.readUrl ||
+        book.readerUrl ||
+        book.html ||
+        "";
+
+
+    /*
+    If no online URL, use PDF.
+    */
+
+    const readLink =
+        online ||
         pdf ||
         "books.html";
 
 
+    /*
+    Escape everything
+    */
+
+    const safeTitle =
+        escapeHtml(title);
+
+    const safeAuthor =
+        escapeHtml(author);
+
+    const safeCategory =
+        escapeHtml(category);
+
+
     card.innerHTML = `
 
-        <img
-            src="${safeUrl(cover)}"
-            alt="${escapeHtml(title)}"
-            onerror="this.src='logo.png'"
-        >
+        <div class="book-result-image">
+
+            <img
+                src="${safeUrl(cover)}"
+                alt="${safeTitle}"
+                loading="lazy"
+                onerror="this.onerror=null;this.src='logo.png';"
+            >
+
+        </div>
+
 
         <div class="book-result-info">
 
             <h4>
-                📚 ${escapeHtml(title)}
+                📚 ${safeTitle}
             </h4>
 
+
             <p>
-                👤 ${escapeHtml(author)}
+                👤 ${safeAuthor}
             </p>
 
+
             ${
-                book.category
-                    ? `<p>📁 ${escapeHtml(book.category)}</p>`
+                category
+                    ? `
+                    <p>
+                        📁 ${safeCategory}
+                    </p>
+                    `
                     : ""
             }
 
-            <a
-                href="${safeUrl(openLink)}"
+
+            <div class="book-result-actions">
+
                 ${
-                    pdf
-                        ? 'target="_blank" rel="noopener"'
+                    readLink
+                        ? `
+                        <a
+                            class="book-read-btn"
+                            href="${safeUrl(readLink)}"
+                            ${
+                                /^https?:\/\//i.test(
+                                    readLink
+                                )
+                                    ? 'target="_blank" rel="noopener noreferrer"'
+                                    : ""
+                            }
+                        >
+                            📖 Read Online
+                        </a>
+                        `
                         : ""
                 }
-            >
+
 
                 ${
                     pdf
-                        ? "📖 Read / PDF"
-                        : "📚 Open Books"
+                        ? `
+                        <a
+                            class="book-download-btn"
+                            href="${safeUrl(pdf)}"
+                            download
+                        >
+                            ↓ Download
+                        </a>
+                        `
+                        : ""
                 }
 
-            </a>
+            </div>
 
         </div>
+
     `;
 
 
@@ -1470,33 +2158,54 @@ function createBookCard(book) {
 }
 
 
-/* =========================================================
+/* ========================================================
    TYPING
-========================================================= */
+======================================================== */
 
 function showTyping() {
 
-    if (
-        document.getElementById("typing")
-    ) {
+    if (!chatMessages)
         return;
+
+
+    if (
+        document.getElementById(
+            "typing"
+        )
+    ) {
+
+        return;
+
     }
 
 
     const typing =
         document.createElement("div");
 
+
     typing.id =
         "typing";
 
+
     typing.className =
-        "message bot-message";
-
-    typing.innerHTML =
-        "Chishti AI is thinking...";
+        "message bot-message typing";
 
 
-    chatMessages.appendChild(typing);
+    typing.innerHTML = `
+
+        <span>Chishti AI is thinking</span>
+
+        <span class="typing-dots">
+            • • •
+        </span>
+
+    `;
+
+
+    chatMessages.appendChild(
+        typing
+    );
+
 
     scrollChat();
 
@@ -1506,18 +2215,23 @@ function showTyping() {
 function removeTyping() {
 
     const typing =
-        document.getElementById("typing");
+        document.getElementById(
+            "typing"
+        );
+
 
     if (typing) {
+
         typing.remove();
+
     }
 
 }
 
 
-/* =========================================================
-   URDU VOICE INPUT
-========================================================= */
+/* ========================================================
+   VOICE RECOGNITION
+======================================================== */
 
 function setupVoiceRecognition() {
 
@@ -1526,15 +2240,22 @@ function setupVoiceRecognition() {
         window.webkitSpeechRecognition;
 
 
-    if (!SpeechRecognition) {
-
-        if (micButton) {
-            micButton.style.display = "none";
-        }
+    if (
+        !SpeechRecognition
+    ) {
 
         console.warn(
             "Speech Recognition not supported."
         );
+
+
+        if (micButton) {
+
+            micButton.style.display =
+                "none";
+
+        }
+
 
         return;
 
@@ -1548,11 +2269,15 @@ function setupVoiceRecognition() {
     recognition.continuous =
         false;
 
+
     recognition.interimResults =
         false;
 
+
     /*
-    Urdu Pakistan
+    Urdu first.
+    Browser may fallback depending
+    on installed language support.
     */
 
     recognition.lang =
@@ -1562,17 +2287,24 @@ function setupVoiceRecognition() {
     recognition.onstart =
         () => {
 
-            isListening = true;
+            isListening =
+                true;
+
 
             if (micButton) {
+
                 micButton.classList.add(
                     "listening"
                 );
+
             }
 
+
             if (voiceStatus) {
+
                 voiceStatus.textContent =
-                    "🎙️ Listening Urdu...";
+                    "🎙️ Listening...";
+
             }
 
         };
@@ -1581,37 +2313,50 @@ function setupVoiceRecognition() {
     recognition.onend =
         () => {
 
-            isListening = false;
+            isListening =
+                false;
+
 
             if (micButton) {
+
                 micButton.classList.remove(
                     "listening"
                 );
+
             }
 
+
             if (voiceStatus) {
+
                 voiceStatus.textContent =
                     "";
+
             }
 
         };
 
 
     recognition.onerror =
-        error => {
+        event => {
 
             console.error(
-                "Speech recognition:",
-                error
+                "Voice error:",
+                event.error
             );
 
-            isListening = false;
+
+            isListening =
+                false;
+
 
             if (micButton) {
+
                 micButton.classList.remove(
                     "listening"
                 );
+
             }
+
 
             if (voiceStatus) {
 
@@ -1627,12 +2372,14 @@ function setupVoiceRecognition() {
         event => {
 
             const transcript =
-                event.results[0][0].transcript;
+                event
+                    .results[0][0]
+                    .transcript
+                    .trim();
 
-            console.log(
-                "🎙️ Urdu voice:",
-                transcript
-            );
+
+            if (!transcript)
+                return;
 
 
             if (chatInput) {
@@ -1640,25 +2387,26 @@ function setupVoiceRecognition() {
                 chatInput.value =
                     transcript;
 
-                sendMessage();
-
             }
+
+
+            sendMessage();
 
         };
 
 }
 
 
-/* =========================================================
-   TOGGLE MIC
-========================================================= */
+/* ========================================================
+   TOGGLE LISTENING
+======================================================== */
 
 function toggleListening() {
 
     if (!currentUser) {
 
         addBotMessage(
-            "Please login first to use voice commands."
+            "Please login first to use voice."
         );
 
         return;
@@ -1669,17 +2417,8 @@ function toggleListening() {
     if (!recognition) {
 
         alert(
-            "Your browser does not support Urdu voice recognition."
+            "Aap ka browser voice recognition support nahi karta. Chrome/Edge try karein."
         );
-
-        return;
-
-    }
-
-
-    if (isListening) {
-
-        recognition.stop();
 
         return;
 
@@ -1688,40 +2427,64 @@ function toggleListening() {
 
     try {
 
-        recognition.start();
+        if (isListening) {
 
-    } catch (error) {
+            recognition.stop();
 
-        console.error(error);
+        } else {
+
+            recognition.start();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Voice start error:",
+            error
+        );
 
     }
 
 }
 
 
-/* =========================================================
+/* ========================================================
    TEXT TO SPEECH
-========================================================= */
+======================================================== */
 
 function speak(text) {
 
     if (
+        !voiceEnabled
+    ) {
+
+        return;
+
+    }
+
+
+    if (
         !("speechSynthesis" in window)
     ) {
+
         return;
+
     }
-
-
-    if (!text) {
-        return;
-    }
-
-
-    window.speechSynthesis.cancel();
 
 
     const cleanText =
-        stripHtml(text);
+        stripHtml(text)
+            .trim();
+
+
+    if (!cleanText)
+        return;
+
+
+    window.speechSynthesis.cancel();
 
 
     const utterance =
@@ -1733,26 +2496,28 @@ function speak(text) {
     utterance.rate =
         0.92;
 
+
     utterance.pitch =
         1;
+
 
     utterance.volume =
         1;
 
+
+    /*
+    Prefer Urdu voice.
+    */
 
     const voices =
         window.speechSynthesis
             .getVoices();
 
 
-    /*
-    Prefer Urdu
-    */
-
-    const urduVoice =
+    let preferred =
         voices.find(
             voice =>
-                /^ur/i.test(
+                /^ur(-|_)/i.test(
                     voice.lang
                 )
         );
@@ -1762,56 +2527,40 @@ function speak(text) {
     Then Hindi
     */
 
-    const hindiVoice =
-        voices.find(
-            voice =>
-                /^hi/i.test(
-                    voice.lang
-                )
-        );
+    if (!preferred) {
+
+        preferred =
+            voices.find(
+                voice =>
+                    /^hi(-|_)/i.test(
+                        voice.lang
+                    )
+            );
+
+    }
 
 
     /*
     Then English
     */
 
-    const englishVoice =
-        voices.find(
-            voice =>
-                /^en/i.test(
-                    voice.lang
-                )
-        );
+    if (!preferred) {
+
+        preferred =
+            voices.find(
+                voice =>
+                    /^en(-|_)/i.test(
+                        voice.lang
+                    )
+            );
+
+    }
 
 
-    if (urduVoice) {
-
-        utterance.voice =
-            urduVoice;
-
-        utterance.lang =
-            urduVoice.lang;
-
-    } else if (hindiVoice) {
+    if (preferred) {
 
         utterance.voice =
-            hindiVoice;
-
-        utterance.lang =
-            hindiVoice.lang;
-
-    } else if (englishVoice) {
-
-        utterance.voice =
-            englishVoice;
-
-        utterance.lang =
-            englishVoice.lang;
-
-    } else {
-
-        utterance.lang =
-            "ur-PK";
+            preferred;
 
     }
 
@@ -1823,29 +2572,80 @@ function speak(text) {
 }
 
 
-/* =========================================================
-   HELPERS
-========================================================= */
+/* ========================================================
+   SPEECH VOICES READY
+======================================================== */
 
-function scrollChat() {
+if (
+    "speechSynthesis" in window
+) {
 
-    if (!chatMessages) {
-        return;
-    }
+    window.speechSynthesis
+        .addEventListener(
+            "voiceschanged",
+            () => {
 
-    chatMessages.scrollTop =
-        chatMessages.scrollHeight;
+                console.log(
+                    "🔊 Speech voices loaded"
+                );
+
+            }
+        );
 
 }
 
 
+/* ========================================================
+   NAVIGATION
+======================================================== */
+
+function navigateTo(
+    page
+) {
+
+    window.location.href =
+        page;
+
+}
+
+
+/* ========================================================
+   SCROLL
+======================================================== */
+
+function scrollChat() {
+
+    if (!chatMessages)
+        return;
+
+
+    requestAnimationFrame(
+        () => {
+
+            chatMessages.scrollTop =
+                chatMessages.scrollHeight;
+
+        }
+    );
+
+}
+
+
+/* ========================================================
+   STRIP HTML
+======================================================== */
+
 function stripHtml(html) {
 
     const temp =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     temp.innerHTML =
         html;
+
 
     return (
         temp.textContent ||
@@ -1856,9 +2656,15 @@ function stripHtml(html) {
 }
 
 
+/* ========================================================
+   ESCAPE HTML
+======================================================== */
+
 function escapeHtml(value) {
 
-    return String(value || "")
+    return String(
+        value ?? ""
+    )
         .replace(
             /&/g,
             "&amp;"
@@ -1883,15 +2689,33 @@ function escapeHtml(value) {
 }
 
 
+/* ========================================================
+   SAFE URL
+======================================================== */
+
 function safeUrl(url) {
 
     const value =
-        String(url || "")
-            .trim();
+        String(
+            url || ""
+        ).trim();
 
 
     if (
-        /^javascript:/i.test(value)
+        /^javascript:/i.test(
+            value
+        )
+    ) {
+
+        return "#";
+
+    }
+
+
+    if (
+        /^data:/i.test(
+            value
+        )
     ) {
 
         return "#";
@@ -1904,11 +2728,18 @@ function safeUrl(url) {
 }
 
 
-/* =========================================================
-   ERROR
-========================================================= */
+/* ========================================================
+   FIREBASE ERROR
+======================================================== */
 
-function showError(message) {
+function showFirebaseError(
+    message
+) {
+
+    console.error(
+        message
+    );
+
 
     if (loadingScreen) {
 
@@ -1919,13 +2750,32 @@ function showError(message) {
     }
 
 
-    if (chatApp) {
+    if (loginScreen) {
 
-        chatApp.classList.remove(
+        loginScreen.classList.remove(
             "hidden"
         );
 
     }
+
+}
+
+
+/* ========================================================
+   GENERAL ERROR
+======================================================== */
+
+function showError(
+    message
+) {
+
+    if (!chatApp)
+        return;
+
+
+    chatApp.classList.remove(
+        "hidden"
+    );
 
 
     addBotMessage(
@@ -1935,19 +2785,60 @@ function showError(message) {
 }
 
 
-/* =========================================================
-   DEBUG
-========================================================= */
+/* ========================================================
+   GLOBAL DEBUG
+======================================================== */
+
+window.ChishtiAI = {
+
+    getUser: () =>
+        currentUser,
+
+    getBooks: () =>
+        books,
+
+    getKnowledge: () =>
+        knowledge,
+
+    searchBooks,
+
+    findKnowledge,
+
+    speak,
+
+    sendMessage
+
+};
+
 
 console.log(
-    "🤖 CHISHTI AI BOT JS LOADED"
+    "======================================"
 );
+
 console.log(
-    "📚 Knowledge-first system enabled"
+    "🤖 CHISHTI AI READY"
 );
+
 console.log(
-    "🔥 Firebase book database enabled"
+    "📚 Firestore books enabled"
 );
+
+console.log(
+    "🧠 knowledge.json enabled"
+);
+
 console.log(
     "🎙️ Urdu voice enabled"
+);
+
+console.log(
+    "🔊 Voice reply enabled"
+);
+
+console.log(
+    "🔐 Login-only mode enabled"
+);
+
+console.log(
+    "======================================"
 );
