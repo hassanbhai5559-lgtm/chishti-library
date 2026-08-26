@@ -292,35 +292,59 @@ LATEST BOOK
 
 </section>
 
-<!-- =========================
-     CHISHTI AI JARVIS
-========================= -->
+<!-- =====================================================
+     CHISHTI AI — JARVIS
+     Auto Open: OFF
+     Login Required: JS handles this
+===================================================== -->
 
-<button id="chatBtn" type="button" aria-label="Open Chishti AI">
+<!-- JARVIS FLOATING ORB -->
+<button
+    id="jarvisOrb"
+    class="jarvis-orb"
+    type="button"
+    aria-label="Open Chishti AI"
+    title="Chishti AI">
+
+    <span class="jarvis-ring ring-1"></span>
+    <span class="jarvis-ring ring-2"></span>
+    <span class="jarvis-ring ring-3"></span>
 
     <img
         src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
         alt="Chishti AI">
-
 </button>
 
 
-<div id="chatWindow">
+<!-- =====================================================
+     JARVIS WINDOW
+===================================================== -->
 
-    <div class="chat-header">
+<div
+    id="jarvisWindow"
+    class="jarvis-window"
+    aria-hidden="true">
 
-        <div class="chat-brand">
+    <!-- HEADER -->
 
-            <img
-                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
-                alt="Chishti AI">
+    <div class="jarvis-header">
+
+        <div class="jarvis-title">
+
+            <div class="jarvis-mini-orb">
+
+                <img
+                    src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                    alt="Chishti AI">
+
+            </div>
 
             <div>
 
                 <h3>CHISHTI AI</h3>
 
-                <span>
-                    JARVIS • ONLINE
+                <span id="jarvisStatus">
+                    Online
                 </span>
 
             </div>
@@ -328,115 +352,234 @@ LATEST BOOK
         </div>
 
 
+        <div class="jarvis-header-actions">
+
+            <!-- Voice -->
+
+            <button
+                id="voiceToggle"
+                type="button"
+                aria-label="Toggle voice"
+                title="Voice">
+
+                <i class="fa-solid fa-volume-high"></i>
+
+            </button>
+
+
+            <!-- Clear -->
+
+            <button
+                id="clearChat"
+                type="button"
+                aria-label="Clear chat"
+                title="Clear chat">
+
+                <i class="fa-solid fa-trash"></i>
+
+            </button>
+
+
+            <!-- Close -->
+
+            <button
+                id="closeJarvis"
+                type="button"
+                aria-label="Close Chishti AI"
+                title="Close">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         JARVIS ORB AREA
+    ================================================== -->
+
+    <div class="jarvis-visual">
+
+        <div
+            id="jarvisCore"
+            class="jarvis-core">
+
+            <div class="core-ring core-ring-1"></div>
+            <div class="core-ring core-ring-2"></div>
+            <div class="core-ring core-ring-3"></div>
+
+            <img
+                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                alt="JARVIS">
+
+        </div>
+
+        <div
+            id="voiceStatus"
+            class="voice-status">
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         MESSAGES
+    ================================================== -->
+
+    <div
+        id="chatMessages"
+        class="jarvis-messages">
+
+        <!-- JS will add messages here -->
+
+    </div>
+
+
+    <!-- =================================================
+         QUICK COMMANDS
+    ================================================== -->
+
+    <div class="quick-commands">
+
         <button
-            id="closeChat"
             type="button"
-            aria-label="Close Chishti AI">
+            data-command="Hi">
 
-            <i class="fas fa-times"></i>
+            Hi
+        </button>
 
+        <button
+            type="button"
+            data-command="Show all books">
+
+            Books
+        </button>
+
+        <button
+            type="button"
+            data-command="Show latest books">
+
+            Latest
+        </button>
+
+        <button
+            type="button"
+            data-command="What is Chishti Library?">
+
+            Library
         </button>
 
     </div>
 
 
-    <!-- JARVIS ORB -->
+    <!-- =================================================
+         INPUT
+    ================================================== -->
 
-    <div class="jarvis-orb-area">
+    <div class="jarvis-input-area">
 
-        <div id="jarvisOrb"
-             class="jarvis-orb">
-
-            <div class="orb-core"></div>
-
-            <div class="orb-ring ring-1"></div>
-            <div class="orb-ring ring-2"></div>
-            <div class="orb-ring ring-3"></div>
-
-        </div>
-
-        <div id="voiceStatus">
-            Ready
-        </div>
-
-    </div>
-
-
-    <!-- MESSAGES -->
-
-    <div id="chatMessages">
-
-        <div class="bot-message">
-
-            Assalamu Alaikum 👋<br><br>
-
-            Main <strong>Chishti AI</strong> hoon.
-            Aap mujh se baat kar sakte hain.
-
-        </div>
-
-    </div>
-
-
-    <!-- INPUT -->
-
-    <div class="chat-input">
+        <!-- MIC -->
 
         <button
             id="micButton"
+            class="jarvis-mic"
             type="button"
-            aria-label="Voice input">
+            aria-label="Voice input"
+            title="Speak">
 
-            <i class="fas fa-microphone"></i>
+            <i class="fa-solid fa-microphone"></i>
 
         </button>
 
 
-        <input
-            type="text"
-            id="chatInput"
-            placeholder="Ask Chishti AI..."
-            autocomplete="off">
+        <!-- INPUT -->
 
+        <input
+            id="chatInput"
+            type="text"
+            autocomplete="off"
+            placeholder="Ask Chishti AI...">
+
+
+        <!-- SEND -->
 
         <button
             id="sendButton"
+            class="jarvis-send"
             type="button"
             aria-label="Send">
 
-            <i class="fas fa-paper-plane"></i>
+            <i class="fa-solid fa-paper-plane"></i>
 
         </button>
 
     </div>
 
-
-    <!-- VOICE -->
-
-    <div class="chat-controls">
-
-        <button
-            id="voiceToggle"
-            type="button">
-
-            <i class="fas fa-volume-high"></i>
-
-            Voice Reply
-
-        </button>
+</div>
 
 
-        <button
-            id="clearChat"
-            type="button">
+<!-- =====================================================
+     LOGIN SCREEN
+     Hidden until JS detects logged-out user
+===================================================== -->
 
-            <i class="fas fa-trash"></i>
+<div
+    id="loginScreen"
+    class="jarvis-login-screen hidden">
 
-            Clear
+    <div class="jarvis-login-box">
 
-        </button>
+        <div class="login-orb">
+
+            <img
+                src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+                alt="Chishti AI">
+
+        </div>
+
+        <h2>CHISHTI AI</h2>
+
+        <p>
+            Please login to use Chishti AI.
+        </p>
+
+        <a
+            href="login.html"
+            class="jarvis-login-button">
+
+            <i class="fa-solid fa-right-to-bracket"></i>
+
+            Login
+
+        </a>
 
     </div>
+
+</div>
+
+
+<!-- =====================================================
+     AI LOADING
+===================================================== -->
+
+<div
+    id="loadingScreen"
+    class="jarvis-loading hidden">
+
+    <div class="loading-orb">
+
+        <img
+            src="6d587a32-1b31-4895-8a67-e5e3a64257e4.png"
+            alt="Loading">
+
+    </div>
+
+    <p>
+        Chishti AI is connecting...
+    </p>
 
 </div>
 <!-- ==========================
