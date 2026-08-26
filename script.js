@@ -1006,3 +1006,77 @@ console.log("✅ Downloads");
 console.log("✅ Responsive");
 
 console.log("🚀 Production Ready");
+
+
+/* =========================================================
+   CHISHTI AI - SAFE LAUNCHER
+   Jarvis does NOT auto-open
+   Only opens when AI button is clicked
+========================================================= */
+
+(function () {
+
+    "use strict";
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        /* -----------------------------------------
+           AI BUTTON
+        ----------------------------------------- */
+
+        const chatBtn = document.getElementById("chatBtn");
+
+        if (!chatBtn) return;
+
+
+        /* -----------------------------------------
+           REMOVE OLD CHAT AUTO-OPEN BEHAVIOR
+        ----------------------------------------- */
+
+        const oldChatWindow =
+            document.getElementById("chatWindow");
+
+        if (oldChatWindow) {
+
+            oldChatWindow.style.display = "none";
+
+            oldChatWindow.classList.remove("open");
+
+        }
+
+
+        /* -----------------------------------------
+           AI BUTTON CLICK
+        ----------------------------------------- */
+
+        chatBtn.onclick = function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            window.location.href = "bot.html";
+
+        };
+
+
+        /* -----------------------------------------
+           MAKE SURE BUTTON IS CLICKABLE
+        ----------------------------------------- */
+
+        chatBtn.style.cursor = "pointer";
+
+        chatBtn.style.pointerEvents = "auto";
+
+
+        console.log(
+            "🤖 Chishti AI launcher ready"
+        );
+
+        console.log(
+            "✅ Jarvis will open ONLY after clicking AI button"
+        );
+
+    });
+
+})();
