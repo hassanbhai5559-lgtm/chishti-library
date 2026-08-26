@@ -1080,3 +1080,955 @@ console.log("🚀 Production Ready");
     });
 
 })();
+
+/* =========================================================
+   CHISHTI LIBRARY
+   SOCIAL + COUNTERS SYSTEM
+   VIEWS • LIKES • DOWNLOADS • COMMENTS • SHARE
+   PASTE THIS AT THE END OF script.js
+========================================================= */
+
+(function () {
+
+    "use strict";
+
+    /* =====================================================
+       WAIT FOR FIREBASE
+    ===================================================== */
+
+    function firebaseReady() {
+
+        return (
+            typeof firebase !== "undefined" &&
+            firebase.apps &&
+            firebase.apps.length > 0
+        );
+
+    }
+
+
+    /* =====================================================
+       GET BOOK ID
+    ===================================================== */
+
+    function getBookId(book) {
+
+        if (!book) return null;
+
+        return (
+            book.id ||
+            book.firestoreId ||
+            book.bookId ||
+            book.title ||
+            null
+        );
+
+    }
+
+
+    /* =====================================================
+       GET CURRENT USER
+    ===================================================== */
+
+    function getCurrentUser() {
+
+        if (
+            typeof firebase !== "undefined" &&
+            firebase.auth &&
+            firebase.auth().currentUser
+        ) {
+
+            return firebase.auth().currentUser;
+
+        }
+
+        return null;
+
+    }
+
+
+    /* =====================================================
+       FIRESTORE BOOK COUNTER
+    ===================================================== */
+
+    async function updateBookCounter(
+        bookId,
+        field
+    ) {
+
+        if (!firebaseReady()) {
+
+            console.warn(
+                "Firebase not ready"
+            );
+
+            return;
+
+        }
+
+        if (!bookId) return;
+
+
+        try {
+
+            const db =
+                firebase.firestore();
+
+
+            const ref =
+                db.collection("books")
+                  .doc(String(bookId));
+
+
+            await ref.update({
+
+                [field]:
+                    firebase.firestore.FieldValue.increment(1)
+
+            });
+
+
+            console.log(
+                "✅ Counter updated:",
+                field,
+                bookId
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Counter error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       VIEW SYSTEM
+    ===================================================== */
+
+    window.chishtiCountView =
+        async function (bookId) {
+
+            if (!bookId) return;
+
+
+            /*
+               Prevent counting same book repeatedly
+               during the same browser session.
+            */
+
+            const key =
+                "chishti_view_" +
+                String(bookId);
+
+
+            if (
+                sessionStorage.getItem(key)
+            ) {
+
+                return;
+
+            }
+
+
+            sessionStorage.setItem(
+                key,
+                "true"
+            );
+
+
+            await updateBookCounter(
+                bookId,
+                "views"
+            );
+
+        };
+
+
+    /* =====================================================
+       DOWNLOAD SYSTEM
+    ===================================================== */
+
+    window.chishtiCountDownload =
+        async function (bookId) {
+
+            if (!bookId) return;
+
+            await updateBookCounter(
+                bookId,
+                "downloads"
+            );
+
+        };
+
+
+    /* =====================================================
+       LIKE SYSTEM
+    ===================================================== */
+
+    window.chishtiLikeBook =
+        async function (bookId) {
+
+            if (!firebaseReady()) return;
+
+
+            const user =
+                getCurrentUser();
+
+
+            /*
+              Login required for likes.
+            */
+
+            if (!user) {
+
+                if (
+                    typeof requireLogin ===
+                    "function"
+                ) {
+
+                    requireLogin();
+
+                } else {
+
+                    alert(
+                        "Please login first to like this book."
+                    );
+
+                }
+
+                return;
+
+            }
+
+
+            const db =
+                firebase.firestore();
+
+
+            const likeId =
+                user.uid +
+                "_" +
+                String(bookId);
+
+
+            const likeRef =
+                db.collection("bookLikes")
+                  .doc(likeId);
+
+
+            const bookRef =
+                db.collection("books")
+                  .doc(String(bookId));
+
+
+            try {
+
+                const likeSnap =
+                    await likeRef.get();
+
+
+                /*
+                  ALREADY LIKED
+                */
+
+                if (likeSnap.exists) {
+
+                    await likeRef.delete();
+
+
+                    await bookRef.update({
+
+                        likes:
+                            firebase.firestore.FieldValue
+                                .increment(-1)
+
+                    });
+
+
+                    return {
+                        liked: false
+                    };
+
+                }
+
+
+                /*
+                  NEW LIKE
+                */
+
+                await likeRef.set({
+
+                    uid: user.uid,
+
+                    bookId:
+                        String(bookId),
+
+                    createdAt:
+                        firebase.firestore.FieldValue
+                            .serverTimestamp()
+
+                });
+
+
+                await bookRef.update({
+
+                    likes:
+                        firebase.firestore.FieldValue
+                            .increment(1)
+
+                });
+
+
+                return {
+                    liked: true
+                };
+
+
+            } catch (error) {
+
+                console.error(
+                    "Like error:",
+                    error
+                );
+
+                return {
+                    liked: false,
+                    error: true
+                };
+
+            }
+
+        };
+
+
+    /* =====================================================
+       CHECK LIKE
+    ===================================================== */
+
+    window.chishtiHasLiked =
+        async function (bookId) {
+
+            if (!firebaseReady()) {
+                return false;
+            }
+
+
+            const user =
+                getCurrentUser();
+
+
+            if (!user) {
+                return false;
+            }
+
+
+            try {
+
+                const likeId =
+                    user.uid +
+                    "_" +
+                    String(bookId);
+
+
+                const snap =
+                    await firebase.firestore()
+                        .collection("bookLikes")
+                        .doc(likeId)
+                        .get();
+
+
+                return snap.exists;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Like check error:",
+                    error
+                );
+
+                return false;
+
+            }
+
+        };
+
+
+    /* =====================================================
+       COMMENTS
+    ===================================================== */
+
+    window.chishtiAddComment =
+        async function (
+            bookId,
+            text
+        ) {
+
+            if (!firebaseReady()) {
+
+                return {
+                    success: false
+                };
+
+            }
+
+
+            const user =
+                getCurrentUser();
+
+
+            if (!user) {
+
+                if (
+                    typeof requireLogin ===
+                    "function"
+                ) {
+
+                    requireLogin();
+
+                }
+
+                return {
+                    success: false,
+                    login: true
+                };
+
+            }
+
+
+            text =
+                String(text || "")
+                    .trim();
+
+
+            if (!text) {
+
+                return {
+                    success: false
+                };
+
+            }
+
+
+            if (text.length > 500) {
+
+                return {
+                    success: false,
+                    message:
+                        "Comment is too long."
+                };
+
+            }
+
+
+            try {
+
+                await firebase.firestore()
+                    .collection("comments")
+                    .add({
+
+                        bookId:
+                            String(bookId),
+
+                        uid:
+                            user.uid,
+
+                        userName:
+                            user.displayName ||
+                            user.email?.split("@")[0] ||
+                            "Reader",
+
+                        userEmail:
+                            user.email ||
+                            "",
+
+                        text:
+                            text,
+
+                        createdAt:
+                            firebase.firestore.FieldValue
+                                .serverTimestamp()
+
+                    });
+
+
+                console.log(
+                    "✅ Comment added"
+                );
+
+
+                return {
+                    success: true
+                };
+
+
+            } catch (error) {
+
+                console.error(
+                    "Comment error:",
+                    error
+                );
+
+
+                return {
+                    success: false,
+                    error: true
+                };
+
+            }
+
+        };
+
+
+    /* =====================================================
+       LOAD COMMENTS
+    ===================================================== */
+
+    window.chishtiLoadComments =
+        async function (bookId) {
+
+            if (!firebaseReady()) {
+                return [];
+            }
+
+
+            try {
+
+                const snapshot =
+                    await firebase.firestore()
+                        .collection("comments")
+                        .where(
+                            "bookId",
+                            "==",
+                            String(bookId)
+                        )
+                        .limit(100)
+                        .get();
+
+
+                const comments = [];
+
+
+                snapshot.forEach(doc => {
+
+                    comments.push({
+
+                        id: doc.id,
+
+                        ...doc.data()
+
+                    });
+
+                });
+
+
+                comments.sort(
+                    (a, b) => {
+
+                        const aTime =
+                            a.createdAt?.seconds ||
+                            0;
+
+                        const bTime =
+                            b.createdAt?.seconds ||
+                            0;
+
+                        return bTime - aTime;
+
+                    }
+                );
+
+
+                return comments;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Load comments error:",
+                    error
+                );
+
+
+                return [];
+
+            }
+
+        };
+
+
+    /* =====================================================
+       SHARE SYSTEM
+    ===================================================== */
+
+    window.chishtiShareBook =
+        async function (book) {
+
+            if (!book) return;
+
+
+            const title =
+                book.title ||
+                "Chishti Library";
+
+
+            const url =
+                book.url ||
+                book.pdf ||
+                window.location.href;
+
+
+            const shareData = {
+
+                title:
+                    title,
+
+                text:
+                    "Read this book on Chishti Library: " +
+                    title,
+
+                url:
+                    url
+
+            };
+
+
+            /*
+              Native mobile/browser share
+            */
+
+            if (
+                navigator.share
+            ) {
+
+                try {
+
+                    await navigator.share(
+                        shareData
+                    );
+
+                    return true;
+
+                } catch (error) {
+
+                    console.log(
+                        "Share cancelled"
+                    );
+
+                    return false;
+
+                }
+
+            }
+
+
+            /*
+              Desktop fallback
+            */
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    url
+                );
+
+
+                alert(
+                    "Book link copied!"
+                );
+
+
+                return true;
+
+
+            } catch (error) {
+
+                prompt(
+                    "Copy this book link:",
+                    url
+                );
+
+
+                return false;
+
+            }
+
+        };
+
+
+    /* =====================================================
+       WHATSAPP SHARE
+    ===================================================== */
+
+    window.chishtiWhatsAppShare =
+        function (book) {
+
+            if (!book) return;
+
+
+            const title =
+                book.title ||
+                "Chishti Library";
+
+
+            const url =
+                book.url ||
+                book.pdf ||
+                window.location.href;
+
+
+            const text =
+                "📚 " +
+                title +
+                "\n\nRead on Chishti Library:\n" +
+                url;
+
+
+            window.open(
+
+                "https://wa.me/?text=" +
+                encodeURIComponent(text),
+
+                "_blank"
+
+            );
+
+        };
+
+
+    /* =====================================================
+       FACEBOOK SHARE
+    ===================================================== */
+
+    window.chishtiFacebookShare =
+        function (book) {
+
+            if (!book) return;
+
+
+            const url =
+                book.url ||
+                book.pdf ||
+                window.location.href;
+
+
+            window.open(
+
+                "https://www.facebook.com/sharer/sharer.php?u=" +
+                encodeURIComponent(url),
+
+                "_blank",
+
+                "width=600,height=500"
+
+            );
+
+        };
+
+
+    /* =====================================================
+       TELEGRAM SHARE
+    ===================================================== */
+
+    window.chishtiTelegramShare =
+        function (book) {
+
+            if (!book) return;
+
+
+            const title =
+                book.title ||
+                "Chishti Library";
+
+
+            const url =
+                book.url ||
+                book.pdf ||
+                window.location.href;
+
+
+            const telegramUrl =
+                "https://t.me/share/url?url=" +
+                encodeURIComponent(url) +
+                "&text=" +
+                encodeURIComponent(title);
+
+
+            window.open(
+                telegramUrl,
+                "_blank"
+            );
+
+        };
+
+
+    /* =====================================================
+       AUTO DOWNLOAD COUNTER
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const link =
+                event.target.closest(
+                    "a[download]"
+                );
+
+
+            if (!link) return;
+
+
+            /*
+              Try to identify book from URL.
+            */
+
+            const pdf =
+                link.getAttribute(
+                    "href"
+                );
+
+
+            if (!pdf) return;
+
+
+            const book =
+                allBooks.find(
+                    b =>
+                        b.pdf === pdf
+                );
+
+
+            if (book) {
+
+                const id =
+                    getBookId(book);
+
+
+                chishtiCountDownload(
+                    id
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       AUTO READ / VIEW COUNTER
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const link =
+                event.target.closest(
+                    "a"
+                );
+
+
+            if (!link) return;
+
+
+            if (
+                link.hasAttribute(
+                    "download"
+                )
+            ) {
+                return;
+            }
+
+
+            const href =
+                link.getAttribute(
+                    "href"
+                );
+
+
+            if (!href) return;
+
+
+            const match =
+                href.match(
+                    /book=([^&]+)/i
+                );
+
+
+            if (!match) return;
+
+
+            const pdf =
+                decodeURIComponent(
+                    match[1]
+                );
+
+
+            const book =
+                allBooks.find(
+                    b =>
+                        b.pdf === pdf
+                );
+
+
+            if (book) {
+
+                chishtiCountView(
+                    getBookId(book)
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       FINISH
+    ===================================================== */
+
+    console.log(
+        "===================================="
+    );
+
+    console.log(
+        "📊 CHISHTI SOCIAL SYSTEM"
+    );
+
+    console.log(
+        "✅ Views"
+    );
+
+    console.log(
+        "✅ Likes"
+    );
+
+    console.log(
+        "✅ Downloads"
+    );
+
+    console.log(
+        "✅ Comments"
+    );
+
+    console.log(
+        "✅ Share"
+    );
+
+    console.log(
+        "🔥 Firebase Connected"
+    );
+
+    console.log(
+        "===================================="
+
+    );
+
+})();
