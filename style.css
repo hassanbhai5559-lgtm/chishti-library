@@ -3363,3 +3363,283 @@ section,
     }
 
 }
+
+
+/* =========================================================
+   CHISHTI LIBRARY — LIKE / COMMENT / SHARE BUTTONS
+   Paste at END of style.css
+========================================================= */
+
+.book-actions,
+.book-social,
+.book-buttons-social {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+}
+
+
+/* =========================
+   COMMON BUTTON
+========================= */
+
+.book-actions button,
+.book-social button,
+.book-buttons-social button,
+.like-btn,
+.comment-btn,
+.share-btn {
+
+    border: none;
+    outline: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 9px 15px;
+
+    border-radius: 10px;
+
+    background: rgba(255,255,255,0.08);
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================
+   ICON
+========================= */
+
+.book-actions button i,
+.book-social button i,
+.book-buttons-social button i,
+.like-btn i,
+.comment-btn i,
+.share-btn i {
+
+    font-size: 15px;
+
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+.book-actions button:hover,
+.book-social button:hover,
+.book-buttons-social button:hover,
+.like-btn:hover,
+.comment-btn:hover,
+.share-btn:hover {
+
+    transform: translateY(-2px);
+
+    background: rgba(255,255,255,0.16);
+
+    box-shadow:
+        0 5px 18px rgba(0,0,0,0.18);
+
+}
+
+
+/* =========================
+   LIKE
+========================= */
+
+.like-btn {
+
+    color: #ff6b81 !important;
+
+}
+
+.like-btn:hover {
+
+    background: rgba(255,107,129,0.12) !important;
+
+}
+
+
+/* =========================
+   COMMENT
+========================= */
+
+.comment-btn {
+
+    color: #7dd3fc !important;
+
+}
+
+.comment-btn:hover {
+
+    background: rgba(125,211,252,0.12) !important;
+
+}
+
+
+/* =========================
+   SHARE
+========================= */
+
+.share-btn {
+
+    color: #a7f3d0 !important;
+
+}
+
+.share-btn:hover {
+
+    background: rgba(167,243,208,0.12) !important;
+
+}
+
+
+/* =========================
+   ACTIVE LIKE
+========================= */
+
+.like-btn.active {
+
+    background: rgba(255,107,129,0.16) !important;
+
+    box-shadow:
+        0 0 15px rgba(255,107,129,0.18);
+
+}
+
+
+/* =========================
+   COUNTER
+========================= */
+
+.like-count,
+.comment-count,
+.share-count {
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    min-width: 12px;
+
+    text-align: center;
+
+}
+
+
+/* =========================
+   BOOK CARD ACTION AREA
+========================= */
+
+.book-card .book-actions,
+.book-result .book-actions {
+
+    border-top:
+        1px solid rgba(255,255,255,0.08);
+
+    padding-top: 12px;
+
+}
+
+
+/* =========================
+   LIGHT BACKGROUND SUPPORT
+========================= */
+
+@media (prefers-color-scheme: light) {
+
+    .book-actions button,
+    .book-social button,
+    .book-buttons-social button,
+    .like-btn,
+    .comment-btn,
+    .share-btn {
+
+        background: rgba(0,0,0,0.05);
+
+        color: #222;
+
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .book-actions,
+    .book-social,
+    .book-buttons-social {
+
+        gap: 7px;
+
+    }
+
+
+    .book-actions button,
+    .book-social button,
+    .book-buttons-social button,
+    .like-btn,
+    .comment-btn,
+    .share-btn {
+
+        padding: 8px 11px;
+
+        font-size: 13px;
+
+        border-radius: 9px;
+
+    }
+
+}
+
+
+/* =========================
+   SMALL ICON-ONLY STYLE
+========================= */
+
+.social-icon-btn {
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0 !important;
+
+    border-radius: 50% !important;
+
+}
+
+
+/* =========================
+   SMOOTH PRESS
+========================= */
+
+.book-actions button:active,
+.book-social button:active,
+.book-buttons-social button:active,
+.like-btn:active,
+.comment-btn:active,
+.share-btn:active {
+
+    transform: scale(0.94);
+
+}
