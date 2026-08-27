@@ -90,7 +90,6 @@ function initMobileMenu() {
     menuBtn.addEventListener("click", () => {
 
         menu.classList.toggle("show");
-
         menuBtn.classList.toggle("active");
 
     });
@@ -204,6 +203,7 @@ async function updateVisitorCounter() {
             counter.textContent = "1";
 
             return;
+
         }
 
 
@@ -366,11 +366,14 @@ async function loadBooks() {
 
         updateBookCounter();
 
+
         displayBooks(
             filteredBooks
         );
 
+
         latestBook();
+
 
         preloadBookCovers();
 
@@ -547,20 +550,21 @@ function createBookCard(book, index = 0) {
         getBookId(book);
 
 
+    /*
+    ---------------------------------------------------------
+    READER
+    ---------------------------------------------------------
+    */
+
+    const readerPage =
+        window.CHISHTI_READER_PAGE ||
+        "reader.html";
+
+
     const readUrl =
-        book.url ||
-        book.readUrl ||
-        (
-            pdf
-                ? pdf
-                : "books.html"
-        );
-
-
-    const likes =
-        Number(
-            book.likes || 0
-        );
+        readerPage +
+        "?book=" +
+        encodeURIComponent(bookId);
 
 
     card.innerHTML = `
@@ -595,6 +599,7 @@ function createBookCard(book, index = 0) {
             ${
                 category
                 ? `
+
                     <p class="book-category">
 
                         <i class="fa-solid fa-layer-group"></i>
@@ -602,6 +607,7 @@ function createBookCard(book, index = 0) {
                         ${escapeHtml(category)}
 
                     </p>
+
                 `
                 : ""
             }
@@ -609,10 +615,10 @@ function createBookCard(book, index = 0) {
 
             <div class="book-buttons">
 
+
                 <a
                     href="${safeUrl(readUrl)}"
                     class="btn book-read-btn"
-                    ${pdf ? 'target="_blank"' : ""}
                 >
 
                     <i class="fa-solid fa-book-open"></i>
@@ -625,6 +631,7 @@ function createBookCard(book, index = 0) {
                 ${
                     pdf
                     ? `
+
                         <a
                             href="${safeUrl(pdf)}"
                             class="btn book-download-btn"
@@ -636,60 +643,14 @@ function createBookCard(book, index = 0) {
                             PDF
 
                         </a>
+
                     `
                     : ""
                 }
 
-            </div>
-
-
-            <div class="book-social-actions">
-
-                <button
-                    type="button"
-                    class="like-book"
-                    data-book-id="${escapeHtml(bookId)}"
-                >
-
-                    <i class="fa-regular fa-heart"></i>
-
-                    <span>
-                        ${likes}
-                    </span>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="comment-book"
-                    data-book-id="${escapeHtml(bookId)}"
-                >
-
-                    <i class="fa-regular fa-comment"></i>
-
-                    <span>
-                        Comment
-                    </span>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="share-book"
-                    data-book-id="${escapeHtml(bookId)}"
-                >
-
-                    <i class="fa-solid fa-share-nodes"></i>
-
-                    <span>
-                        Share
-                    </span>
-
-                </button>
 
             </div>
+
 
         </div>
 
@@ -881,20 +842,24 @@ function searchBooks() {
                             book.title
                         );
 
+
                     const author =
                         normalize(
                             book.author
                         );
+
 
                     const category =
                         normalize(
                             book.category
                         );
 
+
                     const language =
                         normalize(
                             book.language
                         );
+
 
                     const description =
                         normalize(
@@ -950,13 +915,22 @@ function searchBooks() {
                     }
 
 
+                    if (
+                        description.includes(query)
+                    ) {
+
+                        score += 10;
+
+                    }
+
+
                     words.forEach(word => {
 
                         if (
                             title.includes(word)
                         ) {
 
-                            score += 12;
+                            score += 20;
 
                         }
 
@@ -965,7 +939,7 @@ function searchBooks() {
                             author.includes(word)
                         ) {
 
-                            score += 8;
+                            score += 12;
 
                         }
 
@@ -974,16 +948,7 @@ function searchBooks() {
                             category.includes(word)
                         ) {
 
-                            score += 6;
-
-                        }
-
-
-                        if (
-                            description.includes(word)
-                        ) {
-
-                            score += 3;
+                            score += 8;
 
                         }
 
@@ -997,14 +962,17 @@ function searchBooks() {
 
                 })
                 .filter(
-                    item => item.score > 0
+                    item =>
+                        item.score > 0
                 )
                 .sort(
                     (a, b) =>
-                        b.score - a.score
+                        b.score -
+                        a.score
                 )
                 .map(
-                    item => item.book
+                    item =>
+                        item.book
                 );
 
     }
@@ -1019,103 +987,23 @@ function searchBooks() {
     );
 
 }
-
-
-/* =========================================================
-   CATEGORY FILTER
-   ========================================================= */
-
-function initCategories() {
-
-    document
-        .querySelectorAll(".category")
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const category =
-                        button.dataset.category ||
-                        button.textContent.trim();
-
-
-                    filterBooks(
-                        category,
-                        button
-                    );
-
-                }
-            );
-
-        });
-
-}
-
-
 /* =========================================================
    FILTER BOOKS
    ========================================================= */
 
-window.filterBooks =
-function filterBooks(
-    category,
-    button = null
-) {
+function filterBooks(category) {
 
-    const selected =
-        normalize(
-            category || "All"
-        );
-
-
-    document
-        .querySelectorAll(".category")
-        .forEach(btn => {
-
-            btn.classList.remove(
-                "active"
-            );
-
-        });
-
-
-    if (button) {
-
-        button.classList.add(
-            "active"
-        );
-
-    } else {
-
-        document
-            .querySelectorAll(".category")
-            .forEach(btn => {
-
-                const text =
-                    normalize(
-                        btn.dataset.category ||
-                        btn.textContent
-                    );
-
-
-                if (
-                    text === selected
-                ) {
-
-                    btn.classList.add(
-                        "active"
-                    );
-
-                }
-
-            });
-
+    if (!category) {
+        category = "All";
     }
 
 
+    const normalizedCategory =
+        normalize(category);
+
+
     if (
-        selected === "all"
+        normalizedCategory === "all"
     ) {
 
         filteredBooks =
@@ -1126,17 +1014,9 @@ function filterBooks(
         filteredBooks =
             allBooks.filter(book => {
 
-                const bookCategory =
-                    normalize(
-                        book.category
-                    );
-
-
-                return (
-                    bookCategory === selected ||
-                    bookCategory.includes(selected) ||
-                    selected.includes(bookCategory)
-                );
+                return normalize(
+                    book.category
+                ) === normalizedCategory;
 
             });
 
@@ -1152,132 +1032,228 @@ function filterBooks(
     );
 
 
-    console.log(
-        "Category:",
-        category,
-        "Results:",
-        filteredBooks.length
+    updateCategoryButtons(
+        category
     );
 
-};
+}
 
 
 /* =========================================================
-   LATEST BOOK
+   CATEGORY BUTTONS
    ========================================================= */
 
-function latestBook() {
+function initCategories() {
 
-    if (!allBooks.length) return;
+    document
+        .querySelectorAll(
+            ".category"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const category =
+                        button.textContent.trim();
+
+                    filterBooks(
+                        category
+                    );
+
+                }
+            );
+
+        });
+
+}
 
 
-    let latest =
-        allBooks.find(
-            book =>
-                book.latest === true
+/* =========================================================
+   UPDATE CATEGORY BUTTONS
+   ========================================================= */
+
+function updateCategoryButtons(
+    activeCategory
+) {
+
+    const normalized =
+        normalize(
+            activeCategory
         );
 
 
-    if (!latest) {
+    document
+        .querySelectorAll(
+            ".category"
+        )
+        .forEach(button => {
 
-        latest =
-            [...allBooks]
-                .sort((a, b) => {
+            const value =
+                normalize(
+                    button.textContent
+                );
 
-                    const dateA =
-                        getBookDate(a);
 
-                    const dateB =
-                        getBookDate(b);
+            button.classList.toggle(
+                "active",
+                value === normalized
+            );
 
-                    return dateB - dateA;
+        });
 
-                })[0];
+}
+
+
+/* =========================================================
+   SORT BOOKS
+   ========================================================= */
+
+function sortBooks(type) {
+
+    if (!Array.isArray(
+        filteredBooks
+    )) {
+
+        filteredBooks =
+            [...allBooks];
 
     }
 
 
-    if (!latest) return;
+    const books =
+        [...filteredBooks];
 
 
-    const image =
-        document.querySelector(
-            ".book-image img"
-        );
+    switch (type) {
+
+        case "latest":
+
+            books.sort(
+                (a, b) =>
+                    getBookDate(b) -
+                    getBookDate(a)
+            );
+
+            break;
 
 
-    const title =
-        document.querySelector(
-            ".book-info h2"
-        );
+        case "oldest":
+
+            books.sort(
+                (a, b) =>
+                    getBookDate(a) -
+                    getBookDate(b)
+            );
+
+            break;
 
 
-    const author =
-        document.querySelector(
-            ".book-info h3"
-        );
+        case "liked":
+
+            books.sort(
+                (a, b) =>
+                    getNumber(
+                        b.likes
+                    ) -
+                    getNumber(
+                        a.likes
+                    )
+            );
+
+            break;
 
 
-    const description =
-        document.querySelector(
-            ".book-info p"
-        );
+        case "popular":
+
+            books.sort(
+                (a, b) =>
+                    getPopularity(b) -
+                    getPopularity(a)
+            );
+
+            break;
 
 
-    if (image && latest.cover) {
+        default:
 
-        image.src =
-            latest.cover;
+            break;
 
     }
 
 
-    if (title) {
-
-        title.textContent =
-            latest.title ||
-            "Latest Book";
-
-    }
+    filteredBooks =
+        books;
 
 
-    if (author) {
-
-        author.textContent =
-            latest.author ||
-            "";
-
-    }
+    window.filteredBooks =
+        filteredBooks;
 
 
-    if (description) {
+    displayBooks(
+        filteredBooks
+    );
 
-        description.textContent =
-            latest.description ||
-            "";
 
-    }
+    updateSortButtons(
+        type
+    );
+
+}
+
+
+/* =========================================================
+   SORT BUTTONS
+   ========================================================= */
+
+function updateSortButtons(
+    activeType
+) {
+
+    document
+        .querySelectorAll(
+            ".sort-btn"
+        )
+        .forEach(button => {
+
+            button.classList.remove(
+                "active"
+            );
+
+        });
 
 
     const buttons =
         document.querySelectorAll(
-            ".book-buttons a"
+            ".sort-btn"
         );
 
 
-    if (
-        latest.pdf &&
-        buttons.length
-    ) {
+    buttons.forEach(button => {
 
-        buttons.forEach(button => {
+        const onclick =
+            button.getAttribute(
+                "onclick"
+            ) || "";
 
-            button.href =
-                latest.pdf;
 
-        });
+        if (
+            onclick.includes(
+                `'${activeType}'`
+            ) ||
+            onclick.includes(
+                `"${activeType}"`
+            )
+        ) {
 
-    }
+            button.classList.add(
+                "active"
+            );
+
+        }
+
+    });
 
 }
 
@@ -1288,1068 +1264,361 @@ function latestBook() {
 
 function getBookDate(book) {
 
+    const value =
+        book.date ||
+        book.createdAt ||
+        book.created_at ||
+        book.timestamp ||
+        book.publishedAt ||
+        book.publishDate;
+
+
+    if (!value) {
+
+        return 0;
+
+    }
+
+
     if (
-        book.createdAt &&
-        typeof book.createdAt === "object" &&
-        book.createdAt.seconds
+        typeof value ===
+        "object" &&
+        typeof value.toDate ===
+        "function"
     ) {
 
-        return (
-            Number(book.createdAt.seconds) *
-            1000
-        );
+        return value
+            .toDate()
+            .getTime();
 
     }
 
 
-    if (book.createdAt) {
-
-        const date =
-            new Date(
-                book.createdAt
-            ).getTime();
+    const date =
+        new Date(value);
 
 
-        if (!isNaN(date)) {
-            return date;
-        }
-
-    }
+    const time =
+        date.getTime();
 
 
-    if (book.date) {
-
-        const date =
-            new Date(
-                book.date
-            ).getTime();
-
-
-        if (!isNaN(date)) {
-            return date;
-        }
-
-    }
-
-
-    return 0;
+    return Number.isFinite(time)
+        ? time
+        : 0;
 
 }
 
 
 /* =========================================================
-   LIKE SYSTEM
-   FIREBASE
+   POPULARITY
    ========================================================= */
 
-document.addEventListener(
-    "click",
-    event => {
+function getPopularity(book) {
 
-        const button =
-            event.target.closest(
-                ".like-book"
-            );
+    return (
+        getNumber(book.views) +
+        getNumber(book.reads) * 2 +
+        getNumber(book.downloads) +
+        getNumber(book.likes) * 3
+    );
+
+}
 
 
-        if (!button) return;
+/* =========================================================
+   LATEST BOOK
+   ========================================================= */
 
+function latestBook() {
 
-        likeBook(
-            button
+    const container =
+        document.querySelector(
+            ".latest-book-card"
         );
 
-    }
-);
+
+    if (!container) return;
 
 
-async function likeBook(button) {
-
-    const user =
-        getCurrentUser();
+    if (!allBooks.length) return;
 
 
-    if (!user) {
+    const latest =
+        [...allBooks].sort(
+            (a, b) =>
+                getBookDate(b) -
+                getBookDate(a)
+        )[0];
 
-        requireLogin();
 
-        return;
+    if (!latest) return;
 
-    }
+
+    const title =
+        latest.title ||
+        "Untitled Book";
+
+
+    const author =
+        latest.author ||
+        "Unknown Author";
+
+
+    const cover =
+        latest.cover ||
+        latest.coverUrl ||
+        "logo.png";
+
+
+    const pdf =
+        latest.pdf ||
+        latest.pdfUrl ||
+        "";
 
 
     const bookId =
-        button.dataset.bookId;
+        getBookId(
+            latest
+        );
 
 
-    if (!bookId) return;
+    const image =
+        container.querySelector(
+            ".book-image img"
+        );
 
 
-    if (
-        button.dataset.loading === "true"
-    ) {
+    const titleElement =
+        container.querySelector(
+            ".book-info h2"
+        );
 
-        return;
+
+    const authorElement =
+        container.querySelector(
+            ".book-info h3"
+        );
+
+
+    const descriptionElement =
+        container.querySelector(
+            ".book-info p"
+        );
+
+
+    const readButton =
+        container.querySelector(
+            ".read-book"
+        );
+
+
+    const pdfButton =
+        container.querySelector(
+            ".book-info .btn:not(.read-book)"
+        );
+
+
+    if (image) {
+
+        image.src =
+            cover;
+
+        image.alt =
+            title;
 
     }
 
 
-    button.dataset.loading =
-        "true";
+    if (titleElement) {
+
+        titleElement.textContent =
+            title;
+
+    }
 
 
-    try {
+    if (authorElement) {
 
-        const db =
-            firebase.firestore();
+        authorElement.textContent =
+            author;
 
-
-        const bookRef =
-            db.collection("books")
-              .doc(bookId);
+    }
 
 
-        const likeRef =
-            bookRef
-                .collection("likes")
-                .doc(user.uid);
+    if (
+        descriptionElement &&
+        latest.description
+    ) {
+
+        descriptionElement.textContent =
+            latest.description;
+
+    }
 
 
-        const likeSnapshot =
-            await likeRef.get();
+    if (readButton) {
+
+        const readerPage =
+            window.CHISHTI_READER_PAGE ||
+            "reader.html";
 
 
-        const count =
-            button.querySelector("span");
-
-
-        const icon =
-            button.querySelector("i");
-
-
-        let currentCount =
-            Number(
-                count?.textContent || 0
+        readButton.href =
+            readerPage +
+            "?book=" +
+            encodeURIComponent(
+                bookId
             );
 
 
-        if (
-            likeSnapshot.exists
-        ) {
+        readButton.removeAttribute(
+            "target"
+        );
 
-            await likeRef.delete();
+        readButton.dataset.bookId =
+            bookId;
 
-
-            await bookRef.set({
-
-                likes:
-                    firebase.firestore.FieldValue
-                        .increment(-1)
-
-            }, {
-                merge: true
-            });
+    }
 
 
-            currentCount =
-                Math.max(
-                    0,
-                    currentCount - 1
-                );
+    if (pdfButton) {
 
+        if (pdf) {
 
-            button.classList.remove(
-                "liked"
-            );
+            pdfButton.href =
+                pdf;
 
-
-            if (icon) {
-
-                icon.className =
-                    "fa-regular fa-heart";
-
-            }
-
+            pdfButton.style.display =
+                "";
 
         } else {
 
-            await likeRef.set({
-
-                uid:
-                    user.uid,
-
-                createdAt:
-                    firebase.firestore.FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-            await bookRef.set({
-
-                likes:
-                    firebase.firestore.FieldValue
-                        .increment(1)
-
-            }, {
-                merge: true
-            });
-
-
-            currentCount++;
-
-
-            button.classList.add(
-                "liked"
-            );
-
-
-            button.classList.add(
-                "heart-pop"
-            );
-
-
-            if (icon) {
-
-                icon.className =
-                    "fa-solid fa-heart";
-
-            }
-
-
-            setTimeout(() => {
-
-                button.classList.remove(
-                    "heart-pop"
-                );
-
-            }, 500);
+            pdfButton.style.display =
+                "none";
 
         }
-
-
-        if (count) {
-
-            count.textContent =
-                currentCount;
-
-        }
-
-
-    } catch (error) {
-
-        console.error(
-            "Like error:",
-            error
-        );
-
-
-        showToast(
-            "Unable to update like."
-        );
 
     }
-
-
-    button.dataset.loading =
-        "false";
 
 }
 
 
 /* =========================================================
-   COMMENT BUTTON
+   PRELOAD BOOK COVERS
    ========================================================= */
 
-document.addEventListener(
-    "click",
-    event => {
+function preloadBookCovers() {
 
-        const button =
-            event.target.closest(
-                ".comment-book"
-            );
+    if (!Array.isArray(
+        allBooks
+    )) return;
 
 
-        if (!button) return;
+    allBooks.forEach(book => {
 
+        const src =
+            book.cover ||
+            book.coverUrl;
 
-        const bookId =
-            button.dataset.bookId;
 
+        if (!src) return;
 
-        const book =
-            allBooks.find(
-                item =>
-                    getBookId(item) ===
-                    bookId
-            );
 
+        const image =
+            new Image();
 
-        if (!book) return;
 
-
-        openComments(
-            book
-        );
-
-    }
-);
-
-
-/* =========================================================
-   COMMENTS MODAL
-   ========================================================= */
-
-async function openComments(book) {
-
-    const user =
-        getCurrentUser();
-
-
-    if (!user) {
-
-        requireLogin();
-
-        return;
-
-    }
-
-
-    const old =
-        document.getElementById(
-            "bookCommentsModal"
-        );
-
-
-    if (old) {
-        old.remove();
-    }
-
-
-    const bookId =
-        getBookId(book);
-
-
-    const modal =
-        document.createElement(
-            "div"
-        );
-
-
-    modal.id =
-        "bookCommentsModal";
-
-
-    modal.className =
-        "book-comments-modal";
-
-
-    modal.innerHTML = `
-
-        <div class="comments-panel">
-
-            <div class="comments-top">
-
-                <div>
-
-                    <small>
-                        CHISHTI LIBRARY
-                    </small>
-
-                    <h2>
-
-                        <i class="fa-solid fa-comments"></i>
-
-                        Comments
-
-                    </h2>
-
-                    <p>
-                        ${escapeHtml(book.title || "Book")}
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="comments-close"
-                >
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-            </div>
-
-
-            <div
-                class="comments-list"
-                id="commentsList"
-            >
-
-                <div class="comments-loading">
-
-                    Loading comments...
-
-                </div>
-
-            </div>
-
-
-            <div class="comment-reactions">
-
-                <button
-                    type="button"
-                    data-emoji="❤️"
-                >
-                    ❤️
-                </button>
-
-                <button
-                    type="button"
-                    data-emoji="😍"
-                >
-                    😍
-                </button>
-
-                <button
-                    type="button"
-                    data-emoji="🤲"
-                >
-                    🤲
-                </button>
-
-                <button
-                    type="button"
-                    data-emoji="📚"
-                >
-                    📚
-                </button>
-
-                <button
-                    type="button"
-                    data-emoji="🌙"
-                >
-                    🌙
-                </button>
-
-                <button
-                    type="button"
-                    data-emoji="✨"
-                >
-                    ✨
-                </button>
-
-            </div>
-
-
-            <form
-                class="comment-form-new"
-                id="commentFormNew"
-            >
-
-                <input
-                    id="commentInputNew"
-                    type="text"
-                    maxlength="500"
-                    placeholder="Write a comment..."
-                    autocomplete="off"
-                >
-
-
-                <button type="submit">
-
-                    <i class="fa-solid fa-paper-plane"></i>
-
-                </button>
-
-            </form>
-
-        </div>
-
-    `;
-
-
-    document.body.appendChild(
-        modal
-    );
-
-
-    requestAnimationFrame(() => {
-
-        modal.classList.add(
-            "show"
-        );
+        image.src =
+            src;
 
     });
 
-
-    modal
-        .querySelector(
-            ".comments-close"
-        )
-        .addEventListener(
-            "click",
-            () => closeComments(modal)
-        );
+}
 
 
-    modal.addEventListener(
-        "click",
-        event => {
+/* =========================================================
+   IMAGE FALLBACK
+   ========================================================= */
 
-            if (
-                event.target === modal
-            ) {
+function initImageFallback() {
 
-                closeComments(
-                    modal
-                );
-
-            }
-
-        }
-    );
-
-
-    modal
+    document
         .querySelectorAll(
-            "[data-emoji]"
+            "img"
         )
-        .forEach(button => {
+        .forEach(image => {
 
-            button.addEventListener(
-                "click",
+            image.addEventListener(
+                "error",
                 () => {
 
-                    const input =
-                        modal.querySelector(
-                            "#commentInputNew"
-                        );
+                    if (
+                        image.dataset.fallbackApplied
+                    ) {
+
+                        return;
+
+                    }
 
 
-                    input.value +=
-                        button.dataset.emoji;
+                    image.dataset.fallbackApplied =
+                        "true";
 
 
-                    input.focus();
+                    image.src =
+                        "logo.png";
 
                 }
             );
 
         });
 
+}
 
-    modal
-        .querySelector(
-            "#commentFormNew"
+
+/* =========================================================
+   SMOOTH LINKS
+   ========================================================= */
+
+function initSmoothLinks() {
+
+    document
+        .querySelectorAll(
+            'a[href^="#"]'
         )
-        .addEventListener(
-            "submit",
-            event => {
+        .forEach(link => {
 
-                event.preventDefault();
+            link.addEventListener(
+                "click",
+                event => {
 
-                submitComment(
-                    bookId,
-                    modal
-                );
+                    const targetId =
+                        link
+                            .getAttribute("href")
+                            .slice(1);
 
-            }
-        );
 
+                    if (!targetId) return;
 
-    await loadComments(
-        bookId,
-        modal
-    );
 
-}
+                    const target =
+                        document.getElementById(
+                            targetId
+                        );
 
 
-/* =========================================================
-   LOAD FIREBASE COMMENTS
-   ========================================================= */
+                    if (!target) return;
 
-async function loadComments(
-    bookId,
-    modal
-) {
 
-    const list =
-        modal.querySelector(
-            "#commentsList"
-        );
+                    event.preventDefault();
 
 
-    if (!list) return;
+                    target.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
 
-
-    try {
-
-        const snapshot =
-            await firebase.firestore()
-                .collection("books")
-                .doc(bookId)
-                .collection("comments")
-                .orderBy(
-                    "createdAt",
-                    "desc"
-                )
-                .limit(50)
-                .get();
-
-
-        list.innerHTML = "";
-
-
-        if (snapshot.empty) {
-
-            list.innerHTML = `
-
-                <div class="no-comments">
-
-                    <div>
-                        💬
-                    </div>
-
-                    <h3>
-                        No comments yet
-                    </h3>
-
-                    <p>
-                        Be the first to comment.
-                    </p>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        snapshot.forEach(doc => {
-
-            const data =
-                doc.data();
-
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-
-            item.className =
-                "comment-item";
-
-
-            const email =
-                data.email ||
-                "";
-
-
-            const name =
-                email
-                    ? email.split("@")[0]
-                    : "Reader";
-
-
-            const avatar =
-                name
-                    .charAt(0)
-                    .toUpperCase();
-
-
-            item.innerHTML = `
-
-                <div class="comment-avatar">
-
-                    ${escapeHtml(avatar)}
-
-                </div>
-
-
-                <div class="comment-content">
-
-                    <strong>
-                        ${escapeHtml(name)}
-                    </strong>
-
-                    <p>
-                        ${escapeHtml(data.text || "")}
-                    </p>
-
-                </div>
-
-            `;
-
-
-            list.appendChild(
-                item
-            );
-
-        });
-
-
-    } catch (error) {
-
-        console.error(
-            "Comments error:",
-            error
-        );
-
-
-        list.innerHTML = `
-
-            <div class="no-comments">
-
-                Unable to load comments.
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-/* =========================================================
-   SUBMIT COMMENT
-   ========================================================= */
-
-async function submitComment(
-    bookId,
-    modal
-) {
-
-    const user =
-        getCurrentUser();
-
-
-    if (!user) {
-
-        requireLogin();
-
-        return;
-
-    }
-
-
-    const input =
-        modal.querySelector(
-            "#commentInputNew"
-        );
-
-
-    const text =
-        input.value.trim();
-
-
-    if (!text) return;
-
-
-    if (text.length > 500) {
-
-        showToast(
-            "Comment is too long."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        await firebase.firestore()
-
-            .collection("books")
-            .doc(bookId)
-            .collection("comments")
-            .add({
-
-                uid:
-                    user.uid,
-
-                email:
-                    user.email ||
-                    "Reader",
-
-                text:
-                    text,
-
-                createdAt:
-                    firebase.firestore.FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-        input.value = "";
-
-
-        await loadComments(
-            bookId,
-            modal
-        );
-
-
-        showToast(
-            "💬 Comment posted!"
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Comment error:",
-            error
-        );
-
-
-        showToast(
-            "Comment could not be posted."
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   CLOSE COMMENTS
-   ========================================================= */
-
-function closeComments(modal) {
-
-    modal.classList.remove(
-        "show"
-    );
-
-
-    setTimeout(() => {
-
-        if (modal.parentNode) {
-
-            modal.remove();
-
-        }
-
-    }, 300);
-
-}
-
-
-/* =========================================================
-   SHARE
-   ========================================================= */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const button =
-            event.target.closest(
-                ".share-book"
-            );
-
-
-        if (!button) return;
-
-
-        const bookId =
-            button.dataset.bookId;
-
-
-        const book =
-            allBooks.find(
-                item =>
-                    getBookId(item) ===
-                    bookId
-            );
-
-
-        if (!book) return;
-
-
-        shareBook(
-            book
-        );
-
-    }
-);
-
-
-async function shareBook(book) {
-
-    const title =
-        book.title ||
-        "Chishti Library";
-
-
-    const pdf =
-        book.pdf ||
-        book.pdfUrl ||
-        "";
-
-
-    const url =
-        book.url ||
-        book.readUrl ||
-        pdf ||
-        window.location.href;
-
-
-    const shareData = {
-
-        title:
-            title,
-
-        text:
-            `📚 Read "${title}" on Chishti Library`,
-
-        url:
-            new URL(
-                url,
-                window.location.href
-            ).href
-
-    };
-
-
-    try {
-
-        if (
-            navigator.share
-        ) {
-
-            await navigator.share(
-                shareData
-            );
-
-        } else {
-
-            await navigator.clipboard.writeText(
-                shareData.url
-            );
-
-
-            showToast(
-                "🔗 Book link copied!"
-            );
-
-        }
-
-    } catch (error) {
-
-        if (
-            error.name !==
-            "AbortError"
-        ) {
-
-            console.error(
-                "Share error:",
-                error
-            );
-
-        }
-
-    }
-
-}
-
-
-/* =========================================================
-   LOGIN HELPER
-   ========================================================= */
-
-function getCurrentUser() {
-
-    if (
-        typeof firebase !== "undefined" &&
-        firebase.auth
-    ) {
-
-        return firebase.auth().currentUser;
-
-    }
-
-
-    if (
-        window.currentFirebaseUser
-    ) {
-
-        return window.currentFirebaseUser;
-
-    }
-
-
-    return null;
-
-}
-
-
-/* =========================================================
-   REQUIRE LOGIN
-   ========================================================= */
-
-function requireLogin() {
-
-    const user =
-        getCurrentUser();
-
-
-    if (user) {
-
-        return true;
-
-    }
-
-
-    showToast(
-        "🔐 Please login first."
-    );
-
-
-    setTimeout(() => {
-
-        window.location.href =
-            "./login.html";
-
-    }, 700);
-
-
-    return false;
-
-}
-
-
-/* =========================================================
-   FIREBASE AUTH CHANGE
-   ========================================================= */
-
-if (
-    typeof firebase !== "undefined" &&
-    firebase.auth
-) {
-
-    firebase.auth()
-        .onAuthStateChanged(user => {
-
-            window.currentFirebaseUser =
-                user || null;
-
-
-            console.log(
-                user
-                    ? "✅ User logged in"
-                    : "ℹ️ User logged out"
+                }
             );
 
         });
@@ -2358,45 +1627,55 @@ if (
 
 
 /* =========================================================
-   LOCAL COUNTERS
+   YEAR
    ========================================================= */
 
-function incrementLocalCounter(
-    key
-) {
+function initYear() {
 
-    let value =
-        Number(
-            localStorage.getItem(key)
-        ) || 0;
+    const elements =
+        document.querySelectorAll(
+            "[data-current-year]"
+        );
 
 
-    value++;
+    elements.forEach(element => {
 
+        element.textContent =
+            new Date()
+                .getFullYear();
 
-    localStorage.setItem(
-        key,
-        value
-    );
+    });
 
 }
 
 
 /* =========================================================
-   PREMIUM SCROLL ANIMATION
+   PREMIUM ANIMATIONS
    ========================================================= */
 
 function initPremiumAnimations() {
 
-    const sections =
+    const elements =
         document.querySelectorAll(
-            "section"
+            ".book-card, .author-card, .contact-card, .counter-card"
         );
 
 
+    if (!elements.length) return;
+
+
     if (
-        !("IntersectionObserver" in window)
+        typeof IntersectionObserver ===
+        "undefined"
     ) {
+
+        elements.forEach(element => {
+
+            element.classList.add(
+                "visible"
+            );
+
+        });
 
         return;
 
@@ -2414,7 +1693,12 @@ function initPremiumAnimations() {
                     ) {
 
                         entry.target.classList.add(
-                            "show-section"
+                            "visible"
+                        );
+
+
+                        observer.unobserve(
+                            entry.target
                         );
 
                     }
@@ -2423,304 +1707,18 @@ function initPremiumAnimations() {
 
             },
             {
-                threshold: 0.12
+                threshold: 0.08
             }
         );
 
 
-    sections.forEach(section => {
+    elements.forEach(element => {
 
         observer.observe(
-            section
+            element
         );
 
     });
-
-}
-
-
-/* =========================================================
-   BUTTON RIPPLE
-   ========================================================= */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const button =
-            event.target.closest(
-                ".btn"
-            );
-
-
-        if (!button) return;
-
-
-        const ripple =
-            document.createElement(
-                "span"
-            );
-
-
-        ripple.className =
-            "ripple";
-
-
-        const rect =
-            button.getBoundingClientRect();
-
-
-        ripple.style.left =
-            (
-                event.clientX -
-                rect.left
-            ) + "px";
-
-
-        ripple.style.top =
-            (
-                event.clientY -
-                rect.top
-            ) + "px";
-
-
-        button.appendChild(
-            ripple
-        );
-
-
-        setTimeout(() => {
-
-            ripple.remove();
-
-        }, 600);
-
-    }
-);
-
-
-/* =========================================================
-   BOOK CARD HOVER
-   ========================================================= */
-
-document.addEventListener(
-    "mouseover",
-    event => {
-
-        const card =
-            event.target.closest(
-                ".book-card"
-            );
-
-
-        if (!card) return;
-
-
-        card.classList.add(
-            "book-hover"
-        );
-
-    }
-);
-
-
-document.addEventListener(
-    "mouseout",
-    event => {
-
-        const card =
-            event.target.closest(
-                ".book-card"
-            );
-
-
-        if (!card) return;
-
-
-        card.classList.remove(
-            "book-hover"
-        );
-
-    }
-);
-
-
-/* =========================================================
-   NAVBAR SHADOW
-   ========================================================= */
-
-window.addEventListener(
-    "scroll",
-    () => {
-
-        const nav =
-            document.querySelector(
-                ".navbar"
-            );
-
-
-        if (!nav) return;
-
-
-        if (
-            window.scrollY > 40
-        ) {
-
-            nav.classList.add(
-                "nav-shadow"
-            );
-
-        } else {
-
-            nav.classList.remove(
-                "nav-shadow"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   YEAR
-   ========================================================= */
-
-function initYear() {
-
-    const year =
-        document.getElementById(
-            "year"
-        );
-
-
-    if (year) {
-
-        year.textContent =
-            new Date()
-                .getFullYear();
-
-    }
-
-}
-
-
-/* =========================================================
-   IMAGE FALLBACK
-   ========================================================= */
-
-function initImageFallback() {
-
-    document
-        .querySelectorAll("img")
-        .forEach(img => {
-
-            img.addEventListener(
-                "error",
-                function() {
-
-                    if (
-                        this.src.includes(
-                            "logo.png"
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    this.src =
-                        "logo.png";
-
-                }
-            );
-
-        });
-
-}
-
-
-/* =========================================================
-   PRELOAD BOOK COVERS
-   ========================================================= */
-
-function preloadBookCovers() {
-
-    allBooks.forEach(book => {
-
-        const cover =
-            book.cover ||
-            book.coverUrl;
-
-
-        if (!cover) return;
-
-
-        const image =
-            new Image();
-
-
-        image.src =
-            cover;
-
-    });
-
-}
-
-
-/* =========================================================
-   SMOOTH ANCHOR LINKS
-   ========================================================= */
-
-function initSmoothLinks() {
-
-    document
-        .querySelectorAll(
-            'a[href^="#"]'
-        )
-        .forEach(anchor => {
-
-            anchor.addEventListener(
-                "click",
-                event => {
-
-                    const selector =
-                        anchor.getAttribute(
-                            "href"
-                        );
-
-
-                    if (
-                        !selector ||
-                        selector === "#"
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    const target =
-                        document.querySelector(
-                            selector
-                        );
-
-
-                    if (!target) return;
-
-
-                    event.preventDefault();
-
-
-                    target.scrollIntoView({
-                        behavior: "smooth"
-                    });
-
-                }
-            );
-
-        });
 
 }
 
@@ -2737,26 +1735,143 @@ function initCounters() {
 
 
 /* =========================================================
-   NORMALIZE
+   LOCAL COUNTER
    ========================================================= */
 
-function normalize(value) {
+function incrementLocalCounter(
+    type
+) {
+
+    const key =
+        "chishti_" +
+        type;
+
+
+    const current =
+        Number(
+            localStorage.getItem(
+                key
+            )
+        ) || 0;
+
+
+    localStorage.setItem(
+        key,
+        String(current + 1)
+    );
+
+}
+
+
+/* =========================================================
+   FIREBASE BOOK COUNTERS
+   ========================================================= */
+
+async function incrementBookStat(
+    bookId,
+    field
+) {
+
+    if (!bookId || !field) {
+        return;
+    }
+
+
+    if (
+        typeof firebase ===
+        "undefined" ||
+        !firebase.apps ||
+        !firebase.apps.length
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const db =
+            firebase.firestore();
+
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                [field]:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+
+    } catch (error) {
+
+        console.warn(
+            "Book stat update failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   BOOK LOOKUP
+   ========================================================= */
+
+function findBookById(
+    bookId
+) {
+
+    if (!bookId) {
+        return null;
+    }
+
+
+    return allBooks.find(
+        book =>
+            String(
+                getBookId(book)
+            ) ===
+            String(bookId)
+    ) || null;
+
+}
+
+
+/* =========================================================
+   SAFE URL
+   ========================================================= */
+
+function safeUrl(
+    url
+) {
+
+    if (!url) {
+        return "";
+    }
+
 
     return String(
-        value || ""
-    )
-    .toLowerCase()
-    .replace(/[’']/g, "")
-    .replace(/[-_]/g, " ")
-    .replace(
-        /[^\p{L}\p{N}\s]/gu,
-        " "
+        url
     )
     .replace(
-        /\s+/g,
-        " "
+        /"/g,
+        "&quot;"
     )
-    .trim();
+    .replace(
+        /</g,
+        "%3C"
+    )
+    .replace(
+        />/g,
+        "%3E"
+    );
 
 }
 
@@ -2765,10 +1880,12 @@ function normalize(value) {
    ESCAPE HTML
    ========================================================= */
 
-function escapeHtml(value) {
+function escapeHtml(
+    value
+) {
 
     return String(
-        value || ""
+        value ?? ""
     )
     .replace(
         /&/g,
@@ -2795,34 +1912,990 @@ function escapeHtml(value) {
 
 
 /* =========================================================
-   SAFE URL
+   NORMALIZE TEXT
    ========================================================= */
 
-function safeUrl(value) {
+function normalize(
+    value
+) {
 
-    const url =
-        String(
-            value || ""
-        ).trim();
+    return String(
+        value ?? ""
+    )
+    .trim()
+    .toLowerCase()
+    .replace(
+        /\s+/g,
+        " "
+    );
+
+}
 
 
-    if (!url) {
+/* =========================================================
+   NUMBER HELPER
+   ========================================================= */
 
-        return "#";
+function getNumber(
+    value
+) {
+
+    const number =
+        Number(value);
+
+
+    return Number.isFinite(
+        number
+    )
+        ? number
+        : 0;
+
+}
+
+
+/* =========================================================
+   EXPOSE FUNCTIONS
+   ========================================================= */
+
+window.loadBooks =
+    loadBooks;
+
+window.displayBooks =
+    displayBooks;
+
+window.searchBooks =
+    searchBooks;
+
+window.filterBooks =
+    filterBooks;
+
+window.sortBooks =
+    sortBooks;
+
+window.findBookById =
+    findBookById;
+
+window.getBookId =
+    getBookId;
+    /* =========================================================
+       CATEGORY FILTER
+       ========================================================= */
+
+    function initCategories() {
+
+        document
+            .querySelectorAll(".category")
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const category =
+                            button.dataset.category ||
+                            button.textContent.trim();
+
+
+                        filterBooks(
+                            category,
+                            button
+                        );
+
+                    }
+                );
+
+            });
 
     }
 
 
-    if (
-        /^javascript:/i.test(url)
+    /* =========================================================
+       FILTER BOOKS
+       ========================================================= */
+
+    window.filterBooks =
+    function filterBooks(
+        category,
+        button = null
     ) {
 
-        return "#";
+        const selected =
+            normalize(
+                category || "All"
+            );
+
+
+        document
+            .querySelectorAll(".category")
+            .forEach(btn => {
+
+                btn.classList.remove(
+                    "active"
+                );
+
+            });
+
+
+        if (button) {
+
+            button.classList.add(
+                "active"
+            );
+
+        } else {
+
+            document
+                .querySelectorAll(".category")
+                .forEach(btn => {
+
+                    const text =
+                        normalize(
+                            btn.dataset.category ||
+                            btn.textContent
+                        );
+
+
+                    if (
+                        text === selected
+                    ) {
+
+                        btn.classList.add(
+                            "active"
+                        );
+
+                    }
+
+                });
+
+        }
+
+
+        if (
+            selected === "all"
+        ) {
+
+            filteredBooks =
+                [...allBooks];
+
+        } else {
+
+            filteredBooks =
+                allBooks.filter(book => {
+
+                    const bookCategory =
+                        normalize(
+                            book.category
+                        );
+
+
+                    return (
+                        bookCategory === selected ||
+                        bookCategory.includes(selected) ||
+                        selected.includes(bookCategory)
+                    );
+
+                });
+
+        }
+
+
+        window.filteredBooks =
+            filteredBooks;
+
+
+        displayBooks(
+            filteredBooks
+        );
+
+
+        console.log(
+            "Category:",
+            category,
+            "Results:",
+            filteredBooks.length
+        );
+
+    };
+
+
+    /* =========================================================
+       LATEST BOOK
+       ========================================================= */
+
+    function latestBook() {
+
+        if (!allBooks.length) return;
+
+
+        let latest =
+            allBooks.find(
+                book =>
+                    book.latest === true
+            );
+
+
+        if (!latest) {
+
+            latest =
+                [...allBooks]
+                    .sort((a, b) => {
+
+                        const dateA =
+                            getBookDate(a);
+
+                        const dateB =
+                            getBookDate(b);
+
+                        return dateB - dateA;
+
+                    })[0];
+
+        }
+
+
+        if (!latest) return;
+
+
+        const image =
+            document.querySelector(
+                ".book-image img"
+            );
+
+
+        const title =
+            document.querySelector(
+                ".book-info h2"
+            );
+
+
+        const author =
+            document.querySelector(
+                ".book-info h3"
+            );
+
+
+        const description =
+            document.querySelector(
+                ".book-info p"
+            );
+
+
+        if (
+            image &&
+            latest.cover
+        ) {
+
+            image.src =
+                latest.cover;
+
+        }
+
+
+        if (title) {
+
+            title.textContent =
+                latest.title ||
+                "Latest Book";
+
+        }
+
+
+        if (author) {
+
+            author.textContent =
+                latest.author ||
+                "";
+
+        }
+
+
+        if (description) {
+
+            description.textContent =
+                latest.description ||
+                "";
+
+        }
+
+
+        const buttons =
+            document.querySelectorAll(
+                ".book-buttons a"
+            );
+
+
+        if (
+            latest.pdf &&
+            buttons.length
+        ) {
+
+            buttons.forEach(button => {
+
+                button.href =
+                    latest.pdf;
+
+            });
+
+        }
 
     }
 
 
-    return url;
+    /* =========================================================
+       BOOK DATE
+       ========================================================= */
+
+    function getBookDate(book) {
+
+        if (
+            book.createdAt &&
+            typeof book.createdAt === "object" &&
+            book.createdAt.seconds
+        ) {
+
+            return (
+                Number(
+                    book.createdAt.seconds
+                ) * 1000
+            );
+
+        }
+
+
+        if (book.createdAt) {
+
+            const date =
+                new Date(
+                    book.createdAt
+                ).getTime();
+
+
+            if (!isNaN(date)) {
+
+                return date;
+
+            }
+
+        }
+
+
+        if (book.date) {
+
+            const date =
+                new Date(
+                    book.date
+                ).getTime();
+
+
+            if (!isNaN(date)) {
+
+                return date;
+
+            }
+
+        }
+
+
+        return 0;
+
+    }
+
+
+    /* =========================================================
+       LIKE SYSTEM
+       FIREBASE
+       ========================================================= */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    ".like-book"
+                );
+
+
+            if (!button) return;
+
+
+            likeBook(
+                button
+            );
+
+        }
+    );
+
+
+    async function likeBook(button) {
+
+        const user =
+            getCurrentUser();
+
+
+        if (!user) {
+
+            requireLogin();
+            return;
+
+        }
+
+
+        const bookId =
+            button.dataset.bookId;
+
+
+        if (!bookId) return;
+
+
+        if (
+            button.dataset.loading === "true"
+        ) {
+
+            return;
+
+        }
+
+
+        button.dataset.loading =
+            "true";
+
+
+        try {
+
+            const db =
+                firebase.firestore();
+
+
+            const bookRef =
+                db.collection("books")
+                  .doc(bookId);
+
+
+            const likeRef =
+                bookRef
+                    .collection("likes")
+                    .doc(user.uid);
+
+
+            const likeSnapshot =
+                await likeRef.get();
+
+
+            const count =
+                button.querySelector(
+                    "span"
+                );
+
+
+            const icon =
+                button.querySelector(
+                    "i"
+                );
+
+
+            let currentCount =
+                Number(
+                    count?.textContent || 0
+                );
+
+
+            if (
+                likeSnapshot.exists
+            ) {
+
+                await likeRef.delete();
+
+
+                await bookRef.set({
+
+                    likes:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(-1)
+
+                }, {
+                    merge: true
+                });
+
+
+                currentCount =
+                    Math.max(
+                        0,
+                        currentCount - 1
+                    );
+
+
+                button.classList.remove(
+                    "liked"
+                );
+
+
+                if (icon) {
+
+                    icon.className =
+                        "fa-regular fa-heart";
+
+                }
+
+            } else {
+
+                await likeRef.set({
+
+                    uid:
+                        user.uid,
+
+                    createdAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+
+                await bookRef.set({
+
+                    likes:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1)
+
+                }, {
+                    merge: true
+                });
+
+
+                currentCount++;
+
+
+                button.classList.add(
+                    "liked"
+                );
+
+
+                button.classList.add(
+                    "heart-pop"
+                );
+
+
+                if (icon) {
+
+                    icon.className =
+                        "fa-solid fa-heart";
+
+                }
+
+
+                setTimeout(() => {
+
+                    button.classList.remove(
+                        "heart-pop"
+                    );
+
+                }, 500);
+
+            }
+
+
+            if (count) {
+
+                count.textContent =
+                    currentCount;
+
+            }
+
+
+        } catch (error) {
+
+            console.error(
+                "Like error:",
+                error
+            );
+
+
+            showToast(
+                "Unable to update like."
+            );
+
+        }
+
+
+        button.dataset.loading =
+            "false";
+
+    }
+
+
+    /* =========================================================
+       COMMENT BUTTON
+       ========================================================= */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    ".comment-book"
+                );
+
+
+            if (!button) return;
+
+
+            const bookId =
+                button.dataset.bookId;
+
+
+            const book =
+                allBooks.find(
+                    item =>
+                        getBookId(item) ===
+                        bookId
+                );
+
+
+            if (!book) return;
+
+
+            openComments(
+                book
+            );
+
+        }
+    );
+
+
+    /* =========================================================
+       COMMENTS MODAL
+       ========================================================= */
+
+    async function openComments(book) {
+
+        const user =
+            getCurrentUser();
+
+
+        if (!user) {
+
+            requireLogin();
+            return;
+
+        }
+
+
+        const old =
+            document.getElementById(
+                "bookCommentsModal"
+            );
+
+
+        if (old) {
+
+            old.remove();
+
+        }
+
+
+        const bookId =
+            getBookId(book);
+
+
+        const modal =
+            document.createElement(
+                "div"
+            );
+
+
+        modal.id =
+            "bookCommentsModal";
+
+
+        modal.className =
+            "book-comments-modal";
+
+
+        modal.innerHTML = `
+
+            <div class="comments-panel">
+
+                <div class="comments-top">
+
+                    <div>
+
+                        <small>
+                            CHISHTI LIBRARY
+                        </small>
+
+                        <h2>
+
+                            <i class="fa-solid fa-comments"></i>
+
+                            Comments
+
+                        </h2>
+
+                        <p>
+                            ${escapeHtml(book.title || "Book")}
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="comments-close"
+                    >
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="comments-list"
+                    id="commentsList"
+                >
+
+                    <div class="comments-loading">
+                        Loading comments...
+                    </div>
+
+                </div>
+
+
+                <div class="comment-reactions">
+
+                    <button
+                        type="button"
+                        data-emoji="❤️"
+                    >
+                        ❤️
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="😍"
+                    >
+                        😍
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🤲"
+                    >
+                        🤲
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="📚"
+                    >
+                        📚
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🌙"
+                    >
+                        🌙
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="✨"
+                    >
+                        ✨
+                    </button>
+
+                </div>
+
+
+                <form
+                    class="comment-form-new"
+                    id="commentFormNew"
+                >
+
+                    <input
+                        id="commentInputNew"
+                        type="text"
+                        maxlength="500"
+                        placeholder="Write a comment..."
+                        autocomplete="off"
+                    >
+
+
+                    <button type="submit">
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            modal
+        );
+
+
+        requestAnimationFrame(() => {
+
+            modal.classList.add(
+                "show"
+            );
+
+        });
+
+
+        modal
+            .querySelector(
+                ".comments-close"
+            )
+            .addEventListener(
+                "click",
+                () =>
+                    closeComments(
+                        modal
+                    )
+            );
+
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeComments(
+                        modal
+                    );
+
+                }
+
+            }
+        );
+
+
+        modal
+            .querySelectorAll(
+                "[data-emoji]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const input =
+                            modal.querySelector(
+                                "#commentInputNew"
+                            );
+
+
+                        input.value +=
+                            button.dataset.emoji;
+
+
+                        input.focus();
+
+                    }
+                );
+
+            });
+
+
+        modal
+            .querySelector(
+                "#commentFormNew"
+            )
+            .addEventListener(
+                "submit",
+                event => {
+
+                    event.preventDefault();
+
+                    submitComment(
+                        bookId,
+                        modal
+                    );
+
+                }
+            );
+
+
+        await loadComments(
+            bookId,
+            modal
+        );
+
+    }
+/* =========================================================
+   NUMBER HELPER
+   ========================================================= */
+
+function getNumber(value) {
+
+    const number =
+        Number(value);
+
+
+    return Number.isFinite(number)
+        ? number
+        : 0;
+
+}
+
+
+/* =========================================================
+   BOOK ID
+   ========================================================= */
+
+function getBookId(book) {
+
+    if (!book) {
+        return "";
+    }
+
+
+    return String(
+        book.id ||
+        book.bookId ||
+        book.slug ||
+        book.firestoreId ||
+        ""
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+   ========================================================= */
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
 
@@ -2846,14 +2919,11 @@ function showToast(message) {
                 "div"
             );
 
-
         toast.id =
             "chishtiToast";
 
-
         toast.className =
             "chishti-toast";
-
 
         document.body.appendChild(
             toast
@@ -2872,20 +2942,427 @@ function showToast(message) {
 
 
     clearTimeout(
-        toast._timer
+        window.chishtiToastTimer
     );
 
 
-    toast._timer =
+    window.chishtiToastTimer =
         setTimeout(() => {
 
             toast.classList.remove(
                 "show"
             );
 
-        }, 2300);
+        }, 2800);
 
 }
+
+
+/* =========================================================
+   CHAT / AI
+   ========================================================= */
+
+const chatButton =
+    document.getElementById(
+        "chatBtn"
+    );
+
+const chatWindow =
+    document.getElementById(
+        "chatWindow"
+    );
+
+const closeChat =
+    document.getElementById(
+        "closeChat"
+    );
+
+
+if (
+    chatButton &&
+    chatWindow
+) {
+
+    chatButton.addEventListener(
+        "click",
+        () => {
+
+            chatWindow.classList.add(
+                "open"
+            );
+
+            chatWindow.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+        }
+    );
+
+}
+
+
+if (closeChat) {
+
+    closeChat.addEventListener(
+        "click",
+        () => {
+
+            chatWindow?.classList.remove(
+                "open"
+            );
+
+            chatWindow?.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CHAT SEND
+   ========================================================= */
+
+const chatInput =
+    document.getElementById(
+        "chatInput"
+    );
+
+const sendButton =
+    document.getElementById(
+        "sendButton"
+    );
+
+const chatMessages =
+    document.getElementById(
+        "chatMessages"
+    );
+
+
+function addChatMessage(
+    text,
+    type = "bot-message"
+) {
+
+    if (!chatMessages) return;
+
+
+    const message =
+        document.createElement(
+            "div"
+        );
+
+
+    message.className =
+        `message ${type}`;
+
+
+    message.textContent =
+        text;
+
+
+    chatMessages.appendChild(
+        message
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+}
+
+
+function sendChatMessage() {
+
+    if (!chatInput) return;
+
+
+    const text =
+        chatInput.value.trim();
+
+
+    if (!text) return;
+
+
+    addChatMessage(
+        text,
+        "user-message"
+    );
+
+
+    chatInput.value =
+        "";
+
+
+    /*
+     * Keep the existing AI/backend
+     * integration untouched.
+     */
+
+}
+
+
+if (sendButton) {
+
+    sendButton.addEventListener(
+        "click",
+        sendChatMessage
+    );
+
+}
+
+
+if (chatInput) {
+
+    chatInput.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                sendChatMessage();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR CHAT
+   ========================================================= */
+
+const clearChat =
+    document.getElementById(
+        "clearChat"
+    );
+
+
+if (clearChat) {
+
+    clearChat.addEventListener(
+        "click",
+        () => {
+
+            if (!chatMessages) return;
+
+
+            chatMessages.innerHTML = `
+
+                <div class="message bot-message">
+
+                    Assalamu Alaikum 👋
+
+                    <br><br>
+
+                    Welcome to
+                    <strong>Chishti AI</strong>.
+
+                </div>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SHARE POPUP
+   ========================================================= */
+
+const sharePopup =
+    document.getElementById(
+        "sharePopup"
+    );
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const shareButton =
+            event.target.closest(
+                ".share-option"
+            );
+
+
+        if (!shareButton) return;
+
+
+        const type =
+            shareButton.dataset.share;
+
+
+        const url =
+            window.location.href;
+
+
+        const text =
+            document.title;
+
+
+        let shareUrl =
+            "";
+
+
+        if (
+            type === "whatsapp"
+        ) {
+
+            shareUrl =
+                "https://wa.me/?text=" +
+                encodeURIComponent(
+                    text + " " + url
+                );
+
+        }
+
+
+        if (
+            type === "facebook"
+        ) {
+
+            shareUrl =
+                "https://www.facebook.com/sharer/sharer.php?u=" +
+                encodeURIComponent(url);
+
+        }
+
+
+        if (
+            type === "telegram"
+        ) {
+
+            shareUrl =
+                "https://t.me/share/url?url=" +
+                encodeURIComponent(url) +
+                "&text=" +
+                encodeURIComponent(text);
+
+        }
+
+
+        if (
+            type === "twitter"
+        ) {
+
+            shareUrl =
+                "https://twitter.com/intent/tweet?url=" +
+                encodeURIComponent(url) +
+                "&text=" +
+                encodeURIComponent(text);
+
+        }
+
+
+        if (shareUrl) {
+
+            window.open(
+                shareUrl,
+                "_blank",
+                "noopener,noreferrer"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   COPY BOOK LINK
+   ========================================================= */
+
+const copyBookLink =
+    document.getElementById(
+        "copyBookLink"
+    );
+
+
+if (copyBookLink) {
+
+    copyBookLink.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    window.location.href
+                );
+
+
+                showToast(
+                    "🔗 Book link copied!"
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Copy failed:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE SHARE POPUP
+   ========================================================= */
+
+if (sharePopup) {
+
+    sharePopup.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target ===
+                sharePopup
+            ) {
+
+                sharePopup.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+initCategories();
+initPremiumAnimations();
+initImageFallback();
+initSmoothLinks();
+initCounters();
+initYear();
+
+loadBooks();
 
 
 /* =========================================================
@@ -2895,741 +3372,20 @@ function showToast(message) {
 window.displayBooks =
     displayBooks;
 
-
 window.searchBooks =
     searchBooks;
 
+window.filterBooks =
+    filterBooks;
+
+window.sortBooks =
+    sortBooks;
 
 window.latestBook =
     latestBook;
 
-
-window.createBookCard =
-    createBookCard;
-
-
-window.getBookId =
-    getBookId;
-
+window.loadBooks =
+    loadBooks;
 
 window.showToast =
     showToast;
-
-
-window.escapeHtml =
-    escapeHtml;
-
-
-window.safeUrl =
-    safeUrl;
-
-
-/* =========================================================
-   FINAL STATUS
-   ========================================================= */
-
-console.log(
-    "======================================"
-);
-
-console.log(
-    "📚 CHISHTI LIBRARY"
-);
-
-console.log(
-    "🚀 CLEAN PREMIUM SCRIPT"
-);
-
-console.log(
-    "======================================"
-);
-
-console.log(
-    "✅ Loader"
-);
-
-console.log(
-    "✅ Mobile Menu"
-);
-
-console.log(
-    "✅ Books JSON"
-);
-
-console.log(
-    "✅ displayBooks()"
-);
-
-console.log(
-    "✅ Search"
-);
-
-console.log(
-    "✅ Category Filter"
-);
-
-console.log(
-    "✅ Latest Book"
-);
-
-console.log(
-    "✅ Firebase Likes"
-);
-
-console.log(
-    "✅ Firebase Comments"
-);
-
-console.log(
-    "✅ Emoji Comments"
-);
-
-console.log(
-    "✅ Share"
-);
-
-console.log(
-    "✅ Login Protection"
-);
-
-console.log(
-    "✅ Download Counter"
-);
-
-console.log(
-    "✅ Read Counter"
-);
-
-console.log(
-    "✅ Premium Animations"
-);
-
-console.log(
-    "❌ Chatbot NOT included"
-);
-
-console.log(
-    "======================================"
-);
-
-/* =========================================================
-   CHISHTI LIBRARY
-   BOOK VIEWS + DOWNLOADS + LIKES COUNTER
-   END-PASTE SYSTEM
-   Does NOT replace existing functions
-========================================================= */
-
-(function () {
-
-    "use strict";
-
-    console.log("📊 Chishti Library counters system loading...");
-
-    /* =====================================================
-       FIREBASE CHECK
-    ===================================================== */
-
-    function getDB() {
-
-        if (window.db) {
-            return window.db;
-        }
-
-        if (
-            typeof firebase !== "undefined" &&
-            firebase.apps &&
-            firebase.apps.length
-        ) {
-            return firebase.firestore();
-        }
-
-        console.error("❌ Firebase Firestore not available.");
-        return null;
-    }
-
-
-    /* =====================================================
-       GET BOOK ID
-    ===================================================== */
-
-    function getBookId(element) {
-
-        if (!element) return null;
-
-        return (
-            element.dataset.bookId ||
-            element.dataset.id ||
-            element.getAttribute("data-book-id") ||
-            element.getAttribute("data-id") ||
-            null
-        );
-
-    }
-
-
-    /* =====================================================
-       FIND BOOK ID FROM URL
-    ===================================================== */
-
-    function getBookIdFromURL() {
-
-        const params =
-            new URLSearchParams(window.location.search);
-
-        return (
-            params.get("id") ||
-            params.get("book") ||
-            params.get("bookId")
-        );
-
-    }
-
-
-    /* =====================================================
-       INCREMENT FIRESTORE COUNTER
-    ===================================================== */
-
-    async function incrementCounter(bookId, field) {
-
-        if (!bookId) {
-            console.warn("⚠️ No book ID found.");
-            return;
-        }
-
-        const db = getDB();
-
-        if (!db) return;
-
-        try {
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .update({
-
-                    [field]:
-                        firebase.firestore.FieldValue.increment(1)
-
-                });
-
-            console.log(
-                `✅ ${field} +1`,
-                bookId
-            );
-
-        } catch (error) {
-
-            /*
-             If field doesn't exist, Firestore increment
-             still normally creates it.
-            */
-
-            console.error(
-                `❌ Counter error (${field}):`,
-                error
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       UPDATE COUNTER ON SCREEN
-    ===================================================== */
-
-    function updateCounterDisplay(
-        bookId,
-        field,
-        value
-    ) {
-
-        const selectors = [
-
-            `[data-${field}="${bookId}"]`,
-
-            `[data-book-id="${bookId}"] .${field}`,
-
-            `#${field}-${bookId}`,
-
-            `#book-${field}-${bookId}`
-
-        ];
-
-
-        selectors.forEach(selector => {
-
-            document
-                .querySelectorAll(selector)
-                .forEach(element => {
-
-                    element.textContent =
-                        Number(value || 0);
-
-                });
-
-        });
-
-    }
-
-
-    /* =====================================================
-       LOAD BOOK COUNTERS
-    ===================================================== */
-
-    async function loadBookCounters(bookId) {
-
-        if (!bookId) return;
-
-        const db = getDB();
-
-        if (!db) return;
-
-        try {
-
-            const doc =
-                await db
-                    .collection("books")
-                    .doc(bookId)
-                    .get();
-
-            if (!doc.exists) {
-
-                console.warn(
-                    "⚠️ Book not found:",
-                    bookId
-                );
-
-                return;
-
-            }
-
-            const data =
-                doc.data();
-
-
-            updateCounterDisplay(
-                bookId,
-                "views",
-                data.views
-            );
-
-
-            updateCounterDisplay(
-                bookId,
-                "downloads",
-                data.downloads
-            );
-
-
-            updateCounterDisplay(
-                bookId,
-                "likes",
-                data.likes
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "❌ Could not load counters:",
-                error
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       VIEW COUNTER
-    ===================================================== */
-
-    async function countBookView(bookId) {
-
-        if (!bookId) return;
-
-        /*
-        Prevent multiple view counts during the same
-        page session.
-        */
-
-        const key =
-            "chishti_view_" + bookId;
-
-        if (
-            sessionStorage.getItem(key)
-        ) {
-
-            return;
-
-        }
-
-        sessionStorage.setItem(
-            key,
-            "1"
-        );
-
-
-        await incrementCounter(
-            bookId,
-            "views"
-        );
-
-    }
-
-
-    /* =====================================================
-       DOWNLOAD COUNTER
-    ===================================================== */
-
-    async function countBookDownload(bookId) {
-
-        if (!bookId) return;
-
-        await incrementCounter(
-            bookId,
-            "downloads"
-        );
-
-    }
-
-
-    /* =====================================================
-       LIKE COUNTER
-    ===================================================== */
-
-    async function countBookLike(bookId) {
-
-        if (!bookId) return;
-
-        const key =
-            "chishti_like_" + bookId;
-
-
-        /*
-        One like per browser.
-        */
-
-        if (
-            localStorage.getItem(key)
-        ) {
-
-            return false;
-
-        }
-
-
-        localStorage.setItem(
-            key,
-            "1"
-        );
-
-
-        await incrementCounter(
-            bookId,
-            "likes"
-        );
-
-
-        return true;
-
-    }
-
-
-    /* =====================================================
-       AUTO DETECT CURRENT BOOK
-    ===================================================== */
-
-    function detectCurrentBook() {
-
-        let bookId =
-            getBookIdFromURL();
-
-
-        /*
-        Look for common book elements.
-        */
-
-        if (!bookId) {
-
-            const element =
-                document.querySelector(
-                    "[data-book-id], [data-id]"
-                );
-
-            if (element) {
-
-                bookId =
-                    getBookId(element);
-
-            }
-
-        }
-
-
-        return bookId;
-
-    }
-
-
-    /* =====================================================
-       AUTOMATIC VIEW COUNT
-    ===================================================== */
-
-    function startAutomaticViewCounter() {
-
-        const bookId =
-            detectCurrentBook();
-
-
-        if (!bookId) {
-
-            console.log(
-                "ℹ️ No current book ID detected."
-            );
-
-            return;
-
-        }
-
-
-        console.log(
-            "📖 Current book:",
-            bookId
-        );
-
-
-        loadBookCounters(
-            bookId
-        );
-
-
-        countBookView(
-            bookId
-        );
-
-    }
-
-
-    /* =====================================================
-       DOWNLOAD BUTTON LISTENER
-    ===================================================== */
-
-    function setupDownloadCounters() {
-
-        document.addEventListener(
-            "click",
-            function (event) {
-
-                const link =
-                    event.target.closest(
-                        "a"
-                    );
-
-
-                if (!link) return;
-
-
-                const href =
-                    link.getAttribute(
-                        "href"
-                    ) || "";
-
-
-                const isDownload =
-                    link.hasAttribute("download") ||
-                    /pdf/i.test(href);
-
-
-                if (!isDownload) return;
-
-
-                let bookId =
-                    getBookId(link);
-
-
-                if (!bookId) {
-
-                    const parent =
-                        link.closest(
-                            "[data-book-id]"
-                        );
-
-
-                    if (parent) {
-
-                        bookId =
-                            getBookId(parent);
-
-                    }
-
-                }
-
-
-                if (!bookId) {
-
-                    bookId =
-                        getBookIdFromURL();
-
-                }
-
-
-                if (bookId) {
-
-                    countBookDownload(
-                        bookId
-                    );
-
-                }
-
-            },
-            true
-        );
-
-    }
-
-
-    /* =====================================================
-       LIKE BUTTON LISTENER
-    ===================================================== */
-
-    function setupLikeCounters() {
-
-        document.addEventListener(
-            "click",
-            async function (event) {
-
-                const button =
-                    event.target.closest(
-                        "[data-like-book], .like-btn, .book-like"
-                    );
-
-
-                if (!button) return;
-
-
-                let bookId =
-                    getBookId(button);
-
-
-                if (!bookId) {
-
-                    const parent =
-                        button.closest(
-                            "[data-book-id]"
-                        );
-
-
-                    if (parent) {
-
-                        bookId =
-                            getBookId(parent);
-
-                    }
-
-                }
-
-
-                if (!bookId) {
-
-                    bookId =
-                        getBookIdFromURL();
-
-                }
-
-
-                if (!bookId) return;
-
-
-                const liked =
-                    await countBookLike(
-                        bookId
-                    );
-
-
-                if (liked) {
-
-                    button.classList.add(
-                        "liked"
-                    );
-
-
-                    const count =
-                        button.querySelector(
-                            ".likes"
-                        );
-
-
-                    if (count) {
-
-                        count.textContent =
-                            Number(
-                                count.textContent || 0
-                            ) + 1;
-
-                    }
-
-                }
-
-            },
-            true
-        );
-
-    }
-
-
-    /* =====================================================
-       GLOBAL FUNCTIONS
-       You can call these from existing HTML/JS
-    ===================================================== */
-
-    window.chishtiCountView =
-        countBookView;
-
-    window.chishtiCountDownload =
-        countBookDownload;
-
-    window.chishtiCountLike =
-        countBookLike;
-
-    window.chishtiLoadCounters =
-        loadBookCounters;
-
-
-    /* =====================================================
-       START
-    ===================================================== */
-
-    function start() {
-
-        setupDownloadCounters();
-
-        setupLikeCounters();
-
-        startAutomaticViewCounter();
-
-    }
-
-
-    if (
-        document.readyState === "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            start
-        );
-
-    } else {
-
-        start();
-
-    }
-
-
-    console.log(
-        "✅ Chishti counters system ready"
-    );
-
-})();
