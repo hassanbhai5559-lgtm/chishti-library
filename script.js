@@ -334,292 +334,122 @@ console.log(
 
 
 
-/*================================================
-PART 2
-BOOK DISPLAY + LIKE + COMMENT + SHARE
-================================================*/
+/* =========================================================
+   CHISHTI LIBRARY
+   BOOK SOCIAL SYSTEM
+   LIKE + SHARE + COMMENT + EMOJI
+========================================================= */
+
+"use strict";
 
 
-/*=========================
-BOOK ID
-=========================*/
+/* =========================================================
+   BOOK CARD
+========================================================= */
 
-function getBookId(book) {
+function createBookCard(book) {
 
-    return (
-        book.id ||
+    const card = document.createElement("div");
+
+    card.className = "book-result animated-book-card";
+
+    const cover =
+        book.cover ||
+        book.coverUrl ||
+        "logo.png";
+
+    const title =
+        book.title ||
+        "Untitled Book";
+
+    const author =
+        book.author ||
+        "Unknown Author";
+
+    const pdf =
         book.pdf ||
-        book.title
-    )
-    .toString()
-    .replace(
-        /[^a-zA-Z0-9]/g,
-        "_"
-    );
+        book.pdfUrl ||
+        "";
 
-}
+    const bookId =
+        book.firestoreId ||
+        book.id ||
+        title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
+    const openLink =
+        book.url ||
+        book.readUrl ||
+        pdf ||
+        "books.html";
 
-/*=========================
-GET LIKE COUNT
-=========================*/
 
-function getLikeCount(book) {
+    card.innerHTML = `
 
-    const id =
-        getBookId(book);
+        <div class="book-result-main">
 
-    const saved =
-        localStorage.getItem(
-            "chishti_like_" + id
-        );
+            <div class="book-cover-wrap">
 
-    return Number(saved) || 0;
-
-}
-
-
-/*=========================
-GET USER LIKE STATUS
-=========================*/
-
-function hasUserLiked(book) {
-
-    const id =
-        getBookId(book);
-
-    return (
-        localStorage.getItem(
-            "chishti_liked_" + id
-        ) === "true"
-    );
-
-}
-
-
-/*=========================
-DISPLAY BOOKS
-=========================*/
-
-function displayBooks(books) {
-
-    const container =
-        document.getElementById(
-            "booksContainer"
-        );
-
-    if (!container) return;
-
-    container.innerHTML = "";
-
-
-    if (!books || books.length === 0) {
-
-        container.innerHTML = `
-
-        <div class="no-books">
-
-            <h2>No Books Found</h2>
-
-            <p>
-                Try another search.
-            </p>
-
-        </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    books.forEach(book => {
-
-        const bookId =
-            getBookId(book);
-
-        const likes =
-            getLikeCount(book);
-
-        const liked =
-            hasUserLiked(book);
-
-
-        container.innerHTML += `
-
-        <div
-            class="book-card"
-            data-book-id="${bookId}"
-        >
-
-            <img
-                src="${book.cover}"
-                alt="${book.title}"
-                loading="lazy"
-            >
-
-
-            <div class="book-content">
-
-                <span class="book-category">
-
-                    ${book.category || ""}
-
-                </span>
-
-
-                <h2>
-                    ${book.title || ""}
-                </h2>
-
-
-                <h3>
-                    ${book.author || ""}
-                </h3>
-
-
-                <p>
-                    ${book.description || ""}
-                </p>
-
-
-                <!-- BOOK META -->
-
-                <div class="book-meta">
-
-                    <span>
-                        👁 ${book.views || 0}
-                    </span>
-
-                    <span
-                        class="live-like-count"
-                        data-like-id="${bookId}"
-                    >
-                        ❤️ ${likes}
-                    </span>
-
-                    <span>
-                        ⬇ ${book.downloads || 0}
-                    </span>
-
-                </div>
-
-
-                <!-- SOCIAL ACTIONS -->
-
-                <div class="book-social-actions">
-
-                    <button
-                        type="button"
-                        class="book-action like-book ${liked ? "liked" : ""}"
-                        data-book-id="${bookId}"
-                        title="Like this book"
-                    >
-
-                        ${liked ? "❤️" : "♡"}
-
-                        <span>
-                            ${likes}
-                        </span>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="book-action comment-book"
-                        data-book-id="${bookId}"
-                        title="Comments"
-                    >
-
-                        💬
-
-                        <span>
-                            Comments
-                        </span>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="book-action share-book"
-                        data-book-id="${bookId}"
-                        title="Share this book"
-                    >
-
-                        🔗
-
-                        <span>
-                            Share
-                        </span>
-
-                    </button>
-
-                </div>
-
-
-                <!-- COMMENT BOX -->
-
-                <div
-                    class="comment-area"
-                    id="comments-${bookId}"
-                    style="display:none;"
+                <img
+                    src="${safeUrl(cover)}"
+                    alt="${escapeHtml(title)}"
+                    class="book-cover"
+                    onerror="this.src='logo.png'"
                 >
 
-                    <div class="comment-input-row">
+                <div class="cover-glow"></div>
 
-                        <input
-                            type="text"
-                            class="comment-input"
-                            data-comment-id="${bookId}"
-                            placeholder="Write a comment..."
-                            maxlength="300"
-                        >
-
-                        <button
-                            type="button"
-                            class="comment-submit"
-                            data-book-id="${bookId}"
-                        >
-                            Post
-                        </button>
-
-                    </div>
+            </div>
 
 
-                    <div
-                        class="comments-list"
-                        id="comment-list-${bookId}"
-                    ></div>
+            <div class="book-result-info">
 
-                </div>
+                <h4>
+                    ${escapeHtml(title)}
+                </h4>
+
+                <p>
+                    <i class="fa-solid fa-user"></i>
+                    ${escapeHtml(author)}
+                </p>
+
+                ${
+                    book.category
+                    ? `
+                        <p>
+                            <i class="fa-solid fa-layer-group"></i>
+                            ${escapeHtml(book.category)}
+                        </p>
+                    `
+                    : ""
+                }
 
 
-                <!-- BOOK BUTTONS -->
-
-                <div class="book-buttons">
+                <div class="book-actions">
 
                     <a
-                        href="reader.html?book=${encodeURIComponent(book.pdf)}"
-                        class="btn"
+                        href="${safeUrl(openLink)}"
+                        ${pdf ? 'target="_blank"' : ""}
+                        class="book-read-btn"
                     >
-
-                        📖 Read Online
-
+                        <i class="fa-solid fa-book-open"></i>
+                        Read
                     </a>
 
 
-                    <a
-                        href="${book.pdf}"
-                        download
-                        class="btn"
-                    >
-
-                        ⬇ Download
-
-                    </a>
+                    ${
+                        pdf
+                        ? `
+                            <a
+                                href="${safeUrl(pdf)}"
+                                download
+                                class="book-download-btn"
+                            >
+                                <i class="fa-solid fa-download"></i>
+                                PDF
+                            </a>
+                        `
+                        : ""
+                    }
 
                 </div>
 
@@ -627,16 +457,803 @@ function displayBooks(books) {
 
         </div>
 
-        `;
+
+        <div class="book-social">
+
+            <button
+                class="book-like"
+                type="button"
+                data-book-id="${escapeHtml(bookId)}"
+            >
+
+                <i class="fa-regular fa-heart"></i>
+
+                <span class="like-count">
+                    ${Number(book.likes || 0)}
+                </span>
+
+            </button>
+
+
+            <button
+                class="book-comment"
+                type="button"
+                data-book-id="${escapeHtml(bookId)}"
+            >
+
+                <i class="fa-regular fa-comment"></i>
+
+                <span>
+                    Comment
+                </span>
+
+            </button>
+
+
+            <button
+                class="book-share"
+                type="button"
+            >
+
+                <i class="fa-solid fa-share-nodes"></i>
+
+                <span>
+                    Share
+                </span>
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    /* LIKE */
+
+    card
+        .querySelector(".book-like")
+        .addEventListener(
+            "click",
+            () => likeBook(bookId, card)
+        );
+
+
+    /* COMMENT */
+
+    card
+        .querySelector(".book-comment")
+        .addEventListener(
+            "click",
+            () => openComments(book)
+        );
+
+
+    /* SHARE */
+
+    card
+        .querySelector(".book-share")
+        .addEventListener(
+            "click",
+            () => shareBook(book)
+        );
+
+
+    return card;
+}
+
+
+/* =========================================================
+   LIKE
+========================================================= */
+
+async function likeBook(bookId, card) {
+
+    if (!currentUser) {
+
+        alert("Please login first to like a book.");
+
+        window.location.href = "login.html";
+
+        return;
+    }
+
+
+    const button =
+        card.querySelector(".book-like");
+
+    const icon =
+        button.querySelector("i");
+
+    const count =
+        button.querySelector(".like-count");
+
+
+    if (button.dataset.loading === "true") {
+        return;
+    }
+
+    button.dataset.loading = "true";
+
+
+    try {
+
+        const bookRef =
+            firebase.firestore()
+                .collection("books")
+                .doc(bookId);
+
+
+        const likeRef =
+            bookRef
+                .collection("likes")
+                .doc(currentUser.uid);
+
+
+        const likeDoc =
+            await likeRef.get();
+
+
+        if (likeDoc.exists) {
+
+            button.classList.remove("liked");
+
+            icon.className =
+                "fa-regular fa-heart";
+
+            await likeRef.delete();
+
+            await bookRef.update({
+
+                likes:
+                    firebase.firestore.FieldValue.increment(-1)
+
+            });
+
+
+            count.textContent =
+                Math.max(
+                    0,
+                    Number(count.textContent || 0) - 1
+                );
+
+
+        } else {
+
+            button.classList.add("liked");
+
+            icon.className =
+                "fa-solid fa-heart";
+
+
+            /* Heart animation */
+
+            button.classList.add("heart-pop");
+
+
+            setTimeout(() => {
+
+                button.classList.remove("heart-pop");
+
+            }, 500);
+
+
+            await likeRef.set({
+
+                uid:
+                    currentUser.uid,
+
+                createdAt:
+                    firebase.firestore.FieldValue.serverTimestamp()
+
+            });
+
+
+            await bookRef.update({
+
+                likes:
+                    firebase.firestore.FieldValue.increment(1)
+
+            });
+
+
+            count.textContent =
+                Number(count.textContent || 0) + 1;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Like error:",
+            error
+        );
+
+    }
+
+
+    button.dataset.loading = "false";
+}
+
+
+/* =========================================================
+   COMMENTS
+========================================================= */
+
+async function openComments(book) {
+
+    if (!currentUser) {
+
+        alert("Please login first to comment.");
+
+        window.location.href =
+            "login.html";
+
+        return;
+    }
+
+
+    const bookId =
+        book.firestoreId ||
+        book.id;
+
+
+    const oldModal =
+        document.getElementById("bookCommentsModal");
+
+
+    if (oldModal) {
+        oldModal.remove();
+    }
+
+
+    const modal =
+        document.createElement("div");
+
+    modal.id =
+        "bookCommentsModal";
+
+    modal.className =
+        "book-comments-modal";
+
+
+    modal.innerHTML = `
+
+        <div class="comments-panel">
+
+            <div class="comments-top">
+
+                <div>
+
+                    <span class="comments-small">
+                        CHISHTI LIBRARY
+                    </span>
+
+                    <h2>
+                        <i class="fa-solid fa-comments"></i>
+                        Comments
+                    </h2>
+
+                    <p>
+                        ${escapeHtml(book.title || "Book")}
+                    </p>
+
+                </div>
+
+
+                <button
+                    class="comments-close"
+                    type="button"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <div
+                class="comments-list"
+                id="commentsList"
+            >
+
+                <div class="comments-loading">
+                    Loading comments...
+                </div>
+
+            </div>
+
+
+            <div class="comment-reactions">
+
+                <button data-emoji="❤️">
+                    ❤️
+                </button>
+
+                <button data-emoji="😍">
+                    😍
+                </button>
+
+                <button data-emoji="🤲">
+                    🤲
+                </button>
+
+                <button data-emoji="📚">
+                    📚
+                </button>
+
+                <button data-emoji="🌙">
+                    🌙
+                </button>
+
+                <button data-emoji="✨">
+                    ✨
+                </button>
+
+            </div>
+
+
+            <form
+                class="comment-form-new"
+                id="commentFormNew"
+            >
+
+                <input
+                    id="commentInputNew"
+                    maxlength="500"
+                    placeholder="Write a comment..."
+                    autocomplete="off"
+                >
+
+                <button type="submit">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(modal);
+
+
+    /* OPEN ANIMATION */
+
+    requestAnimationFrame(() => {
+
+        modal.classList.add("show");
 
     });
 
 
-    loadAllComments();
+    /* CLOSE */
+
+    modal
+        .querySelector(".comments-close")
+        .addEventListener(
+            "click",
+            () => closeComments(modal)
+        );
+
+
+    modal.addEventListener(
+        "click",
+        event => {
+
+            if (event.target === modal) {
+
+                closeComments(modal);
+
+            }
+
+        }
+    );
+
+
+    /* EMOJI */
+
+    modal
+        .querySelectorAll("[data-emoji]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const input =
+                        document.getElementById(
+                            "commentInputNew"
+                        );
+
+                    input.value +=
+                        button.dataset.emoji;
+
+                    input.focus();
+
+                }
+            );
+
+        });
+
+
+    /* FORM */
+
+    modal
+        .querySelector("#commentFormNew")
+        .addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+                submitComment(
+                    bookId,
+                    modal
+                );
+
+            }
+        );
+
+
+    await loadComments(
+        bookId,
+        modal
+    );
 
 }
 
 
+/* =========================================================
+   LOAD COMMENTS
+========================================================= */
+
+async function loadComments(bookId, modal) {
+
+    const list =
+        modal.querySelector("#commentsList");
+
+
+    try {
+
+        const snapshot =
+            await firebase.firestore()
+
+                .collection("books")
+                .doc(bookId)
+                .collection("comments")
+
+                .orderBy(
+                    "createdAt",
+                    "desc"
+                )
+
+                .limit(50)
+
+                .get();
+
+
+        list.innerHTML = "";
+
+
+        if (snapshot.empty) {
+
+            list.innerHTML = `
+
+                <div class="no-comments">
+
+                    💬
+
+                    <h3>
+                        No comments yet
+                    </h3>
+
+                    <p>
+                        Be the first to comment.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        snapshot.forEach(doc => {
+
+            const data =
+                doc.data();
+
+
+            const comment =
+                document.createElement("div");
+
+            comment.className =
+                "comment-item";
+
+
+            const name =
+                data.email
+                    ? data.email.split("@")[0]
+                    : "Reader";
+
+
+            comment.innerHTML = `
+
+                <div class="comment-avatar">
+
+                    ${escapeHtml(
+                        name.charAt(0).toUpperCase()
+                    )}
+
+                </div>
+
+
+                <div class="comment-content">
+
+                    <strong>
+                        ${escapeHtml(name)}
+                    </strong>
+
+                    <p>
+                        ${escapeHtml(data.text || "")}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(comment);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Comments loading error:",
+            error
+        );
+
+
+        list.innerHTML = `
+
+            <div class="no-comments">
+
+                Unable to load comments.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   SUBMIT COMMENT
+========================================================= */
+
+async function submitComment(bookId, modal) {
+
+    const input =
+        modal.querySelector(
+            "#commentInputNew"
+        );
+
+
+    const text =
+        input.value.trim();
+
+
+    if (!text) {
+        return;
+    }
+
+
+    if (text.length > 500) {
+
+        alert(
+            "Comment must be under 500 characters."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await firebase.firestore()
+
+            .collection("books")
+
+            .doc(bookId)
+
+            .collection("comments")
+
+            .add({
+
+                uid:
+                    currentUser.uid,
+
+                email:
+                    currentUser.email || "Reader",
+
+                text:
+                    text,
+
+                createdAt:
+                    firebase.firestore.FieldValue
+                        .serverTimestamp()
+
+            });
+
+
+        input.value = "";
+
+
+        await loadComments(
+            bookId,
+            modal
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Comment error:",
+            error
+        );
+
+        alert(
+            "Comment save nahi ho saka."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE COMMENTS
+========================================================= */
+
+function closeComments(modal) {
+
+    modal.classList.remove("show");
+
+
+    setTimeout(() => {
+
+        modal.remove();
+
+    }, 300);
+
+}
+
+
+/* =========================================================
+   SHARE
+========================================================= */
+
+async function shareBook(book) {
+
+    const title =
+        book.title ||
+        "Chishti Library";
+
+
+    const url =
+        book.url ||
+        book.readUrl ||
+        book.pdf ||
+        window.location.href;
+
+
+    try {
+
+        if (
+            navigator.share
+        ) {
+
+            await navigator.share({
+
+                title:
+                    title,
+
+                text:
+                    `📚 Read ${title} on Chishti Library`,
+
+                url:
+                    url
+
+            });
+
+        } else {
+
+            await navigator.clipboard.writeText(
+                url
+            );
+
+            showToast(
+                "🔗 Book link copied!"
+            );
+
+        }
+
+    } catch (error) {
+
+        if (
+            error.name !== "AbortError"
+        ) {
+
+            console.error(error);
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    const old =
+        document.querySelector(
+            ".chishti-toast"
+        );
+
+
+    if (old) {
+        old.remove();
+    }
+
+
+    const toast =
+        document.createElement("div");
+
+
+    toast.className =
+        "chishti-toast";
+
+
+    toast.textContent =
+        message;
+
+
+    document.body.appendChild(
+        toast
+    );
+
+
+    requestAnimationFrame(() => {
+
+        toast.classList.add("show");
+
+    });
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+        setTimeout(
+            () => toast.remove(),
+            300
+        );
+
+    }, 2500);
+
+}
 /*================================================
 LIKE SYSTEM
 ================================================*/
