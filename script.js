@@ -1006,97 +1006,1103 @@ console.log("✅ Downloads");
 console.log("✅ Responsive");
 
 console.log("🚀 Production Ready");
-/*=========================================================
-CHISHTI LIBRARY - EXTRA ACTIONS (PASTE AT THE END)
-Views, Like, Share, Comments & Interactive Helpers
-=========================================================*/
+/* =========================================================
+   CHISHTI LIBRARY
+   LIKE + SHARE + COMMENT UI
+   PASTE THIS AT THE VERY END OF SCRIPT.JS
+   ========================================================= */
 
-/* 1. VIEWS TRACKING & READER NAVIGATOR */
-function trackAndRead(bookId, pdfUrl) {
-    if (!bookId) return;
-    
-    // View count increase & save in LocalStorage
-    let currentViews = parseInt(localStorage.getItem(`views_${bookId}`)) || 0;
-    currentViews++;
-    localStorage.setItem(`views_${bookId}`, currentViews);
+(function () {
 
-    // Dynamic UI update if element exists
-    const viewSpan = document.getElementById(`view-count-${bookId}`);
-    if (viewSpan) {
-        viewSpan.innerText = `👁 ${currentViews} Views`;
+    "use strict";
+
+
+    /* =====================================================
+       LIKE BUTTON
+       ===================================================== */
+
+    document.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest(".like-book");
+
+        if (!button) return;
+
+
+        /* Prevent double click animation */
+        if (button.dataset.animating === "true") {
+            return;
+        }
+
+
+        button.dataset.animating = "true";
+
+
+        /* Heart animation */
+        button.classList.add("heart-pop");
+        button.classList.add("liked");
+
+
+        const icon =
+            button.querySelector("i");
+
+
+        if (icon) {
+
+            icon.className =
+                "fa-solid fa-heart";
+
+        }
+
+
+        /* Floating hearts */
+
+        createFloatingHearts(button);
+
+
+        setTimeout(function () {
+
+            button.classList.remove(
+                "heart-pop"
+            );
+
+            button.dataset.animating =
+                "false";
+
+        }, 600);
+
+    });
+
+
+    /* =====================================================
+       FLOATING HEARTS
+       ===================================================== */
+
+    function createFloatingHearts(button) {
+
+        const rect =
+            button.getBoundingClientRect();
+
+
+        const hearts = [
+            "❤️",
+            "💖",
+            "💕",
+            "❤️",
+            "💗"
+        ];
+
+
+        for (
+            let i = 0;
+            i < 5;
+            i++
+        ) {
+
+            const heart =
+                document.createElement("span");
+
+
+            heart.className =
+                "floating-heart";
+
+
+            heart.textContent =
+                hearts[
+                    Math.floor(
+                        Math.random() *
+                        hearts.length
+                    )
+                ];
+
+
+            heart.style.left =
+                (
+                    rect.left +
+                    rect.width / 2 +
+                    (Math.random() * 40 - 20)
+                ) + "px";
+
+
+            heart.style.top =
+                (
+                    rect.top +
+                    window.scrollY
+                ) + "px";
+
+
+            heart.style.setProperty(
+                "--heart-x",
+                (
+                    Math.random() * 100 -
+                    50
+                ) + "px"
+            );
+
+
+            document.body.appendChild(
+                heart
+            );
+
+
+            setTimeout(function () {
+
+                heart.remove();
+
+            }, 1200);
+
+        }
+
     }
 
-    // Redirect to Reader
-    window.location.href = `reader.html?book=${pdfUrl}&id=${encodeURIComponent(bookId)}`;
-}
-window.trackAndRead = trackAndRead;
 
-/* 2. LIKE SYSTEM */
-function likeBook(bookId) {
-    const isLiked = localStorage.getItem(`hasLiked_${bookId}`);
-    if (isLiked) {
-        alert("Aap pehle hi is kitab ko like kar chuke hain!");
-        return;
+    /* =====================================================
+       SHARE BUTTON
+       ===================================================== */
+
+    document.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest(".share-book");
+
+        if (!button) return;
+
+
+        const bookId =
+            button.dataset.bookId || "";
+
+
+        const book =
+            typeof findBookById === "function"
+                ? findBookById(bookId)
+                : null;
+
+
+        const title =
+            book?.title ||
+            document.title ||
+            "Chishti Library";
+
+
+        const url =
+            window.location.href;
+
+
+        openShareBox(
+            title,
+            url
+        );
+
+    });
+
+
+    /* =====================================================
+       SHARE POPUP
+       ===================================================== */
+
+    function openShareBox(
+        title,
+        url
+    ) {
+
+        const old =
+            document.getElementById(
+                "chishtiShareBox"
+            );
+
+
+        if (old) {
+            old.remove();
+        }
+
+
+        const encodedURL =
+            encodeURIComponent(url);
+
+
+        const encodedText =
+            encodeURIComponent(
+                title
+            );
+
+
+        const popup =
+            document.createElement("div");
+
+
+        popup.id =
+            "chishtiShareBox";
+
+
+        popup.className =
+            "chishti-share-popup";
+
+
+        popup.innerHTML = `
+
+            <div class="share-panel">
+
+                <button
+                    type="button"
+                    class="share-close"
+                    aria-label="Close"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+
+                <div class="share-heading">
+
+                    <span class="share-icon">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </span>
+
+                    <h3>
+                        Share Book
+                    </h3>
+
+                    <p>
+                        Share this book with your friends
+                    </p>
+
+                </div>
+
+
+                <div class="share-buttons">
+
+
+                    <a
+                        href="https://wa.me/?text=${encodedText}%20${encodedURL}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="share-option whatsapp"
+                    >
+
+                        <i class="fa-brands fa-whatsapp"></i>
+
+                        <span>WhatsApp</span>
+
+                    </a>
+
+
+                    <a
+                        href="https://www.facebook.com/sharer/sharer.php?u=${encodedURL}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="share-option facebook"
+                    >
+
+                        <i class="fa-brands fa-facebook-f"></i>
+
+                        <span>Facebook</span>
+
+                    </a>
+
+
+                    <a
+                        href="https://t.me/share/url?url=${encodedURL}&text=${encodedText}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="share-option telegram"
+                    >
+
+                        <i class="fa-brands fa-telegram"></i>
+
+                        <span>Telegram</span>
+
+                    </a>
+
+
+                    <a
+                        href="https://twitter.com/intent/tweet?url=${encodedURL}&text=${encodedText}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="share-option twitter"
+                    >
+
+                        <i class="fa-brands fa-x-twitter"></i>
+
+                        <span>Twitter / X</span>
+
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="share-option copy-link"
+                        id="copyChishtiBookLink"
+                    >
+
+                        <i class="fa-solid fa-link"></i>
+
+                        <span>Copy Link</span>
+
+                    </button>
+
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            popup
+        );
+
+
+        requestAnimationFrame(function () {
+
+            popup.classList.add(
+                "show"
+            );
+
+        });
+
+
+        /* Close */
+
+        const close =
+            popup.querySelector(
+                ".share-close"
+            );
+
+
+        if (close) {
+
+            close.addEventListener(
+                "click",
+                function () {
+
+                    closeShareBox();
+
+                }
+            );
+
+        }
+
+
+        /* Click outside */
+
+        popup.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === popup
+                ) {
+
+                    closeShareBox();
+
+                }
+
+            }
+        );
+
+
+        /* Copy link */
+
+        const copyButton =
+            popup.querySelector(
+                "#copyChishtiBookLink"
+            );
+
+
+        if (copyButton) {
+
+            copyButton.addEventListener(
+                "click",
+                async function () {
+
+                    try {
+
+                        await navigator
+                            .clipboard
+                            .writeText(url);
+
+
+                        copyButton.innerHTML = `
+
+                            <i class="fa-solid fa-check"></i>
+
+                            <span>
+                                Copied!
+                            </span>
+
+                        `;
+
+
+                        if (
+                            typeof showToast ===
+                            "function"
+                        ) {
+
+                            showToast(
+                                "🔗 Book link copied!"
+                            );
+
+                        }
+
+
+                        setTimeout(
+                            function () {
+
+                                closeShareBox();
+
+                            },
+                            900
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Copy error:",
+                            error
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
     }
 
-    let currentLikes = parseInt(localStorage.getItem(`likes_${bookId}`)) || 0;
-    currentLikes++;
-    
-    localStorage.setItem(`likes_${bookId}`, currentLikes);
-    localStorage.setItem(`hasLiked_${bookId}`, "true");
 
-    const likeSpan = document.getElementById(`like-count-${bookId}`);
-    if (likeSpan) {
-        likeSpan.innerText = `❤️ ${currentLikes}`;
-    }
-}
-window.likeBook = likeBook;
+    /* =====================================================
+       CLOSE SHARE
+       ===================================================== */
 
-/* 3. SHARE SYSTEM */
-function shareBook(title, pdfUrl) {
-    const shareUrl = `${window.location.origin}/reader.html?book=${encodeURIComponent(pdfUrl)}`;
-    
-    if (navigator.share) {
-        navigator.share({
-            title: title,
-            text: `Chishti Library par ye kitab parhein: ${title}`,
-            url: shareUrl
-        }).catch(() => {});
-    } else {
-        navigator.clipboard.writeText(shareUrl);
-        alert("Kitab ka link copy ho gaya hai!");
-    }
-}
-window.shareBook = shareBook;
+    function closeShareBox() {
 
-/* 4. COMMENT SYSTEM (TOGGLE & ADD) */
-function toggleComments(bookId) {
-    const commentBox = document.getElementById(`comment-box-${bookId}`);
-    if (commentBox) {
-        const isHidden = commentBox.style.display === "none" || commentBox.style.display === "";
-        commentBox.style.display = isHidden ? "block" : "none";
-    }
-}
-window.toggleComments = toggleComments;
+        const popup =
+            document.getElementById(
+                "chishtiShareBox"
+            );
 
-function addComment(bookId) {
-    const input = document.getElementById(`comment-input-${bookId}`);
-    if (!input || input.value.trim() === "") return;
 
-    const newComment = input.value.trim();
-    let comments = JSON.parse(localStorage.getItem(`comments_${bookId}`)) || [];
-    comments.push(newComment);
-    
-    localStorage.setItem(`comments_${bookId}`, JSON.stringify(comments));
+        if (!popup) return;
 
-    const commentsList = document.getElementById(`comments-list-${bookId}`);
-    if (commentsList) {
-        commentsList.innerHTML += `<p style="margin: 3px 0; border-bottom: 1px dashed #ddd; padding-bottom: 2px;"><b>User:</b> ${newComment}</p>`;
-        commentsList.scrollTop = commentsList.scrollHeight;
+
+        popup.classList.remove(
+            "show"
+        );
+
+
+        setTimeout(
+            function () {
+
+                popup.remove();
+
+            },
+            300
+        );
+
     }
 
-    input.value = "";
-}
-window.addComment = addComment;
 
-console.log("✅ Chishti Library Extra Modules Successfully Loaded!");
+    /* =====================================================
+       COMMENT BUTTON
+       ===================================================== */
+
+    document.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest(
+                ".comment-book"
+            );
+
+
+        if (!button) return;
+
+
+        const bookId =
+            button.dataset.bookId;
+
+
+        if (!bookId) {
+
+            console.warn(
+                "Comment button has no book ID."
+            );
+
+            return;
+
+        }
+
+
+        let book = null;
+
+
+        if (
+            typeof findBookById ===
+            "function"
+        ) {
+
+            book =
+                findBookById(
+                    bookId
+                );
+
+        }
+
+
+        if (!book) {
+
+            book = {
+                id: bookId,
+                title: "Book"
+            };
+
+        }
+
+
+        if (
+            typeof openComments ===
+            "function"
+        ) {
+
+            openComments(
+                book
+            );
+
+            return;
+
+        }
+
+
+        /* Fallback comment modal */
+
+        openCommentFallback(
+            book
+        );
+
+    });
+
+
+    /* =====================================================
+       COMMENT FALLBACK
+       ===================================================== */
+
+    function openCommentFallback(book) {
+
+        const old =
+            document.getElementById(
+                "chishtiCommentBox"
+            );
+
+
+        if (old) {
+            old.remove();
+        }
+
+
+        const modal =
+            document.createElement(
+                "div"
+            );
+
+
+        modal.id =
+            "chishtiCommentBox";
+
+
+        modal.className =
+            "chishti-comment-popup";
+
+
+        modal.innerHTML = `
+
+            <div class="comment-panel">
+
+
+                <button
+                    type="button"
+                    class="comment-close"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+
+                <div class="comment-header">
+
+                    <div class="comment-header-icon">
+
+                        💬
+
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            Comments
+                        </h3>
+
+                        <p>
+                            ${escapeCommentText(
+                                book.title ||
+                                "Book"
+                            )}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="comment-gif-area"
+                >
+
+                    <div class="comment-gif">
+
+                        💖
+
+                    </div>
+
+                    <p>
+                        Share your thoughts about this book
+                    </p>
+
+                </div>
+
+
+                <div class="comment-reactions">
+
+
+                    <button
+                        type="button"
+                        data-comment-emoji="❤️"
+                    >
+                        ❤️
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-comment-emoji="😍"
+                    >
+                        😍
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-comment-emoji="🤲"
+                    >
+                        🤲
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-comment-emoji="📚"
+                    >
+                        📚
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-comment-emoji="✨"
+                    >
+                        ✨
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-comment-emoji="🌙"
+                    >
+                        🌙
+                    </button>
+
+
+                </div>
+
+
+                <div class="comment-input-row">
+
+                    <input
+                        type="text"
+                        id="fallbackCommentInput"
+                        maxlength="500"
+                        placeholder="Write a comment..."
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        type="button"
+                        id="fallbackCommentSend"
+                    >
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="fallbackCommentList"
+                    class="fallback-comment-list"
+                >
+
+                    <div class="no-comments">
+
+                        No comments yet.
+                        Be the first to comment.
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(
+            modal
+        );
+
+
+        requestAnimationFrame(
+            function () {
+
+                modal.classList.add(
+                    "show"
+                );
+
+            }
+        );
+
+
+        /* Close */
+
+        modal
+            .querySelector(
+                ".comment-close"
+            )
+            .addEventListener(
+                "click",
+                function () {
+
+                    closeCommentFallback();
+
+                }
+            );
+
+
+        modal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeCommentFallback();
+
+                }
+
+            }
+        );
+
+
+        /* Emoji */
+
+        modal
+            .querySelectorAll(
+                "[data-comment-emoji]"
+            )
+            .forEach(
+                function (emojiButton) {
+
+                    emojiButton.addEventListener(
+                        "click",
+                        function () {
+
+                            const input =
+                                document.getElementById(
+                                    "fallbackCommentInput"
+                                );
+
+
+                            if (!input) return;
+
+
+                            input.value +=
+                                emojiButton.dataset
+                                    .commentEmoji;
+
+
+                            input.focus();
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* Send */
+
+        const send =
+            document.getElementById(
+                "fallbackCommentSend"
+            );
+
+
+        if (send) {
+
+            send.addEventListener(
+                "click",
+                function () {
+
+                    addFallbackComment();
+
+                }
+            );
+
+        }
+
+
+        const input =
+            document.getElementById(
+                "fallbackCommentInput"
+            );
+
+
+        if (input) {
+
+            input.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (
+                        event.key === "Enter"
+                    ) {
+
+                        event.preventDefault();
+
+                        addFallbackComment();
+
+                    }
+
+                }
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ADD FALLBACK COMMENT
+       ===================================================== */
+
+    function addFallbackComment() {
+
+        const input =
+            document.getElementById(
+                "fallbackCommentInput"
+            );
+
+
+        const list =
+            document.getElementById(
+                "fallbackCommentList"
+            );
+
+
+        if (!input || !list) return;
+
+
+        const text =
+            input.value.trim();
+
+
+        if (!text) return;
+
+
+        const comment =
+            document.createElement(
+                "div"
+            );
+
+
+        comment.className =
+            "fallback-comment";
+
+
+        comment.innerHTML = `
+
+            <div class="comment-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+
+            <div class="comment-body">
+
+                <strong>
+                    You
+                </strong>
+
+                <p>
+                    ${escapeCommentText(
+                        text
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+
+        const empty =
+            list.querySelector(
+                ".no-comments"
+            );
+
+
+        if (empty) {
+            empty.remove();
+        }
+
+
+        list.prepend(
+            comment
+        );
+
+
+        input.value =
+            "";
+
+
+        if (
+            typeof showToast ===
+            "function"
+        ) {
+
+            showToast(
+                "💬 Comment added!"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CLOSE COMMENT
+       ===================================================== */
+
+    function closeCommentFallback() {
+
+        const modal =
+            document.getElementById(
+                "chishtiCommentBox"
+            );
+
+
+        if (!modal) return;
+
+
+        modal.classList.remove(
+            "show"
+        );
+
+
+        setTimeout(
+            function () {
+
+                modal.remove();
+
+            },
+            300
+        );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE COMMENT TEXT
+       ===================================================== */
+
+    function escapeCommentText(
+        value
+    ) {
+
+        return String(
+            value ?? ""
+        )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+    }
+
+
+    /* =====================================================
+       ESC KEY
+       ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key !== "Escape"
+            ) {
+                return;
+            }
+
+
+            closeShareBox();
+            closeCommentFallback();
+
+        }
+    );
+
+
+    /* =====================================================
+       PUBLIC
+       ===================================================== */
+
+    window.chishtiOpenShare =
+        openShareBox;
+
+
+    window.chishtiCloseShare =
+        closeShareBox;
+
+
+})();
