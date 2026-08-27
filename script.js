@@ -3093,3 +3093,52 @@ function filterBooks(category, button = null) {
 
     displayBooks(filteredBooks);
 }
+/* =========================================================
+   SAFE TEXT
+========================================================= */
+
+function escapeBookText(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   SAFE URL
+========================================================= */
+
+function safeBookUrl(value) {
+
+    const url =
+        String(value || "").trim();
+
+    if (!url) {
+        return "logo.png";
+    }
+
+    if (
+        /^\s*javascript:/i.test(url)
+    ) {
+        return "#";
+    }
+
+    return url;
+
+}
+
+
+/* Compatibility with old functions */
+
+function escapeHtml(value) {
+    return escapeBookText(value);
+}
+
+function safeUrl(value) {
+    return safeBookUrl(value);
+}
