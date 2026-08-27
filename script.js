@@ -3057,236 +3057,39 @@ console.log(
     "🚀 Production Ready"
 );
 
-/* =========================================================
-   CHISHTI LIBRARY
-   DISPLAY BOOKS
-========================================================= */
+function filterBooks(category, button = null) {
 
-window.displayBooks = function(bookList) {
+    document
+        .querySelectorAll(".category")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
 
-    const container =
-        document.getElementById("booksContainer");
-
-    if (!container) {
-        console.warn("booksContainer not found.");
-        return;
+    if (button) {
+        button.classList.add("active");
     }
 
-    container.innerHTML = "";
+    const selected =
+        String(category || "All")
+            .trim()
+            .toLowerCase();
 
-    /* -----------------------------------------
-       NO BOOKS
-    ----------------------------------------- */
+    if (selected === "all") {
 
-    if (!Array.isArray(bookList) || bookList.length === 0) {
+        filteredBooks = [...allBooks];
 
-        container.innerHTML = `
-            <div class="no-books">
+    } else {
 
-                <i class="fas fa-book-open"></i>
+        filteredBooks =
+            allBooks.filter(book => {
 
-                <h3>No Books Found</h3>
+                return String(book.category || "")
+                    .trim()
+                    .toLowerCase() === selected;
 
-                <p>
-                    Is category mein abhi koi book available nahi hai.
-                </p>
+            });
 
-            </div>
-        `;
-
-        return;
     }
 
-
-    /* -----------------------------------------
-       DISPLAY BOOKS
-    ----------------------------------------- */
-
-    bookList.forEach(book => {
-
-        const card =
-            document.createElement("div");
-
-        card.className = "book-card";
-
-
-        /* BOOK DATA */
-
-        const title =
-            String(
-                book.title ||
-                book.name ||
-                "Untitled Book"
-            );
-
-        const author =
-            String(
-                book.author ||
-                "Unknown Author"
-            );
-
-        const category =
-            String(
-                book.category ||
-                ""
-            );
-
-        const description =
-            String(
-                book.description ||
-                ""
-            );
-
-        const cover =
-            book.cover ||
-            book.coverUrl ||
-            book.image ||
-            "logo.png";
-
-        const pdf =
-            book.pdf ||
-            book.pdfUrl ||
-            book.file ||
-            "";
-
-
-        /* -----------------------------------------
-           CARD HTML
-        ----------------------------------------- */
-
-        card.innerHTML = `
-
-            <div class="book-image">
-
-                <img
-                    src="${safeBookUrl(cover)}"
-                    alt="${escapeBookText(title)}"
-                    onerror="this.onerror=null;this.src='logo.png';"
-                >
-
-            </div>
-
-
-            <div class="book-info">
-
-                <h3>
-                    ${escapeBookText(title)}
-                </h3>
-
-
-                <p class="book-author">
-                    ${escapeBookText(author)}
-                </p>
-
-
-                ${
-                    category
-                        ? `
-                        <span class="book-category">
-                            ${escapeBookText(category)}
-                        </span>
-                        `
-                        : ""
-                }
-
-
-                ${
-                    description
-                        ? `
-                        <p class="book-description">
-                            ${escapeBookText(
-                                description.length > 120
-                                    ? description.substring(0, 120) + "..."
-                                    : description
-                            )}
-                        </p>
-                        `
-                        : ""
-                }
-
-
-                <div class="book-actions">
-
-                    ${
-                        pdf
-                            ? `
-                            <a
-                                href="${safeBookUrl(pdf)}"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="book-btn"
-                            >
-                                <i class="fas fa-book-open"></i>
-                                Read Online
-                            </a>
-
-                            <a
-                                href="${safeBookUrl(pdf)}"
-                                download
-                                class="book-btn"
-                            >
-                                <i class="fas fa-download"></i>
-                                Download
-                            </a>
-                            `
-                            : `
-                            <a
-                                href="books.html"
-                                class="book-btn"
-                            >
-                                <i class="fas fa-book"></i>
-                                Open Book
-                            </a>
-                            `
-                    }
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        container.appendChild(card);
-
-    });
-
-};
-
-
-/* =========================================================
-   SAFE BOOK TEXT
-========================================================= */
-
-function escapeBookText(value) {
-
-    return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* =========================================================
-   SAFE BOOK URL
-========================================================= */
-
-function safeBookUrl(value) {
-
-    const url =
-        String(value || "").trim();
-
-    if (!url) {
-        return "logo.png";
-    }
-
-    if (/^\s*javascript:/i.test(url)) {
-        return "#";
-    }
-
-    return url;
-
+    displayBooks(filteredBooks);
 }
