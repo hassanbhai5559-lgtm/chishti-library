@@ -2951,6 +2951,87 @@ console.log(
 console.log(
     "✅ Share"
 );
+/* =========================================================
+   CHISHTI LIBRARY - CATEGORY FILTER
+========================================================= */
+
+window.filterBooks = function(category) {
+
+    const container =
+        document.getElementById("booksContainer");
+
+    if (!container) return;
+
+    // Get currently loaded books
+    const allBooks =
+        Array.isArray(window.books)
+            ? window.books
+            : (typeof books !== "undefined" && Array.isArray(books)
+                ? books
+                : []);
+
+    let filteredBooks = allBooks;
+
+    // ALL
+    if (
+        String(category).toLowerCase() !== "all"
+    ) {
+
+        filteredBooks = allBooks.filter(book => {
+
+            const bookCategory =
+                String(book.category || "")
+                    .trim()
+                    .toLowerCase();
+
+            return bookCategory ===
+                String(category)
+                    .trim()
+                    .toLowerCase();
+
+        });
+
+    }
+
+    // Active button
+    document
+        .querySelectorAll(".category")
+        .forEach(button => {
+
+            button.classList.remove("active");
+
+            if (
+                button.textContent
+                    .trim()
+                    .toLowerCase() ===
+                String(category)
+                    .trim()
+                    .toLowerCase()
+            ) {
+
+                button.classList.add("active");
+
+            }
+
+        });
+
+
+    // Display filtered books
+    if (
+        typeof displayBooks === "function"
+    ) {
+
+        displayBooks(filteredBooks);
+
+    } else {
+
+        console.warn(
+            "displayBooks() is also missing from script.js"
+        );
+
+    }
+
+};
 
 console.log(
     "✅ AI Chatbot"
