@@ -672,42 +672,94 @@ SCROLL TO TOP
 ========================= -->
 
 <script src="./script.js"></script>
-<!-- COMMENTS MODAL -->
-<div id="commentModal" class="comment-modal">
+<!-- =========================================================
+     CHISHTI LIBRARY
+     COMMENTS MODAL
+========================================================= -->
+
+<div id="commentModal" class="comment-modal" aria-hidden="true">
 
     <div class="comment-box">
 
+        <!-- HEADER -->
         <div class="comment-header">
-            <h3>
+
+            <div class="comment-title">
+
                 <i class="fa-solid fa-comments"></i>
-                Comments
-            </h3>
+
+                <div>
+                    <h3>Comments</h3>
+                    <span>Share your thoughts</span>
+                </div>
+
+            </div>
 
             <button
+                type="button"
                 class="close-comments"
-                id="closeComments">
+                id="closeComments"
+                aria-label="Close comments">
+
                 <i class="fa-solid fa-xmark"></i>
+
             </button>
+
         </div>
 
+
+        <!-- COMMENTS LIST -->
         <div
             id="commentsList"
             class="comments-list">
+
+            <!-- Comments will appear here -->
+
+            <div class="comments-empty">
+
+                <i class="fa-regular fa-comment-dots"></i>
+
+                <h4>No comments yet</h4>
+
+                <p>Be the first to share your thoughts.</p>
+
+            </div>
+
         </div>
 
+
+        <!-- COMMENT FORM -->
         <form
             id="commentForm"
             class="comment-form">
 
-            <input
-                id="commentInput"
-                type="text"
-                maxlength="500"
-                placeholder="Write a comment..."
-                required>
+            <div class="comment-input-wrapper">
 
-            <button type="submit">
+                <input
+                    id="commentInput"
+                    type="text"
+                    maxlength="500"
+                    autocomplete="off"
+                    placeholder="Write a comment..."
+                    aria-label="Write a comment"
+                    required>
+
+                <span
+                    class="comment-counter"
+                    id="commentCounter">
+                    0/500
+                </span>
+
+            </div>
+
+            <button
+                type="submit"
+                class="comment-send-btn"
+                aria-label="Send comment"
+                title="Send comment">
+
                 <i class="fa-solid fa-paper-plane"></i>
+
             </button>
 
         </form>
@@ -716,6 +768,9 @@ SCROLL TO TOP
 
 </div>
 
+<!-- =========================================================
+     END COMMENTS MODAL
+========================================================= -->
 
 <!-- SHARE POPUP -->
 <div id="sharePopup" class="share-popup">
