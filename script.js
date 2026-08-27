@@ -3011,3 +3011,625 @@ console.log(
 console.log(
     "======================================"
 );
+
+/* =========================================================
+   CHISHTI LIBRARY
+   BOOK VIEWS + DOWNLOADS + LIKES COUNTER
+   END-PASTE SYSTEM
+   Does NOT replace existing functions
+========================================================= */
+
+(function () {
+
+    "use strict";
+
+    console.log("📊 Chishti Library counters system loading...");
+
+    /* =====================================================
+       FIREBASE CHECK
+    ===================================================== */
+
+    function getDB() {
+
+        if (window.db) {
+            return window.db;
+        }
+
+        if (
+            typeof firebase !== "undefined" &&
+            firebase.apps &&
+            firebase.apps.length
+        ) {
+            return firebase.firestore();
+        }
+
+        console.error("❌ Firebase Firestore not available.");
+        return null;
+    }
+
+
+    /* =====================================================
+       GET BOOK ID
+    ===================================================== */
+
+    function getBookId(element) {
+
+        if (!element) return null;
+
+        return (
+            element.dataset.bookId ||
+            element.dataset.id ||
+            element.getAttribute("data-book-id") ||
+            element.getAttribute("data-id") ||
+            null
+        );
+
+    }
+
+
+    /* =====================================================
+       FIND BOOK ID FROM URL
+    ===================================================== */
+
+    function getBookIdFromURL() {
+
+        const params =
+            new URLSearchParams(window.location.search);
+
+        return (
+            params.get("id") ||
+            params.get("book") ||
+            params.get("bookId")
+        );
+
+    }
+
+
+    /* =====================================================
+       INCREMENT FIRESTORE COUNTER
+    ===================================================== */
+
+    async function incrementCounter(bookId, field) {
+
+        if (!bookId) {
+            console.warn("⚠️ No book ID found.");
+            return;
+        }
+
+        const db = getDB();
+
+        if (!db) return;
+
+        try {
+
+            await db
+                .collection("books")
+                .doc(bookId)
+                .update({
+
+                    [field]:
+                        firebase.firestore.FieldValue.increment(1)
+
+                });
+
+            console.log(
+                `✅ ${field} +1`,
+                bookId
+            );
+
+        } catch (error) {
+
+            /*
+             If field doesn't exist, Firestore increment
+             still normally creates it.
+            */
+
+            console.error(
+                `❌ Counter error (${field}):`,
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPDATE COUNTER ON SCREEN
+    ===================================================== */
+
+    function updateCounterDisplay(
+        bookId,
+        field,
+        value
+    ) {
+
+        const selectors = [
+
+            `[data-${field}="${bookId}"]`,
+
+            `[data-book-id="${bookId}"] .${field}`,
+
+            `#${field}-${bookId}`,
+
+            `#book-${field}-${bookId}`
+
+        ];
+
+
+        selectors.forEach(selector => {
+
+            document
+                .querySelectorAll(selector)
+                .forEach(element => {
+
+                    element.textContent =
+                        Number(value || 0);
+
+                });
+
+        });
+
+    }
+
+
+    /* =====================================================
+       LOAD BOOK COUNTERS
+    ===================================================== */
+
+    async function loadBookCounters(bookId) {
+
+        if (!bookId) return;
+
+        const db = getDB();
+
+        if (!db) return;
+
+        try {
+
+            const doc =
+                await db
+                    .collection("books")
+                    .doc(bookId)
+                    .get();
+
+            if (!doc.exists) {
+
+                console.warn(
+                    "⚠️ Book not found:",
+                    bookId
+                );
+
+                return;
+
+            }
+
+            const data =
+                doc.data();
+
+
+            updateCounterDisplay(
+                bookId,
+                "views",
+                data.views
+            );
+
+
+            updateCounterDisplay(
+                bookId,
+                "downloads",
+                data.downloads
+            );
+
+
+            updateCounterDisplay(
+                bookId,
+                "likes",
+                data.likes
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Could not load counters:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       VIEW COUNTER
+    ===================================================== */
+
+    async function countBookView(bookId) {
+
+        if (!bookId) return;
+
+        /*
+        Prevent multiple view counts during the same
+        page session.
+        */
+
+        const key =
+            "chishti_view_" + bookId;
+
+        if (
+            sessionStorage.getItem(key)
+        ) {
+
+            return;
+
+        }
+
+        sessionStorage.setItem(
+            key,
+            "1"
+        );
+
+
+        await incrementCounter(
+            bookId,
+            "views"
+        );
+
+    }
+
+
+    /* =====================================================
+       DOWNLOAD COUNTER
+    ===================================================== */
+
+    async function countBookDownload(bookId) {
+
+        if (!bookId) return;
+
+        await incrementCounter(
+            bookId,
+            "downloads"
+        );
+
+    }
+
+
+    /* =====================================================
+       LIKE COUNTER
+    ===================================================== */
+
+    async function countBookLike(bookId) {
+
+        if (!bookId) return;
+
+        const key =
+            "chishti_like_" + bookId;
+
+
+        /*
+        One like per browser.
+        */
+
+        if (
+            localStorage.getItem(key)
+        ) {
+
+            return false;
+
+        }
+
+
+        localStorage.setItem(
+            key,
+            "1"
+        );
+
+
+        await incrementCounter(
+            bookId,
+            "likes"
+        );
+
+
+        return true;
+
+    }
+
+
+    /* =====================================================
+       AUTO DETECT CURRENT BOOK
+    ===================================================== */
+
+    function detectCurrentBook() {
+
+        let bookId =
+            getBookIdFromURL();
+
+
+        /*
+        Look for common book elements.
+        */
+
+        if (!bookId) {
+
+            const element =
+                document.querySelector(
+                    "[data-book-id], [data-id]"
+                );
+
+            if (element) {
+
+                bookId =
+                    getBookId(element);
+
+            }
+
+        }
+
+
+        return bookId;
+
+    }
+
+
+    /* =====================================================
+       AUTOMATIC VIEW COUNT
+    ===================================================== */
+
+    function startAutomaticViewCounter() {
+
+        const bookId =
+            detectCurrentBook();
+
+
+        if (!bookId) {
+
+            console.log(
+                "ℹ️ No current book ID detected."
+            );
+
+            return;
+
+        }
+
+
+        console.log(
+            "📖 Current book:",
+            bookId
+        );
+
+
+        loadBookCounters(
+            bookId
+        );
+
+
+        countBookView(
+            bookId
+        );
+
+    }
+
+
+    /* =====================================================
+       DOWNLOAD BUTTON LISTENER
+    ===================================================== */
+
+    function setupDownloadCounters() {
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                const link =
+                    event.target.closest(
+                        "a"
+                    );
+
+
+                if (!link) return;
+
+
+                const href =
+                    link.getAttribute(
+                        "href"
+                    ) || "";
+
+
+                const isDownload =
+                    link.hasAttribute("download") ||
+                    /pdf/i.test(href);
+
+
+                if (!isDownload) return;
+
+
+                let bookId =
+                    getBookId(link);
+
+
+                if (!bookId) {
+
+                    const parent =
+                        link.closest(
+                            "[data-book-id]"
+                        );
+
+
+                    if (parent) {
+
+                        bookId =
+                            getBookId(parent);
+
+                    }
+
+                }
+
+
+                if (!bookId) {
+
+                    bookId =
+                        getBookIdFromURL();
+
+                }
+
+
+                if (bookId) {
+
+                    countBookDownload(
+                        bookId
+                    );
+
+                }
+
+            },
+            true
+        );
+
+    }
+
+
+    /* =====================================================
+       LIKE BUTTON LISTENER
+    ===================================================== */
+
+    function setupLikeCounters() {
+
+        document.addEventListener(
+            "click",
+            async function (event) {
+
+                const button =
+                    event.target.closest(
+                        "[data-like-book], .like-btn, .book-like"
+                    );
+
+
+                if (!button) return;
+
+
+                let bookId =
+                    getBookId(button);
+
+
+                if (!bookId) {
+
+                    const parent =
+                        button.closest(
+                            "[data-book-id]"
+                        );
+
+
+                    if (parent) {
+
+                        bookId =
+                            getBookId(parent);
+
+                    }
+
+                }
+
+
+                if (!bookId) {
+
+                    bookId =
+                        getBookIdFromURL();
+
+                }
+
+
+                if (!bookId) return;
+
+
+                const liked =
+                    await countBookLike(
+                        bookId
+                    );
+
+
+                if (liked) {
+
+                    button.classList.add(
+                        "liked"
+                    );
+
+
+                    const count =
+                        button.querySelector(
+                            ".likes"
+                        );
+
+
+                    if (count) {
+
+                        count.textContent =
+                            Number(
+                                count.textContent || 0
+                            ) + 1;
+
+                    }
+
+                }
+
+            },
+            true
+        );
+
+    }
+
+
+    /* =====================================================
+       GLOBAL FUNCTIONS
+       You can call these from existing HTML/JS
+    ===================================================== */
+
+    window.chishtiCountView =
+        countBookView;
+
+    window.chishtiCountDownload =
+        countBookDownload;
+
+    window.chishtiCountLike =
+        countBookLike;
+
+    window.chishtiLoadCounters =
+        loadBookCounters;
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    function start() {
+
+        setupDownloadCounters();
+
+        setupLikeCounters();
+
+        startAutomaticViewCounter();
+
+    }
+
+
+    if (
+        document.readyState === "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            start
+        );
+
+    } else {
+
+        start();
+
+    }
+
+
+    console.log(
+        "✅ Chishti counters system ready"
+    );
+
+})();
