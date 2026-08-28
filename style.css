@@ -2,542 +2,331 @@
    CHISHTI LIBRARY
    FINAL PREMIUM STYLE.CSS
    WHITE + GOLD + BLACK THEME
+   CHATBOT REMOVED
 ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 
 /* =========================================================
-   01. ROOT VARIABLES
+   ROOT
 ========================================================= */
 
 :root {
+    --gold: #c9a227;
+    --gold-light: #e5c45a;
+    --gold-dark: #9d7b13;
 
     --black: #080808;
     --black-soft: #111111;
     --black-card: #151515;
 
-    --gold: #c9a227;
-    --gold-light: #e0bd45;
-    --gold-dark: #9f7d12;
-
     --white: #ffffff;
-    --off-white: #faf9f6;
-    --cream: #f5f2e9;
+    --off-white: #f8f8f6;
+    --gray: #777777;
+    --light-gray: #eeeeee;
 
-    --text: #171717;
-    --text-light: #777777;
-
-    --border: rgba(201, 162, 39, 0.25);
+    --border: rgba(201,162,39,.25);
 
     --shadow:
-        0 12px 35px rgba(0, 0, 0, 0.08);
+        0 15px 45px rgba(0,0,0,.12);
 
-    --shadow-gold:
-        0 12px 35px rgba(201, 162, 39, 0.18);
-
-    --radius: 16px;
-
-    --transition:
-        all 0.35s ease;
-
+    --gold-shadow:
+        0 10px 30px rgba(201,162,39,.18);
 }
 
 
 /* =========================================================
-   02. RESET
+   RESET
 ========================================================= */
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-
-html {
     scroll-behavior: smooth;
 }
 
+html {
+    width: 100%;
+    overflow-x: hidden;
+}
 
 body {
-    margin: 0;
-    padding: 0;
+    width: 100%;
+    min-height: 100vh;
 
-    background:
-        linear-gradient(
-            180deg,
-            #ffffff 0%,
-            #faf9f6 100%
-        );
+    background: var(--white);
 
-    color: var(--text);
+    color: #111;
 
-    font-family:
-        "Poppins",
-        "Segoe UI",
-        Arial,
-        sans-serif;
-
-    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
 
     overflow-x: hidden;
+}
 
+img {
+    max-width: 100%;
+    display: block;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
 }
 
 
 /* =========================================================
-   03. SELECTION
+   SELECTION
 ========================================================= */
 
 ::selection {
     background: var(--gold);
-    color: #ffffff;
+    color: #111;
 }
 
 
 /* =========================================================
-   04. SCROLLBAR
+   SCROLLBAR
 ========================================================= */
 
 ::-webkit-scrollbar {
     width: 9px;
 }
 
-
 ::-webkit-scrollbar-track {
-    background: #f2f2f2;
+    background: #111;
 }
 
-
 ::-webkit-scrollbar-thumb {
-    background:
-        linear-gradient(
-            180deg,
-            var(--gold-light),
-            var(--gold-dark)
-        );
-
+    background: var(--gold);
     border-radius: 20px;
 }
 
-
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--gold);
+    background: var(--gold-light);
 }
 
 
 /* =========================================================
-   05. LOADER
-========================================================= */
-
-#loader {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 99999;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background:
-        radial-gradient(
-            circle at center,
-            #1d1d1d 0%,
-            #080808 70%
-        );
-
-    transition:
-        opacity 0.7s ease,
-        visibility 0.7s ease;
-
-}
-
-
-.loader-content {
-
-    text-align: center;
-
-    color: #ffffff;
-
-}
-
-
-.loader-logo {
-
-    width: 90px;
-    height: 90px;
-
-    object-fit: contain;
-
-    margin-bottom: 18px;
-
-    animation:
-        loaderPulse 1.5s infinite ease-in-out;
-
-}
-
-
-.loader-spinner {
-
-    width: 45px;
-    height: 45px;
-
-    margin: auto;
-
-    border:
-
-        3px solid
-        rgba(201, 162, 39, 0.2);
-
-    border-top-color:
-        var(--gold);
-
-    border-radius: 50%;
-
-    animation:
-        loaderSpin 0.8s linear infinite;
-
-}
-
-
-.loader-text {
-
-    margin-top: 15px;
-
-    font-size: 13px;
-
-    letter-spacing: 3px;
-
-    color:
-        var(--gold-light);
-
-}
-
-
-@keyframes loaderSpin {
-
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-@keyframes loaderPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 0.8;
-    }
-
-    50% {
-        transform: scale(1.08);
-        opacity: 1;
-    }
-
-}
-
-
-/* =========================================================
-   06. NAVBAR
+   NAVBAR
 ========================================================= */
 
 .navbar {
-
-    position: sticky;
+    position: fixed;
 
     top: 0;
-
-    z-index: 5000;
+    left: 0;
 
     width: 100%;
 
-    background:
-        rgba(255, 255, 255, 0.97);
-
-    border-bottom:
-        1px solid
-        rgba(201, 162, 39, 0.18);
-
-    transition:
-        var(--transition);
-
-}
-
-
-.navbar.nav-shadow {
-
-    box-shadow:
-        0 8px 30px
-        rgba(0, 0, 0, 0.10);
-
-}
-
-
-/* Navbar inner */
-
-.navbar-container {
-
-    width: min(1400px, 94%);
-
-    margin: auto;
-
-    min-height: 88px;
+    height: 82px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
-    gap: 30px;
+    padding: 0 6%;
 
+    background: rgba(255,255,255,.96);
+
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(201,162,39,.22);
+
+    box-shadow: 0 5px 25px rgba(0,0,0,.06);
+
+    z-index: 9999;
+
+    transition: .3s ease;
+}
+
+.navbar.nav-shadow {
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.12);
+
+    background: rgba(255,255,255,.98);
 }
 
 
 /* =========================================================
-   07. LOGO
+   LOGO
 ========================================================= */
 
-.logo,
-.navbar-logo {
-
+.logo {
     display: flex;
-
     align-items: center;
 
-    text-decoration: none;
+    gap: 12px;
 
-    flex-shrink: 0;
-
+    min-width: 180px;
 }
 
-
-.logo img,
-.navbar-logo img {
-
-    width: 62px;
-    height: 62px;
+.logo img {
+    width: 55px;
+    height: 55px;
 
     object-fit: contain;
-
 }
 
+.logo h2 {
+    color: #111;
 
-.logo-text {
+    font-size: 20px;
 
-    margin-left: 12px;
+    font-weight: 800;
 
-    color: var(--black);
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 23px;
-
-    font-weight: 700;
-
+    letter-spacing: .5px;
 }
 
+.logo span {
+    display: block;
 
-.logo-text span {
+    color: var(--gold-dark);
 
-    color: var(--gold);
+    font-size: 11px;
 
+    margin-top: 2px;
+
+    font-weight: 600;
 }
 
 
 /* =========================================================
-   08. NAVIGATION
+   NAV MENU
 ========================================================= */
 
 .menu {
-
     display: flex;
 
     align-items: center;
 
-    justify-content: center;
+    gap: 32px;
 
-    gap: 6px;
+    list-style: none;
 
+    margin: 0;
 }
 
+.menu li {
+    list-style: none;
+}
 
 .menu a {
-
     position: relative;
 
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 12px 16px;
-
-    color: #222222;
-
-    text-decoration: none;
+    color: #111;
 
     font-size: 14px;
 
     font-weight: 600;
 
-    transition:
-        var(--transition);
-
+    transition: .3s ease;
 }
 
-
 .menu a::after {
-
     content: "";
 
     position: absolute;
 
     left: 50%;
-
-    bottom: 3px;
+    bottom: -8px;
 
     width: 0;
-
     height: 2px;
 
     background: var(--gold);
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
-    transition:
-        width 0.3s ease;
-
+    transition: .3s ease;
 }
-
 
 .menu a:hover {
-
     color: var(--gold-dark);
-
 }
 
-
-.menu a:hover::after,
-.menu a.active::after {
-
-    width: 65%;
-
+.menu a:hover::after {
+    width: 100%;
 }
 
 
 /* =========================================================
-   09. MOBILE MENU
+   MOBILE MENU
 ========================================================= */
 
 .mobile-menu {
-
     display: none;
 
-    width: 44px;
-    height: 44px;
+    color: #111;
 
-    border: 1px solid
-        var(--border);
-
-    background: #ffffff;
-
-    color: var(--black);
-
-    border-radius: 10px;
+    font-size: 26px;
 
     cursor: pointer;
-
-}
-
-
-.mobile-menu span {
-
-    display: block;
-
-    width: 21px;
-    height: 2px;
-
-    margin: 4px auto;
-
-    background: var(--black);
-
-    transition:
-        var(--transition);
-
-}
-
-
-.mobile-menu.active span:nth-child(1) {
-
-    transform:
-        translateY(6px)
-        rotate(45deg);
-
-}
-
-
-.mobile-menu.active span:nth-child(2) {
-
-    opacity: 0;
-
-}
-
-
-.mobile-menu.active span:nth-child(3) {
-
-    transform:
-        translateY(-6px)
-        rotate(-45deg);
-
 }
 
 
 /* =========================================================
-   10. HERO
+   HERO
 ========================================================= */
 
 .hero {
-
     position: relative;
 
-    min-height: 580px;
+    min-height: 100vh;
 
     display: flex;
 
+    justify-content: center;
+
     align-items: center;
 
-    overflow: hidden;
+    text-align: center;
+
+    padding:
+        150px 20px
+        80px;
 
     background:
-
-        radial-gradient(
-            circle at 80% 30%,
-            rgba(201, 162, 39, 0.15),
-            transparent 35%
-        ),
-
         linear-gradient(
             135deg,
-            #ffffff,
-            #faf8f0
+            #ffffff 0%,
+            #faf8ef 50%,
+            #ffffff 100%
         );
 
+    overflow: hidden;
 }
 
-
 .hero::before {
+    content: "";
 
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    top: -200px;
+    right: -150px;
+
+    border-radius: 50%;
+
+    background: rgba(201,162,39,.08);
+
+    filter: blur(10px);
+}
+
+.hero::after {
     content: "";
 
     position: absolute;
@@ -545,83 +334,384 @@ body {
     width: 400px;
     height: 400px;
 
-    right: -180px;
-    top: -180px;
+    bottom: -200px;
+    left: -150px;
 
     border-radius: 50%;
 
-    border:
-        1px solid
-        rgba(201, 162, 39, 0.18);
-
+    background: rgba(201,162,39,.06);
 }
 
+.hero-overlay {
+    position: absolute;
 
-.hero-container {
+    inset: 0;
 
-    width: min(1200px, 92%);
+    background: transparent;
+}
 
-    margin: auto;
-
+.hero-content {
     position: relative;
 
     z-index: 2;
 
+    max-width: 950px;
 }
 
+.hero-logo {
+    width: 190px;
 
-.hero-content {
+    margin: 0 auto 25px;
 
+    filter:
+        drop-shadow(
+            0 10px 25px
+            rgba(201,162,39,.25)
+        );
+
+    animation:
+        heroFloat 4s ease-in-out infinite;
+}
+
+.hero h1 {
+    color: #111;
+
+    font-size: clamp(42px, 6vw, 68px);
+
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    letter-spacing: -1px;
+}
+
+.hero h3 {
+    margin-top: 15px;
+
+    color: var(--gold-dark);
+
+    font-family: 'Cinzel', serif;
+
+    font-size: clamp(20px, 3vw, 30px);
+
+    font-weight: 700;
+}
+
+.hero p {
     max-width: 720px;
 
-}
+    margin: 25px auto;
 
+    color: #666;
 
-.hero-content h1 {
+    font-size: 17px;
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size:
-        clamp(42px, 6vw, 76px);
-
-    line-height: 1.05;
-
-    color: var(--black);
-
-    margin-bottom: 22px;
-
-}
-
-
-.hero-content h1 span {
-
-    color: var(--gold);
-
-}
-
-
-.hero-content p {
-
-    max-width: 650px;
-
-    color: #666666;
-
-    font-size: 16px;
-
-    margin-bottom: 30px;
-
+    line-height: 1.8;
 }
 
 
 /* =========================================================
-   11. GOLD BUTTON
+   HERO FLOAT
 ========================================================= */
 
-.btn {
+@keyframes heroFloat {
 
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-box {
+    width: min(700px, 100%);
+
+    margin: 35px auto;
+
+    display: flex;
+    align-items: center;
+
+    background: #fff;
+
+    border:
+        1px solid
+        rgba(0,0,0,.1);
+
+    border-radius: 50px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.08);
+}
+
+.search-box i {
+    padding-left: 22px;
+
+    color: var(--gold-dark);
+
+    font-size: 18px;
+}
+
+.search-box input {
+    flex: 1;
+
+    border: none;
+    outline: none;
+
+    padding: 17px 20px;
+
+    background: transparent;
+
+    color: #111;
+
+    font-size: 15px;
+}
+
+.search-box input::placeholder {
+    color: #999;
+}
+
+
+/* =========================================================
+   COUNTERS
+========================================================= */
+
+.counter-area {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: stretch;
+
+    flex-wrap: wrap;
+
+    gap: 22px;
+
+    margin-top: 45px;
+}
+
+.counter-card {
+    width: 220px;
+
+    padding: 28px 20px;
+
+    text-align: center;
+
+    background: #fff;
+
+    border:
+        1px solid
+        rgba(201,162,39,.22);
+
+    border-radius: 18px;
+
+    box-shadow: var(--shadow);
+
+    transition: .35s ease;
+}
+
+.counter-card:hover {
+    transform: translateY(-7px);
+
+    box-shadow:
+        0 20px 45px
+        rgba(0,0,0,.12);
+}
+
+.counter-card i {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: var(--gold);
+
+    font-size: 32px;
+}
+
+.counter-card h2 {
+    color: #111;
+
+    font-size: 36px;
+
+    font-weight: 800;
+}
+
+.counter-card p {
+    color: #777;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   GENERAL SECTION
+========================================================= */
+
+section {
+    position: relative;
+
+    width: 100%;
+
+    opacity: 1;
+
+    transform: none;
+}
+
+.section-title {
+    position: relative;
+
+    text-align: center;
+
+    margin-bottom: 45px;
+
+    color: #111;
+
+    font-family: 'Cinzel', serif;
+
+    font-size: clamp(30px, 4vw, 44px);
+
+    font-weight: 700;
+}
+
+.section-title::after {
+    content: "";
+
+    display: block;
+
+    width: 70px;
+    height: 3px;
+
+    margin: 14px auto 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--gold),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   LATEST BOOK
+========================================================= */
+
+.latest-book {
+    padding: 100px 7%;
+
+    background: var(--off-white);
+}
+
+.latest-book-card {
+    max-width: 1150px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 55px;
+
+    padding: 45px;
+
+    background: #fff;
+
+    border:
+        1px solid
+        rgba(201,162,39,.2);
+
+    border-radius: 25px;
+
+    box-shadow: var(--shadow);
+
+    transition: .35s ease;
+}
+
+.latest-book-card:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 25px 60px
+        rgba(0,0,0,.13);
+}
+
+.book-image img {
+    width: 280px;
+
+    max-height: 400px;
+
+    object-fit: cover;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 15px 35px
+        rgba(0,0,0,.18);
+}
+
+.book-info {
+    max-width: 600px;
+}
+
+.book-info h2 {
+    color: #111;
+
+    font-size: 38px;
+
+    margin-bottom: 12px;
+}
+
+.book-info h3 {
+    color: var(--gold-dark);
+
+    font-size: 18px;
+
+    margin-bottom: 18px;
+}
+
+.book-info p {
+    color: #666;
+
+    line-height: 1.8;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.book-buttons {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    flex-wrap: wrap;
+}
+
+.btn {
     position: relative;
 
     display: inline-flex;
@@ -632,174 +722,284 @@ body {
 
     gap: 8px;
 
-    min-height: 44px;
+    padding: 13px 25px;
 
-    padding: 11px 20px;
+    border: none;
 
-    border: 0;
-
-    border-radius: 9px;
+    border-radius: 8px;
 
     background:
         linear-gradient(
             135deg,
-            var(--gold-light),
-            var(--gold-dark)
+            #111,
+            #252525
         );
 
-    color: #ffffff;
+    color: #fff;
 
-    font-size: 13px;
+    font-size: 14px;
 
     font-weight: 700;
-
-    text-decoration: none;
 
     cursor: pointer;
 
     overflow: hidden;
 
-    transition:
-        var(--transition);
+    transition: .3s ease;
+}
 
+.btn:hover {
+    color: #111;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gold-light),
+            var(--gold)
+        );
+
+    transform: translateY(-3px);
+
+    box-shadow: var(--gold-shadow);
 }
 
 
-.btn:hover {
+/* =========================================================
+   LIBRARY BANNER
+========================================================= */
+
+.library-banner {
+    position: relative;
+
+    padding: 110px 20px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #080808,
+            #161616
+        );
+
+    color: #fff;
+
+    overflow: hidden;
+}
+
+.library-banner::before {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    top: -300px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(201,162,39,.1);
+
+    filter: blur(20px);
+}
+
+.banner-logo {
+    position: relative;
+
+    width: 150px;
+
+    margin: 0 auto 25px;
+
+    filter:
+        drop-shadow(
+            0 0 20px
+            rgba(201,162,39,.35)
+        );
+}
+
+.library-banner h1 {
+    position: relative;
+
+    color: #fff;
+
+    font-family: 'Cinzel', serif;
+
+    font-size: clamp(38px, 5vw, 60px);
+
+    letter-spacing: 2px;
+}
+
+.library-banner h3 {
+    position: relative;
+
+    margin-top: 12px;
+
+    color: var(--gold-light);
+
+    font-size: 22px;
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+.categories {
+    padding: 75px 7%;
+
+    background: #fff;
+}
+
+.category-grid {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+.category {
+    padding: 12px 25px;
+
+    border:
+        1px solid
+        rgba(201,162,39,.35);
+
+    border-radius: 50px;
+
+    background: #fff;
+
+    color: #333;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .3s ease;
+}
+
+.category:hover,
+.category.active {
+    background: var(--gold);
+
+    border-color: var(--gold);
+
+    color: #111;
 
     transform: translateY(-2px);
 
     box-shadow:
-        0 8px 20px
-        rgba(201, 162, 39, 0.25);
-
-}
-
-
-.btn:active {
-
-    transform: scale(0.97);
-
+        0 8px 22px
+        rgba(201,162,39,.2);
 }
 
 
 /* =========================================================
-   12. RIPPLE
+   BOOKS SECTION
 ========================================================= */
 
-.ripple {
+.featured-books {
+    width: 100%;
 
-    position: absolute;
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
+    padding: 90px 0 100px;
 
     background:
-        rgba(255, 255, 255, 0.55);
+        linear-gradient(
+            180deg,
+            #ffffff,
+            #f7f7f5
+        );
 
-    transform:
-        translate(-50%, -50%)
-        scale(0);
-
-    animation:
-        rippleAnimation 0.6s ease-out;
-
-    pointer-events: none;
-
-}
-
-
-@keyframes rippleAnimation {
-
-    to {
-
-        transform:
-            translate(-50%, -50%)
-            scale(25);
-
-        opacity: 0;
-
-    }
-
+    overflow: hidden;
 }
 
 
 /* =========================================================
-   13. SECTION
+   SORTING BUTTONS
 ========================================================= */
 
-section {
+.book-sorting {
+    display: flex;
 
-    position: relative;
+    justify-content: center;
 
-    padding:
-        85px 0;
+    align-items: center;
 
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin: 0 auto 30px;
+
+    padding: 0 20px;
 }
 
+.sort-btn {
+    border:
+        1px solid
+        rgba(201,162,39,.3);
 
-.section-container {
+    background: #fff;
 
-    width: min(1400px, 94%);
+    color: #333;
 
-    margin: auto;
+    padding: 11px 23px;
 
+    border-radius: 30px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: .3s ease;
 }
 
-
-.section-title {
-
-    text-align: center;
-
-    margin-bottom: 48px;
-
+.sort-btn i {
+    margin-right: 6px;
 }
 
+.sort-btn:hover {
+    background: #111;
 
-.section-title h2 {
+    color: #fff;
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    border-color: #111;
 
-    font-size:
-        clamp(32px, 4vw, 46px);
-
-    line-height: 1.2;
-
-    color: var(--black);
-
+    transform: translateY(-2px);
 }
 
+.sort-btn.active {
+    background: var(--gold);
 
-.section-title h2 span {
+    color: #111;
 
-    color: var(--gold);
+    border-color: var(--gold);
 
-}
-
-
-.section-title p {
-
-    margin-top: 10px;
-
-    color: #777777;
-
-    font-size: 14px;
-
+    box-shadow:
+        0 8px 22px
+        rgba(201,162,39,.2);
 }
 
 
 /* =========================================================
-   14. BOOKS CONTAINER
-   SINGLE HORIZONTAL LINE
+   BOOK CONTAINER
+   4 BOOKS VISIBLE
+   HORIZONTAL SLIDER
 ========================================================= */
 
 #booksContainer {
-
     width: 100%;
 
     display: flex !important;
@@ -812,1168 +1012,612 @@ section {
 
     gap: 28px;
 
-    overflow-x: hidden;
-
-    overflow-y: hidden;
-
     padding:
-        25px 45px 45px;
+        25px 40px
+        45px;
 
-    scroll-behavior: auto;
+    margin-top: 10px;
+
+    overflow-x: hidden !important;
+
+    overflow-y: hidden !important;
 
     scrollbar-width: none;
 
+    scroll-behavior: auto;
 }
 
-
 #booksContainer::-webkit-scrollbar {
-
     display: none;
-
 }
 
 
 /* =========================================================
-   15. BOOK CARD
+   BOOK CARD
 ========================================================= */
 
 #booksContainer .book-card {
-
     position: relative;
 
     flex:
-        0 0 285px !important;
+        0 0
+        calc(
+            (100% - 84px) / 4
+        ) !important;
 
-    width: 285px !important;
+    width:
+        calc(
+            (100% - 84px) / 4
+        ) !important;
 
-    min-width: 285px !important;
+    min-width:
+        calc(
+            (100% - 84px) / 4
+        ) !important;
 
-    max-width: 285px !important;
+    max-width:
+        calc(
+            (100% - 84px) / 4
+        ) !important;
 
-    min-height: 480px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    overflow: hidden;
-
-    background: #ffffff;
+    background: #fff;
 
     border:
         1px solid
-        rgba(201, 162, 39, 0.16);
+        rgba(0,0,0,.09);
 
-    border-radius:
-        var(--radius);
-
-    box-shadow:
-        0 8px 28px
-        rgba(0, 0, 0, 0.07);
-
-    transition:
-        transform 0.35s ease,
-        box-shadow 0.35s ease,
-        border-color 0.35s ease;
-
-}
-
-
-/* =========================================================
-   BOOK CARD HOVER
-========================================================= */
-
-#booksContainer .book-card:hover {
-
-    transform:
-        translateY(-9px);
-
-    border-color:
-        rgba(201, 162, 39, 0.55);
-
-    box-shadow:
-        0 18px 42px
-        rgba(0, 0, 0, 0.13);
-
-}
-
-
-/* =========================================================
-   16. BOOK COVER
-========================================================= */
-
-.book-image-wrap {
-
-    position: relative;
-
-    width: 100%;
-
-    height: 330px;
+    border-radius: 18px;
 
     overflow: hidden;
 
-    background:
-        linear-gradient(
-            145deg,
-            #f4f4f4,
-            #e9e9e9
-        );
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.08);
 
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease;
+}
+
+#booksContainer .book-card:hover {
+    transform: translateY(-9px);
+
+    box-shadow:
+        0 20px 45px
+        rgba(0,0,0,.15);
 }
 
 
-.book-cover {
+/* =========================================================
+   BOOK IMAGE
+========================================================= */
 
+.book-card img {
     width: 100%;
 
-    height: 100%;
-
-    display: block;
+    height: 340px;
 
     object-fit: cover;
 
-    transition:
-        transform 0.5s ease;
+    background: #f2f2f2;
 
+    transition:
+        transform .4s ease;
 }
 
-
-.book-card:hover
-.book-cover {
-
-    transform:
-        scale(1.045);
-
+.book-card:hover img {
+    transform: scale(1.035);
 }
 
 
 /* =========================================================
-   17. BOOK CONTENT
+   BOOK CONTENT
 ========================================================= */
 
-.book-card-content {
-
-    flex: 1;
-
-    display: flex;
-
-    flex-direction: column;
-
-    padding: 20px 18px 17px;
-
+.book-content {
+    padding: 20px;
 }
 
+.book-title,
+.book-content h2 {
+    color: #111;
 
-.book-card-content h3 {
+    font-size: 20px;
 
-    min-height: 48px;
+    line-height: 1.35;
 
-    margin-bottom: 9px;
+    font-weight: 800;
 
-    color: var(--black);
+    margin-bottom: 8px;
+}
 
-    font-family:
-        "Poppins",
-        sans-serif;
+.book-author,
+.book-content h3 {
+    color: var(--gold-dark);
 
-    font-size: 17px;
+    font-size: 14px;
+
+    line-height: 1.5;
 
     font-weight: 700;
 
-    line-height: 1.4;
-
+    margin-bottom: 10px;
 }
 
+.book-description,
+.book-content p {
+    color: #777;
 
-.book-author {
+    font-size: 13px;
 
-    display: flex;
+    line-height: 1.65;
 
-    align-items: center;
-
-    gap: 7px;
-
-    margin-bottom: 7px;
-
-    color:
-        var(--gold-dark);
-
-    font-size: 12px;
-
-    font-weight: 600;
-
+    margin-bottom: 16px;
 }
-
-
-.book-author i {
-
-    color: var(--gold);
-
-}
-
 
 .book-category {
+    display: inline-block;
 
-    display: inline-flex;
+    margin-bottom: 10px;
 
-    align-items: center;
+    padding: 6px 10px;
 
-    gap: 6px;
+    border-radius: 20px;
 
-    width: fit-content;
+    background: rgba(201,162,39,.12);
 
-    margin-bottom: 13px;
-
-    padding: 5px 10px;
-
-    border-radius: 30px;
-
-    background:
-        rgba(201, 162, 39, 0.10);
-
-    color:
-        var(--gold-dark);
+    color: var(--gold-dark);
 
     font-size: 10px;
 
-    font-weight: 700;
+    font-weight: 800;
 
     text-transform: uppercase;
-
 }
 
 
 /* =========================================================
-   18. BOOK BUTTONS
+   BOOK META
 ========================================================= */
 
-.book-buttons {
-
-    display: flex;
-
-    gap: 8px;
-
-    margin-top: auto;
-
-}
-
-
-.book-buttons .btn {
-
-    flex: 1;
-
-    min-height: 39px;
-
-    padding: 8px 9px;
-
-    font-size: 11px;
-
-}
-
-
-.book-read-btn {
-
-    background: var(--black);
-
-}
-
-
-.book-read-btn:hover {
-
-    background: var(--gold);
-
-}
-
-
-.book-download-btn {
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--gold-light),
-            var(--gold-dark)
-        );
-
-}
-
-
-/* =========================================================
-   19. BOOK STATS
-   VIEW + DOWNLOAD
-========================================================= */
-
-.book-stats {
-
+.book-meta {
     display: flex;
 
     align-items: center;
 
-    gap: 18px;
+    flex-wrap: wrap;
 
-    padding-top: 14px;
+    gap: 12px;
 
-    margin-top: 13px;
+    padding-top: 12px;
+
+    margin-bottom: 12px;
 
     border-top:
         1px solid
-        #eeeeee;
+        rgba(0,0,0,.08);
 
+    color: #777;
+
+    font-size: 11px;
 }
 
-
-.book-stats span {
-
+.book-meta span {
     display: inline-flex;
 
     align-items: center;
 
-    gap: 5px;
-
-    color: #777777;
-
-    font-size: 11px;
-
-    font-weight: 600;
-
+    gap: 4px;
 }
 
-
-.book-stats i {
-
-    color: var(--gold);
-
+.book-meta i {
+    color: var(--gold-dark);
 }
 
 
 /* =========================================================
-   20. SOCIAL ACTIONS
-   LIKE COMMENT SHARE
+   LIKE / SHARE / VIEW / DOWNLOAD
 ========================================================= */
 
-.book-social-actions {
-
+.book-actions,
+.book-social,
+.book-buttons-social,
+.social-actions {
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
 
-    gap: 5px;
+    gap: 7px;
 
-    margin-top: 10px;
+    flex-wrap: wrap;
 
+    width: 100%;
+
+    margin-top: 12px;
 }
 
+.book-actions button,
+.book-social button,
+.book-buttons-social button,
+.social-btn,
+.like-btn,
+.comment-btn,
+.share-btn,
+.view-btn,
+.download-btn {
+    min-height: 40px;
 
-.book-social-actions button {
-
-    flex: 1;
-
-    display: flex;
+    display: inline-flex;
 
     align-items: center;
 
     justify-content: center;
 
-    gap: 4px;
+    gap: 5px;
 
-    min-height: 34px;
+    flex: 1;
 
-    padding: 6px 5px;
+    padding: 8px 9px;
 
     border:
         1px solid
-        #eeeeee;
+        rgba(0,0,0,.08);
 
-    border-radius: 8px;
+    border-radius: 9px;
 
-    background: #ffffff;
+    background: #f7f7f7;
 
-    color: #666666;
+    color: #333;
 
-    font-family: inherit;
+    font-size: 11px;
 
-    font-size: 10px;
+    font-weight: 700;
 
-    font-weight: 600;
+    transition: .25s ease;
 
     cursor: pointer;
-
-    transition:
-        var(--transition);
-
 }
 
+.book-actions button:hover,
+.book-social button:hover,
+.book-buttons-social button:hover,
+.social-btn:hover,
+.like-btn:hover,
+.comment-btn:hover,
+.share-btn:hover,
+.view-btn:hover,
+.download-btn:hover {
+    background: #111;
 
-.book-social-actions button:hover {
+    color: #fff;
 
+    transform: translateY(-2px);
+}
+
+.book-actions i,
+.book-social i,
+.book-buttons-social i,
+.social-btn i {
+    font-size: 13px;
+}
+
+.like-btn {
+    color: #d14b65;
+}
+
+.share-btn {
+    color: #18885b;
+}
+
+.view-btn {
+    color: #3267a8;
+}
+
+.download-btn {
     color: var(--gold-dark);
-
-    border-color:
-        var(--gold);
-
-    background:
-        rgba(201, 162, 39, 0.05);
-
 }
 
+.like-btn.active {
+    background: rgba(209,75,101,.1);
 
-.book-social-actions
-button.liked {
-
-    color: #b18a18;
-
-    border-color:
-        var(--gold);
-
-    background:
-        rgba(201, 162, 39, 0.10);
-
+    border-color: rgba(209,75,101,.25);
 }
 
+.action-count,
+.like-count,
+.comment-count,
+.share-count,
+.view-count,
+.download-count {
+    font-size: 10px;
 
-.book-social-actions
-button i {
-
-    font-size: 12px;
-
+    font-weight: 800;
 }
 
 
 /* =========================================================
-   21. HEART POP
+   BOOK MAIN BUTTON
 ========================================================= */
 
-.heart-pop {
+.book-content .btn {
+    width: 100%;
 
-    animation:
-        heartPop 0.5s ease;
+    margin-top: 12px;
 
-}
-
-
-@keyframes heartPop {
-
-    0% {
-        transform: scale(1);
-    }
-
-    40% {
-        transform: scale(1.18);
-    }
-
-    70% {
-        transform: scale(0.92);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-
+    min-height: 45px;
 }
 
 
 /* =========================================================
-   22. BOOK ANIMATION
+   AUTHORS
 ========================================================= */
 
-.animated-book-card {
+.authors {
+    position: relative;
 
-    opacity: 0;
+    padding: 90px 7%;
 
-    transform:
-        translateY(25px);
+    background: #f7f7f5;
 
-    transition:
-        opacity 0.6s ease,
-        transform 0.6s ease;
-
+    color: #111;
 }
 
-
-.animated-book-card.book-visible {
-
-    opacity: 1;
-
-    transform:
-        translateY(0);
-
-}
-
-
-/* =========================================================
-   23. LATEST BOOK
-========================================================= */
-
-.latest-section {
-
-    background:
-        linear-gradient(
-            180deg,
-            #faf9f6,
-            #ffffff
-        );
-
-}
-
-
-.latest-book {
-
-    width: min(1100px, 94%);
+.authors .container {
+    max-width: 1250px;
 
     margin: auto;
+}
 
+.section-subtitle {
+    text-align: center;
+
+    color: #777;
+
+    font-size: 15px;
+
+    margin-top: -25px;
+
+    margin-bottom: 45px;
+}
+
+.author-grid {
     display: grid;
 
     grid-template-columns:
-        330px 1fr;
+        repeat(4, 1fr);
 
-    gap: 55px;
-
-    align-items: center;
-
-    padding: 40px;
-
-    background: #ffffff;
-
-    border:
-        1px solid
-        rgba(201, 162, 39, 0.20);
-
-    border-radius: 22px;
-
-    box-shadow:
-        0 15px 50px
-        rgba(0, 0, 0, 0.08);
-
+    gap: 25px;
 }
 
+.author-card {
+    position: relative;
 
-.book-image {
+    min-height: 400px;
 
-    width: 100%;
-
-    height: 430px;
-
-    overflow: hidden;
-
-    border-radius: 15px;
-
-    background: #eeeeee;
-
-    box-shadow:
-        0 12px 30px
-        rgba(0, 0, 0, 0.14);
-
-}
-
-
-.book-image img {
-
-    width: 100%;
-
-    height: 100%;
-
-    object-fit: cover;
-
-}
-
-
-.book-info h2 {
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size:
-        clamp(30px, 4vw, 48px);
-
-    line-height: 1.15;
-
-    color: var(--black);
-
-    margin-bottom: 12px;
-
-}
-
-
-.book-info h3 {
-
-    color:
-        var(--gold-dark);
-
-    font-size: 16px;
-
-    margin-bottom: 18px;
-
-}
-
-
-.book-info p {
-
-    color: #666666;
-
-    font-size: 14px;
-
-    line-height: 1.8;
-
-    margin-bottom: 25px;
-
-}
-
-
-/* =========================================================
-   24. CATEGORY BUTTONS
-========================================================= */
-
-.categories {
+    padding: 30px 20px;
 
     display: flex;
 
-    flex-wrap: wrap;
+    flex-direction: column;
 
     align-items: center;
+
+    text-align: center;
+
+    background: #fff;
+
+    border:
+        1px solid
+        rgba(201,162,39,.18);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.08);
+
+    overflow: hidden;
+
+    transition: .35s ease;
+}
+
+.author-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #111,
+            var(--gold),
+            #111
+        );
+}
+
+.author-card:hover {
+    transform: translateY(-8px);
+
+    box-shadow:
+        0 22px 50px
+        rgba(0,0,0,.14);
+}
+
+.author-card img,
+.author-image {
+    width: 145px !important;
+    height: 145px !important;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    border:
+        5px solid
+        var(--gold);
+
+    margin: 5px auto 20px;
+
+    background: #eee;
+}
+
+.author-card h2 {
+    color: #111;
+
+    font-size: 20px;
+
+    margin-bottom: 7px;
+}
+
+.author-card h3 {
+    color: var(--gold-dark);
+
+    font-size: 15px;
+
+    margin-bottom: 14px;
+}
+
+.author-card p {
+    color: #666;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.author-social {
+    display: flex;
 
     justify-content: center;
 
     gap: 10px;
 
-    margin-bottom: 40px;
+    margin-top: auto;
 
+    padding-top: 18px;
 }
 
+.author-social a {
+    width: 40px;
+    height: 40px;
 
-.category {
+    display: flex;
 
-    padding: 9px 18px;
+    align-items: center;
 
-    border:
-        1px solid
-        rgba(201, 162, 39, 0.35);
+    justify-content: center;
 
-    border-radius: 30px;
+    border-radius: 50%;
 
-    background: #ffffff;
+    background: #111;
 
-    color: #555555;
+    color: #fff;
 
-    font-family: inherit;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        var(--transition);
-
+    transition: .3s ease;
 }
 
-
-.category:hover,
-.category.active {
-
+.author-social a:hover {
     background: var(--gold);
 
-    border-color: var(--gold);
+    color: #111;
 
-    color: #ffffff;
-
-    box-shadow:
-        0 7px 20px
-        rgba(201, 162, 39, 0.22);
-
+    transform: translateY(-3px);
 }
 
 
 /* =========================================================
-   25. SEARCH
+   CONTACT
 ========================================================= */
 
-.search-container {
+.contact {
+    padding: 90px 7%;
 
-    position: relative;
-
-    width: min(650px, 92%);
-
-    margin:
-        0 auto 40px;
-
-}
-
-
-#searchInput {
-
-    width: 100%;
-
-    height: 52px;
-
-    padding:
-        0 55px 0 20px;
-
-    border:
-        1px solid
-        rgba(201, 162, 39, 0.25);
-
-    border-radius: 30px;
-
-    outline: none;
-
-    background: #ffffff;
-
-    color: var(--black);
-
-    font-family: inherit;
-
-    font-size: 13px;
-
-    box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.05);
-
-    transition:
-        var(--transition);
-
-}
-
-
-#searchInput:focus {
-
-    border-color:
-        var(--gold);
-
-    box-shadow:
-        0 8px 28px
-        rgba(201, 162, 39, 0.14);
-
-}
-
-
-.search-container i {
-
-    position: absolute;
-
-    right: 20px;
-
-    top: 50%;
-
-    transform:
-        translateY(-50%);
-
-    color: var(--gold);
-
-}
-
-
-/* =========================================================
-   26. ERROR / EMPTY BOOKS
-========================================================= */
-
-.no-books,
-.books-error {
-
-    flex: 0 0 100%;
+    background: #fff;
 
     text-align: center;
-
-    padding: 70px 20px;
-
-    color: #777777;
-
 }
 
+.contact-grid {
+    max-width: 1100px;
 
-.no-books i,
-.books-error i {
+    margin: 50px auto 0;
 
-    font-size: 40px;
+    display: grid;
 
-    color: var(--gold);
+    grid-template-columns:
+        repeat(3, 1fr);
 
-    margin-bottom: 15px;
-
+    gap: 22px;
 }
 
+.contact-card {
+    padding: 28px 20px;
 
-.no-books h3,
-.books-error h3 {
-
-    color: var(--black);
-
-    margin-bottom: 5px;
-
-}
-
-
-/* =========================================================
-   27. COMMENTS MODAL
-========================================================= */
-
-.book-comments-modal {
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 10000;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 20px;
-
-    background:
-        rgba(0, 0, 0, 0.72);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transition:
-        var(--transition);
-
-}
-
-
-.book-comments-modal.show {
-
-    opacity: 1;
-
-    visibility: visible;
-
-}
-
-
-.comments-panel {
-
-    width: min(620px, 100%);
-
-    max-height: 88vh;
-
-    overflow: hidden;
-
-    display: flex;
-
-    flex-direction: column;
-
-    background: #ffffff;
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 25px 80px
-        rgba(0, 0, 0, 0.35);
-
-}
-
-
-.comments-top {
-
-    display: flex;
-
-    align-items: flex-start;
-
-    justify-content: space-between;
-
-    gap: 15px;
-
-    padding: 22px;
-
-    background: var(--black);
-
-    color: #ffffff;
-
-}
-
-
-.comments-top small {
-
-    color: var(--gold-light);
-
-    letter-spacing: 2px;
-
-}
-
-
-.comments-top h2 {
-
-    margin-top: 5px;
-
-    font-size: 22px;
-
-}
-
-
-.comments-top p {
-
-    color: #bbbbbb;
-
-    font-size: 12px;
-
-}
-
-
-.comments-close {
-
-    width: 38px;
-    height: 38px;
-
-    border: 1px solid
-        rgba(255,255,255,0.2);
-
-    border-radius: 50%;
-
-    background: transparent;
-
-    color: #ffffff;
-
-    cursor: pointer;
-
-}
-
-
-.comments-list {
-
-    flex: 1;
-
-    min-height: 180px;
-
-    max-height: 420px;
-
-    overflow-y: auto;
-
-    padding: 20px;
-
-}
-
-
-.comment-item {
-
-    display: flex;
-
-    gap: 12px;
-
-    padding: 13px 0;
-
-    border-bottom:
-        1px solid #eeeeee;
-
-}
-
-
-.comment-avatar {
-
-    width: 38px;
-    height: 38px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: var(--gold);
-
-    color: #ffffff;
-
-    font-weight: 700;
-
-}
-
-
-.comment-content strong {
-
-    color: var(--black);
-
-    font-size: 13px;
-
-}
-
-
-.comment-content p {
-
-    color: #666666;
-
-    font-size: 12px;
-
-    margin-top: 3px;
-
-}
-
-
-.comment-reactions {
-
-    display: flex;
-
-    gap: 7px;
-
-    padding:
-        12px 20px;
-
-    border-top:
-        1px solid #eeeeee;
-
-}
-
-
-.comment-reactions button {
-
-    border: 1px solid #eeeeee;
-
-    background: #ffffff;
-
-    border-radius: 20px;
-
-    padding: 5px 9px;
-
-    cursor: pointer;
-
-}
-
-
-.comment-form-new {
-
-    display: flex;
-
-    gap: 8px;
-
-    padding: 15px 20px;
-
-    border-top:
-        1px solid #eeeeee;
-
-}
-
-
-.comment-form-new input {
-
-    flex: 1;
-
-    height: 42px;
-
-    padding:
-        0 14px;
-
-    border:
-        1px solid #dddddd;
-
-    border-radius: 22px;
-
-    outline: none;
-
-}
-
-
-.comment-form-new input:focus {
-
-    border-color: var(--gold);
-
-}
-
-
-.comment-form-new button {
-
-    width: 44px;
-    height: 42px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background: var(--gold);
-
-    color: #ffffff;
-
-    cursor: pointer;
-
-}
-
-
-/* =========================================================
-   28. TOAST
-========================================================= */
-
-.chishti-toast {
-
-    position: fixed;
-
-    left: 50%;
-
-    bottom: 30px;
-
-    z-index: 20000;
-
-    transform:
-        translate(-50%, 25px);
-
-    padding:
-        12px 20px;
-
-    border-radius: 30px;
-
-    background: var(--black);
-
-    color: #ffffff;
+    background: #fff;
 
     border:
         1px solid
-        rgba(201, 162, 39, 0.5);
+        rgba(201,162,39,.2);
 
-    font-size: 12px;
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transition:
-        var(--transition);
+    border-radius: 18px;
 
     box-shadow:
         0 10px 30px
-        rgba(0, 0, 0, 0.25);
+        rgba(0,0,0,.07);
 
+    transition: .3s ease;
 }
 
+.contact-card:hover {
+    transform: translateY(-6px);
 
-.chishti-toast.show {
+    border-color: var(--gold);
 
-    opacity: 1;
+    box-shadow: var(--gold-shadow);
+}
 
-    visibility: visible;
+.contact-card i {
+    display: block;
 
-    transform:
-        translate(-50%, 0);
+    margin-bottom: 12px;
 
+    color: var(--gold);
+
+    font-size: 30px;
+}
+
+.contact-card h3 {
+    color: #111;
+
+    font-size: 17px;
+
+    margin-bottom: 8px;
+}
+
+.contact-card p {
+    color: #777;
+
+    font-size: 14px;
 }
 
 
 /* =========================================================
-   29. WHATSAPP FLOATING BUTTON
+   WHATSAPP BUTTON
 ========================================================= */
 
-.whatsapp-wrapper {
-
+#whatsappBtn {
     position: fixed;
 
-    right: 22px;
-
-    bottom: 22px;
-
-    z-index: 8000;
-
-}
-
-
-.whatsapp-button {
+    right: 25px;
+    bottom: 25px;
 
     width: 58px;
     height: 58px;
@@ -1981,760 +1625,759 @@ button i {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    border: 3px solid #ffffff;
+    border: none;
 
     border-radius: 50%;
 
     background: #25d366;
 
-    color: #ffffff;
+    color: #fff;
 
     font-size: 27px;
 
     cursor: pointer;
 
+    z-index: 9998;
+
     box-shadow:
         0 8px 25px
-        rgba(0, 0, 0, 0.20);
+        rgba(0,0,0,.25);
 
-    transition:
-        var(--transition);
-
+    transition: .3s ease;
 }
 
-
-.whatsapp-button:hover {
-
-    transform:
-        scale(1.08);
-
-}
-
-
-/* =========================================================
-   30. WHATSAPP CONTACT PANEL
-========================================================= */
-
-.whatsapp-contacts {
-
-    position: absolute;
-
-    right: 0;
-
-    bottom: 72px;
-
-    width: 280px;
-
-    padding: 15px;
-
-    background: #ffffff;
-
-    border:
-        1px solid
-        rgba(201, 162, 39, 0.30);
-
-    border-radius: 16px;
+#whatsappBtn:hover {
+    transform: translateY(-5px) scale(1.04);
 
     box-shadow:
-        0 18px 45px
-        rgba(0, 0, 0, 0.18);
-
-    opacity: 0;
-
-    visibility: hidden;
-
-    transform:
-        translateY(12px)
-        scale(0.96);
-
-    transition:
-        var(--transition);
-
-}
-
-
-.whatsapp-wrapper.open
-.whatsapp-contacts {
-
-    opacity: 1;
-
-    visibility: visible;
-
-    transform:
-        translateY(0)
-        scale(1);
-
-}
-
-
-.whatsapp-contacts h4 {
-
-    margin-bottom: 10px;
-
-    color: var(--black);
-
-    font-size: 14px;
-
-}
-
-
-.whatsapp-contact {
-
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 11px;
-
-    margin-top: 7px;
-
-    border:
-        1px solid #eeeeee;
-
-    border-radius: 10px;
-
-    background: #ffffff;
-
-    color: #222222;
-
-    text-decoration: none;
-
-    font-size: 11px;
-
-    transition:
-        var(--transition);
-
-}
-
-
-.whatsapp-contact:hover {
-
-    border-color:
-        #25d366;
-
-    background:
-        rgba(37, 211, 102, 0.06);
-
-    transform:
-        translateX(-3px);
-
-}
-
-
-.whatsapp-contact i {
-
-    color: #25d366;
-
-    font-size: 18px;
-
-}
-
-
-.whatsapp-contact strong {
-
-    display: block;
-
-    color: var(--black);
-
-}
-
-
-.whatsapp-contact span {
-
-    color: #777777;
-
-    font-size: 10px;
-
+        0 12px 30px
+        rgba(37,211,102,.3);
 }
 
 
 /* =========================================================
-   31. SCROLL TOP
+   WHATSAPP CONTACT BOX
 ========================================================= */
 
-#scrollTop {
-
+#whatsappContacts {
     position: fixed;
 
     right: 25px;
+    bottom: 95px;
 
-    bottom: 92px;
+    width: 310px;
 
-    z-index: 7000;
+    padding: 20px;
+
+    background: #fff;
+
+    border:
+        1px solid
+        rgba(201,162,39,.3);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 55px
+        rgba(0,0,0,.2);
+
+    z-index: 9997;
 
     display: none;
 
-    width: 55px;
-    height: 55px;
-
-    border: 0;
-
-    border-radius: 50%;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--gold-light),
-            var(--gold-dark)
-        );
-
-    color: var(--black);
-
-    font-size: 21px;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 10px 25px
-        rgba(0, 0, 0, 0.16);
-
-    transition:
-        var(--transition);
-
+    animation:
+        whatsappOpen .25s ease;
 }
 
-
-#scrollTop:hover {
-
-    transform:
-        translateY(-4px);
-
-}
-
-
-/* =========================================================
-   32. PROFESSIONAL FOOTER
-========================================================= */
-
-footer {
-
-    position: relative;
-
-    background:
-        linear-gradient(
-            135deg,
-            #050505,
-            #111111
-        );
-
-    color: #ffffff;
-
-    border-top:
-        2px solid
-        var(--gold);
-
-}
-
-
-.footer-container {
-
-    width: min(1250px, 92%);
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        1.4fr 1fr 1fr 1.4fr;
-
-    gap: 45px;
-
-    padding:
-        65px 0 45px;
-
-}
-
-
-.footer-column h3 {
-
-    position: relative;
-
-    margin-bottom: 18px;
-
-    color: var(--gold-light);
-
-    font-size: 14px;
-
-    letter-spacing: 2px;
-
-    text-transform: uppercase;
-
-}
-
-
-.footer-column h3::after {
-
-    content: "";
-
+#whatsappContacts.show {
     display: block;
-
-    width: 35px;
-
-    height: 2px;
-
-    margin-top: 8px;
-
-    background: var(--gold);
-
 }
 
+@keyframes whatsappOpen {
 
-.footer-column p {
+    from {
+        opacity: 0;
 
-    max-width: 300px;
+        transform:
+            translateY(12px)
+            scale(.97);
+    }
 
-    color: #bbbbbb;
+    to {
+        opacity: 1;
 
-    font-size: 12px;
-
-    line-height: 1.8;
-
+        transform:
+            translateY(0)
+            scale(1);
+    }
 }
 
+#whatsappContacts h3 {
+    color: #111;
 
-.footer-column a {
+    font-size: 18px;
 
-    display: block;
+    margin-bottom: 14px;
 
-    width: fit-content;
+    padding-bottom: 12px;
 
-    margin-bottom: 8px;
-
-    color: #cccccc;
-
-    text-decoration: none;
-
-    font-size: 12px;
-
-    transition:
-        var(--transition);
-
-}
-
-
-.footer-column a:hover {
-
-    color: var(--gold-light);
-
-    transform:
-        translateX(4px);
-
-}
-
-
-/* Footer newsletter */
-
-.footer-newsletter {
-
-    display: flex;
-
-    margin-top: 14px;
-
-    border:
+    border-bottom:
         1px solid
-        rgba(201, 162, 39, 0.35);
-
-    border-radius: 9px;
-
-    overflow: hidden;
-
+        rgba(0,0,0,.08);
 }
 
-
-.footer-newsletter input {
-
-    flex: 1;
-
-    min-width: 0;
-
-    height: 42px;
-
-    padding:
-        0 12px;
-
-    border: 0;
-
-    outline: none;
-
-    background: #ffffff;
-
-    color: #222222;
-
-    font-family: inherit;
-
-    font-size: 11px;
-
-}
-
-
-.footer-newsletter button {
-
-    width: 75px;
-
-    border: 0;
-
-    background: var(--black);
-
-    color: var(--gold-light);
-
-    font-size: 11px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-}
-
-
-/* =========================================================
-   33. FOOTER SOCIAL
-========================================================= */
-
-.footer-social {
-
-    display: flex;
-
-    gap: 9px;
-
-    margin-top: 18px;
-
-}
-
-
-.footer-social a {
-
-    width: 37px;
-    height: 37px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    margin: 0;
-
-    border:
-        1px solid
-        rgba(201, 162, 39, 0.35);
-
-    border-radius: 9px;
-
-    color: var(--gold-light);
-
-    font-size: 14px;
-
-}
-
-
-.footer-social a:hover {
-
-    background: var(--gold);
-
-    color: #ffffff;
-
-    transform:
-        translateY(-3px);
-
-}
-
-
-/* =========================================================
-   34. FOOTER BOTTOM
-========================================================= */
-
-.footer-bottom {
-
-    width: min(1250px, 92%);
-
-    margin: auto;
-
-    padding:
-        18px 0;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,0.08);
-
+.whatsapp-contact {
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
 
-    gap: 15px;
+    gap: 10px;
 
+    padding: 11px 0;
+
+    border-bottom:
+        1px solid
+        rgba(0,0,0,.06);
 }
 
+.whatsapp-contact:last-child {
+    border-bottom: none;
+}
 
-.footer-bottom p {
+.whatsapp-contact strong {
+    display: block;
 
-    color: #888888;
+    color: #222;
+
+    font-size: 12px;
+}
+
+.whatsapp-contact span {
+    color: #777;
+
+    font-size: 11px;
+}
+
+.whatsapp-contact a {
+    flex-shrink: 0;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 8px 12px;
+
+    border-radius: 20px;
+
+    background: #25d366;
+
+    color: #fff;
 
     font-size: 11px;
 
+    font-weight: 700;
+}
+
+.whatsapp-contact a:hover {
+    background: #1da851;
 }
 
 
-.footer-bottom span {
+/* =========================================================
+   FOOTER
+========================================================= */
 
+footer,
+.footer {
+    position: relative;
+
+    width: 100%;
+
+    padding:
+        60px 7%
+        25px;
+
+    background: #080808;
+
+    color: #fff;
+
+    border-top:
+        1px solid
+        rgba(201,162,39,.35);
+
+    overflow: hidden;
+}
+
+footer::before,
+.footer::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 50%;
+
+    width: 180px;
+    height: 2px;
+
+    transform:
+        translateX(-50%);
+
+    background: var(--gold);
+
+    box-shadow:
+        0 0 20px
+        rgba(201,162,39,.5);
+}
+
+.footer-container,
+.footer-content {
+    max-width: 1250px;
+
+    margin: auto;
+}
+
+footer img,
+.footer img {
+    width: 90px;
+
+    margin-bottom: 15px;
+}
+
+footer h2,
+.footer h2 {
+    color: #fff;
+
+    font-family: 'Cinzel', serif;
+
+    font-size: 28px;
+
+    margin-bottom: 10px;
+}
+
+footer h3,
+footer h4,
+.footer h3,
+.footer h4 {
+    color: var(--gold);
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 12px;
+}
+
+footer p,
+.footer p {
+    color: #aaa;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+}
+
+.footer-links {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 25px;
+
+    margin: 25px 0;
+}
+
+.footer-links a {
+    color: #ddd;
+
+    font-size: 13px;
+
+    transition: .3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   FOOTER SOCIAL
+========================================================= */
+
+.footer-social {
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin: 22px 0;
+}
+
+.footer-social a {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.1);
+
+    border-radius: 25px;
+
+    background: #151515;
+
+    color: #ddd;
+
+    font-size: 12px;
+
+    transition: .3s ease;
+}
+
+.footer-social a:hover {
+    background: var(--gold);
+
+    color: #111;
+
+    border-color: var(--gold);
+
+    transform: translateY(-3px);
+}
+
+.footer-social a i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   FOOTER BOTTOM
+========================================================= */
+
+.footer-bottom {
+    margin-top: 30px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,.1);
+
+    text-align: center;
+
+    color: #777;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   SCROLL TOP
+========================================================= */
+
+#scrollTop {
+    position: fixed;
+
+    right: 25px;
+    bottom: 95px;
+
+    width: 52px;
+    height: 52px;
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(255,255,255,.15);
+
+    border-radius: 50%;
+
+    background: var(--gold);
+
+    color: #111;
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    z-index: 9990;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.2);
+
+    transition: .3s ease;
+}
+
+#scrollTop.show {
+    display: flex !important;
+}
+
+#scrollTop:hover {
+    transform: translateY(-5px);
+
+    background: var(--gold-light);
+
+    box-shadow:
+        0 12px 30px
+        rgba(201,162,39,.3);
+}
+
+#scrollTop i {
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   RIPPLE
+========================================================= */
+
+.btn {
+    position: relative;
+
+    overflow: hidden;
+}
+
+.ripple {
+    position: absolute;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.45);
+
+    transform:
+        translate(-50%,-50%);
+
+    animation:
+        ripple .6s linear;
+
+    pointer-events: none;
+}
+
+@keyframes ripple {
+
+    0% {
+        width: 0;
+        height: 0;
+
+        opacity: .8;
+    }
+
+    100% {
+        width: 300px;
+        height: 300px;
+
+        opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   NO BOOKS
+========================================================= */
+
+.no-books {
+    width: 100%;
+
+    padding: 80px 20px;
+
+    text-align: center;
+
+    color: #777;
+
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   PAGE VISIBILITY FIX
+========================================================= */
+
+.library-page section,
+.contact-page section,
+.authors-page,
+.authors-page section,
+.authors-section {
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    transform: none !important;
+}
+
+
+/* =========================================================
+   AUTHOR PAGE
+========================================================= */
+
+.authors-page {
+    display: block !important;
+
+    min-height: 100vh;
+
+    background: #fff !important;
+
+    color: #111 !important;
+}
+
+.authors-hero {
+    position: relative;
+
+    min-height: 430px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #080808,
+            #1a1a1a
+        ) !important;
+
+    color: #fff;
+
+    overflow: hidden;
+}
+
+.authors-hero-content {
+    position: relative;
+
+    z-index: 5;
+}
+
+.authors-hero h1 {
+    color: #fff;
+
+    font-family: 'Cinzel', serif;
+
+    font-size: clamp(40px, 6vw, 65px);
+}
+
+.authors-hero p {
+    color: #bbb;
+
+    margin-top: 12px;
+}
+
+.authors-label {
     color: var(--gold-light);
 
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+.authors-section {
+    background: #f7f7f5;
+
+    padding: 90px 7%;
 }
 
 
 /* =========================================================
-   35. SECTION REVEAL
+   RESPONSIVE — TABLET
 ========================================================= */
 
-section {
+@media (max-width: 1100px) {
 
-    opacity: 0;
-
-    transform:
-        translateY(25px);
-
-    transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
-
-}
-
-
-section.show-section {
-
-    opacity: 1;
-
-    transform:
-        translateY(0);
-
-}
-
-
-/* =========================================================
-   36. RESPONSIVE TABLET
-========================================================= */
-
-@media (max-width: 1000px) {
-
-    .navbar-container {
-
-        min-height: 78px;
-
+    .navbar {
+        padding: 0 4%;
     }
-
 
     .menu {
-
-        gap: 0;
-
+        gap: 20px;
     }
 
+    #booksContainer .book-card {
+        flex:
+            0 0
+            280px !important;
 
-    .menu a {
+        width: 280px !important;
 
-        padding:
-            10px 9px;
+        min-width: 280px !important;
 
-        font-size: 12px;
-
+        max-width: 280px !important;
     }
 
-
-    .footer-container {
-
+    .author-grid {
         grid-template-columns:
-            1fr 1fr;
-
+            repeat(2, 1fr);
     }
 
-
-    .latest-book {
-
+    .contact-grid {
         grid-template-columns:
-            280px 1fr;
-
-        gap: 35px;
-
-        padding: 30px;
-
+            repeat(2, 1fr);
     }
-
-
-    .book-image {
-
-        height: 380px;
-
-    }
-
 }
 
 
 /* =========================================================
-   37. MOBILE
+   RESPONSIVE — 900px
 ========================================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
 
-    /* Navbar */
-
-    .navbar-container {
-
-        min-height: 72px;
-
-        width: 92%;
-
+    .navbar {
+        height: 75px;
     }
 
-
-    .logo img,
-    .navbar-logo img {
-
-        width: 50px;
-        height: 50px;
-
+    .menu {
+        display: none;
     }
-
-
-    .logo-text {
-
-        font-size: 18px;
-
-    }
-
 
     .mobile-menu {
-
         display: block;
-
     }
 
-
-    .menu {
-
+    .menu.show {
         position: absolute;
 
-        left: 4%;
+        top: 75px;
+        left: 0;
 
-        right: 4%;
-
-        top: 72px;
+        width: 100%;
 
         display: flex;
 
         flex-direction: column;
 
-        align-items: stretch;
+        gap: 18px;
 
-        padding: 10px;
+        padding: 25px;
 
-        background: #ffffff;
+        background: #fff;
 
-        border:
+        border-bottom:
             1px solid
-            rgba(201, 162, 39, 0.18);
-
-        border-radius: 0 0 15px 15px;
+            rgba(201,162,39,.25);
 
         box-shadow:
-            0 15px 35px
-            rgba(0,0,0,0.12);
-
-        opacity: 0;
-
-        visibility: hidden;
-
-        transform:
-            translateY(-10px);
-
-        transition:
-            var(--transition);
-
+            0 15px 30px
+            rgba(0,0,0,.1);
     }
 
-
-    .menu.show {
-
-        opacity: 1;
-
-        visibility: visible;
-
-        transform:
-            translateY(0);
-
-    }
-
-
-    .menu a {
-
-        width: 100%;
-
-        justify-content: flex-start;
-
-        padding: 12px 15px;
-
-    }
-
-
-    .menu a::after {
-
-        display: none;
-
-    }
-
-
-    /* Hero */
-
-    .hero {
-
-        min-height: 500px;
-
-    }
-
-
-    .hero-content {
+    .latest-book-card {
+        flex-direction: column;
 
         text-align: center;
-
     }
 
+    .book-info {
+        max-width: 700px;
+    }
+}
 
-    /* Sections */
 
-    section {
+/* =========================================================
+   RESPONSIVE — 768px
+========================================================= */
 
+@media (max-width: 768px) {
+
+    .hero {
         padding:
-            60px 0;
-
+            120px 18px
+            60px;
     }
 
-
-    .section-title {
-
-        margin-bottom: 30px;
-
+    .hero-logo {
+        width: 145px;
     }
 
+    .hero h1 {
+        font-size: 36px;
+    }
 
-    /* Books */
+    .hero h3 {
+        font-size: 21px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .counter-card {
+        width: 100%;
+
+        max-width: 350px;
+    }
+
+    .latest-book {
+        padding: 70px 18px;
+    }
+
+    .latest-book-card {
+        padding: 25px 18px;
+
+        gap: 30px;
+    }
+
+    .book-image img {
+        width: 220px;
+    }
+
+    .book-info h2 {
+        font-size: 29px;
+    }
+
+    .featured-books {
+        padding:
+            70px 0
+            80px;
+    }
 
     #booksContainer {
-
         gap: 18px;
 
         padding:
-            20px 18px 35px;
-
+            20px 18px
+            35px;
     }
 
-
     #booksContainer .book-card {
-
         flex:
             0 0 245px !important;
 
@@ -2743,213 +2386,305 @@ section.show-section {
         min-width: 245px !important;
 
         max-width: 245px !important;
-
-        min-height: 445px;
-
     }
 
-
-    .book-image-wrap {
-
-        height: 285px;
-
+    .book-card img {
+        height: 300px;
     }
 
-
-    .book-card-content {
-
-        padding:
-            16px 14px;
-
-    }
-
-
-    .book-card-content h3 {
-
-        font-size: 15px;
-
-        min-height: 43px;
-
-    }
-
-
-    /* Latest */
-
-    .latest-book {
-
+    .author-grid {
         grid-template-columns: 1fr;
-
-        gap: 25px;
-
-        padding: 22px;
-
     }
 
-
-    .book-image {
-
-        width: min(280px, 100%);
-
-        height: 360px;
-
-        margin: auto;
-
-    }
-
-
-    .book-info {
-
-        text-align: center;
-
-    }
-
-
-    /* Footer */
-
-    .footer-container {
-
+    .contact-grid {
         grid-template-columns: 1fr;
+    }
 
-        gap: 30px;
-
+    .authors,
+    .contact {
         padding:
-            50px 0 30px;
-
+            70px 18px;
     }
-
-
-    .footer-column p {
-
-        max-width: 100%;
-
-    }
-
-
-    .footer-bottom {
-
-        flex-direction: column;
-
-        text-align: center;
-
-    }
-
-
-    /* Floating buttons */
-
-    .whatsapp-wrapper {
-
-        right: 15px;
-
-        bottom: 15px;
-
-    }
-
 
     #scrollTop {
+        width: 48px;
+        height: 48px;
 
-        right: 15px;
-
-        bottom: 82px;
-
-        width: 47px;
-
-        height: 47px;
-
+        right: 18px;
+        bottom: 85px;
     }
 
+    #whatsappBtn {
+        width: 55px;
+        height: 55px;
+
+        right: 18px;
+        bottom: 18px;
+    }
+
+    #whatsappContacts {
+        right: 15px;
+        bottom: 85px;
+
+        width:
+            calc(100vw - 30px);
+
+        max-width: 330px;
+    }
 }
 
 
 /* =========================================================
-   38. SMALL MOBILE
+   RESPONSIVE — 600px
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .logo {
+        gap: 8px;
+    }
+
+    .logo img {
+        width: 46px;
+        height: 46px;
+    }
+
+    .logo h2 {
+        font-size: 17px;
+    }
+
+    .logo span {
+        font-size: 9px;
+    }
+
+    .search-box {
+        border-radius: 14px;
+    }
+
+    .search-box input {
+        padding: 15px;
+        font-size: 13px;
+    }
+
+    .book-sorting {
+        gap: 8px;
+    }
+
+    .sort-btn {
+        padding: 9px 14px;
+
+        font-size: 11px;
+    }
+
+    .section-title {
+        font-size: 29px;
+    }
+
+    .section-subtitle {
+        font-size: 13px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .footer-social {
+        flex-direction: column;
+    }
+
+    .footer-social a {
+        width: 220px;
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE — 480px
 ========================================================= */
 
 @media (max-width: 480px) {
 
-    .logo-text {
-
-        display: none;
-
+    .hero h1 {
+        font-size: 31px;
     }
 
-
-    .hero-content h1 {
-
-        font-size: 39px;
-
+    .hero h3 {
+        font-size: 18px;
     }
 
-
-    .section-title h2 {
-
-        font-size: 30px;
-
+    .library-banner {
+        padding:
+            90px 15px;
     }
 
+    .library-banner h1 {
+        font-size: 34px;
+    }
 
-    .category {
+    .library-banner h3 {
+        font-size: 18px;
+    }
+
+    #booksContainer .book-card {
+        flex:
+            0 0 220px !important;
+
+        width: 220px !important;
+
+        min-width: 220px !important;
+
+        max-width: 220px !important;
+    }
+
+    .book-card img {
+        height: 270px;
+    }
+
+    .book-content {
+        padding: 14px;
+    }
+
+    .book-title,
+    .book-content h2 {
+        font-size: 16px;
+    }
+
+    .book-author,
+    .book-content h3 {
+        font-size: 11px;
+    }
+
+    .book-description,
+    .book-content p {
+        font-size: 11px;
+    }
+
+    .book-actions button,
+    .book-social button,
+    .book-buttons-social button,
+    .social-btn {
+        min-height: 38px;
 
         padding:
-            8px 13px;
-
-        font-size: 10px;
-
-    }
-
-
-    .whatsapp-contacts {
-
-        right: -5px;
-
-        width: 260px;
-
-    }
-
-
-    .book-social-actions button {
+            7px 5px;
 
         font-size: 9px;
-
     }
 
+    .action-count {
+        font-size: 9px;
+    }
+
+    .book-buttons {
+        flex-direction: column;
+    }
+
+    .book-buttons .btn {
+        width: 100%;
+    }
+
+    .author-card {
+        min-height: auto;
+    }
 }
 
 
 /* =========================================================
-   39. ACCESSIBILITY
+   VERY SMALL PHONE
 ========================================================= */
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
+@media (max-width: 360px) {
 
-    outline:
-        2px solid
-        var(--gold);
+    #booksContainer .book-card {
+        flex:
+            0 0 200px !important;
 
-    outline-offset: 3px;
+        width: 200px !important;
 
+        min-width: 200px !important;
+
+        max-width: 200px !important;
+    }
+
+    .book-card img {
+        height: 245px;
+    }
+
+    .book-actions {
+        gap: 4px;
+    }
+
+    .book-actions button {
+        font-size: 8px;
+    }
+
+    #whatsappContacts {
+        right: 10px;
+
+        width:
+            calc(100vw - 20px);
+    }
 }
 
 
 /* =========================================================
-   40. REDUCED MOTION
+   FINAL OVERRIDES
+   KEEP THESE AT THE VERY END
 ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+/* White page */
+main,
+.library-page,
+.contact-page {
+    background: #fff;
+}
 
-    *,
-    *::before,
-    *::after {
 
-        scroll-behavior: auto !important;
+/* Books always horizontal */
+#booksContainer {
+    display: flex !important;
 
-        animation-duration: 0.01ms !important;
+    flex-direction: row !important;
 
-        animation-iteration-count: 1 !important;
+    flex-wrap: nowrap !important;
 
-        transition-duration: 0.01ms !important;
+    overflow-x: hidden !important;
+}
 
-    }
 
+/* Never hide book cards */
+#booksContainer .book-card {
+    opacity: 1 !important;
+
+    visibility: visible !important;
+}
+
+
+/* No chatbot */
+#chatBtn,
+#chatWindow,
+#chatMessages,
+.chat-header,
+.chat-input,
+.user-message,
+.bot-message {
+    display: none !important;
+}
+
+
+/* Author visibility */
+.authors,
+.author-grid,
+.author-card {
+    visibility: visible !important;
+
+    opacity: 1 !important;
+}
+
+
+/* Prevent horizontal page movement */
+body {
+    overflow-x: hidden !important;
 }
