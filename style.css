@@ -3667,3 +3667,180 @@ section,
     }
 
 }
+/* =========================================================
+   CHISHTI LIBRARY - PREMIUM FOOTER
+========================================================= */
+
+footer,
+.footer {
+    width: 100%;
+    background: #080808 !important;
+    color: #ffffff;
+    border-top: 1px solid rgba(212, 168, 36, 0.35);
+    padding: 55px 6% 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before,
+.footer::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 180px;
+    height: 2px;
+    transform: translateX(-50%);
+    background: #d4a824;
+    box-shadow: 0 0 20px rgba(212, 168, 36, 0.7);
+}
+
+footer a,
+.footer a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+footer a:hover,
+.footer a:hover {
+    color: #d4a824;
+    transform: translateX(3px);
+}
+
+footer h3,
+footer h4,
+.footer h3,
+.footer h4 {
+    color: #d4a824;
+    letter-spacing: 1px;
+}
+
+footer p,
+.footer p {
+    color: #cfcfcf;
+    line-height: 1.7;
+}
+
+
+/* Footer columns */
+
+.footer-container,
+.footer-content {
+    max-width: 1250px;
+    margin: auto;
+}
+
+
+/* Bottom copyright */
+
+.footer-bottom {
+    margin-top: 35px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   PREMIUM SCROLL TOP BUTTON
+========================================================= */
+
+#scrollTop {
+    position: fixed !important;
+    right: 28px;
+    bottom: 28px;
+
+    width: 54px;
+    height: 54px;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+
+    background: #d4a824 !important;
+    color: #111 !important;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    cursor: pointer;
+    z-index: 9999;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,0.35),
+        0 0 0 rgba(212,168,36,0.5);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        background 0.3s ease;
+}
+
+#scrollTop.show {
+    display: flex !important;
+}
+
+#scrollTop:hover {
+    transform: translateY(-6px);
+
+    background: #f0c33b !important;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.4),
+        0 0 20px rgba(212,168,36,0.45);
+}
+
+#scrollTop i {
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   BOOK SECTION TOP
+========================================================= */
+
+#booksContainer {
+    margin-top: 15px;
+}
+
+
+/* Premium section heading */
+
+.books-section h2,
+.books-section h1,
+#booksSection h2,
+#booksSection h1 {
+    color: #d4a824;
+    text-align: center;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    footer,
+    .footer {
+        padding: 40px 22px 20px;
+        text-align: center;
+    }
+
+    #scrollTop {
+        width: 48px;
+        height: 48px;
+        right: 18px;
+        bottom: 18px;
+        font-size: 18px;
+    }
+
+}
