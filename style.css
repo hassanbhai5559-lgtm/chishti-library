@@ -3611,3 +3611,43 @@ section,
     }
 
 }
+
+#booksContainer {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 28px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding: 25px 40px 40px;
+    scrollbar-width: none;
+}
+
+#booksContainer::-webkit-scrollbar {
+    display: none;
+}
+
+#booksContainer .book-card {
+    flex: 0 0 290px !important;
+    width: 290px !important;
+    min-width: 290px !important;
+    max-width: 290px !important;
+}
+
+@media (max-width: 768px) {
+
+    #booksContainer {
+        gap: 18px;
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    #booksContainer .book-card {
+        flex: 0 0 245px !important;
+        width: 245px !important;
+        min-width: 245px !important;
+        max-width: 245px !important;
+    }
+
+}
