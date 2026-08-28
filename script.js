@@ -2106,3 +2106,243 @@ console.log("🚀 Production Ready");
 
 
 })();
+
+/* =========================================================
+   CHISHTI LIBRARY
+   SAFE HORIZONTAL BOOK CAROUSEL
+   ADD THIS AT THE VERY END OF SCRIPT.JS
+========================================================= */
+
+(function () {
+
+    "use strict";
+
+    let animationFrame = null;
+    let paused = false;
+    let initializedContainer = null;
+
+
+    function startBookCarousel() {
+
+        const container =
+            document.getElementById("booksContainer");
+
+        if (!container) {
+            return;
+        }
+
+
+        /* Stop previous animation */
+        if (animationFrame) {
+
+            cancelAnimationFrame(
+                animationFrame
+            );
+
+            animationFrame = null;
+
+        }
+
+
+        /* If there are not enough books, do nothing */
+        if (
+            container.scrollWidth <=
+            container.clientWidth
+        ) {
+
+            return;
+
+        }
+
+
+        function animate() {
+
+            if (!paused) {
+
+                container.scrollLeft += 0.35;
+
+
+                /*
+                 * Safely return to beginning
+                 * when reaching the end.
+                 */
+
+                if (
+                    container.scrollLeft +
+                    container.clientWidth >=
+                    container.scrollWidth - 2
+                ) {
+
+                    container.scrollLeft = 0;
+
+                }
+
+            }
+
+
+            animationFrame =
+                requestAnimationFrame(
+                    animate
+                );
+
+        }
+
+
+        animationFrame =
+            requestAnimationFrame(
+                animate
+            );
+
+    }
+
+
+    function setupBookCarousel() {
+
+        const container =
+            document.getElementById(
+                "booksContainer"
+            );
+
+        if (!container) {
+            return;
+        }
+
+
+        /*
+         * Do not add mouse/touch events
+         * more than once.
+         */
+
+        if (
+            initializedContainer ===
+            container
+        ) {
+
+            startBookCarousel();
+
+            return;
+
+        }
+
+
+        initializedContainer =
+            container;
+
+
+        /* Desktop pause */
+        container.addEventListener(
+            "mouseenter",
+            function () {
+
+                paused = true;
+
+            }
+        );
+
+
+        container.addEventListener(
+            "mouseleave",
+            function () {
+
+                paused = false;
+
+            }
+        );
+
+
+        /* Mobile touch pause */
+        container.addEventListener(
+            "touchstart",
+            function () {
+
+                paused = true;
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        container.addEventListener(
+            "touchend",
+            function () {
+
+                setTimeout(
+                    function () {
+
+                        paused = false;
+
+                    },
+                    1000
+                );
+
+            },
+            {
+                passive: true
+            }
+        );
+
+
+        startBookCarousel();
+
+    }
+
+
+    /*
+     * Start after page loads.
+     */
+
+    function bootCarousel() {
+
+        setTimeout(
+            function () {
+
+                setupBookCarousel();
+
+            },
+            1200
+        );
+
+    }
+
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            bootCarousel
+        );
+
+    } else {
+
+        bootCarousel();
+
+    }
+
+
+    /*
+     * Make function available globally.
+     * This lets us restart it after
+     * search/category rendering.
+     */
+
+    window.restartBookCarousel =
+        function () {
+
+            setTimeout(
+                function () {
+
+                    setupBookCarousel();
+
+                },
+                150
+            );
+
+        };
+
+
+})();
