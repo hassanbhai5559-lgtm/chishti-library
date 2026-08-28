@@ -5,38 +5,1073 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="Chishti Library - Read and explore Islamic books online."
-    >
+    <meta name="description"
+          content="Chishti Library - Islamic Books Library">
 
     <title>Chishti Library</title>
 
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- FONT AWESOME -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        /* =====================================================
+           GLOBAL
+        ===================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Montserrat", Arial, sans-serif;
+            background: #ffffff;
+            color: #111111;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        :root {
+            --black: #050505;
+            --gold: #c9a227;
+            --gold-light: #e5c65a;
+            --white: #ffffff;
+            --gray: #f7f7f7;
+            --border: #e7e7e7;
+            --text: #151515;
+            --muted: #777777;
+        }
 
 
-    <!-- GOOGLE FONT -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+        /* =====================================================
+           LOADER
+        ===================================================== */
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: var(--black);
+
+            transition:
+                opacity .6s ease,
+                visibility .6s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 20px;
+        }
+
+        .loader-title {
+            color: var(--gold);
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .loader-line {
+            width: 160px;
+            height: 3px;
+            background: var(--gold);
+            margin: 18px auto 0;
+            overflow: hidden;
+        }
+
+        .loader-line::after {
+            content: "";
+            display: block;
+            width: 50%;
+            height: 100%;
+            background: white;
+            animation: loaderMove 1s infinite;
+        }
+
+        @keyframes loaderMove {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(300%);
+            }
+        }
 
 
-    <!-- YOUR CSS -->
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #eeeeee;
+            position: sticky;
+            top: 0;
+            z-index: 5000;
+        }
+
+        .header-inner {
+            max-width: 1400px;
+            margin: auto;
+            padding: 18px 30px 0;
+        }
+
+
+        /* =====================================================
+           LOGO
+        ===================================================== */
+
+        .logo-area {
+            text-align: center;
+        }
+
+        .logo-area img {
+            width: 82px;
+            height: 82px;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+        }
+
+        .logo-title {
+            margin-top: 5px;
+            color: var(--black);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .logo-subtitle {
+            color: var(--gold);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        nav {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin-top: 14px;
+
+            border-top: 1px solid #eeeeee;
+        }
+
+        .menu {
+            list-style: none;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            gap: 42px;
+
+            padding: 14px 0;
+        }
+
+        .menu a {
+            position: relative;
+
+            font-size: 13px;
+            font-weight: 700;
+            color: #111111;
+
+            transition: .25s ease;
+        }
+
+        .menu a::after {
+            content: "";
+
+            position: absolute;
+            left: 50%;
+            bottom: -8px;
+
+            width: 0;
+            height: 2px;
+
+            background: var(--gold);
+
+            transform: translateX(-50%);
+            transition: .25s ease;
+        }
+
+        .menu a:hover {
+            color: var(--gold);
+        }
+
+        .menu a:hover::after {
+            width: 100%;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .hero {
+            background:
+                linear-gradient(
+                    135deg,
+                    #050505,
+                    #151515
+                );
+
+            min-height: 410px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            padding: 80px 25px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero-small {
+            color: var(--gold-light);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            color: white;
+            font-size: clamp(38px, 6vw, 72px);
+            font-weight: 800;
+            line-height: 1.05;
+        }
+
+        .hero h1 span {
+            color: var(--gold);
+        }
+
+        .hero p {
+            color: #dddddd;
+            max-width: 650px;
+            margin: 25px auto 30px;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+
+            background: var(--gold);
+            color: #050505;
+
+            padding: 13px 28px;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            border-radius: 3px;
+
+            transition: .3s ease;
+        }
+
+        .hero-btn:hover {
+            background: white;
+            transform: translateY(-3px);
+        }
+
+
+        /* =====================================================
+           SECTION
+        ===================================================== */
+
+        .books-section {
+            padding: 80px 0 70px;
+            background: white;
+        }
+
+        .section-heading {
+            text-align: center;
+            padding: 0 20px;
+            margin-bottom: 42px;
+        }
+
+        .section-heading .small-title {
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .section-heading h2 {
+            font-size: 36px;
+            margin-top: 8px;
+            color: var(--black);
+            font-weight: 800;
+        }
+
+        .heading-line {
+            width: 55px;
+            height: 3px;
+            background: var(--gold);
+            margin: 14px auto 0;
+        }
+
+
+        /* =====================================================
+           SEARCH
+        ===================================================== */
+
+        .search-area {
+            max-width: 850px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+        }
+
+        .search-box {
+            display: flex;
+
+            border: 1px solid #dddddd;
+            border-radius: 4px;
+
+            overflow: hidden;
+
+            background: white;
+
+            box-shadow: 0 8px 30px rgba(0,0,0,.06);
+        }
+
+        .search-box input {
+            flex: 1;
+
+            border: none;
+            outline: none;
+
+            padding: 16px 18px;
+
+            font-size: 14px;
+        }
+
+        .search-box button {
+            width: 130px;
+
+            border: none;
+
+            background: var(--black);
+            color: white;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: var(--gold);
+            color: black;
+        }
+
+
+        /* =====================================================
+           CAROUSEL
+        ===================================================== */
+
+        .books-wrapper {
+            position: relative;
+            max-width: 1500px;
+            margin: auto;
+        }
+
+        .books-container {
+            display: flex;
+
+            flex-wrap: nowrap;
+
+            gap: 24px;
+
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            scroll-behavior: smooth;
+
+            scrollbar-width: none;
+
+            padding: 15px 40px 35px;
+        }
+
+        .books-container::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        /* =====================================================
+           BOOK CARD
+        ===================================================== */
+
+        .book-card {
+            flex: 0 0 calc(
+                (100% - 72px) / 4
+            );
+
+            min-width: 260px;
+
+            background: white;
+
+            border: 1px solid #e4e4e4;
+
+            border-radius: 8px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,.07);
+
+            transition:
+                transform .35s ease,
+                box-shadow .35s ease;
+
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px);
+
+            box-shadow:
+                0 18px 40px rgba(0,0,0,.13);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 350px;
+
+            background: #f3f3f3;
+
+            overflow: hidden;
+
+            position: relative;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+            transition: transform .5s ease;
+        }
+
+        .book-card:hover .book-cover img {
+            transform: scale(1.04);
+        }
+
+
+        /* =====================================================
+           CATEGORY
+        ===================================================== */
+
+        .book-category {
+            position: absolute;
+
+            top: 14px;
+            left: 14px;
+
+            background: var(--gold);
+            color: black;
+
+            padding: 6px 10px;
+
+            border-radius: 3px;
+
+            font-size: 9px;
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            z-index: 3;
+        }
+
+
+        /* =====================================================
+           BOOK CONTENT
+        ===================================================== */
+
+        .book-content {
+            padding: 20px;
+        }
+
+        .book-content h3 {
+            font-size: 18px;
+            line-height: 1.35;
+
+            color: #111111;
+
+            margin-bottom: 9px;
+
+            font-weight: 800;
+        }
+
+        .book-author {
+            font-size: 12px;
+            font-weight: 700;
+
+            color: var(--gold);
+
+            margin-bottom: 12px;
+        }
+
+        .book-description {
+            color: #777777;
+
+            font-size: 11px;
+            line-height: 1.7;
+
+            min-height: 38px;
+
+            margin-bottom: 16px;
+        }
+
+
+        /* =====================================================
+           COUNTERS
+        ===================================================== */
+
+        .book-stats {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            padding: 10px 0;
+
+            border-top: 1px solid #eeeeee;
+            border-bottom: 1px solid #eeeeee;
+
+            margin-bottom: 15px;
+        }
+
+        .stat-btn {
+            border: none;
+            background: transparent;
+
+            color: #666666;
+
+            font-size: 10px;
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: .2s;
+        }
+
+        .stat-btn:hover {
+            color: var(--gold);
+        }
+
+
+        /* =====================================================
+           BOOK BUTTONS
+        ===================================================== */
+
+        .book-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .book-btn {
+            border: 1px solid var(--black);
+
+            background: var(--black);
+            color: white;
+
+            padding: 11px 8px;
+
+            text-align: center;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            border-radius: 3px;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+        .book-btn:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: black;
+        }
+
+        .download-btn {
+            background: white;
+            color: black;
+        }
+
+        .download-btn:hover {
+            background: var(--black);
+            color: white;
+        }
+
+
+        /* =====================================================
+           CAROUSEL ARROWS
+        ===================================================== */
+
+        .carousel-arrow {
+            position: absolute;
+
+            top: 45%;
+
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            border: 1px solid #dddddd;
+
+            background: white;
+
+            color: black;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            z-index: 20;
+
+            box-shadow: 0 5px 18px rgba(0,0,0,.12);
+
+            transition: .25s;
+        }
+
+        .carousel-arrow:hover {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .carousel-prev {
+            left: 12px;
+        }
+
+        .carousel-next {
+            right: 12px;
+        }
+
+
+        /* =====================================================
+           NO BOOKS
+        ===================================================== */
+
+        .no-books {
+            width: 100%;
+            padding: 60px;
+            text-align: center;
+            color: #777777;
+        }
+
+
+        /* =====================================================
+           WHATSAPP
+        ===================================================== */
+
+        .whatsapp-container {
+            position: fixed;
+
+            right: 22px;
+            bottom: 22px;
+
+            z-index: 9000;
+        }
+
+        .whatsapp-main {
+            width: 58px;
+            height: 58px;
+
+            border-radius: 50%;
+
+            border: none;
+
+            background: #25d366;
+            color: white;
+
+            font-size: 27px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 25px rgba(0,0,0,.25);
+
+            transition: .3s;
+        }
+
+        .whatsapp-main:hover {
+            transform: scale(1.08);
+        }
+
+        .whatsapp-contacts {
+            position: absolute;
+
+            right: 0;
+            bottom: 70px;
+
+            width: 260px;
+
+            background: white;
+
+            border-radius: 8px;
+
+            padding: 12px;
+
+            box-shadow:
+                0 10px 35px rgba(0,0,0,.2);
+
+            border: 1px solid #eeeeee;
+
+            display: none;
+        }
+
+        .whatsapp-contacts.show {
+            display: block;
+            animation: whatsappOpen .25s ease;
+        }
+
+        @keyframes whatsappOpen {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .whatsapp-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: #111111;
+
+            padding: 7px 5px 10px;
+
+            border-bottom: 1px solid #eeeeee;
+
+            margin-bottom: 5px;
+        }
+
+        .whatsapp-contact {
+            display: block;
+
+            padding: 11px 8px;
+
+            font-size: 11px;
+
+            border-bottom: 1px solid #f0f0f0;
+
+            transition: .2s;
+        }
+
+        .whatsapp-contact:last-child {
+            border-bottom: none;
+        }
+
+        .whatsapp-contact:hover {
+            background: #f7f7f7;
+            color: #159447;
+        }
+
+        .contact-name {
+            display: block;
+            font-weight: 800;
+            color: #111111;
+            margin-bottom: 3px;
+        }
+
+        .contact-number {
+            color: #159447;
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+            background: #050505;
+            color: white;
+
+            border-top: 3px solid var(--gold);
+
+            padding: 65px 30px 25px;
+        }
+
+        .footer-grid {
+            max-width: 1250px;
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns:
+                1.4fr
+                1fr
+                1fr
+                1.5fr;
+
+            gap: 50px;
+        }
+
+        .footer-logo {
+            width: 65px;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand h3 {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 12px;
+            line-height: 1.8;
+            max-width: 300px;
+        }
+
+        .footer-column h4 {
+            color: var(--gold);
+            font-size: 11px;
+            letter-spacing: 3px;
+            margin-bottom: 18px;
+        }
+
+        .footer-column a {
+            display: block;
+
+            color: #cccccc;
+
+            font-size: 11px;
+
+            margin-bottom: 11px;
+
+            transition: .2s;
+        }
+
+        .footer-column a:hover {
+            color: var(--gold);
+            padding-left: 4px;
+        }
+
+        .footer-column p {
+            color: #aaaaaa;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        .footer-bottom {
+            max-width: 1250px;
+            margin: 45px auto 0;
+
+            padding-top: 20px;
+
+            border-top: 1px solid #292929;
+
+            display: flex;
+            justify-content: space-between;
+
+            color: #777777;
+
+            font-size: 10px;
+        }
+
+
+        /* =====================================================
+           SCROLL TOP
+        ===================================================== */
+
+        #scrollTop {
+            position: fixed;
+
+            right: 25px;
+            bottom: 95px;
+
+            width: 42px;
+            height: 42px;
+
+            border: none;
+            border-radius: 50%;
+
+            background: var(--gold);
+            color: black;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            display: none;
+
+            z-index: 8000;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1100px) {
+
+            .book-card {
+                flex-basis: calc(
+                    (100% - 48px) / 3
+                );
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 760px) {
+
+            .header-inner {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+
+            .menu {
+                gap: 18px;
+                flex-wrap: wrap;
+            }
+
+            .menu a {
+                font-size: 10px;
+            }
+
+            .hero {
+                min-height: 350px;
+                padding: 60px 20px;
+            }
+
+            .books-section {
+                padding-top: 60px;
+            }
+
+            .section-heading h2 {
+                font-size: 29px;
+            }
+
+            .book-card {
+                flex-basis: calc(
+                    (100% - 16px) / 2
+                );
+
+                min-width: 235px;
+            }
+
+            .books-container {
+                gap: 16px;
+                padding-left: 25px;
+                padding-right: 25px;
+            }
+
+            .book-cover {
+                height: 290px;
+            }
+
+            .carousel-arrow {
+                display: none;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .logo-area img {
+                width: 65px;
+                height: 65px;
+            }
+
+            .logo-title {
+                font-size: 19px;
+            }
+
+            .menu {
+                gap: 12px;
+            }
+
+            .book-card {
+                flex-basis: 82%;
+                min-width: 82%;
+            }
+
+            .book-cover {
+                height: 320px;
+            }
+
+            .whatsapp-container {
+                right: 15px;
+                bottom: 15px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -52,465 +1087,411 @@
 
     <div class="loader-content">
 
-        <img
-            src="logo.png"
-            alt="Chishti Library"
-        >
+        <img src="logo.png"
+             class="loader-logo"
+             alt="Chishti Library">
 
-        <div class="loader-spinner"></div>
+        <div class="loader-title">
+            CHISHTI LIBRARY
+        </div>
 
-        <h3>Chishti Library</h3>
-
-        <p>Loading Books...</p>
+        <div class="loader-line"></div>
 
     </div>
 
 </div>
 
 
-
 <!-- =====================================================
-     NAVBAR
+     HEADER
 ===================================================== -->
 
-<header class="navbar">
+<header>
 
-    <div class="nav-container">
+    <div class="header-inner">
 
+        <div class="logo-area">
 
-        <!-- LOGO -->
+            <img src="logo.png"
+                 alt="Chishti Library Logo">
 
-        <a
-            href="index.html"
-            class="logo"
-        >
+            <div class="logo-title">
+                CHISHTI LIBRARY
+            </div>
 
-            <img
-                src="logo.png"
-                alt="Chishti Library Logo"
-            >
+            <div class="logo-subtitle">
+                ISLAMIC KNOWLEDGE • BOOKS • RESEARCH
+            </div>
 
-            <span>
-                Chishti Library
-            </span>
-
-        </a>
+        </div>
 
 
+        <nav>
 
-        <!-- MOBILE MENU -->
+            <ul class="menu">
 
-        <button
-            type="button"
-            class="mobile-menu"
-            aria-label="Open Menu"
-        >
+                <li>
+                    <a href="#home">HOME</a>
+                </li>
 
-            <i class="fa-solid fa-bars"></i>
+                <li>
+                    <a href="#latest">LATEST</a>
+                </li>
 
-        </button>
+                <li>
+                    <a href="#popular">POPULAR</a>
+                </li>
 
+                <li>
+                    <a href="#old">OLD BOOKS</a>
+                </li>
 
+                <li>
+                    <a href="#allBooks">ALL BOOKS</a>
+                </li>
 
-        <!-- MENU -->
+                <li>
+                    <a href="#footer">CONTACT</a>
+                </li>
 
-        <nav class="menu">
-
-            <a
-                href="index.html"
-                class="active"
-            >
-                Home
-            </a>
-
-            <a href="#latest">
-                Latest
-            </a>
-
-            <a href="#books">
-                All Books
-            </a>
-
-            <a href="#categories">
-                Categories
-            </a>
-
-            <a href="about.html">
-                About
-            </a>
-
-            <a href="contact.html">
-                Contact
-            </a>
+            </ul>
 
         </nav>
-
 
     </div>
 
 </header>
 
 
-
 <!-- =====================================================
      HERO
 ===================================================== -->
 
-<section class="hero">
+<section class="hero" id="home">
 
     <div class="hero-content">
 
-        <span class="hero-small">
+        <div class="hero-small">
             WELCOME TO
-        </span>
+        </div>
 
         <h1>
-            Chishti Library
+            Chishti <span>Library</span>
         </h1>
 
         <p>
-            Explore Islamic books, literature,
-            Seerat, Naat, Manqabat and more.
+            Explore a professional collection of Islamic books,
+            research material, Naat, Manqabat, Seerat and
+            valuable works of renowned scholars.
         </p>
 
-
-        <!-- SEARCH -->
-
-        <div class="search-box">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            <input
-                type="search"
-                id="searchInput"
-                placeholder="Search books, authors or categories..."
-                autocomplete="off"
-            >
-
-        </div>
-
+        <a href="#allBooks"
+           class="hero-btn">
+            EXPLORE BOOKS
+        </a>
 
     </div>
 
 </section>
-
 
 
 <!-- =====================================================
-     CATEGORIES
+     LATEST BOOKS
 ===================================================== -->
 
-<section
-    id="categories"
-    class="categories-section"
->
+<section class="books-section" id="latest">
 
     <div class="section-heading">
 
-        <span>
-            EXPLORE
-        </span>
+        <div class="small-title">
+            Recently Added
+        </div>
 
         <h2>
-            Categories
+            Latest Books
         </h2>
+
+        <div class="heading-line"></div>
 
     </div>
 
+    <div class="books-wrapper">
 
-    <div class="categories">
-
-        <button
-            type="button"
-            class="category active"
-            data-category="All"
-        >
-            <i class="fa-solid fa-layer-group"></i>
-            All
+        <button class="carousel-arrow carousel-prev"
+                data-target="latestBooks">
+            ‹
         </button>
 
+        <div class="books-container"
+             id="latestBooks">
+        </div>
 
-        <button
-            type="button"
-            class="category"
-            data-category="Hamd"
-        >
-            <i class="fa-solid fa-moon"></i>
-            Hamd
-        </button>
-
-
-        <button
-            type="button"
-            class="category"
-            data-category="Naat"
-        >
-            <i class="fa-solid fa-star"></i>
-            Naat
-        </button>
-
-
-        <button
-            type="button"
-            class="category"
-            data-category="Manqabat"
-        >
-            <i class="fa-solid fa-heart"></i>
-            Manqabat
-        </button>
-
-
-        <button
-            type="button"
-            class="category"
-            data-category="Seerat"
-        >
-            <i class="fa-solid fa-book-open"></i>
-            Seerat
-        </button>
-
-
-        <button
-            type="button"
-            class="category"
-            data-category="Tafseer"
-        >
-            <i class="fa-solid fa-book-quran"></i>
-            Tafseer
-        </button>
-
-
-        <button
-            type="button"
-            class="category"
-            data-category="Islamic"
-        >
-            <i class="fa-solid fa-mosque"></i>
-            Islamic
+        <button class="carousel-arrow carousel-next"
+                data-target="latestBooks">
+            ›
         </button>
 
     </div>
 
 </section>
-
 
 
 <!-- =====================================================
-     LATEST BOOK
+     POPULAR BOOKS
 ===================================================== -->
 
-<section
-    id="latest"
-    class="latest-section"
->
+<section class="books-section"
+         id="popular"
+         style="background:#f8f8f8;">
 
     <div class="section-heading">
 
-        <span>
-            FEATURED
-        </span>
+        <div class="small-title">
+            Most Viewed
+        </div>
 
         <h2>
-            Latest Book
+            Popular Books
         </h2>
+
+        <div class="heading-line"></div>
 
     </div>
 
+    <div class="books-wrapper">
 
-    <div class="latest-book-wrapper">
+        <button class="carousel-arrow carousel-prev"
+                data-target="popularBooks">
+            ‹
+        </button>
 
-
-        <div class="book-image">
-
-            <img
-                src="logo.png"
-                alt="Latest Book"
-            >
-
+        <div class="books-container"
+             id="popularBooks">
         </div>
 
-
-        <div class="book-info">
-
-            <span class="latest-label">
-                LATEST RELEASE
-            </span>
-
-
-            <h2>
-                Latest Book
-            </h2>
-
-
-            <h3>
-                Author
-            </h3>
-
-
-            <p>
-                Discover our latest addition
-                to Chishti Library.
-            </p>
-
-
-            <div class="book-buttons">
-
-                <!-- JS CAN UPDATE THESE -->
-
-                <a
-                    href="#books"
-                    class="btn book-read-btn"
-                >
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    Read Book
-
-                </a>
-
-            </div>
-
-        </div>
-
+        <button class="carousel-arrow carousel-next"
+                data-target="popularBooks">
+            ›
+        </button>
 
     </div>
 
 </section>
 
+
+<!-- =====================================================
+     OLD BOOKS
+===================================================== -->
+
+<section class="books-section"
+         id="old">
+
+    <div class="section-heading">
+
+        <div class="small-title">
+            Classic Collection
+        </div>
+
+        <h2>
+            Old Books
+        </h2>
+
+        <div class="heading-line"></div>
+
+    </div>
+
+    <div class="books-wrapper">
+
+        <button class="carousel-arrow carousel-prev"
+                data-target="oldBooks">
+            ‹
+        </button>
+
+        <div class="books-container"
+             id="oldBooks">
+        </div>
+
+        <button class="carousel-arrow carousel-next"
+                data-target="oldBooks">
+            ›
+        </button>
+
+    </div>
+
+</section>
 
 
 <!-- =====================================================
      ALL BOOKS
 ===================================================== -->
 
-<section
-    id="books"
-    class="books-section"
->
-
+<section class="books-section"
+         id="allBooks"
+         style="background:#f8f8f8;">
 
     <div class="section-heading">
 
-        <span>
-            LIBRARY COLLECTION
-        </span>
+        <div class="small-title">
+            Complete Collection
+        </div>
 
         <h2>
             All Books
         </h2>
 
-        <p>
-            Browse our complete collection
-        </p>
+        <div class="heading-line"></div>
 
     </div>
 
 
+    <div class="search-area">
 
-    <!-- =================================================
-         HORIZONTAL BOOK CAROUSEL
-    ================================================= -->
+        <div class="search-box">
 
-    <div
-        id="booksContainer"
-        class="books-container"
-    >
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search books, authors or categories...">
 
-        <!-- BOOKS LOADED BY SCRIPT.JS -->
+            <button id="searchBtn">
+                SEARCH
+            </button>
+
+        </div>
 
     </div>
 
+
+    <div class="books-wrapper">
+
+        <button class="carousel-arrow carousel-prev"
+                data-target="allBooksContainer">
+            ‹
+        </button>
+
+        <div class="books-container"
+             id="allBooksContainer">
+        </div>
+
+        <button class="carousel-arrow carousel-next"
+                data-target="allBooksContainer">
+            ›
+        </button>
+
+    </div>
 
 </section>
-
 
 
 <!-- =====================================================
-     LIBRARY STATS
+     WHATSAPP
 ===================================================== -->
 
-<section class="stats-section">
+<div class="whatsapp-container">
 
-    <div class="stat-box">
+    <div class="whatsapp-contacts"
+         id="whatsappContacts">
 
-        <i class="fa-solid fa-book"></i>
+        <div class="whatsapp-title">
+            CONTACT CHISHTI LIBRARY
+        </div>
 
-        <strong id="bookCounter">
-            0
-        </strong>
 
-        <span>
-            Books
-        </span>
+        <a class="whatsapp-contact"
+           href="https://wa.me/923006674752"
+           target="_blank">
+
+            <span class="contact-name">
+                Latif Sajid Chishti
+            </span>
+
+            <span class="contact-number">
+                03006674752
+            </span>
+
+        </a>
+
+
+        <a class="whatsapp-contact"
+           href="https://wa.me/923027190715"
+           target="_blank">
+
+            <span class="contact-name">
+                Ahmed Mujtaba
+            </span>
+
+            <span class="contact-number">
+                03027190715
+            </span>
+
+        </a>
+
+
+        <a class="whatsapp-contact"
+           href="https://wa.me/923067813783"
+           target="_blank">
+
+            <span class="contact-name">
+                Hafiz Owais
+            </span>
+
+            <span class="contact-number">
+                03067813783
+            </span>
+
+        </a>
 
     </div>
 
 
-    <div class="stat-box">
+    <button class="whatsapp-main"
+            id="whatsappBtn"
+            aria-label="WhatsApp Contacts">
 
-        <i class="fa-solid fa-users"></i>
+        ☎
 
-        <strong id="visitorCounter">
-            0
-        </strong>
+    </button>
 
-        <span>
-            Visitors
-        </span>
-
-    </div>
+</div>
 
 
-    <div class="stat-box">
+<!-- =====================================================
+     SCROLL TOP
+===================================================== -->
 
-        <i class="fa-solid fa-book-open"></i>
-
-        <strong>
-            Online
-        </strong>
-
-        <span>
-            Reading
-        </span>
-
-    </div>
-
-</section>
-
+<button id="scrollTop">
+    ↑
+</button>
 
 
 <!-- =====================================================
      FOOTER
 ===================================================== -->
 
-<footer class="footer">
+<footer id="footer">
 
-    <div class="footer-container">
+    <div class="footer-grid">
 
 
-        <!-- BRAND -->
+        <div class="footer-brand">
 
-        <div class="footer-column footer-brand">
-
-            <img
-                src="logo.png"
-                alt="Chishti Library"
-            >
+            <img src="logo.png"
+                 class="footer-logo"
+                 alt="Chishti Library">
 
             <h3>
                 Chishti Library
             </h3>
 
             <p>
-                A professional digital library
-                for Islamic books and literature.
+                A professional Islamic digital library
+                providing valuable books and research
+                material for students, scholars and
+                readers.
             </p>
 
         </div>
 
-
-
-        <!-- QUICK LINKS -->
 
         <div class="footer-column">
 
@@ -518,302 +1499,81 @@
                 QUICK LINKS
             </h4>
 
-
-            <a href="index.html">
-                Home
-            </a>
-
-            <a href="#latest">
-                Latest Books
-            </a>
-
-            <a href="#books">
-                All Books
-            </a>
-
-            <a href="#categories">
-                Categories
-            </a>
-
-            <a href="about.html">
-                About Us
-            </a>
+            <a href="#home">Home</a>
+            <a href="#latest">Latest Books</a>
+            <a href="#popular">Popular Books</a>
+            <a href="#old">Old Books</a>
+            <a href="#allBooks">All Books</a>
 
         </div>
 
 
-
-        <!-- LIBRARY -->
-
         <div class="footer-column">
 
             <h4>
-                LIBRARY
+                COLLECTION
             </h4>
 
-
-            <a href="#books">
-                Books
-            </a>
-
-            <a href="#categories">
-                Categories
-            </a>
-
-            <a href="login.html">
-                Login
-            </a>
-
-            <a href="register.html">
-                Register
-            </a>
-
-            <a href="contact.html">
-                Contact
-            </a>
+            <a href="#allBooks">Hamd</a>
+            <a href="#allBooks">Naat</a>
+            <a href="#allBooks">Manqabat</a>
+            <a href="#allBooks">Seerat</a>
+            <a href="#allBooks">Islamic Books</a>
 
         </div>
 
 
-
-        <!-- SOCIAL -->
-
         <div class="footer-column">
 
             <h4>
-                STAY CONNECTED
+                CONTACT
             </h4>
-
 
             <p>
-                Follow Chishti Library
-                for new books and updates.
+                Latif Sajid Chishti<br>
+                03006674752
             </p>
 
+            <br>
 
-            <div class="footer-social">
+            <p>
+                Ahmed Mujtaba<br>
+                03027190715
+            </p>
 
-                <a
-                    href="#"
-                    aria-label="Facebook"
-                >
-                    <i class="fa-brands fa-facebook-f"></i>
-                </a>
+            <br>
 
-
-                <a
-                    href="#"
-                    aria-label="Instagram"
-                >
-                    <i class="fa-brands fa-instagram"></i>
-                </a>
-
-
-                <a
-                    href="#"
-                    aria-label="YouTube"
-                >
-                    <i class="fa-brands fa-youtube"></i>
-                </a>
-
-            </div>
+            <p>
+                Hafiz Owais<br>
+                03067813783
+            </p>
 
         </div>
-
 
     </div>
 
 
-
-    <!-- COPYRIGHT -->
-
     <div class="footer-bottom">
 
-        <p>
+        <span>
             © <span id="year"></span>
-            Chishti Library.
-            All Rights Reserved.
-        </p>
+            Chishti Library. All Rights Reserved.
+        </span>
+
+        <span>
+            Islamic Knowledge • Books • Research
+        </span>
 
     </div>
 
 </footer>
 
 
-
 <!-- =====================================================
-     SCROLL TOP
-===================================================== -->
-
-<button
-    id="scrollTop"
-    type="button"
-    aria-label="Scroll to top"
->
-
-    <i class="fa-solid fa-arrow-up"></i>
-
-</button>
-
-
-
-<!-- =====================================================
-     WHATSAPP
-===================================================== -->
-
-<div class="whatsapp-wrapper">
-
-    <button
-        type="button"
-        class="whatsapp-button"
-        aria-label="WhatsApp Contacts"
-    >
-
-        <i class="fa-brands fa-whatsapp"></i>
-
-    </button>
-
-
-    <div class="whatsapp-contacts">
-
-        <a
-            href="https://wa.me/"
-            target="_blank"
-            rel="noopener"
-        >
-            <i class="fa-brands fa-whatsapp"></i>
-            Latif Sajid
-        </a>
-
-
-        <a
-            href="https://wa.me/"
-            target="_blank"
-            rel="noopener"
-        >
-            <i class="fa-brands fa-whatsapp"></i>
-            Chishti Library
-        </a>
-
-    </div>
-
-</div>
-
-
-
-<!-- =====================================================
-     FIREBASE
-===================================================== -->
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-
-
-<!-- =====================================================
-     FIREBASE CONFIG
-     
-     IMPORTANT:
-     Apna existing Firebase config yahan rakho.
-===================================================== -->
-
-<script>
-
-    const firebaseConfig = {
-
-        apiKey: "YOUR_API_KEY",
-
-        authDomain: "YOUR_PROJECT.firebaseapp.com",
-
-        projectId: "YOUR_PROJECT_ID",
-
-        storageBucket: "YOUR_PROJECT.appspot.com",
-
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-
-        appId: "YOUR_APP_ID"
-
-    };
-
-
-    if (
-        typeof firebase !== "undefined" &&
-        !firebase.apps.length
-    ) {
-
-        firebase.initializeApp(
-            firebaseConfig
-        );
-
-    }
-
-</script>
-
-
-
-<!-- =====================================================
-     MAIN SCRIPT
+     JAVASCRIPT
 ===================================================== -->
 
 <script src="script.js"></script>
-
-
-
-<!-- =====================================================
-     DIRECT READER FIX
-     
-     Makes every generated Read button open:
-     
-     reader.html?book=BOOK_ID
-===================================================== -->
-
-<script>
-
-document.addEventListener(
-    "click",
-    function(event) {
-
-        const button =
-            event.target.closest(
-                ".book-read-btn"
-            );
-
-        if (!button) return;
-
-
-        const bookId =
-            button.dataset.bookId;
-
-        if (!bookId) return;
-
-
-        /*
-         * Stop script.js from opening
-         * the raw PDF URL.
-         */
-
-        event.preventDefault();
-
-
-        /*
-         * Open reader.html
-         * with the selected book ID.
-         */
-
-        window.location.href =
-            "reader.html?book=" +
-            encodeURIComponent(bookId);
-
-    },
-    true
-);
-
-</script>
-
-
 
 </body>
 
