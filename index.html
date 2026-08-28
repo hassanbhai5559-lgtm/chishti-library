@@ -3,60 +3,40 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Chishti Library | Digital Islamic Library</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<meta name="description"
-content="Official Chishti Library - Digital Islamic Library">
+    <meta
+        name="description"
+        content="Chishti Library - Read and explore Islamic books online."
+    >
 
-<meta name="keywords"
-content="Islamic Books, Naat, Manqabat, Hamd, Maqala, Kulliyat, Seerat">
+    <title>Chishti Library</title>
 
-<meta name="author"
-content="Chishti Library">
 
-<!-- GOOGLE SITE VERIFICATION -->
-<meta name="google-site-verification"
-content="dnI7e07V0xtGoWxgsCqJy-lDkwCFmeaiSlrK6uHToDgkc">
+    <!-- FONT AWESOME -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
-<!-- FAVICON -->
-<link rel="icon"
-type="image/png"
-href="./logo.png">
 
-<link rel="apple-touch-icon"
-href="./logo.png">
+    <!-- GOOGLE FONT -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
-<!-- GOOGLE FONTS -->
-<link rel="preconnect"
-href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
-
-<link
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-rel="stylesheet">
-
-<!-- FONT AWESOME -->
-<link
-rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-<!-- MAIN CSS -->
-<link rel="stylesheet"
-href="./style.css">
-
-<!-- =====================================================
-     READER CONFIG
-===================================================== -->
-
-<script>
-window.CHISHTI_READER_PAGE = "reader.html";
-</script>
+    <!-- YOUR CSS -->
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 
 </head>
 
@@ -65,115 +45,110 @@ window.CHISHTI_READER_PAGE = "reader.html";
 
 
 <!-- =====================================================
+     LOADER
+===================================================== -->
+
+<div id="loader">
+
+    <div class="loader-content">
+
+        <img
+            src="logo.png"
+            alt="Chishti Library"
+        >
+
+        <div class="loader-spinner"></div>
+
+        <h3>Chishti Library</h3>
+
+        <p>Loading Books...</p>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
      NAVBAR
 ===================================================== -->
 
-<nav class="navbar">
+<header class="navbar">
 
-    <div class="logo">
+    <div class="nav-container">
 
-        <a href="index.html">
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
 
             <img
-            src="logo.png"
-            alt="Chishti Library Logo">
+                src="logo.png"
+                alt="Chishti Library Logo"
+            >
+
+            <span>
+                Chishti Library
+            </span>
 
         </a>
 
-        <div class="logo-text">
-
-            <h2>CHISHTI LIBRARY</h2>
-
-            <span>Digital Library</span>
-
-        </div>
-
-    </div>
 
 
-    <ul class="menu">
+        <!-- MOBILE MENU -->
 
-        <li>
-            <a href="index.html">
-                <i class="fas fa-house"></i>
-                Home
-            </a>
-        </li>
+        <button
+            type="button"
+            class="mobile-menu"
+            aria-label="Open Menu"
+        >
 
+            <i class="fa-solid fa-bars"></i>
 
-        <li>
-            <a href="books.html">
-                <i class="fas fa-book"></i>
-                Books
-            </a>
-        </li>
+        </button>
 
 
-        <li>
-            <a href="authors.html">
-                <i class="fas fa-feather-alt"></i>
-                Authors
-            </a>
-        </li>
 
+        <!-- MENU -->
 
-        <li>
-            <a href="developer.html">
-                <i class="fas fa-code"></i>
-                Developer
-            </a>
-        </li>
-
-
-        <li>
-            <a href="contact.html">
-                <i class="fas fa-phone"></i>
-                Contact
-            </a>
-        </li>
-
-
-        <li id="loginNavItem">
+        <nav class="menu">
 
             <a
-            href="login.html"
-            id="loginNav">
-
-                <i class="fas fa-right-to-bracket"></i>
-
-                <span>Login</span>
-
+                href="index.html"
+                class="active"
+            >
+                Home
             </a>
 
-        </li>
-
-
-        <li>
-
-            <a href="admin">
-
-                <i class="fas fa-user-shield"></i>
-
-                Admin Login
-
+            <a href="#latest">
+                Latest
             </a>
 
-        </li>
+            <a href="#books">
+                All Books
+            </a>
 
-    </ul>
+            <a href="#categories">
+                Categories
+            </a>
 
+            <a href="about.html">
+                About
+            </a>
 
-    <!-- MOBILE MENU -->
+            <a href="contact.html">
+                Contact
+            </a>
 
-    <div
-    class="mobile-menu"
-    id="mobileMenu">
+        </nav>
 
-        <i class="fas fa-bars"></i>
 
     </div>
 
-</nav>
+</header>
 
 
 
@@ -183,32 +158,19 @@ window.CHISHTI_READER_PAGE = "reader.html";
 
 <section class="hero">
 
-    <div class="hero-overlay"></div>
-
-
     <div class="hero-content">
 
-
-        <img
-        src="logo.png"
-        class="hero-logo"
-        alt="Chishti Library Logo">
-
+        <span class="hero-small">
+            WELCOME TO
+        </span>
 
         <h1>
-            CHISHTI LIBRARY
+            Chishti Library
         </h1>
 
-
-        <h3>
-            Digital Islamic Library
-        </h3>
-
-
         <p>
-            Read Islamic Books, Naat, Manqabat,
-            Hamd, Maqala and Research Articles
-            by Hazrat Allama Saim Chishti.
+            Explore Islamic books, literature,
+            Seerat, Naat, Manqabat and more.
         </p>
 
 
@@ -216,51 +178,14 @@ window.CHISHTI_READER_PAGE = "reader.html";
 
         <div class="search-box">
 
-            <i class="fas fa-search"></i>
+            <i class="fa-solid fa-magnifying-glass"></i>
 
             <input
-            type="text"
-            id="searchInput"
-            placeholder="Search Books..."
-            autocomplete="off">
-
-        </div>
-
-
-        <!-- COUNTERS -->
-
-        <div class="counter-area">
-
-
-            <div class="counter-card visitors">
-
-                <i class="fas fa-eye"></i>
-
-                <h2 id="visitorCounter">
-                    0
-                </h2>
-
-                <p>
-                    Visitors
-                </p>
-
-            </div>
-
-
-            <div class="counter-card books">
-
-                <i class="fas fa-book-open"></i>
-
-                <h2 id="bookCounter">
-                    0
-                </h2>
-
-                <p>
-                    Books
-                </p>
-
-            </div>
-
+                type="search"
+                id="searchInput"
+                placeholder="Search books, authors or categories..."
+                autocomplete="off"
+            >
 
         </div>
 
@@ -272,61 +197,101 @@ window.CHISHTI_READER_PAGE = "reader.html";
 
 
 <!-- =====================================================
-     BOOK SORTING
+     CATEGORIES
 ===================================================== -->
 
-<div class="book-sorting">
+<section
+    id="categories"
+    class="categories-section"
+>
+
+    <div class="section-heading">
+
+        <span>
+            EXPLORE
+        </span>
+
+        <h2>
+            Categories
+        </h2>
+
+    </div>
 
 
-    <button
-    class="sort-btn active"
-    type="button"
-    onclick="sortBooks('latest')">
+    <div class="categories">
 
-        <i class="fas fa-clock"></i>
-
-        Latest
-
-    </button>
-
-
-    <button
-    class="sort-btn"
-    type="button"
-    onclick="sortBooks('oldest')">
-
-        <i class="fas fa-hourglass-start"></i>
-
-        Oldest
-
-    </button>
+        <button
+            type="button"
+            class="category active"
+            data-category="All"
+        >
+            <i class="fa-solid fa-layer-group"></i>
+            All
+        </button>
 
 
-    <button
-    class="sort-btn"
-    type="button"
-    onclick="sortBooks('liked')">
-
-        <i class="fas fa-heart"></i>
-
-        Most Liked
-
-    </button>
+        <button
+            type="button"
+            class="category"
+            data-category="Hamd"
+        >
+            <i class="fa-solid fa-moon"></i>
+            Hamd
+        </button>
 
 
-    <button
-    class="sort-btn"
-    type="button"
-    onclick="sortBooks('popular')">
-
-        <i class="fas fa-fire"></i>
-
-        Popular
-
-    </button>
+        <button
+            type="button"
+            class="category"
+            data-category="Naat"
+        >
+            <i class="fa-solid fa-star"></i>
+            Naat
+        </button>
 
 
-</div>
+        <button
+            type="button"
+            class="category"
+            data-category="Manqabat"
+        >
+            <i class="fa-solid fa-heart"></i>
+            Manqabat
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            data-category="Seerat"
+        >
+            <i class="fa-solid fa-book-open"></i>
+            Seerat
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            data-category="Tafseer"
+        >
+            <i class="fa-solid fa-book-quran"></i>
+            Tafseer
+        </button>
+
+
+        <button
+            type="button"
+            class="category"
+            data-category="Islamic"
+        >
+            <i class="fa-solid fa-mosque"></i>
+            Islamic
+        </button>
+
+    </div>
+
+</section>
 
 
 
@@ -334,221 +299,81 @@ window.CHISHTI_READER_PAGE = "reader.html";
      LATEST BOOK
 ===================================================== -->
 
-<section class="latest-book">
+<section
+    id="latest"
+    class="latest-section"
+>
+
+    <div class="section-heading">
+
+        <span>
+            FEATURED
+        </span>
+
+        <h2>
+            Latest Book
+        </h2>
+
+    </div>
 
 
-    <h2 class="section-title">
-        Latest Release
-    </h2>
-
-
-    <div class="latest-book-card">
+    <div class="latest-book-wrapper">
 
 
         <div class="book-image">
 
             <img
-            src="shaheed-ibn-e-shaheed-cover.png"
-            alt="Shaheed Ibn-e-Shaheed"
-            onerror="this.src='logo.png'">
+                src="logo.png"
+                alt="Latest Book"
+            >
 
         </div>
 
 
         <div class="book-info">
 
-
-            <span class="badge">
-                NEW RELEASE
+            <span class="latest-label">
+                LATEST RELEASE
             </span>
 
 
             <h2>
-                Shaheed Ibn-e-Shaheed
+                Latest Book
             </h2>
 
 
             <h3>
-                Hazrat Allama Saim Chishti
+                Author
             </h3>
 
 
             <p>
-                A beautiful Islamic book based on
-                the martyrs of Karbala.
+                Discover our latest addition
+                to Chishti Library.
             </p>
 
 
             <div class="book-buttons">
 
-
-                <!-- CONNECTED TO READER -->
-
-                <a
-                href="reader.html?book=shaheed-ibn-e-shaheed"
-                class="btn read-book"
-                data-book-id="shaheed-ibn-e-shaheed">
-
-                    <i class="fas fa-book-open"></i>
-
-                    Read Online
-
-                </a>
-
-
-                <!-- PDF -->
+                <!-- JS CAN UPDATE THESE -->
 
                 <a
-                href="shaheed-ibn-e-shaheed.pdf"
-                class="btn"
-                download>
+                    href="#books"
+                    class="btn book-read-btn"
+                >
 
-                    <i class="fas fa-download"></i>
+                    <i class="fa-solid fa-book-open"></i>
 
-                    Download PDF
+                    Read Book
 
                 </a>
-
 
             </div>
-
 
         </div>
 
 
     </div>
-
-
-</section>
-
-
-
-<!-- =====================================================
-     LIBRARY BANNER
-===================================================== -->
-
-<section class="library-banner">
-
-    <div class="banner-overlay"></div>
-
-
-    <div class="banner-content">
-
-
-        <img
-        src="logo.png"
-        class="banner-logo"
-        alt="Chishti Library">
-
-
-        <h1>
-            CHISHTI LIBRARY
-        </h1>
-
-
-        <h3>
-            CHISHTI LIBRARY 2026
-        </h3>
-
-
-        <p>
-            World Class Digital Islamic Library
-        </p>
-
-
-    </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     BOOK CATEGORIES
-===================================================== -->
-
-<section class="categories">
-
-
-    <h2 class="section-title">
-        Browse Categories
-    </h2>
-
-
-    <div class="category-grid">
-
-
-        <button
-        class="category active"
-        type="button"
-        onclick="filterBooks('All')">
-
-            ALL
-
-        </button>
-
-
-        <button
-        class="category"
-        type="button"
-        onclick="filterBooks('Naat')">
-
-            NAAT
-
-        </button>
-
-
-        <button
-        class="category"
-        type="button"
-        onclick="filterBooks('Manqabat')">
-
-            MANQABAT
-
-        </button>
-
-
-        <button
-        class="category"
-        type="button"
-        onclick="filterBooks('Hamd')">
-
-            HAMD
-
-        </button>
-
-
-        <button
-        class="category"
-        type="button"
-        onclick="filterBooks('Maqala')">
-
-            MAQALA
-
-        </button>
-
-
-        <button
-        class="category"
-        type="button"
-        onclick="filterBooks('Seerat')">
-
-            SEERAT
-
-        </button>
-
-
-        <button
-        class="category"
-        type="button"
-        onclick="filterBooks('Kulliyat')">
-
-            KULLIYAT
-
-        </button>
-
-
-    </div>
-
 
 </section>
 
@@ -558,241 +383,40 @@ window.CHISHTI_READER_PAGE = "reader.html";
      ALL BOOKS
 ===================================================== -->
 
-<section class="featured-books">
-
-
-    <h2 class="section-title">
-        All Books
-    </h2>
-
-
-    <div
-    id="booksContainer">
-
-        <!-- Firebase books will load here -->
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =====================================================
-     AUTHORS
-===================================================== -->
-
 <section
-class="authors"
-id="authors">
+    id="books"
+    class="books-section"
+>
 
 
-    <div class="container">
+    <div class="section-heading">
 
+        <span>
+            LIBRARY COLLECTION
+        </span>
 
-        <h2 class="section-title">
-            Chishti Library Authors
+        <h2>
+            All Books
         </h2>
 
-
-        <p class="section-subtitle">
-            Meet the scholars and writers of Chishti Library.
+        <p>
+            Browse our complete collection
         </p>
 
+    </div>
 
-        <div class="author-grid">
 
 
-            <!-- AUTHOR 1 -->
+    <!-- =================================================
+         HORIZONTAL BOOK CAROUSEL
+    ================================================= -->
 
-            <div class="author-card">
+    <div
+        id="booksContainer"
+        class="books-container"
+    >
 
-
-                <img
-                src="hazrat allama saim chishti.jfif"
-                alt="Hazrat Allama Saim Chishti">
-
-
-                <h2>
-                    Hazrat Allama Saim Chishti
-                </h2>
-
-
-                <h3>
-                    حضرت علامہ صائم چشتی
-                </h3>
-
-
-                <p>
-                    Islamic Scholar, Naat Writer,
-                    Researcher, Author and Founder
-                    of numerous literary works.
-                </p>
-
-
-                <div class="author-social">
-
-                    <a href="#">
-                        <i class="fas fa-book-open"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-user"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- AUTHOR 2 -->
-
-            <div class="author-card">
-
-
-                <img
-                src="latif sajid chishti.jpeg"
-                alt="Latif Sajid Chishti">
-
-
-                <h2>
-                    Latif Sajid Chishti
-                </h2>
-
-
-                <h3>
-                    لطیف ساجد چشتی
-                </h3>
-
-
-                <p>
-                    Islamic Writer, Researcher and
-                    Digital Library Contributor.
-                </p>
-
-
-                <div class="author-social">
-
-                    <a href="#">
-                        <i class="fas fa-book-open"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-user"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- AUTHOR 3 -->
-
-            <div class="author-card">
-
-
-                <img
-                src="shafiq mujhid chishti.png"
-                alt="Shafiq Mujahid Chishti">
-
-
-                <h2>
-                    Shafiq Mujahid Chishti
-                </h2>
-
-
-                <h3>
-                    شفیق مجاہد چشتی
-                </h3>
-
-
-                <p>
-                    Islamic Scholar, Researcher,
-                    Writer and Contributor.
-                </p>
-
-
-                <div class="author-social">
-
-                    <a href="#">
-                        <i class="fas fa-book-open"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-user"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- AUTHOR 4 -->
-
-            <div class="author-card">
-
-
-                <img
-                src="touseef haider chishti.jpg"
-                alt="Touseef Haider Chishti">
-
-
-                <h2>
-                    Touseef Haider
-                </h2>
-
-
-                <h3>
-                    توصیف حیدر چشتی
-                </h3>
-
-
-                <p>
-                    Islamic Researcher, Writer and
-                    Digital Contributor of Chishti Library.
-                </p>
-
-
-                <div class="author-social">
-
-                    <a href="#">
-                        <i class="fas fa-book-open"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-user"></i>
-                    </a>
-
-                    <a href="#">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
+        <!-- BOOKS LOADED BY SCRIPT.JS -->
 
     </div>
 
@@ -802,63 +426,54 @@ id="authors">
 
 
 <!-- =====================================================
-     CONTACT
+     LIBRARY STATS
 ===================================================== -->
 
-<section
-class="contact"
-id="contact">
+<section class="stats-section">
 
+    <div class="stat-box">
 
-    <div class="container">
+        <i class="fa-solid fa-book"></i>
 
+        <strong id="bookCounter">
+            0
+        </strong>
 
-        <h2 class="section-title">
-            Contact Us
-        </h2>
-
-
-        <div class="contact-grid">
-
-
-            <div class="contact-card">
-
-                <i class="fas fa-phone"></i>
-
-                <span>
-                    03067813783
-                </span>
-
-            </div>
-
-
-            <div class="contact-card">
-
-                <i class="fas fa-phone"></i>
-
-                <span>
-                    03006674752
-                </span>
-
-            </div>
-
-
-            <div class="contact-card">
-
-                <i class="fas fa-phone"></i>
-
-                <span>
-                    03027190715
-                </span>
-
-            </div>
-
-
-        </div>
-
+        <span>
+            Books
+        </span>
 
     </div>
 
+
+    <div class="stat-box">
+
+        <i class="fa-solid fa-users"></i>
+
+        <strong id="visitorCounter">
+            0
+        </strong>
+
+        <span>
+            Visitors
+        </span>
+
+    </div>
+
+
+    <div class="stat-box">
+
+        <i class="fa-solid fa-book-open"></i>
+
+        <strong>
+            Online
+        </strong>
+
+        <span>
+            Reading
+        </span>
+
+    </div>
 
 </section>
 
@@ -868,113 +483,226 @@ id="contact">
      FOOTER
 ===================================================== -->
 
-<footer>
+<footer class="footer">
+
+    <div class="footer-container">
 
 
-    <div class="footer-logo">
+        <!-- BRAND -->
+
+        <div class="footer-column footer-brand">
+
+            <img
+                src="logo.png"
+                alt="Chishti Library"
+            >
+
+            <h3>
+                Chishti Library
+            </h3>
+
+            <p>
+                A professional digital library
+                for Islamic books and literature.
+            </p>
+
+        </div>
 
 
-        <img
-        src="logo.png"
-        alt="Chishti Library">
+
+        <!-- QUICK LINKS -->
+
+        <div class="footer-column">
+
+            <h4>
+                QUICK LINKS
+            </h4>
 
 
-        <h2>
-            CHISHTI LIBRARY
-        </h2>
+            <a href="index.html">
+                Home
+            </a>
 
+            <a href="#latest">
+                Latest Books
+            </a>
+
+            <a href="#books">
+                All Books
+            </a>
+
+            <a href="#categories">
+                Categories
+            </a>
+
+            <a href="about.html">
+                About Us
+            </a>
+
+        </div>
+
+
+
+        <!-- LIBRARY -->
+
+        <div class="footer-column">
+
+            <h4>
+                LIBRARY
+            </h4>
+
+
+            <a href="#books">
+                Books
+            </a>
+
+            <a href="#categories">
+                Categories
+            </a>
+
+            <a href="login.html">
+                Login
+            </a>
+
+            <a href="register.html">
+                Register
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+        </div>
+
+
+
+        <!-- SOCIAL -->
+
+        <div class="footer-column">
+
+            <h4>
+                STAY CONNECTED
+            </h4>
+
+
+            <p>
+                Follow Chishti Library
+                for new books and updates.
+            </p>
+
+
+            <div class="footer-social">
+
+                <a
+                    href="#"
+                    aria-label="Facebook"
+                >
+                    <i class="fa-brands fa-facebook-f"></i>
+                </a>
+
+
+                <a
+                    href="#"
+                    aria-label="Instagram"
+                >
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+
+
+                <a
+                    href="#"
+                    aria-label="YouTube"
+                >
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- COPYRIGHT -->
+
+    <div class="footer-bottom">
 
         <p>
-            Digital Islamic Library
+            © <span id="year"></span>
+            Chishti Library.
+            All Rights Reserved.
         </p>
 
-
     </div>
-
-
-
-    <div class="footer-social">
-
-
-        <a
-        href="https://www.facebook.com/profile.php?id=100063724950961"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Facebook">
-
-            <i class="fab fa-facebook-f"></i>
-
-            <span>
-                Facebook
-            </span>
-
-        </a>
-
-
-
-        <a
-        href="https://www.youtube.com/@Saimtv5"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="YouTube">
-
-            <i class="fab fa-youtube"></i>
-
-            <span>
-                YouTube
-            </span>
-
-        </a>
-
-
-
-        <a
-        href="https://www.facebook.com/saimchishtiofficial"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Saim Chishti Official">
-
-            <i class="fab fa-facebook-f"></i>
-
-            <span>
-                Saim Chishti Official
-            </span>
-
-        </a>
-
-
-    </div>
-
-
-
-    <div class="footer-copy">
-
-        © 2026 Chishti Library — All Rights Reserved.
-
-    </div>
-
 
 </footer>
 
 
 
 <!-- =====================================================
-     SCROLL TO TOP
+     SCROLL TOP
 ===================================================== -->
 
 <button
-id="scrollTop"
-type="button"
-aria-label="Scroll to top">
+    id="scrollTop"
+    type="button"
+    aria-label="Scroll to top"
+>
 
-    <i class="fas fa-arrow-up"></i>
+    <i class="fa-solid fa-arrow-up"></i>
 
 </button>
 
 
 
 <!-- =====================================================
-     FIREBASE SDK
+     WHATSAPP
+===================================================== -->
+
+<div class="whatsapp-wrapper">
+
+    <button
+        type="button"
+        class="whatsapp-button"
+        aria-label="WhatsApp Contacts"
+    >
+
+        <i class="fa-brands fa-whatsapp"></i>
+
+    </button>
+
+
+    <div class="whatsapp-contacts">
+
+        <a
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener"
+        >
+            <i class="fa-brands fa-whatsapp"></i>
+            Latif Sajid
+        </a>
+
+
+        <a
+            href="https://wa.me/"
+            target="_blank"
+            rel="noopener"
+        >
+            <i class="fa-brands fa-whatsapp"></i>
+            Chishti Library
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     FIREBASE
 ===================================================== -->
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -987,370 +715,105 @@ aria-label="Scroll to top">
 
 <!-- =====================================================
      FIREBASE CONFIG
-===================================================== -->
-
-<script src="./firebase.js"></script>
-
-
-
-<!-- =====================================================
-     MAIN WEBSITE JS
-===================================================== -->
-
-<script src="./script.js"></script>
-
-
-
-<!-- =====================================================
-     READER LINK SAFETY / DYNAMIC BOOK LINKS
+     
+     IMPORTANT:
+     Apna existing Firebase config yahan rakho.
 ===================================================== -->
 
 <script>
 
-(function () {
+    const firebaseConfig = {
 
-    "use strict";
+        apiKey: "YOUR_API_KEY",
 
+        authDomain: "YOUR_PROJECT.firebaseapp.com",
 
-    /*
-    -------------------------------------------------------
-    Dynamic Firebase book cards ke Read button ko
-    reader.html se connect karta hai.
-    -------------------------------------------------------
-    */
+        projectId: "YOUR_PROJECT_ID",
 
-    function connectReaderLinks() {
+        storageBucket: "YOUR_PROJECT.appspot.com",
 
-        const readerPage =
-            window.CHISHTI_READER_PAGE ||
-            "reader.html";
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
 
+        appId: "YOUR_APP_ID"
 
-        document
-            .querySelectorAll(
-                "#booksContainer .book-result"
-            )
-            .forEach(function (card) {
-
-
-                /*
-                Agar script ne already reader link
-                bana diya hai to dobara change nahi karna.
-                */
-
-                const existing =
-                    card.querySelector(
-                        'a[data-reader-link="true"]'
-                    );
-
-
-                if (existing) {
-                    return;
-                }
-
-
-                /*
-                Book ID detect
-                */
-
-                const bookId =
-                    card.dataset.bookId ||
-                    card.getAttribute("data-id");
-
-
-                if (!bookId) {
-                    return;
-                }
-
-
-                /*
-                Existing PDF link
-                */
-
-                const links =
-                    card.querySelectorAll("a");
-
-
-                links.forEach(function (link) {
-
-                    const text =
-                        link.textContent
-                            .trim()
-                            .toLowerCase();
-
-
-                    if (
-                        text.includes("read") ||
-                        text.includes("view")
-                    ) {
-
-                        link.href =
-                            readerPage +
-                            "?book=" +
-                            encodeURIComponent(bookId);
-
-                        link.removeAttribute(
-                            "target"
-                        );
-
-                        link.dataset.readerLink =
-                            "true";
-
-                    }
-
-                });
-
-            });
-
-    }
-
-
-    /*
-    -------------------------------------------------------
-    MutationObserver
-    Firebase books jab dynamically load hon
-    tab bhi links automatically connect honge.
-    -------------------------------------------------------
-    */
-
-    const observer =
-        new MutationObserver(
-            function () {
-
-                connectReaderLinks();
-
-            }
-        );
-
-
-    const container =
-        document.getElementById(
-            "booksContainer"
-        );
-
-
-    if (container) {
-
-        observer.observe(
-            container,
-            {
-                childList: true,
-                subtree: true
-            }
-        );
-
-    }
-
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        connectReaderLinks
-    );
-
-
-    setTimeout(
-        connectReaderLinks,
-        500
-    );
-
-
-    setTimeout(
-        connectReaderLinks,
-        1500
-    );
-
-
-})();
-
-</script>
-
-
-
-<!-- =====================================================
-     MOBILE NAV
-===================================================== -->
-
-<script>
-
-(function () {
-
-    const mobileMenu =
-        document.getElementById(
-            "mobileMenu"
-        );
-
-    const menu =
-        document.querySelector(
-            ".menu"
-        );
+    };
 
 
     if (
-        mobileMenu &&
-        menu
+        typeof firebase !== "undefined" &&
+        !firebase.apps.length
     ) {
 
-        mobileMenu.addEventListener(
-            "click",
-            function () {
-
-                menu.classList.toggle(
-                    "active"
-                );
-
-            }
+        firebase.initializeApp(
+            firebaseConfig
         );
 
     }
 
-})();
+</script>
+
+
+
+<!-- =====================================================
+     MAIN SCRIPT
+===================================================== -->
+
+<script src="script.js"></script>
+
+
+
+<!-- =====================================================
+     DIRECT READER FIX
+     
+     Makes every generated Read button open:
+     
+     reader.html?book=BOOK_ID
+===================================================== -->
+
+<script>
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const button =
+            event.target.closest(
+                ".book-read-btn"
+            );
+
+        if (!button) return;
+
+
+        const bookId =
+            button.dataset.bookId;
+
+        if (!bookId) return;
+
+
+        /*
+         * Stop script.js from opening
+         * the raw PDF URL.
+         */
+
+        event.preventDefault();
+
+
+        /*
+         * Open reader.html
+         * with the selected book ID.
+         */
+
+        window.location.href =
+            "reader.html?book=" +
+            encodeURIComponent(bookId);
+
+    },
+    true
+);
 
 </script>
 
-<!-- =========================================================
-     CHISHTI BOOK ACTIONS
-     LIKE / COMMENT / SHARE
-     ========================================================= -->
 
-<div class="book-actions">
-
-    <!-- LIKE -->
-    <button
-        type="button"
-        class="like-book"
-        data-book-id=""
-        aria-label="Like this book"
-    >
-        <i class="fa-regular fa-heart"></i>
-        <span>0</span>
-    </button>
-
-
-    <!-- COMMENT -->
-    <button
-        type="button"
-        class="comment-book"
-        data-book-id=""
-        aria-label="Comments"
-    >
-        <i class="fa-regular fa-comment"></i>
-        <span>0</span>
-    </button>
-
-
-    <!-- SHARE -->
-    <button
-        type="button"
-        class="share-book"
-        aria-label="Share this book"
-    >
-        <i class="fa-solid fa-share-nodes"></i>
-        <span>Share</span>
-    </button>
-
-</div>
-
-
-<!-- =========================================================
-     SHARE POPUP
-     ========================================================= -->
-
-<div
-    id="sharePopup"
-    class="share-popup"
-    aria-hidden="true"
->
-
-    <div class="share-panel">
-
-        <button
-            type="button"
-            class="share-close"
-            onclick="closeSharePopup()"
-        >
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-
-        <h3>Share Book</h3>
-
-        <p>Share this book with others</p>
-
-
-        <div class="share-options">
-
-            <button
-                type="button"
-                class="share-option"
-                data-share="whatsapp"
-            >
-                <i class="fa-brands fa-whatsapp"></i>
-                WhatsApp
-            </button>
-
-
-            <button
-                type="button"
-                class="share-option"
-                data-share="facebook"
-            >
-                <i class="fa-brands fa-facebook"></i>
-                Facebook
-            </button>
-
-
-            <button
-                type="button"
-                class="share-option"
-                data-share="telegram"
-            >
-                <i class="fa-brands fa-telegram"></i>
-                Telegram
-            </button>
-
-
-            <button
-                type="button"
-                class="share-option"
-                data-share="copy"
-            >
-                <i class="fa-solid fa-link"></i>
-                Copy Link
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
-     LIKE / REACTION GIF ANIMATION
-     ========================================================= -->
-
-<div
-    id="reactionAnimation"
-    class="reaction-animation"
-    aria-hidden="true"
->
-    <div class="reaction-heart">❤️</div>
-    <div class="reaction-sparkle">✨</div>
-    <div class="reaction-sparkle">💖</div>
-    <div class="reaction-sparkle">✨</div>
-</div>
-
-
-<!-- =========================================================
-     COMMENT GIF / REACTION OVERLAY
-     ========================================================= -->
-
-<div
-    id="commentReaction"
-    class="comment-reaction-animation"
-    aria-hidden="true"
->
-    💬
-</div>
 
 </body>
 
