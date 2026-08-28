@@ -13,6 +13,19 @@
 
     <title>Chishti Library</title>
 
+
+<!-- GOOGLE SITE VERIFICATION -->
+<meta name="google-site-verification"
+content="dnI7e07V0xtGoWxgsCqJy-lDkwCFmeaiSlrK6uHToDgkc">
+
+<!-- FAVICON -->
+<link rel="icon"
+type="image/png"
+href="./logo.png">
+
+<link rel="apple-touch-icon"
+href="./logo.png">
+    
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -186,62 +199,57 @@
            NAVBAR
         ===================================================== */
 
-        nav {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+       
+          <nav class="navbar">
+    <div class="nav-container">
 
-            margin-top: 14px;
+        <!-- LOGO -->
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="Chishti Library">
+        </a>
 
-            border-top: 1px solid #eeeeee;
-        }
+        <!-- NAVIGATION -->
+        <div class="menu">
 
-        .menu {
-            list-style: none;
+            <a href="index.html">
+                <i class="fa-solid fa-house"></i>
+                Home
+            </a>
 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            <a href="books.html">
+                <i class="fa-solid fa-book"></i>
+                Books
+            </a>
 
-            gap: 42px;
+            <a href="author.html">
+                <i class="fa-solid fa-user-pen"></i>
+                Author
+            </a>
 
-            padding: 14px 0;
-        }
+            <a href="contact.html">
+                <i class="fa-solid fa-envelope"></i>
+                Contact
+            </a>
 
-        .menu a {
-            position: relative;
+            <a href="developer.html">
+                <i class="fa-solid fa-code"></i>
+                Developer
+            </a>
 
-            font-size: 13px;
-            font-weight: 700;
-            color: #111111;
+            <a href="login.html" class="login-nav">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                Login
+            </a>
 
-            transition: .25s ease;
-        }
+        </div>
 
-        .menu a::after {
-            content: "";
+        <!-- MOBILE MENU -->
+        <button class="mobile-menu" type="button">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-            position: absolute;
-            left: 50%;
-            bottom: -8px;
-
-            width: 0;
-            height: 2px;
-
-            background: var(--gold);
-
-            transform: translateX(-50%);
-            transition: .25s ease;
-        }
-
-        .menu a:hover {
-            color: var(--gold);
-        }
-
-        .menu a:hover::after {
-            width: 100%;
-        }
+    </div>
+</nav>
 
 
         /* =====================================================
