@@ -1,228 +1,56 @@
-/*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
-PART 1
-Foundation + Books Loader
-=========================================*/
+/* =========================================================
+   CHISHTI LIBRARY
+   FINAL SCRIPT.JS
+   CHATBOT REMOVED
+   DIRECT PDF READER
+   1 SECOND BOOK CAROUSEL
+========================================================= */
 
-/*=========================
-PREMIUM LOADER
-=========================*/
+"use strict";
 
-window.addEventListener("load", () => {
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+let allBooks = [];
+
+let searchResults = [];
+
+let carouselTimers = {};
+
+let carouselPositions = {};
+
+
+/* =========================================================
+   PAGE LOAD
+========================================================= */
+
+window.addEventListener("load", function () {
 
     const loader = document.getElementById("loader");
 
-    setTimeout(() => {
+    setTimeout(function () {
 
-        if (loader) {
+        if (!loader) return;
 
-            loader.style.opacity = "0";
-            loader.style.visibility = "hidden";
+        loader.style.opacity = "0";
+        loader.style.visibility = "hidden";
 
-            setTimeout(() => {
+        setTimeout(function () {
 
-                loader.remove();
+            loader.remove();
 
-            }, 800);
+        }, 700);
 
-        }
-
-    }, 2500);
+    }, 1200);
 
 });
 
-/*=========================
-MOBILE MENU
-=========================*/
 
-const menuBtn = document.querySelector(".mobile-menu");
-const menu = document.querySelector(".menu");
-
-if (menuBtn && menu) {
-
-    menuBtn.addEventListener("click", () => {
-
-        menu.classList.toggle("show");
-
-    });
-
-}
-
-/*=========================
-SCROLL TO TOP
-=========================*/
-
-const scrollBtn = document.getElementById("scrollTop");
-
-window.addEventListener("scroll", () => {
-
-    if (!scrollBtn) return;
-
-    scrollBtn.style.display =
-        window.scrollY > 300 ? "block" : "none";
-
-});
-
-if (scrollBtn) {
-
-    scrollBtn.onclick = () => {
-
-        window.scrollTo({
-
-            top: 0,
-            behavior: "smooth"
-
-        });
-
-    };
-
-}
-
-/*=========================
-  VISITOR COUNTER
-=========================*/
-
-async function updateVisitorCounter() {
-
-    const visitorCounter =
-        document.getElementById("visitorCounter");
-
-    if (!visitorCounter) return;
-
-    try {
-
-        const visitorRef =
-            db.collection("counter").doc("visitors");
-
-
-        /* =========================
-           GET CURRENT DOCUMENT
-        ========================= */
-
-        const snapshot =
-            await visitorRef.get();
-
-
-        /* =========================
-           CREATE DOCUMENT IF MISSING
-        ========================= */
-
-        if (!snapshot.exists) {
-
-            await visitorRef.set({
-                count: 1
-            });
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-            visitorCounter.innerText = "1";
-
-            return;
-        }
-
-
-        /* =========================
-           CHECK THIS SESSION
-        ========================= */
-
-        const alreadyCounted =
-            sessionStorage.getItem(
-                "chishtiVisitorCounted"
-            );
-
-
-        /* =========================
-           NEW VISITOR
-        ========================= */
-
-        if (!alreadyCounted) {
-
-            await visitorRef.update({
-
-                count:
-                    firebase.firestore.FieldValue.increment(1)
-
-            });
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-        }
-
-
-        /* =========================
-           GET UPDATED COUNT
-        ========================= */
-
-        const latestSnapshot =
-            await visitorRef.get();
-
-
-        const visitors =
-            Number(
-                latestSnapshot.data().count
-            ) || 0;
-
-
-        /* =========================
-           ANIMATION
-        ========================= */
-
-        let current = 0;
-
-        const animation =
-            setInterval(function () {
-
-                current++;
-
-                visitorCounter.innerText =
-                    current;
-
-                if (current >= visitors) {
-
-                    clearInterval(animation);
-
-                }
-
-            }, 25);
-
-
-    } catch (error) {
-
-        console.error(
-            "Visitor counter error:",
-            error
-        );
-
-        visitorCounter.innerText = "0";
-
-    }
-
-}
-
-
-/* =========================
-   START COUNTER
-========================= */
-
-updateVisitorCounter();
-
-/*=========================
-GLOBAL VARIABLES
-=========================*/
-
-let allBooks = [];
-let filteredBooks = [];
-
-/*=========================
-LOAD BOOKS.JSON
-=========================*/
+/* =========================================================
+   LOAD BOOKS.JSON
+========================================================= */
 
 async function loadBooks() {
 
@@ -238,1147 +66,1392 @@ async function loadBooks() {
 
         allBooks = await response.json();
 
-        filteredBooks = [...allBooks];
+        searchResults = [...allBooks];
 
-        /* Book Counter */
 
-        const bookCounter = document.getElementById("bookCounter");
+        console.log(
+            "✅ Books Loaded:",
+            allBooks.length
+        );
 
-        if (bookCounter) {
 
-            let count = 0;
+        renderAllSections();
 
-            const total = allBooks.length;
 
-            const animation = setInterval(() => {
+    } catch (error) {
 
-                count++;
+        console.error(
+            "❌ Books Loading Error:",
+            error
+        );
 
-                bookCounter.innerText = count;
-
-                if (count >= total) {
-
-                    clearInterval(animation);
-
-                }
-
-            }, 120);
-
-        }
-
-        if (typeof displayBooks === "function") {
-
-            displayBooks(filteredBooks);
-
-        }
-
-        if (typeof latestBook === "function") {
-
-            latestBook();
-
-        }
-
-        console.log("✅ Books Loaded Successfully");
-
-    }
-
-    catch (err) {
-
-        console.error(err);
+        showBooksError();
 
     }
 
 }
 
-loadBooks();
 
-/*=========================
-UTILITY
-=========================*/
+/* =========================================================
+   RENDER ALL SECTIONS
+========================================================= */
 
-function byId(id) {
+function renderAllSections() {
 
-    return document.getElementById(id);
+    renderBooks(
+        allBooks,
+        "allBooksContainer"
+    );
+
+
+    const latest = allBooks.filter(function (book) {
+
+        return book.latest === true;
+
+    });
+
+
+    const popular = [...allBooks]
+        .sort(function (a, b) {
+
+            return (
+                Number(b.views || 0) -
+                Number(a.views || 0)
+            );
+
+        })
+        .slice(0, Math.max(8, Math.min(allBooks.length, 12)));
+
+
+    const oldBooks = allBooks.filter(function (book) {
+
+        return book.old === true;
+
+    });
+
+
+    renderBooks(
+        latest.length ? latest : allBooks.slice(0, 12),
+        "latestBooks"
+    );
+
+
+    renderBooks(
+        popular,
+        "popularBooks"
+    );
+
+
+    renderBooks(
+        oldBooks.length ? oldBooks : allBooks.slice(-12),
+        "oldBooks"
+    );
+
+
+    startAllCarousels();
 
 }
 
-console.log("✅ Script Part 1 Loaded");
 
-/*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
-PART 2
-DISPLAY BOOKS + SEARCH + FILTER
-=========================================*/
+/* =========================================================
+   RENDER BOOKS
+========================================================= */
 
-function displayBooks(books) {
+function renderBooks(books, containerId) {
 
-    const container = document.getElementById("booksContainer");
+    const container =
+        document.getElementById(containerId);
 
     if (!container) return;
 
+
     container.innerHTML = "";
 
-    if (books.length === 0) {
+
+    if (!books || books.length === 0) {
 
         container.innerHTML = `
-        <div class="no-books">
-            <h2>No Books Found</h2>
-            <p>Try another search.</p>
-        </div>
+
+            <div class="no-books">
+
+                <h3>
+                    No Books Found
+                </h3>
+
+                <p>
+                    Books will appear here soon.
+                </p>
+
+            </div>
+
         `;
 
         return;
+
     }
 
-    books.forEach(book => {
 
-        container.innerHTML += `
+    books.forEach(function (book, index) {
 
-        <div class="book-card">
+        const card =
+            createBookCard(book, index);
 
-            <img src="${book.cover}"
-                 alt="${book.title}"
-                 loading="lazy">
+        container.insertAdjacentHTML(
+            "beforeend",
+            card
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   CREATE BOOK CARD
+========================================================= */
+
+function createBookCard(book, index) {
+
+    const title =
+        escapeHTML(book.title || "Untitled Book");
+
+
+    const author =
+        escapeHTML(book.author || "Unknown Author");
+
+
+    const category =
+        escapeHTML(book.category || "Islamic Book");
+
+
+    const description =
+        escapeHTML(
+            book.description ||
+            "Islamic knowledge and valuable reading material."
+        );
+
+
+    const cover =
+        book.cover ||
+        "logo.png";
+
+
+    const pdf =
+        book.pdf ||
+        "#";
+
+
+    const likes =
+        getBookCounter(
+            book,
+            "likes"
+        );
+
+
+    const views =
+        getBookCounter(
+            book,
+            "views"
+        );
+
+
+    const downloads =
+        getBookCounter(
+            book,
+            "downloads"
+        );
+
+
+    const shares =
+        getBookCounter(
+            book,
+            "shares"
+        );
+
+
+    return `
+
+        <article
+            class="book-card"
+            data-book-index="${index}">
+
+            <div class="book-cover">
+
+                <span class="book-category">
+                    ${category}
+                </span>
+
+                <img
+                    src="${cover}"
+                    alt="${title}"
+                    loading="lazy"
+                    onerror="this.src='logo.png';">
+
+            </div>
+
 
             <div class="book-content">
 
-                <span class="book-category">
-                    ${book.category}
-                </span>
+                <h3>
+                    ${title}
+                </h3>
 
-                <h2>${book.title}</h2>
 
-                <h3>${book.author}</h3>
+                <div class="book-author">
+                    ${author}
+                </div>
 
-                <p>${book.description}</p>
 
-                <div class="book-meta">
+                <p class="book-description">
+                    ${description}
+                </p>
 
-                    <span>👁 ${book.views || 0}</span>
 
-                    <span>❤️ ${book.likes || 0}</span>
+                <div class="book-stats">
 
-                    <span>⬇ ${book.downloads || 0}</span>
+                    <button
+                        class="stat-btn like-btn"
+                        data-action="like"
+                        data-pdf="${escapeAttribute(pdf)}"
+                        title="Like">
+
+                        ❤️
+                        <span class="like-count">
+                            ${likes}
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="stat-btn share-btn"
+                        data-action="share"
+                        data-title="${escapeAttribute(title)}"
+                        data-pdf="${escapeAttribute(pdf)}"
+                        title="Share">
+
+                        🔗
+                        <span class="share-count">
+                            ${shares}
+                        </span>
+
+                    </button>
+
+
+                    <span class="stat-btn">
+
+                        👁
+                        <span>
+                            ${views}
+                        </span>
+
+                    </span>
+
+
+                    <span class="stat-btn">
+
+                        ⬇
+                        <span>
+                            ${downloads}
+                        </span>
+
+                    </span>
 
                 </div>
 
-                <div class="book-buttons">
 
-                    <a href="reader.html?book=${encodeURIComponent(book.pdf)}"
-                       class="btn">
-                        📖 Read Online
+                <div class="book-actions">
+
+                    <!-- DIRECT PDF -->
+                    <a
+                        href="${pdf}"
+                        target="_blank"
+                        rel="noopener"
+                        class="book-btn read-btn"
+                        data-action="read"
+                        data-pdf="${escapeAttribute(pdf)}">
+
+                        📖 READ ONLINE
+
                     </a>
 
-                    <a href="${book.pdf}"
-                       download
-                       class="btn">
-                        ⬇ Download
+
+                    <!-- DIRECT DOWNLOAD -->
+                    <a
+                        href="${pdf}"
+                        download
+                        class="book-btn download-btn"
+                        data-action="download"
+                        data-pdf="${escapeAttribute(pdf)}">
+
+                        ⬇ DOWNLOAD
+
                     </a>
 
                 </div>
 
             </div>
 
-        </div>
+        </article>
+
+    `;
+
+}
+
+
+/* =========================================================
+   COUNTER
+========================================================= */
+
+function getBookCounter(book, type) {
+
+    const pdf =
+        book.pdf || book.title || "book";
+
+
+    const key =
+        "chishti_" +
+        type +
+        "_" +
+        btoa(unescape(encodeURIComponent(pdf)))
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .substring(0, 80);
+
+
+    const stored =
+        Number(
+            localStorage.getItem(key)
+        );
+
+
+    if (stored > 0) {
+
+        return stored;
+
+    }
+
+
+    return Number(book[type] || 0);
+
+}
+
+
+/* =========================================================
+   INCREMENT COUNTER
+========================================================= */
+
+function incrementBookCounter(
+    pdf,
+    type,
+    amount = 1
+) {
+
+    if (!pdf) return 0;
+
+
+    const safeKey =
+        btoa(unescape(encodeURIComponent(pdf)))
+            .replace(/[^a-zA-Z0-9]/g, "")
+            .substring(0, 80);
+
+
+    const key =
+        "chishti_" +
+        type +
+        "_" +
+        safeKey;
+
+
+    let current =
+        Number(
+            localStorage.getItem(key)
+        ) || 0;
+
+
+    current += amount;
+
+
+    localStorage.setItem(
+        key,
+        current
+    );
+
+
+    return current;
+
+}
+
+
+/* =========================================================
+   FIND BOOK CARD
+========================================================= */
+
+function getBookFromPDF(pdf) {
+
+    return allBooks.find(function (book) {
+
+        return book.pdf === pdf;
+
+    });
+
+}
+
+
+/* =========================================================
+   LIKE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(".like-btn");
+
+        if (!button) return;
+
+
+        const pdf =
+            button.dataset.pdf;
+
+
+        const alreadyLiked =
+            localStorage.getItem(
+                "liked_" + pdf
+            );
+
+
+        if (alreadyLiked) {
+
+            return;
+
+        }
+
+
+        localStorage.setItem(
+            "liked_" + pdf,
+            "true"
+        );
+
+
+        const newCount =
+            incrementBookCounter(
+                pdf,
+                "likes"
+            );
+
+
+        const count =
+            button.querySelector(
+                ".like-count"
+            );
+
+
+        if (count) {
+
+            count.textContent =
+                newCount;
+
+        }
+
+
+        button.style.transform =
+            "scale(1.15)";
+
+
+        setTimeout(function () {
+
+            button.style.transform =
+                "scale(1)";
+
+        }, 180);
+
+    }
+);
+
+
+/* =========================================================
+   SHARE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    async function (event) {
+
+        const button =
+            event.target.closest(".share-btn");
+
+        if (!button) return;
+
+
+        const pdf =
+            button.dataset.pdf;
+
+
+        const title =
+            button.dataset.title ||
+            "Chishti Library Book";
+
+
+        const shareURL =
+            new URL(
+                pdf,
+                window.location.href
+            ).href;
+
+
+        try {
+
+            if (
+                navigator.share
+            ) {
+
+                await navigator.share({
+
+                    title: title,
+
+                    text:
+                        "Read this book from Chishti Library",
+
+                    url: shareURL
+
+                });
+
+            } else {
+
+                await navigator.clipboard.writeText(
+                    shareURL
+                );
+
+                alert(
+                    "Book link copied!"
+                );
+
+            }
+
+
+            const newCount =
+                incrementBookCounter(
+                    pdf,
+                    "shares"
+                );
+
+
+            const count =
+                button.querySelector(
+                    ".share-count"
+                );
+
+
+            if (count) {
+
+                count.textContent =
+                    newCount;
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.log(
+                "Share cancelled."
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   VIEW / READ COUNTER
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                ".read-btn"
+            );
+
+        if (!button) return;
+
+
+        const pdf =
+            button.dataset.pdf;
+
+
+        incrementBookCounter(
+            pdf,
+            "views"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   DOWNLOAD COUNTER
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                ".download-btn"
+            );
+
+        if (!button) return;
+
+
+        const pdf =
+            button.dataset.pdf;
+
+
+        incrementBookCounter(
+            pdf,
+            "downloads"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
+
+
+const searchBtn =
+    document.getElementById(
+        "searchBtn"
+    );
+
+
+function performSearch() {
+
+    if (!searchInput) return;
+
+
+    const query =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+
+    if (!query) {
+
+        searchResults =
+            [...allBooks];
+
+    }
+
+    else {
+
+        searchResults =
+            allBooks.filter(
+                function (book) {
+
+                    return (
+
+                        String(
+                            book.title || ""
+                        )
+                            .toLowerCase()
+                            .includes(query)
+
+                        ||
+
+                        String(
+                            book.author || ""
+                        )
+                            .toLowerCase()
+                            .includes(query)
+
+                        ||
+
+                        String(
+                            book.category || ""
+                        )
+                            .toLowerCase()
+                            .includes(query)
+
+                        ||
+
+                        String(
+                            book.language || ""
+                        )
+                            .toLowerCase()
+                            .includes(query)
+
+                    );
+
+                }
+            );
+
+    }
+
+
+    renderBooks(
+        searchResults,
+        "allBooksContainer"
+    );
+
+
+    stopCarousel(
+        "allBooksContainer"
+    );
+
+
+    startCarousel(
+        "allBooksContainer"
+    );
+
+}
+
+
+if (searchBtn) {
+
+    searchBtn.addEventListener(
+        "click",
+        performSearch
+    );
+
+}
+
+
+if (searchInput) {
+
+    searchInput.addEventListener(
+        "input",
+        performSearch
+    );
+
+}
+
+
+/* =========================================================
+   CAROUSEL
+   ONE BOOK = ONE SECOND
+========================================================= */
+
+function getBookMoveAmount(container) {
+
+    const card =
+        container.querySelector(
+            ".book-card"
+        );
+
+
+    if (!card) {
+
+        return 300;
+
+    }
+
+
+    const styles =
+        window.getComputedStyle(
+            container
+        );
+
+
+    const gap =
+        parseFloat(
+            styles.columnGap ||
+            styles.gap ||
+            24
+        );
+
+
+    return (
+        card.getBoundingClientRect().width +
+        gap
+    );
+
+}
+
+
+/* =========================================================
+   START CAROUSEL
+========================================================= */
+
+function startCarousel(containerId) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) return;
+
+
+    stopCarousel(containerId);
+
+
+    if (
+        container.children.length <= 4
+    ) {
+
+        return;
+
+    }
+
+
+    carouselPositions[
+        containerId
+    ] = 0;
+
+
+    carouselTimers[
+        containerId
+    ] = setInterval(
+        function () {
+
+            moveCarousel(
+                containerId,
+                1
+            );
+
+        },
+        1000
+    );
+
+
+    container.addEventListener(
+        "mouseenter",
+        function () {
+
+            stopCarousel(
+                containerId
+            );
+
+        },
+        {
+            once: false
+        }
+    );
+
+
+    container.addEventListener(
+        "mouseleave",
+        function () {
+
+            startCarousel(
+                containerId
+            );
+
+        },
+        {
+            once: false
+        }
+    );
+
+}
+
+
+/* =========================================================
+   MOVE CAROUSEL
+========================================================= */
+
+function moveCarousel(
+    containerId,
+    direction
+) {
+
+    const container =
+        document.getElementById(
+            containerId
+        );
+
+
+    if (!container) return;
+
+
+    const cards =
+        container.querySelectorAll(
+            ".book-card"
+        );
+
+
+    if (cards.length <= 4) return;
+
+
+    const moveAmount =
+        getBookMoveAmount(
+            container
+        );
+
+
+    const maxPosition =
+        cards.length - 4;
+
+
+    let position =
+        carouselPositions[
+            containerId
+        ] || 0;
+
+
+    position += direction;
+
+
+    if (
+        position > maxPosition
+    ) {
+
+        position = 0;
+
+    }
+
+
+    if (position < 0) {
+
+        position = maxPosition;
+
+    }
+
+
+    carouselPositions[
+        containerId
+    ] = position;
+
+
+    container.scrollTo({
+
+        left:
+            position *
+            moveAmount,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* =========================================================
+   STOP CAROUSEL
+========================================================= */
+
+function stopCarousel(containerId) {
+
+    if (
+        carouselTimers[
+            containerId
+        ]
+    ) {
+
+        clearInterval(
+            carouselTimers[
+                containerId
+            ]
+        );
+
+
+        carouselTimers[
+            containerId
+        ] = null;
+
+    }
+
+}
+
+
+/* =========================================================
+   START ALL CAROUSELS
+========================================================= */
+
+function startAllCarousels() {
+
+    [
+        "latestBooks",
+        "popularBooks",
+        "oldBooks",
+        "allBooksContainer"
+
+    ].forEach(function (id) {
+
+        startCarousel(id);
+
+    });
+
+}
+
+
+/* =========================================================
+   ARROW BUTTONS
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const button =
+            event.target.closest(
+                ".carousel-arrow"
+            );
+
+
+        if (!button) return;
+
+
+        const target =
+            button.dataset.target;
+
+
+        stopCarousel(target);
+
+
+        if (
+            button.classList.contains(
+                "carousel-next"
+            )
+        ) {
+
+            moveCarousel(
+                target,
+                1
+            );
+
+        }
+
+        else {
+
+            moveCarousel(
+                target,
+                -1
+            );
+
+        }
+
+
+        setTimeout(
+            function () {
+
+                startCarousel(
+                    target
+                );
+
+            },
+            1800
+        );
+
+    }
+);
+
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+const whatsappBtn =
+    document.getElementById(
+        "whatsappBtn"
+    );
+
+
+const whatsappContacts =
+    document.getElementById(
+        "whatsappContacts"
+    );
+
+
+if (whatsappBtn) {
+
+    whatsappBtn.addEventListener(
+        "click",
+        function (event) {
+
+            event.stopPropagation();
+
+
+            whatsappContacts.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        if (
+            whatsappContacts &&
+            !event.target.closest(
+                ".whatsapp-container"
+            )
+        ) {
+
+            whatsappContacts.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SCROLL TOP
+========================================================= */
+
+const scrollTop =
+    document.getElementById(
+        "scrollTop"
+    );
+
+
+window.addEventListener(
+    "scroll",
+    function () {
+
+        if (!scrollTop) return;
+
+
+        if (
+            window.scrollY > 350
+        ) {
+
+            scrollTop.style.display =
+                "block";
+
+        }
+
+        else {
+
+            scrollTop.style.display =
+                "none";
+
+        }
+
+    }
+);
+
+
+if (scrollTop) {
+
+    scrollTop.addEventListener(
+        "click",
+        function () {
+
+            window.scrollTo({
+
+                top: 0,
+
+                behavior: "smooth"
+
+            });
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   YEAR
+========================================================= */
+
+const year =
+    document.getElementById(
+        "year"
+    );
+
+
+if (year) {
+
+    year.textContent =
+        new Date().getFullYear();
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE ATTRIBUTE
+========================================================= */
+
+function escapeAttribute(value) {
+
+    return String(value || "")
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   BOOK ERROR
+========================================================= */
+
+function showBooksError() {
+
+    [
+        "latestBooks",
+        "popularBooks",
+        "oldBooks",
+        "allBooksContainer"
+
+    ].forEach(function (id) {
+
+        const container =
+            document.getElementById(id);
+
+
+        if (!container) return;
+
+
+        container.innerHTML = `
+
+            <div class="no-books">
+
+                <h3>
+                    Books Could Not Be Loaded
+                </h3>
+
+                <p>
+                    Please make sure
+                    <b>books.json</b>
+                    is uploaded correctly.
+                </p>
+
+            </div>
 
         `;
 
     });
 
 }
-/*=========================
-LIVE SEARCH
-=========================*/
-
-function searchBooks() {
-
-    const input = document.getElementById("searchInput");
-
-    if (!input) return;
-
-    const value = input.value.toLowerCase().trim();
-
-    filteredBooks = allBooks.filter(book =>
-
-        (book.title || "").toLowerCase().includes(value) ||
-
-        (book.author || "").toLowerCase().includes(value) ||
-
-        (book.category || "").toLowerCase().includes(value) ||
-
-        (book.language || "").toLowerCase().includes(value)
-
-    );
-
-    displayBooks(filteredBooks);
-
-}
-
-/*=========================
-CATEGORY FILTER
-=========================*/
-
-function filterBooks(category, button = null) {
-
-    document.querySelectorAll(".category").forEach(btn => {
-
-        btn.classList.remove("active");
-
-    });
-
-    if (button) {
-
-        button.classList.add("active");
-
-    }
-
-    if (category === "All") {
-
-        filteredBooks = [...allBooks];
-
-    } else {
-
-        filteredBooks = allBooks.filter(book =>
-
-            book.category === category
-
-        );
-
-    }
-
-    displayBooks(filteredBooks);
-
-}
-
-/*=========================
-LATEST BOOK
-=========================*/
-
-function latestBook() {
-
-    const latest = allBooks.find(book => book.latest === true);
-
-    if (!latest) return;
-
-    const image = document.querySelector(".book-image img");
-    const title = document.querySelector(".book-info h2");
-    const author = document.querySelector(".book-info h3");
-    const desc = document.querySelector(".book-info p");
-
-    const buttons = document.querySelectorAll(".book-buttons a");
-
-    if (image) image.src = latest.cover;
-    if (title) title.innerText = latest.title;
-    if (author) author.innerText = latest.author;
-    if (desc) desc.innerText = latest.description;
-
-    if (buttons.length >= 2) {
-
-        buttons[0].href = latest.pdf;
-        buttons[0].target = "_blank";
-
-        buttons[1].href = latest.pdf;
-
-    }
-
-}
-
-console.log("✅ Script Part 2 Loaded");
-
-/*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
-PART 3
-AI CHATBOT
-=========================================*/
-
-let knowledge = [];
-
-/*=========================
-LOAD KNOWLEDGE
-=========================*/
-
-async function loadKnowledge() {
-
-    try {
-
-        const response = await fetch("knowledge.json");
-
-        if (!response.ok) {
-
-            throw new Error("knowledge.json not found");
-
-        }
-
-        knowledge = await response.json();
-
-        console.log("✅ Knowledge Loaded");
-
-    }
-
-    catch (err) {
-
-        console.log(err);
-
-    }
-
-}
-
-loadKnowledge();
-
-/*=========================
-CHAT ELEMENTS
-=========================*/
-
-const chatBtn = document.getElementById("chatBtn");
-const chatWindow = document.getElementById("chatWindow");
-const closeChat = document.getElementById("closeChat");
-const chatInput = document.getElementById("chatInput");
-const chatMessages = document.getElementById("chatMessages");
-
-/*=========================
-OPEN CHAT
-=========================*/
-
-if (chatBtn) {
-
-    chatBtn.onclick = () => {
-
-        chatWindow.style.display = "flex";
-
-    };
-
-}
-
-/*=========================
-CLOSE CHAT
-=========================*/
-
-if (closeChat) {
-
-    closeChat.onclick = () => {
-
-        chatWindow.style.display = "none";
-
-    };
-
-}
-
-/*=========================
-ENTER KEY
-=========================*/
-
-if (chatInput) {
-
-    chatInput.addEventListener("keypress", (e) => {
-
-        if (e.key === "Enter") {
-
-            sendMessage();
-
-        }
-
-    });
-
-}
-
-/*=========================
-SEARCH BOOK
-=========================*/
-
-function searchBook(question) {
-
-    const q = question.toLowerCase();
-
-    for (const book of allBooks) {
-
-        if (
-            (book.title || "").toLowerCase().includes(q) ||
-            (book.category || "").toLowerCase().includes(q)
-        ) {
-
-            return `
-
-📚 <b>${book.title}</b><br>
-
-👤 ${book.author}<br>
-
-📂 ${book.category}<br><br>
-
-<a href="reader.html?book=${encodeURIComponent(book.pdf)}" class="btn">
-📖 Read Online
-</a>
-
-&nbsp;
-
-<a href="${book.pdf}" download class="btn">
-⬇ Download
-</a>
-
-`;
-
-        }
-
-    }
-
-    return null;
-}
-
-/*=========================
-SEARCH KNOWLEDGE
-=========================*/
-
-function searchKnowledge(question) {
-
-    const q = question.toLowerCase();
-
-    for (const item of knowledge) {
-
-        if (
-
-            (item.question || "").toLowerCase().includes(q)
-
-        ) {
-
-            return item.answer;
-
-        }
-
-    }
-
-    return null;
-
-}
-
-/*=========================
-BOT MESSAGE
-=========================*/
-
-function botReply(text) {
-
-    chatMessages.innerHTML += `
-
-<div class="bot-message">
-
-${text}
-
-</div>
-
-`;
-
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-}
-
-/*=========================
-USER MESSAGE
-=========================*/
-
-function userReply(text) {
-
-    chatMessages.innerHTML += `
-
-<div class="user-message">
-
-${text}
-
-</div>
-
-`;
-
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-
-}
-
-/*=========================
-SEND MESSAGE
-=========================*/
-
-function sendMessage() {
-
-    const question = chatInput.value.trim();
-
-    if (question === "") return;
-
-    userReply(question);
-
-    chatInput.value = "";
-
-    setTimeout(() => {
-
-        let reply = searchBook(question);
-
-        if (!reply) {
-
-            reply = searchKnowledge(question);
-
-        }
-
-        if (!reply) {
-
-            reply = `
-
-🤖 Sorry!
-
-Mujhe iska jawab abhi database me nahi mila.
-
-`;
-
-        }
-
-        botReply(reply);
-
-    }, 500);
-
-}
-
-console.log("✅ Script Part 3 Loaded");
-
-/*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
-PART 4
-FINAL PREMIUM
-=========================================*/
-
-/*=========================
-SCROLL ANIMATION
-=========================*/
-
-const sections = document.querySelectorAll("section");
-
-const observer = new IntersectionObserver((entries) => {
-
-    entries.forEach(entry => {
-
-        if (entry.isIntersecting) {
-
-            entry.target.classList.add("show-section");
-
-        }
-
-    });
-
-}, {
-
-    threshold: 0.15
-
-});
-
-sections.forEach(section => {
-
-    observer.observe(section);
-
-});
-
-/*=========================
-BOOK CARD HOVER
-=========================*/
-
-document.addEventListener("mouseover", (e) => {
-
-    const card = e.target.closest(".book-card");
-
-    if (card) {
-
-        card.style.transform = "translateY(-10px)";
-        card.style.transition = ".35s";
-
-    }
-
-});
-
-document.addEventListener("mouseout", (e) => {
-
-    const card = e.target.closest(".book-card");
-
-    if (card) {
-
-        card.style.transform = "translateY(0px)";
-
-    }
-
-});
-
-/*=========================
-DOWNLOAD COUNTER
-=========================*/
-
-document.addEventListener("click", (e) => {
-
-    const btn = e.target.closest("a");
-
-    if (!btn) return;
-
-    if (btn.hasAttribute("download")) {
-
-        let total = Number(localStorage.getItem("downloads")) || 0;
-
-        total++;
-
-        localStorage.setItem("downloads", total);
-
-    }
-
-});
-
-/*=========================
-READ COUNTER
-=========================*/
-
-document.addEventListener("click", (e) => {
-
-    const btn = e.target.closest("a");
-
-    if (!btn) return;
-
-    if (
-
-        btn.href.includes(".pdf") &&
-
-        !btn.hasAttribute("download")
-
-    ) {
-
-        let total = Number(localStorage.getItem("reads")) || 0;
-
-        total++;
-
-        localStorage.setItem("reads", total);
-
-    }
-
-});
-
-/*=========================
-BUTTON RIPPLE
-=========================*/
-
-document.addEventListener("click", (e) => {
-
-    const btn = e.target.closest(".btn");
-
-    if (!btn) return;
-
-    const ripple = document.createElement("span");
-
-    ripple.className = "ripple";
-
-    ripple.style.left = e.offsetX + "px";
-
-    ripple.style.top = e.offsetY + "px";
-
-    btn.appendChild(ripple);
-
-    setTimeout(() => {
-
-        ripple.remove();
-
-    }, 600);
-
-});
-
-/*=========================
-NAVBAR SHADOW
-=========================*/
-
-window.addEventListener("scroll", () => {
-
-    const nav = document.querySelector(".navbar");
-
-    if (!nav) return;
-
-    if (window.scrollY > 40) {
-
-        nav.classList.add("nav-shadow");
-
-    }
-
-    else {
-
-        nav.classList.remove("nav-shadow");
-
-    }
-
-});
-
-/*=========================
-AUTO YEAR
-=========================*/
-
-const year = document.getElementById("year");
-
-if (year) {
-
-    year.innerText = new Date().getFullYear();
-
-}
-
-/*=========================
-IMAGE FALLBACK
-=========================*/
-
-document.querySelectorAll("img").forEach(img => {
-
-    img.onerror = function () {
-
-        this.src = "logo.png";
-
-    };
-
-});
-
-/*=========================
-PRELOAD BOOK COVERS
-=========================*/
-
-window.addEventListener("load", () => {
-
-    if (!Array.isArray(allBooks)) return;
-
-    allBooks.forEach(book => {
-
-        const image = new Image();
-
-        image.src = book.cover;
-
-    });
-
-});
-
-/*=========================
-SMOOTH ANCHOR LINKS
-=========================*/
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-    anchor.addEventListener("click", function (e) {
-
-        e.preventDefault();
-
-        const target = document.querySelector(this.getAttribute("href"));
-
-        if (target) {
-
-            target.scrollIntoView({
-
-                behavior: "smooth"
-
-            });
-
-        }
-
-    });
-
-});
-
-/*=========================
-CONSOLE
-=========================*/
-
-console.log("====================================");
-
-console.log("📚 CHISHTI LIBRARY");
-
-console.log("Version : 1.0");
-
-console.log("Developer : Ali Hassan");
-
-console.log("====================================");
-
-console.log("✅ Loader");
-
-console.log("✅ Navbar");
-
-console.log("✅ Search");
-
-console.log("✅ Categories");
-
-console.log("✅ Books");
-
-console.log("✅ AI");
-
-console.log("✅ Reader");
-
-console.log("✅ Downloads");
-
-console.log("✅ Responsive");
-
-console.log("🚀 Production Ready");
-
 
 
 /* =========================================================
-   CHISHTI LIBRARY
-   4 BOOKS SLIDING CAROUSEL
-   ONE BOOK MOVES AT A TIME
+   DIRECT PDF CHECK
 ========================================================= */
 
-(function () {
+function checkAlRehmanPDF() {
 
-    "use strict";
+    const expectedPDF =
+        "Al%20Rehman%20..%20Latif%20Sajid.C.pdf";
 
-    let carouselTimer = null;
-    let currentPosition = 0;
-    let carouselReady = false;
 
+    const book =
+        allBooks.find(
+            function (item) {
 
-    function setupFourBookCarousel() {
-
-        const container =
-            document.getElementById("booksContainer");
-
-        if (!container) return;
-
-
-        const cards =
-            container.querySelectorAll(".book-card");
-
-
-        if (cards.length <= 4) return;
-
-
-        /* Stop old timer */
-        if (carouselTimer) {
-
-            clearInterval(carouselTimer);
-            carouselTimer = null;
-
-        }
-
-
-        currentPosition = 0;
-
-
-        /* Make sure we start from first book */
-        container.scrollLeft = 0;
-
-
-        /* Start automatic movement */
-        carouselTimer = setInterval(function () {
-
-            const card =
-                container.querySelector(".book-card");
-
-            if (!card) return;
-
-
-            const gap = 28;
-
-            const moveAmount =
-                card.offsetWidth + gap;
-
-
-            currentPosition++;
-
-
-            /*
-             * Move exactly ONE book
-             */
-            container.scrollTo({
-
-                left:
-                    currentPosition *
-                    moveAmount,
-
-                behavior: "smooth"
-
-            });
-
-
-            /*
-             * When the last group is reached,
-             * start again from Book 1.
-             */
-
-            const maxPosition =
-                cards.length - 4;
-
-
-            if (
-                currentPosition >=
-                maxPosition
-            ) {
-
-                setTimeout(function () {
-
-                    currentPosition = 0;
-
-                    container.scrollTo({
-
-                        left: 0,
-
-                        behavior: "smooth"
-
-                    });
-
-                }, 1800);
-
-            }
-
-        }, 3000);
-
-
-        carouselReady = true;
-
-    }
-
-
-    /*
-     * Wait until books.json has loaded
-     */
-
-    function startWhenReady() {
-
-        const container =
-            document.getElementById(
-                "booksContainer"
-            );
-
-        if (!container) {
-
-            setTimeout(
-                startWhenReady,
-                500
-            );
-
-            return;
-
-        }
-
-
-        const cards =
-            container.querySelectorAll(
-                ".book-card"
-            );
-
-
-        if (cards.length === 0) {
-
-            setTimeout(
-                startWhenReady,
-                500
-            );
-
-            return;
-
-        }
-
-
-        setupFourBookCarousel();
-
-    }
-
-
-    /*
-     * Start after page load
-     */
-
-    if (
-        document.readyState ===
-        "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-
-                setTimeout(
-                    startWhenReady,
-                    1000
+                return String(
+                    item.pdf || ""
+                ).includes(
+                    "Al%20Rehman"
                 );
 
             }
         );
 
-    } else {
 
-        setTimeout(
-            startWhenReady,
-            1000
+    if (book) {
+
+        console.log(
+            "✅ Al-Rehman PDF:",
+            book.pdf
         );
 
     }
 
-
-    /*
-     * Restart after search/category filter
-     */
-
-    window.restartFourBookCarousel =
-        function () {
-
-            if (carouselTimer) {
-
-                clearInterval(
-                    carouselTimer
-                );
-
-                carouselTimer = null;
-
-            }
-
-            currentPosition = 0;
-
-            setTimeout(
-                setupFourBookCarousel,
-                300
-            );
-
-        };
+}
 
 
-})();
-(function () {
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
-    "use strict";
-
-    let animationFrame = null;
-    let paused = false;
-
-    function startBookCarousel() {
-
-        const container =
-            document.getElementById("booksContainer");
-
-        if (!container) return;
-
-        if (animationFrame) {
-            cancelAnimationFrame(animationFrame);
-        }
-
-        if (
-            container.scrollWidth <=
-            container.clientWidth
-        ) {
-            return;
-        }
-
-        function animate() {
-
-            if (!paused) {
-
-                container.scrollLeft += 0.35;
-
-                if (
-                    container.scrollLeft +
-                    container.clientWidth >=
-                    container.scrollWidth - 2
-                ) {
-
-                    container.scrollLeft = 0;
-
-                }
-
-            }
-
-            animationFrame =
-                requestAnimationFrame(animate);
-
-        }
-
-        animationFrame =
-            requestAnimationFrame(animate);
-    }
+loadBooks();
 
 
-    function setupBookCarousel() {
+console.log(
+    "======================================"
+);
 
-        const container =
-            document.getElementById("booksContainer");
+console.log(
+    "📚 CHISHTI LIBRARY"
+);
 
-        if (!container) return;
+console.log(
+    "✅ Chatbot Removed"
+);
 
-        if (
-            container.dataset.carouselReady === "true"
-        ) {
-            startBookCarousel();
-            return;
-        }
+console.log(
+    "✅ Direct PDF Reader"
+);
 
-        container.dataset.carouselReady = "true";
+console.log(
+    "✅ 1 Second Carousel"
+);
 
+console.log(
+    "✅ Latest / Popular / Old"
+);
 
-        container.addEventListener(
-            "mouseenter",
-            function () {
-                paused = true;
-            }
-        );
+console.log(
+    "✅ Like / Share / View / Download"
+);
 
+console.log(
+    "✅ WhatsApp Contacts"
+);
 
-        container.addEventListener(
-            "mouseleave",
-            function () {
-                paused = false;
-            }
-        );
-
-
-        container.addEventListener(
-            "touchstart",
-            function () {
-                paused = true;
-            },
-            { passive: true }
-        );
-
-
-        container.addEventListener(
-            "touchend",
-            function () {
-
-                setTimeout(
-                    function () {
-                        paused = false;
-                    },
-                    1000
-                );
-
-            },
-            { passive: true }
-        );
-
-
-        startBookCarousel();
-    }
-
-
-    function bootCarousel() {
-
-        setTimeout(
-            setupBookCarousel,
-            1000
-        );
-
-    }
-
-
-    if (
-        document.readyState === "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            bootCarousel
-        );
-
-    } else {
-
-        bootCarousel();
-
-    }
-
-
-    window.restartBookCarousel =
-        function () {
-
-            setTimeout(
-                setupBookCarousel,
-                200
-            );
-
-        };
-
-})();
+console.log(
+    "======================================"
+);
