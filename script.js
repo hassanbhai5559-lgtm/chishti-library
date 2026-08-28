@@ -2106,97 +2106,127 @@ console.log("🚀 Production Ready");
 
 
 })();
-
 /* =========================================================
    CHISHTI LIBRARY
-   SAFE HORIZONTAL BOOK CAROUSEL
-   ADD THIS AT THE VERY END OF SCRIPT.JS
+   4 BOOKS SLIDING CAROUSEL
+   ONE BOOK MOVES AT A TIME
 ========================================================= */
 
 (function () {
 
     "use strict";
 
-    let animationFrame = null;
-    let paused = false;
-    let initializedContainer = null;
+    let carouselTimer = null;
+    let currentPosition = 0;
+    let carouselReady = false;
 
 
-    function startBookCarousel() {
+    function setupFourBookCarousel() {
 
         const container =
             document.getElementById("booksContainer");
 
-        if (!container) {
-            return;
-        }
+        if (!container) return;
 
 
-        /* Stop previous animation */
-        if (animationFrame) {
-
-            cancelAnimationFrame(
-                animationFrame
-            );
-
-            animationFrame = null;
-
-        }
+        const cards =
+            container.querySelectorAll(".book-card");
 
 
-        /* If there are not enough books, do nothing */
-        if (
-            container.scrollWidth <=
-            container.clientWidth
-        ) {
+        if (cards.length <= 4) return;
 
-            return;
+
+        /* Stop old timer */
+        if (carouselTimer) {
+
+            clearInterval(carouselTimer);
+            carouselTimer = null;
 
         }
 
 
-        function animate() {
-
-            if (!paused) {
-
-                container.scrollLeft += 0.35;
+        currentPosition = 0;
 
 
-                /*
-                 * Safely return to beginning
-                 * when reaching the end.
-                 */
+        /* Make sure we start from first book */
+        container.scrollLeft = 0;
 
-                if (
-                    container.scrollLeft +
-                    container.clientWidth >=
-                    container.scrollWidth - 2
-                ) {
 
-                    container.scrollLeft = 0;
+        /* Start automatic movement */
+        carouselTimer = setInterval(function () {
 
-                }
+            const card =
+                container.querySelector(".book-card");
+
+            if (!card) return;
+
+
+            const gap = 28;
+
+            const moveAmount =
+                card.offsetWidth + gap;
+
+
+            currentPosition++;
+
+
+            /*
+             * Move exactly ONE book
+             */
+            container.scrollTo({
+
+                left:
+                    currentPosition *
+                    moveAmount,
+
+                behavior: "smooth"
+
+            });
+
+
+            /*
+             * When the last group is reached,
+             * start again from Book 1.
+             */
+
+            const maxPosition =
+                cards.length - 4;
+
+
+            if (
+                currentPosition >=
+                maxPosition
+            ) {
+
+                setTimeout(function () {
+
+                    currentPosition = 0;
+
+                    container.scrollTo({
+
+                        left: 0,
+
+                        behavior: "smooth"
+
+                    });
+
+                }, 1800);
 
             }
 
-
-            animationFrame =
-                requestAnimationFrame(
-                    animate
-                );
-
-        }
+        }, 3000);
 
 
-        animationFrame =
-            requestAnimationFrame(
-                animate
-            );
+        carouselReady = true;
 
     }
 
 
-    function setupBookCarousel() {
+    /*
+     * Wait until books.json has loaded
+     */
+
+    function startWhenReady() {
 
         const container =
             document.getElementById(
@@ -2204,108 +2234,43 @@ console.log("🚀 Production Ready");
             );
 
         if (!container) {
-            return;
-        }
 
-
-        /*
-         * Do not add mouse/touch events
-         * more than once.
-         */
-
-        if (
-            initializedContainer ===
-            container
-        ) {
-
-            startBookCarousel();
+            setTimeout(
+                startWhenReady,
+                500
+            );
 
             return;
 
         }
 
 
-        initializedContainer =
-            container;
+        const cards =
+            container.querySelectorAll(
+                ".book-card"
+            );
 
 
-        /* Desktop pause */
-        container.addEventListener(
-            "mouseenter",
-            function () {
+        if (cards.length === 0) {
 
-                paused = true;
+            setTimeout(
+                startWhenReady,
+                500
+            );
 
-            }
-        );
+            return;
 
-
-        container.addEventListener(
-            "mouseleave",
-            function () {
-
-                paused = false;
-
-            }
-        );
+        }
 
 
-        /* Mobile touch pause */
-        container.addEventListener(
-            "touchstart",
-            function () {
-
-                paused = true;
-
-            },
-            {
-                passive: true
-            }
-        );
-
-
-        container.addEventListener(
-            "touchend",
-            function () {
-
-                setTimeout(
-                    function () {
-
-                        paused = false;
-
-                    },
-                    1000
-                );
-
-            },
-            {
-                passive: true
-            }
-        );
-
-
-        startBookCarousel();
+        setupFourBookCarousel();
 
     }
 
 
     /*
-     * Start after page loads.
+     * Start after page load
      */
-
-    function bootCarousel() {
-
-        setTimeout(
-            function () {
-
-                setupBookCarousel();
-
-            },
-            1200
-        );
-
-    }
-
 
     if (
         document.readyState ===
@@ -2314,32 +2279,48 @@ console.log("🚀 Production Ready");
 
         document.addEventListener(
             "DOMContentLoaded",
-            bootCarousel
+            function () {
+
+                setTimeout(
+                    startWhenReady,
+                    1000
+                );
+
+            }
         );
 
     } else {
 
-        bootCarousel();
+        setTimeout(
+            startWhenReady,
+            1000
+        );
 
     }
 
 
     /*
-     * Make function available globally.
-     * This lets us restart it after
-     * search/category rendering.
+     * Restart after search/category filter
      */
 
-    window.restartBookCarousel =
+    window.restartFourBookCarousel =
         function () {
 
+            if (carouselTimer) {
+
+                clearInterval(
+                    carouselTimer
+                );
+
+                carouselTimer = null;
+
+            }
+
+            currentPosition = 0;
+
             setTimeout(
-                function () {
-
-                    setupBookCarousel();
-
-                },
-                150
+                setupFourBookCarousel,
+                300
             );
 
         };
