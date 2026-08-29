@@ -1721,3 +1721,439 @@ input:focus-visible {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--gold);
 }
+/* =========================================================
+   CHISHTI LIBRARY
+   ALL BOOKS — FIXED PROFESSIONAL GRID
+========================================================= */
+
+#booksContainer {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 25px;
+    align-items: stretch;
+}
+
+/* ALL BOOK CARD */
+
+#booksContainer .book-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+
+    padding: 15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #171717,
+            #100000
+        );
+
+    border: 1px solid rgba(201, 162, 39, 0.18);
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.35);
+
+    overflow: hidden;
+
+    /* IMPORTANT: no automatic movement */
+    transform: none !important;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* NO MOVING ALL BOOKS */
+
+#booksContainer .book-card:hover {
+    transform: none !important;
+
+    border-color: var(--gold);
+
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+
+/* BOOK COVER */
+
+#booksContainer .book-card > img,
+#booksContainer .book-card .book-cover {
+    width: 100%;
+    height: 285px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    border-radius: 9px;
+}
+
+/* If JS uses direct IMG */
+
+#booksContainer .book-card > img {
+    object-fit: cover;
+
+    background: #090909;
+}
+
+
+/* If wrapper exists */
+
+#booksContainer .book-cover img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 9px;
+}
+
+
+/* BOOK CONTENT */
+
+#booksContainer .book-content {
+    display: flex;
+    flex-direction: column;
+
+    flex: 1;
+
+    min-height: 0;
+
+    padding-top: 12px;
+}
+
+
+/* CATEGORY */
+
+#booksContainer .book-category {
+    display: inline-block;
+
+    width: fit-content;
+
+    color: var(--gold);
+
+    font-size: 10px;
+    font-weight: 600;
+
+    margin-bottom: 6px;
+}
+
+
+/* TITLE */
+
+#booksContainer .book-content h2 {
+    color: white;
+
+    font-size: 15px;
+    line-height: 1.4;
+
+    min-height: 42px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* AUTHOR */
+
+#booksContainer .book-content h3 {
+    color: var(--gold-light);
+
+    font-size: 11px;
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    min-height: 16px;
+
+    margin-top: 5px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* DESCRIPTION */
+
+#booksContainer .book-content > p {
+    color: #999;
+
+    font-size: 10px;
+    line-height: 1.6;
+
+    margin-top: 8px;
+
+    min-height: 48px;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   BOOK META
+========================================================= */
+
+#booksContainer .book-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 30px;
+
+    margin-top: 10px;
+    padding: 6px 7px;
+
+    background: #0b0b0b;
+
+    border: 1px solid rgba(201, 162, 39, 0.12);
+    border-radius: 7px;
+
+    color: #aaa;
+
+    font-size: 9px;
+}
+
+#booksContainer .book-meta span {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    white-space: nowrap;
+}
+
+#booksContainer .book-meta span:nth-child(1) i {
+    color: #aaa;
+}
+
+#booksContainer .book-meta span:nth-child(2) i {
+    color: var(--gold);
+}
+
+#booksContainer .book-meta span:nth-child(3) i {
+    color: var(--gold-light);
+}
+
+
+/* =========================================================
+   LIKE / VIEW / SHARE BAR
+========================================================= */
+
+#booksContainer .chishti-book-actions {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 37px;
+
+    margin: 9px 0 0;
+    padding: 4px;
+
+    background: #090909;
+
+    border: 1px solid rgba(201, 162, 39, 0.14);
+    border-radius: 8px;
+
+    gap: 3px;
+}
+
+#booksContainer .book-action {
+    flex: 1;
+
+    min-width: 0;
+    min-height: 29px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 3px;
+
+    border: 0;
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #aaa;
+
+    font-size: 9px;
+}
+
+#booksContainer .book-action i {
+    color: var(--gold);
+
+    font-size: 10px;
+}
+
+#booksContainer .book-action:hover {
+    background: rgba(122, 0, 0, 0.5);
+
+    color: white;
+}
+
+
+/* =========================================================
+   READ / DOWNLOAD BUTTONS
+========================================================= */
+
+#booksContainer .book-buttons {
+    display: flex;
+
+    gap: 7px;
+
+    width: 100%;
+
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+#booksContainer .book-buttons .btn {
+    flex: 1;
+
+    min-width: 0;
+    min-height: 38px;
+
+    padding: 8px 6px;
+
+    font-size: 10px;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    #booksContainer {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        gap: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    #booksContainer {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 12px;
+    }
+
+    #booksContainer .book-card {
+        padding: 10px;
+    }
+
+    #booksContainer .book-card > img,
+    #booksContainer .book-card .book-cover {
+        height: 215px;
+    }
+
+    #booksContainer .book-content h2 {
+        font-size: 12px;
+
+        min-height: 34px;
+    }
+
+    #booksContainer .book-content h3 {
+        font-size: 9px;
+    }
+
+    #booksContainer .book-content > p {
+        font-size: 9px;
+
+        min-height: 43px;
+    }
+
+    #booksContainer .book-meta {
+        font-size: 8px;
+    }
+
+    #booksContainer .chishti-book-actions {
+        min-height: 32px;
+    }
+
+    #booksContainer .book-action {
+        min-height: 25px;
+
+        font-size: 8px;
+    }
+
+    #booksContainer .book-buttons {
+        flex-direction: column;
+    }
+
+    #booksContainer .book-buttons .btn {
+        width: 100%;
+
+        min-height: 34px;
+
+        font-size: 9px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 420px) {
+
+    #booksContainer {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+    #booksContainer .book-card {
+        padding: 8px;
+    }
+
+    #booksContainer .book-card > img,
+    #booksContainer .book-card .book-cover {
+        height: 185px;
+    }
+
+    #booksContainer .book-content h2 {
+        font-size: 11px;
+    }
+
+    #booksContainer .book-content > p {
+        -webkit-line-clamp: 2;
+
+        min-height: 30px;
+    }
+
+}
