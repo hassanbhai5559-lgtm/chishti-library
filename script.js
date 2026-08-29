@@ -169,78 +169,67 @@ function animateCounter(element, target, duration = 1000) {
 }
 
 
-/*=========================================
-VISITOR COUNTER
-=========================================*/
+/* =========================================
+   VISITOR COUNTER
+========================================= */
 
 async function updateVisitorCounter() {
 
     const visitorCounter =
-        byId("visitorCounter");
+        document.getElementById("visitorCounter");
 
     if (!visitorCounter) return;
 
+    // Firebase ready hone ka wait
+    if (!window.firebaseReady || !window.db) {
+
+        console.log("⏳ Waiting for Firebase...");
+
+        window.addEventListener(
+            "firebaseReady",
+            updateVisitorCounter,
+            { once: true }
+        );
+
+        return;
+    }
 
     try {
-
-        if (!window.firebaseReady || !window.db) {
-
-            console.warn(
-                "Firebase not ready for visitor counter."
-            );
-
-            return;
-
-        }
-
 
         const visitorRef =
             window.db
                 .collection("counter")
                 .doc("visitors");
 
-
         const snapshot =
             await visitorRef.get();
-
 
         /* FIRST VISITOR */
 
         if (!snapshot.exists) {
 
             await visitorRef.set({
-
                 count: 1
-
             });
-
 
             sessionStorage.setItem(
                 "chishtiVisitorCounted",
                 "true"
             );
 
-
-            animateCounter(
-                visitorCounter,
-                1
-            );
-
+            visitorCounter.innerText = "1";
 
             return;
-
         }
 
-
-        /* CHECK SESSION */
+        /* CHECK CURRENT SESSION */
 
         const alreadyCounted =
             sessionStorage.getItem(
                 "chishtiVisitorCounted"
             );
 
-
-        /* NEW VISITOR SESSION */
+        /* NEW VISITOR */
 
         if (!alreadyCounted) {
 
@@ -251,7 +240,6 @@ async function updateVisitorCounter() {
 
             });
 
-
             sessionStorage.setItem(
                 "chishtiVisitorCounted",
                 "true"
@@ -259,53 +247,49 @@ async function updateVisitorCounter() {
 
         }
 
+        /* GET UPDATED COUNT */
 
-        /* GET FINAL COUNT */
-
-        const latest =
+        const latestSnapshot =
             await visitorRef.get();
 
+        const data =
+            latestSnapshot.data() || {};
 
-        const count =
-            Number(
-                latest.data()?.count
-            ) || 0;
+        const visitors =
+            Number(data.count) || 0;
 
+        /* ANIMATE COUNTER */
 
-        animateCounter(
-            visitorCounter,
-            count
-        );
+        let current = 0;
 
+        const animation =
+            setInterval(() => {
 
-    } catch (error) {
+                current++;
 
-        console.error(
-            "Visitor Counter Error:",
-            error
-        );
+                visitorCounter.innerText =
+                    current.toLocaleString();
+
+                if (current >= visitors) {
+
+                    clearInterval(animation);
+
+                }
+
+            }, 25);
 
     }
 
-}
+    catch (error) {
 
+        console.error(
+            "🔥 Visitor Counter Error:",
+            error
+        );
 
-/*=========================================
-START VISITOR COUNTER
-=========================================*/
+        visitorCounter.innerText = "0";
 
-if (
-    document.readyState === "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        updateVisitorCounter
-    );
-
-} else {
-
-    updateVisitorCounter();
+    }
 
 }
 
