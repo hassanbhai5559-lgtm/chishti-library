@@ -556,3 +556,24 @@ td {
     }
 
 }
+
+/* =========================
+   SMALL BOOK COVERS
+========================= */
+
+.admin-cover {
+    width: 55px !important;
+    height: 75px !important;
+    object-fit: cover;
+    border-radius: 5px;
+    display: block;
+}
+
+#booksTable td:first-child {
+    width: 80px;
+    padding: 8px;
+}
+
+#booksTable tr {
+    height: 90px;
+}
