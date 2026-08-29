@@ -1,10 +1,12 @@
 /*=========================================================
  CHISHTI LIBRARY
  SCRIPT.JS
- FULL REPLACEMENT
+ FULL FIXED VERSION
+ 38 BOOKS / MOST LIKED TOP 6 / REAL PDF URLS
 =========================================================*/
 
 "use strict";
+
 
 /*=========================================================
  GLOBAL VARIABLES
@@ -16,17 +18,19 @@ let knowledge = [];
 
 
 /*=========================================================
- HELPER
+ HELPERS
 =========================================================*/
 
 function byId(id) {
     return document.getElementById(id);
 }
 
+
 function safeNumber(value) {
     const n = Number(value);
     return Number.isFinite(n) ? n : 0;
 }
+
 
 function escapeHTML(value) {
 
@@ -36,6 +40,20 @@ function escapeHTML(value) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+
+/*=========================================================
+ FIREBASE CHECK
+=========================================================*/
+
+function firebaseReady() {
+
+    return (
+        typeof firebase !== "undefined" &&
+        typeof db !== "undefined"
+    );
+
 }
 
 
@@ -73,8 +91,11 @@ window.addEventListener("load", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const menuBtn = document.querySelector(".mobile-menu");
-    const menu = document.querySelector(".menu");
+    const menuBtn =
+        document.querySelector(".mobile-menu");
+
+    const menu =
+        document.querySelector(".menu");
 
     if (!menuBtn || !menu) return;
 
@@ -111,17 +132,16 @@ window.addEventListener("scroll", () => {
 
     if (window.scrollY > 300) {
 
-        scrollBtn.classList.add("show");
         scrollBtn.style.display = "flex";
 
     } else {
 
-        scrollBtn.classList.remove("show");
         scrollBtn.style.display = "none";
 
     }
 
 });
+
 
 if (scrollBtn) {
 
@@ -143,29 +163,52 @@ if (scrollBtn) {
 
 window.addEventListener("scroll", () => {
 
-    const nav = document.querySelector(".navbar");
+    const nav =
+        document.querySelector(".navbar");
 
     if (!nav) return;
 
-    if (window.scrollY > 40) {
-        nav.classList.add("nav-shadow");
-    } else {
-        nav.classList.remove("nav-shadow");
-    }
+    nav.classList.toggle(
+        "nav-shadow",
+        window.scrollY > 40
+    );
 
 });
 
 
 /*=========================================================
- FIREBASE HELPERS
+ NUMBER ANIMATION
 =========================================================*/
 
-function firebaseReady() {
+function animateNumber(element, target, speed = 20) {
 
-    return (
-        typeof firebase !== "undefined" &&
-        typeof db !== "undefined"
+    if (!element) return;
+
+    target = Math.max(
+        0,
+        Math.floor(safeNumber(target))
     );
+
+    let current = 0;
+
+    element.innerText = "0";
+
+    if (target === 0) return;
+
+    const timer = setInterval(() => {
+
+        current++;
+
+        element.innerText =
+            current.toLocaleString();
+
+        if (current >= target) {
+
+            clearInterval(timer);
+
+        }
+
+    }, speed);
 
 }
 
@@ -176,7 +219,8 @@ function firebaseReady() {
 
 async function updateVisitorCounter() {
 
-    const counter = byId("visitorCounter");
+    const counter =
+        byId("visitorCounter");
 
     if (!counter) return;
 
@@ -190,9 +234,12 @@ async function updateVisitorCounter() {
     try {
 
         const ref =
-            db.collection("counter").doc("visitors");
+            db.collection("counter")
+              .doc("visitors");
 
-        const snapshot = await ref.get();
+        const snapshot =
+            await ref.get();
+
 
         if (!snapshot.exists) {
 
@@ -210,10 +257,12 @@ async function updateVisitorCounter() {
             return;
         }
 
+
         const already =
             sessionStorage.getItem(
                 "chishtiVisitorCounted"
             );
+
 
         if (!already) {
 
@@ -231,13 +280,20 @@ async function updateVisitorCounter() {
 
         }
 
+
         const latest =
             await ref.get();
 
         const total =
-            safeNumber(latest.data()?.count);
+            safeNumber(
+                latest.data()?.count
+            );
 
-        animateNumber(counter, total, 20);
+        animateNumber(
+            counter,
+            total,
+            20
+        );
 
     }
 
@@ -254,40 +310,87 @@ async function updateVisitorCounter() {
 
 }
 
+
 updateVisitorCounter();
 
 
 /*=========================================================
- NUMBER ANIMATION
+ BOOK UNIQUE KEY
 =========================================================*/
 
-function animateNumber(element, target, speed = 20) {
+/*
+ IMPORTANT:
 
-    if (!element) return;
+ PDF filename is the REAL identity of a book.
 
-    target = Math.max(0, Math.floor(target));
+ Example:
 
-    let current = 0;
+ husn-e-kainat.pdf
 
-    if (target === 0) {
+ becomes:
 
-        element.innerText = "0";
-        return;
+ books/husn-e-kainat.pdf
+
+ NOT:
+
+ book-2
+ 6
+ 7
+ etc.
+*/
+
+function getBookKey(book) {
+
+    if (!book) return "";
+
+    return String(
+        book.pdf ||
+        book.id ||
+        book.title ||
+        ""
+    ).trim();
+
+}
+
+
+/*=========================================================
+ READER URL
+=========================================================*/
+
+function getReaderURL(book) {
+
+    if (!book || !book.pdf) {
+
+        return "reader.html";
 
     }
 
-    const timer = setInterval(() => {
+    const pdf =
+        String(book.pdf).trim();
 
-        current++;
+    return (
+        "reader.html?book=" +
+        encodeURIComponent(pdf)
+    );
 
-        element.innerText =
-            current.toLocaleString();
+}
 
-        if (current >= target) {
-            clearInterval(timer);
-        }
 
-    }, speed);
+/*=========================================================
+ PDF URL
+=========================================================*/
+
+function getPDFURL(book) {
+
+    if (!book || !book.pdf) {
+
+        return "#";
+
+    }
+
+    return encodeURI(
+        String(book.pdf).trim()
+    );
 
 }
 
@@ -301,9 +404,13 @@ async function loadBooks() {
     try {
 
         const response =
-            await fetch("books.json", {
-                cache: "no-store"
-            });
+            await fetch(
+                "books.json",
+                {
+                    cache: "no-store"
+                }
+            );
+
 
         if (!response.ok) {
 
@@ -313,7 +420,10 @@ async function loadBooks() {
 
         }
 
-        const data = await response.json();
+
+        const data =
+            await response.json();
+
 
         if (!Array.isArray(data)) {
 
@@ -323,19 +433,35 @@ async function loadBooks() {
 
         }
 
+
         /*
-         * IMPORTANT:
-         * Only books.json books are used.
-         * No extra books are created.
+         * ONLY books.json
+         *
+         * No extra books.
+         * No hard-coded books.
          */
 
-        allBooks = data;
+        allBooks = data.filter(
+            book =>
+                book &&
+                typeof book === "object"
+        );
 
-        filteredBooks = [...allBooks];
+
+        filteredBooks =
+            [...allBooks];
+
+
+        console.log(
+            "📚 Actual books in books.json:",
+            allBooks.length
+        );
+
 
         /* BOOK COUNTER */
 
-        const bookCounter = byId("bookCounter");
+        const bookCounter =
+            byId("bookCounter");
 
         if (bookCounter) {
 
@@ -347,20 +473,26 @@ async function loadBooks() {
 
         }
 
+
         /* ALL BOOKS */
 
-        displayBooks(filteredBooks);
+        displayBooks(
+            filteredBooks
+        );
+
 
         /* LATEST */
 
         latestBook();
 
+
         /* MOST LIKED */
 
         renderMostLikedBooks();
 
+
         console.log(
-            `✅ ${allBooks.length} books loaded`
+            `✅ ${allBooks.length} books loaded successfully`
         );
 
     }
@@ -372,16 +504,27 @@ async function loadBooks() {
             error
         );
 
+
         const container =
             byId("booksContainer");
+
 
         if (container) {
 
             container.innerHTML = `
+
                 <div class="no-books">
-                    <h2>Books could not be loaded</h2>
-                    <p>Please check books.json.</p>
+
+                    <h2>
+                        Books could not be loaded
+                    </h2>
+
+                    <p>
+                        Please check books.json.
+                    </p>
+
                 </div>
+
             `;
 
         }
@@ -390,57 +533,26 @@ async function loadBooks() {
 
 }
 
+
 loadBooks();
 
 
 /*=========================================================
- GET BOOK PDF URL
-=========================================================*/
-
-function getReaderURL(book) {
-
-    if (!book || !book.pdf) {
-        return "reader.html";
-    }
-
-    return (
-        "reader.html?book=" +
-        encodeURIComponent(
-            String(book.pdf).trim()
-        )
-    );
-
-}
-
-
-/*=========================================================
- GET PDF URL
-=========================================================*/
-
-function getPDFURL(book) {
-
-    if (!book || !book.pdf) {
-        return "#";
-    }
-
-    return encodeURI(
-        String(book.pdf).trim()
-    );
-
-}
-
-
-/*=========================================================
- BOOK STATISTICS
+ BOOK STATS
 =========================================================*/
 
 function getBookStats(book) {
 
     return {
 
-        views: safeNumber(book.views),
-        likes: safeNumber(book.likes),
-        downloads: safeNumber(book.downloads)
+        views:
+            safeNumber(book.views),
+
+        likes:
+            safeNumber(book.likes),
+
+        downloads:
+            safeNumber(book.downloads)
 
     };
 
@@ -449,8 +561,7 @@ function getBookStats(book) {
 
 /*=========================================================
  ALL BOOKS
- NORMAL GRID
- NO AUTO MOVEMENT
+ STATIC GRID
 =========================================================*/
 
 function displayBooks(books) {
@@ -460,20 +571,45 @@ function displayBooks(books) {
 
     if (!container) return;
 
+
     container.innerHTML = "";
 
-    if (!Array.isArray(books) || books.length === 0) {
+
+    if (
+        !Array.isArray(books) ||
+        books.length === 0
+    ) {
 
         container.innerHTML = `
+
             <div class="no-books">
-                <h2>No Books Found</h2>
-                <p>Try another search.</p>
+
+                <h2>
+                    No Books Found
+                </h2>
+
+                <p>
+                    Try another search.
+                </p>
+
             </div>
+
         `;
 
         return;
 
     }
+
+
+    /*
+     * IMPORTANT:
+     *
+     * No transform
+     * No interval
+     * No carousel
+     *
+     * All Books remain fixed.
+     */
 
     books.forEach(book => {
 
@@ -488,36 +624,40 @@ function displayBooks(books) {
 
 
 /*=========================================================
- CREATE BOOK CARD
+ CREATE ALL BOOK CARD
 =========================================================*/
 
 function createBookCard(book) {
 
-    const stats = getBookStats(book);
+    const stats =
+        getBookStats(book);
 
-    const readerURL = getReaderURL(book);
-    const pdfURL = getPDFURL(book);
+    const bookKey =
+        getBookKey(book);
 
-    const bookID =
-        escapeHTML(
-            book.id ?? book.pdf ?? book.title
-        );
 
     return `
 
     <article
         class="book-card"
-        data-book-id="${bookID}"
-        data-book-pdf="${escapeHTML(book.pdf || "")}"
+        data-book-id="${escapeHTML(
+            String(book.id ?? "")
+        )}"
+        data-book-pdf="${escapeHTML(
+            String(book.pdf ?? "")
+        )}"
     >
 
         <div class="book-cover">
 
             <img
-                src="${escapeHTML(book.cover || "logo.png")}"
-                alt="${escapeHTML(book.title || "Book")}"
+                src="${escapeHTML(
+                    book.cover || "logo.png"
+                )}"
+                alt="${escapeHTML(
+                    book.title || "Book"
+                )}"
                 loading="lazy"
-                onerror="this.onerror=null;this.src='logo.png';"
             >
 
         </div>
@@ -525,29 +665,44 @@ function createBookCard(book) {
 
         <div class="book-content">
 
+
             <span class="book-category">
-                ${escapeHTML(book.category || "Book")}
+
+                ${escapeHTML(
+                    book.category || "Book"
+                )}
+
             </span>
 
 
             <h2>
-                ${escapeHTML(book.title || "Untitled")}
+
+                ${escapeHTML(
+                    book.title || "Untitled"
+                )}
+
             </h2>
 
 
             <h3>
-                ${escapeHTML(book.author || "Unknown Author")}
+
+                ${escapeHTML(
+                    book.author || "Unknown Author"
+                )}
+
             </h3>
 
 
             <p>
+
                 ${escapeHTML(
                     book.description || ""
                 )}
+
             </p>
 
 
-            <!-- BOOK STATS -->
+            <!-- STATS -->
 
             <div class="book-meta">
 
@@ -556,7 +711,9 @@ function createBookCard(book) {
                     <i class="fas fa-eye"></i>
 
                     <span class="book-view-count">
+
                         ${stats.views}
+
                     </span>
 
                 </span>
@@ -567,7 +724,9 @@ function createBookCard(book) {
                     <i class="fas fa-heart"></i>
 
                     <span class="book-like-count">
+
                         ${stats.likes}
+
                     </span>
 
                 </span>
@@ -578,7 +737,9 @@ function createBookCard(book) {
                     <i class="fas fa-download"></i>
 
                     <span class="book-download-count">
+
                         ${stats.downloads}
+
                     </span>
 
                 </span>
@@ -590,10 +751,16 @@ function createBookCard(book) {
 
             <div class="chishti-book-actions">
 
+
                 <button
                     type="button"
                     class="book-action like-action"
-                    data-book-id="${bookID}"
+                    data-book-id="${escapeHTML(
+                        String(book.id ?? "")
+                    )}"
+                    data-book-pdf="${escapeHTML(
+                        String(book.pdf ?? "")
+                    )}"
                     title="Like this book"
                 >
 
@@ -609,7 +776,12 @@ function createBookCard(book) {
                 <button
                     type="button"
                     class="book-action view-action"
-                    data-book-id="${bookID}"
+                    data-book-id="${escapeHTML(
+                        String(book.id ?? "")
+                    )}"
+                    data-book-pdf="${escapeHTML(
+                        String(book.pdf ?? "")
+                    )}"
                     title="Views"
                 >
 
@@ -625,7 +797,12 @@ function createBookCard(book) {
                 <button
                     type="button"
                     class="book-action share-action"
-                    data-book-id="${bookID}"
+                    data-book-id="${escapeHTML(
+                        String(book.id ?? "")
+                    )}"
+                    data-book-pdf="${escapeHTML(
+                        String(book.pdf ?? "")
+                    )}"
                     title="Share book"
                 >
 
@@ -637,6 +814,7 @@ function createBookCard(book) {
 
                 </button>
 
+
             </div>
 
 
@@ -644,11 +822,16 @@ function createBookCard(book) {
 
             <div class="book-buttons">
 
+
                 <a
-                    href="${readerURL}"
+                    href="${getReaderURL(book)}"
                     class="btn read-book"
-                    data-book-id="${bookID}"
-                    data-book-pdf="${escapeHTML(book.pdf || "")}"
+                    data-book-id="${escapeHTML(
+                        String(book.id ?? "")
+                    )}"
+                    data-book-pdf="${escapeHTML(
+                        String(book.pdf ?? "")
+                    )}"
                 >
 
                     <i class="fas fa-book-open"></i>
@@ -659,11 +842,15 @@ function createBookCard(book) {
 
 
                 <a
-                    href="${pdfURL}"
+                    href="${getPDFURL(book)}"
                     download
                     class="btn download-book"
-                    data-book-id="${bookID}"
-                    data-book-pdf="${escapeHTML(book.pdf || "")}"
+                    data-book-id="${escapeHTML(
+                        String(book.id ?? "")
+                    )}"
+                    data-book-pdf="${escapeHTML(
+                        String(book.pdf ?? "")
+                    )}"
                 >
 
                     <i class="fas fa-download"></i>
@@ -672,7 +859,9 @@ function createBookCard(book) {
 
                 </a>
 
+
             </div>
+
 
         </div>
 
@@ -684,7 +873,66 @@ function createBookCard(book) {
 
 
 /*=========================================================
- SEARCH
+ FIND BOOK
+=========================================================*/
+
+function findBookFromElement(element) {
+
+    if (!element) return null;
+
+
+    const card =
+        element.closest(
+            ".book-card, .most-liked-card"
+        );
+
+
+    if (!card) return null;
+
+
+    const pdf =
+        card.dataset.bookPdf || "";
+
+
+    const id =
+        card.dataset.bookId || "";
+
+
+    /*
+     * FIRST MATCH PDF
+     */
+
+    let book =
+        allBooks.find(
+            item =>
+                String(item.pdf || "") ===
+                String(pdf)
+        );
+
+
+    /*
+     * SECOND MATCH ID
+     */
+
+    if (!book && id) {
+
+        book =
+            allBooks.find(
+                item =>
+                    String(item.id || "") ===
+                    String(id)
+            );
+
+    }
+
+
+    return book || null;
+
+}
+
+
+/*=========================================================
+ SEARCH BOOKS
 =========================================================*/
 
 function searchBooks() {
@@ -694,10 +942,12 @@ function searchBooks() {
 
     if (!input) return;
 
+
     const value =
         input.value
             .toLowerCase()
             .trim();
+
 
     filteredBooks =
         allBooks.filter(book => {
@@ -726,17 +976,26 @@ function searchBooks() {
                     .toLowerCase()
                     .includes(value)
 
+                ||
+
+                String(book.language || "")
+                    .toLowerCase()
+                    .includes(value)
+
             );
 
         });
 
-    displayBooks(filteredBooks);
+
+    displayBooks(
+        filteredBooks
+    );
 
 }
 
 
 /*=========================================================
- CONNECT SEARCH
+ SEARCH CONNECT
 =========================================================*/
 
 document.addEventListener(
@@ -746,7 +1005,9 @@ document.addEventListener(
         const input =
             byId("searchInput");
 
+
         if (!input) return;
+
 
         input.addEventListener(
             "input",
@@ -761,33 +1022,50 @@ document.addEventListener(
  CATEGORY FILTER
 =========================================================*/
 
-function filterBooks(category, button = null) {
+function filterBooks(
+    category,
+    button = null
+) {
 
     document
         .querySelectorAll(".category")
         .forEach(btn => {
 
-            btn.classList.remove("active");
+            btn.classList.remove(
+                "active"
+            );
 
         });
 
+
     if (button) {
 
-        button.classList.add("active");
+        button.classList.add(
+            "active"
+        );
 
     }
 
-    if (category === "All") {
 
-        filteredBooks = [...allBooks];
+    if (
+        String(category)
+            .toLowerCase() === "all"
+    ) {
 
-    } else {
+        filteredBooks =
+            [...allBooks];
+
+    }
+
+    else {
 
         filteredBooks =
             allBooks.filter(book =>
 
-                String(book.category || "")
-                    .toLowerCase() ===
+                String(
+                    book.category || ""
+                )
+                .toLowerCase() ===
                 String(category || "")
                     .toLowerCase()
 
@@ -795,7 +1073,10 @@ function filterBooks(category, button = null) {
 
     }
 
-    displayBooks(filteredBooks);
+
+    displayBooks(
+        filteredBooks
+    );
 
 }
 
@@ -805,33 +1086,6 @@ function filterBooks(category, button = null) {
 =========================================================*/
 
 function sortBooks(type) {
-
-    const buttons =
-        document.querySelectorAll(".sort-btn");
-
-    buttons.forEach(btn => {
-        btn.classList.remove("active");
-    });
-
-    const clicked =
-        [...buttons].find(btn =>
-            btn.textContent
-                .toLowerCase()
-                .includes(
-                    type === "latest"
-                        ? "latest"
-                        : type === "oldest"
-                            ? "oldest"
-                            : type === "liked"
-                                ? "liked"
-                                : "popular"
-                )
-        );
-
-    if (clicked) {
-        clicked.classList.add("active");
-    }
-
 
     let sorted =
         [...filteredBooks];
@@ -848,7 +1102,7 @@ function sortBooks(type) {
     }
 
 
-    if (type === "oldest") {
+    else if (type === "oldest") {
 
         sorted.sort(
             (a, b) =>
@@ -859,7 +1113,7 @@ function sortBooks(type) {
     }
 
 
-    if (type === "liked") {
+    else if (type === "liked") {
 
         sorted.sort(
             (a, b) =>
@@ -870,7 +1124,7 @@ function sortBooks(type) {
     }
 
 
-    if (type === "popular") {
+    else if (type === "popular") {
 
         sorted.sort((a, b) => {
 
@@ -879,10 +1133,12 @@ function sortBooks(type) {
                 safeNumber(a.likes) * 3 +
                 safeNumber(a.downloads) * 2;
 
+
             const scoreB =
                 safeNumber(b.views) +
                 safeNumber(b.likes) * 3 +
                 safeNumber(b.downloads) * 2;
+
 
             return scoreB - scoreA;
 
@@ -890,7 +1146,10 @@ function sortBooks(type) {
 
     }
 
-    displayBooks(sorted);
+
+    displayBooks(
+        sorted
+    );
 
 }
 
@@ -901,22 +1160,22 @@ function sortBooks(type) {
 
 function latestBook() {
 
-    if (!Array.isArray(allBooks) ||
-        allBooks.length === 0) {
+    if (
+        !Array.isArray(allBooks) ||
+        allBooks.length === 0
+    ) {
 
         return;
 
     }
 
+
     let latest =
         allBooks.find(
-            book => book.latest === true
+            book =>
+                book.latest === true
         );
 
-    /*
-     * If no latest:true exists,
-     * use highest ID.
-     */
 
     if (!latest) {
 
@@ -930,6 +1189,7 @@ function latestBook() {
 
     }
 
+
     if (!latest) return;
 
 
@@ -938,20 +1198,24 @@ function latestBook() {
             ".latest-book .book-image img"
         );
 
+
     const title =
         document.querySelector(
             ".latest-book .book-info h2"
         );
+
 
     const author =
         document.querySelector(
             ".latest-book .book-info h3"
         );
 
+
     const desc =
         document.querySelector(
             ".latest-book .book-info p"
         );
+
 
     const buttons =
         document.querySelectorAll(
@@ -997,33 +1261,22 @@ function latestBook() {
     if (buttons.length >= 2) {
 
         /*
-         * IMPORTANT:
-         * Reader uses PDF filename.
-         * NOT numeric ID.
+         * CORRECT READER URL
+         *
+         * reader.html?book=filename.pdf
          */
 
         buttons[0].href =
             getReaderURL(latest);
 
+
         buttons[0].removeAttribute(
             "target"
         );
 
-        buttons[0].dataset.bookId =
-            latest.id ?? "";
-
-        buttons[0].dataset.bookPdf =
-            latest.pdf ?? "";
-
 
         buttons[1].href =
             getPDFURL(latest);
-
-        buttons[1].dataset.bookId =
-            latest.id ?? "";
-
-        buttons[1].dataset.bookPdf =
-            latest.pdf ?? "";
 
     }
 
@@ -1032,25 +1285,50 @@ function latestBook() {
 
 /*=========================================================
  MOST LIKED TOP 6
- INSERT JUST BEFORE AUTHORS
+ SMALL HORIZONTAL CAROUSEL
 =========================================================*/
 
 function renderMostLikedBooks() {
 
-    if (!Array.isArray(allBooks)) return;
+    if (
+        !Array.isArray(allBooks) ||
+        allBooks.length === 0
+    ) return;
+
 
     /*
-     * IMPORTANT:
-     * Top 6 are calculated from ALL books.
+     * TOP 6 ONLY
+     *
+     * Based on actual likes.
      */
 
     const topBooks =
         [...allBooks]
-            .sort(
-                (a, b) =>
+            .sort((a, b) => {
+
+                const likesDifference =
                     safeNumber(b.likes) -
-                    safeNumber(a.likes)
-            )
+                    safeNumber(a.likes);
+
+
+                /*
+                 * If likes are same,
+                 * views decide the order.
+                 */
+
+                if (likesDifference !== 0) {
+
+                    return likesDifference;
+
+                }
+
+
+                return (
+                    safeNumber(b.views) -
+                    safeNumber(a.views)
+                );
+
+            })
             .slice(0, 6);
 
 
@@ -1058,27 +1336,32 @@ function renderMostLikedBooks() {
 
 
     let section =
-        document.getElementById(
-            "mostLikedSection"
-        );
+        byId("mostLikedSection");
 
 
     /*
-     * Create section automatically
-     * if it does not already exist.
+     * CREATE SECTION
      */
 
     if (!section) {
 
         section =
-            document.createElement("section");
+            document.createElement(
+                "section"
+            );
+
 
         section.id =
             "mostLikedSection";
 
+
         section.className =
             "most-liked-books";
 
+
+        /*
+         * PUT DIRECTLY BEFORE AUTHORS
+         */
 
         const authors =
             document.querySelector(
@@ -1093,25 +1376,31 @@ function renderMostLikedBooks() {
                 authors
             );
 
-        } else {
+        }
 
-            const featured =
+        else {
+
+            /*
+             * Fallback:
+             * search common author IDs/classes.
+             */
+
+            const authorSection =
                 document.querySelector(
-                    ".featured-books"
+                    "#authors, .authors-section, [id*='authors']"
                 );
 
-            if (featured) {
 
-                featured.parentNode.insertAfter
-                    ? featured.parentNode.insertAfter(
-                        section,
-                        featured
-                    )
-                    : document.body.appendChild(
-                        section
-                    );
+            if (authorSection) {
 
-            } else {
+                authorSection.parentNode.insertBefore(
+                    section,
+                    authorSection
+                );
+
+            }
+
+            else {
 
                 document.body.appendChild(
                     section
@@ -1124,17 +1413,27 @@ function renderMostLikedBooks() {
     }
 
 
+    /*
+     * RENDER
+     */
+
     section.innerHTML = `
 
         <div class="container">
 
             <h2 class="section-title">
+
                 Most Liked Books
+
             </h2>
 
+
             <p class="section-subtitle">
+
                 Top 6 books loved by Chishti Library readers.
+
             </p>
+
 
             <div class="most-liked-wrapper">
 
@@ -1144,7 +1443,9 @@ function renderMostLikedBooks() {
                 >
 
                     ${topBooks
-                        .map(createMostLikedCard)
+                        .map(
+                            createMostLikedCard
+                        )
                         .join("")}
 
                 </div>
@@ -1163,6 +1464,7 @@ function renderMostLikedBooks() {
 
 /*=========================================================
  MOST LIKED CARD
+ SMALL VERSION
 =========================================================*/
 
 function createMostLikedCard(book) {
@@ -1170,14 +1472,19 @@ function createMostLikedCard(book) {
     const stats =
         getBookStats(book);
 
+
     return `
 
     <article
         class="most-liked-card"
         data-book-id="${escapeHTML(
-            book.id ?? book.pdf ?? book.title
+            String(book.id ?? "")
+        )}"
+        data-book-pdf="${escapeHTML(
+            String(book.pdf ?? "")
         )}"
     >
+
 
         <div class="most-liked-cover">
 
@@ -1189,7 +1496,6 @@ function createMostLikedCard(book) {
                     book.title || "Book"
                 )}"
                 loading="lazy"
-                onerror="this.onerror=null;this.src='logo.png';"
             >
 
         </div>
@@ -1197,36 +1503,54 @@ function createMostLikedCard(book) {
 
         <div class="most-liked-info">
 
+
             <span class="book-category">
+
                 ${escapeHTML(
                     book.category || "Book"
                 )}
+
             </span>
 
+
             <h3>
+
                 ${escapeHTML(
                     book.title || "Untitled"
                 )}
+
             </h3>
 
+
             <p>
+
                 ${escapeHTML(
                     book.author || ""
                 )}
+
             </p>
 
 
             <div class="most-liked-stats">
 
-                <span>
-                    <i class="fas fa-heart"></i>
-                    ${stats.likes}
-                </span>
 
                 <span>
-                    <i class="fas fa-eye"></i>
-                    ${stats.views}
+
+                    <i class="fas fa-heart"></i>
+
+                    ${stats.likes}
+
                 </span>
+
+
+                <span>
+
+                    <i class="fas fa-eye"></i>
+
+                    ${stats.views}
+
+                </span>
+
 
             </div>
 
@@ -1238,11 +1562,13 @@ function createMostLikedCard(book) {
 
                 <i class="fas fa-book-open"></i>
 
-                Read Online
+                Read
 
             </a>
 
+
         </div>
+
 
     </article>
 
@@ -1252,54 +1578,94 @@ function createMostLikedCard(book) {
 
 
 /*=========================================================
- MOST LIKED AUTO CAROUSEL
+ MOST LIKED CAROUSEL
 =========================================================*/
+
+let mostLikedTimer = null;
+
 
 function startMostLikedCarousel() {
 
     const track =
         byId("mostLikedTrack");
 
+
     if (!track) return;
 
 
     /*
-     * Small automatic movement.
-     * Does NOT affect All Books.
+     * Clear previous timer.
+     *
+     * Prevents multiple intervals
+     * after liking a book.
      */
 
-    let position = 0;
+    if (mostLikedTimer) {
+
+        clearInterval(
+            mostLikedTimer
+        );
+
+        mostLikedTimer = null;
+
+    }
+
 
     const cards =
         track.querySelectorAll(
             ".most-liked-card"
         );
 
+
+    /*
+     * 1-6 cards:
+     * no need to move if only one.
+     */
+
     if (cards.length <= 1) return;
 
 
-    function move() {
+    let position = 0;
 
-        const first =
-            cards[0];
 
-        if (!first) return;
+    function moveCarousel() {
+
+        const firstCard =
+            track.querySelector(
+                ".most-liked-card"
+            );
+
+
+        if (!firstCard) return;
 
 
         const cardWidth =
-            first.getBoundingClientRect().width;
+            firstCard.getBoundingClientRect()
+                .width;
+
+
+        const styles =
+            getComputedStyle(track);
 
 
         const gap =
             parseFloat(
-                getComputedStyle(track).gap
-            ) || 20;
+                styles.columnGap ||
+                styles.gap
+            ) || 16;
 
 
         position++;
 
 
-        if (position >= cards.length) {
+        /*
+         * When last card reached,
+         * smoothly return to first.
+         */
+
+        if (
+            position >= cards.length
+        ) {
 
             position = 0;
 
@@ -1319,46 +1685,45 @@ function startMostLikedCarousel() {
      * Move every 1 second.
      */
 
-    setInterval(
-        move,
-        1000
-    );
+    mostLikedTimer =
+        setInterval(
+            moveCarousel,
+            1000
+        );
 
 }
 
 
 /*=========================================================
  LIKE BOOK
- FIRESTORE
 =========================================================*/
 
 async function likeBook(book) {
 
     if (!book) return;
 
-    const bookKey =
-        String(
-            book.pdf ||
-            book.id ||
-            book.title
-        ).trim();
+
+    const key =
+        getBookKey(book);
 
 
-    /*
-     * Prevent multiple likes
-     * from same browser.
-     */
+    if (!key) return;
+
 
     const storageKey =
         "chishti-liked-" +
-        encodeURIComponent(bookKey);
+        encodeURIComponent(key);
 
 
-    const alreadyLiked =
-        localStorage.getItem(storageKey);
+    /*
+     * ONE LIKE PER BROWSER
+     */
 
-
-    if (alreadyLiked === "true") {
+    if (
+        localStorage.getItem(
+            storageKey
+        ) === "true"
+    ) {
 
         return;
 
@@ -1366,11 +1731,12 @@ async function likeBook(book) {
 
 
     /*
-     * Local fallback
+     * Optimistic local update
      */
 
     book.likes =
         safeNumber(book.likes) + 1;
+
 
     localStorage.setItem(
         storageKey,
@@ -1382,48 +1748,53 @@ async function likeBook(book) {
 
 
     /*
+     * Re-render Top 6 immediately
+     */
+
+    renderMostLikedBooks();
+
+
+    /*
      * Firebase
      */
 
-    if (!firebaseReady()) {
-
-        renderMostLikedBooks();
-        return;
-
-    }
+    if (!firebaseReady()) return;
 
 
     try {
 
-        const ref =
-            db.collection("books")
-                .doc(bookKey);
+        await db.collection("books")
+            .doc(key)
+            .set({
 
+                title:
+                    book.title || "",
 
-        await ref.set({
+                author:
+                    book.author || "",
 
-            title: book.title || "",
-            author: book.author || "",
-            pdf: book.pdf || "",
-            likes:
-                firebase.firestore.FieldValue.increment(1),
-            updatedAt:
-                firebase.firestore.FieldValue.serverTimestamp()
+                pdf:
+                    book.pdf || "",
 
-        }, {
+                likes:
+                    firebase.firestore.FieldValue
+                        .increment(1),
 
-            merge: true
+                updatedAt:
+                    firebase.firestore.FieldValue
+                        .serverTimestamp()
 
-        });
+            }, {
+
+                merge: true
+
+            });
 
 
         console.log(
             "❤️ Like saved:",
             book.title
         );
-
-
-        renderMostLikedBooks();
 
     }
 
@@ -1447,21 +1818,21 @@ async function countBookView(book) {
 
     if (!book) return;
 
-    const bookKey =
-        String(
-            book.pdf ||
-            book.id ||
-            book.title
-        ).trim();
+
+    const key =
+        getBookKey(book);
+
+
+    if (!key) return;
 
 
     /*
-     * Count only once per browser session.
+     * ONE VIEW PER SESSION
      */
 
     const sessionKey =
         "chishti-viewed-" +
-        encodeURIComponent(bookKey);
+        encodeURIComponent(key);
 
 
     if (
@@ -1481,6 +1852,10 @@ async function countBookView(book) {
     );
 
 
+    /*
+     * Local update
+     */
+
     book.views =
         safeNumber(book.views) + 1;
 
@@ -1488,35 +1863,41 @@ async function countBookView(book) {
     updateBookUI(book);
 
 
-    if (!firebaseReady()) {
+    /*
+     * Firebase
+     */
 
-        return;
-
-    }
+    if (!firebaseReady()) return;
 
 
     try {
 
-        const ref =
-            db.collection("books")
-                .doc(bookKey);
+        await db.collection("books")
+            .doc(key)
+            .set({
 
+                title:
+                    book.title || "",
 
-        await ref.set({
+                author:
+                    book.author || "",
 
-            title: book.title || "",
-            author: book.author || "",
-            pdf: book.pdf || "",
-            views:
-                firebase.firestore.FieldValue.increment(1),
-            updatedAt:
-                firebase.firestore.FieldValue.serverTimestamp()
+                pdf:
+                    book.pdf || "",
 
-        }, {
+                views:
+                    firebase.firestore.FieldValue
+                        .increment(1),
 
-            merge: true
+                updatedAt:
+                    firebase.firestore.FieldValue
+                        .serverTimestamp()
 
-        });
+            }, {
+
+                merge: true
+
+            });
 
 
         console.log(
@@ -1544,73 +1925,87 @@ async function countBookView(book) {
 
 function updateBookUI(book) {
 
-    const key =
+    if (!book) return;
+
+
+    const pdf =
         String(
-            book.pdf ||
-            book.id ||
-            book.title
-        ).trim();
-
-
-    document
-        .querySelectorAll(
-            `[data-book-pdf="${CSS.escape(
-                book.pdf || ""
-            )}"]`
+            book.pdf || ""
         );
 
 
+    const id =
+        String(
+            book.id || ""
+        );
+
+
+    /*
+     * Update every matching book card.
+     */
+
     document
-        .querySelectorAll(".book-card")
+        .querySelectorAll(
+            ".book-card, .most-liked-card"
+        )
         .forEach(card => {
 
             const cardPDF =
-                card.dataset.bookPdf || "";
+                String(
+                    card.dataset.bookPdf || ""
+                );
+
 
             const cardID =
-                card.dataset.bookId || "";
+                String(
+                    card.dataset.bookId || ""
+                );
 
 
             if (
-                cardPDF === String(book.pdf || "") ||
-                cardID === String(book.id || "")
+                cardPDF === pdf ||
+                (
+                    id &&
+                    cardID === id
+                )
             ) {
 
-                const likeCounts =
-                    card.querySelectorAll(
-                        ".book-like-count, .like-action span"
-                    );
 
-                likeCounts.forEach(el => {
+                card.querySelectorAll(
+                    ".book-like-count, .like-action span"
+                )
+                .forEach(el => {
 
                     el.innerText =
-                        safeNumber(book.likes);
+                        safeNumber(
+                            book.likes
+                        );
 
                 });
 
 
-                const viewCounts =
-                    card.querySelectorAll(
-                        ".book-view-count, .view-action span"
-                    );
-
-                viewCounts.forEach(el => {
+                card.querySelectorAll(
+                    ".book-view-count, .view-action span"
+                )
+                .forEach(el => {
 
                     el.innerText =
-                        safeNumber(book.views);
+                        safeNumber(
+                            book.views
+                        );
 
                 });
 
 
-                const downloadCounts =
-                    card.querySelectorAll(
-                        ".book-download-count"
-                    );
-
-                downloadCounts.forEach(el => {
+                card.querySelectorAll(
+                    ".book-download-count"
+                )
+                .forEach(el => {
 
                     el.innerText =
-                        safeNumber(book.downloads);
+                        safeNumber(
+                            book.downloads
+                        );
 
                 });
 
@@ -1622,118 +2017,76 @@ function updateBookUI(book) {
 
 
 /*=========================================================
- FIND BOOK
-=========================================================*/
-
-function findBookFromElement(element) {
-
-    if (!element) return null;
-
-    const card =
-        element.closest(
-            ".book-card, .most-liked-card"
-        );
-
-    if (!card) return null;
-
-    const pdf =
-        card.dataset.bookPdf || "";
-
-    const id =
-        card.dataset.bookId || "";
-
-
-    return (
-        allBooks.find(book =>
-            String(book.pdf || "") ===
-            String(pdf)
-        )
-
-        ||
-
-        allBooks.find(book =>
-            String(book.id || "") ===
-            String(id)
-        )
-
-        ||
-
-        null
-    );
-
-}
-
-
-/*=========================================================
- BOOK ACTION CLICKS
+ LIKE BUTTON CLICK
 =========================================================*/
 
 document.addEventListener(
     "click",
     async event => {
 
-        const likeButton =
+        const button =
             event.target.closest(
                 ".like-action"
             );
 
 
-        if (likeButton) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            const book =
-                findBookFromElement(
-                    likeButton
-                );
-
-            if (!book) return;
+        if (!button) return;
 
 
-            const key =
-                String(
-                    book.pdf ||
-                    book.id ||
-                    book.title
-                );
+        event.preventDefault();
+        event.stopPropagation();
 
 
-            const storageKey =
-                "chishti-liked-" +
-                encodeURIComponent(key);
+        const book =
+            findBookFromElement(
+                button
+            );
 
 
-            if (
-                localStorage.getItem(
-                    storageKey
-                ) === "true"
-            ) {
-
-                return;
-
-            }
+        if (!book) return;
 
 
-            likeButton.dataset.liked =
-                "true";
+        const key =
+            getBookKey(book);
 
 
-            const icon =
-                likeButton.querySelector("i");
+        const storageKey =
+            "chishti-liked-" +
+            encodeURIComponent(key);
 
 
-            if (icon) {
+        /*
+         * Already liked
+         */
 
-                icon.className =
-                    "fas fa-heart";
+        if (
+            localStorage.getItem(
+                storageKey
+            ) === "true"
+        ) {
 
-            }
-
-
-            await likeBook(book);
+            return;
 
         }
+
+
+        /*
+         * Change heart
+         */
+
+        const icon =
+            button.querySelector("i");
+
+
+        if (icon) {
+
+            icon.className =
+                "fas fa-heart";
+
+        }
+
+
+        await likeBook(book);
 
     }
 );
@@ -1741,25 +2094,24 @@ document.addEventListener(
 
 /*=========================================================
  READ BUTTON
- ENSURE PDF FILENAME URL
 =========================================================*/
 
 document.addEventListener(
     "click",
     async event => {
 
-        const readButton =
+        const button =
             event.target.closest(
                 ".read-book"
             );
 
 
-        if (!readButton) return;
+        if (!button) return;
 
 
         const book =
             findBookFromElement(
-                readButton
+                button
             );
 
 
@@ -1767,11 +2119,21 @@ document.addEventListener(
 
 
         /*
-         * FORCE CORRECT READER URL
+         * FORCE REAL PDF FILENAME
          */
 
-        readButton.href =
+        const readerURL =
             getReaderURL(book);
+
+
+        button.href =
+            readerURL;
+
+
+        console.log(
+            "📖 Opening:",
+            readerURL
+        );
 
 
         /*
@@ -1785,30 +2147,118 @@ document.addEventListener(
 
 
 /*=========================================================
- DOWNLOAD COUNTER
+ MOST LIKED READ BUTTON
 =========================================================*/
 
 document.addEventListener(
     "click",
     async event => {
 
-        const downloadButton =
+        const button =
             event.target.closest(
-                ".download-book"
+                ".most-liked-card .btn"
             );
 
 
-        if (!downloadButton) return;
+        if (!button) return;
 
 
         const book =
             findBookFromElement(
-                downloadButton
+                button
             );
 
 
         if (!book) return;
 
+
+        button.href =
+            getReaderURL(book);
+
+
+        await countBookView(book);
+
+    }
+);
+
+
+/*=========================================================
+ VIEW ACTION BUTTON
+=========================================================*/
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const button =
+            event.target.closest(
+                ".view-action"
+            );
+
+
+        if (!button) return;
+
+
+        event.preventDefault();
+
+
+        const book =
+            findBookFromElement(
+                button
+            );
+
+
+        if (!book) return;
+
+
+        /*
+         * View button shows/counts
+         * one view per session.
+         */
+
+        await countBookView(book);
+
+    }
+);
+
+
+/*=========================================================
+ DOWNLOAD
+=========================================================*/
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const button =
+            event.target.closest(
+                ".download-book"
+            );
+
+
+        if (!button) return;
+
+
+        const book =
+            findBookFromElement(
+                button
+            );
+
+
+        if (!book) return;
+
+
+        /*
+         * Correct PDF
+         */
+
+        button.href =
+            getPDFURL(book);
+
+
+        /*
+         * Local count
+         */
 
         book.downloads =
             safeNumber(
@@ -1820,7 +2270,7 @@ document.addEventListener(
 
 
         /*
-         * Firebase download counter
+         * Firebase
          */
 
         if (!firebaseReady()) return;
@@ -1829,26 +2279,31 @@ document.addEventListener(
         try {
 
             const key =
-                String(
-                    book.pdf ||
-                    book.id ||
-                    book.title
-                ).trim();
+                getBookKey(book);
 
 
             await db.collection("books")
                 .doc(key)
                 .set({
 
-                    title: book.title || "",
-                    author: book.author || "",
-                    pdf: book.pdf || "",
+                    title:
+                        book.title || "",
+
+                    author:
+                        book.author || "",
+
+                    pdf:
+                        book.pdf || "",
 
                     downloads:
-                        firebase.firestore.FieldValue.increment(1),
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1),
 
                     updatedAt:
-                        firebase.firestore.FieldValue.serverTimestamp()
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
 
                 }, {
 
@@ -1856,12 +2311,18 @@ document.addEventListener(
 
                 });
 
+
+            console.log(
+                "⬇ Download saved:",
+                book.title
+            );
+
         }
 
         catch (error) {
 
             console.error(
-                "Download counter error:",
+                "Download error:",
                 error
             );
 
@@ -1879,13 +2340,13 @@ document.addEventListener(
     "click",
     async event => {
 
-        const shareButton =
+        const button =
             event.target.closest(
                 ".share-action"
             );
 
 
-        if (!shareButton) return;
+        if (!button) return;
 
 
         event.preventDefault();
@@ -1893,7 +2354,7 @@ document.addEventListener(
 
         const book =
             findBookFromElement(
-                shareButton
+                button
             );
 
 
@@ -1922,7 +2383,8 @@ document.addEventListener(
                     text:
                         "Read this book on Chishti Library",
 
-                    url: url
+                    url:
+                        url
 
                 });
 
@@ -1930,7 +2392,9 @@ document.addEventListener(
 
             catch (error) {
 
-                /* User cancelled */
+                /*
+                 * User cancelled share.
+                 */
 
             }
 
@@ -1944,6 +2408,7 @@ document.addEventListener(
 
                 await navigator.clipboard
                     .writeText(url);
+
 
                 alert(
                     "Book link copied!"
@@ -2099,7 +2564,7 @@ document.addEventListener(
 
 
 /*=========================================================
- KNOWLEDGE JSON
+ KNOWLEDGE.JSON
 =========================================================*/
 
 async function loadKnowledge() {
@@ -2144,6 +2609,7 @@ async function loadKnowledge() {
     }
 
 }
+
 
 loadKnowledge();
 
@@ -2215,7 +2681,7 @@ if (closeChat) {
 
 
 /*=========================================================
- CHAT SEARCH BOOK
+ SEARCH BOOK FOR CHATBOT
 =========================================================*/
 
 function searchBook(question) {
@@ -2260,33 +2726,50 @@ function searchBook(question) {
 
     return `
 
-        📚 <b>${escapeHTML(
-            book.title
-        )}</b><br><br>
+        📚 <b>
+            ${escapeHTML(
+                book.title
+            )}
+        </b>
 
-        👤 ${escapeHTML(
+        <br><br>
+
+        👤
+        ${escapeHTML(
             book.author
-        )}<br>
+        )}
 
-        📂 ${escapeHTML(
+        <br>
+
+        📂
+        ${escapeHTML(
             book.category
-        )}<br><br>
+        )}
+
+        <br><br>
+
 
         <a
             href="${getReaderURL(book)}"
             class="btn"
         >
+
             📖 Read Online
+
         </a>
 
+
         &nbsp;
+
 
         <a
             href="${getPDFURL(book)}"
             download
             class="btn"
         >
+
             ⬇ Download
+
         </a>
 
     `;
@@ -2313,7 +2796,8 @@ function searchKnowledge(question) {
         const itemQuestion =
             String(
                 item.question || ""
-            ).toLowerCase();
+            )
+            .toLowerCase();
 
 
         if (
@@ -2341,12 +2825,17 @@ function botReply(text) {
 
     if (!chatMessages) return;
 
+
     chatMessages.insertAdjacentHTML(
         "beforeend",
         `
+
         <div class="bot-message">
+
             ${text}
+
         </div>
+
         `
     );
 
@@ -2365,12 +2854,17 @@ function userReply(text) {
 
     if (!chatMessages) return;
 
+
     chatMessages.insertAdjacentHTML(
         "beforeend",
         `
+
         <div class="user-message">
+
             ${escapeHTML(text)}
+
         </div>
+
         `
     );
 
@@ -2424,8 +2918,12 @@ function sendMessage() {
         if (!reply) {
 
             reply = `
+
                 🤖 Sorry!<br><br>
-                Mujhe iska jawab abhi database mein nahi mila.
+
+                Mujhe iska jawab abhi
+                database mein nahi mila.
+
             `;
 
         }
@@ -2595,6 +3093,7 @@ document.addEventListener(
 const yearElement =
     byId("year");
 
+
 if (yearElement) {
 
     yearElement.innerText =
@@ -2617,39 +3116,47 @@ console.log(
 );
 
 console.log(
-    "Full Script Loaded"
+    "Digital Library of Hazrat Allama Saim Chishti"
 );
 
 console.log(
-    "✅ JSON Books"
+    "===================================="
 );
 
 console.log(
-    "✅ All Books Normal Grid"
+    "✅ Books loaded from books.json only"
 );
 
 console.log(
-    "✅ Most Liked Top 6"
+    "✅ All Books = STATIC"
 );
 
 console.log(
-    "✅ Auto Moving Most Liked"
+    "✅ Most Liked = TOP 6"
 );
 
 console.log(
-    "✅ PDF Reader URLs"
+    "✅ Most Liked = SMALL CARDS"
 );
 
 console.log(
-    "✅ Likes"
+    "✅ Most Liked = AUTO MOVING"
 );
 
 console.log(
-    "✅ Views"
+    "✅ Reader uses REAL PDF filename"
 );
 
 console.log(
-    "✅ Downloads"
+    "✅ Likes fixed"
+);
+
+console.log(
+    "✅ Views fixed"
+);
+
+console.log(
+    "✅ Downloads fixed"
 );
 
 console.log(
@@ -2665,9 +3172,10 @@ console.log(
 );
 
 console.log(
-    "🚀 Ready"
+    "🚀 READY"
 );
 
 console.log(
     "===================================="
 );
+
