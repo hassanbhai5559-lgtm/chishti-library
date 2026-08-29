@@ -6,56 +6,178 @@ CHISHTI LIBRARY
 ADMIN.JS
 FULL ADMIN PANEL
 =========================================================
-
-FEATURES
-
-✅ Firebase Login
-✅ Admin Redirect
-✅ Auth Protection
-✅ Logout
-✅ Add Book
-✅ Edit Book
-✅ Delete Book
-✅ Book List
-✅ Search Books
-✅ Category Filter
-✅ Latest Book
-✅ Upload Cover
-✅ Upload PDF
-✅ Visitor Statistics
-✅ Book Statistics
-=========================================================
 */
 
 
 /*=========================================================
- FIREBASE READY CHECK
+ GLOBAL VARIABLES
 =========================================================*/
 
-function firebaseReady() {
-
-    if (
-        typeof firebase === "undefined" ||
-        !firebase.apps ||
-        !firebase.apps.length
-    ) {
-
-        console.error("❌ Firebase is not loaded.");
-
-        return false;
-    }
-
-    return true;
-}
+let adminBooks = [];
+let editingBook = false;
 
 
 /*=========================================================
  ELEMENT HELPER
 =========================================================*/
 
-function byId(id) {
-
+function $(id) {
     return document.getElementById(id);
+}
+
+
+/*=========================================================
+ SHOW MESSAGE
+=========================================================*/
+
+function showMessage(message, type = "success") {
+
+    const box = $("bookMessage");
+
+    if (!box) return;
+
+    box.innerText = message;
+
+    box.className = "";
+
+    box.classList.add(type);
+
+    setTimeout(() => {
+
+        box.innerText = "";
+
+    }, 5000);
+}
+
+
+/*=========================================================
+ WAIT FOR FIREBASE
+=========================================================*/
+
+function waitForFirebase(callback) {
+
+    if (
+        window.firebaseReady &&
+        window.db &&
+        window.auth &&
+        window.storage
+    ) {
+
+        callback();
+
+        return;
+
+    }
+
+    window.addEventListener(
+        "firebaseReady",
+        callback,
+        {
+            once: true
+        }
+    );
+
+}
+
+
+/*=========================================================
+ LOGIN SCREEN
+=========================================================*/
+
+function showLogin() {
+
+    const loginScreen = $("loginScreen");
+    const adminApp = $("adminApp");
+
+    if (loginScreen) {
+
+        loginScreen.classList.remove("hidden");
+
+    }
+
+    if (adminApp) {
+
+        adminApp.classList.add("hidden");
+
+    }
+
+}
+
+
+/*=========================================================
+ ADMIN SCREEN
+=========================================================*/
+
+function showAdmin(user) {
+
+    const loginScreen = $("loginScreen");
+    const adminApp = $("adminApp");
+
+    if (loginScreen) {
+
+        loginScreen.classList.add("hidden");
+
+    }
+
+    if (adminApp) {
+
+        adminApp.classList.remove("hidden");
+
+    }
+
+    const email = $("adminEmail");
+
+    if (email) {
+
+        email.innerText =
+            user.email ||
+            "Admin";
+
+    }
+
+    loadDashboard();
+
+}
+
+
+/*=========================================================
+ FIREBASE AUTH STATE
+=========================================================*/
+
+function initializeAdminAuth() {
+
+    if (!window.auth) {
+
+        console.error(
+            "❌ Firebase Auth is not ready."
+        );
+
+        return;
+
+    }
+
+    auth.onAuthStateChanged(function(user) {
+
+        if (user) {
+
+            console.log(
+                "✅ Admin authenticated:",
+                user.email
+            );
+
+            showAdmin(user);
+
+        } else {
+
+            console.log(
+                "ℹ️ No admin logged in"
+            );
+
+            showLogin();
+
+        }
+
+    });
 
 }
 
@@ -64,271 +186,163 @@ function byId(id) {
  LOGIN
 =========================================================*/
 
-async function adminLogin() {
+function initializeLogin() {
 
-    const emailInput =
-        byId("adminEmail") ||
-        byId("email") ||
-        byId("loginEmail");
+    const form = $("loginForm");
 
-    const passwordInput =
-        byId("adminPassword") ||
-        byId("password") ||
-        byId("loginPassword");
+    if (!form) return;
 
-    if (!emailInput || !passwordInput) {
+    form.addEventListener(
+        "submit",
+        async function(e) {
 
-        console.error(
-            "❌ Login fields not found."
-        );
+            e.preventDefault();
 
-        return;
-    }
+            const email =
+                $("loginEmail").value.trim();
 
-    const email =
-        emailInput.value.trim();
+            const password =
+                $("loginPassword").value;
 
-    const password =
-        passwordInput.value;
+            const errorBox =
+                $("loginError");
 
+            const button =
+                form.querySelector("button");
 
-    if (!email || !password) {
+            if (!email || !password) {
 
-        alert(
-            "Please enter email and password."
-        );
+                if (errorBox) {
 
-        return;
-    }
-
-
-    if (!firebaseReady()) {
-
-        alert(
-            "Firebase is not loaded."
-        );
-
-        return;
-    }
-
-
-    try {
-
-        const result =
-            await firebase
-                .auth()
-                .signInWithEmailAndPassword(
-                    email,
-                    password
-                );
-
-
-        console.log(
-            "✅ Login successful!",
-            result.user.email
-        );
-
-
-        /*
-        =====================================================
-        EXACT ADMIN URL
-        =====================================================
-        */
-
-        window.location.href =
-            "https://hassanbhai5559-lgtm.github.io/chishti-library/admin.html";
-
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Login Error:",
-            error
-        );
-
-
-        let message =
-            error.message ||
-            "Login failed.";
-
-
-        alert(
-            "Login failed: " + message
-        );
-
-    }
-
-}
-
-
-/*=========================================================
- LOGIN BUTTON
-=========================================================*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const loginBtn =
-            byId("loginBtn") ||
-            byId("adminLoginBtn") ||
-            document.querySelector(
-                ".login-btn"
-            );
-
-
-        if (loginBtn) {
-
-            loginBtn.addEventListener(
-                "click",
-                function (e) {
-
-                    e.preventDefault();
-
-                    adminLogin();
+                    errorBox.innerText =
+                        "Please enter email and password.";
 
                 }
-            );
 
-        }
-
-
-        const loginForm =
-            byId("loginForm");
-
-
-        if (loginForm) {
-
-            loginForm.addEventListener(
-                "submit",
-                function (e) {
-
-                    e.preventDefault();
-
-                    adminLogin();
-
-                }
-            );
-
-        }
-
-    }
-);
-
-
-/*=========================================================
- ENTER KEY LOGIN
-=========================================================*/
-
-document.addEventListener(
-    "keydown",
-    function (e) {
-
-        if (
-            e.key === "Enter" &&
-            (
-                byId("adminEmail") ||
-                byId("email")
-            )
-        ) {
-
-            const active =
-                document.activeElement;
-
-
-            if (
-                active &&
-                (
-                    active.id === "adminEmail" ||
-                    active.id === "adminPassword" ||
-                    active.id === "email" ||
-                    active.id === "password"
-                )
-            ) {
-
-                e.preventDefault();
-
-                adminLogin();
+                return;
 
             }
 
-        }
+            try {
 
-    }
-);
+                if (button) {
 
+                    button.disabled = true;
 
-/*=========================================================
- AUTH STATE
-=========================================================*/
+                    button.innerText =
+                        "🔄 Logging in...";
 
-function protectAdminPage() {
+                }
 
-    if (!firebaseReady()) return;
+                if (errorBox) {
 
+                    errorBox.innerText = "";
 
-    firebase
-        .auth()
-        .onAuthStateChanged(
-            function (user) {
+                }
 
-                const currentPage =
-                    window.location.pathname
-                        .split("/")
-                        .pop()
-                        .toLowerCase();
-
-
-                /*
-                =============================================
-                ADMIN PAGE PROTECTION
-                =============================================
-                */
-
-                if (
-                    currentPage === "admin.html"
-                ) {
-
-                    if (!user) {
-
-                        console.warn(
-                            "⚠️ No admin logged in."
-                        );
-
-
-                        window.location.href =
-                            "https://hassanbhai5559-lgtm.github.io/chishti-library/login.html";
-
-                        return;
-
-                    }
-
-
-                    console.log(
-                        "✅ Admin authenticated:",
-                        user.email
+                const result =
+                    await auth.signInWithEmailAndPassword(
+                        email,
+                        password
                     );
 
+                console.log(
+                    "✅ Login successful:",
+                    result.user.email
+                );
 
-                    const emailElement =
-                        byId("adminEmailDisplay") ||
-                        byId("userEmail") ||
-                        byId("adminUser");
+                /*
+                Auth state listener automatically
+                opens the admin panel.
+                */
 
+            }
 
-                    if (emailElement) {
+            catch (error) {
 
-                        emailElement.innerText =
-                            user.email || "";
+                console.error(
+                    "❌ Login failed:",
+                    error
+                );
 
-                    }
+                let message =
+                    "Login failed.";
+
+                if (
+                    error.code ===
+                    "auth/invalid-credential"
+                ) {
+
+                    message =
+                        "❌ Email or password is incorrect.";
+
+                }
+
+                else if (
+                    error.code ===
+                    "auth/user-not-found"
+                ) {
+
+                    message =
+                        "❌ Admin account not found.";
+
+                }
+
+                else if (
+                    error.code ===
+                    "auth/wrong-password"
+                ) {
+
+                    message =
+                        "❌ Incorrect password.";
+
+                }
+
+                else if (
+                    error.code ===
+                    "auth/invalid-email"
+                ) {
+
+                    message =
+                        "❌ Invalid email address.";
+
+                }
+
+                else {
+
+                    message =
+                        "❌ " +
+                        (
+                            error.message ||
+                            "Login failed."
+                        );
+
+                }
+
+                if (errorBox) {
+
+                    errorBox.innerText =
+                        message;
 
                 }
 
             }
-        );
+
+            finally {
+
+                if (button) {
+
+                    button.disabled = false;
+
+                    button.innerText =
+                        "🔐 Login";
+
+                }
+
+            }
+
+        }
+    );
 
 }
 
@@ -337,567 +351,1148 @@ function protectAdminPage() {
  LOGOUT
 =========================================================*/
 
-async function adminLogout() {
+function initializeLogout() {
 
-    if (!firebaseReady()) return;
+    const button =
+        $("logoutBtn");
 
+    if (!button) return;
 
-    try {
+    button.addEventListener(
+        "click",
+        async function() {
 
-        await firebase
-            .auth()
-            .signOut();
+            try {
 
+                await auth.signOut();
 
-        console.log(
-            "✅ Admin logged out"
-        );
-
-
-        window.location.href =
-            "https://hassanbhai5559-lgtm.github.io/chishti-library/login.html";
-
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Logout Error:",
-            error
-        );
-
-        alert(
-            "Logout failed: " +
-            error.message
-        );
-
-    }
-
-}
-
-
-/*=========================================================
- LOGOUT BUTTON
-=========================================================*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const logoutBtn =
-            byId("logoutBtn") ||
-            byId("adminLogoutBtn") ||
-            document.querySelector(
-                ".logout-btn"
-            );
-
-
-        if (logoutBtn) {
-
-            logoutBtn.addEventListener(
-                "click",
-                function (e) {
-
-                    e.preventDefault();
-
-                    adminLogout();
-
-                }
-            );
-
-        }
-
-    }
-);
-
-
-/*=========================================================
- LOAD BOOKS
-=========================================================*/
-
-async function loadAdminBooks() {
-
-    if (!firebaseReady()) return;
-
-
-    const container =
-        byId("adminBooks") ||
-        byId("booksList") ||
-        byId("adminBooksContainer");
-
-
-    if (!container) {
-
-        console.log(
-            "ℹ️ Admin book container not found."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const snapshot =
-            await firebase
-                .firestore()
-                .collection("books")
-                .orderBy(
-                    "createdAt",
-                    "desc"
-                )
-                .get();
-
-
-        container.innerHTML = "";
-
-
-        if (snapshot.empty) {
-
-            container.innerHTML = `
-                <div class="no-books">
-                    No books found.
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        snapshot.forEach(
-            function (doc) {
-
-                const book =
-                    doc.data();
-
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "admin-book-card";
-
-
-                card.innerHTML = `
-
-                    <img
-                        src="${book.coverUrl || book.cover || "logo.png"}"
-                        alt="${book.title || "Book"}"
-                    >
-
-                    <div class="admin-book-info">
-
-                        <h3>
-                            ${book.title || "Untitled"}
-                        </h3>
-
-                        <p>
-                            ${book.author || "Unknown Author"}
-                        </p>
-
-                        <span>
-                            ${book.category || "Other"}
-                        </span>
-
-                        <div class="admin-book-stats">
-
-                            👁 ${book.views || 0}
-
-                            ❤️ ${book.likes || 0}
-
-                            🔗 ${book.shares || 0}
-
-                            ⬇ ${book.downloads || 0}
-
-                        </div>
-
-                        <div class="admin-book-actions">
-
-                            <button
-                                class="edit-book-btn"
-                                data-id="${doc.id}">
-                                ✏️ Edit
-                            </button>
-
-                            <button
-                                class="delete-book-btn"
-                                data-id="${doc.id}">
-                                🗑️ Delete
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-
-                container.appendChild(card);
-
-            }
-        );
-
-
-        attachBookActions();
-
-
-        console.log(
-            "✅ Admin books loaded:",
-            snapshot.size
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Load books error:",
-            error
-        );
-
-    }
-
-}
-
-
-/*=========================================================
- ADD BOOK
-=========================================================*/
-
-async function addAdminBook() {
-
-    if (!firebaseReady()) return;
-
-
-    const title =
-        byId("bookTitle")?.value.trim() || "";
-
-    const author =
-        byId("bookAuthor")?.value.trim() || "";
-
-    const category =
-        byId("bookCategory")?.value || "Other";
-
-    const description =
-        byId("bookDescription")?.value.trim() || "";
-
-
-    const coverInput =
-        byId("bookCover");
-
-    const pdfInput =
-        byId("bookPDF");
-
-
-    if (!title) {
-
-        alert(
-            "Please enter book title."
-        );
-
-        return;
-
-    }
-
-
-    if (!author) {
-
-        alert(
-            "Please enter author."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !pdfInput ||
-        !pdfInput.files ||
-        !pdfInput.files[0]
-    ) {
-
-        alert(
-            "Please select a PDF."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const db =
-            firebase.firestore();
-
-        const storage =
-            firebase.storage();
-
-
-        const bookRef =
-            db.collection("books").doc();
-
-
-        const bookId =
-            bookRef.id;
-
-
-        /*
-        =============================================
-        UPLOAD COVER
-        =============================================
-        */
-
-        let coverUrl = "";
-        let coverPath = "";
-
-
-        if (
-            coverInput &&
-            coverInput.files &&
-            coverInput.files[0]
-        ) {
-
-            const coverFile =
-                coverInput.files[0];
-
-
-            const coverRef =
-                storage
-                    .ref()
-                    .child(
-                        `books/${bookId}/cover/${Date.now()}-${coverFile.name}`
-                    );
-
-
-            await coverRef.put(
-                coverFile
-            );
-
-
-            coverUrl =
-                await coverRef.getDownloadURL();
-
-
-            coverPath =
-                coverRef.fullPath;
-
-        }
-
-
-        /*
-        =============================================
-        UPLOAD PDF
-        =============================================
-        */
-
-        const pdfFile =
-            pdfInput.files[0];
-
-
-        if (
-            pdfFile.type !==
-            "application/pdf"
-        ) {
-
-            alert(
-                "Only PDF files are allowed."
-            );
-
-            return;
-
-        }
-
-
-        const pdfRef =
-            storage
-                .ref()
-                .child(
-                    `books/${bookId}/pdf/${Date.now()}-${pdfFile.name}`
+                console.log(
+                    "✅ Admin logged out"
                 );
 
+                showLogin();
 
-        await pdfRef.put(
-            pdfFile
-        );
+            }
 
+            catch (error) {
 
-        const pdfUrl =
-            await pdfRef.getDownloadURL();
-
-
-        const pdfPath =
-            pdfRef.fullPath;
-
-
-        /*
-        =============================================
-        SAVE BOOK
-        =============================================
-        */
-
-        await bookRef.set({
-
-            title:
-                title,
-
-            author:
-                author,
-
-            category:
-                category,
-
-            description:
-                description,
-
-            coverUrl:
-                coverUrl,
-
-            coverPath:
-                coverPath,
-
-            pdfUrl:
-                pdfUrl,
-
-            pdfPath:
-                pdfPath,
-
-            latest:
-                byId("bookLatest")?.checked ||
-                false,
-
-            views:
-                0,
-
-            likes:
-                0,
-
-            shares:
-                0,
-
-            downloads:
-                0,
-
-            comments:
-                0,
-
-            createdAt:
-                firebase.firestore
-                    .FieldValue
-                    .serverTimestamp(),
-
-            updatedAt:
-                firebase.firestore
-                    .FieldValue
-                    .serverTimestamp()
-
-        });
-
-
-        alert(
-            "✅ Book added successfully!"
-        );
-
-
-        clearBookForm();
-
-        loadAdminBooks();
-
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Add book error:",
-            error
-        );
-
-
-        alert(
-            "Book upload failed: " +
-            error.message
-        );
-
-    }
-
-}
-
-
-/*=========================================================
- CLEAR BOOK FORM
-=========================================================*/
-
-function clearBookForm() {
-
-    const fields = [
-
-        "bookTitle",
-        "bookAuthor",
-        "bookDescription"
-
-    ];
-
-
-    fields.forEach(
-        function (id) {
-
-            const element =
-                byId(id);
-
-
-            if (element) {
-
-                element.value = "";
+                console.error(
+                    "❌ Logout error:",
+                    error
+                );
 
             }
 
         }
     );
 
-
-    const category =
-        byId("bookCategory");
+}
 
 
-    if (category) {
+/*=========================================================
+ NAVIGATION
+=========================================================*/
 
-        category.value =
-            "Quran";
+function initializeNavigation() {
+
+    const buttons =
+        document.querySelectorAll(".nav-btn");
+
+    const sections =
+        document.querySelectorAll(".admin-section");
+
+    buttons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                const sectionId =
+                    this.dataset.section;
+
+                buttons.forEach(btn => {
+
+                    btn.classList.remove(
+                        "active"
+                    );
+
+                });
+
+                this.classList.add("active");
+
+                sections.forEach(section => {
+
+                    section.classList.remove(
+                        "active-section"
+                    );
+
+                });
+
+                const section =
+                    $(sectionId);
+
+                if (section) {
+
+                    section.classList.add(
+                        "active-section"
+                    );
+
+                }
+
+                const title =
+                    $("pageTitle");
+
+                if (title) {
+
+                    const names = {
+
+                        dashboard:
+                            "Dashboard",
+
+                        books:
+                            "Books",
+
+                        addBook:
+                            "Add Book",
+
+                        comments:
+                            "Comments"
+
+                    };
+
+                    title.innerText =
+                        names[sectionId] ||
+                        "Admin Panel";
+
+                }
+
+                if (
+                    sectionId ===
+                    "dashboard"
+                ) {
+
+                    loadDashboard();
+
+                }
+
+                if (
+                    sectionId ===
+                    "books"
+                ) {
+
+                    loadBooks();
+
+                }
+
+                if (
+                    sectionId ===
+                    "comments"
+                ) {
+
+                    loadComments();
+
+                }
+
+            }
+        );
+
+    });
+
+
+    const goAdd =
+        $("goAddBook");
+
+    if (goAdd) {
+
+        goAdd.addEventListener(
+            "click",
+            function() {
+
+                resetBookForm();
+
+                openSection("addBook");
+
+            }
+        );
 
     }
 
-
-    const latest =
-        byId("bookLatest");
+}
 
 
-    if (latest) {
+/*=========================================================
+ OPEN SECTION
+=========================================================*/
 
-        latest.checked =
-            false;
+function openSection(sectionId) {
+
+    const button =
+        document.querySelector(
+            `.nav-btn[data-section="${sectionId}"]`
+        );
+
+    if (button) {
+
+        button.click();
 
     }
 
+}
+
+
+/*=========================================================
+ MOBILE MENU
+=========================================================*/
+
+function initializeMobileMenu() {
+
+    const button =
+        $("mobileMenu");
+
+    const sidebar =
+        document.querySelector(".sidebar");
+
+    if (!button || !sidebar) return;
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            sidebar.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+/*=========================================================
+ LOAD DASHBOARD
+=========================================================*/
+
+async function loadDashboard() {
+
+    try {
+
+        const stats =
+            await getStatistics();
+
+        const bookStats =
+            await calculateBookStatistics();
+
+        setNumber(
+            "totalBooks",
+            bookStats.totalBooks
+        );
+
+        setNumber(
+            "totalVisitors",
+            stats.visitors || 0
+        );
+
+        setNumber(
+            "totalViews",
+            bookStats.totalViews
+        );
+
+        setNumber(
+            "totalLikes",
+            bookStats.totalLikes
+        );
+
+        setNumber(
+            "totalShares",
+            bookStats.totalShares
+        );
+
+        setNumber(
+            "totalDownloads",
+            bookStats.totalDownloads
+        );
+
+        console.log(
+            "✅ Dashboard loaded"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Dashboard error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ NUMBER DISPLAY
+=========================================================*/
+
+function setNumber(id, number) {
+
+    const element = $(id);
+
+    if (!element) return;
+
+    element.innerText =
+        Number(number || 0).toLocaleString();
+
+}
+
+
+/*=========================================================
+ LOAD BOOKS
+=========================================================*/
+
+async function loadBooks() {
+
+    const table =
+        $("booksTable");
+
+    if (!table) return;
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="8">
+                Loading books...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        adminBooks =
+            await getAllBooks();
+
+        renderBooks();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Books loading error:",
+            error
+        );
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    ❌ Failed to load books.
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/*=========================================================
+ RENDER BOOKS
+=========================================================*/
+
+function renderBooks() {
+
+    const table =
+        $("booksTable");
+
+    if (!table) return;
+
+    table.innerHTML = "";
+
+    if (!adminBooks.length) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="8">
+                    No books found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    adminBooks.forEach(book => {
+
+        const row =
+            document.createElement("tr");
+
+        const cover =
+            book.coverUrl ||
+            book.cover ||
+            "logo.png";
+
+        row.innerHTML = `
+
+            <td>
+
+                <img
+                    src="${escapeHTML(cover)}"
+                    class="admin-cover"
+                    alt="Cover"
+                    onerror="this.src='logo.png'"
+                >
+
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    book.title || "Untitled"
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    book.author || "Unknown"
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    book.category || "Other"
+                )}
+            </td>
+
+            <td>
+                ${Number(book.views || 0)}
+            </td>
+
+            <td>
+                ${Number(book.downloads || 0)}
+            </td>
+
+            <td>
+
+                ${
+                    book.latest === true
+                    ? "⭐ Yes"
+                    : "No"
+                }
+
+            </td>
+
+            <td>
+
+                <div class="action-buttons">
+
+                    <button
+                        class="edit-btn"
+                        data-id="${book.id}"
+                    >
+                        ✏️ Edit
+                    </button>
+
+                    <button
+                        class="delete-btn"
+                        data-id="${book.id}"
+                    >
+                        🗑️ Delete
+                    </button>
+
+                </div>
+
+            </td>
+
+        `;
+
+        table.appendChild(row);
+
+    });
+
+    initializeBookActions();
+
+}
+
+
+/*=========================================================
+ ESCAPE HTML
+=========================================================*/
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/*=========================================================
+ BOOK ACTIONS
+=========================================================*/
+
+function initializeBookActions() {
+
+    document.querySelectorAll(
+        ".edit-btn"
+    ).forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                editBook(
+                    this.dataset.id
+                );
+
+            }
+        );
+
+    });
+
+
+    document.querySelectorAll(
+        ".delete-btn"
+    ).forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                deleteBookAdmin(
+                    this.dataset.id
+                );
+
+            }
+        );
+
+    });
+
+}
+
+
+/*=========================================================
+ EDIT BOOK
+=========================================================*/
+
+function editBook(bookId) {
+
+    const book =
+        adminBooks.find(
+            item => item.id === bookId
+        );
+
+    if (!book) {
+
+        alert(
+            "Book not found."
+        );
+
+        return;
+
+    }
+
+    editingBook = true;
+
+    $("editingBookId").value =
+        book.id;
+
+    $("bookTitle").value =
+        book.title || "";
+
+    $("bookAuthor").value =
+        book.author || "";
+
+    $("bookCategory").value =
+        book.category || "Other";
+
+    $("bookLanguage").value =
+        book.language || "Urdu";
+
+    $("bookDescription").value =
+        book.description || "";
+
+    $("bookLatest").checked =
+        book.latest === true;
+
+    $("coverStatus").innerText =
+        book.coverUrl
+        ? "✅ Existing cover will be kept"
+        : "No cover selected";
+
+    $("pdfStatus").innerText =
+        book.pdfUrl
+        ? "✅ Existing PDF will be kept"
+        : "No PDF selected";
+
+    const title =
+        $("bookFormTitle");
+
+    if (title) {
+
+        title.innerText =
+            "Edit Book";
+
+    }
+
+    const save =
+        $("saveBookBtn");
+
+    if (save) {
+
+        save.innerText =
+            "💾 Update Book";
+
+    }
+
+    openSection("addBook");
+
+}
+
+
+/*=========================================================
+ RESET FORM
+=========================================================*/
+
+function resetBookForm() {
+
+    editingBook = false;
+
+    const form =
+        $("bookForm");
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+    $("editingBookId").value = "";
+
+    $("coverStatus").innerText =
+        "No cover selected";
+
+    $("pdfStatus").innerText =
+        "No PDF selected";
+
+    const title =
+        $("bookFormTitle");
+
+    if (title) {
+
+        title.innerText =
+            "Add New Book";
+
+    }
+
+    const save =
+        $("saveBookBtn");
+
+    if (save) {
+
+        save.innerText =
+            "💾 Save Book";
+
+    }
+
+}
+
+
+/*=========================================================
+ CANCEL EDIT
+=========================================================*/
+
+function initializeCancel() {
+
+    const button =
+        $("cancelEdit");
+
+    if (!button) return;
+
+    button.addEventListener(
+        "click",
+        function() {
+
+            resetBookForm();
+
+            openSection("books");
+
+        }
+    );
+
+}
+
+
+/*=========================================================
+ COVER FILE STATUS
+=========================================================*/
+
+function initializeFileInputs() {
 
     const cover =
-        byId("bookCover");
-
+        $("coverFile");
 
     const pdf =
-        byId("bookPDF");
+        $("pdfFile");
 
 
-    if (cover) cover.value = "";
+    if (cover) {
 
-    if (pdf) pdf.value = "";
+        cover.addEventListener(
+            "change",
+            function() {
+
+                if (
+                    this.files &&
+                    this.files[0]
+                ) {
+
+                    $("coverStatus").innerText =
+                        "📕 " +
+                        this.files[0].name;
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (pdf) {
+
+        pdf.addEventListener(
+            "change",
+            function() {
+
+                if (
+                    this.files &&
+                    this.files[0]
+                ) {
+
+                    $("pdfStatus").innerText =
+                        "📄 " +
+                        this.files[0].name;
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ SAVE / UPDATE BOOK
+=========================================================*/
+
+function initializeBookForm() {
+
+    const form =
+        $("bookForm");
+
+    if (!form) return;
+
+    form.addEventListener(
+        "submit",
+        async function(e) {
+
+            e.preventDefault();
+
+            const title =
+                $("bookTitle").value.trim();
+
+            const author =
+                $("bookAuthor").value.trim();
+
+            const category =
+                $("bookCategory").value;
+
+            const language =
+                $("bookLanguage").value;
+
+            const description =
+                $("bookDescription").value.trim();
+
+            const latest =
+                $("bookLatest").checked;
+
+            const coverFile =
+                $("coverFile").files[0];
+
+            const pdfFile =
+                $("pdfFile").files[0];
+
+            const editingId =
+                $("editingBookId").value.trim();
+
+            const saveButton =
+                $("saveBookBtn");
+
+
+            if (!title) {
+
+                showMessage(
+                    "Please enter book title.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!author) {
+
+                showMessage(
+                    "Please enter author.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            try {
+
+                saveButton.disabled =
+                    true;
+
+                saveButton.innerText =
+                    editingId
+                    ? "🔄 Updating..."
+                    : "🔄 Saving...";
+
+
+                /*
+                =========================================
+                UPDATE EXISTING BOOK
+                =========================================
+                */
+
+                if (editingId) {
+
+                    const oldBook =
+                        adminBooks.find(
+                            book =>
+                                book.id ===
+                                editingId
+                        );
+
+
+                    let coverUrl =
+                        oldBook?.coverUrl ||
+                        "";
+
+                    let coverPath =
+                        oldBook?.coverPath ||
+                        "";
+
+                    let pdfUrl =
+                        oldBook?.pdfUrl ||
+                        "";
+
+                    let pdfPath =
+                        oldBook?.pdfPath ||
+                        "";
+
+
+                    /*
+                    NEW COVER
+                    */
+
+                    if (coverFile) {
+
+                        const uploadedCover =
+                            await uploadBookCover(
+                                coverFile,
+                                editingId
+                            );
+
+                        coverUrl =
+                            uploadedCover.url;
+
+                        coverPath =
+                            uploadedCover.path;
+
+                    }
+
+
+                    /*
+                    NEW PDF
+                    */
+
+                    if (pdfFile) {
+
+                        const uploadedPDF =
+                            await uploadBookPDF(
+                                pdfFile,
+                                editingId
+                            );
+
+                        pdfUrl =
+                            uploadedPDF.url;
+
+                        pdfPath =
+                            uploadedPDF.path;
+
+                    }
+
+
+                    await updateBook(
+                        editingId,
+                        {
+
+                            title,
+                            author,
+                            category,
+                            language,
+                            description,
+
+                            coverUrl,
+                            coverPath,
+
+                            pdfUrl,
+                            pdfPath,
+
+                            latest
+
+                        }
+                    );
+
+
+                    /*
+                    If this is latest,
+                    remove latest from others.
+                    */
+
+                    if (latest) {
+
+                        await removeOtherLatest(
+                            editingId
+                        );
+
+                    }
+
+
+                    showMessage(
+                        "✅ Book updated successfully!",
+                        "success"
+                    );
+
+                }
+
+
+                /*
+                =========================================
+                ADD NEW BOOK
+                =========================================
+                */
+
+                else {
+
+                    const bookId =
+                        createBookId();
+
+
+                    let coverUrl = "";
+
+                    let coverPath = "";
+
+                    let pdfUrl = "";
+
+                    let pdfPath = "";
+
+
+                    /*
+                    COVER
+                    */
+
+                    if (coverFile) {
+
+                        const uploadedCover =
+                            await uploadBookCover(
+                                coverFile,
+                                bookId
+                            );
+
+                        coverUrl =
+                            uploadedCover.url;
+
+                        coverPath =
+                            uploadedCover.path;
+
+                    }
+
+
+                    /*
+                    PDF
+                    */
+
+                    if (!pdfFile) {
+
+                        throw new Error(
+                            "Please select a PDF."
+                        );
+
+                    }
+
+
+                    const uploadedPDF =
+                        await uploadBookPDF(
+                            pdfFile,
+                            bookId
+                        );
+
+                    pdfUrl =
+                        uploadedPDF.url;
+
+                    pdfPath =
+                        uploadedPDF.path;
+
+
+                    await addBook({
+
+                        title,
+                        author,
+                        category,
+                        language,
+                        description,
+
+                        coverUrl,
+                        coverPath,
+
+                        pdfUrl,
+                        pdfPath,
+
+                        latest
+
+                    });
+
+
+                    showMessage(
+                        "✅ Book added successfully!",
+                        "success"
+                    );
+
+                }
+
+
+                /*
+                REFRESH
+                */
+
+                await loadBooks();
+
+                await loadDashboard();
+
+
+                setTimeout(() => {
+
+                    resetBookForm();
+
+                    openSection(
+                        "books"
+                    );
+
+                }, 1000);
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "❌ Save book error:",
+                    error
+                );
+
+                showMessage(
+                    "❌ " +
+                    (
+                        error.message ||
+                        "Something went wrong."
+                    ),
+                    "error"
+                );
+
+            }
+
+            finally {
+
+                saveButton.disabled =
+                    false;
+
+                saveButton.innerText =
+                    editingId
+                    ? "💾 Update Book"
+                    : "💾 Save Book";
+
+            }
+
+        }
+    );
+
+}
+
+
+/*=========================================================
+ REMOVE OTHER LATEST BOOKS
+=========================================================*/
+
+async function removeOtherLatest(
+    currentBookId
+) {
+
+    try {
+
+        const snapshot =
+            await db
+                .collection("books")
+                .where(
+                    "latest",
+                    "==",
+                    true
+                )
+                .get();
+
+        const batch =
+            db.batch();
+
+        snapshot.forEach(doc => {
+
+            if (
+                doc.id !==
+                currentBookId
+            ) {
+
+                batch.update(
+                    doc.ref,
+                    {
+                        latest: false
+                    }
+                );
+
+            }
+
+        });
+
+        await batch.commit();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Latest update error:",
+            error
+        );
+
+    }
 
 }
 
@@ -906,35 +1501,42 @@ function clearBookForm() {
  DELETE BOOK
 =========================================================*/
 
-async function deleteAdminBook(bookId) {
+async function deleteBookAdmin(bookId) {
 
-    if (!bookId) return;
+    const book =
+        adminBooks.find(
+            item =>
+                item.id === bookId
+        );
+
+    if (!book) return;
 
 
-    const confirmDelete =
+    const confirmed =
         confirm(
-            "Are you sure you want to delete this book?"
+            `Delete "${book.title}"?\n\nThis action cannot be undone.`
         );
 
 
-    if (!confirmDelete) return;
+    if (!confirmed) return;
 
 
     try {
 
-        await firebase
-            .firestore()
-            .collection("books")
-            .doc(bookId)
-            .delete();
+        await deleteBook(bookId);
 
-
-        alert(
-            "🗑️ Book deleted successfully!"
+        console.log(
+            "🗑️ Deleted:",
+            book.title
         );
 
+        await loadBooks();
 
-        loadAdminBooks();
+        await loadDashboard();
+
+        alert(
+            "✅ Book deleted successfully."
+        );
 
     }
 
@@ -945,10 +1547,8 @@ async function deleteAdminBook(bookId) {
             error
         );
 
-
         alert(
-            "Delete failed: " +
-            error.message
+            "❌ Failed to delete book."
         );
 
     }
@@ -957,121 +1557,93 @@ async function deleteAdminBook(bookId) {
 
 
 /*=========================================================
- EDIT BOOK
+ LOAD COMMENTS
 =========================================================*/
 
-async function editAdminBook(bookId) {
+async function loadComments() {
 
-    if (!bookId) return;
+    const container =
+        $("commentsContainer");
+
+    if (!container) return;
+
+
+    container.innerHTML = `
+        <p class="loading">
+            Loading comments...
+        </p>
+    `;
 
 
     try {
 
-        const doc =
-            await firebase
-                .firestore()
-                .collection("books")
-                .doc(bookId)
-                .get();
+        const books =
+            await getAllBooks();
+
+        let allComments = [];
 
 
-        if (!doc.exists) {
+        for (
+            const book of books
+        ) {
 
-            alert(
-                "Book not found."
-            );
+            try {
 
-            return;
+                const comments =
+                    await getBookComments(
+                        book.id
+                    );
 
-        }
+                comments.forEach(
+                    comment => {
 
+                        allComments.push({
 
-        const book =
-            doc.data();
+                            ...comment,
 
+                            bookId:
+                                book.id,
 
-        const title =
-            byId("bookTitle");
+                            bookTitle:
+                                book.title
 
+                        });
 
-        const author =
-            byId("bookAuthor");
+                    }
+                );
 
+            }
 
-        const category =
-            byId("bookCategory");
+            catch (error) {
 
+                console.warn(
+                    "Comments unavailable for:",
+                    book.title
+                );
 
-        const description =
-            byId("bookDescription");
-
-
-        if (title)
-            title.value =
-                book.title || "";
-
-
-        if (author)
-            author.value =
-                book.author || "";
-
-
-        if (category)
-            category.value =
-                book.category || "Other";
-
-
-        if (description)
-            description.value =
-                book.description || "";
-
-
-        /*
-        Store editing ID
-        */
-
-        const form =
-            byId("bookForm");
-
-
-        if (form) {
-
-            form.dataset.editingId =
-                bookId;
+            }
 
         }
 
 
-        const submitBtn =
-            byId("addBookBtn") ||
-            byId("saveBookBtn");
-
-
-        if (submitBtn) {
-
-            submitBtn.innerText =
-                "💾 Update Book";
-
-        }
-
-
-        window.scrollTo({
-
-            top: 0,
-
-            behavior: "smooth"
-
-        });
-
+        renderComments(
+            allComments
+        );
 
     }
 
     catch (error) {
 
         console.error(
-            "❌ Edit error:",
+            "❌ Comments error:",
             error
         );
+
+        container.innerHTML = `
+            <p>
+                ❌ Failed to load comments.
+            </p>
+        `;
 
     }
 
@@ -1079,566 +1651,171 @@ async function editAdminBook(bookId) {
 
 
 /*=========================================================
- UPDATE BOOK
+ RENDER COMMENTS
 =========================================================*/
 
-async function updateAdminBook(
-    bookId
+function renderComments(
+    comments
 ) {
 
-    if (!bookId) return;
+    const container =
+        $("commentsContainer");
+
+    if (!container) return;
 
 
-    const title =
-        byId("bookTitle")?.value.trim() || "";
+    if (!comments.length) {
 
-    const author =
-        byId("bookAuthor")?.value.trim() || "";
-
-    const category =
-        byId("bookCategory")?.value || "Other";
-
-    const description =
-        byId("bookDescription")?.value.trim() || "";
-
-
-    if (!title) {
-
-        alert(
-            "Book title is required."
-        );
+        container.innerHTML = `
+            <p>
+                No comments yet.
+            </p>
+        `;
 
         return;
 
     }
 
 
-    try {
+    container.innerHTML = "";
 
-        await firebase
-            .firestore()
-            .collection("books")
-            .doc(bookId)
-            .update({
 
-                title:
-                    title,
+    comments.forEach(comment => {
 
-                author:
-                    author,
-
-                category:
-                    category,
-
-                description:
-                    description,
-
-                latest:
-                    byId("bookLatest")?.checked ||
-                    false,
-
-                updatedAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-        alert(
-            "✅ Book updated successfully!"
-        );
-
-
-        clearBookForm();
-
-
-        const form =
-            byId("bookForm");
-
-
-        if (form) {
-
-            delete form.dataset.editingId;
-
-        }
-
-
-        const submitBtn =
-            byId("addBookBtn") ||
-            byId("saveBookBtn");
-
-
-        if (submitBtn) {
-
-            submitBtn.innerText =
-                "➕ Add Book";
-
-        }
-
-
-        loadAdminBooks();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Update error:",
-            error
-        );
-
-
-        alert(
-            "Update failed: " +
-            error.message
-        );
-
-    }
-
-}
-
-
-/*=========================================================
- BOOK ACTIONS
-=========================================================*/
-
-function attachBookActions() {
-
-    document
-        .querySelectorAll(
-            ".delete-book-btn"
-        )
-        .forEach(
-            function (button) {
-
-                button.onclick =
-                    function () {
-
-                        deleteAdminBook(
-                            button.dataset.id
-                        );
-
-                    };
-
-            }
-        );
-
-
-    document
-        .querySelectorAll(
-            ".edit-book-btn"
-        )
-        .forEach(
-            function (button) {
-
-                button.onclick =
-                    function () {
-
-                        editAdminBook(
-                            button.dataset.id
-                        );
-
-                    };
-
-            }
-        );
-
-}
-
-
-/*=========================================================
- BOOK FORM SUBMIT
-=========================================================*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-        const form =
-            byId("bookForm");
-
-
-        if (!form) return;
-
-
-        form.addEventListener(
-            "submit",
-            async function (e) {
-
-                e.preventDefault();
-
-
-                const editingId =
-                    form.dataset.editingId;
-
-
-                if (editingId) {
-
-                    await updateAdminBook(
-                        editingId
-                    );
-
-                }
-
-                else {
-
-                    await addAdminBook();
-
-                }
-
-            }
-        );
-
-    }
-);
-
-
-/*=========================================================
- SEARCH BOOKS
-=========================================================*/
-
-function searchAdminBooks() {
-
-    const input =
-        byId("adminSearch") ||
-        byId("searchBooks");
-
-
-    if (!input) return;
-
-
-    const value =
-        input.value
-            .toLowerCase()
-            .trim();
-
-
-    document
-        .querySelectorAll(
-            ".admin-book-card"
-        )
-        .forEach(
-            function (card) {
-
-                const text =
-                    card.innerText
-                        .toLowerCase();
-
-
-                card.style.display =
-                    text.includes(value)
-                        ? ""
-                        : "none";
-
-            }
-        );
-
-}
-
-
-/*=========================================================
- CATEGORY FILTER
-=========================================================*/
-
-function filterAdminCategory(
-    category
-) {
-
-    document
-        .querySelectorAll(
-            ".admin-book-card"
-        )
-        .forEach(
-            function (card) {
-
-                if (
-                    category === "All"
-                ) {
-
-                    card.style.display =
-                        "";
-
-                    return;
-
-                }
-
-
-                const text =
-                    card.innerText
-                        .toLowerCase();
-
-
-                card.style.display =
-                    text.includes(
-                        category.toLowerCase()
-                    )
-                        ? ""
-                        : "none";
-
-            }
-        );
-
-}
-
-
-/*=========================================================
- STATISTICS
-=========================================================*/
-
-async function loadAdminStatistics() {
-
-    if (!firebaseReady()) return;
-
-
-    try {
-
-        const db =
-            firebase.firestore();
-
-
-        /*
-        =============================================
-        VISITORS
-        =============================================
-        */
-
-        const statsDoc =
-            await db
-                .collection("statistics")
-                .doc("main")
-                .get();
-
-
-        const stats =
-            statsDoc.exists
-                ? statsDoc.data()
-                : {};
-
-
-        const visitorValue =
-            Number(
-                stats.visitors || 0
+        const div =
+            document.createElement(
+                "div"
             );
 
-
-        const visitorElement =
-            byId("visitorCounter") ||
-            byId("totalVisitors");
+        div.className =
+            "comment-card";
 
 
-        if (visitorElement) {
+        div.innerHTML = `
 
-            visitorElement.innerText =
-                visitorValue;
+            <div>
 
-        }
+                <h3>
+                    ${escapeHTML(
+                        comment.name ||
+                        "Visitor"
+                    )}
+                </h3>
 
+                <strong>
+                    ${escapeHTML(
+                        comment.bookTitle ||
+                        "Book"
+                    )}
+                </strong>
 
-        /*
-        =============================================
-        BOOK STATISTICS
-        =============================================
-        */
+                <p>
+                    ${escapeHTML(
+                        comment.comment ||
+                        ""
+                    )}
+                </p>
 
-        const snapshot =
-            await db
-                .collection("books")
-                .get();
+            </div>
 
+            <button
+                class="delete-comment"
+                data-book="${comment.bookId}"
+                data-comment="${comment.id}"
+            >
+                🗑️ Delete
+            </button>
 
-        let views = 0;
-        let likes = 0;
-        let shares = 0;
-        let downloads = 0;
-
-
-        snapshot.forEach(
-            function (doc) {
-
-                const book =
-                    doc.data();
-
-
-                views +=
-                    Number(
-                        book.views || 0
-                    );
-
-
-                likes +=
-                    Number(
-                        book.likes || 0
-                    );
+        `;
 
 
-                shares +=
-                    Number(
-                        book.shares || 0
-                    );
+        container.appendChild(div);
+
+    });
 
 
-                downloads +=
-                    Number(
-                        book.downloads || 0
-                    );
+    document.querySelectorAll(
+        ".delete-comment"
+    ).forEach(button => {
 
-            }
-        );
+        button.addEventListener(
+            "click",
+            function() {
 
-
-        setText(
-            "totalBooks",
-            snapshot.size
-        );
-
-
-        setText(
-            "totalViews",
-            views
-        );
-
-
-        setText(
-            "totalLikes",
-            likes
-        );
-
-
-        setText(
-            "totalShares",
-            shares
-        );
-
-
-        setText(
-            "totalDownloads",
-            downloads
-        );
-
-
-        console.log(
-            "✅ Statistics loaded"
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Statistics error:",
-            error
-        );
-
-    }
-
-}
-
-
-/*=========================================================
- SET TEXT
-=========================================================*/
-
-function setText(
-    id,
-    value
-) {
-
-    const element =
-        byId(id);
-
-
-    if (element) {
-
-        element.innerText =
-            value;
-
-    }
-
-}
-
-
-/*=========================================================
- LATEST BOOK
-=========================================================*/
-
-async function setLatestBook(
-    bookId
-) {
-
-    if (!bookId) return;
-
-
-    try {
-
-        /*
-        Remove latest from all books
-        */
-
-        const snapshot =
-            await firebase
-                .firestore()
-                .collection("books")
-                .where(
-                    "latest",
-                    "==",
-                    true
-                )
-                .get();
-
-
-        const batch =
-            firebase
-                .firestore()
-                .batch();
-
-
-        snapshot.forEach(
-            function (doc) {
-
-                batch.update(
-                    doc.ref,
-                    {
-                        latest: false
-                    }
+                deleteComment(
+                    this.dataset.book,
+                    this.dataset.comment
                 );
 
             }
         );
 
+    });
 
-        const selected =
-            firebase
-                .firestore()
-                .collection("books")
-                .doc(bookId);
+}
 
 
-        batch.update(
-            selected,
-            {
-                latest: true
-            }
+/*=========================================================
+ DELETE COMMENT
+=========================================================*/
+
+async function deleteComment(
+    bookId,
+    commentId
+) {
+
+    if (!bookId || !commentId) return;
+
+
+    const confirmed =
+        confirm(
+            "Delete this comment?"
         );
 
 
-        await batch.commit();
+    if (!confirmed) return;
 
+
+    try {
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .collection("comments")
+            .doc(commentId)
+            .delete();
+
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                comments:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(-1)
+
+            });
+
+
+        await loadComments();
 
         console.log(
-            "⭐ Latest book updated"
+            "✅ Comment deleted"
         );
-
-
-        loadAdminBooks();
 
     }
 
     catch (error) {
 
         console.error(
-            "❌ Latest book error:",
+            "❌ Comment delete error:",
             error
+        );
+
+        alert(
+            "❌ Could not delete comment."
         );
 
     }
@@ -1650,118 +1827,29 @@ async function setLatestBook(
  INITIALIZE ADMIN
 =========================================================*/
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+waitForFirebase(function() {
 
-        protectAdminPage();
+    console.log(
+        "🔥 Firebase ready for Admin Panel"
+    );
 
-        loadAdminBooks();
+    initializeAdminAuth();
 
-        loadAdminStatistics();
+    initializeLogin();
 
+    initializeLogout();
 
-        /*
-        =============================================
-        SEARCH LISTENER
-        =============================================
-        */
+    initializeNavigation();
 
-        const search =
-            byId("adminSearch") ||
-            byId("searchBooks");
+    initializeMobileMenu();
 
+    initializeBookForm();
 
-        if (search) {
+    initializeCancel();
 
-            search.addEventListener(
-                "input",
-                searchAdminBooks
-            );
+    initializeFileInputs();
 
-        }
-
-
-        /*
-        =============================================
-        ADD BOOK BUTTON
-        =============================================
-        */
-
-        const addButton =
-            byId("addBookBtn");
-
-
-        if (
-            addButton &&
-            addButton.tagName !== "SUBMIT"
-        ) {
-
-            addButton.addEventListener(
-                "click",
-                function () {
-
-                    const form =
-                        byId("bookForm");
-
-
-                    if (form) {
-
-                        form.requestSubmit();
-
-                    }
-
-                    else {
-
-                        addAdminBook();
-
-                    }
-
-                }
-            );
-
-        }
-
-    }
-);
-
-
-/*=========================================================
- GLOBAL FUNCTIONS
-=========================================================*/
-
-window.adminLogin =
-    adminLogin;
-
-window.adminLogout =
-    adminLogout;
-
-window.loadAdminBooks =
-    loadAdminBooks;
-
-window.addAdminBook =
-    addAdminBook;
-
-window.editAdminBook =
-    editAdminBook;
-
-window.updateAdminBook =
-    updateAdminBook;
-
-window.deleteAdminBook =
-    deleteAdminBook;
-
-window.searchAdminBooks =
-    searchAdminBooks;
-
-window.filterAdminCategory =
-    filterAdminCategory;
-
-window.loadAdminStatistics =
-    loadAdminStatistics;
-
-window.setLatestBook =
-    setLatestBook;
+});
 
 
 /*=========================================================
@@ -1785,31 +1873,35 @@ console.log(
 );
 
 console.log(
-    "✅ Redirect System"
+    "✅ Authentication"
 );
 
 console.log(
-    "✅ Authentication Protection"
+    "✅ Dashboard"
 );
 
 console.log(
-    "✅ Logout"
+    "✅ Books"
 );
 
 console.log(
-    "✅ Book Upload"
+    "✅ Add Book"
 );
 
 console.log(
-    "✅ Book Edit"
+    "✅ Edit Book"
 );
 
 console.log(
-    "✅ Book Delete"
+    "✅ Delete Book"
 );
 
 console.log(
-    "✅ Book Search"
+    "✅ PDF Upload"
+);
+
+console.log(
+    "✅ Cover Upload"
 );
 
 console.log(
@@ -1821,7 +1913,11 @@ console.log(
 );
 
 console.log(
-    "✅ Statistics"
+    "✅ Comments"
+);
+
+console.log(
+    "✅ Logout"
 );
 
 console.log(
