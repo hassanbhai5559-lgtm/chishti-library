@@ -1,8 +1,8 @@
 /*=========================================================
  CHISHTI LIBRARY
  SCRIPT.JS
- FULL FIXED VERSION
- 38 BOOKS / MOST LIKED TOP 6 / REAL PDF URLS
+ CLEAN FINAL VERSION
+ BOOKS.JSON + FIREBASE + READER
 =========================================================*/
 
 "use strict";
@@ -15,6 +15,8 @@
 let allBooks = [];
 let filteredBooks = [];
 let knowledge = [];
+
+let mostLikedTimer = null;
 
 
 /*=========================================================
@@ -40,12 +42,9 @@ function escapeHTML(value) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+
 }
 
-
-/*=========================================================
- FIREBASE CHECK
-=========================================================*/
 
 function firebaseReady() {
 
@@ -133,10 +132,12 @@ window.addEventListener("scroll", () => {
     if (window.scrollY > 300) {
 
         scrollBtn.style.display = "flex";
+        scrollBtn.classList.add("show");
 
     } else {
 
         scrollBtn.style.display = "none";
+        scrollBtn.classList.remove("show");
 
     }
 
@@ -203,9 +204,7 @@ function animateNumber(element, target, speed = 20) {
             current.toLocaleString();
 
         if (current >= target) {
-
             clearInterval(timer);
-
         }
 
     }, speed);
@@ -289,6 +288,7 @@ async function updateVisitorCounter() {
                 latest.data()?.count
             );
 
+
         animateNumber(
             counter,
             total,
@@ -318,27 +318,6 @@ updateVisitorCounter();
  BOOK UNIQUE KEY
 =========================================================*/
 
-/*
- IMPORTANT:
-
- PDF filename is the REAL identity of a book.
-
- Example:
-
- husn-e-kainat.pdf
-
- becomes:
-
- books/husn-e-kainat.pdf
-
- NOT:
-
- book-2
- 6
- 7
- etc.
-*/
-
 function getBookKey(book) {
 
     if (!book) return "";
@@ -360,17 +339,14 @@ function getBookKey(book) {
 function getReaderURL(book) {
 
     if (!book || !book.pdf) {
-
         return "reader.html";
-
     }
-
-    const pdf =
-        String(book.pdf).trim();
 
     return (
         "reader.html?book=" +
-        encodeURIComponent(pdf)
+        encodeURIComponent(
+            String(book.pdf).trim()
+        )
     );
 
 }
@@ -383,9 +359,7 @@ function getReaderURL(book) {
 function getPDFURL(book) {
 
     if (!book || !book.pdf) {
-
         return "#";
-
     }
 
     return encodeURI(
@@ -434,13 +408,6 @@ async function loadBooks() {
         }
 
 
-        /*
-         * ONLY books.json
-         *
-         * No extra books.
-         * No hard-coded books.
-         */
-
         allBooks = data.filter(
             book =>
                 book &&
@@ -453,15 +420,14 @@ async function loadBooks() {
 
 
         console.log(
-            "📚 Actual books in books.json:",
+            "📚 Books loaded:",
             allBooks.length
         );
 
 
-        /* BOOK COUNTER */
-
         const bookCounter =
             byId("bookCounter");
+
 
         if (bookCounter) {
 
@@ -474,19 +440,13 @@ async function loadBooks() {
         }
 
 
-        /* ALL BOOKS */
-
         displayBooks(
             filteredBooks
         );
 
 
-        /* LATEST */
-
         latestBook();
 
-
-        /* MOST LIKED */
 
         renderMostLikedBooks();
 
@@ -560,80 +520,13 @@ function getBookStats(book) {
 
 
 /*=========================================================
- ALL BOOKS
- STATIC GRID
-=========================================================*/
-
-function displayBooks(books) {
-
-    const container =
-        byId("booksContainer");
-
-    if (!container) return;
-
-
-    container.innerHTML = "";
-
-
-    if (
-        !Array.isArray(books) ||
-        books.length === 0
-    ) {
-
-        container.innerHTML = `
-
-            <div class="no-books">
-
-                <h2>
-                    No Books Found
-                </h2>
-
-                <p>
-                    Try another search.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    /*
-     * IMPORTANT:
-     *
-     * No transform
-     * No interval
-     * No carousel
-     *
-     * All Books remain fixed.
-     */
-
-    books.forEach(book => {
-
-        container.insertAdjacentHTML(
-            "beforeend",
-            createBookCard(book)
-        );
-
-    });
-
-}
-
-
-/*=========================================================
- CREATE ALL BOOK CARD
+ CREATE BOOK CARD
 =========================================================*/
 
 function createBookCard(book) {
 
     const stats =
         getBookStats(book);
-
-    const bookKey =
-        getBookKey(book);
 
 
     return `
@@ -665,44 +558,33 @@ function createBookCard(book) {
 
         <div class="book-content">
 
-
             <span class="book-category">
-
                 ${escapeHTML(
                     book.category || "Book"
                 )}
-
             </span>
 
 
             <h2>
-
                 ${escapeHTML(
                     book.title || "Untitled"
                 )}
-
             </h2>
 
 
             <h3>
-
                 ${escapeHTML(
                     book.author || "Unknown Author"
                 )}
-
             </h3>
 
 
             <p>
-
                 ${escapeHTML(
                     book.description || ""
                 )}
-
             </p>
 
-
-            <!-- STATS -->
 
             <div class="book-meta">
 
@@ -711,9 +593,7 @@ function createBookCard(book) {
                     <i class="fas fa-eye"></i>
 
                     <span class="book-view-count">
-
                         ${stats.views}
-
                     </span>
 
                 </span>
@@ -724,9 +604,7 @@ function createBookCard(book) {
                     <i class="fas fa-heart"></i>
 
                     <span class="book-like-count">
-
                         ${stats.likes}
-
                     </span>
 
                 </span>
@@ -737,9 +615,7 @@ function createBookCard(book) {
                     <i class="fas fa-download"></i>
 
                     <span class="book-download-count">
-
                         ${stats.downloads}
-
                     </span>
 
                 </span>
@@ -747,10 +623,7 @@ function createBookCard(book) {
             </div>
 
 
-            <!-- ACTION BAR -->
-
             <div class="chishti-book-actions">
-
 
                 <button
                     type="button"
@@ -814,14 +687,10 @@ function createBookCard(book) {
 
                 </button>
 
-
             </div>
 
 
-            <!-- BUTTONS -->
-
             <div class="book-buttons">
-
 
                 <a
                     href="${getReaderURL(book)}"
@@ -859,15 +728,66 @@ function createBookCard(book) {
 
                 </a>
 
-
             </div>
-
 
         </div>
 
     </article>
 
     `;
+
+}
+
+
+/*=========================================================
+ DISPLAY BOOKS
+=========================================================*/
+
+function displayBooks(books) {
+
+    const container =
+        byId("booksContainer");
+
+    if (!container) return;
+
+
+    container.innerHTML = "";
+
+
+    if (
+        !Array.isArray(books) ||
+        books.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="no-books">
+
+                <h2>
+                    No Books Found
+                </h2>
+
+                <p>
+                    Try another search.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    books.forEach(book => {
+
+        container.insertAdjacentHTML(
+            "beforeend",
+            createBookCard(book)
+        );
+
+    });
 
 }
 
@@ -883,7 +803,7 @@ function findBookFromElement(element) {
 
     const card =
         element.closest(
-            ".book-card, .most-liked-card"
+            ".book-card, .most-liked-card, .latest-book-card"
         );
 
 
@@ -898,10 +818,6 @@ function findBookFromElement(element) {
         card.dataset.bookId || "";
 
 
-    /*
-     * FIRST MATCH PDF
-     */
-
     let book =
         allBooks.find(
             item =>
@@ -909,10 +825,6 @@ function findBookFromElement(element) {
                 String(pdf)
         );
 
-
-    /*
-     * SECOND MATCH ID
-     */
 
     if (!book && id) {
 
@@ -932,7 +844,7 @@ function findBookFromElement(element) {
 
 
 /*=========================================================
- SEARCH BOOKS
+ SEARCH
 =========================================================*/
 
 function searchBooks() {
@@ -994,10 +906,6 @@ function searchBooks() {
 }
 
 
-/*=========================================================
- SEARCH CONNECT
-=========================================================*/
-
 document.addEventListener(
     "DOMContentLoaded",
     () => {
@@ -1005,9 +913,7 @@ document.addEventListener(
         const input =
             byId("searchInput");
 
-
         if (!input) return;
-
 
         input.addEventListener(
             "input",
@@ -1031,18 +937,14 @@ function filterBooks(
         .querySelectorAll(".category")
         .forEach(btn => {
 
-            btn.classList.remove(
-                "active"
-            );
+            btn.classList.remove("active");
 
         });
 
 
     if (button) {
 
-        button.classList.add(
-            "active"
-        );
+        button.classList.add("active");
 
     }
 
@@ -1082,13 +984,33 @@ function filterBooks(
 
 
 /*=========================================================
- SORT BOOKS
+ SORT
 =========================================================*/
 
 function sortBooks(type) {
 
     let sorted =
         [...filteredBooks];
+
+
+    document
+        .querySelectorAll(".sort-btn")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    const activeButton =
+        document.querySelector(
+            `.sort-btn[onclick="sortBooks('${type}')"]`
+        );
+
+
+    if (activeButton) {
+        activeButton.classList.add("active");
+    }
 
 
     if (type === "latest") {
@@ -1164,9 +1086,7 @@ function latestBook() {
         !Array.isArray(allBooks) ||
         allBooks.length === 0
     ) {
-
         return;
-
     }
 
 
@@ -1193,6 +1113,23 @@ function latestBook() {
     if (!latest) return;
 
 
+    const latestCard =
+        document.querySelector(
+            ".latest-book-card"
+        );
+
+
+    if (latestCard) {
+
+        latestCard.dataset.bookId =
+            String(latest.id ?? "");
+
+        latestCard.dataset.bookPdf =
+            String(latest.pdf ?? "");
+
+    }
+
+
     const image =
         document.querySelector(
             ".latest-book .book-image img"
@@ -1214,12 +1151,6 @@ function latestBook() {
     const desc =
         document.querySelector(
             ".latest-book .book-info p"
-        );
-
-
-    const buttons =
-        document.querySelectorAll(
-            ".latest-book .book-buttons a"
         );
 
 
@@ -1258,25 +1189,80 @@ function latestBook() {
     }
 
 
-    if (buttons.length >= 2) {
+    const stats =
+        getBookStats(latest);
 
-        /*
-         * CORRECT READER URL
-         *
-         * reader.html?book=filename.pdf
-         */
+
+    const statsBox =
+        document.querySelector(
+            ".latest-book-stats"
+        );
+
+
+    if (statsBox) {
+
+        const view =
+            statsBox.querySelector(
+                ".latest-view-count"
+            );
+
+        const like =
+            statsBox.querySelector(
+                ".latest-like-count"
+            );
+
+        const download =
+            statsBox.querySelector(
+                ".latest-download-count"
+            );
+
+
+        if (view) {
+            view.innerText = stats.views;
+        }
+
+        if (like) {
+            like.innerText = stats.likes;
+        }
+
+        if (download) {
+            download.innerText = stats.downloads;
+        }
+
+    }
+
+
+    const buttons =
+        document.querySelectorAll(
+            ".latest-book .book-buttons a"
+        );
+
+
+    if (buttons.length >= 2) {
 
         buttons[0].href =
             getReaderURL(latest);
 
+        buttons[0].removeAttribute("target");
 
-        buttons[0].removeAttribute(
-            "target"
-        );
+        buttons[0].dataset.bookId =
+            String(latest.id ?? "");
 
+        buttons[0].dataset.bookPdf =
+            String(latest.pdf ?? "");
 
         buttons[1].href =
             getPDFURL(latest);
+
+        buttons[1].dataset.bookId =
+            String(latest.id ?? "");
+
+        buttons[1].dataset.bookPdf =
+            String(latest.pdf ?? "");
+
+        buttons[1].classList.add(
+            "download-book"
+        );
 
     }
 
@@ -1284,8 +1270,7 @@ function latestBook() {
 
 
 /*=========================================================
- MOST LIKED TOP 6
- SMALL HORIZONTAL CAROUSEL
+ MOST LIKED
 =========================================================*/
 
 function renderMostLikedBooks() {
@@ -1293,14 +1278,10 @@ function renderMostLikedBooks() {
     if (
         !Array.isArray(allBooks) ||
         allBooks.length === 0
-    ) return;
+    ) {
+        return;
+    }
 
-
-    /*
-     * TOP 6 ONLY
-     *
-     * Based on actual likes.
-     */
 
     const topBooks =
         [...allBooks]
@@ -1311,15 +1292,8 @@ function renderMostLikedBooks() {
                     safeNumber(a.likes);
 
 
-                /*
-                 * If likes are same,
-                 * views decide the order.
-                 */
-
                 if (likesDifference !== 0) {
-
                     return likesDifference;
-
                 }
 
 
@@ -1339,34 +1313,20 @@ function renderMostLikedBooks() {
         byId("mostLikedSection");
 
 
-    /*
-     * CREATE SECTION
-     */
-
     if (!section) {
 
         section =
-            document.createElement(
-                "section"
-            );
-
+            document.createElement("section");
 
         section.id =
             "mostLikedSection";
-
 
         section.className =
             "most-liked-books";
 
 
-        /*
-         * PUT DIRECTLY BEFORE AUTHORS
-         */
-
         const authors =
-            document.querySelector(
-                ".authors"
-            );
+            document.querySelector(".authors");
 
 
         if (authors) {
@@ -1380,58 +1340,24 @@ function renderMostLikedBooks() {
 
         else {
 
-            /*
-             * Fallback:
-             * search common author IDs/classes.
-             */
-
-            const authorSection =
-                document.querySelector(
-                    "#authors, .authors-section, [id*='authors']"
-                );
-
-
-            if (authorSection) {
-
-                authorSection.parentNode.insertBefore(
-                    section,
-                    authorSection
-                );
-
-            }
-
-            else {
-
-                document.body.appendChild(
-                    section
-                );
-
-            }
+            document.body.appendChild(section);
 
         }
 
     }
 
 
-    /*
-     * RENDER
-     */
-
     section.innerHTML = `
 
         <div class="container">
 
             <h2 class="section-title">
-
                 Most Liked Books
-
             </h2>
 
 
             <p class="section-subtitle">
-
                 Top 6 books loved by Chishti Library readers.
-
             </p>
 
 
@@ -1443,9 +1369,7 @@ function renderMostLikedBooks() {
                 >
 
                     ${topBooks
-                        .map(
-                            createMostLikedCard
-                        )
+                        .map(createMostLikedCard)
                         .join("")}
 
                 </div>
@@ -1464,7 +1388,6 @@ function renderMostLikedBooks() {
 
 /*=========================================================
  MOST LIKED CARD
- SMALL VERSION
 =========================================================*/
 
 function createMostLikedCard(book) {
@@ -1485,7 +1408,6 @@ function createMostLikedCard(book) {
         )}"
     >
 
-
         <div class="most-liked-cover">
 
             <img
@@ -1503,61 +1425,51 @@ function createMostLikedCard(book) {
 
         <div class="most-liked-info">
 
-
             <span class="book-category">
-
                 ${escapeHTML(
                     book.category || "Book"
                 )}
-
             </span>
 
 
             <h3>
-
                 ${escapeHTML(
                     book.title || "Untitled"
                 )}
-
             </h3>
 
 
             <p>
-
                 ${escapeHTML(
                     book.author || ""
                 )}
-
             </p>
 
 
             <div class="most-liked-stats">
 
-
                 <span>
-
                     <i class="fas fa-heart"></i>
-
                     ${stats.likes}
-
                 </span>
-
 
                 <span>
-
                     <i class="fas fa-eye"></i>
-
                     ${stats.views}
-
                 </span>
-
 
             </div>
 
 
             <a
-                class="btn"
+                class="btn read-book"
                 href="${getReaderURL(book)}"
+                data-book-id="${escapeHTML(
+                    String(book.id ?? "")
+                )}"
+                data-book-pdf="${escapeHTML(
+                    String(book.pdf ?? "")
+                )}"
             >
 
                 <i class="fas fa-book-open"></i>
@@ -1566,9 +1478,7 @@ function createMostLikedCard(book) {
 
             </a>
 
-
         </div>
-
 
     </article>
 
@@ -1581,9 +1491,6 @@ function createMostLikedCard(book) {
  MOST LIKED CAROUSEL
 =========================================================*/
 
-let mostLikedTimer = null;
-
-
 function startMostLikedCarousel() {
 
     const track =
@@ -1592,13 +1499,6 @@ function startMostLikedCarousel() {
 
     if (!track) return;
 
-
-    /*
-     * Clear previous timer.
-     *
-     * Prevents multiple intervals
-     * after liking a book.
-     */
 
     if (mostLikedTimer) {
 
@@ -1616,11 +1516,6 @@ function startMostLikedCarousel() {
             ".most-liked-card"
         );
 
-
-    /*
-     * 1-6 cards:
-     * no need to move if only one.
-     */
 
     if (cards.length <= 1) return;
 
@@ -1658,17 +1553,8 @@ function startMostLikedCarousel() {
         position++;
 
 
-        /*
-         * When last card reached,
-         * smoothly return to first.
-         */
-
-        if (
-            position >= cards.length
-        ) {
-
+        if (position >= cards.length) {
             position = 0;
-
         }
 
 
@@ -1680,10 +1566,6 @@ function startMostLikedCarousel() {
 
     }
 
-
-    /*
-     * Move every 1 second.
-     */
 
     mostLikedTimer =
         setInterval(
@@ -1715,24 +1597,14 @@ async function likeBook(book) {
         encodeURIComponent(key);
 
 
-    /*
-     * ONE LIKE PER BROWSER
-     */
-
     if (
         localStorage.getItem(
             storageKey
         ) === "true"
     ) {
-
         return;
-
     }
 
-
-    /*
-     * Optimistic local update
-     */
 
     book.likes =
         safeNumber(book.likes) + 1;
@@ -1747,16 +1619,8 @@ async function likeBook(book) {
     updateBookUI(book);
 
 
-    /*
-     * Re-render Top 6 immediately
-     */
-
     renderMostLikedBooks();
 
-
-    /*
-     * Firebase
-     */
 
     if (!firebaseReady()) return;
 
@@ -1785,9 +1649,7 @@ async function likeBook(book) {
                         .serverTimestamp()
 
             }, {
-
                 merge: true
-
             });
 
 
@@ -1811,7 +1673,7 @@ async function likeBook(book) {
 
 
 /*=========================================================
- VIEW BOOK
+ COUNT VIEW
 =========================================================*/
 
 async function countBookView(book) {
@@ -1826,10 +1688,6 @@ async function countBookView(book) {
     if (!key) return;
 
 
-    /*
-     * ONE VIEW PER SESSION
-     */
-
     const sessionKey =
         "chishti-viewed-" +
         encodeURIComponent(key);
@@ -1840,9 +1698,7 @@ async function countBookView(book) {
             sessionKey
         )
     ) {
-
         return;
-
     }
 
 
@@ -1852,20 +1708,12 @@ async function countBookView(book) {
     );
 
 
-    /*
-     * Local update
-     */
-
     book.views =
         safeNumber(book.views) + 1;
 
 
     updateBookUI(book);
 
-
-    /*
-     * Firebase
-     */
 
     if (!firebaseReady()) return;
 
@@ -1894,9 +1742,7 @@ async function countBookView(book) {
                         .serverTimestamp()
 
             }, {
-
                 merge: true
-
             });
 
 
@@ -1929,24 +1775,16 @@ function updateBookUI(book) {
 
 
     const pdf =
-        String(
-            book.pdf || ""
-        );
+        String(book.pdf || "");
 
 
     const id =
-        String(
-            book.id || ""
-        );
+        String(book.id || "");
 
-
-    /*
-     * Update every matching book card.
-     */
 
     document
         .querySelectorAll(
-            ".book-card, .most-liked-card"
+            ".book-card, .most-liked-card, .latest-book-card"
         )
         .forEach(card => {
 
@@ -1969,7 +1807,6 @@ function updateBookUI(book) {
                     cardID === id
                 )
             ) {
-
 
                 card.querySelectorAll(
                     ".book-like-count, .like-action span"
@@ -2009,6 +1846,45 @@ function updateBookUI(book) {
 
                 });
 
+
+                card.querySelectorAll(
+                    ".latest-view-count"
+                )
+                .forEach(el => {
+
+                    el.innerText =
+                        safeNumber(
+                            book.views
+                        );
+
+                });
+
+
+                card.querySelectorAll(
+                    ".latest-like-count"
+                )
+                .forEach(el => {
+
+                    el.innerText =
+                        safeNumber(
+                            book.likes
+                        );
+
+                });
+
+
+                card.querySelectorAll(
+                    ".latest-download-count"
+                )
+                .forEach(el => {
+
+                    el.innerText =
+                        safeNumber(
+                            book.downloads
+                        );
+
+                });
+
             }
 
         });
@@ -2017,7 +1893,7 @@ function updateBookUI(book) {
 
 
 /*=========================================================
- LIKE BUTTON CLICK
+ LIKE BUTTON
 =========================================================*/
 
 document.addEventListener(
@@ -2055,24 +1931,14 @@ document.addEventListener(
             encodeURIComponent(key);
 
 
-        /*
-         * Already liked
-         */
-
         if (
             localStorage.getItem(
                 storageKey
             ) === "true"
         ) {
-
             return;
-
         }
 
-
-        /*
-         * Change heart
-         */
 
         const icon =
             button.querySelector("i");
@@ -2118,60 +1984,6 @@ document.addEventListener(
         if (!book) return;
 
 
-        /*
-         * FORCE REAL PDF FILENAME
-         */
-
-        const readerURL =
-            getReaderURL(book);
-
-
-        button.href =
-            readerURL;
-
-
-        console.log(
-            "📖 Opening:",
-            readerURL
-        );
-
-
-        /*
-         * Count view
-         */
-
-        await countBookView(book);
-
-    }
-);
-
-
-/*=========================================================
- MOST LIKED READ BUTTON
-=========================================================*/
-
-document.addEventListener(
-    "click",
-    async event => {
-
-        const button =
-            event.target.closest(
-                ".most-liked-card .btn"
-            );
-
-
-        if (!button) return;
-
-
-        const book =
-            findBookFromElement(
-                button
-            );
-
-
-        if (!book) return;
-
-
         button.href =
             getReaderURL(book);
 
@@ -2183,7 +1995,7 @@ document.addEventListener(
 
 
 /*=========================================================
- VIEW ACTION BUTTON
+ VIEW BUTTON
 =========================================================*/
 
 document.addEventListener(
@@ -2210,11 +2022,6 @@ document.addEventListener(
 
         if (!book) return;
 
-
-        /*
-         * View button shows/counts
-         * one view per session.
-         */
 
         await countBookView(book);
 
@@ -2248,17 +2055,9 @@ document.addEventListener(
         if (!book) return;
 
 
-        /*
-         * Correct PDF
-         */
-
         button.href =
             getPDFURL(book);
 
-
-        /*
-         * Local count
-         */
 
         book.downloads =
             safeNumber(
@@ -2268,10 +2067,6 @@ document.addEventListener(
 
         updateBookUI(book);
 
-
-        /*
-         * Firebase
-         */
 
         if (!firebaseReady()) return;
 
@@ -2306,9 +2101,7 @@ document.addEventListener(
                             .serverTimestamp()
 
                 }, {
-
                     merge: true
-
                 });
 
 
@@ -2333,7 +2126,7 @@ document.addEventListener(
 
 
 /*=========================================================
- SHARE BOOK
+ SHARE
 =========================================================*/
 
 document.addEventListener(
@@ -2368,9 +2161,7 @@ document.addEventListener(
             ).href;
 
 
-        if (
-            navigator.share
-        ) {
+        if (navigator.share) {
 
             try {
 
@@ -2390,25 +2181,17 @@ document.addEventListener(
 
             }
 
-            catch (error) {
-
-                /*
-                 * User cancelled share.
-                 */
-
-            }
+            catch (error) {}
 
         }
 
-        else if (
-            navigator.clipboard
-        ) {
+        else if (navigator.clipboard) {
 
             try {
 
-                await navigator.clipboard
-                    .writeText(url);
-
+                await navigator.clipboard.writeText(
+                    url
+                );
 
                 alert(
                     "Book link copied!"
@@ -2553,9 +2336,7 @@ document.addEventListener(
 
         sections.forEach(section => {
 
-            observer.observe(
-                section
-            );
+            observer.observe(section);
 
         });
 
@@ -2727,27 +2508,20 @@ function searchBook(question) {
     return `
 
         📚 <b>
-            ${escapeHTML(
-                book.title
-            )}
+            ${escapeHTML(book.title)}
         </b>
 
         <br><br>
 
         👤
-        ${escapeHTML(
-            book.author
-        )}
+        ${escapeHTML(book.author)}
 
         <br>
 
         📂
-        ${escapeHTML(
-            book.category
-        )}
+        ${escapeHTML(book.category)}
 
         <br><br>
-
 
         <a
             href="${getReaderURL(book)}"
@@ -2758,9 +2532,7 @@ function searchBook(question) {
 
         </a>
 
-
         &nbsp;
-
 
         <a
             href="${getPDFURL(book)}"
@@ -2789,9 +2561,7 @@ function searchKnowledge(question) {
             .trim();
 
 
-    for (
-        const item of knowledge
-    ) {
+    for (const item of knowledge) {
 
         const itemQuestion =
             String(
@@ -2900,17 +2670,13 @@ function sendMessage() {
     setTimeout(() => {
 
         let reply =
-            searchBook(
-                question
-            );
+            searchBook(question);
 
 
         if (!reply) {
 
             reply =
-                searchKnowledge(
-                    question
-                );
+                searchKnowledge(question);
 
         }
 
@@ -2942,9 +2708,7 @@ if (chatInput) {
         "keydown",
         event => {
 
-            if (
-                event.key === "Enter"
-            ) {
+            if (event.key === "Enter") {
 
                 event.preventDefault();
 
@@ -2974,9 +2738,7 @@ document.addEventListener(
             if (
                 event.target.dataset.fallbackDone
             ) {
-
                 return;
-
             }
 
 
@@ -3004,7 +2766,9 @@ window.addEventListener(
 
         if (
             !Array.isArray(allBooks)
-        ) return;
+        ) {
+            return;
+        }
 
 
         allBooks.forEach(book => {
@@ -3052,7 +2816,9 @@ document.addEventListener(
                         if (
                             !href ||
                             href === "#"
-                        ) return;
+                        ) {
+                            return;
+                        }
 
 
                         const target =
@@ -3136,15 +2902,15 @@ console.log(
 );
 
 console.log(
-    "✅ Most Liked = SMALL CARDS"
-);
-
-console.log(
     "✅ Most Liked = AUTO MOVING"
 );
 
 console.log(
     "✅ Reader uses REAL PDF filename"
+);
+
+console.log(
+    "✅ Latest Book connected"
 );
 
 console.log(
@@ -3178,4 +2944,3 @@ console.log(
 console.log(
     "===================================="
 );
-
