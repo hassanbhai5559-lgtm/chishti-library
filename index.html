@@ -19,15 +19,11 @@
     <meta name="author"
           content="Chishti Library">
 
-
     <!-- GOOGLE VERIFICATION -->
-
     <meta name="google-site-verification"
           content="dnI7e07V0xtGoWxgsCqJy-lDkwCFmeaiSlrK6uHToDgkc">
 
-
     <!-- FAVICON -->
-
     <link rel="icon"
           type="image/png"
           href="./logo.png">
@@ -35,9 +31,7 @@
     <link rel="apple-touch-icon"
           href="./logo.png">
 
-
     <!-- GOOGLE FONT -->
-
     <link rel="preconnect"
           href="https://fonts.googleapis.com">
 
@@ -48,27 +42,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet">
 
-
     <!-- FONT AWESOME -->
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-
     <!-- MAIN CSS -->
-
     <link rel="stylesheet"
           href="./style.css">
 
-
     <!-- READER PAGE -->
-
     <script>
         window.CHISHTI_READER_PAGE = "reader.html";
     </script>
 
 </head>
-
 
 <body>
 
@@ -275,6 +262,7 @@
             onclick="sortBooks('latest')">
 
         <i class="fas fa-clock"></i>
+
         Latest
 
     </button>
@@ -285,6 +273,7 @@
             onclick="sortBooks('oldest')">
 
         <i class="fas fa-hourglass-start"></i>
+
         Oldest
 
     </button>
@@ -295,6 +284,7 @@
             onclick="sortBooks('liked')">
 
         <i class="fas fa-heart"></i>
+
         Most Liked
 
     </button>
@@ -305,6 +295,7 @@
             onclick="sortBooks('popular')">
 
         <i class="fas fa-fire"></i>
+
         Popular
 
     </button>
@@ -360,25 +351,24 @@
 
             <div class="book-buttons">
 
-                <!-- READER -->
-
-                <a href="reader.html?book=shaheed-ibn-e-shaheed"
+                <a href="reader.html?book=shaheed-ibn-e-shaheed.pdf"
                    class="btn read-book"
-                   data-book-id="shaheed-ibn-e-shaheed">
+                   data-book-pdf="shaheed-ibn-e-shaheed.pdf">
 
                     <i class="fas fa-book-open"></i>
+
                     Read Online
 
                 </a>
 
 
-                <!-- PDF DOWNLOAD -->
-
                 <a href="shaheed-ibn-e-shaheed.pdf"
-                   class="btn"
+                   class="btn download-book"
+                   data-book-pdf="shaheed-ibn-e-shaheed.pdf"
                    download>
 
                     <i class="fas fa-download"></i>
+
                     Download PDF
 
                 </a>
@@ -440,50 +430,64 @@
 
         <button class="category active"
                 type="button"
-                onclick="filterBooks('All')">
+                onclick="filterBooks('All', this)">
+
             ALL
+
         </button>
 
 
         <button class="category"
                 type="button"
-                onclick="filterBooks('Naat')">
+                onclick="filterBooks('Naat', this)">
+
             NAAT
+
         </button>
 
 
         <button class="category"
                 type="button"
-                onclick="filterBooks('Manqabat')">
+                onclick="filterBooks('Manqabat', this)">
+
             MANQABAT
+
         </button>
 
 
         <button class="category"
                 type="button"
-                onclick="filterBooks('Hamd')">
+                onclick="filterBooks('Hamd', this)">
+
             HAMD
+
         </button>
 
 
         <button class="category"
                 type="button"
-                onclick="filterBooks('Maqala')">
+                onclick="filterBooks('Maqala', this)">
+
             MAQALA
+
         </button>
 
 
         <button class="category"
                 type="button"
-                onclick="filterBooks('Seerat')">
+                onclick="filterBooks('Seerat', this)">
+
             SEERAT
+
         </button>
 
 
         <button class="category"
                 type="button"
-                onclick="filterBooks('Kulliyat')">
+                onclick="filterBooks('Kulliyat', this)">
+
             KULLIYAT
+
         </button>
 
     </div>
@@ -505,7 +509,13 @@
 
     <div id="booksContainer">
 
-        <!-- Firebase books are loaded here -->
+        <div class="no-books">
+
+            <p>
+                Loading books...
+            </p>
+
+        </div>
 
     </div>
 
@@ -540,7 +550,8 @@
             <div class="author-card">
 
                 <img src="hazrat allama saim chishti.jfif"
-                     alt="Hazrat Allama Saim Chishti">
+                     alt="Hazrat Allama Saim Chishti"
+                     onerror="this.src='logo.png'">
 
                 <h2>
                     Hazrat Allama Saim Chishti
@@ -590,7 +601,8 @@
             <div class="author-card">
 
                 <img src="latif sajid chishti.jpeg"
-                     alt="Latif Sajid Chishti">
+                     alt="Latif Sajid Chishti"
+                     onerror="this.src='logo.png'">
 
                 <h2>
                     Latif Sajid Chishti
@@ -639,7 +651,8 @@
             <div class="author-card">
 
                 <img src="shafiq mujhid chishti.png"
-                     alt="Shafiq Mujahid Chishti">
+                     alt="Shafiq Mujahid Chishti"
+                     onerror="this.src='logo.png'">
 
                 <h2>
                     Shafiq Mujahid Chishti
@@ -688,7 +701,8 @@
             <div class="author-card">
 
                 <img src="touseef haider chishti.jpg"
-                     alt="Touseef Haider Chishti">
+                     alt="Touseef Haider Chishti"
+                     onerror="this.src='logo.png'">
 
                 <h2>
                     Touseef Haider
@@ -836,25 +850,33 @@
     <div class="footer-column">
 
         <h3>
+
             <i class="fas fa-link"></i>
+
             Quick Links
+
         </h3>
+
 
         <a href="index.html">
             Home
         </a>
 
+
         <a href="books.html">
             Books
         </a>
+
 
         <a href="authors.html">
             Authors
         </a>
 
+
         <a href="developer.html">
             Developer
         </a>
+
 
         <a href="contact.html">
             Contact
@@ -863,22 +885,29 @@
     </div>
 
 
+
     <!-- ACCOUNT -->
 
     <div class="footer-column">
 
         <h3>
+
             <i class="fas fa-user"></i>
+
             Account
+
         </h3>
+
 
         <a href="login.html">
             Login
         </a>
 
+
         <a href="login.html">
             Register
         </a>
+
 
         <a href="contact.html">
             Support
@@ -887,13 +916,17 @@
     </div>
 
 
+
     <!-- SOCIAL -->
 
     <div class="footer-column footer-social">
 
         <h3>
+
             <i class="fas fa-share-nodes"></i>
+
             Stay Connected
+
         </h3>
 
 
@@ -902,6 +935,7 @@
            rel="noopener noreferrer">
 
             <i class="fab fa-facebook-f"></i>
+
             Facebook
 
         </a>
@@ -912,6 +946,7 @@
            rel="noopener noreferrer">
 
             <i class="fab fa-youtube"></i>
+
             YouTube
 
         </a>
@@ -922,6 +957,7 @@
            rel="noopener noreferrer">
 
             <i class="fab fa-facebook-f"></i>
+
             Saim Chishti Official
 
         </a>
@@ -932,6 +968,7 @@
            rel="noopener noreferrer">
 
             <i class="fab fa-whatsapp"></i>
+
             WhatsApp
 
         </a>
@@ -939,9 +976,11 @@
     </div>
 
 
+
     <div class="footer-copy">
 
-        © 2026 Chishti Library —
+        © <span id="year">2026</span>
+        Chishti Library —
         All Rights Reserved.
 
     </div>
@@ -965,6 +1004,86 @@
 
 
 <!-- =========================================================
+     CHATBOT
+========================================================= -->
+
+<button id="chatBtn"
+        type="button"
+        aria-label="Open Chishti Library Chatbot">
+
+    <i class="fas fa-robot"></i>
+
+</button>
+
+
+<div id="chatWindow"
+     class="chat-window"
+     style="display:none;">
+
+    <div class="chat-header">
+
+        <div>
+
+            <strong>
+                Chishti Library
+            </strong>
+
+            <small>
+                Library Assistant
+            </small>
+
+        </div>
+
+
+        <button id="closeChat"
+                type="button"
+                aria-label="Close Chat">
+
+            <i class="fas fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <div id="chatMessages"
+         class="chat-messages">
+
+        <div class="bot-message">
+
+            👋 Assalam-o-Alaikum!<br><br>
+
+            Main Chishti Library Assistant hoon.
+            Aap kisi book ka naam, author ya category
+            search kar sakte hain.
+
+        </div>
+
+    </div>
+
+
+    <div class="chat-input-area">
+
+        <input type="text"
+               id="chatInput"
+               placeholder="Ask about a book..."
+               autocomplete="off">
+
+        <button type="button"
+                onclick="sendMessage()"
+                aria-label="Send Message">
+
+            <i class="fas fa-paper-plane"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
      FIREBASE
 ========================================================= -->
 
@@ -976,549 +1095,8 @@
 
 <script src="./firebase.js"></script>
 
+<!-- MAIN SCRIPT -->
 <script src="./script.js"></script>
-
-
-
-<!-- =========================================================
-     READER + BOOK ACTIONS
-========================================================= -->
-
-<script>
-
-(function () {
-
-    "use strict";
-
-
-    /*
-     * READER PAGE
-     * Every Firebase book Read/View button
-     * opens reader.html.
-     */
-
-    function connectReaderLinks() {
-
-        const container =
-            document.getElementById("booksContainer");
-
-        if (!container) return;
-
-
-        container
-            .querySelectorAll(".book-result")
-            .forEach(function (card) {
-
-                const bookId =
-                    card.dataset.bookId ||
-                    card.dataset.id ||
-                    card.getAttribute("data-book-id");
-
-
-                if (!bookId) return;
-
-
-                const links =
-                    card.querySelectorAll("a");
-
-
-                links.forEach(function (link) {
-
-                    const text =
-                        link.textContent
-                            .trim()
-                            .toLowerCase();
-
-
-                    if (
-                        text.includes("read online") ||
-                        text === "read" ||
-                        text.includes("view book")
-                    ) {
-
-                        link.href =
-                            "reader.html?book=" +
-                            encodeURIComponent(bookId);
-
-                        link.removeAttribute("target");
-
-                    }
-
-                });
-
-
-                /*
-                 * ADD BOOK ACTION BAR
-                 */
-
-                addBookActions(card, bookId);
-
-            });
-
-    }
-
-
-
-    /*
-     * BOOK ACTIONS
-     * Views / Like / Comment / Share
-     */
-
-    function addBookActions(card, bookId) {
-
-        if (
-            card.querySelector(
-                ".chishti-book-actions"
-            )
-        ) {
-            return;
-        }
-
-
-        const actionBar =
-            document.createElement("div");
-
-
-        actionBar.className =
-            "chishti-book-actions";
-
-
-        actionBar.innerHTML = `
-
-            <button
-                type="button"
-                class="book-action view-action"
-                title="Views">
-
-                <i class="fas fa-eye"></i>
-
-                <span class="book-view-count">
-                    0
-                </span>
-
-            </button>
-
-
-            <button
-                type="button"
-                class="book-action like-action"
-                data-book-id="${escapeHtml(bookId)}"
-                title="Like">
-
-                <i class="far fa-heart"></i>
-
-                <span>
-                    0
-                </span>
-
-            </button>
-
-
-            <button
-                type="button"
-                class="book-action comment-action"
-                data-book-id="${escapeHtml(bookId)}"
-                title="Comment">
-
-                <i class="far fa-comment"></i>
-
-                <span>
-                    0
-                </span>
-
-            </button>
-
-
-            <button
-                type="button"
-                class="book-action share-action"
-                data-book-id="${escapeHtml(bookId)}"
-                title="Share">
-
-                <i class="fas fa-share-nodes"></i>
-
-                <span>
-                    Share
-                </span>
-
-            </button>
-
-        `;
-
-
-        /*
-         * Put action bar near bottom of card.
-         */
-
-        const buttons =
-            card.querySelector(".book-buttons");
-
-
-        if (buttons) {
-
-            buttons.parentNode.insertBefore(
-                actionBar,
-                buttons
-            );
-
-        } else {
-
-            card.appendChild(actionBar);
-
-        }
-
-
-        /*
-         * LIKE
-         */
-
-        const likeButton =
-            actionBar.querySelector(
-                ".like-action"
-            );
-
-
-        if (likeButton) {
-
-            likeButton.addEventListener(
-                "click",
-                function () {
-
-                    const icon =
-                        likeButton.querySelector("i");
-
-                    const count =
-                        likeButton.querySelector("span");
-
-
-                    let liked =
-                        likeButton.dataset.liked === "true";
-
-
-                    let value =
-                        parseInt(
-                            count.textContent
-                        ) || 0;
-
-
-                    if (!liked) {
-
-                        value++;
-
-                        likeButton.dataset.liked =
-                            "true";
-
-                        icon.className =
-                            "fas fa-heart";
-
-                    } else {
-
-                        value =
-                            Math.max(
-                                0,
-                                value - 1
-                            );
-
-                        likeButton.dataset.liked =
-                            "false";
-
-                        icon.className =
-                            "far fa-heart";
-
-                    }
-
-
-                    count.textContent =
-                        value;
-
-                }
-            );
-
-        }
-
-
-        /*
-         * COMMENT
-         */
-
-        const commentButton =
-            actionBar.querySelector(
-                ".comment-action"
-            );
-
-
-        if (commentButton) {
-
-            commentButton.addEventListener(
-                "click",
-                function () {
-
-                    window.location.href =
-                        "reader.html?book=" +
-                        encodeURIComponent(bookId);
-
-                }
-            );
-
-        }
-
-
-        /*
-         * SHARE
-         */
-
-        const shareButton =
-            actionBar.querySelector(
-                ".share-action"
-            );
-
-
-        if (shareButton) {
-
-            shareButton.addEventListener(
-                "click",
-                function () {
-
-                    const url =
-                        new URL(
-                            "reader.html?book=" +
-                            encodeURIComponent(bookId),
-                            window.location.href
-                        ).href;
-
-
-                    if (
-                        navigator.share
-                    ) {
-
-                        navigator.share({
-
-                            title:
-                                "Chishti Library",
-
-                            text:
-                                "Read this book on Chishti Library",
-
-                            url:
-                                url
-
-                        }).catch(
-                            function () {}
-                        );
-
-                    } else {
-
-                        navigator.clipboard
-                            .writeText(url)
-                            .then(function () {
-
-                                alert(
-                                    "Book link copied!"
-                                );
-
-                            });
-
-                    }
-
-                }
-            );
-
-        }
-
-    }
-
-
-
-    /*
-     * Safe text helper
-     */
-
-    function escapeHtml(value) {
-
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-
-
-    /*
-     * Firebase books load dynamically.
-     * Observer reconnects buttons automatically.
-     */
-
-    const booksContainer =
-        document.getElementById(
-            "booksContainer"
-        );
-
-
-    if (booksContainer) {
-
-        const observer =
-            new MutationObserver(
-                function () {
-
-                    connectReaderLinks();
-
-                }
-            );
-
-
-        observer.observe(
-            booksContainer,
-            {
-                childList: true,
-                subtree: true
-            }
-        );
-
-    }
-
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            connectReaderLinks();
-
-        }
-    );
-
-
-    setTimeout(
-        connectReaderLinks,
-        500
-    );
-
-
-    setTimeout(
-        connectReaderLinks,
-        1500
-    );
-
-
-    setTimeout(
-        connectReaderLinks,
-        3000
-    );
-
-
-
-    /*
-     * MOBILE NAVIGATION
-     */
-
-    const mobileMenu =
-        document.getElementById(
-            "mobileMenu"
-        );
-
-
-    const menu =
-        document.querySelector(
-            ".menu"
-        );
-
-
-    if (
-        mobileMenu &&
-        menu
-    ) {
-
-        mobileMenu.addEventListener(
-            "click",
-            function () {
-
-                menu.classList.toggle(
-                    "active"
-                );
-
-            }
-        );
-
-
-        menu
-            .querySelectorAll("a")
-            .forEach(function (link) {
-
-                link.addEventListener(
-                    "click",
-                    function () {
-
-                        menu.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-            });
-
-    }
-
-
-
-    /*
-     * SCROLL TO TOP
-     */
-
-    const scrollTop =
-        document.getElementById(
-            "scrollTop"
-        );
-
-
-    if (scrollTop) {
-
-        window.addEventListener(
-            "scroll",
-            function () {
-
-                if (
-                    window.scrollY > 400
-                ) {
-
-                    scrollTop.classList.add(
-                        "show"
-                    );
-
-                } else {
-
-                    scrollTop.classList.remove(
-                        "show"
-                    );
-
-                }
-
-            }
-        );
-
-
-        scrollTop.addEventListener(
-            "click",
-            function () {
-
-                window.scrollTo({
-
-                    top: 0,
-
-                    behavior: "smooth"
-
-                });
-
-            }
-        );
-
-    }
-
-})();
-
-</script>
 
 
 </body>
