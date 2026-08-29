@@ -134,241 +134,89 @@ if (scrollBtn) {
 }
 
 
-/* =========================================================
-   VISITOR COUNTER
-========================================================= */
+/*=========================================================
+ CHISHTI LIBRARY - VISITOR COUNTER
+ WAIT FOR FIREBASE
+=========================================================*/
 
-async function updateVisitorCounter() {
+function startVisitorCounter() {
 
-    const counter =
-        document.getElementById(
-            "visitorCounter"
-        );
-
-    if (!counter) return;
-
-
-    /* Firebase not ready */
-
-    if (!firebaseIsReady()) {
+    if (
+        !window.firebaseReady ||
+        !window.db
+    ) {
 
         console.log(
             "⏳ Waiting for Firebase..."
         );
 
-        window.addEventListener(
-            "firebaseReady",
-            updateVisitorCounter,
-            { once: true }
-        );
-
         return;
 
     }
 
 
-    try {
-
-        const visitorRef =
-            window.db
-                .collection("counter")
-                .doc("visitors");
-
-
-        const snapshot =
-            await visitorRef.get();
-
-
-        /* =========================================
-           CREATE COUNTER
-        ========================================= */
-
-        if (!snapshot.exists) {
-
-            await visitorRef.set({
-
-                count: 1,
-
-                updatedAt:
-                    window.firebaseServerTimestamp
-                        ? window.firebaseServerTimestamp()
-                        : new Date()
-
-            });
-
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-
-            counter.innerText = "1";
-
-            console.log(
-                "🌐 First visitor counted"
-            );
-
-            return;
-
-        }
-
-
-        /* =========================================
-           CHECK SESSION
-        ========================================= */
-
-        const alreadyCounted =
-            sessionStorage.getItem(
-                "chishtiVisitorCounted"
-            );
-
-
-        /* =========================================
-           NEW VISITOR
-        ========================================= */
-
-        if (!alreadyCounted) {
-
-            await visitorRef.update({
-
-                count:
-                    window.firebaseIncrement
-                        ? window.firebaseIncrement(1)
-                        : firebase.firestore.FieldValue.increment(1),
-
-                updatedAt:
-                    window.firebaseServerTimestamp
-                        ? window.firebaseServerTimestamp()
-                        : new Date()
-
-            });
-
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-
-            console.log(
-                "🌐 New visitor counted"
-            );
-
-        }
-
-
-        /* =========================================
-           GET CURRENT COUNT
-        ========================================= */
-
-        const latest =
-            await visitorRef.get();
-
-
-        const data =
-            latest.data() || {};
-
-
-        const visitors =
-            Number(data.count) || 0;
-
-
-        /* =========================================
-           ANIMATE NUMBER
-        ========================================= */
-
-        animateCounter(
-            counter,
-            visitors
-        );
-
-
-    }
-
-    catch (error) {
+    if (
+        typeof window.addVisitor !== "function"
+    ) {
 
         console.error(
-            "🔥 Visitor Counter Error:",
-            error
+            "❌ addVisitor() not available"
         );
-
-        counter.innerText = "0";
-
-    }
-
-}
-
-
-/* =========================================================
-   COUNTER ANIMATION
-========================================================= */
-
-function animateCounter(
-    element,
-    target
-) {
-
-    if (!element) return;
-
-    target =
-        Number(target) || 0;
-
-
-    let current = 0;
-
-
-    if (target === 0) {
-
-        element.innerText = "0";
 
         return;
 
     }
 
 
-    const duration = 1000;
+    window.addVisitor()
 
-    const steps = 40;
+        .then(function () {
 
-    const increment =
-        target / steps;
+            console.log(
+                "👤 Visitor successfully added to Firebase"
+            );
 
+        })
 
-    const interval =
-        duration / steps;
+        .catch(function (error) {
 
+            console.error(
+                "❌ Visitor counter error:",
+                error
+            );
 
-    const timer =
-        setInterval(() => {
-
-            current += increment;
-
-
-            if (current >= target) {
-
-                current = target;
-
-                clearInterval(timer);
-
-            }
-
-
-            element.innerText =
-                Math.floor(current)
-                    .toLocaleString();
-
-        }, interval);
+        });
 
 }
 
 
-/* =========================================================
-   START VISITOR COUNTER
-========================================================= */
+/*=========================================================
+ FIREBASE READY EVENT
+=========================================================*/
 
-updateVisitorCounter();
+window.addEventListener(
+    "firebaseReady",
+    function () {
 
+        console.log(
+            "🔥 Firebase is ready"
+        );
+
+        startVisitorCounter();
+
+    }
+);
+
+
+/*=========================================================
+ IF FIREBASE ALREADY READY
+=========================================================*/
+
+if (window.firebaseReady) {
+
+    startVisitorCounter();
+
+}
 
 /* =========================================================
    LOAD BOOKS.JSON
