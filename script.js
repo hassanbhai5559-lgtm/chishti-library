@@ -3,7 +3,7 @@
 /* =========================================================
    CHISHTI LIBRARY
    FULL SCRIPT.JS
-   PREMIUM VERSION
+   FIXED + FIREBASE SUPPORT
    ========================================================= */
 
 
@@ -13,6 +13,8 @@
 
 let allBooks = [];
 let filteredBooks = [];
+
+let firebaseVisitorStarted = false;
 
 
 /* =========================================================
@@ -25,6 +27,59 @@ function firebaseIsReady() {
         window.firebaseReady === true &&
         window.db
     );
+
+}
+
+
+/* =========================================================
+   ANIMATE COUNTER
+========================================================= */
+
+function animateCounter(element, target, duration = 800) {
+
+    if (!element) return;
+
+    target = Number(target) || 0;
+
+    const startTime = performance.now();
+
+    function update(time) {
+
+        const progress =
+            Math.min(
+                (time - startTime) / duration,
+                1
+            );
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+        const value =
+            Math.floor(
+                target * eased
+            );
+
+        element.textContent =
+            value.toLocaleString();
+
+        if (progress < 1) {
+
+            requestAnimationFrame(update);
+
+        } else {
+
+            element.textContent =
+                target.toLocaleString();
+
+        }
+
+    }
+
+    requestAnimationFrame(update);
 
 }
 
@@ -47,7 +102,9 @@ window.addEventListener("load", () => {
 
         setTimeout(() => {
 
-            loader.remove();
+            if (loader) {
+                loader.remove();
+            }
 
         }, 800);
 
@@ -75,9 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
         menu.classList.toggle("show");
 
     });
-
-
-    /* Close menu after clicking link */
 
     menu.querySelectorAll("a").forEach(link => {
 
@@ -122,11 +176,8 @@ if (scrollBtn) {
     scrollBtn.addEventListener("click", () => {
 
         window.scrollTo({
-
             top: 0,
-
             behavior: "smooth"
-
         });
 
     });
@@ -134,17 +185,17 @@ if (scrollBtn) {
 }
 
 
-/*=========================================================
- CHISHTI LIBRARY - VISITOR COUNTER
- WAIT FOR FIREBASE
-=========================================================*/
+/* =========================================================
+   FIREBASE VISITOR COUNTER
+========================================================= */
 
-function startVisitorCounter() {
+async function startVisitorCounter() {
 
-    if (
-        !window.firebaseReady ||
-        !window.db
-    ) {
+    if (firebaseVisitorStarted) {
+        return;
+    }
+
+    if (!firebaseIsReady()) {
 
         console.log(
             "⏳ Waiting for Firebase..."
@@ -154,52 +205,110 @@ function startVisitorCounter() {
 
     }
 
+    firebaseVisitorStarted = true;
 
-    if (
-        typeof window.addVisitor !== "function"
-    ) {
+    try {
+
+        /*
+        -----------------------------------------------------
+        USE EXISTING addVisitor() IF AVAILABLE
+        -----------------------------------------------------
+        */
+
+        if (
+            typeof window.addVisitor ===
+            "function"
+        ) {
+
+            await window.addVisitor();
+
+            console.log(
+                "👤 Visitor successfully added"
+            );
+
+            return;
+
+        }
+
+
+        /*
+        -----------------------------------------------------
+        DIRECT FIREBASE VISITOR COUNTER
+        -----------------------------------------------------
+        */
+
+        const visitorRef =
+            window.db
+                .collection("siteStats")
+                .doc("visitors");
+
+
+        await visitorRef.set({
+
+            count:
+                window.firebaseIncrement
+                    ? window.firebaseIncrement(1)
+                    : firebase.firestore.FieldValue.increment(1),
+
+            lastVisit:
+                window.firebaseServerTimestamp
+                    ? window.firebaseServerTimestamp()
+                    : firebase.firestore.FieldValue.serverTimestamp()
+
+        }, {
+
+            merge: true
+
+        });
+
+
+        console.log(
+            "👤 Visitor counted in Firebase"
+        );
+
+    }
+
+    catch (error) {
+
+        firebaseVisitorStarted = false;
 
         console.error(
-            "❌ addVisitor() not available"
+            "❌ Visitor counter error:",
+            error
         );
+
+    }
+
+}
+
+
+/* =========================================================
+   WAIT FOR FIREBASE
+========================================================= */
+
+function waitForFirebase() {
+
+    if (firebaseIsReady()) {
+
+        startVisitorCounter();
 
         return;
 
     }
 
-
-    window.addVisitor()
-
-        .then(function () {
-
-            console.log(
-                "👤 Visitor successfully added to Firebase"
-            );
-
-        })
-
-        .catch(function (error) {
-
-            console.error(
-                "❌ Visitor counter error:",
-                error
-            );
-
-        });
+    console.log(
+        "⏳ Firebase not ready yet..."
+    );
 
 }
 
 
-/*=========================================================
- FIREBASE READY EVENT
-=========================================================*/
-
 window.addEventListener(
     "firebaseReady",
-    function () {
+    () => {
 
         console.log(
-            "🔥 Firebase is ready"
+            "🔥 Firebase Ready Event Received"
         );
 
         startVisitorCounter();
@@ -208,15 +317,61 @@ window.addEventListener(
 );
 
 
-/*=========================================================
- IF FIREBASE ALREADY READY
-=========================================================*/
+/*
+---------------------------------------------------------
+TRY AFTER DOM LOAD
+---------------------------------------------------------
+*/
 
-if (window.firebaseReady) {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    startVisitorCounter();
+        waitForFirebase();
 
-}
+    }
+);
+
+
+/*
+---------------------------------------------------------
+RETRY IF FIREBASE FILE LOADS AFTER SCRIPT.JS
+---------------------------------------------------------
+*/
+
+let firebaseWaitAttempts = 0;
+
+const firebaseWaitTimer =
+    setInterval(() => {
+
+        if (firebaseIsReady()) {
+
+            clearInterval(
+                firebaseWaitTimer
+            );
+
+            startVisitorCounter();
+
+            return;
+
+        }
+
+        firebaseWaitAttempts++;
+
+        if (firebaseWaitAttempts >= 30) {
+
+            clearInterval(
+                firebaseWaitTimer
+            );
+
+            console.warn(
+                "⚠️ Firebase was not detected after waiting."
+            );
+
+        }
+
+    }, 500);
+
 
 /* =========================================================
    LOAD BOOKS.JSON
@@ -227,9 +382,12 @@ async function loadBooks() {
     try {
 
         const response =
-            await fetch("books.json", {
-                cache: "no-cache"
-            });
+            await fetch(
+                "books.json",
+                {
+                    cache: "no-cache"
+                }
+            );
 
 
         if (!response.ok) {
@@ -241,11 +399,11 @@ async function loadBooks() {
         }
 
 
-        allBooks =
+        const data =
             await response.json();
 
 
-        if (!Array.isArray(allBooks)) {
+        if (!Array.isArray(data)) {
 
             throw new Error(
                 "books.json must contain an array"
@@ -254,13 +412,17 @@ async function loadBooks() {
         }
 
 
+        allBooks = data;
+
         filteredBooks =
             [...allBooks];
 
 
-        /* =========================================
-           BOOK COUNTER
-        ========================================= */
+        /*
+        -----------------------------------------------------
+        BOOK COUNTER
+        -----------------------------------------------------
+        */
 
         const bookCounter =
             document.getElementById(
@@ -278,34 +440,24 @@ async function loadBooks() {
         }
 
 
-        /* =========================================
-           DISPLAY BOOKS
-        ========================================= */
+        /*
+        -----------------------------------------------------
+        DISPLAY BOOKS
+        -----------------------------------------------------
+        */
 
-        if (
-            typeof displayBooks ===
-            "function"
-        ) {
-
-            displayBooks(
-                filteredBooks
-            );
-
-        }
+        displayBooks(
+            filteredBooks
+        );
 
 
-        /* =========================================
-           LATEST BOOK
-        ========================================= */
+        /*
+        -----------------------------------------------------
+        LATEST BOOK
+        -----------------------------------------------------
+        */
 
-        if (
-            typeof latestBook ===
-            "function"
-        ) {
-
-            latestBook();
-
-        }
+        latestBook();
 
 
         console.log(
@@ -321,6 +473,7 @@ async function loadBooks() {
             "❌ Books Loading Error:",
             error
         );
+
 
         const container =
             document.getElementById(
@@ -372,6 +525,38 @@ function byId(id) {
 
 
 /* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================================
+   GET BOOK ID
+========================================================= */
+
+function getBookId(book) {
+
+    return String(
+        book?.id ||
+        book?.bookId ||
+        book?.title ||
+        ""
+    );
+
+}
+
+
+/* =========================================================
    DISPLAY BOOKS
 ========================================================= */
 
@@ -415,7 +600,7 @@ function displayBooks(books) {
     }
 
 
-    books.forEach(book => {
+    books.forEach((book, index) => {
 
         const views =
             Number(book.views) || 0;
@@ -429,14 +614,16 @@ function displayBooks(books) {
         const comments =
             Number(book.comments) || 0;
 
+        const bookId =
+            getBookId(book);
+
 
         container.innerHTML += `
 
             <div
                 class="book-card"
-                data-book-id="${escapeHTML(
-                    book.id || book.title || ""
-                )}"
+                data-book-id="${escapeHTML(bookId)}"
+                data-book-index="${index}"
             >
 
                 <img
@@ -452,7 +639,6 @@ function displayBooks(books) {
 
                 <div class="book-content">
 
-
                     <span class="book-category">
 
                         ${escapeHTML(
@@ -465,7 +651,8 @@ function displayBooks(books) {
                     <h2>
 
                         ${escapeHTML(
-                            book.title || "Untitled Book"
+                            book.title ||
+                            "Untitled Book"
                         )}
 
                     </h2>
@@ -474,7 +661,8 @@ function displayBooks(books) {
                     <h3>
 
                         ${escapeHTML(
-                            book.author || "Unknown Author"
+                            book.author ||
+                            "Unknown Author"
                         )}
 
                     </h3>
@@ -489,54 +677,66 @@ function displayBooks(books) {
                     </p>
 
 
-                    <!-- BOOK META -->
+                    <!-- BOOK STATS -->
 
                     <div class="book-meta">
 
-
-                        <span
-                            title="Views"
-                        >
+                        <span title="Views">
 
                             <i class="fas fa-eye"></i>
 
-                            ${views}
+                            <span class="view-count">
+
+                                ${views}
+
+                            </span>
 
                         </span>
 
 
                         <span
                             title="Likes"
+                            class="like-book-btn"
+                            data-book-id="${escapeHTML(bookId)}"
+                            role="button"
+                            tabindex="0"
                         >
 
                             <i class="fas fa-heart"></i>
 
-                            ${likes}
+                            <span class="like-count">
+
+                                ${likes}
+
+                            </span>
 
                         </span>
 
 
-                        <span
-                            title="Comments"
-                        >
+                        <span title="Comments">
 
                             <i class="fas fa-comment"></i>
 
-                            ${comments}
+                            <span class="comment-count">
+
+                                ${comments}
+
+                            </span>
 
                         </span>
 
 
-                        <span
-                            title="Downloads"
-                        >
+                        <span title="Downloads">
 
                             <i class="fas fa-download"></i>
 
-                            ${downloads}
+                            <span class="download-count">
+
+                                ${downloads}
+
+                            </span>
 
                         </span>
-
 
                     </div>
 
@@ -545,12 +745,12 @@ function displayBooks(books) {
 
                     <div class="book-buttons">
 
-
                         <a
                             href="reader.html?book=${encodeURIComponent(
                                 book.pdf || ""
                             )}"
                             class="btn read-book-btn"
+                            data-book-id="${escapeHTML(bookId)}"
                         >
 
                             <i class="fas fa-book-open"></i>
@@ -565,6 +765,7 @@ function displayBooks(books) {
                                 book.pdf || "#"
                             )}"
                             class="btn download-book-btn"
+                            data-book-id="${escapeHTML(bookId)}"
                             download
                         >
 
@@ -574,9 +775,7 @@ function displayBooks(books) {
 
                         </a>
 
-
                     </div>
-
 
                 </div>
 
@@ -590,23 +789,7 @@ function displayBooks(books) {
 
 
 /* =========================================================
-   ESCAPE HTML
-========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* =========================================================
-   LIVE SEARCH
+   SEARCH
 ========================================================= */
 
 function searchBooks() {
@@ -674,6 +857,28 @@ function searchBooks() {
 
 
 /* =========================================================
+   SEARCH INPUT EVENT
+========================================================= */
+
+document.addEventListener(
+    "input",
+    event => {
+
+        if (
+            event.target &&
+            event.target.id ===
+            "searchInput"
+        ) {
+
+            searchBooks();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
    CATEGORY FILTER
 ========================================================= */
 
@@ -681,7 +886,6 @@ function filterBooks(
     category,
     button = null
 ) {
-
 
     document
         .querySelectorAll(
@@ -706,6 +910,7 @@ function filterBooks(
 
 
     if (
+        !category ||
         category === "All"
     ) {
 
@@ -834,7 +1039,11 @@ function latestBook() {
     ) {
 
         buttons[0].href =
-            latest.pdf || "#";
+            "reader.html?book=" +
+            encodeURIComponent(
+                latest.pdf || ""
+            );
+
 
         buttons[1].href =
             latest.pdf || "#";
@@ -851,206 +1060,218 @@ function latestBook() {
 
 
 /* =========================================================
-   BOOK VIEW COUNTER
+   FIREBASE BOOK REFERENCE
+========================================================= */
+
+function getBookFirebaseRef(bookId) {
+
+    if (!firebaseIsReady()) {
+        return null;
+    }
+
+    if (!bookId) {
+        return null;
+    }
+
+    return window.db
+        .collection("books")
+        .doc(String(bookId));
+
+}
+
+
+/* =========================================================
+   GENERIC BOOK COUNTER
+========================================================= */
+
+async function increaseBookCounter(
+    bookId,
+    field
+) {
+
+    if (!firebaseIsReady()) {
+
+        console.warn(
+            "⚠️ Firebase unavailable:",
+            field
+        );
+
+        return false;
+
+    }
+
+
+    if (!bookId) {
+
+        console.warn(
+            "⚠️ Book ID missing:",
+            field
+        );
+
+        return false;
+
+    }
+
+
+    try {
+
+        const ref =
+            getBookFirebaseRef(
+                bookId
+            );
+
+
+        await ref.set({
+
+            [field]:
+                window.firebaseIncrement
+                    ? window.firebaseIncrement(1)
+                    : firebase.firestore.FieldValue.increment(1)
+
+        }, {
+
+            merge: true
+
+        });
+
+
+        console.log(
+            `✅ ${field} counted:`,
+            bookId
+        );
+
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            `❌ ${field} error:`,
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
+   BOOK VIEW
 ========================================================= */
 
 async function increaseBookView(book) {
 
-    if (!book) return;
+    if (!book) return false;
 
-
-    /* Firebase unavailable */
-
-    if (!firebaseIsReady()) {
-
-        console.log(
-            "⚠️ Firebase unavailable for view counter"
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        let bookId =
-            book.id ||
-            book.title;
-
-
-        if (!bookId) return;
-
-
-        bookId =
-            String(bookId);
-
-
-        const ref =
-            window.db
-                .collection("books")
-                .doc(bookId);
-
-
-        await ref.set({
-
-            views:
-                window.firebaseIncrement
-                    ? window.firebaseIncrement(1)
-                    : firebase.firestore.FieldValue.increment(1)
-
-        }, {
-            merge: true
-        });
-
-
-        console.log(
-            "👁 View counted:",
-            book.title
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "🔥 View counter error:",
-            error
-        );
-
-    }
+    return increaseBookCounter(
+        getBookId(book),
+        "views"
+    );
 
 }
 
 
 /* =========================================================
-   DOWNLOAD COUNTER
+   BOOK DOWNLOAD
 ========================================================= */
 
 async function increaseBookDownload(book) {
 
-    if (!book) return;
+    if (!book) return false;
 
-
-    if (!firebaseIsReady()) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const bookId =
-            String(
-                book.id ||
-                book.title ||
-                ""
-            );
-
-
-        if (!bookId) return;
-
-
-        const ref =
-            window.db
-                .collection("books")
-                .doc(bookId);
-
-
-        await ref.set({
-
-            downloads:
-                window.firebaseIncrement
-                    ? window.firebaseIncrement(1)
-                    : firebase.firestore.FieldValue.increment(1)
-
-        }, {
-            merge: true
-        });
-
-
-        console.log(
-            "⬇ Download counted:",
-            book.title
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "🔥 Download counter error:",
-            error
-        );
-
-    }
+    return increaseBookCounter(
+        getBookId(book),
+        "downloads"
+    );
 
 }
 
 
 /* =========================================================
-   LIKE BOOK
+   BOOK LIKE
 ========================================================= */
 
 async function likeBook(book) {
 
-    if (!book) return;
+    if (!book) return false;
+
+    return increaseBookCounter(
+        getBookId(book),
+        "likes"
+    );
+
+}
 
 
-    if (!firebaseIsReady()) {
+/* =========================================================
+   BOOK COMMENT COUNTER
+========================================================= */
 
-        return;
+async function increaseBookComment(book) {
 
-    }
+    if (!book) return false;
+
+    return increaseBookCounter(
+        getBookId(book),
+        "comments"
+    );
+
+}
 
 
-    try {
+/* =========================================================
+   FIND BOOK FROM CARD
+========================================================= */
 
-        const bookId =
-            String(
-                book.id ||
-                book.title ||
-                ""
+function getBookFromCard(card) {
+
+    if (!card) return null;
+
+
+    const bookId =
+        card.dataset.bookId;
+
+
+    if (bookId) {
+
+        const found =
+            allBooks.find(
+                book =>
+                    getBookId(book) ===
+                    String(bookId)
             );
 
 
-        if (!bookId) return;
+        if (found) {
 
+            return found;
 
-        const ref =
-            window.db
-                .collection("books")
-                .doc(bookId);
-
-
-        await ref.set({
-
-            likes:
-                window.firebaseIncrement
-                    ? window.firebaseIncrement(1)
-                    : firebase.firestore.FieldValue.increment(1)
-
-        }, {
-            merge: true
-        });
-
-
-        console.log(
-            "❤️ Like counted:",
-            book.title
-        );
+        }
 
     }
 
-    catch (error) {
 
-        console.error(
-            "🔥 Like error:",
-            error
+    const index =
+        Number(
+            card.dataset.bookIndex
         );
 
+
+    if (
+        Number.isInteger(index) &&
+        filteredBooks[index]
+    ) {
+
+        return filteredBooks[index];
+
     }
+
+
+    return null;
 
 }
 
@@ -1063,6 +1284,66 @@ document.addEventListener(
     "click",
     event => {
 
+        /*
+        -----------------------------------------------------
+        LIKE
+        -----------------------------------------------------
+        */
+
+        const likeBtn =
+            event.target.closest(
+                ".like-book-btn"
+            );
+
+
+        if (likeBtn) {
+
+            event.preventDefault();
+
+
+            const card =
+                likeBtn.closest(
+                    ".book-card"
+                );
+
+
+            const book =
+                getBookFromCard(card);
+
+
+            if (!book) return;
+
+
+            likeBook(book);
+
+
+            const count =
+                likeBtn.querySelector(
+                    ".like-count"
+                );
+
+
+            if (count) {
+
+                const old =
+                    Number(
+                        count.textContent
+                    ) || 0;
+
+
+                count.textContent =
+                    old + 1;
+
+            }
+
+        }
+
+
+        /*
+        -----------------------------------------------------
+        DOWNLOAD
+        -----------------------------------------------------
+        */
 
         const downloadBtn =
             event.target.closest(
@@ -1078,31 +1359,26 @@ document.addEventListener(
                 );
 
 
-            if (card) {
-
-                const index =
-                    [...document.querySelectorAll(
-                        ".book-card"
-                    )]
-                    .indexOf(card);
+            const book =
+                getBookFromCard(card);
 
 
-                const book =
-                    filteredBooks[index];
+            if (book) {
 
-
-                if (book) {
-
-                    increaseBookDownload(
-                        book
-                    );
-
-                }
+                increaseBookDownload(
+                    book
+                );
 
             }
 
         }
 
+
+        /*
+        -----------------------------------------------------
+        READ ONLINE
+        -----------------------------------------------------
+        */
 
         const readBtn =
             event.target.closest(
@@ -1118,26 +1394,15 @@ document.addEventListener(
                 );
 
 
-            if (card) {
-
-                const index =
-                    [...document.querySelectorAll(
-                        ".book-card"
-                    )]
-                    .indexOf(card);
+            const book =
+                getBookFromCard(card);
 
 
-                const book =
-                    filteredBooks[index];
+            if (book) {
 
-
-                if (book) {
-
-                    increaseBookView(
-                        book
-                    );
-
-                }
+                increaseBookView(
+                    book
+                );
 
             }
 
@@ -1180,12 +1445,6 @@ document.addEventListener(
             total
         );
 
-
-        console.log(
-            "⬇ Total local downloads:",
-            total
-        );
-
     }
 );
 
@@ -1197,7 +1456,6 @@ document.addEventListener(
 document.addEventListener(
     "click",
     event => {
-
 
         const btn =
             event.target.closest(
@@ -1223,15 +1481,17 @@ document.addEventListener(
 
 
         ripple.style.left =
-            (event.clientX -
-                rect.left) +
-            "px";
+            (
+                event.clientX -
+                rect.left
+            ) + "px";
 
 
         ripple.style.top =
-            (event.clientY -
-                rect.top) +
-            "px";
+            (
+                event.clientY -
+                rect.top
+            ) + "px";
 
 
         btn.appendChild(
@@ -1241,7 +1501,9 @@ document.addEventListener(
 
         setTimeout(() => {
 
-            ripple.remove();
+            if (ripple) {
+                ripple.remove();
+            }
 
         }, 600);
 
@@ -1289,7 +1551,7 @@ window.addEventListener(
 
 
 /* =========================================================
-   SECTION SCROLL ANIMATION
+   SECTION ANIMATION
 ========================================================= */
 
 function initializeSectionAnimation() {
@@ -1303,8 +1565,6 @@ function initializeSectionAnimation() {
     if (!sections.length) return;
 
 
-    /* Prevent animation from hiding content */
-
     sections.forEach(section => {
 
         section.style.opacity = "1";
@@ -1313,8 +1573,7 @@ function initializeSectionAnimation() {
 
 
     if (
-        !("IntersectionObserver"
-            in window)
+        !("IntersectionObserver" in window)
     ) {
 
         return;
@@ -1326,23 +1585,21 @@ function initializeSectionAnimation() {
         new IntersectionObserver(
             entries => {
 
-                entries.forEach(
-                    entry => {
+                entries.forEach(entry => {
 
-                        if (
-                            entry.isIntersecting
-                        ) {
+                    if (
+                        entry.isIntersecting
+                    ) {
 
-                            entry.target
-                                .classList
-                                .add(
-                                    "show-section"
-                                );
-
-                        }
+                        entry.target
+                            .classList
+                            .add(
+                                "show-section"
+                            );
 
                     }
-                );
+
+                });
 
             },
             {
@@ -1424,9 +1681,7 @@ window.addEventListener(
     () => {
 
         if (
-            !Array.isArray(
-                allBooks
-            )
+            !Array.isArray(allBooks)
         ) {
 
             return;
@@ -1434,27 +1689,21 @@ window.addEventListener(
         }
 
 
-        allBooks.forEach(
-            book => {
+        allBooks.forEach(book => {
 
-                if (
-                    !book.cover
-                ) {
-
-                    return;
-
-                }
-
-
-                const image =
-                    new Image();
-
-
-                image.src =
-                    book.cover;
-
+            if (!book.cover) {
+                return;
             }
-        );
+
+
+            const image =
+                new Image();
+
+
+            image.src =
+                book.cover;
+
+        });
 
     }
 );
@@ -1493,10 +1742,23 @@ document.addEventListener(
         }
 
 
-        const target =
-            document.querySelector(
-                href
-            );
+        let target = null;
+
+
+        try {
+
+            target =
+                document.querySelector(
+                    href
+                );
+
+        }
+
+        catch (error) {
+
+            return;
+
+        }
 
 
         if (!target) return;
@@ -1522,8 +1784,6 @@ document.addEventListener(
 ========================================================= */
 
 function createWhatsAppButton() {
-
-    /* Don't create duplicate */
 
     if (
         document.getElementById(
@@ -1575,8 +1835,6 @@ function createWhatsAppButton() {
         button
     );
 
-
-    /* Inline styling */
 
     button.style.position =
         "fixed";
@@ -1673,6 +1931,38 @@ document.addEventListener(
 
 
 /* =========================================================
+   GLOBAL FUNCTIONS
+========================================================= */
+
+window.displayBooks =
+    displayBooks;
+
+window.searchBooks =
+    searchBooks;
+
+window.filterBooks =
+    filterBooks;
+
+window.latestBook =
+    latestBook;
+
+window.increaseBookView =
+    increaseBookView;
+
+window.increaseBookDownload =
+    increaseBookDownload;
+
+window.likeBook =
+    likeBook;
+
+window.increaseBookComment =
+    increaseBookComment;
+
+window.startVisitorCounter =
+    startVisitorCounter;
+
+
+/* =========================================================
    CONSOLE
 ========================================================= */
 
@@ -1685,7 +1975,7 @@ console.log(
 );
 
 console.log(
-    "Version : 2.0"
+    "Version : 2.1"
 );
 
 console.log(
@@ -1729,19 +2019,19 @@ console.log(
 );
 
 console.log(
-    "✅ Views"
+    "✅ Firebase Views"
 );
 
 console.log(
-    "✅ Likes Support"
+    "✅ Firebase Likes"
 );
 
 console.log(
-    "✅ Comments Support"
+    "✅ Firebase Comments"
 );
 
 console.log(
-    "✅ Downloads"
+    "✅ Firebase Downloads"
 );
 
 console.log(
@@ -1758,4 +2048,8 @@ console.log(
 
 console.log(
     "🚀 Production Ready"
+);
+
+console.log(
+    "===================================="
 );
