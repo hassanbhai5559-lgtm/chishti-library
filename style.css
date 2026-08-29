@@ -1,1467 +1,959 @@
 /* =========================================================
    CHISHTI LIBRARY
-   PREMIUM MAROON • GOLD • BLACK
-   COMPLETE STYLE.CSS
+   JS MATCHING CSS
+   FINAL PREMIUM ADD-ON
 ========================================================= */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --maroon: #350000;
-    --maroon-2: #4b0000;
-    --dark: #160000;
-    --deep: #220000;
-    --black: #080000;
-
-    --gold: #d4af37;
-    --gold-light: #f3d77a;
-    --gold-dark: #9b7818;
-
-    --white: #ffffff;
-    --text: #222;
-    --muted: #888;
-
-    --border: rgba(212,175,55,.18);
-    --shadow: 0 15px 40px rgba(0,0,0,.35);
-}
 
 /* =========================================================
-   GLOBAL
+   PREMIUM LOADER
 ========================================================= */
 
-html {
-    scroll-behavior: smooth;
+#loader{
+    position:fixed;
+    inset:0;
+    background:#0B0B0B;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    z-index:999999;
+    transition:.8s ease;
 }
 
-body {
-    font-family: "Poppins", sans-serif;
-    min-height: 100vh;
-    color: #fff;
-    overflow-x: hidden;
-
-    background:
-        radial-gradient(
-            circle at 50% -10%,
-            #620000 0%,
-            #400000 28%,
-            #210000 62%,
-            #080000 100%
-        );
+#loader img{
+    width:120px;
+    height:120px;
+    object-fit:contain;
+    filter:drop-shadow(0 0 25px var(--gold));
+    animation:loaderFloat 1.5s ease-in-out infinite;
 }
 
-button,
-input,
-select,
-textarea {
-    font-family: inherit;
+#loader h2{
+    margin-top:20px;
+    color:#fff;
+    letter-spacing:2px;
 }
 
-button {
-    cursor: pointer;
+#loader p{
+    color:var(--gold);
+    margin-top:8px;
 }
 
-a {
-    color: inherit;
+@keyframes loaderFloat{
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.08);
+    }
 }
 
-img {
-    max-width: 100%;
-    display: block;
-}
-
-::selection {
-    background: var(--gold);
-    color: #250000;
-}
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #0b0000;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(
-        180deg,
-        var(--gold-light),
-        var(--gold-dark)
-    );
-    border-radius: 20px;
-}
-
-/* =========================================================
-   NAVBAR
-========================================================= */
-
-.navbar {
-    width: 100%;
-    min-height: 74px;
-    padding: 9px 3%;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    position: sticky;
-    top: 0;
-    z-index: 9999;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(12,0,0,.98),
-            rgba(34,0,0,.97),
-            rgba(12,0,0,.98)
-        );
-
-    border-bottom: 1px solid var(--border);
-
-    box-shadow:
-        0 8px 30px rgba(0,0,0,.35);
-
-    backdrop-filter: blur(15px);
-}
-
-/* BRAND */
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    color: #fff;
-    text-decoration: none;
-
-    min-width: max-content;
-}
-
-.brand img {
-    width: 52px;
-    height: 52px;
-
-    object-fit: contain;
-    background: #fff;
-
-    border-radius: 6px;
-
-    box-shadow:
-        0 0 18px rgba(212,175,55,.2);
-}
-
-.brand-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.brand h2 {
-    font-size: 18px;
-    font-weight: 800;
-    line-height: 1.2;
-}
-
-.brand span {
-    margin-top: 3px;
-    color: #aaa;
-    font-size: 10px;
-}
-
-/* NAV LINKS */
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-}
-
-.nav-links a {
-    position: relative;
-
-    padding: 8px 0;
-
-    color: #fff;
-    text-decoration: none;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    transition:
-        color .25s ease,
-        transform .25s ease;
-}
-
-.nav-links a::after {
-    content: "";
-
-    position: absolute;
-    left: 50%;
-    bottom: 0;
-
-    width: 0;
-    height: 2px;
-
-    background: var(--gold);
-
-    transform: translateX(-50%);
-    transition: width .25s ease;
-}
-
-.nav-links a:hover,
-.nav-links a.active {
-    color: var(--gold);
-}
-
-.nav-links a:hover::after,
-.nav-links a.active::after {
-    width: 100%;
-}
-
-.nav-links i {
-    margin-right: 5px;
-}
-
-/* MOBILE MENU */
-
-.mobile-menu {
-    display: none;
-
-    border: none;
-    outline: none;
-
-    background: transparent;
-    color: #fff;
-
-    font-size: 24px;
-    padding: 8px;
-}
-
-.mobile-menu:hover {
-    color: var(--gold);
-}
-
-/* =========================================================
-   HERO
-========================================================= */
-
-.books-hero {
-    position: relative;
-    overflow: hidden;
-
-    text-align: center;
-
-    padding: 55px 20px 65px;
-}
-
-.books-hero::before {
-    content: "";
-
-    position: absolute;
-
-    width: 650px;
-    height: 350px;
-
-    top: -70px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    background:
-        radial-gradient(
-            ellipse,
-            rgba(212,175,55,.18),
-            transparent 70%
-        );
-
-    pointer-events: none;
-}
-
-.hero-glow {
-    position: absolute;
-
-    width: 300px;
-    height: 300px;
-
-    top: 10px;
-    left: 50%;
-
-    transform: translateX(-50%);
-
-    background: var(--gold);
-
-    filter: blur(140px);
-    opacity: .13;
-
-    pointer-events: none;
-}
-
-.hero-logo {
-    position: relative;
-
-    width: 125px;
-    height: 125px;
-
-    margin: auto;
-
-    object-fit: contain;
-
-    background: #fff;
-
-    border-radius: 7px;
-
-    box-shadow:
-        0 0 0 1px rgba(212,175,55,.4),
-        0 0 40px rgba(212,175,55,.4);
-}
-
-.books-hero h1 {
-    position: relative;
-
-    margin-top: 25px;
-
-    font-size: clamp(32px,5vw,58px);
-    line-height: 1.1;
-
-    font-weight: 800;
-    letter-spacing: -1px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #fff,
-            var(--gold-light),
-            #fff
-        );
-
-    -webkit-background-clip: text;
-    background-clip: text;
-
-    color: transparent;
-}
-
-.books-hero h3 {
-    position: relative;
-
-    margin-top: 9px;
-
-    color: var(--gold);
-
-    font-size: 20px;
-    font-weight: 700;
-}
-
-.books-hero p {
-    position: relative;
-
-    width: min(700px, 95%);
-
-    margin: 18px auto 28px;
-
-    color: #d3d3d3;
-
-    font-size: 14px;
-    line-height: 1.8;
-}
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-.search-box {
-    position: relative;
-
-    width: min(720px,95%);
-
-    margin: auto;
-
-    display: flex;
-    align-items: center;
-
-    padding: 5px 8px 5px 18px;
-
-    background: #fff;
-
-    border-radius: 50px;
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.3);
-
-    transition: .25s ease;
-}
-
-.search-box:focus-within {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 15px 40px rgba(0,0,0,.4),
-        0 0 0 2px rgba(212,175,55,.25);
-}
-
-.search-box i {
-    color: #777;
-    font-size: 16px;
-}
-
-.search-box input {
-    flex: 1;
-    min-width: 0;
-
-    padding: 15px;
-
-    border: none;
-    outline: none;
-
-    background: transparent;
-
-    color: #222;
-
-    font-size: 14px;
-}
-
-.search-box input::placeholder {
-    color: #999;
-}
-
-.search-box button {
-    width: 38px;
-    height: 38px;
-
-    border: none;
-    border-radius: 50%;
-
-    background: transparent;
-    color: #777;
-
-    font-size: 15px;
-
-    transition: .2s ease;
-}
-
-.search-box button:hover {
-    background: #f1f1f1;
-    color: var(--maroon);
-}
-
-/* =========================================================
-   STATS
-========================================================= */
-
-.stats {
-    width: min(1000px,92%);
-
-    margin: 0 auto 60px;
-
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-
-    gap: 18px;
-}
-
-.stat-card {
-    position: relative;
-
-    padding: 25px;
-
-    text-align: center;
-
-    color: #222;
-
-    background:
-        linear-gradient(
-            145deg,
-            #fff,
-            #f3f3f3
-        );
-
-    border: 1px solid rgba(212,175,55,.12);
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 10px 35px rgba(0,0,0,.28);
-
-    transition: .3s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-6px);
-
-    box-shadow:
-        0 20px 45px rgba(0,0,0,.35),
-        0 0 25px rgba(212,175,55,.08);
-}
-
-.stat-card i {
-    color: var(--gold);
-    font-size: 27px;
-}
-
-.stat-card strong {
-    display: block;
-
-    margin-top: 8px;
-
-    color: var(--maroon);
-
-    font-size: 28px;
-}
-
-.stat-card span {
-    color: #888;
-    font-size: 12px;
-}
-
-/* =========================================================
-   LIBRARY SECTION
-========================================================= */
-
-.library-section {
-    width: min(1200px,92%);
-
-    margin: 0 auto 65px;
-}
-
-.section-title {
-    position: relative;
-
-    text-align: center;
-
-    color: #fff;
-
-    font-size: 28px;
-    font-weight: 800;
-}
-
-.section-title::after {
-    content: "";
-
-    display: block;
-
-    width: 55px;
-    height: 3px;
-
-    margin: 10px auto 0;
-
-    border-radius: 20px;
-
-    background: var(--gold);
-}
-
-.section-subtitle {
-    margin-top: 9px;
-
-    text-align: center;
-
-    color: #aaa;
-
-    font-size: 13px;
-}
-
-/* =========================================================
-   CATEGORIES
-========================================================= */
-
-.categories {
-    margin-top: 30px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    flex-wrap: wrap;
-
-    gap: 12px;
-}
-
-.category {
-    padding: 11px 20px;
-
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 30px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #300000,
-            #190000
-        );
-
-    color: #fff;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    transition: .25s ease;
-}
-
-.category:hover {
-    color: var(--gold);
-
-    border-color: var(--gold);
-
-    transform: translateY(-2px);
-}
-
-.category.active {
-    background:
-        linear-gradient(
-            135deg,
-            var(--gold-light),
-            var(--gold)
-        );
-
-    color: #250000;
-
-    border-color: var(--gold);
-
-    box-shadow:
-        0 5px 18px rgba(212,175,55,.2);
-}
-
-/* =========================================================
-   SORTING
-========================================================= */
-
-.sorting-section {
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    flex-wrap: wrap;
-
-    gap: 12px;
-
-    margin: 12px auto 45px;
-}
-
-.sort-btn {
-    padding: 11px 23px;
-
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 30px;
-
-    background: #220000;
-    color: #fff;
-
-    font-size: 12px;
-    font-weight: 700;
-
-    transition: .25s ease;
-}
-
-.sort-btn:hover {
-    color: var(--gold);
-
-    border-color: var(--gold);
-
-    transform: translateY(-2px);
-}
-
-.sort-btn.active {
-    background:
-        linear-gradient(
-            135deg,
-            var(--gold-light),
-            var(--gold)
-        );
-
-    color: #250000;
-
-    border-color: var(--gold);
-}
-
-/* =========================================================
-   BOOK GRID
-========================================================= */
-
-.books-grid {
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns: repeat(4,minmax(0,1fr));
-
-    gap: 24px;
-
-    margin-top: 28px;
-}
-
-/* =========================================================
-   BOOK CARD
-========================================================= */
-
-.book-card {
-    position: relative;
-
-    min-width: 0;
-
-    overflow: hidden;
-
-    color: #222;
-
-    background:
-        linear-gradient(
-            145deg,
-            #fff,
-            #f5f5f5
-        );
-
-    border:
-        1px solid
-        rgba(255,255,255,.35);
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,.28);
-
-    transition:
-        transform .3s ease,
-        box-shadow .3s ease;
-}
-
-.book-card:hover {
-    transform: translateY(-8px);
-
-    box-shadow:
-        0 22px 45px rgba(0,0,0,.4),
-        0 0 25px rgba(212,175,55,.08);
-}
 
 /* =========================================================
    BOOK COVER
 ========================================================= */
 
-.book-cover {
-    position: relative;
-
-    width: 100%;
-    height: 270px;
-
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ddd,
-            #eee
-        );
+.book-cover{
+    width:100%;
+    height:360px;
+    overflow:hidden;
+    background:#090909;
 }
 
-.book-cover img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    transition:
-        transform .5s ease;
+.book-cover img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:.45s ease;
 }
 
-.book-card:hover .book-cover img {
-    transform: scale(1.04);
+.book-card:hover .book-cover img{
+    transform:scale(1.06);
 }
 
-.book-cover::after {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    background:
-        linear-gradient(
-            180deg,
-            transparent 60%,
-            rgba(0,0,0,.28)
-        );
-}
 
 /* =========================================================
    BOOK CATEGORY
 ========================================================= */
 
-.book-category {
-    position: absolute;
+.book-category{
+    display:inline-block;
 
-    top: 12px;
-    left: 12px;
+    padding:6px 13px;
 
-    z-index: 3;
+    margin-bottom:12px;
 
-    padding: 5px 10px;
+    border-radius:20px;
 
-    border-radius: 20px;
+    background:rgba(201,162,39,.12);
+
+    border:1px solid rgba(201,162,39,.3);
+
+    color:var(--gold);
+
+    font-size:12px;
+
+    font-weight:600;
+
+    text-transform:uppercase;
+
+    letter-spacing:.5px;
+}
+
+
+/* =========================================================
+   BOOK META STATS
+========================================================= */
+
+.book-meta{
+    display:flex;
+    align-items:center;
+    gap:20px;
+
+    margin:15px 0 20px;
+
+    color:#aaa;
+
+    font-size:14px;
+
+    flex-wrap:wrap;
+}
+
+.book-meta span{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.book-meta i{
+    color:var(--gold);
+}
+
+.like-stat i{
+    color:#ff4b5c;
+}
+
+.view-stat i{
+    color:#4da6ff;
+}
+
+.download-stat i{
+    color:#7CFC00;
+}
+
+
+/* =========================================================
+   BOOK ACTION BAR
+========================================================= */
+
+.chishti-book-actions{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    margin:15px 0;
+
+    padding:10px;
+
+    background:#101010;
+
+    border:1px solid rgba(201,162,39,.15);
+
+    border-radius:15px;
+}
+
+.book-action{
+    flex:1;
+
+    min-height:44px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#1d1d1d;
+
+    color:#ddd;
+
+    cursor:pointer;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:7px;
+
+    font-size:13px;
+
+    transition:.3s ease;
+}
+
+.book-action:hover{
+    background:var(--gold);
+
+    color:#111;
+
+    transform:translateY(-2px);
+}
+
+.book-action i{
+    font-size:15px;
+}
+
+.like-action:hover i{
+    color:#111;
+}
+
+
+/* =========================================================
+   READ / DOWNLOAD BUTTONS
+========================================================= */
+
+.book-buttons{
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+.book-buttons .btn{
+    flex:1;
+
+    min-width:140px;
+
+    text-align:center;
+
+    white-space:nowrap;
+}
+
+
+/* =========================================================
+   MOST LIKED SECTION
+========================================================= */
+
+.most-liked-books{
+    padding:90px 8%;
 
     background:
         linear-gradient(
-            135deg,
-            var(--gold-light),
-            var(--gold)
+            180deg,
+            #111 0%,
+            #0B0B0B 100%
         );
 
-    color: #250000;
+    overflow:hidden;
+}
 
-    font-size: 9px;
-    font-weight: 800;
+.most-liked-books .container{
+    width:100%;
+    max-width:1400px;
+    margin:auto;
+}
+
+.most-liked-books .section-title{
+    margin-bottom:10px;
+}
+
+.most-liked-books .section-subtitle{
+    text-align:center;
+
+    color:#999;
+
+    margin-bottom:45px;
+
+    font-size:16px;
+}
+
+
+/* =========================================================
+   MOST LIKED WRAPPER
+========================================================= */
+
+.most-liked-wrapper{
+    width:100%;
+
+    overflow:hidden;
+
+    position:relative;
+
+    padding:15px 5px 30px;
+}
+
+
+/* =========================================================
+   MOST LIKED TRACK
+========================================================= */
+
+.most-liked-track{
+    display:flex;
+
+    gap:20px;
+
+    width:max-content;
+
+    transition:
+        transform .7s cubic-bezier(.4,0,.2,1);
+}
+
+
+/* =========================================================
+   MOST LIKED CARD
+========================================================= */
+
+.most-liked-card{
+    flex:0 0 310px;
+
+    min-height:470px;
+
+    background:#171717;
+
+    border:1px solid rgba(201,162,39,.18);
+
+    border-radius:22px;
+
+    overflow:hidden;
 
     box-shadow:
-        0 4px 12px rgba(0,0,0,.2);
+        0 15px 35px rgba(0,0,0,.35);
+
+    transition:.35s ease;
 }
 
-/* =========================================================
-   BOOK INFO
-========================================================= */
+.most-liked-card:hover{
+    transform:translateY(-8px);
 
-.book-info {
-    padding: 18px;
-}
-
-.book-info h3 {
-    color: var(--maroon);
-
-    font-size: 16px;
-    line-height: 1.4;
-    font-weight: 800;
-}
-
-.book-info .author {
-    display: block;
-
-    margin-top: 6px;
-
-    color: #777;
-
-    font-size: 11px;
-}
-
-.book-info p {
-    margin-top: 10px;
-
-    color: #777;
-
-    font-size: 11px;
-    line-height: 1.65;
-}
-
-/* =========================================================
-   BOOK META
-========================================================= */
-
-.book-meta {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    gap: 12px;
-
-    margin-top: 14px;
-
-    color: #777;
-
-    font-size: 10px;
-}
-
-.book-meta span {
-    display: flex;
-    align-items: center;
-
-    gap: 4px;
-}
-
-.book-meta i {
-    color: var(--gold);
-}
-
-/* =========================================================
-   BOOK ACTIONS
-========================================================= */
-
-.book-actions {
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 8px;
-
-    margin-top: 15px;
-}
-
-.book-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 38px;
-
-    padding: 10px 7px;
-
-    border: none;
-    border-radius: 8px;
-
-    text-decoration: none;
-    text-align: center;
-
-    font-size: 10px;
-    font-weight: 700;
-
-    transition: .25s ease;
-}
-
-.book-btn i {
-    margin-right: 4px;
-}
-
-.read-btn {
-    background:
-        linear-gradient(
-            135deg,
-            #470000,
-            #270000
-        );
-
-    color: #fff;
-}
-
-.read-btn:hover {
-    background:
-        linear-gradient(
-            135deg,
-            #600000,
-            #350000
-        );
-}
-
-.download-btn {
-    background:
-        linear-gradient(
-            135deg,
-            var(--gold-light),
-            var(--gold)
-        );
-
-    color: #250000;
-}
-
-.download-btn:hover {
-    filter: brightness(1.08);
-}
-
-.book-btn:hover {
-    transform: translateY(-2px);
+    border-color:rgba(201,162,39,.55);
 
     box-shadow:
-        0 5px 15px rgba(0,0,0,.18);
+        0 20px 45px rgba(0,0,0,.5),
+        0 0 25px rgba(201,162,39,.15);
 }
+
 
 /* =========================================================
-   EXTRA ACTIONS
+   MOST LIKED COVER
 ========================================================= */
 
-.extra-actions {
-    display: flex;
+.most-liked-cover{
+    width:100%;
 
-    justify-content: center;
-    align-items: center;
+    height:280px;
 
-    gap: 9px;
+    overflow:hidden;
 
-    margin-top: 10px;
+    background:#090909;
 }
 
-.icon-btn {
-    width: 35px;
-    height: 35px;
+.most-liked-cover img{
+    width:100%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height:100%;
 
-    border: 1px solid #ddd;
-    border-radius: 50%;
+    object-fit:cover;
 
-    background: #fff;
-    color: #777;
+    display:block;
 
-    transition: .25s ease;
+    transition:.5s ease;
 }
 
-.icon-btn:hover,
-.icon-btn.active {
-    background: var(--maroon);
-
-    color: #fff;
-
-    border-color: var(--maroon);
-
-    transform: translateY(-2px);
+.most-liked-card:hover
+.most-liked-cover img{
+    transform:scale(1.07);
 }
 
-.icon-btn.like.active {
-    background: #ffe8e8;
-
-    color: #d00000;
-
-    border-color: #ffcaca;
-}
 
 /* =========================================================
-   LOADER
+   MOST LIKED INFO
 ========================================================= */
 
-.loader {
-    grid-column: 1 / -1;
-
-    padding: 70px 20px;
-
-    text-align: center;
-
-    color: var(--gold);
+.most-liked-info{
+    padding:22px;
 }
 
-.loader i {
-    display: block;
+.most-liked-info h3{
+    color:#fff;
 
-    margin-bottom: 12px;
+    font-size:20px;
 
-    font-size: 30px;
+    line-height:1.4;
 
-    animation: spin 1s linear infinite;
+    margin:5px 0 8px;
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
+.most-liked-info p{
+    color:#aaa;
 
-    to {
-        transform: rotate(360deg);
-    }
+    font-size:14px;
+
+    margin-bottom:15px;
 }
+
+.most-liked-stats{
+    display:flex;
+
+    gap:20px;
+
+    margin-bottom:18px;
+
+    color:#aaa;
+
+    font-size:14px;
+}
+
+.most-liked-stats span{
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+}
+
+.most-liked-stats .fa-heart{
+    color:#ff4b5c;
+}
+
+.most-liked-stats .fa-eye{
+    color:#4da6ff;
+}
+
+.most-liked-info .btn{
+    display:block;
+
+    width:100%;
+
+    text-align:center;
+}
+
+
+/* =========================================================
+   LATEST BOOK STATS
+========================================================= */
+
+.latest-book-stats{
+    display:flex;
+
+    gap:20px;
+
+    margin:20px 0;
+
+    flex-wrap:wrap;
+}
+
+.latest-book-stats span{
+    display:flex;
+
+    align-items:center;
+
+    gap:7px;
+
+    color:#bbb;
+}
+
+.latest-book-stats i{
+    color:var(--gold);
+}
+
+
+/* =========================================================
+   LATEST CARD DATA
+========================================================= */
+
+.latest-book-card{
+    position:relative;
+}
+
+.latest-book-card .book-buttons{
+    margin-top:20px;
+}
+
+
+/* =========================================================
+   SEARCH PREMIUM
+========================================================= */
+
+.search-box{
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.3);
+
+    border:2px solid transparent;
+
+    transition:.3s ease;
+}
+
+.search-box:focus-within{
+    border-color:var(--gold);
+
+    box-shadow:
+        0 0 25px rgba(201,162,39,.25);
+}
+
+.search-box input::placeholder{
+    color:#888;
+}
+
 
 /* =========================================================
    NO BOOKS
 ========================================================= */
 
-.no-books {
-    grid-column: 1 / -1;
+.no-books{
+    grid-column:1 / -1;
 
-    padding: 70px 20px;
+    width:100%;
 
-    text-align: center;
+    text-align:center;
 
-    color: #aaa;
+    padding:80px 20px;
+
+    background:#151515;
+
+    border-radius:20px;
+
+    border:1px solid #292929;
 }
 
-.no-books i {
-    display: block;
+.no-books h2{
+    color:var(--gold);
 
-    margin-bottom: 15px;
-
-    color: var(--gold);
-
-    font-size: 45px;
+    margin-bottom:10px;
 }
 
-.no-books h3 {
-    margin-bottom: 7px;
-
-    color: #fff;
-
-    font-size: 20px;
+.no-books p{
+    color:#aaa;
 }
 
-.no-books p {
-    color: #888;
-
-    font-size: 12px;
-}
 
 /* =========================================================
-   FOOTER
+   CATEGORY
 ========================================================= */
 
-footer {
-    position: relative;
-
-    padding: 45px 20px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            180deg,
-            #170000,
-            #0b0000
-        );
-
-    border-top:
-        1px solid
-        rgba(212,175,55,.16);
+.category-grid{
+    align-items:center;
 }
 
-.footer-logo img {
-    width: 65px;
-    height: 65px;
+.category{
+    user-select:none;
 
-    margin: auto;
+    transition:
+        transform .3s ease,
+        background .3s ease,
+        color .3s ease,
+        box-shadow .3s ease;
+}
 
-    object-fit: contain;
-
-    background: #fff;
-
-    border-radius: 5px;
+.category:hover{
+    transform:translateY(-3px);
 
     box-shadow:
-        0 0 20px rgba(212,175,55,.18);
+        0 8px 20px rgba(201,162,39,.18);
 }
 
-.footer-logo h2 {
-    margin-top: 10px;
-
-    font-size: 19px;
-    font-weight: 800;
+.category.active{
+    box-shadow:
+        0 8px 25px rgba(201,162,39,.25);
 }
 
-.footer-logo p {
-    margin-top: 4px;
-
-    color: #aaa;
-
-    font-size: 12px;
-}
-
-.copyright {
-    margin-top: 25px;
-    padding-top: 20px;
-
-    border-top:
-        1px solid
-        rgba(255,255,255,.06);
-
-    color: #777;
-
-    font-size: 10px;
-}
 
 /* =========================================================
-   MOBILE NAV
+   SORT BUTTONS
 ========================================================= */
 
-@media (max-width: 800px) {
+.sort-btn{
+    padding:11px 22px;
 
-    .navbar {
-        padding: 9px 4%;
-    }
+    border-radius:30px;
 
-    .mobile-menu {
-        display: block;
-    }
+    border:1px solid #333;
 
-    .nav-links {
-        display: none;
+    background:#181818;
 
-        position: absolute;
+    color:#ddd;
 
-        top: 73px;
-        left: 0;
-        right: 0;
+    cursor:pointer;
 
-        padding: 18px;
+    transition:.3s ease;
 
-        flex-direction: column;
-
-        gap: 5px;
-
-        background:
-            linear-gradient(
-                180deg,
-                #1c0000,
-                #0d0000
-            );
-
-        border-bottom:
-            1px solid
-            rgba(212,175,55,.2);
-
-        box-shadow:
-            0 15px 30px rgba(0,0,0,.4);
-    }
-
-    .nav-links.show {
-        display: flex;
-    }
-
-    .nav-links a {
-        width: 100%;
-
-        padding: 12px;
-
-        text-align: center;
-    }
-
-    .nav-links a::after {
-        display: none;
-    }
-
-    .stats {
-        grid-template-columns: repeat(2,1fr);
-    }
-
-    .books-grid {
-        grid-template-columns: repeat(2,1fr);
-    }
+    font-weight:600;
 }
+
+.sort-btn:hover{
+    background:#2b2b2b;
+
+    border-color:var(--gold);
+
+    color:var(--gold);
+}
+
+.sort-btn.active{
+    background:var(--gold);
+
+    color:#111;
+
+    border-color:var(--gold);
+}
+
 
 /* =========================================================
-   TABLET
+   CHAT BUTTON
 ========================================================= */
 
-@media (max-width: 1050px) {
+#chatBtn{
+    display:flex;
 
-    .books-grid {
-        grid-template-columns: repeat(3,1fr);
-    }
+    align-items:center;
 
-    .nav-links {
-        gap: 15px;
-    }
+    justify-content:center;
 
-    .nav-links a {
-        font-size: 12px;
-    }
-
-    .library-section {
-        width: 94%;
-    }
+    transition:.3s ease;
 }
+
+#chatBtn:hover{
+    transform:scale(1.08);
+}
+
 
 /* =========================================================
-   SMALL TABLET
+   CHAT INPUT
 ========================================================= */
 
-@media (max-width: 700px) {
-
-    .books-grid {
-        grid-template-columns: repeat(2,1fr);
-
-        gap: 16px;
-    }
-
-    .book-cover {
-        height: 250px;
-    }
-
-    .book-info {
-        padding: 14px;
-    }
-
-    .book-info h3 {
-        font-size: 14px;
-    }
-
-    .book-info p {
-        font-size: 10px;
-    }
-
-    .book-meta {
-        gap: 8px;
-    }
+.chat-input{
+    border-top:1px solid #292929;
 }
+
+.chat-input input::placeholder{
+    color:#777;
+}
+
+.chat-input button{
+    transition:.3s ease;
+}
+
+.chat-input button:hover{
+    background:var(--gold);
+
+    color:#111;
+}
+
 
 /* =========================================================
-   MOBILE
+   CHAT MESSAGE LINKS
 ========================================================= */
 
-@media (max-width: 520px) {
+.bot-message .btn{
+    display:inline-block;
 
-    .navbar {
-        min-height: 68px;
-    }
+    padding:8px 14px;
 
-    .brand img {
-        width: 45px;
-        height: 45px;
-    }
+    font-size:12px;
 
-    .brand h2 {
-        font-size: 15px;
-    }
-
-    .brand span {
-        font-size: 9px;
-    }
-
-    .books-hero {
-        padding: 35px 15px 45px;
-    }
-
-    .hero-logo {
-        width: 100px;
-        height: 100px;
-    }
-
-    .books-hero h1 {
-        font-size: 34px;
-    }
-
-    .books-hero h3 {
-        font-size: 17px;
-    }
-
-    .books-hero p {
-        width: 100%;
-
-        font-size: 12px;
-        line-height: 1.7;
-    }
-
-    .search-box {
-        width: 100%;
-    }
-
-    .search-box input {
-        padding: 13px 10px;
-        font-size: 12px;
-    }
-
-    .stats {
-        grid-template-columns: 1fr;
-
-        gap: 12px;
-
-        margin-bottom: 45px;
-    }
-
-    .stat-card {
-        padding: 20px;
-    }
-
-    .library-section {
-        width: 92%;
-    }
-
-    .section-title {
-        font-size: 23px;
-    }
-
-    .categories {
-        gap: 8px;
-    }
-
-    .category,
-    .sort-btn {
-        padding: 9px 14px;
-
-        font-size: 11px;
-    }
-
-    .sorting-section {
-        gap: 8px;
-
-        margin-bottom: 30px;
-    }
-
-    .books-grid {
-        grid-template-columns: 1fr;
-
-        gap: 18px;
-    }
-
-    .book-cover {
-        height: 320px;
-    }
-
-    .book-info {
-        padding: 17px;
-    }
-
-    .book-info h3 {
-        font-size: 16px;
-    }
-
-    .book-info p {
-        font-size: 11px;
-    }
-
-    .book-btn {
-        min-height: 40px;
-
-        padding: 11px 7px;
-
-        font-size: 11px;
-    }
+    margin-top:5px;
 }
+
+
+/* =========================================================
+   FOOTER SOCIAL
+========================================================= */
+
+.footer-social a{
+    border:1px solid #333;
+}
+
+.footer-social a:hover{
+    border-color:var(--gold);
+}
+
+
+/* =========================================================
+   SCROLL TOP
+========================================================= */
+
+#scrollTop{
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.35);
+}
+
+#scrollTop.show{
+    display:flex;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media(max-width:1000px){
+
+    .navbar{
+        padding:15px 25px;
+    }
+
+    .menu{
+        gap:20px;
+    }
+
+    #booksContainer{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .most-liked-card{
+        flex-basis:280px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media(max-width:768px){
+
+    .navbar{
+        padding:12px 18px;
+    }
+
+    .logo img{
+        width:50px;
+    }
+
+    .logo h2{
+        font-size:18px;
+    }
+
+    .logo span{
+        display:none;
+    }
+
+    .hero{
+        padding:
+            110px 15px 50px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .hero h3{
+        font-size:20px;
+    }
+
+    .hero p{
+        font-size:15px;
+    }
+
+    .hero-logo{
+        width:145px;
+    }
+
+    .search-box{
+        margin:25px auto;
+    }
+
+    .search-box i{
+        padding:15px;
+    }
+
+    .search-box input{
+        padding:15px 8px;
+        font-size:14px;
+    }
+
+    #booksContainer{
+        grid-template-columns:1fr;
+    }
+
+    .book-cover{
+        height:380px;
+    }
+
+    .book-content{
+        padding:20px;
+    }
+
+    .book-content h2{
+        font-size:20px;
+    }
+
+    .chishti-book-actions{
+        gap:6px;
+    }
+
+    .book-action{
+        font-size:11px;
+        padding:8px 4px;
+    }
+
+    .book-action i{
+        font-size:13px;
+    }
+
+    .book-buttons{
+        flex-direction:column;
+    }
+
+    .book-buttons .btn{
+        width:100%;
+    }
+
+    .latest-book{
+        padding:70px 15px;
+    }
+
+    .latest-book-card{
+        padding:25px 18px;
+        gap:30px;
+    }
+
+    .book-image img{
+        width:200px;
+    }
+
+    .book-info h2{
+        font-size:27px;
+    }
+
+    .latest-book-stats{
+        justify-content:center;
+    }
+
+    .most-liked-books{
+        padding:70px 15px;
+    }
+
+    .most-liked-card{
+        flex:0 0 270px;
+        min-height:450px;
+    }
+
+    .most-liked-cover{
+        height:260px;
+    }
+
+    #chatBtn{
+        width:65px;
+        height:65px;
+
+        right:15px;
+        bottom:15px;
+    }
+
+    #chatWindow{
+        width:calc(100% - 20px);
+        right:10px;
+        bottom:90px;
+        height:70vh;
+        max-height:560px;
+    }
+
+    #scrollTop{
+        right:15px;
+        bottom:90px;
+
+        width:48px;
+        height:48px;
+    }
+
+}
+
 
 /* =========================================================
    VERY SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 360px) {
+@media(max-width:450px){
 
-    .brand h2 {
-        font-size: 14px;
+    .section-title{
+        font-size:27px;
     }
 
-    .brand span {
-        display: none;
+    .book-cover{
+        height:340px;
     }
 
-    .hero-logo {
-        width: 90px;
-        height: 90px;
+    .book-meta{
+        gap:12px;
+        font-size:12px;
     }
 
-    .books-hero h1 {
-        font-size: 29px;
+    .chishti-book-actions{
+        padding:7px;
     }
 
-    .book-cover {
-        height: 280px;
+    .book-action span{
+        font-size:10px;
     }
 
-    .book-actions {
-        grid-template-columns: 1fr;
+    .most-liked-card{
+        flex-basis:250px;
     }
+
+    .most-liked-cover{
+        height:240px;
+    }
+
+    .most-liked-info{
+        padding:18px;
+    }
+
+    .counter-card{
+        padding:25px 15px;
+    }
+
 }
+
 
 /* =========================================================
    ACCESSIBILITY
 ========================================================= */
 
-button:focus-visible,
-a:focus-visible,
-input:focus-visible {
-    outline: 2px solid var(--gold);
-    outline-offset: 3px;
+button,
+a,
+input{
+    -webkit-tap-highlight-color:transparent;
 }
 
+button:focus-visible,
+a:focus-visible,
+input:focus-visible{
+    outline:2px solid var(--gold);
+    outline-offset:3px;
+}
+
+
 /* =========================================================
-   REDUCED MOTION
+   PREMIUM SELECTION
 ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+::selection{
+    background:var(--gold);
+    color:#111;
+}
 
-    html {
-        scroll-behavior: auto;
-    }
 
-    *,
-    *::before,
-    *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: .01ms !important;
-    }
+/* =========================================================
+   FINAL
+========================================================= */
+
+.book-card,
+.most-liked-card,
+.latest-book-card,
+.author-card,
+.contact-card{
+    will-change:transform;
 }
