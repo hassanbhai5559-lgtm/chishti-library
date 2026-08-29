@@ -185,193 +185,144 @@ if (scrollBtn) {
 }
 
 
-/* =========================================================
-   FIREBASE VISITOR COUNTER
-========================================================= */
+/*=========================================
+  CHISHTI LIBRARY
+  VISITOR COUNTER
+=========================================*/
 
-async function startVisitorCounter() {
+async function updateVisitorCounter() {
 
-    if (firebaseVisitorStarted) {
-        return;
-    }
+    const visitorCounter =
+        document.getElementById("visitorCounter");
 
-    if (!firebaseIsReady()) {
-
-        console.log(
-            "⏳ Waiting for Firebase..."
-        );
-
-        return;
-
-    }
-
-    firebaseVisitorStarted = true;
+    if (!visitorCounter) return;
 
     try {
 
-        /*
-        -----------------------------------------------------
-        USE EXISTING addVisitor() IF AVAILABLE
-        -----------------------------------------------------
-        */
+        /* =========================
+           FIREBASE VISITOR DOCUMENT
+        ========================= */
 
-        if (
-            typeof window.addVisitor ===
-            "function"
-        ) {
+        const visitorRef =
+            db.collection("counter").doc("visitors");
 
-            await window.addVisitor();
 
-            console.log(
-                "👤 Visitor successfully added"
+        /* =========================
+           GET CURRENT COUNT
+        ========================= */
+
+        const snapshot =
+            await visitorRef.get();
+
+
+        /* =========================
+           CREATE IF NOT EXISTS
+        ========================= */
+
+        if (!snapshot.exists) {
+
+            await visitorRef.set({
+                count: 1
+            });
+
+            sessionStorage.setItem(
+                "chishtiVisitorCounted",
+                "true"
             );
 
+            visitorCounter.innerText = "1";
+
             return;
+        }
+
+
+        /* =========================
+           CHECK THIS SESSION
+        ========================= */
+
+        const alreadyCounted =
+            sessionStorage.getItem(
+                "chishtiVisitorCounted"
+            );
+
+
+        /* =========================
+           COUNT NEW VISITOR
+        ========================= */
+
+        if (!alreadyCounted) {
+
+            await visitorRef.update({
+
+                count:
+                    firebase.firestore.FieldValue.increment(1)
+
+            });
+
+            sessionStorage.setItem(
+                "chishtiVisitorCounted",
+                "true"
+            );
 
         }
 
 
-        /*
-        -----------------------------------------------------
-        DIRECT FIREBASE VISITOR COUNTER
-        -----------------------------------------------------
-        */
+        /* =========================
+           GET UPDATED COUNT
+        ========================= */
 
-        const visitorRef =
-            window.db
-                .collection("siteStats")
-                .doc("visitors");
+        const latestSnapshot =
+            await visitorRef.get();
 
 
-        await visitorRef.set({
-
-            count:
-                window.firebaseIncrement
-                    ? window.firebaseIncrement(1)
-                    : firebase.firestore.FieldValue.increment(1),
-
-            lastVisit:
-                window.firebaseServerTimestamp
-                    ? window.firebaseServerTimestamp()
-                    : firebase.firestore.FieldValue.serverTimestamp()
-
-        }, {
-
-            merge: true
-
-        });
+        const visitors =
+            Number(
+                latestSnapshot.data().count
+            ) || 0;
 
 
-        console.log(
-            "👤 Visitor counted in Firebase"
-        );
+        /* =========================
+           ANIMATED COUNTER
+        ========================= */
 
-    }
+        let current = 0;
 
-    catch (error) {
+        const animation =
+            setInterval(() => {
 
-        firebaseVisitorStarted = false;
+                current++;
+
+                visitorCounter.innerText =
+                    current.toLocaleString();
+
+                if (current >= visitors) {
+
+                    clearInterval(animation);
+
+                }
+
+            }, 25);
+
+
+    } catch (error) {
 
         console.error(
-            "❌ Visitor counter error:",
+            "Visitor counter error:",
             error
         );
 
+        visitorCounter.innerText = "0";
+
     }
 
 }
 
 
-/* =========================================================
-   WAIT FOR FIREBASE
-========================================================= */
+/* =========================
+   UPDATE VISITOR COUNTER
+========================= */
 
-function waitForFirebase() {
-
-    if (firebaseIsReady()) {
-
-        startVisitorCounter();
-
-        return;
-
-    }
-
-    console.log(
-        "⏳ Firebase not ready yet..."
-    );
-
-}
-
-
-window.addEventListener(
-    "firebaseReady",
-    () => {
-
-        console.log(
-            "🔥 Firebase Ready Event Received"
-        );
-
-        startVisitorCounter();
-
-    }
-);
-
-
-/*
----------------------------------------------------------
-TRY AFTER DOM LOAD
----------------------------------------------------------
-*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        waitForFirebase();
-
-    }
-);
-
-
-/*
----------------------------------------------------------
-RETRY IF FIREBASE FILE LOADS AFTER SCRIPT.JS
----------------------------------------------------------
-*/
-
-let firebaseWaitAttempts = 0;
-
-const firebaseWaitTimer =
-    setInterval(() => {
-
-        if (firebaseIsReady()) {
-
-            clearInterval(
-                firebaseWaitTimer
-            );
-
-            startVisitorCounter();
-
-            return;
-
-        }
-
-        firebaseWaitAttempts++;
-
-        if (firebaseWaitAttempts >= 30) {
-
-            clearInterval(
-                firebaseWaitTimer
-            );
-
-            console.warn(
-                "⚠️ Firebase was not detected after waiting."
-            );
-
-        }
-
-    }, 500);
-
+updateVisitorCounter();
 
 /* =========================================================
    LOAD BOOKS.JSON
