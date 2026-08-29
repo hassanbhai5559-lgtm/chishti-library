@@ -1,370 +1,256 @@
 "use strict";
 
-/*=========================================
+/*
+=========================================================
 CHISHTI LIBRARY
 ADMIN.JS
-=========================================*/
+FULL ADMIN PANEL
+=========================================================
+
+FEATURES:
+
+✅ Firebase Authentication
+✅ Admin Login
+✅ Logout
+✅ Firestore Books
+✅ Add Book
+✅ Edit Book
+✅ Change Book Name
+✅ Change Author
+✅ Change Category
+✅ Change Description
+✅ Cover Upload
+✅ PDF Upload
+✅ Delete Book
+✅ Search Books
+✅ Category Filter
+✅ Latest Book
+✅ Statistics
+✅ Visitor Counter
+=========================================================
+*/
 
 
-/*=========================================
-ELEMENTS
-=========================================*/
+/*=========================================================
+ GLOBAL VARIABLES
+=========================================================*/
 
-const loginScreen =
-    document.getElementById("loginScreen");
-
-const adminApp =
-    document.getElementById("adminApp");
-
-const loginForm =
-    document.getElementById("loginForm");
-
-const loginError =
-    document.getElementById("loginError");
-
-const logoutBtn =
-    document.getElementById("logoutBtn");
-
-const adminEmail =
-    document.getElementById("adminEmail");
-
-const booksTable =
-    document.getElementById("booksTable");
-
-const bookForm =
-    document.getElementById("bookForm");
-
-const bookMessage =
-    document.getElementById("bookMessage");
-
-const coverFile =
-    document.getElementById("coverFile");
-
-const pdfFile =
-    document.getElementById("pdfFile");
-
-const coverStatus =
-    document.getElementById("coverStatus");
-
-const pdfStatus =
-    document.getElementById("pdfStatus");
+let adminBooks = [];
+let editingBookId = null;
 
 
-let books = [];
+/*=========================================================
+ WAIT FOR FIREBASE
+=========================================================*/
 
+function waitForFirebase(callback) {
 
-/*=========================================
-AUTH STATE
-=========================================*/
+    if (
+        window.firebaseReady &&
+        window.db &&
+        window.auth &&
+        window.storage
+    ) {
 
-auth.onAuthStateChanged(function(user) {
+        callback();
 
-    if (user) {
-
-        loginScreen.classList.add("hidden");
-
-        adminApp.classList.remove("hidden");
-
-        adminEmail.innerText =
-            user.email || "Admin";
-
-        loadDashboard();
-
-        loadBooks();
-
-        loadComments();
-
-    } else {
-
-        loginScreen.classList.remove("hidden");
-
-        adminApp.classList.add("hidden");
-
+        return;
     }
 
+
+    window.addEventListener(
+        "firebaseReady",
+        callback,
+        { once: true }
+    );
+
+}
+
+
+/*=========================================================
+ DOM HELPER
+=========================================================*/
+
+function get(id) {
+
+    return document.getElementById(id);
+
+}
+
+
+/*=========================================================
+ ADMIN PAGE START
+=========================================================*/
+
+waitForFirebase(function () {
+
+    console.log("🔥 Firebase ready for Admin Panel");
+
+    checkAdminLogin();
+
+    loadAdminBooks();
+
+    loadAdminStatistics();
+
 });
 
 
-/*=========================================
-LOGIN
-=========================================*/
+/*=========================================================
+ AUTH CHECK
+=========================================================*/
 
-if (loginForm) {
+function checkAdminLogin() {
 
-    loginForm.addEventListener(
-        "submit",
-        async function(e) {
+    auth.onAuthStateChanged(function (user) {
 
-            e.preventDefault();
+        const loginSection =
+            get("loginSection");
 
-            loginError.innerText = "";
+        const adminSection =
+            get("adminSection");
 
-            const email =
-                document
-                .getElementById("loginEmail")
-                .value
-                .trim();
+        const adminEmail =
+            get("adminEmail");
 
-            const password =
-                document
-                .getElementById("loginPassword")
-                .value;
+        if (user) {
 
-            try {
-
-                await auth.signInWithEmailAndPassword(
-                    email,
-                    password
-                );
-
-            }
-
-            catch(error) {
-
-                console.error(
-                    "Login Error:",
-                    error
-                );
-
-                loginError.innerText =
-                    "❌ Invalid email or password.";
-
-            }
-
-        }
-    );
-
-}
-
-
-/*=========================================
-LOGOUT
-=========================================*/
-
-if (logoutBtn) {
-
-    logoutBtn.addEventListener(
-        "click",
-        async function() {
-
-            await auth.signOut();
-
-        }
-    );
-
-}
-
-
-/*=========================================
-NAVIGATION
-=========================================*/
-
-document
-.querySelectorAll(".nav-btn")
-.forEach(function(button) {
-
-    button.addEventListener(
-        "click",
-        function() {
-
-            openSection(
-                button.dataset.section
+            console.log(
+                "✅ Admin logged in:",
+                user.email
             );
 
-            document
-            .querySelectorAll(".nav-btn")
-            .forEach(function(btn) {
 
-                btn.classList.remove("active");
+            if (loginSection) {
 
-            });
+                loginSection.style.display =
+                    "none";
 
-            button.classList.add("active");
+            }
+
+
+            if (adminSection) {
+
+                adminSection.style.display =
+                    "block";
+
+            }
+
+
+            if (adminEmail) {
+
+                adminEmail.innerText =
+                    user.email || "Admin";
+
+            }
 
         }
-    );
 
-});
+        else {
+
+            console.log(
+                "ℹ️ No admin logged in"
+            );
 
 
-function openSection(sectionId) {
+            if (loginSection) {
 
-    document
-    .querySelectorAll(".admin-section")
-    .forEach(function(section) {
+                loginSection.style.display =
+                    "block";
 
-        section.classList.remove(
-            "active-section"
-        );
+            }
+
+
+            if (adminSection) {
+
+                adminSection.style.display =
+                    "none";
+
+            }
+
+        }
 
     });
 
-    const section =
-        document.getElementById(sectionId);
+}
 
-    if (section) {
 
-        section.classList.add(
-            "active-section"
+/*=========================================================
+ LOGIN
+=========================================================*/
+
+async function adminLoginForm() {
+
+    const email =
+        get("loginEmail")?.value.trim();
+
+    const password =
+        get("loginPassword")?.value;
+
+
+    if (!email || !password) {
+
+        alert(
+            "Please enter email and password."
         );
+
+        return;
 
     }
 
-    const titles = {
-
-        dashboard: "Dashboard",
-
-        books: "Books",
-
-        addBook: "Add Book",
-
-        comments: "Comments"
-
-    };
-
-    document.getElementById(
-        "pageTitle"
-    ).innerText =
-        titles[sectionId] || "Admin";
-
-
-    document
-    .querySelector(".sidebar")
-    ?.classList.remove("show");
-
-}
-
-
-/*=========================================
-MOBILE MENU
-=========================================*/
-
-const mobileMenu =
-    document.getElementById("mobileMenu");
-
-if (mobileMenu) {
-
-    mobileMenu.onclick = function() {
-
-        document
-        .querySelector(".sidebar")
-        .classList.toggle("show");
-
-    };
-
-}
-
-
-/*=========================================
-GO ADD BOOK
-=========================================*/
-
-const goAddBook =
-    document.getElementById("goAddBook");
-
-if (goAddBook) {
-
-    goAddBook.onclick = function() {
-
-        resetBookForm();
-
-        openSection("addBook");
-
-        document
-        .querySelectorAll(".nav-btn")
-        .forEach(btn =>
-            btn.classList.remove("active")
-        );
-
-        document
-        .querySelector(
-            '[data-section="addBook"]'
-        )
-        ?.classList.add("active");
-
-    };
-
-}
-
-
-/*=========================================
-DASHBOARD
-=========================================*/
-
-async function loadDashboard() {
 
     try {
 
-        const stats =
-            await getStatistics();
-
-        const snapshot =
-            await db
-            .collection("books")
-            .get();
+        await auth.signInWithEmailAndPassword(
+            email,
+            password
+        );
 
 
-        let views = 0;
-        let likes = 0;
-        let shares = 0;
-        let downloads = 0;
+        alert(
+            "✅ Login successful!"
+        );
 
-
-        snapshot.forEach(function(doc) {
-
-            const book = doc.data();
-
-            views +=
-                Number(book.views || 0);
-
-            likes +=
-                Number(book.likes || 0);
-
-            shares +=
-                Number(book.shares || 0);
-
-            downloads +=
-                Number(book.downloads || 0);
-
-        });
-
-
-        document.getElementById(
-            "totalBooks"
-        ).innerText =
-            snapshot.size;
-
-        document.getElementById(
-            "totalVisitors"
-        ).innerText =
-            Number(stats.visitors || 0);
-
-        document.getElementById(
-            "totalViews"
-        ).innerText =
-            views;
-
-        document.getElementById(
-            "totalLikes"
-        ).innerText =
-            likes;
-
-        document.getElementById(
-            "totalShares"
-        ).innerText =
-            shares;
-
-        document.getElementById(
-            "totalDownloads"
-        ).innerText =
-            downloads;
 
     }
 
-    catch(error) {
+    catch (error) {
 
         console.error(
-            "Dashboard Error:",
+            "❌ Login Error:",
+            error
+        );
+
+
+        alert(
+            "Login failed: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ LOGOUT
+=========================================================*/
+
+async function adminLogout() {
+
+    try {
+
+        await auth.signOut();
+
+        alert(
+            "✅ Logged out successfully."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Logout Error:",
             error
         );
 
@@ -373,53 +259,30 @@ async function loadDashboard() {
 }
 
 
-/*=========================================
-STATISTICS
-=========================================*/
+/*=========================================================
+ LOAD BOOKS
+=========================================================*/
 
-async function getStatistics() {
-
-    const doc =
-        await db
-        .collection("statistics")
-        .doc("main")
-        .get();
-
-    if (!doc.exists) {
-
-        return {
-            visitors: 0
-        };
-
-    }
-
-    return doc.data();
-
-}
-
-
-/*=========================================
-LOAD BOOKS
-=========================================*/
-
-async function loadBooks() {
+async function loadAdminBooks() {
 
     try {
 
         const snapshot =
             await db
-            .collection("books")
-            .orderBy(
-                "createdAt",
-                "desc"
-            )
-            .get();
+                .collection("books")
+                .orderBy(
+                    "createdAt",
+                    "desc"
+                )
+                .get();
 
-        books = [];
 
-        snapshot.forEach(function(doc) {
+        adminBooks = [];
 
-            books.push({
+
+        snapshot.forEach(function (doc) {
+
+            adminBooks.push({
 
                 id: doc.id,
 
@@ -429,77 +292,71 @@ async function loadBooks() {
 
         });
 
-        renderBooks();
+
+        console.log(
+            "✅ Admin Books Loaded:",
+            adminBooks.length
+        );
+
+
+        displayAdminBooks(
+            adminBooks
+        );
+
+
+        updateBookStatistics();
+
 
     }
 
-    catch(error) {
+    catch (error) {
 
         console.error(
-            "Books Error:",
+            "❌ Load Books Error:",
             error
         );
-
-        /*
-        If createdAt orderBy fails because
-        old documents don't have createdAt,
-        load without orderBy.
-        */
-
-        try {
-
-            const snapshot =
-                await db
-                .collection("books")
-                .get();
-
-            books = [];
-
-            snapshot.forEach(function(doc) {
-
-                books.push({
-
-                    id: doc.id,
-
-                    ...doc.data()
-
-                });
-
-            });
-
-            renderBooks();
-
-        }
-
-        catch(err) {
-
-            console.error(err);
-
-        }
 
     }
 
 }
 
 
-/*=========================================
-RENDER BOOKS
-=========================================*/
+/*=========================================================
+ DISPLAY BOOKS
+=========================================================*/
 
-function renderBooks() {
+function displayAdminBooks(books) {
 
-    if (!booksTable) return;
+    const container =
+        get("adminBooksContainer") ||
+        get("booksContainer") ||
+        get("adminBookList");
 
-    booksTable.innerHTML = "";
 
-    if (books.length === 0) {
+    if (!container) {
 
-        booksTable.innerHTML = `
-            <tr>
-                <td colspan="8">
-                    No books found.
-                </td>
-            </tr>
+        console.warn(
+            "⚠️ Books container not found."
+        );
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    if (!books.length) {
+
+        container.innerHTML = `
+
+            <div class="no-books">
+
+                <h3>No Books Found</h3>
+
+            </div>
+
         `;
 
         return;
@@ -507,466 +364,784 @@ function renderBooks() {
     }
 
 
-    books.forEach(function(book) {
+    books.forEach(function (book) {
 
         const cover =
-            book.coverUrl ||
-            book.cover ||
-            "logo.png";
+            book.coverUrl || "logo.png";
 
 
-        const title =
-            book.title || "Untitled";
-
-        const author =
-            book.author || "Unknown";
-
-        const category =
-            book.category || "Other";
+        const latestBadge =
+            book.latest === true
+                ? `<span class="latest-badge">
+                    LATEST
+                   </span>`
+                : "";
 
 
-        const row =
-            document.createElement("tr");
+        container.innerHTML += `
 
+        <div class="admin-book-card"
+             data-id="${book.id}">
 
-        row.innerHTML = `
+            <div class="admin-book-cover">
 
-            <td>
                 <img
-                    src="${cover}"
-                    class="book-cover"
+                    src="${escapeHTML(cover)}"
+                    alt="${escapeHTML(book.title || "")}"
                     onerror="this.src='logo.png'"
                 >
-            </td>
 
-            <td>${escapeHTML(title)}</td>
+            </div>
 
-            <td>${escapeHTML(author)}</td>
 
-            <td>${escapeHTML(category)}</td>
+            <div class="admin-book-info">
 
-            <td>${Number(book.views || 0)}</td>
+                ${latestBadge}
 
-            <td>${Number(book.downloads || 0)}</td>
+                <h3>
+                    ${escapeHTML(
+                        book.title || "Untitled"
+                    )}
+                </h3>
 
-            <td>
-                ${
-                    book.latest === true
-                    ? "⭐ Yes"
-                    : "No"
-                }
-            </td>
 
-            <td>
+                <p>
+                    <strong>Author:</strong>
+                    ${escapeHTML(
+                        book.author || "Unknown"
+                    )}
+                </p>
 
-                <button
-                    class="action-btn edit-btn"
-                    onclick="editBook('${book.id}')"
-                >
-                    ✏️
-                </button>
 
-                <button
-                    class="action-btn delete-btn"
-                    onclick="deleteBook('${book.id}')"
-                >
-                    🗑️
-                </button>
+                <p>
+                    <strong>Category:</strong>
+                    ${escapeHTML(
+                        book.category || "Other"
+                    )}
+                </p>
 
-            </td>
+
+                <p>
+                    ${escapeHTML(
+                        book.description || ""
+                    )}
+                </p>
+
+
+                <div class="admin-stats">
+
+                    <span>
+                        👁 ${book.views || 0}
+                    </span>
+
+                    <span>
+                        ❤️ ${book.likes || 0}
+                    </span>
+
+                    <span>
+                        🔗 ${book.shares || 0}
+                    </span>
+
+                    <span>
+                        ⬇ ${book.downloads || 0}
+                    </span>
+
+                </div>
+
+
+                <div class="admin-actions">
+
+                    <button
+                        class="edit-book-btn"
+                        onclick="editBook('${book.id}')">
+
+                        ✏️ Edit
+
+                    </button>
+
+
+                    <button
+                        class="delete-book-btn"
+                        onclick="deleteBook('${book.id}')">
+
+                        🗑️ Delete
+
+                    </button>
+
+
+                    <button
+                        class="latest-book-btn"
+                        onclick="setLatestBook('${book.id}')">
+
+                        ⭐ Latest
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
         `;
-
-        booksTable.appendChild(row);
 
     });
 
 }
 
 
-/*=========================================
-ADD / UPDATE BOOK
-=========================================*/
-
-if (bookForm) {
-
-    bookForm.addEventListener(
-        "submit",
-        async function(e) {
-
-            e.preventDefault();
-
-            const saveBtn =
-                document.getElementById(
-                    "saveBookBtn"
-                );
-
-            saveBtn.disabled = true;
-
-            saveBtn.innerText =
-                "⏳ Saving...";
-
-
-            try {
-
-                const editingId =
-                    document.getElementById(
-                        "editingBookId"
-                    ).value;
-
-
-                const title =
-                    document.getElementById(
-                        "bookTitle"
-                    ).value.trim();
-
-
-                const author =
-                    document.getElementById(
-                        "bookAuthor"
-                    ).value.trim();
-
-
-                const category =
-                    document.getElementById(
-                        "bookCategory"
-                    ).value;
-
-
-                const language =
-                    document.getElementById(
-                        "bookLanguage"
-                    ).value;
-
-
-                const description =
-                    document.getElementById(
-                        "bookDescription"
-                    ).value.trim();
-
-
-                const latest =
-                    document.getElementById(
-                        "bookLatest"
-                    ).checked;
-
-
-                let coverUrl = "";
-                let coverPath = "";
-
-                let pdfUrl = "";
-                let pdfPath = "";
-
-
-                /*
-                =========================
-                EXISTING BOOK
-                =========================
-                */
-
-                if (editingId) {
-
-                    const oldBook =
-                        books.find(
-                            b =>
-                                b.id === editingId
-                        );
-
-                    coverUrl =
-                        oldBook?.coverUrl ||
-                        oldBook?.cover ||
-                        "";
-
-                    coverPath =
-                        oldBook?.coverPath ||
-                        "";
-
-                    pdfUrl =
-                        oldBook?.pdfUrl ||
-                        oldBook?.pdf ||
-                        "";
-
-                    pdfPath =
-                        oldBook?.pdfPath ||
-                        "";
-
-                }
-
-
-                /*
-                =========================
-                CREATE ID
-                =========================
-                */
-
-                const bookId =
-                    editingId ||
-                    db
-                    .collection("books")
-                    .doc()
-                    .id;
-
-
-                /*
-                =========================
-                COVER
-                =========================
-                */
-
-                if (
-                    coverFile.files.length > 0
-                ) {
-
-                    const file =
-                        coverFile.files[0];
-
-                    const extension =
-                        file.name
-                        .split(".")
-                        .pop()
-                        .toLowerCase();
-
-                    const path =
-                        `books/${bookId}/cover/cover-${Date.now()}.${extension}`;
-
-                    const ref =
-                        storage.ref(path);
-
-                    const upload =
-                        await ref.put(file);
-
-                    coverUrl =
-                        await upload
-                        .ref
-                        .getDownloadURL();
-
-                    coverPath = path;
-
-                }
-
-
-                /*
-                =========================
-                PDF
-                =========================
-                */
-
-                if (
-                    pdfFile.files.length > 0
-                ) {
-
-                    const file =
-                        pdfFile.files[0];
-
-
-                    if (
-                        file.type !==
-                        "application/pdf"
-                    ) {
-
-                        throw new Error(
-                            "Only PDF files are allowed."
-                        );
-
-                    }
-
-
-                    const path =
-                        `books/${bookId}/pdf/book-${Date.now()}.pdf`;
-
-
-                    const ref =
-                        storage.ref(path);
-
-
-                    const upload =
-                        await ref.put(file);
-
-
-                    pdfUrl =
-                        await upload
-                        .ref
-                        .getDownloadURL();
-
-                    pdfPath = path;
-
-                }
-
-
-                /*
-                =========================
-                DATA
-                =========================
-                */
-
-                const data = {
-
-                    title,
-
-                    author,
-
-                    category,
-
-                    language,
-
-                    description,
-
-                    coverUrl,
-
-                    coverPath,
-
-                    pdfUrl,
-
-                    pdfPath,
-
-                    latest,
-
-                    updatedAt:
-                        firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-                };
-
-
-                /*
-                =========================
-                UPDATE
-                =========================
-                */
-
-                if (editingId) {
-
-                    await db
-                    .collection("books")
-                    .doc(editingId)
-                    .update(data);
-
-
-                    /*
-                    If latest selected,
-                    remove latest from others.
-                    */
-
-                    if (latest) {
-
-                        await removeOtherLatest(
-                            editingId
-                        );
-
-                    }
-
-
-                    showMessage(
-                        "✅ Book updated successfully."
-                    );
-
-                }
-
-
-                /*
-                =========================
-                ADD
-                =========================
-                */
-
-                else {
-
-                    data.views = 0;
-                    data.likes = 0;
-                    data.shares = 0;
-                    data.downloads = 0;
-                    data.comments = 0;
-
-                    data.createdAt =
-                        firebase.firestore
-                        .FieldValue
-                        .serverTimestamp();
-
-
-                    await db
-                    .collection("books")
-                    .doc(bookId)
-                    .set(data);
-
-
-                    if (latest) {
-
-                        await removeOtherLatest(
-                            bookId
-                        );
-
-                    }
-
-
-                    showMessage(
-                        "✅ Book added successfully."
-                    );
-
-                }
-
-
-                resetBookForm();
-
-                await loadBooks();
-
-                await loadDashboard();
-
-            }
-
-            catch(error) {
-
-                console.error(
-                    "Book Save Error:",
-                    error
-                );
-
-                showMessage(
-                    "❌ " +
-                    (error.message ||
-                    "Something went wrong.")
-                );
-
-            }
-
-            finally {
-
-                saveBtn.disabled = false;
-
-                saveBtn.innerText =
-                    "💾 Save Book";
-
-            }
-
-        }
-    );
+/*=========================================================
+ ESCAPE HTML
+=========================================================*/
+
+function escapeHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
-/*=========================================
-REMOVE OTHER LATEST
-=========================================*/
+/*=========================================================
+ GET FORM VALUES
+=========================================================*/
 
-async function removeOtherLatest(currentId) {
+function getBookFormData() {
+
+    return {
+
+        title:
+            get("bookTitle")?.value.trim() || "",
+
+        author:
+            get("bookAuthor")?.value.trim() || "",
+
+        category:
+            get("bookCategory")?.value || "Other",
+
+        description:
+            get("bookDescription")?.value.trim() || "",
+
+        latest:
+            get("bookLatest")?.checked || false
+
+    };
+
+}
+
+
+/*=========================================================
+ ADD / UPDATE BOOK
+=========================================================*/
+
+async function saveBook() {
+
+    if (!window.currentFirebaseUser) {
+
+        alert(
+            "Please login as admin first."
+        );
+
+        return;
+
+    }
+
+
+    const data =
+        getBookFormData();
+
+
+    if (!data.title) {
+
+        alert(
+            "Please enter book title."
+        );
+
+        return;
+
+    }
+
+
+    if (!data.author) {
+
+        alert(
+            "Please enter author name."
+        );
+
+        return;
+
+    }
+
+
+    const coverInput =
+        get("bookCover");
+
+    const pdfInput =
+        get("bookPDF");
+
+
+    const coverFile =
+        coverInput?.files?.[0] || null;
+
+    const pdfFile =
+        pdfInput?.files?.[0] || null;
+
+
+    try {
+
+        let bookId =
+            editingBookId;
+
+
+        /*=========================================
+        NEW BOOK
+        =========================================*/
+
+        if (!bookId) {
+
+            const bookRef =
+                db
+                    .collection("books")
+                    .doc();
+
+
+            bookId =
+                bookRef.id;
+
+
+            let coverData = null;
+            let pdfData = null;
+
+
+            /* COVER */
+
+            if (coverFile) {
+
+                coverData =
+                    await uploadFirebaseFile(
+                        coverFile,
+                        "books/" +
+                        bookId +
+                        "/cover",
+                        "cover-" +
+                        Date.now()
+                    );
+
+            }
+
+
+            /* PDF */
+
+            if (pdfFile) {
+
+                pdfData =
+                    await uploadFirebaseFile(
+                        pdfFile,
+                        "books/" +
+                        bookId +
+                        "/pdf",
+                        "book-" +
+                        Date.now() +
+                        ".pdf"
+                    );
+
+            }
+
+
+            const bookData = {
+
+                title:
+                    data.title,
+
+                author:
+                    data.author,
+
+                category:
+                    data.category,
+
+                description:
+                    data.description,
+
+                coverUrl:
+                    coverData?.url || "",
+
+                coverPath:
+                    coverData?.path || "",
+
+                pdfUrl:
+                    pdfData?.url || "",
+
+                pdfPath:
+                    pdfData?.path || "",
+
+                latest:
+                    data.latest,
+
+                views: 0,
+
+                likes: 0,
+
+                shares: 0,
+
+                downloads: 0,
+
+                comments: 0,
+
+                createdAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp(),
+
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            };
+
+
+            await bookRef.set(
+                bookData
+            );
+
+
+            /* REMOVE OTHER LATEST BOOKS */
+
+            if (data.latest) {
+
+                await removeOtherLatestBooks(
+                    bookId
+                );
+
+            }
+
+
+            alert(
+                "✅ Book added successfully!"
+            );
+
+        }
+
+
+        /*=========================================
+        UPDATE BOOK
+        =========================================*/
+
+        else {
+
+            const updateData = {
+
+                title:
+                    data.title,
+
+                author:
+                    data.author,
+
+                category:
+                    data.category,
+
+                description:
+                    data.description,
+
+                latest:
+                    data.latest,
+
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            };
+
+
+            /*=====================================
+            NEW COVER
+            =====================================*/
+
+            if (coverFile) {
+
+                const coverData =
+                    await uploadFirebaseFile(
+                        coverFile,
+                        "books/" +
+                        bookId +
+                        "/cover",
+                        "cover-" +
+                        Date.now()
+                    );
+
+
+                updateData.coverUrl =
+                    coverData.url;
+
+                updateData.coverPath =
+                    coverData.path;
+
+            }
+
+
+            /*=====================================
+            NEW PDF
+            =====================================*/
+
+            if (pdfFile) {
+
+                if (
+                    pdfFile.type !==
+                    "application/pdf"
+                ) {
+
+                    alert(
+                        "Only PDF files are allowed."
+                    );
+
+                    return;
+
+                }
+
+
+                const pdfData =
+                    await uploadFirebaseFile(
+                        pdfFile,
+                        "books/" +
+                        bookId +
+                        "/pdf",
+                        "book-" +
+                        Date.now() +
+                        ".pdf"
+                    );
+
+
+                updateData.pdfUrl =
+                    pdfData.url;
+
+                updateData.pdfPath =
+                    pdfData.path;
+
+            }
+
+
+            /*=====================================
+            FIRESTORE UPDATE
+            =====================================*/
+
+            await db
+                .collection("books")
+                .doc(bookId)
+                .update(
+                    updateData
+                );
+
+
+            /* REMOVE OTHER LATEST */
+
+            if (data.latest) {
+
+                await removeOtherLatestBooks(
+                    bookId
+                );
+
+            }
+
+
+            alert(
+                "✅ Book updated successfully!"
+            );
+
+        }
+
+
+        resetBookForm();
+
+        await loadAdminBooks();
+
+        await loadAdminStatistics();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Save Book Error:",
+            error
+        );
+
+
+        alert(
+            "❌ Error:\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ EDIT BOOK
+=========================================================*/
+
+async function editBook(bookId) {
+
+    try {
+
+        const doc =
+            await db
+                .collection("books")
+                .doc(bookId)
+                .get();
+
+
+        if (!doc.exists) {
+
+            alert(
+                "Book not found."
+            );
+
+            return;
+
+        }
+
+
+        const book =
+            doc.data();
+
+
+        editingBookId =
+            bookId;
+
+
+        /* FILL FORM */
+
+        if (get("bookTitle"))
+            get("bookTitle").value =
+                book.title || "";
+
+
+        if (get("bookAuthor"))
+            get("bookAuthor").value =
+                book.author || "";
+
+
+        if (get("bookCategory"))
+            get("bookCategory").value =
+                book.category || "Other";
+
+
+        if (get("bookDescription"))
+            get("bookDescription").value =
+                book.description || "";
+
+
+        if (get("bookLatest"))
+            get("bookLatest").checked =
+                book.latest === true;
+
+
+        /* BUTTON */
+
+        const saveBtn =
+            get("saveBookBtn") ||
+            get("addBookBtn");
+
+
+        if (saveBtn) {
+
+            saveBtn.innerText =
+                "💾 Update Book";
+
+        }
+
+
+        const cancelBtn =
+            get("cancelEditBtn");
+
+
+        if (cancelBtn) {
+
+            cancelBtn.style.display =
+                "inline-block";
+
+        }
+
+
+        /* SCROLL */
+
+        const form =
+            get("bookForm");
+
+
+        if (form) {
+
+            form.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+
+        console.log(
+            "✏️ Editing:",
+            book.title
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Edit Book Error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ DELETE BOOK
+=========================================================*/
+
+async function deleteBook(bookId) {
+
+    if (!window.currentFirebaseUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+
+    }
+
+
+    const confirmDelete =
+        confirm(
+            "⚠️ Are you sure you want to delete this book?"
+        );
+
+
+    if (!confirmDelete) return;
+
+
+    try {
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .delete();
+
+
+        alert(
+            "🗑️ Book deleted successfully!"
+        );
+
+
+        await loadAdminBooks();
+
+        await loadAdminStatistics();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Delete Error:",
+            error
+        );
+
+
+        alert(
+            "Delete failed:\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ SET LATEST BOOK
+=========================================================*/
+
+async function setLatestBook(bookId) {
+
+    try {
+
+        await removeOtherLatestBooks(
+            bookId
+        );
+
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                latest: true,
+
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            });
+
+
+        alert(
+            "⭐ Latest book updated!"
+        );
+
+
+        await loadAdminBooks();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Latest Book Error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ REMOVE OTHER LATEST BOOKS
+=========================================================*/
+
+async function removeOtherLatestBooks(
+    currentBookId
+) {
 
     const snapshot =
         await db
-        .collection("books")
-        .where(
-            "latest",
-            "==",
-            true
-        )
-        .get();
+            .collection("books")
+            .where(
+                "latest",
+                "==",
+                true
+            )
+            .get();
 
 
     const batch =
         db.batch();
 
 
-    snapshot.forEach(function(doc) {
+    snapshot.forEach(function (doc) {
 
-        if (doc.id !== currentId) {
+        if (doc.id !== currentBookId) {
 
             batch.update(
                 doc.ref,
@@ -985,346 +1160,362 @@ async function removeOtherLatest(currentId) {
 }
 
 
-/*=========================================
-EDIT BOOK
-=========================================*/
-
-window.editBook =
-async function(bookId) {
-
-    const book =
-        books.find(
-            b => b.id === bookId
-        );
-
-    if (!book) return;
-
-
-    document.getElementById(
-        "editingBookId"
-    ).value = book.id;
-
-
-    document.getElementById(
-        "bookTitle"
-    ).value =
-        book.title || "";
-
-
-    document.getElementById(
-        "bookAuthor"
-    ).value =
-        book.author || "";
-
-
-    document.getElementById(
-        "bookCategory"
-    ).value =
-        book.category || "Other";
-
-
-    document.getElementById(
-        "bookLanguage"
-    ).value =
-        book.language || "Urdu";
-
-
-    document.getElementById(
-        "bookDescription"
-    ).value =
-        book.description || "";
-
-
-    document.getElementById(
-        "bookLatest"
-    ).checked =
-        book.latest === true;
-
-
-    document.getElementById(
-        "bookFormTitle"
-    ).innerText =
-        "Edit Book";
-
-
-    document.getElementById(
-        "saveBookBtn"
-    ).innerText =
-        "💾 Update Book";
-
-
-    coverStatus.innerText =
-        book.coverUrl
-        ? "Existing cover will be kept"
-        : "No cover selected";
-
-
-    pdfStatus.innerText =
-        book.pdfUrl
-        ? "Existing PDF will be kept"
-        : "No PDF selected";
-
-
-    openSection("addBook");
-
-};
-
-
-/*=========================================
-DELETE BOOK
-=========================================*/
-
-window.deleteBook =
-async function(bookId) {
-
-    const book =
-        books.find(
-            b => b.id === bookId
-        );
-
-    if (!book) return;
-
-
-    const confirmed =
-        confirm(
-            `Delete "${book.title}"?`
-        );
-
-
-    if (!confirmed) return;
-
-
-    try {
-
-        await db
-        .collection("books")
-        .doc(bookId)
-        .delete();
-
-
-        /*
-        Delete Storage folder
-        */
-
-        try {
-
-            const folderRef =
-                storage.ref(
-                    `books/${bookId}`
-                );
-
-            const result =
-                await folderRef.listAll();
-
-
-            const deletePromises =
-                result.items.map(
-                    item =>
-                        item.delete()
-                );
-
-
-            await Promise.all(
-                deletePromises
-            );
-
-        }
-
-        catch(storageError) {
-
-            console.warn(
-                "Storage delete warning:",
-                storageError
-            );
-
-        }
-
-
-        alert(
-            "✅ Book deleted."
-        );
-
-
-        await loadBooks();
-
-        await loadDashboard();
-
-    }
-
-    catch(error) {
-
-        console.error(
-            "Delete Error:",
-            error
-        );
-
-        alert(
-            "❌ Could not delete book."
-        );
-
-    }
-
-};
-
-
-/*=========================================
-CANCEL EDIT
-=========================================*/
-
-const cancelEdit =
-    document.getElementById(
-        "cancelEdit"
-    );
-
-if (cancelEdit) {
-
-    cancelEdit.onclick =
-        resetBookForm;
-
-}
-
+/*=========================================================
+ RESET FORM
+=========================================================*/
 
 function resetBookForm() {
 
-    if (!bookForm) return;
-
-    bookForm.reset();
-
-    document.getElementById(
-        "editingBookId"
-    ).value = "";
+    editingBookId =
+        null;
 
 
-    document.getElementById(
-        "bookFormTitle"
-    ).innerText =
-        "Add New Book";
+    const form =
+        get("bookForm");
 
 
-    document.getElementById(
-        "saveBookBtn"
-    ).innerText =
-        "💾 Save Book";
+    if (form) {
+
+        form.reset();
+
+    }
 
 
-    coverStatus.innerText =
-        "No cover selected";
+    const saveBtn =
+        get("saveBookBtn") ||
+        get("addBookBtn");
 
 
-    pdfStatus.innerText =
-        "No PDF selected";
+    if (saveBtn) {
+
+        saveBtn.innerText =
+            "➕ Add Book";
+
+    }
 
 
-    bookMessage.innerText = "";
+    const cancelBtn =
+        get("cancelEditBtn");
+
+
+    if (cancelBtn) {
+
+        cancelBtn.style.display =
+            "none";
+
+    }
 
 }
 
 
-/*=========================================
-FILE STATUS
-=========================================*/
+/*=========================================================
+ SEARCH BOOKS
+=========================================================*/
 
-if (coverFile) {
+function searchAdminBooks() {
 
-    coverFile.addEventListener(
-        "change",
-        function() {
+    const input =
+        get("adminSearch") ||
+        get("searchInput");
 
-            coverStatus.innerText =
-                this.files.length
-                ? "✅ " +
-                  this.files[0].name
-                : "No cover selected";
 
-        }
+    if (!input) return;
+
+
+    const query =
+        input.value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        adminBooks.filter(function (book) {
+
+            return (
+
+                (book.title || "")
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                (book.author || "")
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                (book.category || "")
+                    .toLowerCase()
+                    .includes(query)
+
+            );
+
+        });
+
+
+    displayAdminBooks(
+        filtered
     );
 
 }
 
 
-if (pdfFile) {
+/*=========================================================
+ CATEGORY FILTER
+=========================================================*/
 
-    pdfFile.addEventListener(
-        "change",
-        function() {
+function filterAdminBooks(category) {
 
-            pdfStatus.innerText =
-                this.files.length
-                ? "✅ " +
-                  this.files[0].name
-                : "No PDF selected";
+    if (
+        !category ||
+        category === "ALL" ||
+        category === "All"
+    ) {
 
-        }
-    );
-
-}
-
-
-/*=========================================
-COMMENTS
-=========================================*/
-
-async function loadComments() {
-
-    const container =
-        document.getElementById(
-            "commentsContainer"
+        displayAdminBooks(
+            adminBooks
         );
 
-    if (!container) return;
+        return;
+
+    }
 
 
-    container.innerHTML =
-        `<p class="loading">
-            Loading comments...
-        </p>`;
+    const filtered =
+        adminBooks.filter(function (book) {
 
+            return (
+                book.category === category
+            );
+
+        });
+
+
+    displayAdminBooks(
+        filtered
+    );
+
+}
+
+
+/*=========================================================
+ STATISTICS
+=========================================================*/
+
+async function loadAdminStatistics() {
 
     try {
 
         const snapshot =
             await db
-            .collection("books")
-            .get();
-
-
-        const allComments = [];
-
-
-        for (
-            const bookDoc
-            of snapshot.docs
-        ) {
-
-            const book =
-                bookDoc.data();
-
-
-            const commentsSnapshot =
-                await db
                 .collection("books")
-                .doc(bookDoc.id)
-                .collection("comments")
                 .get();
 
 
-            commentsSnapshot.forEach(
-                function(commentDoc) {
+        let views = 0;
+        let likes = 0;
+        let shares = 0;
+        let downloads = 0;
+        let latest = 0;
 
-                    allComments.push({
 
-                        id:
-                            commentDoc.id,
+        snapshot.forEach(function (doc) {
 
-                        bookId:
-                            bookDoc.id,
+            const book =
+                doc.data();
 
-                        bookTitle:
-                            book.title || "Book",
 
-                        ...commentDoc.data()
+            views +=
+                Number(book.views || 0);
 
-                    });
+
+            likes +=
+                Number(book.likes || 0);
+
+
+            shares +=
+                Number(book.shares || 0);
+
+
+            downloads +=
+                Number(book.downloads || 0);
+
+
+            if (
+                book.latest === true
+            ) {
+
+                latest++;
+
+            }
+
+        });
+
+
+        /* BOOKS */
+
+        setText(
+            "totalBooks",
+            snapshot.size
+        );
+
+
+        /* VIEWS */
+
+        setText(
+            "totalViews",
+            views
+        );
+
+
+        /* LIKES */
+
+        setText(
+            "totalLikes",
+            likes
+        );
+
+
+        /* SHARES */
+
+        setText(
+            "totalShares",
+            shares
+        );
+
+
+        /* DOWNLOADS */
+
+        setText(
+            "totalDownloads",
+            downloads
+        );
+
+
+        /* LATEST */
+
+        setText(
+            "latestBooks",
+            latest
+        );
+
+
+        /* VISITORS */
+
+        try {
+
+            const statistics =
+                await db
+                    .collection("statistics")
+                    .doc("main")
+                    .get();
+
+
+            const visitorCount =
+                statistics.exists
+                    ? Number(
+                        statistics.data()
+                            .visitors || 0
+                    )
+                    : 0;
+
+
+            setText(
+                "totalVisitors",
+                visitorCount
+            );
+
+        }
+
+        catch (visitorError) {
+
+            console.error(
+                "Visitor statistics error:",
+                visitorError
+            );
+
+        }
+
+
+        console.log(
+            "📊 Statistics updated"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Statistics Error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ UPDATE BOOK STATISTICS
+=========================================================*/
+
+function updateBookStatistics() {
+
+    setText(
+        "totalBooks",
+        adminBooks.length
+    );
+
+}
+
+
+/*=========================================================
+ SET TEXT
+=========================================================*/
+
+function setText(
+    id,
+    value
+) {
+
+    const element =
+        get(id);
+
+
+    if (element) {
+
+        element.innerText =
+            Number(value || 0)
+                .toLocaleString();
+
+    }
+
+}
+
+
+/*=========================================================
+ FORM SUBMIT
+=========================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const form =
+            get("bookForm");
+
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                function (e) {
+
+                    e.preventDefault();
+
+                    saveBook();
 
                 }
             );
@@ -1332,207 +1523,121 @@ async function loadComments() {
         }
 
 
-        container.innerHTML = "";
+        /* SEARCH */
+
+        const search =
+            get("adminSearch") ||
+            get("searchInput");
 
 
-        if (
-            allComments.length === 0
-        ) {
+        if (search) {
 
-            container.innerHTML =
-                `<p class="loading">
-                    No comments found.
-                </p>`;
-
-            return;
-
-        }
-
-
-        allComments.forEach(
-            function(comment) {
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-                card.className =
-                    "comment-card";
-
-
-                card.innerHTML = `
-
-                    <h3>
-                        ${escapeHTML(
-                            comment.name ||
-                            "Visitor"
-                        )}
-                    </h3>
-
-                    <div class="comment-book">
-                        📚 ${
-                            escapeHTML(
-                                comment.bookTitle
-                            )
-                        }
-                    </div>
-
-                    <p>
-                        ${escapeHTML(
-                            comment.comment || ""
-                        )}
-                    </p>
-
-                    <button
-                        class="action-btn delete-btn"
-                        onclick="deleteComment(
-                            '${comment.bookId}',
-                            '${comment.id}'
-                        )"
-                    >
-                        🗑️ Delete
-                    </button>
-
-                `;
-
-
-                container.appendChild(card);
-
-            }
-        );
-
-    }
-
-    catch(error) {
-
-        console.error(
-            "Comments Error:",
-            error
-        );
-
-        container.innerHTML =
-            `<p>
-                ❌ Unable to load comments.
-            </p>`;
-
-    }
-
-}
-
-
-/*=========================================
-DELETE COMMENT
-=========================================*/
-
-window.deleteComment =
-async function(
-    bookId,
-    commentId
-) {
-
-    if (
-        !confirm(
-            "Delete this comment?"
-        )
-    ) return;
-
-
-    try {
-
-        await db
-        .collection("books")
-        .doc(bookId)
-        .collection("comments")
-        .doc(commentId)
-        .delete();
-
-
-        /*
-        Update comments counter
-        */
-
-        const bookRef =
-            db
-            .collection("books")
-            .doc(bookId);
-
-
-        const bookDoc =
-            await bookRef.get();
-
-
-        if (bookDoc.exists) {
-
-            const current =
-                Number(
-                    bookDoc.data().comments ||
-                    0
-                );
-
-
-            await bookRef.update({
-
-                comments:
-                    Math.max(
-                        0,
-                        current - 1
-                    )
-
-            });
+            search.addEventListener(
+                "input",
+                searchAdminBooks
+            );
 
         }
 
 
-        await loadComments();
+        /* CANCEL */
 
-        await loadDashboard();
+        const cancel =
+            get("cancelEditBtn");
+
+
+        if (cancel) {
+
+            cancel.addEventListener(
+                "click",
+                resetBookForm
+            );
+
+        }
+
+
+        /* LOGIN FORM */
+
+        const loginForm =
+            get("loginForm");
+
+
+        if (loginForm) {
+
+            loginForm.addEventListener(
+                "submit",
+                function (e) {
+
+                    e.preventDefault();
+
+                    adminLoginForm();
+
+                }
+            );
+
+        }
+
+
+        /* LOGOUT BUTTON */
+
+        const logoutBtn =
+            get("logoutBtn");
+
+
+        if (logoutBtn) {
+
+            logoutBtn.addEventListener(
+                "click",
+                adminLogout
+            );
+
+        }
 
     }
-
-    catch(error) {
-
-        console.error(
-            "Comment delete error:",
-            error
-        );
-
-    }
-
-};
+);
 
 
-/*=========================================
-MESSAGE
-=========================================*/
+/*=========================================================
+ GLOBAL FUNCTIONS
+=========================================================*/
 
-function showMessage(message) {
+window.adminLoginForm =
+    adminLoginForm;
 
-    bookMessage.innerText =
-        message;
+window.adminLogout =
+    adminLogout;
 
-}
+window.loadAdminBooks =
+    loadAdminBooks;
+
+window.saveBook =
+    saveBook;
+
+window.editBook =
+    editBook;
+
+window.deleteBook =
+    deleteBook;
+
+window.setLatestBook =
+    setLatestBook;
+
+window.resetBookForm =
+    resetBookForm;
+
+window.searchAdminBooks =
+    searchAdminBooks;
+
+window.filterAdminBooks =
+    filterAdminBooks;
+
+window.loadAdminStatistics =
+    loadAdminStatistics;
 
 
-/*=========================================
-ESCAPE HTML
-=========================================*/
-
-function escapeHTML(value) {
-
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-
-}
-
-
-/*=========================================
-CONSOLE
-=========================================*/
+/*=========================================================
+ CONSOLE
+=========================================================*/
 
 console.log(
     "===================================="
@@ -1543,23 +1648,35 @@ console.log(
 );
 
 console.log(
-    "✅ Firebase Auth"
+    "===================================="
 );
 
 console.log(
-    "✅ Dashboard"
+    "✅ Firebase Authentication"
 );
 
 console.log(
-    "✅ Books"
+    "✅ Admin Login"
 );
 
 console.log(
-    "✅ Add / Edit / Delete"
+    "✅ Firestore"
 );
 
 console.log(
-    "✅ PDF Upload"
+    "✅ Add Book"
+);
+
+console.log(
+    "✅ Edit Book"
+);
+
+console.log(
+    "✅ Change Book Name"
+);
+
+console.log(
+    "✅ Delete Book"
 );
 
 console.log(
@@ -1567,11 +1684,23 @@ console.log(
 );
 
 console.log(
-    "✅ Visitor Statistics"
+    "✅ PDF Upload"
 );
 
 console.log(
-    "✅ Comments"
+    "✅ Categories"
+);
+
+console.log(
+    "✅ Latest Book"
+);
+
+console.log(
+    "✅ Statistics"
+);
+
+console.log(
+    "✅ Visitor Counter"
 );
 
 console.log(
