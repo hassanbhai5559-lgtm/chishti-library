@@ -1,12 +1,7 @@
 /* =========================================================
    CHISHTI LIBRARY
-   PREMIUM MAROON • GOLD • BLACK THEME
-   FULL STYLE.CSS
-========================================================= */
-
-
-/* =========================================================
-   RESET
+   PREMIUM MAROON • GOLD • BLACK
+   COMPLETE STYLE.CSS
 ========================================================= */
 
 * {
@@ -15,57 +10,48 @@
     box-sizing: border-box;
 }
 
+:root {
+    --maroon: #350000;
+    --maroon-2: #4b0000;
+    --dark: #160000;
+    --deep: #220000;
+    --black: #080000;
+
+    --gold: #d4af37;
+    --gold-light: #f3d77a;
+    --gold-dark: #9b7818;
+
+    --white: #ffffff;
+    --text: #222;
+    --muted: #888;
+
+    --border: rgba(212,175,55,.18);
+    --shadow: 0 15px 40px rgba(0,0,0,.35);
+}
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 html {
     scroll-behavior: smooth;
 }
 
 body {
     font-family: "Poppins", sans-serif;
+    min-height: 100vh;
+    color: #fff;
+    overflow-x: hidden;
+
     background:
         radial-gradient(
-            circle at 50% 0%,
-            #5b0000 0%,
-            #350000 32%,
-            #180000 70%,
-            #090000 100%
+            circle at 50% -10%,
+            #620000 0%,
+            #400000 28%,
+            #210000 62%,
+            #080000 100%
         );
-    color: #fff;
-    min-height: 100vh;
-    overflow-x: hidden;
 }
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-:root {
-    --maroon: #350000;
-    --dark-maroon: #180000;
-    --deep-maroon: #240000;
-    --black: #090000;
-
-    --gold: #d4af37;
-    --light-gold: #f3d77a;
-    --dark-gold: #9d7c16;
-
-    --white: #ffffff;
-    --muted: #bdbdbd;
-    --soft: #777;
-
-    --border: rgba(212, 175, 55, 0.18);
-
-    --shadow:
-        0 15px 40px rgba(0, 0, 0, 0.35);
-
-    --gold-shadow:
-        0 0 25px rgba(212, 175, 55, 0.25);
-}
-
-
-/* =========================================================
-   GLOBAL
-========================================================= */
 
 button,
 input,
@@ -92,7 +78,6 @@ img {
     color: #250000;
 }
 
-
 /* =========================================================
    SCROLLBAR
 ========================================================= */
@@ -102,54 +87,50 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-    background: #100000;
+    background: #0b0000;
 }
 
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(
         180deg,
-        var(--gold),
-        #765800
+        var(--gold-light),
+        var(--gold-dark)
     );
     border-radius: 20px;
 }
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--light-gold);
-}
-
 
 /* =========================================================
    NAVBAR
 ========================================================= */
 
 .navbar {
+    width: 100%;
     min-height: 74px;
-    padding: 10px 3%;
+    padding: 9px 3%;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
 
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+
     background:
         linear-gradient(
             90deg,
-            #110000,
-            #1d0000,
-            #110000
+            rgba(12,0,0,.98),
+            rgba(34,0,0,.97),
+            rgba(12,0,0,.98)
         );
 
     border-bottom: 1px solid var(--border);
 
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    backdrop-filter: blur(14px);
-
     box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.28);
-}
+        0 8px 30px rgba(0,0,0,.35);
 
+    backdrop-filter: blur(15px);
+}
 
 /* BRAND */
 
@@ -158,8 +139,8 @@ img {
     align-items: center;
     gap: 12px;
 
-    text-decoration: none;
     color: #fff;
+    text-decoration: none;
 
     min-width: max-content;
 }
@@ -169,13 +150,12 @@ img {
     height: 52px;
 
     object-fit: contain;
-
     background: #fff;
 
     border-radius: 6px;
 
     box-shadow:
-        0 0 18px rgba(212, 175, 55, 0.18);
+        0 0 18px rgba(212,175,55,.2);
 }
 
 .brand-text {
@@ -190,31 +170,29 @@ img {
 }
 
 .brand span {
-    font-size: 10px;
-    color: #aaa;
     margin-top: 3px;
+    color: #aaa;
+    font-size: 10px;
 }
-
 
 /* NAV LINKS */
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 26px;
+    gap: 25px;
 }
 
 .nav-links a {
     position: relative;
 
-    color: #fff;
+    padding: 8px 0;
 
+    color: #fff;
     text-decoration: none;
 
     font-size: 13px;
     font-weight: 600;
-
-    padding: 8px 0;
 
     transition:
         color .25s ease,
@@ -225,7 +203,6 @@ img {
     content: "";
 
     position: absolute;
-
     left: 50%;
     bottom: 0;
 
@@ -235,7 +212,6 @@ img {
     background: var(--gold);
 
     transform: translateX(-50%);
-
     transition: width .25s ease;
 }
 
@@ -253,20 +229,18 @@ img {
     margin-right: 5px;
 }
 
-
 /* MOBILE MENU */
 
 .mobile-menu {
     display: none;
 
     border: none;
+    outline: none;
 
     background: transparent;
-
     color: #fff;
 
-    font-size: 23px;
-
+    font-size: 24px;
     padding: 8px;
 }
 
@@ -274,51 +248,41 @@ img {
     color: var(--gold);
 }
 
-
 /* =========================================================
    HERO
 ========================================================= */
 
 .books-hero {
+    position: relative;
+    overflow: hidden;
+
     text-align: center;
 
-    padding:
-        55px 20px
-        65px;
-
-    position: relative;
-
-    overflow: hidden;
+    padding: 55px 20px 65px;
 }
-
-
-/* HERO BACKGROUND GLOW */
 
 .books-hero::before {
     content: "";
 
     position: absolute;
 
-    width: 600px;
-    height: 300px;
+    width: 650px;
+    height: 350px;
 
+    top: -70px;
     left: 50%;
-    top: 0;
 
     transform: translateX(-50%);
 
     background:
         radial-gradient(
             ellipse,
-            rgba(212, 175, 55, .14),
+            rgba(212,175,55,.18),
             transparent 70%
         );
 
     pointer-events: none;
 }
-
-
-/* GLOW */
 
 .hero-glow {
     position: absolute;
@@ -326,73 +290,54 @@ img {
     width: 300px;
     height: 300px;
 
-    background: var(--gold);
-
-    filter: blur(130px);
-
-    opacity: .14;
-
-    top: 20px;
+    top: 10px;
     left: 50%;
 
     transform: translateX(-50%);
 
+    background: var(--gold);
+
+    filter: blur(140px);
+    opacity: .13;
+
     pointer-events: none;
 }
 
-
-/* HERO LOGO */
-
 .hero-logo {
+    position: relative;
+
     width: 125px;
     height: 125px;
+
+    margin: auto;
 
     object-fit: contain;
 
     background: #fff;
 
-    position: relative;
-
-    margin: auto;
-
     border-radius: 7px;
 
     box-shadow:
-        0 0 0 1px rgba(212, 175, 55, .3),
-        0 0 35px rgba(212, 175, 55, .4);
-
-    transition: .3s ease;
+        0 0 0 1px rgba(212,175,55,.4),
+        0 0 40px rgba(212,175,55,.4);
 }
-
-.hero-logo:hover {
-    transform: scale(1.04);
-
-    box-shadow:
-        0 0 0 1px rgba(212, 175, 55, .55),
-        0 0 50px rgba(212, 175, 55, .5);
-}
-
-
-/* HERO TITLE */
 
 .books-hero h1 {
     position: relative;
 
     margin-top: 25px;
 
-    font-size: clamp(32px, 5vw, 58px);
-
+    font-size: clamp(32px,5vw,58px);
     line-height: 1.1;
 
     font-weight: 800;
-
     letter-spacing: -1px;
 
     background:
         linear-gradient(
             90deg,
             #fff,
-            var(--light-gold),
+            var(--gold-light),
             #fff
         );
 
@@ -405,31 +350,26 @@ img {
 .books-hero h3 {
     position: relative;
 
-    color: var(--gold);
-
     margin-top: 9px;
 
-    font-size: 20px;
+    color: var(--gold);
 
+    font-size: 20px;
     font-weight: 700;
 }
 
 .books-hero p {
     position: relative;
 
-    max-width: 700px;
+    width: min(700px, 95%);
 
-    margin:
-        18px auto
-        28px;
+    margin: 18px auto 28px;
 
-    color: #d4d4d4;
-
-    line-height: 1.8;
+    color: #d3d3d3;
 
     font-size: 14px;
+    line-height: 1.8;
 }
-
 
 /* =========================================================
    SEARCH
@@ -438,34 +378,31 @@ img {
 .search-box {
     position: relative;
 
-    width: min(720px, 95%);
+    width: min(720px,95%);
 
     margin: auto;
+
+    display: flex;
+    align-items: center;
+
+    padding: 5px 8px 5px 18px;
 
     background: #fff;
 
     border-radius: 50px;
 
-    display: flex;
-
-    align-items: center;
-
-    padding: 5px 18px;
-
     box-shadow:
-        0 12px 35px rgba(0, 0, 0, .25);
+        0 12px 35px rgba(0,0,0,.3);
 
-    transition:
-        box-shadow .25s ease,
-        transform .25s ease;
+    transition: .25s ease;
 }
 
 .search-box:focus-within {
     transform: translateY(-2px);
 
     box-shadow:
-        0 15px 40px rgba(0, 0, 0, .35),
-        0 0 0 2px rgba(212, 175, 55, .25);
+        0 15px 40px rgba(0,0,0,.4),
+        0 0 0 2px rgba(212,175,55,.25);
 }
 
 .search-box i {
@@ -475,21 +412,18 @@ img {
 
 .search-box input {
     flex: 1;
-
     min-width: 0;
+
+    padding: 15px;
 
     border: none;
     outline: none;
 
-    padding: 15px;
-
-    font-family: inherit;
-
-    font-size: 14px;
-
     background: transparent;
 
     color: #222;
+
+    font-size: 14px;
 }
 
 .search-box input::placeholder {
@@ -501,41 +435,32 @@ img {
     height: 38px;
 
     border: none;
-
-    background: transparent;
-
-    color: #777;
-
     border-radius: 50%;
 
-    cursor: pointer;
+    background: transparent;
+    color: #777;
 
     font-size: 15px;
 
-    transition: .2s;
+    transition: .2s ease;
 }
 
 .search-box button:hover {
+    background: #f1f1f1;
     color: var(--maroon);
-
-    background: #f3f3f3;
 }
-
 
 /* =========================================================
    STATS
 ========================================================= */
 
 .stats {
-    width: min(1000px, 92%);
+    width: min(1000px,92%);
 
-    margin:
-        0 auto 60px;
+    margin: 0 auto 60px;
 
     display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
+    grid-template-columns: repeat(4,1fr);
 
     gap: 18px;
 }
@@ -543,73 +468,65 @@ img {
 .stat-card {
     position: relative;
 
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f5f5f5
-        );
-
-    color: #222;
-
-    border-radius: 18px;
-
     padding: 25px;
 
     text-align: center;
 
-    border: 1px solid rgba(212, 175, 55, .12);
+    color: #222;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #f3f3f3
+        );
+
+    border: 1px solid rgba(212,175,55,.12);
+
+    border-radius: 18px;
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, .25);
+        0 10px 35px rgba(0,0,0,.28);
 
-    transition:
-        transform .3s ease,
-        box-shadow .3s ease;
+    transition: .3s ease;
 }
 
 .stat-card:hover {
     transform: translateY(-6px);
 
     box-shadow:
-        0 18px 45px rgba(0, 0, 0, .35),
-        0 0 25px rgba(212, 175, 55, .08);
+        0 20px 45px rgba(0,0,0,.35),
+        0 0 25px rgba(212,175,55,.08);
 }
 
 .stat-card i {
     color: var(--gold);
-
     font-size: 27px;
-
-    margin-bottom: 3px;
 }
 
 .stat-card strong {
     display: block;
 
-    font-size: 28px;
-
     margin-top: 8px;
 
     color: var(--maroon);
+
+    font-size: 28px;
 }
 
 .stat-card span {
     color: #888;
-
     font-size: 12px;
 }
-
 
 /* =========================================================
    LIBRARY SECTION
 ========================================================= */
 
 .library-section {
-    width: min(1200px, 92%);
+    width: min(1200px,92%);
 
-    margin:
-        0 auto 65px;
+    margin: 0 auto 65px;
 }
 
 .section-title {
@@ -617,11 +534,10 @@ img {
 
     text-align: center;
 
-    font-size: 28px;
-
-    font-weight: 800;
-
     color: #fff;
+
+    font-size: 28px;
+    font-weight: 800;
 }
 
 .section-title::after {
@@ -632,24 +548,22 @@ img {
     width: 55px;
     height: 3px;
 
-    background: var(--gold);
-
-    margin:
-        10px auto 0;
+    margin: 10px auto 0;
 
     border-radius: 20px;
+
+    background: var(--gold);
 }
 
 .section-subtitle {
+    margin-top: 9px;
+
     text-align: center;
 
     color: #aaa;
 
     font-size: 13px;
-
-    margin-top: 9px;
 }
-
 
 /* =========================================================
    CATEGORIES
@@ -659,8 +573,8 @@ img {
     margin-top: 30px;
 
     display: flex;
-
     justify-content: center;
+    align-items: center;
 
     flex-wrap: wrap;
 
@@ -668,33 +582,24 @@ img {
 }
 
 .category {
-    border:
-        1px solid
-        rgba(255, 255, 255, .14);
+    padding: 11px 20px;
+
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 30px;
 
     background:
         linear-gradient(
             145deg,
-            #2b0000,
-            #1b0000
+            #300000,
+            #190000
         );
 
     color: #fff;
 
-    padding: 11px 20px;
-
-    border-radius: 30px;
-
-    font-family: inherit;
-
+    font-size: 13px;
     font-weight: 600;
 
-    font-size: 13px;
-
-    cursor: pointer;
-
-    transition:
-        .25s ease;
+    transition: .25s ease;
 }
 
 .category:hover {
@@ -709,7 +614,7 @@ img {
     background:
         linear-gradient(
             135deg,
-            var(--light-gold),
+            var(--gold-light),
             var(--gold)
         );
 
@@ -718,9 +623,8 @@ img {
     border-color: var(--gold);
 
     box-shadow:
-        0 5px 18px rgba(212, 175, 55, .18);
+        0 5px 18px rgba(212,175,55,.2);
 }
-
 
 /* =========================================================
    SORTING
@@ -730,45 +634,34 @@ img {
     display: flex;
 
     justify-content: center;
+    align-items: center;
 
     flex-wrap: wrap;
 
     gap: 12px;
 
-    margin:
-        12px auto 45px;
+    margin: 12px auto 45px;
 }
 
 .sort-btn {
-    border:
-        1px solid
-        rgba(255, 255, 255, .14);
-
-    background:
-        #220000;
-
-    color: #fff;
-
     padding: 11px 23px;
 
+    border: 1px solid rgba(255,255,255,.14);
     border-radius: 30px;
 
-    font-family: inherit;
+    background: #220000;
+    color: #fff;
 
     font-size: 12px;
-
     font-weight: 700;
 
-    cursor: pointer;
-
-    transition:
-        .25s ease;
+    transition: .25s ease;
 }
 
 .sort-btn:hover {
-    border-color: var(--gold);
-
     color: var(--gold);
+
+    border-color: var(--gold);
 
     transform: translateY(-2px);
 }
@@ -777,34 +670,30 @@ img {
     background:
         linear-gradient(
             135deg,
-            var(--light-gold),
+            var(--gold-light),
             var(--gold)
         );
 
     color: #250000;
 
     border-color: var(--gold);
-
-    box-shadow:
-        0 5px 18px rgba(212, 175, 55, .16);
 }
-
 
 /* =========================================================
    BOOK GRID
 ========================================================= */
 
 .books-grid {
+    width: 100%;
+
     display: grid;
 
-    grid-template-columns:
-        repeat(4, 1fr);
+    grid-template-columns: repeat(4,minmax(0,1fr));
 
     gap: 24px;
 
     margin-top: 28px;
 }
-
 
 /* =========================================================
    BOOK CARD
@@ -813,25 +702,27 @@ img {
 .book-card {
     position: relative;
 
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f6f6f6
-        );
-
-    color: #222;
-
-    border-radius: 18px;
+    min-width: 0;
 
     overflow: hidden;
 
+    color: #222;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #f5f5f5
+        );
+
     border:
         1px solid
-        rgba(255, 255, 255, .3);
+        rgba(255,255,255,.35);
+
+    border-radius: 18px;
 
     box-shadow:
-        0 10px 30px rgba(0, 0, 0, .28);
+        0 10px 30px rgba(0,0,0,.28);
 
     transition:
         transform .3s ease,
@@ -842,17 +733,21 @@ img {
     transform: translateY(-8px);
 
     box-shadow:
-        0 20px 45px rgba(0, 0, 0, .4),
-        0 0 25px rgba(212, 175, 55, .08);
+        0 22px 45px rgba(0,0,0,.4),
+        0 0 25px rgba(212,175,55,.08);
 }
-
 
 /* =========================================================
    BOOK COVER
 ========================================================= */
 
 .book-cover {
+    position: relative;
+
+    width: 100%;
     height: 270px;
+
+    overflow: hidden;
 
     background:
         linear-gradient(
@@ -860,10 +755,6 @@ img {
             #ddd,
             #eee
         );
-
-    position: relative;
-
-    overflow: hidden;
 }
 
 .book-cover img {
@@ -880,9 +771,6 @@ img {
     transform: scale(1.04);
 }
 
-
-/* COVER OVERLAY */
-
 .book-cover::after {
     content: "";
 
@@ -890,18 +778,19 @@ img {
 
     inset: 0;
 
+    pointer-events: none;
+
     background:
         linear-gradient(
             180deg,
-            transparent 65%,
-            rgba(0, 0, 0, .25)
+            transparent 60%,
+            rgba(0,0,0,.28)
         );
-
-    pointer-events: none;
 }
 
-
-/* BOOK CATEGORY */
+/* =========================================================
+   BOOK CATEGORY
+========================================================= */
 
 .book-category {
     position: absolute;
@@ -909,32 +798,27 @@ img {
     top: 12px;
     left: 12px;
 
-    z-index: 2;
+    z-index: 3;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
 
     background:
         linear-gradient(
             135deg,
-            var(--light-gold),
+            var(--gold-light),
             var(--gold)
         );
 
     color: #250000;
 
-    padding:
-        5px 10px;
-
-    border-radius: 20px;
-
     font-size: 9px;
-
     font-weight: 800;
 
-    letter-spacing: .3px;
-
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, .2);
+        0 4px 12px rgba(0,0,0,.2);
 }
-
 
 /* =========================================================
    BOOK INFO
@@ -945,35 +829,31 @@ img {
 }
 
 .book-info h3 {
-    color: #350000;
+    color: var(--maroon);
 
     font-size: 16px;
-
     line-height: 1.4;
-
     font-weight: 800;
 }
 
 .book-info .author {
-    color: #777;
-
-    font-size: 11px;
+    display: block;
 
     margin-top: 6px;
 
-    display: block;
-}
-
-.book-info p {
     color: #777;
 
     font-size: 11px;
-
-    line-height: 1.65;
-
-    margin-top: 10px;
 }
 
+.book-info p {
+    margin-top: 10px;
+
+    color: #777;
+
+    font-size: 11px;
+    line-height: 1.65;
+}
 
 /* =========================================================
    BOOK META
@@ -981,7 +861,7 @@ img {
 
 .book-meta {
     display: flex;
-
+    align-items: center;
     flex-wrap: wrap;
 
     gap: 12px;
@@ -995,7 +875,6 @@ img {
 
 .book-meta span {
     display: flex;
-
     align-items: center;
 
     gap: 4px;
@@ -1005,7 +884,6 @@ img {
     color: var(--gold);
 }
 
-
 /* =========================================================
    BOOK ACTIONS
 ========================================================= */
@@ -1013,8 +891,7 @@ img {
 .book-actions {
     display: grid;
 
-    grid-template-columns:
-        1fr 1fr;
+    grid-template-columns: 1fr 1fr;
 
     gap: 8px;
 
@@ -1022,34 +899,36 @@ img {
 }
 
 .book-btn {
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    border-radius: 8px;
+    min-height: 38px;
 
     padding: 10px 7px;
 
-    font-family: inherit;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    cursor: pointer;
+    border: none;
+    border-radius: 8px;
 
     text-decoration: none;
-
     text-align: center;
 
-    transition:
-        .25s ease;
+    font-size: 10px;
+    font-weight: 700;
+
+    transition: .25s ease;
+}
+
+.book-btn i {
+    margin-right: 4px;
 }
 
 .read-btn {
     background:
         linear-gradient(
             135deg,
-            #420000,
-            #280000
+            #470000,
+            #270000
         );
 
     color: #fff;
@@ -1059,7 +938,7 @@ img {
     background:
         linear-gradient(
             135deg,
-            #570000,
+            #600000,
             #350000
         );
 }
@@ -1068,7 +947,7 @@ img {
     background:
         linear-gradient(
             135deg,
-            var(--light-gold),
+            var(--gold-light),
             var(--gold)
         );
 
@@ -1083,13 +962,8 @@ img {
     transform: translateY(-2px);
 
     box-shadow:
-        0 5px 15px rgba(0, 0, 0, .15);
+        0 5px 15px rgba(0,0,0,.18);
 }
-
-.book-btn i {
-    margin-right: 4px;
-}
-
 
 /* =========================================================
    EXTRA ACTIONS
@@ -1099,6 +973,7 @@ img {
     display: flex;
 
     justify-content: center;
+    align-items: center;
 
     gap: 9px;
 
@@ -1109,47 +984,37 @@ img {
     width: 35px;
     height: 35px;
 
-    border:
-        1px solid
-        #ddd;
-
-    background: #fff;
-
-    color: #777;
-
-    border-radius: 50%;
-
-    cursor: pointer;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    transition:
-        .25s ease;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+
+    background: #fff;
+    color: #777;
+
+    transition: .25s ease;
 }
 
 .icon-btn:hover,
 .icon-btn.active {
-    background: #350000;
+    background: var(--maroon);
 
     color: #fff;
 
-    border-color: #350000;
+    border-color: var(--maroon);
 
     transform: translateY(-2px);
 }
 
 .icon-btn.like.active {
-    color: #d00000;
-
     background: #ffe8e8;
+
+    color: #d00000;
 
     border-color: #ffcaca;
 }
-
 
 /* =========================================================
    LOADER
@@ -1158,22 +1023,21 @@ img {
 .loader {
     grid-column: 1 / -1;
 
-    text-align: center;
+    padding: 70px 20px;
 
-    padding: 70px;
+    text-align: center;
 
     color: var(--gold);
 }
 
 .loader i {
-    font-size: 30px;
-
     display: block;
 
     margin-bottom: 12px;
 
-    animation:
-        spin 1s linear infinite;
+    font-size: 30px;
+
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -1186,7 +1050,6 @@ img {
     }
 }
 
-
 /* =========================================================
    NO BOOKS
 ========================================================= */
@@ -1194,28 +1057,29 @@ img {
 .no-books {
     grid-column: 1 / -1;
 
-    text-align: center;
+    padding: 70px 20px;
 
-    padding:
-        70px 20px;
+    text-align: center;
 
     color: #aaa;
 }
 
 .no-books i {
-    font-size: 45px;
+    display: block;
+
+    margin-bottom: 15px;
 
     color: var(--gold);
 
-    margin-bottom: 15px;
+    font-size: 45px;
 }
 
 .no-books h3 {
+    margin-bottom: 7px;
+
     color: #fff;
 
     font-size: 20px;
-
-    margin-bottom: 7px;
 }
 
 .no-books p {
@@ -1224,7 +1088,6 @@ img {
     font-size: 12px;
 }
 
-
 /* =========================================================
    FOOTER
 ========================================================= */
@@ -1232,72 +1095,68 @@ img {
 footer {
     position: relative;
 
+    padding: 45px 20px;
+
+    text-align: center;
+
     background:
         linear-gradient(
             180deg,
-            #160000,
-            #0d0000
+            #170000,
+            #0b0000
         );
 
     border-top:
         1px solid
-        rgba(212, 175, 55, .16);
-
-    text-align: center;
-
-    padding:
-        45px 20px;
+        rgba(212,175,55,.16);
 }
 
 .footer-logo img {
     width: 65px;
     height: 65px;
 
+    margin: auto;
+
     object-fit: contain;
 
     background: #fff;
 
-    margin: auto;
-
     border-radius: 5px;
 
     box-shadow:
-        0 0 20px rgba(212, 175, 55, .18);
+        0 0 20px rgba(212,175,55,.18);
 }
 
 .footer-logo h2 {
     margin-top: 10px;
 
     font-size: 19px;
-
     font-weight: 800;
 }
 
 .footer-logo p {
+    margin-top: 4px;
+
     color: #aaa;
 
     font-size: 12px;
-
-    margin-top: 4px;
 }
 
 .copyright {
     margin-top: 25px;
-
     padding-top: 20px;
 
     border-top:
         1px solid
-        rgba(255, 255, 255, .06);
+        rgba(255,255,255,.06);
 
     color: #777;
 
     font-size: 10px;
 }
 
-
 /* =========================================================
-   MOBILE NAV OVERLAY
+   MOBILE NAV
 ========================================================= */
 
 @media (max-width: 800px) {
@@ -1306,13 +1165,16 @@ footer {
         padding: 9px 4%;
     }
 
+    .mobile-menu {
+        display: block;
+    }
+
     .nav-links {
         display: none;
 
         position: absolute;
 
         top: 73px;
-
         left: 0;
         right: 0;
 
@@ -1325,16 +1187,16 @@ footer {
         background:
             linear-gradient(
                 180deg,
-                #1b0000,
-                #100000
+                #1c0000,
+                #0d0000
             );
 
         border-bottom:
             1px solid
-            rgba(212, 175, 55, .2);
+            rgba(212,175,55,.2);
 
         box-shadow:
-            0 15px 30px rgba(0, 0, 0, .35);
+            0 15px 30px rgba(0,0,0,.4);
     }
 
     .nav-links.show {
@@ -1344,30 +1206,23 @@ footer {
     .nav-links a {
         width: 100%;
 
-        text-align: center;
-
         padding: 12px;
+
+        text-align: center;
     }
 
     .nav-links a::after {
         display: none;
     }
 
-    .mobile-menu {
-        display: block;
-    }
-
     .stats {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
     }
 
     .books-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
     }
 }
-
 
 /* =========================================================
    TABLET
@@ -1376,8 +1231,7 @@ footer {
 @media (max-width: 1050px) {
 
     .books-grid {
-        grid-template-columns:
-            repeat(3, 1fr);
+        grid-template-columns: repeat(3,1fr);
     }
 
     .nav-links {
@@ -1393,7 +1247,6 @@ footer {
     }
 }
 
-
 /* =========================================================
    SMALL TABLET
 ========================================================= */
@@ -1401,8 +1254,7 @@ footer {
 @media (max-width: 700px) {
 
     .books-grid {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
 
         gap: 16px;
     }
@@ -1428,7 +1280,6 @@ footer {
     }
 }
 
-
 /* =========================================================
    MOBILE
 ========================================================= */
@@ -1453,9 +1304,7 @@ footer {
     }
 
     .books-hero {
-        padding:
-            35px 15px
-            45px;
+        padding: 35px 15px 45px;
     }
 
     .hero-logo {
@@ -1472,8 +1321,9 @@ footer {
     }
 
     .books-hero p {
-        font-size: 12px;
+        width: 100%;
 
+        font-size: 12px;
         line-height: 1.7;
     }
 
@@ -1482,9 +1332,7 @@ footer {
     }
 
     .search-box input {
-        padding:
-            13px 10px;
-
+        padding: 13px 10px;
         font-size: 12px;
     }
 
@@ -1514,8 +1362,7 @@ footer {
 
     .category,
     .sort-btn {
-        padding:
-            9px 14px;
+        padding: 9px 14px;
 
         font-size: 11px;
     }
@@ -1549,12 +1396,13 @@ footer {
     }
 
     .book-btn {
+        min-height: 40px;
+
         padding: 11px 7px;
 
         font-size: 11px;
     }
 }
-
 
 /* =========================================================
    VERY SMALL MOBILE
@@ -1588,6 +1436,16 @@ footer {
     }
 }
 
+/* =========================================================
+   ACCESSIBILITY
+========================================================= */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+}
 
 /* =========================================================
    REDUCED MOTION
@@ -1595,8 +1453,13 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
 
-    * {
-        scroll-behavior: auto !important;
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
