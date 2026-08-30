@@ -177,77 +177,71 @@
         >
 
 
-                                                           
-            
-<!-- =========================
-     READER SEARCH
-========================= -->
+            <!-- =================================================
+                 READER SEARCH
+            ================================================== -->
 
-<div class="reader-search">
+            <div class="reader-search">
 
-    <div class="reader-search-box">
+                <div class="reader-search-box">
 
-        <span class="reader-search-icon">🔎</span>
+                    <span
+                        class="reader-search-icon"
+                        aria-hidden="true"
+                    >
+                        🔎
+                    </span>
 
-        <input
-            type="search"
-            id="readerSearchInput"
-            placeholder="Search books, authors, categories..."
-            autocomplete="off"
-        >
+                    <input
+                        type="search"
+                        id="readerSearchInput"
+                        placeholder="Search books, authors, categories..."
+                        autocomplete="off"
+                        aria-label="Search books, authors, and categories"
+                    >
 
-        <button
-            type="button"
-            id="readerSearchClear"
-            class="reader-search-clear"
-            aria-label="Clear search">
-            ✕
-        </button>
+                    <button
+                        type="button"
+                        id="readerSearchClear"
+                        class="reader-search-clear"
+                        aria-label="Clear search"
+                    >
+                        ✕
+                    </button>
 
-    </div>
+                </div>
 
-    <div
-        id="readerSearchResults"
-        class="reader-search-results">
-    </div>
+                <div
+                    id="readerSearchResults"
+                    class="reader-search-results"
+                    role="listbox"
+                    aria-label="Search results"
+                ></div>
 
-</div>
-            <div class="search-box">
+            </div>
 
-    <input
-        type="search"
-        id="searchInput"
-        placeholder="Search books, authors, categories..."
-        autocomplete="off"
-    >
 
-    <button type="button" onclick="searchBooks()">
-        🔍 Search
-    </button>
+            <!-- =================================================
+                 PREVIOUS
+            ================================================== -->
 
-</div>
+            <button
+                id="previousPageButton"
+                class="control-button"
+                type="button"
+                title="Previous page"
+                aria-label="Previous page"
+            >
 
-<!-- =================================================
-     PREVIOUS
-================================================== -->
+                <span aria-hidden="true">
+                    ←
+                </span>
 
-<button
-    id="previousPageButton"
-    class="control-button"
-    type="button"
-    title="Previous page"
-    aria-label="Previous page"
->
+                <span class="button-label">
+                    Previous
+                </span>
 
-    <span aria-hidden="true">
-        ←
-    </span>
-
-    <span class="button-label">
-        Previous
-    </span>
-
-</button>
+            </button>
 
 
             <!-- =================================================
@@ -379,7 +373,7 @@
 
 
             <!-- =================================================
-                 ZOOM
+                 ZOOM LEVEL
             ================================================== -->
 
             <button
