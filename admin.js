@@ -4,49 +4,30 @@
 =========================================================
 CHISHTI LIBRARY
 ADMIN.JS
-FULL ADMIN PANEL
+FINAL COMPLETE ADMIN PANEL
 =========================================================
 */
 
 
 /*=========================================================
- GLOBAL VARIABLES
+ GLOBAL
 =========================================================*/
 
 let adminBooks = [];
-let editingBook = false;
+
+let editingBook = null;
+
+let adminInitialized = false;
 
 
 /*=========================================================
  ELEMENT HELPER
 =========================================================*/
 
-function $(id) {
+function $id(id) {
+
     return document.getElementById(id);
-}
 
-
-/*=========================================================
- SHOW MESSAGE
-=========================================================*/
-
-function showMessage(message, type = "success") {
-
-    const box = $("bookMessage");
-
-    if (!box) return;
-
-    box.innerText = message;
-
-    box.className = "";
-
-    box.classList.add(type);
-
-    setTimeout(() => {
-
-        box.innerText = "";
-
-    }, 5000);
 }
 
 
@@ -69,6 +50,7 @@ function waitForFirebase(callback) {
 
     }
 
+
     window.addEventListener(
         "firebaseReady",
         callback,
@@ -81,103 +63,54 @@ function waitForFirebase(callback) {
 
 
 /*=========================================================
- LOGIN SCREEN
+ DOM READY
 =========================================================*/
 
-function showLogin() {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    const loginScreen = $("loginScreen");
-    const adminApp = $("adminApp");
-
-    if (loginScreen) {
-
-        loginScreen.classList.remove("hidden");
-
-    }
-
-    if (adminApp) {
-
-        adminApp.classList.add("hidden");
-
-    }
-
-}
-
-
-/*=========================================================
- ADMIN SCREEN
-=========================================================*/
-
-function showAdmin(user) {
-
-    const loginScreen = $("loginScreen");
-    const adminApp = $("adminApp");
-
-    if (loginScreen) {
-
-        loginScreen.classList.add("hidden");
-
-    }
-
-    if (adminApp) {
-
-        adminApp.classList.remove("hidden");
-
-    }
-
-    const email = $("adminEmail");
-
-    if (email) {
-
-        email.innerText =
-            user.email ||
-            "Admin";
-
-    }
-
-    loadDashboard();
-
-}
-
-
-/*=========================================================
- FIREBASE AUTH STATE
-=========================================================*/
-
-function initializeAdminAuth() {
-
-    if (!window.auth) {
-
-        console.error(
-            "❌ Firebase Auth is not ready."
+        waitForFirebase(
+            initializeAdmin
         );
 
-        return;
-
     }
+);
 
-    auth.onAuthStateChanged(function(user) {
 
-        if (user) {
+/*=========================================================
+ INITIALIZE ADMIN
+=========================================================*/
 
-            console.log(
-                "✅ Admin authenticated:",
-                user.email
-            );
+function initializeAdmin() {
 
-            showAdmin(user);
+    if (adminInitialized) return;
 
-        } else {
+    adminInitialized = true;
 
-            console.log(
-                "ℹ️ No admin logged in"
-            );
+    setupLogin();
 
-            showLogin();
+    setupNavigation();
 
-        }
+    setupLogout();
 
-    });
+    setupBookForm();
+
+    setupFileInputs();
+
+    setupMobileMenu();
+
+    setupAddBookButton();
+
+    setupCancelButton();
+
+    setupDashboardControls();
+
+    watchAuth();
+
+    console.log(
+        "✅ Admin initialized"
+    );
 
 }
 
@@ -186,156 +119,83 @@ function initializeAdminAuth() {
  LOGIN
 =========================================================*/
 
-function initializeLogin() {
+function setupLogin() {
 
-    const form = $("loginForm");
+    const form =
+        $id("loginForm");
 
     if (!form) return;
 
+
     form.addEventListener(
         "submit",
-        async function(e) {
+        async function (e) {
 
             e.preventDefault();
 
+
             const email =
-                $("loginEmail").value.trim();
+                $id("loginEmail")?.value
+                    .trim();
 
             const password =
-                $("loginPassword").value;
+                $id("loginPassword")?.value;
+
 
             const errorBox =
-                $("loginError");
+                $id("loginError");
 
-            const button =
-                form.querySelector("button");
 
-            if (!email || !password) {
+            if (errorBox) {
+
+                errorBox.innerText =
+                    "Logging in...";
+
+            }
+
+
+            try {
+
+                await adminLogin(
+                    email,
+                    password
+                );
+
 
                 if (errorBox) {
 
                     errorBox.innerText =
-                        "Please enter email and password.";
+                        "✅ Login successful!";
 
                 }
 
-                return;
 
-            }
+                showAdminApp();
 
-            try {
 
-                if (button) {
+                await loadDashboard();
 
-                    button.disabled = true;
+                await loadBooks();
 
-                    button.innerText =
-                        "🔄 Logging in...";
+                await loadComments();
 
-                }
-
-                if (errorBox) {
-
-                    errorBox.innerText = "";
-
-                }
-
-                const result =
-                    await auth.signInWithEmailAndPassword(
-                        email,
-                        password
-                    );
-
-                console.log(
-                    "✅ Login successful:",
-                    result.user.email
-                );
-
-                /*
-                Auth state listener automatically
-                opens the admin panel.
-                */
 
             }
 
             catch (error) {
 
                 console.error(
-                    "❌ Login failed:",
+                    "❌ Login:",
                     error
                 );
 
-                let message =
-                    "Login failed.";
-
-                if (
-                    error.code ===
-                    "auth/invalid-credential"
-                ) {
-
-                    message =
-                        "❌ Email or password is incorrect.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/user-not-found"
-                ) {
-
-                    message =
-                        "❌ Admin account not found.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/wrong-password"
-                ) {
-
-                    message =
-                        "❌ Incorrect password.";
-
-                }
-
-                else if (
-                    error.code ===
-                    "auth/invalid-email"
-                ) {
-
-                    message =
-                        "❌ Invalid email address.";
-
-                }
-
-                else {
-
-                    message =
-                        "❌ " +
-                        (
-                            error.message ||
-                            "Login failed."
-                        );
-
-                }
 
                 if (errorBox) {
 
                     errorBox.innerText =
-                        message;
-
-                }
-
-            }
-
-            finally {
-
-                if (button) {
-
-                    button.disabled = false;
-
-                    button.innerText =
-                        "🔐 Login";
+                        getFirebaseErrorMessage(
+                            error
+                        );
 
                 }
 
@@ -348,36 +208,150 @@ function initializeLogin() {
 
 
 /*=========================================================
+ AUTH STATE
+=========================================================*/
+
+function watchAuth() {
+
+    window.addEventListener(
+        "firebaseAuthChanged",
+        function (event) {
+
+            const user =
+                event.detail.user;
+
+
+            if (user) {
+
+                showAdminApp();
+
+                const email =
+                    $id("adminEmail");
+
+                if (email) {
+
+                    email.innerText =
+                        user.email ||
+                        "Admin";
+
+                }
+
+                loadDashboard();
+
+                loadBooks();
+
+                loadComments();
+
+            }
+
+            else {
+
+                showLoginScreen();
+
+            }
+
+        }
+    );
+
+}
+
+
+/*=========================================================
+ SHOW ADMIN
+=========================================================*/
+
+function showAdminApp() {
+
+    const login =
+        $id("loginScreen");
+
+    const app =
+        $id("adminApp");
+
+
+    if (login) {
+
+        login.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (app) {
+
+        app.classList.remove(
+            "hidden"
+        );
+
+        app.style.animation =
+            "adminFade .4s ease";
+
+    }
+
+}
+
+
+/*=========================================================
+ SHOW LOGIN
+=========================================================*/
+
+function showLoginScreen() {
+
+    const login =
+        $id("loginScreen");
+
+    const app =
+        $id("adminApp");
+
+
+    if (login) {
+
+        login.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    if (app) {
+
+        app.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/*=========================================================
  LOGOUT
 =========================================================*/
 
-function initializeLogout() {
+function setupLogout() {
 
     const button =
-        $("logoutBtn");
+        $id("logoutBtn");
 
     if (!button) return;
 
+
     button.addEventListener(
         "click",
-        async function() {
+        async function () {
 
             try {
 
-                await auth.signOut();
+                await adminLogout();
 
-                console.log(
-                    "✅ Admin logged out"
-                );
-
-                showLogin();
+                showLoginScreen();
 
             }
 
             catch (error) {
 
                 console.error(
-                    "❌ Logout error:",
                     error
                 );
 
@@ -393,129 +367,31 @@ function initializeLogout() {
  NAVIGATION
 =========================================================*/
 
-function initializeNavigation() {
+function setupNavigation() {
 
-    const buttons =
-        document.querySelectorAll(".nav-btn");
+    document
+        .querySelectorAll(
+            ".nav-btn"
+        )
+        .forEach(
+            function (button) {
 
-    const sections =
-        document.querySelectorAll(".admin-section");
+                button.addEventListener(
+                    "click",
+                    function () {
 
-    buttons.forEach(button => {
+                        const section =
+                            button.dataset.section;
 
-        button.addEventListener(
-            "click",
-            function() {
+                        openSection(
+                            section
+                        );
 
-                const sectionId =
-                    this.dataset.section;
-
-                buttons.forEach(btn => {
-
-                    btn.classList.remove(
-                        "active"
-                    );
-
-                });
-
-                this.classList.add("active");
-
-                sections.forEach(section => {
-
-                    section.classList.remove(
-                        "active-section"
-                    );
-
-                });
-
-                const section =
-                    $(sectionId);
-
-                if (section) {
-
-                    section.classList.add(
-                        "active-section"
-                    );
-
-                }
-
-                const title =
-                    $("pageTitle");
-
-                if (title) {
-
-                    const names = {
-
-                        dashboard:
-                            "Dashboard",
-
-                        books:
-                            "Books",
-
-                        addBook:
-                            "Add Book",
-
-                        comments:
-                            "Comments"
-
-                    };
-
-                    title.innerText =
-                        names[sectionId] ||
-                        "Admin Panel";
-
-                }
-
-                if (
-                    sectionId ===
-                    "dashboard"
-                ) {
-
-                    loadDashboard();
-
-                }
-
-                if (
-                    sectionId ===
-                    "books"
-                ) {
-
-                    loadBooks();
-
-                }
-
-                if (
-                    sectionId ===
-                    "comments"
-                ) {
-
-                    loadComments();
-
-                }
+                    }
+                );
 
             }
         );
-
-    });
-
-
-    const goAdd =
-        $("goAddBook");
-
-    if (goAdd) {
-
-        goAdd.addEventListener(
-            "click",
-            function() {
-
-                resetBookForm();
-
-                openSection("addBook");
-
-            }
-        );
-
-    }
 
 }
 
@@ -524,16 +400,117 @@ function initializeNavigation() {
  OPEN SECTION
 =========================================================*/
 
-function openSection(sectionId) {
+function openSection(
+    sectionId
+) {
 
-    const button =
+    document
+        .querySelectorAll(
+            ".nav-btn"
+        )
+        .forEach(
+            btn =>
+                btn.classList.remove(
+                    "active"
+                )
+        );
+
+
+    const activeButton =
         document.querySelector(
             `.nav-btn[data-section="${sectionId}"]`
         );
 
-    if (button) {
 
-        button.click();
+    if (activeButton) {
+
+        activeButton.classList.add(
+            "active"
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".admin-section"
+        )
+        .forEach(
+            section => {
+
+                section.classList.remove(
+                    "active-section"
+                );
+
+            }
+        );
+
+
+    const target =
+        $id(sectionId);
+
+
+    if (target) {
+
+        target.classList.add(
+            "active-section"
+        );
+
+        target.style.animation =
+            "adminFade .35s ease";
+
+    }
+
+
+    const title =
+        $id("pageTitle");
+
+
+    if (title) {
+
+        const names = {
+
+            dashboard:
+                "Dashboard",
+
+            books:
+                "All Books",
+
+            addBook:
+                editingBook ?
+                "Edit Book" :
+                "Add Book",
+
+            comments:
+                "Comments"
+
+        };
+
+
+        title.innerText =
+            names[sectionId] ||
+            "Dashboard";
+
+    }
+
+
+    if (sectionId === "dashboard") {
+
+        loadDashboard();
+
+    }
+
+
+    if (sectionId === "books") {
+
+        loadBooks();
+
+    }
+
+
+    if (sectionId === "comments") {
+
+        loadComments();
 
     }
 
@@ -544,22 +521,29 @@ function openSection(sectionId) {
  MOBILE MENU
 =========================================================*/
 
-function initializeMobileMenu() {
+function setupMobileMenu() {
 
     const button =
-        $("mobileMenu");
+        $id("mobileMenu");
 
     const sidebar =
-        document.querySelector(".sidebar");
+        document.querySelector(
+            ".sidebar"
+        );
 
-    if (!button || !sidebar) return;
+
+    if (
+        !button ||
+        !sidebar
+    ) return;
+
 
     button.addEventListener(
         "click",
-        function() {
+        function () {
 
             sidebar.classList.toggle(
-                "show"
+                "mobile-open"
             );
 
         }
@@ -569,61 +553,450 @@ function initializeMobileMenu() {
 
 
 /*=========================================================
- LOAD DASHBOARD
+ ADD BOOK BUTTON
 =========================================================*/
 
-async function loadDashboard() {
+function setupAddBookButton() {
+
+    const button =
+        $id("goAddBook");
+
+    if (!button) return;
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            resetBookForm();
+
+            openSection(
+                "addBook"
+            );
+
+        }
+    );
+
+}
+
+
+/*=========================================================
+ CANCEL EDIT
+=========================================================*/
+
+function setupCancelButton() {
+
+    const button =
+        $id("cancelEdit");
+
+    if (!button) return;
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            resetBookForm();
+
+            openSection(
+                "books"
+            );
+
+        }
+    );
+
+}
+
+
+/*=========================================================
+ BOOK FORM
+=========================================================*/
+
+function setupBookForm() {
+
+    const form =
+        $id("bookForm");
+
+    if (!form) return;
+
+
+    form.addEventListener(
+        "submit",
+        saveBook
+    );
+
+}
+
+
+/*=========================================================
+ SAVE BOOK
+=========================================================*/
+
+async function saveBook(e) {
+
+    e.preventDefault();
+
+
+    const saveButton =
+        $id("saveBookBtn");
+
+    const message =
+        $id("bookMessage");
+
+
+    const title =
+        $id("bookTitle")?.value
+            .trim();
+
+    const author =
+        $id("bookAuthor")?.value
+            .trim();
+
+    const category =
+        $id("bookCategory")?.value ||
+        "Other";
+
+    const language =
+        $id("bookLanguage")?.value ||
+        "Urdu";
+
+    const description =
+        $id("bookDescription")?.value
+            .trim();
+
+    const latest =
+        Boolean(
+            $id("bookLatest")?.checked
+        );
+
+
+    if (!title || !author) {
+
+        showMessage(
+            message,
+            "❌ Title and author are required.",
+            true
+        );
+
+        return;
+
+    }
+
 
     try {
 
-        const stats =
-            await getStatistics();
+        if (saveButton) {
 
-        const bookStats =
-            await calculateBookStatistics();
+            saveButton.disabled =
+                true;
 
-        setNumber(
-            "totalBooks",
-            bookStats.totalBooks
+            saveButton.innerText =
+                editingBook ?
+                "⏳ Updating..." :
+                "⏳ Saving...";
+
+        }
+
+
+        /*=============================================
+          EDIT EXISTING BOOK
+        =============================================*/
+
+        if (editingBook) {
+
+            const bookId =
+                editingBook.id;
+
+
+            let coverUrl =
+                editingBook.coverUrl ||
+                editingBook.cover ||
+                "";
+
+            let coverPath =
+                editingBook.coverPath ||
+                "";
+
+            let pdfUrl =
+                editingBook.pdfUrl ||
+                editingBook.pdf ||
+                "";
+
+            let pdfPath =
+                editingBook.pdfPath ||
+                "";
+
+
+            const coverFile =
+                $id("coverFile")?.files?.[0];
+
+            const pdfFile =
+                $id("pdfFile")?.files?.[0];
+
+
+            if (coverFile) {
+
+                const uploadedCover =
+                    await uploadBookCover(
+                        coverFile,
+                        bookId
+                    );
+
+                coverUrl =
+                    uploadedCover.url;
+
+                coverPath =
+                    uploadedCover.path;
+
+            }
+
+
+            if (pdfFile) {
+
+                const uploadedPDF =
+                    await uploadBookPDF(
+                        pdfFile,
+                        bookId
+                    );
+
+                pdfUrl =
+                    uploadedPDF.url;
+
+                pdfPath =
+                    uploadedPDF.path;
+
+            }
+
+
+            if (latest) {
+
+                await removeOtherLatestBooks(
+                    bookId
+                );
+
+            }
+
+
+            await updateBook(
+                bookId,
+                {
+
+                    title,
+
+                    author,
+
+                    category,
+
+                    language,
+
+                    description,
+
+                    latest,
+
+                    coverUrl,
+
+                    coverPath,
+
+                    pdfUrl,
+
+                    pdfPath
+
+                }
+            );
+
+
+            showMessage(
+                message,
+                "✅ Book updated successfully.",
+                false
+            );
+
+        }
+
+        /*=============================================
+          ADD NEW BOOK
+        =============================================*/
+
+        else {
+
+            const tempId =
+                createBookId();
+
+
+            let coverUrl = "";
+
+            let coverPath = "";
+
+            let pdfUrl = "";
+
+            let pdfPath = "";
+
+
+            const coverFile =
+                $id("coverFile")?.files?.[0];
+
+            const pdfFile =
+                $id("pdfFile")?.files?.[0];
+
+
+            if (coverFile) {
+
+                const uploadedCover =
+                    await uploadBookCover(
+                        coverFile,
+                        tempId
+                    );
+
+                coverUrl =
+                    uploadedCover.url;
+
+                coverPath =
+                    uploadedCover.path;
+
+            }
+
+
+            if (pdfFile) {
+
+                const uploadedPDF =
+                    await uploadBookPDF(
+                        pdfFile,
+                        tempId
+                    );
+
+                pdfUrl =
+                    uploadedPDF.url;
+
+                pdfPath =
+                    uploadedPDF.path;
+
+            }
+
+
+            if (!pdfUrl) {
+
+                throw new Error(
+                    "Please select a PDF."
+                );
+
+            }
+
+
+            if (latest) {
+
+                await removeOtherLatestBooks(
+                    tempId
+                );
+
+            }
+
+
+            const ref =
+                db
+                    .collection("books")
+                    .doc(tempId);
+
+
+            await ref.set({
+
+                title,
+
+                author,
+
+                category,
+
+                language,
+
+                description,
+
+                coverUrl,
+
+                coverPath,
+
+                pdfUrl,
+
+                pdfPath,
+
+                latest,
+
+                views: 0,
+
+                likes: 0,
+
+                shares: 0,
+
+                downloads: 0,
+
+                comments: 0,
+
+                createdAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp(),
+
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            });
+
+
+            showMessage(
+                message,
+                "✅ Book added successfully.",
+                false
+            );
+
+        }
+
+
+        await loadBooks();
+
+        await loadDashboard();
+
+
+        setTimeout(
+            resetBookForm,
+            1000
         );
 
-        setNumber(
-            "totalVisitors",
-            stats.visitors || 0
-        );
-
-        setNumber(
-            "totalViews",
-            bookStats.totalViews
-        );
-
-        setNumber(
-            "totalLikes",
-            bookStats.totalLikes
-        );
-
-        setNumber(
-            "totalShares",
-            bookStats.totalShares
-        );
-
-        setNumber(
-            "totalDownloads",
-            bookStats.totalDownloads
-        );
-
-        console.log(
-            "✅ Dashboard loaded"
-        );
 
     }
 
     catch (error) {
 
         console.error(
-            "❌ Dashboard error:",
+            "❌ Save book error:",
             error
         );
+
+
+        showMessage(
+            message,
+            "❌ " +
+            (
+                error.message ||
+                "Something went wrong."
+            ),
+            true
+        );
+
+    }
+
+    finally {
+
+        if (saveButton) {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.innerText =
+                editingBook ?
+                "💾 Update Book" :
+                "💾 Save Book";
+
+        }
 
     }
 
@@ -631,17 +1004,121 @@ async function loadDashboard() {
 
 
 /*=========================================================
- NUMBER DISPLAY
+ REMOVE OTHER LATEST BOOKS
 =========================================================*/
 
-function setNumber(id, number) {
+async function removeOtherLatestBooks(
+    currentId
+) {
 
-    const element = $(id);
+    const snap =
+        await db
+            .collection("books")
+            .where(
+                "latest",
+                "==",
+                true
+            )
+            .get();
 
-    if (!element) return;
 
-    element.innerText =
-        Number(number || 0).toLocaleString();
+    const batch =
+        db.batch();
+
+
+    snap.forEach(
+        function (doc) {
+
+            if (
+                doc.id !==
+                currentId
+            ) {
+
+                batch.update(
+                    doc.ref,
+                    {
+                        latest: false
+                    }
+                );
+
+            }
+
+        }
+    );
+
+
+    await batch.commit();
+
+}
+
+
+/*=========================================================
+ FILE INPUTS
+=========================================================*/
+
+function setupFileInputs() {
+
+    const cover =
+        $id("coverFile");
+
+    const pdf =
+        $id("pdfFile");
+
+
+    if (cover) {
+
+        cover.addEventListener(
+            "change",
+            function () {
+
+                const file =
+                    cover.files[0];
+
+                const status =
+                    $id("coverStatus");
+
+
+                if (status) {
+
+                    status.innerText =
+                        file ?
+                        "✅ " + file.name :
+                        "No cover selected";
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if (pdf) {
+
+        pdf.addEventListener(
+            "change",
+            function () {
+
+                const file =
+                    pdf.files[0];
+
+                const status =
+                    $id("pdfStatus");
+
+
+                if (status) {
+
+                    status.innerText =
+                        file ?
+                        "✅ " + file.name :
+                        "No PDF selected";
+
+                }
+
+            }
+        );
+
+    }
 
 }
 
@@ -653,22 +1130,33 @@ function setNumber(id, number) {
 async function loadBooks() {
 
     const table =
-        $("booksTable");
+        $id("booksTable");
+
 
     if (!table) return;
 
+
     table.innerHTML = `
+
         <tr>
-            <td colspan="8">
-                Loading books...
+
+            <td colspan="8"
+                class="loading">
+
+                ⏳ Loading books...
+
             </td>
+
         </tr>
+
     `;
+
 
     try {
 
         adminBooks =
             await getAllBooks();
+
 
         renderBooks();
 
@@ -677,16 +1165,23 @@ async function loadBooks() {
     catch (error) {
 
         console.error(
-            "❌ Books loading error:",
+            "❌ Books error:",
             error
         );
 
+
         table.innerHTML = `
+
             <tr>
+
                 <td colspan="8">
+
                     ❌ Failed to load books.
+
                 </td>
+
             </tr>
+
         `;
 
     }
@@ -701,174 +1196,180 @@ async function loadBooks() {
 function renderBooks() {
 
     const table =
-        $("booksTable");
+        $id("booksTable");
 
     if (!table) return;
 
-    table.innerHTML = "";
 
     if (!adminBooks.length) {
 
         table.innerHTML = `
+
             <tr>
-                <td colspan="8">
-                    No books found.
+
+                <td colspan="8"
+                    style="text-align:center">
+
+                    📚 No books found.
+
                 </td>
+
             </tr>
+
         `;
 
         return;
 
     }
 
-    adminBooks.forEach(book => {
 
-        const row =
-            document.createElement("tr");
+    table.innerHTML =
+        adminBooks
+            .map(
+                function (book) {
 
-        const cover =
-            book.coverUrl ||
-            book.cover ||
-            "logo.png";
+                    const cover =
+                        book.coverUrl ||
+                        book.cover ||
+                        "logo.png";
 
-        row.innerHTML = `
 
-            <td>
+                    return `
 
-                <img
-                    src="${escapeHTML(cover)}"
-                    class="admin-cover"
-                    alt="Cover"
-                    onerror="this.src='logo.png'"
-                >
+                    <tr class="admin-book-row">
 
-            </td>
+                        <td>
 
-            <td>
-                ${escapeHTML(
-                    book.title || "Untitled"
-                )}
-            </td>
+                            <img
+                                src="${escapeHTML(cover)}"
+                                class="admin-book-cover"
+                                onerror="this.src='logo.png'"
+                            >
 
-            <td>
-                ${escapeHTML(
-                    book.author || "Unknown"
-                )}
-            </td>
+                        </td>
 
-            <td>
-                ${escapeHTML(
-                    book.category || "Other"
-                )}
-            </td>
+                        <td>
 
-            <td>
-                ${Number(book.views || 0)}
-            </td>
+                            <strong>
+                                ${escapeHTML(
+                                    book.title ||
+                                    "Untitled"
+                                )}
+                            </strong>
 
-            <td>
-                ${Number(book.downloads || 0)}
-            </td>
+                        </td>
 
-            <td>
+                        <td>
 
-                ${
-                    book.latest === true
-                    ? "⭐ Yes"
-                    : "No"
+                            ${escapeHTML(
+                                book.author ||
+                                "Unknown"
+                            )}
+
+                        </td>
+
+                        <td>
+
+                            ${escapeHTML(
+                                book.category ||
+                                "Other"
+                            )}
+
+                        </td>
+
+                        <td>
+                            👁 ${Number(
+                                book.views || 0
+                            )}
+                        </td>
+
+                        <td>
+                            ⬇ ${Number(
+                                book.downloads || 0
+                            )}
+                        </td>
+
+                        <td>
+
+                            ${
+                                book.latest
+                                ?
+                                "⭐ Yes"
+                                :
+                                "—"
+                            }
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="admin-action edit-action"
+                                data-edit="${book.id}"
+                            >
+                                ✏️ Edit
+                            </button>
+
+                            <button
+                                class="admin-action delete-action"
+                                data-delete="${book.id}"
+                            >
+                                🗑️ Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    `;
+
                 }
-
-            </td>
-
-            <td>
-
-                <div class="action-buttons">
-
-                    <button
-                        class="edit-btn"
-                        data-id="${book.id}"
-                    >
-                        ✏️ Edit
-                    </button>
-
-                    <button
-                        class="delete-btn"
-                        data-id="${book.id}"
-                    >
-                        🗑️ Delete
-                    </button>
-
-                </div>
-
-            </td>
-
-        `;
-
-        table.appendChild(row);
-
-    });
-
-    initializeBookActions();
-
-}
+            )
+            .join("");
 
 
-/*=========================================================
- ESCAPE HTML
-=========================================================*/
+    table
+        .querySelectorAll(
+            "[data-edit]"
+        )
+        .forEach(
+            button => {
 
-function escapeHTML(value) {
+                button.addEventListener(
+                    "click",
+                    function () {
 
-    return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+                        editBook(
+                            button.dataset.edit
+                        );
 
-}
-
-
-/*=========================================================
- BOOK ACTIONS
-=========================================================*/
-
-function initializeBookActions() {
-
-    document.querySelectorAll(
-        ".edit-btn"
-    ).forEach(button => {
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                editBook(
-                    this.dataset.id
+                    }
                 );
 
             }
         );
 
-    });
 
+    table
+        .querySelectorAll(
+            "[data-delete]"
+        )
+        .forEach(
+            button => {
 
-    document.querySelectorAll(
-        ".delete-btn"
-    ).forEach(button => {
+                button.addEventListener(
+                    "click",
+                    function () {
 
-        button.addEventListener(
-            "click",
-            function() {
+                        deleteBook(
+                            button.dataset.delete
+                        );
 
-                deleteBookAdmin(
-                    this.dataset.id
+                    }
                 );
 
             }
         );
-
-    });
 
 }
 
@@ -877,12 +1378,14 @@ function initializeBookActions() {
  EDIT BOOK
 =========================================================*/
 
-function editBook(bookId) {
+function editBook(id) {
 
     const book =
         adminBooks.find(
-            item => item.id === bookId
+            item =>
+                item.id === id
         );
+
 
     if (!book) {
 
@@ -894,41 +1397,44 @@ function editBook(bookId) {
 
     }
 
-    editingBook = true;
 
-    $("editingBookId").value =
+    editingBook =
+        book;
+
+
+    $id("editingBookId").value =
         book.id;
 
-    $("bookTitle").value =
+
+    $id("bookTitle").value =
         book.title || "";
 
-    $("bookAuthor").value =
+
+    $id("bookAuthor").value =
         book.author || "";
 
-    $("bookCategory").value =
-        book.category || "Other";
 
-    $("bookLanguage").value =
-        book.language || "Urdu";
+    $id("bookCategory").value =
+        book.category ||
+        "Other";
 
-    $("bookDescription").value =
+
+    $id("bookLanguage").value =
+        book.language ||
+        "Urdu";
+
+
+    $id("bookDescription").value =
         book.description || "";
 
-    $("bookLatest").checked =
+
+    $id("bookLatest").checked =
         book.latest === true;
 
-    $("coverStatus").innerText =
-        book.coverUrl
-        ? "✅ Existing cover will be kept"
-        : "No cover selected";
-
-    $("pdfStatus").innerText =
-        book.pdfUrl
-        ? "✅ Existing PDF will be kept"
-        : "No PDF selected";
 
     const title =
-        $("bookFormTitle");
+        $id("bookFormTitle");
+
 
     if (title) {
 
@@ -937,8 +1443,10 @@ function editBook(bookId) {
 
     }
 
+
     const save =
-        $("saveBookBtn");
+        $id("saveBookBtn");
+
 
     if (save) {
 
@@ -947,552 +1455,38 @@ function editBook(bookId) {
 
     }
 
-    openSection("addBook");
 
-}
+    const coverStatus =
+        $id("coverStatus");
 
 
-/*=========================================================
- RESET FORM
-=========================================================*/
+    if (coverStatus) {
 
-function resetBookForm() {
-
-    editingBook = false;
-
-    const form =
-        $("bookForm");
-
-    if (form) {
-
-        form.reset();
+        coverStatus.innerText =
+            book.coverUrl ?
+            "Current cover will remain unless replaced." :
+            "No current cover.";
 
     }
 
-    $("editingBookId").value = "";
 
-    $("coverStatus").innerText =
-        "No cover selected";
+    const pdfStatus =
+        $id("pdfStatus");
 
-    $("pdfStatus").innerText =
-        "No PDF selected";
 
-    const title =
-        $("bookFormTitle");
+    if (pdfStatus) {
 
-    if (title) {
-
-        title.innerText =
-            "Add New Book";
+        pdfStatus.innerText =
+            book.pdfUrl ?
+            "Current PDF will remain unless replaced." :
+            "No current PDF.";
 
     }
 
-    const save =
-        $("saveBookBtn");
 
-    if (save) {
-
-        save.innerText =
-            "💾 Save Book";
-
-    }
-
-}
-
-
-/*=========================================================
- CANCEL EDIT
-=========================================================*/
-
-function initializeCancel() {
-
-    const button =
-        $("cancelEdit");
-
-    if (!button) return;
-
-    button.addEventListener(
-        "click",
-        function() {
-
-            resetBookForm();
-
-            openSection("books");
-
-        }
+    openSection(
+        "addBook"
     );
-
-}
-
-
-/*=========================================================
- COVER FILE STATUS
-=========================================================*/
-
-function initializeFileInputs() {
-
-    const cover =
-        $("coverFile");
-
-    const pdf =
-        $("pdfFile");
-
-
-    if (cover) {
-
-        cover.addEventListener(
-            "change",
-            function() {
-
-                if (
-                    this.files &&
-                    this.files[0]
-                ) {
-
-                    $("coverStatus").innerText =
-                        "📕 " +
-                        this.files[0].name;
-
-                }
-
-            }
-        );
-
-    }
-
-
-    if (pdf) {
-
-        pdf.addEventListener(
-            "change",
-            function() {
-
-                if (
-                    this.files &&
-                    this.files[0]
-                ) {
-
-                    $("pdfStatus").innerText =
-                        "📄 " +
-                        this.files[0].name;
-
-                }
-
-            }
-        );
-
-    }
-
-}
-
-
-/*=========================================================
- SAVE / UPDATE BOOK
-=========================================================*/
-
-function initializeBookForm() {
-
-    const form =
-        $("bookForm");
-
-    if (!form) return;
-
-    form.addEventListener(
-        "submit",
-        async function(e) {
-
-            e.preventDefault();
-
-            const title =
-                $("bookTitle").value.trim();
-
-            const author =
-                $("bookAuthor").value.trim();
-
-            const category =
-                $("bookCategory").value;
-
-            const language =
-                $("bookLanguage").value;
-
-            const description =
-                $("bookDescription").value.trim();
-
-            const latest =
-                $("bookLatest").checked;
-
-            const coverFile =
-                $("coverFile").files[0];
-
-            const pdfFile =
-                $("pdfFile").files[0];
-
-            const editingId =
-                $("editingBookId").value.trim();
-
-            const saveButton =
-                $("saveBookBtn");
-
-
-            if (!title) {
-
-                showMessage(
-                    "Please enter book title.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            if (!author) {
-
-                showMessage(
-                    "Please enter author.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                saveButton.disabled =
-                    true;
-
-                saveButton.innerText =
-                    editingId
-                    ? "🔄 Updating..."
-                    : "🔄 Saving...";
-
-
-                /*
-                =========================================
-                UPDATE EXISTING BOOK
-                =========================================
-                */
-
-                if (editingId) {
-
-                    const oldBook =
-                        adminBooks.find(
-                            book =>
-                                book.id ===
-                                editingId
-                        );
-
-
-                    let coverUrl =
-                        oldBook?.coverUrl ||
-                        "";
-
-                    let coverPath =
-                        oldBook?.coverPath ||
-                        "";
-
-                    let pdfUrl =
-                        oldBook?.pdfUrl ||
-                        "";
-
-                    let pdfPath =
-                        oldBook?.pdfPath ||
-                        "";
-
-
-                    /*
-                    NEW COVER
-                    */
-
-                    if (coverFile) {
-
-                        const uploadedCover =
-                            await uploadBookCover(
-                                coverFile,
-                                editingId
-                            );
-
-                        coverUrl =
-                            uploadedCover.url;
-
-                        coverPath =
-                            uploadedCover.path;
-
-                    }
-
-
-                    /*
-                    NEW PDF
-                    */
-
-                    if (pdfFile) {
-
-                        const uploadedPDF =
-                            await uploadBookPDF(
-                                pdfFile,
-                                editingId
-                            );
-
-                        pdfUrl =
-                            uploadedPDF.url;
-
-                        pdfPath =
-                            uploadedPDF.path;
-
-                    }
-
-
-                    await updateBook(
-                        editingId,
-                        {
-
-                            title,
-                            author,
-                            category,
-                            language,
-                            description,
-
-                            coverUrl,
-                            coverPath,
-
-                            pdfUrl,
-                            pdfPath,
-
-                            latest
-
-                        }
-                    );
-
-
-                    /*
-                    If this is latest,
-                    remove latest from others.
-                    */
-
-                    if (latest) {
-
-                        await removeOtherLatest(
-                            editingId
-                        );
-
-                    }
-
-
-                    showMessage(
-                        "✅ Book updated successfully!",
-                        "success"
-                    );
-
-                }
-
-
-                /*
-                =========================================
-                ADD NEW BOOK
-                =========================================
-                */
-
-                else {
-
-                    const bookId =
-                        createBookId();
-
-
-                    let coverUrl = "";
-
-                    let coverPath = "";
-
-                    let pdfUrl = "";
-
-                    let pdfPath = "";
-
-
-                    /*
-                    COVER
-                    */
-
-                    if (coverFile) {
-
-                        const uploadedCover =
-                            await uploadBookCover(
-                                coverFile,
-                                bookId
-                            );
-
-                        coverUrl =
-                            uploadedCover.url;
-
-                        coverPath =
-                            uploadedCover.path;
-
-                    }
-
-
-                    /*
-                    PDF
-                    */
-
-                    if (!pdfFile) {
-
-                        throw new Error(
-                            "Please select a PDF."
-                        );
-
-                    }
-
-
-                    const uploadedPDF =
-                        await uploadBookPDF(
-                            pdfFile,
-                            bookId
-                        );
-
-                    pdfUrl =
-                        uploadedPDF.url;
-
-                    pdfPath =
-                        uploadedPDF.path;
-
-
-                    await addBook({
-
-                        title,
-                        author,
-                        category,
-                        language,
-                        description,
-
-                        coverUrl,
-                        coverPath,
-
-                        pdfUrl,
-                        pdfPath,
-
-                        latest
-
-                    });
-
-
-                    showMessage(
-                        "✅ Book added successfully!",
-                        "success"
-                    );
-
-                }
-
-
-                /*
-                REFRESH
-                */
-
-                await loadBooks();
-
-                await loadDashboard();
-
-
-                setTimeout(() => {
-
-                    resetBookForm();
-
-                    openSection(
-                        "books"
-                    );
-
-                }, 1000);
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "❌ Save book error:",
-                    error
-                );
-
-                showMessage(
-                    "❌ " +
-                    (
-                        error.message ||
-                        "Something went wrong."
-                    ),
-                    "error"
-                );
-
-            }
-
-            finally {
-
-                saveButton.disabled =
-                    false;
-
-                saveButton.innerText =
-                    editingId
-                    ? "💾 Update Book"
-                    : "💾 Save Book";
-
-            }
-
-        }
-    );
-
-}
-
-
-/*=========================================================
- REMOVE OTHER LATEST BOOKS
-=========================================================*/
-
-async function removeOtherLatest(
-    currentBookId
-) {
-
-    try {
-
-        const snapshot =
-            await db
-                .collection("books")
-                .where(
-                    "latest",
-                    "==",
-                    true
-                )
-                .get();
-
-        const batch =
-            db.batch();
-
-        snapshot.forEach(doc => {
-
-            if (
-                doc.id !==
-                currentBookId
-            ) {
-
-                batch.update(
-                    doc.ref,
-                    {
-                        latest: false
-                    }
-                );
-
-            }
-
-        });
-
-        await batch.commit();
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Latest update error:",
-            error
-        );
-
-    }
 
 }
 
@@ -1501,13 +1495,14 @@ async function removeOtherLatest(
  DELETE BOOK
 =========================================================*/
 
-async function deleteBookAdmin(bookId) {
+async function deleteBook(id) {
 
     const book =
         adminBooks.find(
             item =>
-                item.id === bookId
+                item.id === id
         );
+
 
     if (!book) return;
 
@@ -1523,16 +1518,15 @@ async function deleteBookAdmin(bookId) {
 
     try {
 
-        await deleteBook(bookId);
-
-        console.log(
-            "🗑️ Deleted:",
-            book.title
+        await window.deleteBook(
+            id
         );
+
 
         await loadBooks();
 
         await loadDashboard();
+
 
         alert(
             "✅ Book deleted successfully."
@@ -1543,12 +1537,12 @@ async function deleteBookAdmin(bookId) {
     catch (error) {
 
         console.error(
-            "❌ Delete error:",
             error
         );
 
         alert(
-            "❌ Failed to delete book."
+            "❌ Delete failed:\n" +
+            error.message
         );
 
     }
@@ -1557,21 +1551,507 @@ async function deleteBookAdmin(bookId) {
 
 
 /*=========================================================
- LOAD COMMENTS
+ RESET FORM
+=========================================================*/
+
+function resetBookForm() {
+
+    editingBook =
+        null;
+
+
+    const form =
+        $id("bookForm");
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+    const hidden =
+        $id("editingBookId");
+
+
+    if (hidden) {
+
+        hidden.value = "";
+
+    }
+
+
+    const title =
+        $id("bookFormTitle");
+
+
+    if (title) {
+
+        title.innerText =
+            "Add New Book";
+
+    }
+
+
+    const save =
+        $id("saveBookBtn");
+
+
+    if (save) {
+
+        save.innerText =
+            "💾 Save Book";
+
+    }
+
+
+    const cover =
+        $id("coverStatus");
+
+
+    if (cover) {
+
+        cover.innerText =
+            "No cover selected";
+
+    }
+
+
+    const pdf =
+        $id("pdfStatus");
+
+
+    if (pdf) {
+
+        pdf.innerText =
+            "No PDF selected";
+
+    }
+
+
+    const message =
+        $id("bookMessage");
+
+
+    if (message) {
+
+        message.innerText = "";
+
+    }
+
+}
+
+
+/*=========================================================
+ DASHBOARD
+=========================================================*/
+
+async function loadDashboard() {
+
+    try {
+
+        const stats =
+            await getStatistics();
+
+
+        const bookStats =
+            await calculateBookStatistics();
+
+
+        animateNumber(
+            "totalBooks",
+            bookStats.totalBooks
+        );
+
+
+        animateNumber(
+            "totalVisitors",
+            Number(
+                stats.visitors || 0
+            )
+        );
+
+
+        animateNumber(
+            "totalViews",
+            bookStats.totalViews
+        );
+
+
+        animateNumber(
+            "totalLikes",
+            bookStats.totalLikes
+        );
+
+
+        animateNumber(
+            "totalShares",
+            bookStats.totalShares
+        );
+
+
+        animateNumber(
+            "totalDownloads",
+            bookStats.totalDownloads
+        );
+
+
+        createDashboardTools();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Dashboard:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ DASHBOARD EXTRA TOOLS
+=========================================================*/
+
+function createDashboardTools() {
+
+    const dashboard =
+        $id("dashboard");
+
+
+    if (!dashboard) return;
+
+
+    if (
+        $id("adminExtraTools")
+    ) {
+
+        return;
+
+    }
+
+
+    const box =
+        document.createElement(
+            "div"
+        );
+
+
+    box.id =
+        "adminExtraTools";
+
+
+    box.className =
+        "admin-extra-tools";
+
+
+    box.innerHTML = `
+
+        <div class="section-head">
+
+            <div>
+
+                <h2>⚙️ Admin Controls</h2>
+
+                <p>
+                    Manage counters and refresh library data.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="admin-tools-grid">
+
+            <button
+                id="changeVisitorsBtn"
+                class="gold-btn"
+            >
+                👥 Change Visitor Counter
+            </button>
+
+
+            <button
+                id="refreshAdminBtn"
+                class="gold-btn"
+            >
+                🔄 Refresh Dashboard
+            </button>
+
+
+            <button
+                id="manageBooksBtn"
+                class="gold-btn"
+            >
+                📚 Manage Books
+            </button>
+
+
+            <button
+                id="manageCommentsBtn"
+                class="gold-btn"
+            >
+                💬 Manage Comments
+            </button>
+
+        </div>
+
+    `;
+
+
+    dashboard.appendChild(
+        box
+    );
+
+
+    $id(
+        "changeVisitorsBtn"
+    )
+    .addEventListener(
+        "click",
+        changeVisitorCounter
+    );
+
+
+    $id(
+        "refreshAdminBtn"
+    )
+    .addEventListener(
+        "click",
+        async function () {
+
+            await loadDashboard();
+
+            await loadBooks();
+
+            await loadComments();
+
+        }
+    );
+
+
+    $id(
+        "manageBooksBtn"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            openSection(
+                "books"
+            );
+
+        }
+    );
+
+
+    $id(
+        "manageCommentsBtn"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            openSection(
+                "comments"
+            );
+
+        }
+    );
+
+}
+
+
+/*=========================================================
+ CHANGE VISITOR COUNTER
+=========================================================*/
+
+async function changeVisitorCounter() {
+
+    const current =
+        await getStatistics();
+
+
+    const value =
+        prompt(
+            "Enter new visitor count:",
+            Number(
+                current.visitors || 0
+            )
+        );
+
+
+    if (
+        value === null
+    ) return;
+
+
+    const number =
+        Number(value);
+
+
+    if (
+        !Number.isFinite(number) ||
+        number < 0
+    ) {
+
+        alert(
+            "❌ Enter a valid number."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await setVisitorCount(
+            Math.floor(number)
+        );
+
+
+        await loadDashboard();
+
+
+        alert(
+            "✅ Visitor counter updated."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+        alert(
+            "❌ Failed to update counter."
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+ ANIMATED NUMBER
+=========================================================*/
+
+function animateNumber(
+    id,
+    target
+) {
+
+    const element =
+        $id(id);
+
+
+    if (!element) return;
+
+
+    target =
+        Number(target) || 0;
+
+
+    const start =
+        Number(
+            element.innerText
+        ) || 0;
+
+
+    const duration =
+        700;
+
+
+    const startTime =
+        performance.now();
+
+
+    function update(
+        currentTime
+    ) {
+
+        const progress =
+            Math.min(
+                (
+                    currentTime -
+                    startTime
+                ) /
+                duration,
+                1
+            );
+
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+
+        const value =
+            Math.floor(
+                start +
+                (
+                    target -
+                    start
+                ) *
+                eased
+            );
+
+
+        element.innerText =
+            value.toLocaleString();
+
+
+        if (
+            progress < 1
+        ) {
+
+            requestAnimationFrame(
+                update
+            );
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        update
+    );
+
+}
+
+
+/*=========================================================
+ COMMENTS
 =========================================================*/
 
 async function loadComments() {
 
     const container =
-        $("commentsContainer");
+        $id("commentsContainer");
+
 
     if (!container) return;
 
 
     container.innerHTML = `
+
         <p class="loading">
-            Loading comments...
+            ⏳ Loading comments...
         </p>
+
     `;
 
 
@@ -1580,11 +2060,13 @@ async function loadComments() {
         const books =
             await getAllBooks();
 
-        let allComments = [];
+
+        const allComments = [];
 
 
         for (
-            const book of books
+            const book
+            of books
         ) {
 
             try {
@@ -1594,15 +2076,13 @@ async function loadComments() {
                         book.id
                     );
 
+
                 comments.forEach(
                     comment => {
 
                         allComments.push({
 
                             ...comment,
-
-                            bookId:
-                                book.id,
 
                             bookTitle:
                                 book.title
@@ -1617,8 +2097,8 @@ async function loadComments() {
             catch (error) {
 
                 console.warn(
-                    "Comments unavailable for:",
-                    book.title
+                    "Comments skipped:",
+                    book.id
                 );
 
             }
@@ -1635,14 +2115,16 @@ async function loadComments() {
     catch (error) {
 
         console.error(
-            "❌ Comments error:",
             error
         );
 
+
         container.innerHTML = `
+
             <p>
-                ❌ Failed to load comments.
+                ❌ Unable to load comments.
             </p>
+
         `;
 
     }
@@ -1659,7 +2141,8 @@ function renderComments(
 ) {
 
     const container =
-        $("commentsContainer");
+        $id("commentsContainer");
+
 
     if (!container) return;
 
@@ -1667,9 +2150,13 @@ function renderComments(
     if (!comments.length) {
 
         container.innerHTML = `
-            <p>
-                No comments yet.
-            </p>
+
+            <div class="empty-comments">
+
+                💬 No comments yet.
+
+            </div>
+
         `;
 
         return;
@@ -1677,146 +2164,170 @@ function renderComments(
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        comments
+            .map(
+                function (comment) {
+
+                    return `
+
+                    <div class="admin-comment">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(
+                                    comment.name ||
+                                    "Visitor"
+                                )}
+                            </strong>
+
+                            <small>
+                                ${escapeHTML(
+                                    comment.bookTitle ||
+                                    ""
+                                )}
+                            </small>
+
+                        </div>
 
 
-    comments.forEach(comment => {
-
-        const div =
-            document.createElement(
-                "div"
-            );
-
-        div.className =
-            "comment-card";
+                        <p>
+                            ${escapeHTML(
+                                comment.comment ||
+                                ""
+                            )}
+                        </p>
 
 
-        div.innerHTML = `
+                        <button
+                            class="admin-action delete-action"
+                            data-comment-book="${comment.bookId}"
+                            data-comment-id="${comment.id}"
+                        >
+                            🗑️ Delete
+                        </button>
 
-            <div>
+                    </div>
 
-                <h3>
-                    ${escapeHTML(
-                        comment.name ||
-                        "Visitor"
-                    )}
-                </h3>
+                    `;
 
-                <strong>
-                    ${escapeHTML(
-                        comment.bookTitle ||
-                        "Book"
-                    )}
-                </strong>
-
-                <p>
-                    ${escapeHTML(
-                        comment.comment ||
-                        ""
-                    )}
-                </p>
-
-            </div>
-
-            <button
-                class="delete-comment"
-                data-book="${comment.bookId}"
-                data-comment="${comment.id}"
-            >
-                🗑️ Delete
-            </button>
-
-        `;
+                }
+            )
+            .join("");
 
 
-        container.appendChild(div);
+    container
+        .querySelectorAll(
+            "[data-comment-id]"
+        )
+        .forEach(
+            button => {
 
-    });
+                button.addEventListener(
+                    "click",
+                    async function () {
+
+                        const bookId =
+                            button.dataset
+                                .commentBook;
+
+                        const commentId =
+                            button.dataset
+                                .commentId;
 
 
-    document.querySelectorAll(
-        ".delete-comment"
-    ).forEach(button => {
+                        if (
+                            !confirm(
+                                "Delete this comment?"
+                            )
+                        ) {
 
-        button.addEventListener(
-            "click",
-            function() {
+                            return;
 
-                deleteComment(
-                    this.dataset.book,
-                    this.dataset.comment
+                        }
+
+
+                        try {
+
+                            await deleteBookComment(
+                                bookId,
+                                commentId
+                            );
+
+
+                            await loadComments();
+
+                            await loadDashboard();
+
+
+                        }
+
+                        catch (error) {
+
+                            console.error(
+                                error
+                            );
+
+                            alert(
+                                "❌ Failed to delete comment."
+                            );
+
+                        }
+
+                    }
                 );
 
             }
         );
 
-    });
-
 }
 
 
 /*=========================================================
- DELETE COMMENT
+ MESSAGE
 =========================================================*/
 
-async function deleteComment(
-    bookId,
-    commentId
+function showMessage(
+    element,
+    text,
+    error
 ) {
 
-    if (!bookId || !commentId) return;
+    if (!element) return;
 
 
-    const confirmed =
-        confirm(
-            "Delete this comment?"
-        );
+    element.innerText =
+        text;
 
 
-    if (!confirmed) return;
+    element.style.padding =
+        "12px";
 
 
-    try {
-
-        await db
-            .collection("books")
-            .doc(bookId)
-            .collection("comments")
-            .doc(commentId)
-            .delete();
+    element.style.marginTop =
+        "15px";
 
 
-        await db
-            .collection("books")
-            .doc(bookId)
-            .update({
-
-                comments:
-                    firebase.firestore
-                        .FieldValue
-                        .increment(-1)
-
-            });
+    element.style.borderRadius =
+        "8px";
 
 
-        await loadComments();
+    element.style.animation =
+        "adminFade .3s ease";
 
-        console.log(
-            "✅ Comment deleted"
-        );
+
+    if (error) {
+
+        element.style.color =
+            "#ff8080";
 
     }
 
-    catch (error) {
+    else {
 
-        console.error(
-            "❌ Comment delete error:",
-            error
-        );
-
-        alert(
-            "❌ Could not delete comment."
-        );
+        element.style.color =
+            "#d4af37";
 
     }
 
@@ -1824,32 +2335,126 @@ async function deleteComment(
 
 
 /*=========================================================
- INITIALIZE ADMIN
+ ESCAPE HTML
 =========================================================*/
 
-waitForFirebase(function() {
+function escapeHTML(
+    value
+) {
 
-    console.log(
-        "🔥 Firebase ready for Admin Panel"
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
     );
 
-    initializeAdminAuth();
+}
 
-    initializeLogin();
 
-    initializeLogout();
+/*=========================================================
+ FIREBASE ERROR
+=========================================================*/
 
-    initializeNavigation();
+function getFirebaseErrorMessage(
+    error
+) {
 
-    initializeMobileMenu();
+    if (!error) {
 
-    initializeBookForm();
+        return "Login failed.";
 
-    initializeCancel();
+    }
 
-    initializeFileInputs();
 
-});
+    const code =
+        error.code || "";
+
+
+    const messages = {
+
+        "auth/invalid-credential":
+            "❌ Email or password is incorrect.",
+
+        "auth/invalid-login-credentials":
+            "❌ Email or password is incorrect.",
+
+        "auth/user-not-found":
+            "❌ Admin account not found.",
+
+        "auth/wrong-password":
+            "❌ Incorrect password.",
+
+        "auth/invalid-email":
+            "❌ Invalid email address.",
+
+        "auth/too-many-requests":
+            "❌ Too many attempts. Try again later.",
+
+        "auth/network-request-failed":
+            "❌ Internet connection problem."
+
+    };
+
+
+    return (
+        messages[code] ||
+        error.message ||
+        "❌ Login failed."
+    );
+
+}
+
+
+/*=========================================================
+ DASHBOARD CONTROLS
+=========================================================*/
+
+function setupDashboardControls() {
+
+    /*
+     * Extra dashboard controls are created
+     * automatically by createDashboardTools().
+     */
+
+}
+
+
+/*=========================================================
+ AUTO REFRESH
+=========================================================*/
+
+setInterval(
+    function () {
+
+        if (
+            window.currentFirebaseUser
+        ) {
+
+            loadDashboard();
+
+        }
+
+    },
+    60000
+);
 
 
 /*=========================================================
@@ -1865,15 +2470,7 @@ console.log(
 );
 
 console.log(
-    "===================================="
-);
-
-console.log(
-    "✅ Login System"
-);
-
-console.log(
-    "✅ Authentication"
+    "✅ Login"
 );
 
 console.log(
@@ -1881,7 +2478,11 @@ console.log(
 );
 
 console.log(
-    "✅ Books"
+    "✅ Visitor Counter"
+);
+
+console.log(
+    "✅ Statistics"
 );
 
 console.log(
@@ -1897,15 +2498,11 @@ console.log(
 );
 
 console.log(
-    "✅ PDF Upload"
-);
-
-console.log(
     "✅ Cover Upload"
 );
 
 console.log(
-    "✅ Categories"
+    "✅ PDF Upload"
 );
 
 console.log(
@@ -1917,11 +2514,15 @@ console.log(
 );
 
 console.log(
-    "✅ Logout"
+    "✅ Comment Delete"
 );
 
 console.log(
-    "🚀 Admin Panel Ready"
+    "✅ Refresh"
+);
+
+console.log(
+    "🚀 Admin Ready"
 );
 
 console.log(
