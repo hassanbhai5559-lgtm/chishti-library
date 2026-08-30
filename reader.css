@@ -2220,3 +2220,298 @@ body {
 #bookmarkBtn:hover {
     transform: translateY(-2px);
 }
+
+/*=========================================================
+   CHISHTI READER
+   PREMIUM BOOK SEARCH
+=========================================================*/
+
+.reader-search {
+    width: min(700px, 94%);
+    margin: 15px auto;
+    position: relative;
+    z-index: 1000;
+}
+
+.reader-search-box {
+    height: 52px;
+    display: flex;
+    align-items: center;
+
+    background: rgba(15, 15, 15, 0.96);
+
+    border: 1px solid rgba(212, 175, 55, 0.45);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.35),
+        inset 0 0 15px rgba(212, 175, 55, 0.03);
+
+    transition: 0.3s ease;
+
+    overflow: hidden;
+}
+
+.reader-search-box:focus-within {
+
+    border-color: #d4af37;
+
+    box-shadow:
+        0 0 0 3px rgba(212, 175, 55, 0.10),
+        0 10px 35px rgba(0, 0, 0, 0.45);
+
+    transform: translateY(-1px);
+}
+
+.reader-search-icon {
+
+    font-size: 20px;
+
+    margin-left: 16px;
+    margin-right: 10px;
+
+    opacity: 0.9;
+}
+
+#readerSearchInput {
+
+    flex: 1;
+
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-size: 15px;
+
+    font-family: inherit;
+}
+
+#readerSearchInput::placeholder {
+
+    color: rgba(255, 255, 255, 0.48);
+
+}
+
+.reader-search-clear {
+
+    width: 45px;
+    height: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    color: #d4af37;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: 0.25s ease;
+}
+
+.reader-search-clear.active {
+
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.reader-search-clear:hover {
+
+    color: #fff;
+
+    transform: scale(1.15);
+
+}
+
+
+/*=========================================================
+   SEARCH RESULTS
+=========================================================*/
+
+.reader-search-results {
+
+    position: absolute;
+
+    top: 60px;
+
+    left: 0;
+    right: 0;
+
+    max-height: 420px;
+
+    overflow-y: auto;
+
+    display: none;
+
+    background: rgba(12, 12, 12, 0.98);
+
+    border: 1px solid rgba(212, 175, 55, 0.35);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.55);
+
+    backdrop-filter: blur(15px);
+}
+
+.reader-search-results.show {
+
+    display: block;
+
+    animation: readerSearchDrop 0.2s ease;
+}
+
+@keyframes readerSearchDrop {
+
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/*=========================================================
+   RESULT ITEM
+=========================================================*/
+
+.reader-search-result {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 12px 15px;
+
+    cursor: pointer;
+
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+
+    transition: 0.25s ease;
+}
+
+.reader-search-result:last-child {
+
+    border-bottom: none;
+
+}
+
+.reader-search-result:hover {
+
+    background: rgba(212, 175, 55, 0.10);
+
+}
+
+.reader-search-result img {
+
+    width: 45px;
+    height: 58px;
+
+    object-fit: cover;
+
+    border-radius: 5px;
+
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.reader-search-result-info {
+
+    min-width: 0;
+    flex: 1;
+}
+
+.reader-search-result-info h4 {
+
+    margin: 0 0 4px;
+
+    color: #fff;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.reader-search-result-info p {
+
+    margin: 0;
+
+    color: #d4af37;
+
+    font-size: 12px;
+
+}
+
+.reader-search-empty {
+
+    padding: 25px;
+
+    text-align: center;
+
+    color: rgba(255,255,255,0.6);
+
+    font-size: 14px;
+}
+
+
+/*=========================================================
+   MOBILE
+=========================================================*/
+
+@media (max-width: 600px) {
+
+    .reader-search {
+
+        width: 94%;
+
+        margin: 10px auto;
+    }
+
+    .reader-search-box {
+
+        height: 48px;
+
+        border-radius: 12px;
+    }
+
+    #readerSearchInput {
+
+        font-size: 14px;
+    }
+
+    .reader-search-results {
+
+        top: 56px;
+
+        max-height: 350px;
+    }
+
+    .reader-search-result img {
+
+        width: 40px;
+        height: 52px;
+    }
+
+}
