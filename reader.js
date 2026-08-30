@@ -3194,7 +3194,639 @@ if (retryButton) {
     loadReaderBooks();
 
 })();
+/* =========================================================
+   CHISHTI READER
+   READER SEARCH SYSTEM
+   PASTE AT THE VERY END OF reader.js
+========================================================= */
 
+(function () {
+
+    "use strict";
+
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
+
+    const searchInput =
+        document.getElementById("readerSearchInput");
+
+    const searchClear =
+        document.getElementById("readerSearchClear");
+
+    const searchResults =
+        document.getElementById("readerSearchResults");
+
+
+    if (!searchInput || !searchResults) {
+        console.warn(
+            "Chishti Reader Search: Search elements not found."
+        );
+        return;
+    }
+
+
+    /* =====================================================
+       FIND BOOK DATABASE
+    ===================================================== */
+
+    function getBooks() {
+
+        /*
+         * Tries common book-data names used by Chishti Library.
+         */
+
+        if (Array.isArray(window.books)) {
+            return window.books;
+        }
+
+        if (Array.isArray(window.bookData)) {
+            return window.bookData;
+        }
+
+        if (Array.isArray(window.libraryBooks)) {
+            return window.libraryBooks;
+        }
+
+        if (Array.isArray(window.allBooks)) {
+            return window.allBooks;
+        }
+
+
+        /* Try localStorage */
+
+        const storageKeys = [
+            "books",
+            "bookData",
+            "libraryBooks",
+            "allBooks"
+        ];
+
+
+        for (const key of storageKeys) {
+
+            try {
+
+                const data =
+                    JSON.parse(
+                        localStorage.getItem(key)
+                    );
+
+                if (Array.isArray(data)) {
+                    return data;
+                }
+
+            } catch (error) {
+                // Ignore invalid localStorage data
+            }
+
+        }
+
+
+        return [];
+    }
+
+
+    /* =====================================================
+       SAFE TEXT
+    ===================================================== */
+
+    function safeText(value) {
+
+        if (
+            value === null ||
+            value === undefined
+        ) {
+            return "";
+        }
+
+        return String(value);
+    }
+
+
+    /* =====================================================
+       GET BOOK INFORMATION
+    ===================================================== */
+
+    function getBookTitle(book) {
+
+        return safeText(
+            book.title ||
+            book.name ||
+            book.bookTitle ||
+            book.bookName
+        );
+    }
+
+
+    function getBookAuthor(book) {
+
+        return safeText(
+            book.author ||
+            book.authorName ||
+            book.writer ||
+            book.writerName
+        );
+    }
+
+
+    function getBookCategory(book) {
+
+        return safeText(
+            book.category ||
+            book.categoryName ||
+            book.subject ||
+            book.genre
+        );
+    }
+
+
+    function getBookImage(book) {
+
+        return (
+            book.image ||
+            book.cover ||
+            book.coverImage ||
+            book.thumbnail ||
+            book.imageUrl ||
+            ""
+        );
+    }
+
+
+    /* =====================================================
+       SEARCH BOOKS
+    ===================================================== */
+
+    function searchBooks(query) {
+
+        const books = getBooks();
+
+        const cleanQuery =
+            safeText(query)
+                .trim()
+                .toLowerCase();
+
+
+        searchResults.innerHTML = "";
+
+
+        /* Empty search */
+
+        if (!cleanQuery) {
+
+            searchResults.classList.remove(
+                "show"
+            );
+
+            return;
+        }
+
+
+        /* No database */
+
+        if (!books.length) {
+
+            searchResults.innerHTML = `
+                <div class="reader-search-empty">
+                    No books available for search.
+                </div>
+            `;
+
+            searchResults.classList.add("show");
+
+            return;
+        }
+
+
+        /* Filter */
+
+        const matches = books.filter(book => {
+
+            const title =
+                getBookTitle(book).toLowerCase();
+
+            const author =
+                getBookAuthor(book).toLowerCase();
+
+            const category =
+                getBookCategory(book).toLowerCase();
+
+
+            return (
+                title.includes(cleanQuery) ||
+                author.includes(cleanQuery) ||
+                category.includes(cleanQuery)
+            );
+
+        });
+
+
+        /* No results */
+
+        if (!matches.length) {
+
+            searchResults.innerHTML = `
+                <div class="reader-search-empty">
+                    No books found for
+                    "<strong>${escapeHTML(query)}</strong>"
+                </div>
+            `;
+
+            searchResults.classList.add("show");
+
+            return;
+        }
+
+
+        /* Limit results */
+
+        const limitedResults =
+            matches.slice(0, 12);
+
+
+        limitedResults.forEach((book, index) => {
+
+            const title =
+                getBookTitle(book) ||
+                "Untitled Book";
+
+            const author =
+                getBookAuthor(book);
+
+            const category =
+                getBookCategory(book);
+
+            const image =
+                getBookImage(book);
+
+
+            const result =
+                document.createElement("div");
+
+
+            result.className =
+                "reader-search-result";
+
+
+            result.setAttribute(
+                "role",
+                "option"
+            );
+
+
+            result.dataset.index =
+                String(index);
+
+
+            result.innerHTML = `
+
+                <div class="reader-search-result-image">
+
+                    ${
+                        image
+                            ? `
+                                <img
+                                    src="${escapeAttribute(image)}"
+                                    alt=""
+                                    loading="lazy"
+                                >
+                              `
+                            : `
+                                <span>
+                                    📖
+                                </span>
+                              `
+                    }
+
+                </div>
+
+
+                <div class="reader-search-result-info">
+
+                    <div class="reader-search-result-title">
+                        ${escapeHTML(title)}
+                    </div>
+
+                    ${
+                        author
+                            ? `
+                                <div class="reader-search-result-author">
+                                    ${escapeHTML(author)}
+                                </div>
+                              `
+                            : ""
+                    }
+
+                    ${
+                        category
+                            ? `
+                                <div class="reader-search-result-category">
+                                    ${escapeHTML(category)}
+                                </div>
+                              `
+                            : ""
+                    }
+
+                </div>
+
+            `;
+
+
+            result.addEventListener(
+                "click",
+                function () {
+
+                    openSearchBook(book);
+
+                }
+            );
+
+
+            searchResults.appendChild(result);
+
+        });
+
+
+        searchResults.classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       OPEN SELECTED BOOK
+    ===================================================== */
+
+    function openSearchBook(book) {
+
+        /*
+         * Try common PDF/file properties.
+         */
+
+        const pdfUrl =
+            book.pdf ||
+            book.pdfUrl ||
+            book.file ||
+            book.fileUrl ||
+            book.url ||
+            book.path ||
+            book.downloadUrl;
+
+
+        if (!pdfUrl) {
+
+            console.warn(
+                "Chishti Reader Search: PDF URL not found.",
+                book
+            );
+
+            return;
+        }
+
+
+        /*
+         * If your existing reader has a global
+         * book-opening function, use it.
+         */
+
+        if (
+            typeof window.openBook === "function"
+        ) {
+
+            window.openBook(book);
+
+            closeSearch();
+
+            return;
+        }
+
+
+        if (
+            typeof window.loadBook === "function"
+        ) {
+
+            window.loadBook(book);
+
+            closeSearch();
+
+            return;
+        }
+
+
+        if (
+            typeof window.loadPDF === "function"
+        ) {
+
+            window.loadPDF(pdfUrl);
+
+            closeSearch();
+
+            return;
+        }
+
+
+        /*
+         * Fallback:
+         * Open the PDF in the current reader.
+         */
+
+        try {
+
+            const url =
+                new URL(
+                    pdfUrl,
+                    window.location.href
+                ).href;
+
+
+            window.location.href = url;
+
+        } catch (error) {
+
+            console.error(
+                "Unable to open selected book.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CLEAR SEARCH
+    ===================================================== */
+
+    function closeSearch() {
+
+        searchResults.innerHTML = "";
+
+        searchResults.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    function clearSearch() {
+
+        searchInput.value = "";
+
+        closeSearch();
+
+        searchInput.focus();
+
+    }
+
+
+    /* =====================================================
+       HTML SAFETY
+    ===================================================== */
+
+    function escapeHTML(value) {
+
+        return safeText(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    function escapeAttribute(value) {
+
+        return escapeHTML(value);
+
+    }
+
+
+    /* =====================================================
+       LIVE SEARCH
+    ===================================================== */
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            searchBooks(
+                this.value
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       CLEAR BUTTON
+    ===================================================== */
+
+    if (searchClear) {
+
+        searchClear.addEventListener(
+            "click",
+            clearSearch
+        );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE KEY
+    ===================================================== */
+
+    searchInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                clearSearch();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       ENTER KEY
+    ===================================================== */
+
+    searchInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                const firstResult =
+                    searchResults.querySelector(
+                        ".reader-search-result"
+                    );
+
+
+                if (firstResult) {
+
+                    firstResult.click();
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       CLOSE WHEN CLICKING OUTSIDE
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const searchContainer =
+                document.querySelector(
+                    ".reader-search"
+                );
+
+
+            if (
+                searchContainer &&
+                !searchContainer.contains(
+                    event.target
+                )
+            ) {
+
+                searchResults.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       INITIAL STATE
+    ===================================================== */
+
+    searchResults.classList.remove(
+        "show"
+    );
+
+
+    console.log(
+        "✓ Chishti Reader Search System Loaded"
+    );
+
+
+})();
 
 /* =========================================================
    LOAD PDF
