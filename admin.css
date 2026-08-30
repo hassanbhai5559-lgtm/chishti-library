@@ -577,3 +577,217 @@ td {
 #booksTable tr {
     height: 90px;
 }
+
+/* =========================================
+   CHISHTI LIBRARY ADMIN
+   BOOK COVER + MOBILE FIX
+   PASTE AT END OF admin.css
+========================================= */
+
+/* BOOK COVER SIZE */
+#booksTable td:first-child img,
+.book-cover,
+.book-cover-img {
+    width: 55px !important;
+    height: 75px !important;
+    max-width: 55px !important;
+    max-height: 75px !important;
+    object-fit: cover !important;
+    border-radius: 6px !important;
+    display: block;
+}
+
+/* TABLE ROW */
+#booksTable tr {
+    height: 85px;
+}
+
+#booksTable td {
+    vertical-align: middle;
+}
+
+/* =========================================
+   MOBILE ADMIN
+========================================= */
+
+@media (max-width: 768px) {
+
+    .admin-app {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .sidebar {
+        width: 250px;
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100vh;
+        z-index: 9999;
+        transition: .3s ease;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .main-content {
+        width: 100%;
+        margin-left: 0 !important;
+        padding: 12px !important;
+    }
+
+    .topbar {
+        width: 100%;
+        padding: 12px !important;
+    }
+
+    .mobile-menu {
+        display: inline-flex !important;
+    }
+
+    /* DASHBOARD CARDS */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    .stat-card {
+        padding: 15px !important;
+    }
+
+    .stat-card strong {
+        font-size: 24px;
+    }
+
+    /* FORM */
+    .form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .upload-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+
+    .book-form {
+        width: 100%;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100% !important;
+        max-width: 100%;
+    }
+
+    /* BOOK TABLE */
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 850px;
+    }
+
+    #booksTable td:first-child img,
+    .book-cover,
+    .book-cover-img {
+        width: 45px !important;
+        height: 62px !important;
+        max-width: 45px !important;
+        max-height: 62px !important;
+    }
+
+    #booksTable tr {
+        height: 72px;
+    }
+
+    /* SECTION HEAD */
+    .section-head {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .section-head button {
+        width: 100%;
+    }
+
+    /* FORM BUTTONS */
+    .form-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .main-content {
+        padding: 9px !important;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8px !important;
+    }
+
+    .stat-card {
+        padding: 11px !important;
+    }
+
+    .stat-card span {
+        font-size: 20px;
+    }
+
+    .stat-card h3 {
+        font-size: 12px;
+    }
+
+    .stat-card strong {
+        font-size: 21px;
+    }
+
+    .topbar h1 {
+        font-size: 20px;
+    }
+
+    #booksTable td:first-child img,
+    .book-cover,
+    .book-cover-img {
+        width: 40px !important;
+        height: 55px !important;
+        max-width: 40px !important;
+        max-height: 55px !important;
+    }
+
+}
+
+/* =========================================
+   PREVENT HUGE IMAGES EVERYWHERE
+========================================= */
+
+#booksTable img {
+    object-fit: cover !important;
+}
+
+/* MOBILE MENU BUTTON */
+.mobile-menu {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
