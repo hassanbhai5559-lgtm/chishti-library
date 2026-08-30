@@ -3752,3 +3752,24 @@ console.log(
     );
 
 })();
+/*=========================
+SEARCH ENTER KEY
+=========================*/
+
+const searchInput = document.getElementById("searchInput");
+
+if (searchInput) {
+
+    searchInput.addEventListener("keydown", function (e) {
+
+        if (e.key === "Enter") {
+
+            e.preventDefault();
+
+            searchBooks();
+
+        }
+
+    });
+
+}
