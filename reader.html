@@ -177,50 +177,67 @@
         >
 
 
-            <!-- =================================================
-                 READER SEARCH
-            ================================================== -->
+         <!-- =========================
+     READER SEARCH
+========================= -->
 
-            <div class="reader-search">
+<div class="reader-search">
 
-                <div class="reader-search-box">
+    <div class="reader-search-box">
 
-                    <span
-                        class="reader-search-icon"
-                        aria-hidden="true"
-                    >
-                        🔎
-                    </span>
+        <span
+            class="reader-search-icon"
+            aria-hidden="true"
+        >
+            🔎
+        </span>
 
-                    <input
-                        type="search"
-                        id="readerSearchInput"
-                        placeholder="Search books, authors, categories..."
-                        autocomplete="off"
-                        aria-label="Search books, authors, and categories"
-                    >
+        <input
+            type="search"
+            id="readerSearchInput"
+            placeholder="Search books, authors, categories..."
+            autocomplete="off"
+            aria-label="Search books, authors, and categories"
+        >
 
-                    <button
-                        type="button"
-                        id="readerSearchClear"
-                        class="reader-search-clear"
-                        aria-label="Clear search"
-                    >
-                        ✕
-                    </button>
+        <button
+            type="button"
+            id="readerSearchClear"
+            class="reader-search-clear"
+            aria-label="Clear search"
+            title="Clear search"
+        >
+            ✕
+        </button>
 
-                </div>
+        <!-- SEARCH BUTTON -->
+        <button
+            type="button"
+            id="readerSearchButton"
+            class="reader-search-button"
+            aria-label="Search"
+            title="Search"
+        >
+            <i
+                class="fas fa-search"
+                aria-hidden="true"
+            ></i>
 
-                <div
-                    id="readerSearchResults"
-                    class="reader-search-results"
-                    role="listbox"
-                    aria-label="Search results"
-                ></div>
+            <span>
+                Search
+            </span>
+        </button>
 
-            </div>
+    </div>
 
+    <div
+        id="readerSearchResults"
+        class="reader-search-results"
+        role="listbox"
+        aria-label="Search results"
+    ></div>
 
+</div>
             <!-- =================================================
                  PREVIOUS
             ================================================== -->
