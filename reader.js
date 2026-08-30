@@ -3412,3 +3412,343 @@ console.log(
     );
 
 })();
+
+/*=========================================================
+   CHISHTI READER
+   PREMIUM BOOK SEARCH SYSTEM
+=========================================================*/
+
+(function () {
+
+    const searchInput =
+        document.getElementById("readerSearchInput");
+
+    const clearButton =
+        document.getElementById("readerSearchClear");
+
+    const resultsBox =
+        document.getElementById("readerSearchResults");
+
+    if (!searchInput || !resultsBox) {
+
+        console.log("ℹ️ Reader search elements not found");
+
+        return;
+
+    }
+
+
+    /*=====================================================
+       LOAD BOOKS
+    =====================================================*/
+
+    let readerBooks = [];
+
+
+    async function loadReaderBooks() {
+
+        try {
+
+            const response =
+                await fetch("books.json");
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "books.json not found"
+                );
+
+            }
+
+            readerBooks =
+                await response.json();
+
+            console.log(
+                "✅ Reader Search Books Loaded:",
+                readerBooks.length
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "❌ Reader Search Error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    loadReaderBooks();
+
+
+    /*=====================================================
+       SEARCH
+    =====================================================*/
+
+    function searchReaderBooks(value) {
+
+        const query =
+            value.toLowerCase().trim();
+
+
+        if (!query) {
+
+            resultsBox.innerHTML = "";
+
+            resultsBox.classList.remove("show");
+
+            clearButton.classList.remove("active");
+
+            return;
+
+        }
+
+
+        clearButton.classList.add("active");
+
+
+        const results =
+            readerBooks.filter(book => {
+
+                return (
+
+                    (book.title || "")
+                        .toLowerCase()
+                        .includes(query)
+
+                    ||
+
+                    (book.author || "")
+                        .toLowerCase()
+                        .includes(query)
+
+                    ||
+
+                    (book.category || "")
+                        .toLowerCase()
+                        .includes(query)
+
+                    ||
+
+                    (book.language || "")
+                        .toLowerCase()
+                        .includes(query)
+
+                );
+
+            });
+
+
+        resultsBox.innerHTML = "";
+
+
+        if (results.length === 0) {
+
+            resultsBox.innerHTML = `
+
+                <div class="reader-search-empty">
+
+                    🔎 No books found
+
+                </div>
+
+            `;
+
+            resultsBox.classList.add("show");
+
+            return;
+
+        }
+
+
+        results.slice(0, 10).forEach(book => {
+
+            const item =
+                document.createElement("div");
+
+            item.className =
+                "reader-search-result";
+
+
+            item.innerHTML = `
+
+                <img
+                    src="${book.cover || "logo.png"}"
+                    alt="${book.title || "Book"}"
+                    onerror="this.src='logo.png'"
+                >
+
+                <div class="reader-search-result-info">
+
+                    <h4>
+                        ${escapeReaderHTML(
+                            book.title || "Untitled"
+                        )}
+                    </h4>
+
+                    <p>
+                        ${escapeReaderHTML(
+                            book.author || "Unknown Author"
+                        )}
+                        •
+                        ${escapeReaderHTML(
+                            book.category || "Other"
+                        )}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            item.addEventListener(
+                "click",
+                function () {
+
+                    if (!book.pdf) return;
+
+
+                    window.location.href =
+                        "reader.html?book=" +
+                        encodeURIComponent(
+                            book.pdf
+                        );
+
+                }
+            );
+
+
+            resultsBox.appendChild(item);
+
+        });
+
+
+        resultsBox.classList.add("show");
+
+    }
+
+
+    /*=====================================================
+       HTML SAFETY
+    =====================================================*/
+
+    function escapeReaderHTML(text) {
+
+        return String(text)
+
+            .replace(/&/g, "&amp;")
+
+            .replace(/</g, "&lt;")
+
+            .replace(/>/g, "&gt;")
+
+            .replace(/"/g, "&quot;")
+
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /*=====================================================
+       INPUT
+    =====================================================*/
+
+    searchInput.addEventListener(
+        "input",
+        function () {
+
+            searchReaderBooks(
+                this.value
+            );
+
+        }
+    );
+
+
+    /*=====================================================
+       CLEAR
+    =====================================================*/
+
+    clearButton.addEventListener(
+        "click",
+        function () {
+
+            searchInput.value = "";
+
+            searchInput.focus();
+
+            resultsBox.innerHTML = "";
+
+            resultsBox.classList.remove(
+                "show"
+            );
+
+            clearButton.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    /*=====================================================
+       ESC KEY
+    =====================================================*/
+
+    searchInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                searchInput.value = "";
+
+                resultsBox.innerHTML = "";
+
+                resultsBox.classList.remove(
+                    "show"
+                );
+
+                clearButton.classList.remove(
+                    "active"
+                );
+
+            }
+
+        }
+    );
+
+
+    /*=====================================================
+       CLICK OUTSIDE
+    =====================================================*/
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                !event.target.closest(
+                    ".reader-search"
+                )
+            ) {
+
+                resultsBox.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+
+    console.log(
+        "🔎 Reader Search System Ready"
+    );
+
+})();
