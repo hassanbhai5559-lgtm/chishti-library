@@ -1,15 +1,17 @@
 /* =========================================================
    CHISHTI LIBRARY
    PREMIUM READER.JS
-   FULL FIXED VERSION
+   FULL CLEAN + FIXED VERSION
 
-   ✅ PDF.JS
+   FEATURES
+   ✅ PDF.JS 4.10.38
    ✅ NEXT / PREVIOUS
    ✅ PREMIUM PAGE FLIP
-   ✅ SWAP ANIMATION
+   ✅ PAGE SWAP ANIMATION
    ✅ MOBILE SWIPE
    ✅ KEYBOARD NAVIGATION
    ✅ PAGE COUNTER
+   ✅ PAGE INPUT
    ✅ ZOOM
    ✅ THEMES
    ✅ FULLSCREEN
@@ -18,15 +20,19 @@
    ✅ WATERMARK DOWNLOAD
    ✅ WATERMARK PRINT
    ✅ READER SEARCH
+   ✅ URL PAGE SUPPORT
+   ✅ DUPLICATE SEARCH REMOVED
+   ✅ RENDER CONFLICT PROTECTION
+========================================================= */
+
+
+/* =========================================================
+   PDF.JS
 ========================================================= */
 
 import * as pdfjsLib from
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
 
-
-/* =========================================================
-   PDF.JS WORKER
-========================================================= */
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
@@ -38,6 +44,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
 const params =
     new URLSearchParams(window.location.search);
+
 
 const rawBook =
     params.get("book") ||
@@ -58,7 +65,7 @@ function getPDFURL() {
     try {
 
         const cleanPath =
-            rawBook
+            decodeURIComponent(rawBook)
                 .replace(/^\/+/, "")
                 .trim();
 
@@ -96,85 +103,118 @@ const DEFAULT_ZOOM = 1;
 
 
 /*
- * Page flip timing.
- * 650ms = premium but fast.
+ * Premium flip speed.
  */
 
 const FLIP_TIME = 650;
 
 
 /* =========================================================
-   DOM
+   DOM ELEMENTS
 ========================================================= */
 
 const bookTitle =
     document.getElementById("bookTitle");
 
+
 const bookViewport =
     document.getElementById("bookViewport");
+
 
 const pageWrapper =
     document.getElementById("pageWrapper");
 
+
 const pdfCanvas =
     document.getElementById("pdfCanvas");
+
 
 const previousPageButton =
     document.getElementById("previousPageButton");
 
+
 const nextPageButton =
     document.getElementById("nextPageButton");
+
 
 const pageNumberInput =
     document.getElementById("pageNumberInput");
 
+
 const totalPages =
     document.getElementById("totalPages");
+
 
 const zoomOutButton =
     document.getElementById("zoomOutButton");
 
+
 const resetZoomButton =
     document.getElementById("resetZoomButton");
+
 
 const zoomInButton =
     document.getElementById("zoomInButton");
 
+
 const zoomLevel =
     document.getElementById("zoomLevel");
+
 
 const errorScreen =
     document.getElementById("errorScreen");
 
+
 const errorMessage =
     document.getElementById("errorMessage");
+
 
 const retryButton =
     document.getElementById("retryButton");
 
+
 const readerStatus =
     document.getElementById("readerStatus");
+
 
 const downloadButton =
     document.getElementById("downloadButton");
 
+
 const printButton =
     document.getElementById("printButton");
+
 
 const fullscreenButton =
     document.getElementById("fullscreenButton");
 
+
 const themeButton =
     document.getElementById("themeButton");
+
 
 const cleanDownloadButton =
     document.getElementById("cleanDownloadButton");
 
+
 const bookmarkButton =
     document.getElementById("bookmarkBtn");
 
+
 const shareButton =
     document.getElementById("shareBtn");
+
+
+const readerSearchInput =
+    document.getElementById("readerSearchInput");
+
+
+const readerSearchClear =
+    document.getElementById("readerSearchClear");
+
+
+const readerSearchResults =
+    document.getElementById("readerSearchResults");
 
 
 /* =========================================================
@@ -203,22 +243,15 @@ let zoom = DEFAULT_ZOOM;
 
 let currentRenderTask = null;
 
-
-/*
- * IMPORTANT
- *
- * This prevents:
- * Next click
- * + animation click
- * + swipe
- * from running together.
- */
-
 let pageTransitionBusy = false;
+
+let loadingPDF = false;
+
+let renderVersion = 0;
 
 
 /* =========================================================
-   MOBILE TOUCH
+   MOBILE TOUCH STATE
 ========================================================= */
 
 let touchStartX = 0;
@@ -296,9 +329,10 @@ function announce(message) {
 function showError(message) {
 
     console.error(
-        "Reader error:",
+        "Chishti Reader:",
         message
     );
+
 
     if (errorMessage) {
 
@@ -306,6 +340,7 @@ function showError(message) {
             message;
 
     }
+
 
     if (errorScreen) {
 
@@ -330,146 +365,7 @@ function hideError() {
 
 
 /* =========================================================
-   THEME
-========================================================= */
-
-function applyTheme(index) {
-
-    currentTheme =
-        (
-            index +
-            themes.length
-        ) %
-        themes.length;
-
-
-    const theme =
-        themes[currentTheme];
-
-
-    const root =
-        document.documentElement;
-
-
-    root.style.setProperty(
-        "--library-maroon",
-        "#4B0000"
-    );
-
-    root.style.setProperty(
-        "--library-deep-maroon",
-        "#350000"
-    );
-
-    root.style.setProperty(
-        "--library-gold",
-        "#D4A500"
-    );
-
-    root.style.setProperty(
-        "--library-white",
-        "#FFFFFF"
-    );
-
-    root.style.setProperty(
-        "--reader-background",
-        theme.background
-    );
-
-    root.style.setProperty(
-        "--reader-surface",
-        theme.surface
-    );
-
-    root.style.setProperty(
-        "--reader-accent",
-        theme.accent
-    );
-
-    root.style.setProperty(
-        "--reader-text",
-        theme.text
-    );
-
-
-    document.body.dataset.theme =
-        theme.name
-            .toLowerCase()
-            .replace(/\s+/g, "-");
-
-
-    if (themeButton) {
-
-        themeButton.title =
-            `Theme: ${theme.name} — click to change`;
-
-        themeButton.setAttribute(
-            "aria-label",
-            `Theme: ${theme.name}. Click to change`
-        );
-
-    }
-
-
-    localStorage.setItem(
-        "chishtiReaderTheme",
-        String(currentTheme)
-    );
-
-}
-
-
-function loadTheme() {
-
-    const saved =
-        Number(
-            localStorage.getItem(
-                "chishtiReaderTheme"
-            )
-        );
-
-
-    if (
-        Number.isInteger(saved) &&
-        saved >= 0 &&
-        saved < themes.length
-    ) {
-
-        currentTheme =
-            saved;
-
-    }
-
-
-    applyTheme(
-        currentTheme
-    );
-
-}
-
-
-if (themeButton) {
-
-    themeButton.addEventListener(
-        "click",
-        function () {
-
-            applyTheme(
-                currentTheme + 1
-            );
-
-            announce(
-                `Theme changed to ${themes[currentTheme].name}.`
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   BOOK TITLE
+   BOOK NAME
 ========================================================= */
 
 function getBookName() {
@@ -527,8 +423,196 @@ function setBookTitle() {
 
 
 /* =========================================================
-   BOOKMARK
+   THEME SYSTEM
 ========================================================= */
+
+function applyTheme(index) {
+
+    currentTheme =
+        (
+            index +
+            themes.length
+        ) %
+        themes.length;
+
+
+    const theme =
+        themes[currentTheme];
+
+
+    const root =
+        document.documentElement;
+
+
+    root.style.setProperty(
+        "--library-maroon",
+        "#4B0000"
+    );
+
+
+    root.style.setProperty(
+        "--library-deep-maroon",
+        "#350000"
+    );
+
+
+    root.style.setProperty(
+        "--library-gold",
+        "#D4A500"
+    );
+
+
+    root.style.setProperty(
+        "--library-white",
+        "#FFFFFF"
+    );
+
+
+    root.style.setProperty(
+        "--reader-background",
+        theme.background
+    );
+
+
+    root.style.setProperty(
+        "--reader-surface",
+        theme.surface
+    );
+
+
+    root.style.setProperty(
+        "--reader-accent",
+        theme.accent
+    );
+
+
+    root.style.setProperty(
+        "--reader-text",
+        theme.text
+    );
+
+
+    document.body.dataset.theme =
+        theme.name
+            .toLowerCase()
+            .replace(/\s+/g, "-");
+
+
+    if (themeButton) {
+
+        themeButton.title =
+            `Theme: ${theme.name} — click to change`;
+
+
+        themeButton.setAttribute(
+            "aria-label",
+            `Theme: ${theme.name}. Click to change`
+        );
+
+    }
+
+
+    try {
+
+        localStorage.setItem(
+            "chishtiReaderTheme",
+            String(currentTheme)
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Theme storage unavailable."
+        );
+
+    }
+
+}
+
+
+function loadTheme() {
+
+    let saved = 0;
+
+
+    try {
+
+        saved =
+            Number(
+                localStorage.getItem(
+                    "chishtiReaderTheme"
+                )
+            );
+
+    } catch (error) {
+
+        saved = 0;
+
+    }
+
+
+    if (
+        Number.isInteger(saved) &&
+        saved >= 0 &&
+        saved < themes.length
+    ) {
+
+        currentTheme =
+            saved;
+
+    }
+
+
+    applyTheme(
+        currentTheme
+    );
+
+}
+
+
+if (themeButton) {
+
+    themeButton.addEventListener(
+        "click",
+        function () {
+
+            applyTheme(
+                currentTheme + 1
+            );
+
+
+            announce(
+                `Theme changed to ${themes[currentTheme].name}.`
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BOOKMARK SYSTEM
+========================================================= */
+
+function getSavedBookmark() {
+
+    try {
+
+        return Number(
+            localStorage.getItem(
+                bookmarkKey
+            )
+        ) || 0;
+
+    } catch (error) {
+
+        return 0;
+
+    }
+
+}
+
 
 function updateBookmarkButton() {
 
@@ -538,11 +622,7 @@ function updateBookmarkButton() {
 
 
     const savedPage =
-        Number(
-            localStorage.getItem(
-                bookmarkKey
-            )
-        );
+        getSavedBookmark();
 
 
     if (
@@ -561,7 +641,6 @@ function updateBookmarkButton() {
 
         bookmarkButton.title =
             `Remove bookmark from page ${currentPage}`;
-
 
     } else {
 
@@ -589,34 +668,43 @@ if (bookmarkButton) {
         function () {
 
             const savedPage =
-                Number(
-                    localStorage.getItem(
+                getSavedBookmark();
+
+
+            try {
+
+                if (
+                    savedPage === currentPage
+                ) {
+
+                    localStorage.removeItem(
                         bookmarkKey
-                    )
-                );
+                    );
 
 
-            if (
-                savedPage === currentPage
-            ) {
+                    announce(
+                        `Bookmark removed from page ${currentPage}.`
+                    );
 
-                localStorage.removeItem(
-                    bookmarkKey
-                );
+                } else {
 
-                announce(
-                    `Bookmark removed from page ${currentPage}.`
-                );
+                    localStorage.setItem(
+                        bookmarkKey,
+                        String(currentPage)
+                    );
 
-            } else {
 
-                localStorage.setItem(
-                    bookmarkKey,
-                    String(currentPage)
-                );
+                    announce(
+                        `Page ${currentPage} bookmarked.`
+                    );
 
-                announce(
-                    `Page ${currentPage} bookmarked.`
+                }
+
+            } catch (error) {
+
+                console.error(
+                    "Bookmark error:",
+                    error
                 );
 
             }
@@ -636,67 +724,71 @@ if (bookmarkButton) {
 
 async function shareCurrentPage() {
 
-    const shareURL =
-        new URL(
-            window.location.href
+    try {
+
+        const shareURL =
+            new URL(
+                window.location.href
+            );
+
+
+        shareURL.searchParams.set(
+            "page",
+            String(currentPage)
         );
 
 
-    shareURL.searchParams.set(
-        "page",
-        String(currentPage)
-    );
+        const bookName =
+            getBookName();
 
 
-    const bookName =
-        getBookName();
+        const shareData = {
+
+            title:
+                `${bookName} — Chishti Library`,
+
+            text:
+                `Read "${bookName}" on Chishti Library — Page ${currentPage}`,
+
+            url:
+                shareURL.href
+
+        };
 
 
-    const shareData = {
+        if (
+            navigator.share
+        ) {
 
-        title:
-            `${bookName} — Chishti Library`,
+            try {
 
-        text:
-            `Read "${bookName}" on Chishti Library — Page ${currentPage}`,
-
-        url:
-            shareURL.href
-
-    };
+                await navigator.share(
+                    shareData
+                );
 
 
-    if (navigator.share) {
+                announce(
+                    "Book shared successfully."
+                );
 
-        try {
-
-            await navigator.share(
-                shareData
-            );
-
-            announce(
-                "Book shared successfully."
-            );
-
-            return;
-
-        } catch (error) {
-
-            if (
-                error?.name ===
-                "AbortError"
-            ) {
 
                 return;
+
+            } catch (error) {
+
+                if (
+                    error?.name ===
+                    "AbortError"
+                ) {
+
+                    return;
+
+                }
 
             }
 
         }
 
-    }
-
-
-    try {
 
         if (
             navigator.clipboard &&
@@ -707,29 +799,21 @@ async function shareCurrentPage() {
                 shareURL.href
             );
 
+
             announce(
                 "Reader link copied."
             );
+
 
             alert(
                 `✅ Reader link copied!\n\nPage ${currentPage} direct link copied.`
             );
 
+
             return;
 
         }
 
-    } catch (error) {
-
-        console.warn(
-            "Clipboard failed:",
-            error
-        );
-
-    }
-
-
-    try {
 
         const input =
             document.createElement("input");
@@ -741,6 +825,7 @@ async function shareCurrentPage() {
 
         input.style.position =
             "fixed";
+
 
         input.style.opacity =
             "0";
@@ -773,10 +858,38 @@ async function shareCurrentPage() {
 
     } catch (error) {
 
-        prompt(
-            "Copy this reader link:",
-            shareURL.href
+        console.error(
+            "Share error:",
+            error
         );
+
+
+        try {
+
+            const shareURL =
+                new URL(
+                    window.location.href
+                );
+
+
+            shareURL.searchParams.set(
+                "page",
+                String(currentPage)
+            );
+
+
+            prompt(
+                "Copy this reader link:",
+                shareURL.href
+            );
+
+        } catch (fallbackError) {
+
+            console.error(
+                fallbackError
+            );
+
+        }
 
     }
 
@@ -848,6 +961,7 @@ function updateUI() {
         cleanDownloadButton.disabled =
             true;
 
+
         cleanDownloadButton.title =
             "Clean download is not available";
 
@@ -860,7 +974,7 @@ function updateUI() {
 
 
 /* =========================================================
-   SCALE
+   SCALE CALCULATION
 ========================================================= */
 
 function calculateScale(page) {
@@ -918,7 +1032,7 @@ function calculateScale(page) {
 
 
 /* =========================================================
-   CANCEL RENDER
+   CANCEL CURRENT RENDER
 ========================================================= */
 
 function cancelCurrentRender() {
@@ -968,6 +1082,10 @@ async function renderPage(
     }
 
 
+    const myRenderVersion =
+        ++renderVersion;
+
+
     pageNumber =
         Math.max(
             1,
@@ -987,6 +1105,16 @@ async function renderPage(
             await pdfDocument.getPage(
                 pageNumber
             );
+
+
+        if (
+            myRenderVersion !==
+            renderVersion
+        ) {
+
+            return false;
+
+        }
 
 
         const scale =
@@ -1035,6 +1163,7 @@ async function renderPage(
             pageWrapper.style.width =
                 `${viewport.width}px`;
 
+
             pageWrapper.style.height =
                 `${viewport.height}px`;
 
@@ -1078,6 +1207,16 @@ async function renderPage(
         await currentRenderTask.promise;
 
 
+        if (
+            myRenderVersion !==
+            renderVersion
+        ) {
+
+            return false;
+
+        }
+
+
         currentRenderTask =
             null;
 
@@ -1118,9 +1257,16 @@ async function renderPage(
         );
 
 
-        showError(
-            "This PDF page could not be rendered."
-        );
+        if (
+            myRenderVersion ===
+            renderVersion
+        ) {
+
+            showError(
+                "This PDF page could not be rendered."
+            );
+
+        }
 
 
         return false;
@@ -1136,7 +1282,7 @@ async function renderPage(
 
 
 /* =========================================================
-   PAGE FLIP ANIMATION
+   PAGE FLIP
 ========================================================= */
 
 async function playPageFlip(
@@ -1192,19 +1338,38 @@ async function playPageFlip(
         pageTransitionBusy =
             false;
 
+
         updateUI();
+
 
         await renderPage(
             targetPage
         );
+
 
         return;
 
     }
 
 
+    const rect =
+        page.getBoundingClientRect();
+
+
+    const width =
+        rect.width ||
+        canvas.clientWidth ||
+        300;
+
+
+    const height =
+        rect.height ||
+        canvas.clientHeight ||
+        400;
+
+
     /*
-     * Get current page image.
+     * Copy current page.
      */
 
     const oldCanvas =
@@ -1213,6 +1378,7 @@ async function playPageFlip(
 
     oldCanvas.width =
         canvas.width;
+
 
     oldCanvas.height =
         canvas.height;
@@ -1233,9 +1399,9 @@ async function playPageFlip(
     }
 
 
-    const rect =
-        page.getBoundingClientRect();
-
+    /*
+     * Stage.
+     */
 
     const stage =
         document.createElement("div");
@@ -1246,15 +1412,15 @@ async function playPageFlip(
 
 
     stage.style.width =
-        `${rect.width}px`;
+        `${width}px`;
 
 
     stage.style.height =
-        `${rect.height}px`;
+        `${height}px`;
 
 
     /*
-     * New sheet.
+     * Sheet.
      */
 
     const sheet =
@@ -1266,15 +1432,15 @@ async function playPageFlip(
 
 
     sheet.style.width =
-        `${rect.width}px`;
+        `${width}px`;
 
 
     sheet.style.height =
-        `${rect.height}px`;
+        `${height}px`;
 
 
     /*
-     * Front = current page.
+     * Front.
      */
 
     const front =
@@ -1284,22 +1450,6 @@ async function playPageFlip(
     front.className =
         "chishti-page-flip-face chishti-page-flip-front";
 
-
-    /*
-     * Back = blank paper.
-     */
-
-    const back =
-        document.createElement("div");
-
-
-    back.className =
-        "chishti-page-flip-face chishti-page-flip-back";
-
-
-    /*
-     * Copy current canvas.
-     */
 
     const frontCanvas =
         document.createElement("canvas");
@@ -1314,11 +1464,11 @@ async function playPageFlip(
 
 
     frontCanvas.style.width =
-        `${rect.width}px`;
+        `${width}px`;
 
 
     frontCanvas.style.height =
-        `${rect.height}px`;
+        `${height}px`;
 
 
     const frontContext =
@@ -1342,8 +1492,16 @@ async function playPageFlip(
 
 
     /*
-     * Back design.
+     * Back.
      */
+
+    const back =
+        document.createElement("div");
+
+
+    back.className =
+        "chishti-page-flip-face chishti-page-flip-back";
+
 
     back.innerHTML = `
         <div class="chishti-flip-paper"></div>
@@ -1365,15 +1523,6 @@ async function playPageFlip(
     );
 
 
-    viewport.appendChild(
-        stage
-    );
-
-
-    /*
-     * Direction class.
-     */
-
     if (direction === "next") {
 
         stage.classList.add(
@@ -1389,16 +1538,17 @@ async function playPageFlip(
     }
 
 
+    viewport.appendChild(
+        stage
+    );
+
+
     /*
-     * Force browser to start animation.
+     * Force animation start.
      */
 
     void stage.offsetWidth;
 
-
-    /*
-     * Start flip.
-     */
 
     stage.classList.add(
         "chishti-flip-running"
@@ -1413,9 +1563,7 @@ async function playPageFlip(
 
 
     /*
-     * Render the new page during the
-     * flip instead of waiting until the
-     * entire animation finishes.
+     * Render target during animation.
      */
 
     const renderDelay =
@@ -1433,6 +1581,17 @@ async function playPageFlip(
     );
 
 
+    if (
+        !pageTransitionBusy
+    ) {
+
+        stage.remove();
+
+        return;
+
+    }
+
+
     await renderPage(
         targetPage,
         false
@@ -1440,7 +1599,7 @@ async function playPageFlip(
 
 
     /*
-     * Let animation finish.
+     * Finish animation.
      */
 
     await new Promise(
@@ -1525,6 +1684,8 @@ function goToPage(
         target === currentPage
     ) {
 
+        updateUI();
+
         return;
 
     }
@@ -1535,6 +1696,7 @@ function goToPage(
         renderPage(
             target
         );
+
 
         return;
 
@@ -1556,7 +1718,7 @@ function goToPage(
 
 
 /* =========================================================
-   NEXT
+   NEXT PAGE
 ========================================================= */
 
 function nextPage() {
@@ -1581,7 +1743,7 @@ function nextPage() {
 
 
 /* =========================================================
-   PREVIOUS
+   PREVIOUS PAGE
 ========================================================= */
 
 function previousPage() {
@@ -1606,7 +1768,7 @@ function previousPage() {
 
 
 /* =========================================================
-   BUTTON EVENTS
+   PAGE BUTTONS
 ========================================================= */
 
 if (nextPageButton) {
@@ -1647,6 +1809,11 @@ if (previousPageButton) {
 
 function zoomIn() {
 
+    if (pageTransitionBusy) {
+        return;
+    }
+
+
     zoom =
         Math.min(
             MAX_ZOOM,
@@ -1662,13 +1829,11 @@ function zoomIn() {
     updateUI();
 
 
-    if (
-        pdfDocument &&
-        !pageTransitionBusy
-    ) {
+    if (pdfDocument) {
 
         renderPage(
-            currentPage
+            currentPage,
+            false
         );
 
     }
@@ -1677,6 +1842,11 @@ function zoomIn() {
 
 
 function zoomOut() {
+
+    if (pageTransitionBusy) {
+        return;
+    }
+
 
     zoom =
         Math.max(
@@ -1693,13 +1863,11 @@ function zoomOut() {
     updateUI();
 
 
-    if (
-        pdfDocument &&
-        !pageTransitionBusy
-    ) {
+    if (pdfDocument) {
 
         renderPage(
-            currentPage
+            currentPage,
+            false
         );
 
     }
@@ -1709,6 +1877,11 @@ function zoomOut() {
 
 function resetZoom() {
 
+    if (pageTransitionBusy) {
+        return;
+    }
+
+
     zoom =
         DEFAULT_ZOOM;
 
@@ -1716,13 +1889,11 @@ function resetZoom() {
     updateUI();
 
 
-    if (
-        pdfDocument &&
-        !pageTransitionBusy
-    ) {
+    if (pdfDocument) {
 
         renderPage(
-            currentPage
+            currentPage,
+            false
         );
 
     }
@@ -1790,10 +1961,12 @@ if (pageNumberInput) {
 
                 event.preventDefault();
 
+
                 goToPage(
                     this.value,
                     true
                 );
+
 
                 this.blur();
 
@@ -1806,7 +1979,7 @@ if (pageNumberInput) {
 
 
 /* =========================================================
-   KEYBOARD
+   KEYBOARD NAVIGATION
 ========================================================= */
 
 document.addEventListener(
@@ -1947,7 +2120,6 @@ document.addEventListener(
 
 /* =========================================================
    MOBILE SWIPE
-   ONLY ONE SWIPE SYSTEM
 ========================================================= */
 
 if (bookViewport) {
@@ -1995,9 +2167,7 @@ if (bookViewport) {
 
 
             if (pageTransitionBusy) {
-
                 return;
-
             }
 
 
@@ -2015,10 +2185,6 @@ if (bookViewport) {
                 touchStartY;
 
 
-            /*
-             * Ignore vertical movement.
-             */
-
             if (
                 Math.abs(deltaX) < 60 ||
                 Math.abs(deltaX) <= Math.abs(deltaY)
@@ -2029,22 +2195,11 @@ if (bookViewport) {
             }
 
 
-            /*
-             * Swipe left = next
-             */
-
             if (deltaX < 0) {
 
                 nextPage();
 
-            }
-
-
-            /*
-             * Swipe right = previous
-             */
-
-            else {
+            } else {
 
                 previousPage();
 
@@ -2215,8 +2370,10 @@ document.addEventListener(
 const WATERMARK_TEXT =
     "ChishtiLibrary.com";
 
+
 const WATERMARK_SUBTEXT =
     "CHISHTI LIBRARY";
+
 
 const WATERMARK_OPACITY =
     0.22;
@@ -2273,6 +2430,15 @@ async function createWatermarkedPDF() {
 
         throw new Error(
             "PDFLib is not loaded."
+        );
+
+    }
+
+
+    if (!PDF_URL) {
+
+        throw new Error(
+            "No PDF URL."
         );
 
     }
@@ -2493,6 +2659,7 @@ async function downloadWatermarkedPDF() {
             downloadButton.disabled =
                 true;
 
+
             downloadButton.innerHTML =
                 "⏳";
 
@@ -2548,7 +2715,7 @@ async function downloadWatermarkedPDF() {
 
 
         setTimeout(
-            () => {
+            function () {
 
                 URL.revokeObjectURL(
                     url
@@ -2562,7 +2729,6 @@ async function downloadWatermarkedPDF() {
         announce(
             "Watermarked PDF downloaded successfully."
         );
-
 
     } catch (error) {
 
@@ -2581,13 +2747,13 @@ async function downloadWatermarkedPDF() {
             "Download failed."
         );
 
-
     } finally {
 
         if (downloadButton) {
 
             downloadButton.disabled =
                 false;
+
 
             downloadButton.innerHTML =
                 oldHTML || "↓";
@@ -2708,6 +2874,7 @@ async function printCurrentBook() {
                 "Please allow popups to print the book."
             );
 
+
             return;
 
         }
@@ -2773,350 +2940,599 @@ if (printButton) {
 
 
 /* =========================================================
-   RETRY
+   READER SEARCH
+   ONLY ONE SEARCH SYSTEM
 ========================================================= */
 
-if (retryButton) {
+let readerBooks = [];
 
-    retryButton.addEventListener(
-        "click",
-        loadPDF
+let searchLoaded = false;
+
+
+/* =========================================================
+   SEARCH ESCAPE
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   SEARCH BOOK FIELD HELPERS
+========================================================= */
+
+function getBookTitleFromData(book) {
+
+    return String(
+        book?.title ||
+        book?.name ||
+        book?.bookTitle ||
+        book?.bookName ||
+        ""
+    );
+
+}
+
+
+function getBookAuthorFromData(book) {
+
+    return String(
+        book?.author ||
+        book?.authorName ||
+        book?.writer ||
+        book?.writerName ||
+        ""
+    );
+
+}
+
+
+function getBookCategoryFromData(book) {
+
+    return String(
+        book?.category ||
+        book?.categoryName ||
+        book?.subject ||
+        book?.genre ||
+        ""
+    );
+
+}
+
+
+function getBookLanguageFromData(book) {
+
+    return String(
+        book?.language ||
+        book?.lang ||
+        ""
+    );
+
+}
+
+
+function getBookImageFromData(book) {
+
+    return String(
+        book?.image ||
+        book?.cover ||
+        book?.coverImage ||
+        book?.thumbnail ||
+        book?.imageUrl ||
+        ""
+    );
+
+}
+
+
+function getBookPDFFromData(book) {
+
+    return (
+        book?.pdf ||
+        book?.pdfUrl ||
+        book?.file ||
+        book?.fileUrl ||
+        book?.url ||
+        book?.path ||
+        book?.downloadUrl ||
+        ""
     );
 
 }
 
 
 /* =========================================================
-   READER SEARCH
+   LOAD BOOKS.JSON
 ========================================================= */
 
-(function initReaderSearch() {
+async function loadReaderBooks() {
 
-    const searchInput =
-        document.getElementById(
-            "readerSearchInput"
+    if (searchLoaded) {
+        return;
+    }
+
+
+    searchLoaded =
+        true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                "books.json",
+                {
+                    cache: "no-cache"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `books.json HTTP ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (Array.isArray(data)) {
+
+            readerBooks =
+                data;
+
+        } else if (
+            Array.isArray(data.books)
+        ) {
+
+            readerBooks =
+                data.books;
+
+        } else {
+
+            readerBooks =
+                [];
+
+        }
+
+
+        console.log(
+            `✅ Reader search loaded ${readerBooks.length} books.`
         );
 
-    const clearButton =
-        document.getElementById(
-            "readerSearchClear"
-        );
+    } catch (error) {
 
-    const resultsBox =
-        document.getElementById(
-            "readerSearchResults"
+        console.warn(
+            "Reader search books.json error:",
+            error
         );
 
 
-    if (
-        !searchInput ||
-        !resultsBox
-    ) {
+        /*
+         * Fallback to common global arrays.
+         */
+
+        if (Array.isArray(window.books)) {
+
+            readerBooks =
+                window.books;
+
+        } else if (
+            Array.isArray(window.bookData)
+        ) {
+
+            readerBooks =
+                window.bookData;
+
+        } else if (
+            Array.isArray(window.libraryBooks)
+        ) {
+
+            readerBooks =
+                window.libraryBooks;
+
+        } else if (
+            Array.isArray(window.allBooks)
+        ) {
+
+            readerBooks =
+                window.allBooks;
+
+        } else {
+
+            readerBooks =
+                [];
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   CLOSE SEARCH
+========================================================= */
+
+function closeSearch() {
+
+    if (!readerSearchResults) {
+        return;
+    }
+
+
+    readerSearchResults.innerHTML =
+        "";
+
+
+    readerSearchResults.classList.remove(
+        "show"
+    );
+
+
+    if (readerSearchClear) {
+
+        readerSearchClear.classList.remove(
+            "active"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   OPEN SEARCH BOOK
+========================================================= */
+
+function openSearchBook(book) {
+
+    const pdfUrl =
+        getBookPDFFromData(book);
+
+
+    if (!pdfUrl) {
+
+        console.warn(
+            "Reader Search: PDF URL not found.",
+            book
+        );
+
 
         return;
 
     }
 
 
-    let readerBooks = [];
+    /*
+     * Keep the reader page instead of
+     * opening the raw PDF.
+     */
 
+    try {
 
-    async function loadReaderBooks() {
-
-        try {
-
-            const response =
-                await fetch(
-                    "books.json",
-                    {
-                        cache:
-                            "no-cache"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "books.json not found"
-                );
-
-            }
-
-
-            readerBooks =
-                await response.json();
-
-
-            if (
-                !Array.isArray(
-                    readerBooks
-                )
-            ) {
-
-                readerBooks =
-                    [];
-
-            }
-
-
-            console.log(
-                "✅ Reader search books:",
-                readerBooks.length
+        const readerURL =
+            new URL(
+                "reader.html",
+                window.location.href
             );
 
-        } catch (error) {
 
-            console.error(
-                "Reader search:",
-                error
-            );
+        readerURL.searchParams.set(
+            "book",
+            pdfUrl
+        );
 
-        }
+
+        window.location.href =
+            readerURL.href;
+
+    } catch (error) {
+
+        console.error(
+            "Unable to open book:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH BOOKS
+========================================================= */
+
+async function searchBooks(query) {
+
+    if (!readerSearchResults) {
+        return;
+    }
+
+
+    const cleanQuery =
+        String(query ?? "")
+            .trim()
+            .toLowerCase();
+
+
+    if (!cleanQuery) {
+
+        closeSearch();
+
+        return;
 
     }
 
 
-    function escapeHTML(value) {
+    if (readerSearchClear) {
 
-        return String(value)
-
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-
-            .replace(
-                /</g,
-                "&lt;"
-            )
-
-            .replace(
-                />/g,
-                "&gt;"
-            )
-
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-
-            .replace(
-                /'/g,
-                "&#039;"
-            );
-
-    }
-
-
-    function searchBooks(value) {
-
-        const query =
-            String(value)
-                .toLowerCase()
-                .trim();
-
-
-        if (!query) {
-
-            resultsBox.innerHTML =
-                "";
-
-            resultsBox.classList.remove(
-                "show"
-            );
-
-            if (clearButton) {
-
-                clearButton.classList.remove(
-                    "active"
-                );
-
-            }
-
-            return;
-
-        }
-
-
-        if (clearButton) {
-
-            clearButton.classList.add(
-                "active"
-            );
-
-        }
-
-
-        const results =
-            readerBooks.filter(
-                book => {
-
-                    const title =
-                        String(
-                            book.title || ""
-                        ).toLowerCase();
-
-
-                    const author =
-                        String(
-                            book.author || ""
-                        ).toLowerCase();
-
-
-                    const category =
-                        String(
-                            book.category || ""
-                        ).toLowerCase();
-
-
-                    const language =
-                        String(
-                            book.language || ""
-                        ).toLowerCase();
-
-
-                    return (
-                        title.includes(query) ||
-                        author.includes(query) ||
-                        category.includes(query) ||
-                        language.includes(query)
-                    );
-
-                }
-            );
-
-
-        resultsBox.innerHTML =
-            "";
-
-
-        if (!results.length) {
-
-            resultsBox.innerHTML = `
-
-                <div class="reader-search-empty">
-                    🔎 No books found
-                </div>
-
-            `;
-
-
-            resultsBox.classList.add(
-                "show"
-            );
-
-
-            return;
-
-        }
-
-
-        results
-            .slice(0, 10)
-            .forEach(
-                book => {
-
-                    const item =
-                        document.createElement(
-                            "div"
-                        );
-
-
-                    item.className =
-                        "reader-search-result";
-
-
-                    const cover =
-                        escapeHTML(
-                            book.cover ||
-                            "logo.png"
-                        );
-
-
-                    const title =
-                        escapeHTML(
-                            book.title ||
-                            "Untitled"
-                        );
-
-
-                    const author =
-                        escapeHTML(
-                            book.author ||
-                            "Unknown Author"
-                        );
-
-
-                    const category =
-                        escapeHTML(
-                            book.category ||
-                            "Other"
-                        );
-
-
-                    item.innerHTML = `
-
-                        <img
-                            src="${cover}"
-                            alt="${title}"
-                            onerror="this.src='logo.png'"
-                        >
-
-                        <div class="reader-search-result-info">
-
-                            <h4>
-                                ${title}
-                            </h4>
-
-                            <p>
-                                ${author}
-                                •
-                                ${category}
-                            </p>
-
-                        </div>
-
-                    `;
-
-
-                    item.addEventListener(
-                        "click",
-                        function () {
-
-                            if (!book.pdf) {
-
-                                return;
-
-                            }
-
-
-                            window.location.href =
-                                "reader.html?book=" +
-                                encodeURIComponent(
-                                    book.pdf
-                                );
-
-                        }
-                    );
-
-
-                    resultsBox.appendChild(
-                        item
-                    );
-
-                }
-            );
-
-
-        resultsBox.classList.add(
-            "show"
+        readerSearchClear.classList.add(
+            "active"
         );
 
     }
 
 
-    searchInput.addEventListener(
+    await loadReaderBooks();
+
+
+    readerSearchResults.innerHTML =
+        "";
+
+
+    if (!readerBooks.length) {
+
+        readerSearchResults.innerHTML = `
+
+            <div class="reader-search-empty">
+                🔎 No books available for search.
+            </div>
+
+        `;
+
+
+        readerSearchResults.classList.add(
+            "show"
+        );
+
+
+        return;
+
+    }
+
+
+    const matches =
+        readerBooks.filter(
+            book => {
+
+                const title =
+                    getBookTitleFromData(
+                        book
+                    ).toLowerCase();
+
+
+                const author =
+                    getBookAuthorFromData(
+                        book
+                    ).toLowerCase();
+
+
+                const category =
+                    getBookCategoryFromData(
+                        book
+                    ).toLowerCase();
+
+
+                const language =
+                    getBookLanguageFromData(
+                        book
+                    ).toLowerCase();
+
+
+                return (
+                    title.includes(cleanQuery) ||
+                    author.includes(cleanQuery) ||
+                    category.includes(cleanQuery) ||
+                    language.includes(cleanQuery)
+                );
+
+            }
+        );
+
+
+    if (!matches.length) {
+
+        readerSearchResults.innerHTML = `
+
+            <div class="reader-search-empty">
+                🔎 No books found for
+                "<strong>${escapeHTML(query)}</strong>"
+            </div>
+
+        `;
+
+
+        readerSearchResults.classList.add(
+            "show"
+        );
+
+
+        return;
+
+    }
+
+
+    matches
+        .slice(0, 12)
+        .forEach(
+            (book, index) => {
+
+                const title =
+                    getBookTitleFromData(
+                        book
+                    ) ||
+                    "Untitled Book";
+
+
+                const author =
+                    getBookAuthorFromData(
+                        book
+                    );
+
+
+                const category =
+                    getBookCategoryFromData(
+                        book
+                    );
+
+
+                const image =
+                    getBookImageFromData(
+                        book
+                    );
+
+
+                const result =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                result.className =
+                    "reader-search-result";
+
+
+                result.setAttribute(
+                    "role",
+                    "option"
+                );
+
+
+                result.dataset.index =
+                    String(index);
+
+
+                const imageHTML =
+                    image
+                        ? `
+                            <img
+                                src="${escapeHTML(image)}"
+                                alt=""
+                                loading="lazy"
+                                onerror="this.style.display='none'"
+                            >
+                          `
+                        : `
+                            <span>📖</span>
+                          `;
+
+
+                result.innerHTML = `
+
+                    <div class="reader-search-result-image">
+
+                        ${imageHTML}
+
+                    </div>
+
+
+                    <div class="reader-search-result-info">
+
+                        <div class="reader-search-result-title">
+                            ${escapeHTML(title)}
+                        </div>
+
+
+                        ${
+                            author
+                                ? `
+                                    <div class="reader-search-result-author">
+                                        ${escapeHTML(author)}
+                                    </div>
+                                  `
+                                : ""
+                        }
+
+
+                        ${
+                            category
+                                ? `
+                                    <div class="reader-search-result-category">
+                                        ${escapeHTML(category)}
+                                    </div>
+                                  `
+                                : ""
+                        }
+
+                    </div>
+
+                `;
+
+
+                result.addEventListener(
+                    "click",
+                    function () {
+
+                        openSearchBook(
+                            book
+                        );
+
+                    }
+                );
+
+
+                readerSearchResults.appendChild(
+                    result
+                );
+
+            }
+        );
+
+
+    readerSearchResults.classList.add(
+        "show"
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH INPUT
+========================================================= */
+
+if (readerSearchInput) {
+
+    readerSearchInput.addEventListener(
         "input",
         function () {
 
@@ -3128,7 +3544,7 @@ if (retryButton) {
     );
 
 
-    searchInput.addEventListener(
+    readerSearchInput.addEventListener(
         "keydown",
         function (event) {
 
@@ -3140,633 +3556,25 @@ if (retryButton) {
                 this.value =
                     "";
 
-                searchBooks(
-                    ""
-                );
+
+                closeSearch();
+
+                return;
 
             }
 
-        }
-    );
-
-
-    if (clearButton) {
-
-        clearButton.addEventListener(
-            "click",
-            function () {
-
-                searchInput.value =
-                    "";
-
-                searchBooks(
-                    ""
-                );
-
-                searchInput.focus();
-
-            }
-        );
-
-    }
-
-
-    document.addEventListener(
-        "click",
-        function (event) {
 
             if (
-                !event.target.closest(
-                    ".reader-search"
-                )
-            ) {
-
-                resultsBox.classList.remove(
-                    "show"
-                );
-
-            }
-
-        }
-    );
-
-
-    loadReaderBooks();
-
-})();
-/* =========================================================
-   CHISHTI READER
-   READER SEARCH SYSTEM
-   PASTE AT THE VERY END OF reader.js
-========================================================= */
-
-(function () {
-
-    "use strict";
-
-
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const searchInput =
-        document.getElementById("readerSearchInput");
-
-    const searchClear =
-        document.getElementById("readerSearchClear");
-
-    const searchResults =
-        document.getElementById("readerSearchResults");
-
-
-    if (!searchInput || !searchResults) {
-        console.warn(
-            "Chishti Reader Search: Search elements not found."
-        );
-        return;
-    }
-
-
-    /* =====================================================
-       FIND BOOK DATABASE
-    ===================================================== */
-
-    function getBooks() {
-
-        /*
-         * Tries common book-data names used by Chishti Library.
-         */
-
-        if (Array.isArray(window.books)) {
-            return window.books;
-        }
-
-        if (Array.isArray(window.bookData)) {
-            return window.bookData;
-        }
-
-        if (Array.isArray(window.libraryBooks)) {
-            return window.libraryBooks;
-        }
-
-        if (Array.isArray(window.allBooks)) {
-            return window.allBooks;
-        }
-
-
-        /* Try localStorage */
-
-        const storageKeys = [
-            "books",
-            "bookData",
-            "libraryBooks",
-            "allBooks"
-        ];
-
-
-        for (const key of storageKeys) {
-
-            try {
-
-                const data =
-                    JSON.parse(
-                        localStorage.getItem(key)
-                    );
-
-                if (Array.isArray(data)) {
-                    return data;
-                }
-
-            } catch (error) {
-                // Ignore invalid localStorage data
-            }
-
-        }
-
-
-        return [];
-    }
-
-
-    /* =====================================================
-       SAFE TEXT
-    ===================================================== */
-
-    function safeText(value) {
-
-        if (
-            value === null ||
-            value === undefined
-        ) {
-            return "";
-        }
-
-        return String(value);
-    }
-
-
-    /* =====================================================
-       GET BOOK INFORMATION
-    ===================================================== */
-
-    function getBookTitle(book) {
-
-        return safeText(
-            book.title ||
-            book.name ||
-            book.bookTitle ||
-            book.bookName
-        );
-    }
-
-
-    function getBookAuthor(book) {
-
-        return safeText(
-            book.author ||
-            book.authorName ||
-            book.writer ||
-            book.writerName
-        );
-    }
-
-
-    function getBookCategory(book) {
-
-        return safeText(
-            book.category ||
-            book.categoryName ||
-            book.subject ||
-            book.genre
-        );
-    }
-
-
-    function getBookImage(book) {
-
-        return (
-            book.image ||
-            book.cover ||
-            book.coverImage ||
-            book.thumbnail ||
-            book.imageUrl ||
-            ""
-        );
-    }
-
-
-    /* =====================================================
-       SEARCH BOOKS
-    ===================================================== */
-
-    function searchBooks(query) {
-
-        const books = getBooks();
-
-        const cleanQuery =
-            safeText(query)
-                .trim()
-                .toLowerCase();
-
-
-        searchResults.innerHTML = "";
-
-
-        /* Empty search */
-
-        if (!cleanQuery) {
-
-            searchResults.classList.remove(
-                "show"
-            );
-
-            return;
-        }
-
-
-        /* No database */
-
-        if (!books.length) {
-
-            searchResults.innerHTML = `
-                <div class="reader-search-empty">
-                    No books available for search.
-                </div>
-            `;
-
-            searchResults.classList.add("show");
-
-            return;
-        }
-
-
-        /* Filter */
-
-        const matches = books.filter(book => {
-
-            const title =
-                getBookTitle(book).toLowerCase();
-
-            const author =
-                getBookAuthor(book).toLowerCase();
-
-            const category =
-                getBookCategory(book).toLowerCase();
-
-
-            return (
-                title.includes(cleanQuery) ||
-                author.includes(cleanQuery) ||
-                category.includes(cleanQuery)
-            );
-
-        });
-
-
-        /* No results */
-
-        if (!matches.length) {
-
-            searchResults.innerHTML = `
-                <div class="reader-search-empty">
-                    No books found for
-                    "<strong>${escapeHTML(query)}</strong>"
-                </div>
-            `;
-
-            searchResults.classList.add("show");
-
-            return;
-        }
-
-
-        /* Limit results */
-
-        const limitedResults =
-            matches.slice(0, 12);
-
-
-        limitedResults.forEach((book, index) => {
-
-            const title =
-                getBookTitle(book) ||
-                "Untitled Book";
-
-            const author =
-                getBookAuthor(book);
-
-            const category =
-                getBookCategory(book);
-
-            const image =
-                getBookImage(book);
-
-
-            const result =
-                document.createElement("div");
-
-
-            result.className =
-                "reader-search-result";
-
-
-            result.setAttribute(
-                "role",
-                "option"
-            );
-
-
-            result.dataset.index =
-                String(index);
-
-
-            result.innerHTML = `
-
-                <div class="reader-search-result-image">
-
-                    ${
-                        image
-                            ? `
-                                <img
-                                    src="${escapeAttribute(image)}"
-                                    alt=""
-                                    loading="lazy"
-                                >
-                              `
-                            : `
-                                <span>
-                                    📖
-                                </span>
-                              `
-                    }
-
-                </div>
-
-
-                <div class="reader-search-result-info">
-
-                    <div class="reader-search-result-title">
-                        ${escapeHTML(title)}
-                    </div>
-
-                    ${
-                        author
-                            ? `
-                                <div class="reader-search-result-author">
-                                    ${escapeHTML(author)}
-                                </div>
-                              `
-                            : ""
-                    }
-
-                    ${
-                        category
-                            ? `
-                                <div class="reader-search-result-category">
-                                    ${escapeHTML(category)}
-                                </div>
-                              `
-                            : ""
-                    }
-
-                </div>
-
-            `;
-
-
-            result.addEventListener(
-                "click",
-                function () {
-
-                    openSearchBook(book);
-
-                }
-            );
-
-
-            searchResults.appendChild(result);
-
-        });
-
-
-        searchResults.classList.add("show");
-
-    }
-
-
-    /* =====================================================
-       OPEN SELECTED BOOK
-    ===================================================== */
-
-    function openSearchBook(book) {
-
-        /*
-         * Try common PDF/file properties.
-         */
-
-        const pdfUrl =
-            book.pdf ||
-            book.pdfUrl ||
-            book.file ||
-            book.fileUrl ||
-            book.url ||
-            book.path ||
-            book.downloadUrl;
-
-
-        if (!pdfUrl) {
-
-            console.warn(
-                "Chishti Reader Search: PDF URL not found.",
-                book
-            );
-
-            return;
-        }
-
-
-        /*
-         * If your existing reader has a global
-         * book-opening function, use it.
-         */
-
-        if (
-            typeof window.openBook === "function"
-        ) {
-
-            window.openBook(book);
-
-            closeSearch();
-
-            return;
-        }
-
-
-        if (
-            typeof window.loadBook === "function"
-        ) {
-
-            window.loadBook(book);
-
-            closeSearch();
-
-            return;
-        }
-
-
-        if (
-            typeof window.loadPDF === "function"
-        ) {
-
-            window.loadPDF(pdfUrl);
-
-            closeSearch();
-
-            return;
-        }
-
-
-        /*
-         * Fallback:
-         * Open the PDF in the current reader.
-         */
-
-        try {
-
-            const url =
-                new URL(
-                    pdfUrl,
-                    window.location.href
-                ).href;
-
-
-            window.location.href = url;
-
-        } catch (error) {
-
-            console.error(
-                "Unable to open selected book.",
-                error
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       CLEAR SEARCH
-    ===================================================== */
-
-    function closeSearch() {
-
-        searchResults.innerHTML = "";
-
-        searchResults.classList.remove(
-            "show"
-        );
-
-    }
-
-
-    function clearSearch() {
-
-        searchInput.value = "";
-
-        closeSearch();
-
-        searchInput.focus();
-
-    }
-
-
-    /* =====================================================
-       HTML SAFETY
-    ===================================================== */
-
-    function escapeHTML(value) {
-
-        return safeText(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
-
-
-    function escapeAttribute(value) {
-
-        return escapeHTML(value);
-
-    }
-
-
-    /* =====================================================
-       LIVE SEARCH
-    ===================================================== */
-
-    searchInput.addEventListener(
-        "input",
-        function () {
-
-            searchBooks(
-                this.value
-            );
-
-        }
-    );
-
-
-    /* =====================================================
-       CLEAR BUTTON
-    ===================================================== */
-
-    if (searchClear) {
-
-        searchClear.addEventListener(
-            "click",
-            clearSearch
-        );
-
-    }
-
-
-    /* =====================================================
-       ESCAPE KEY
-    ===================================================== */
-
-    searchInput.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (event.key === "Escape") {
-
-                clearSearch();
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       ENTER KEY
-    ===================================================== */
-
-    searchInput.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 const firstResult =
-                    searchResults.querySelector(
-                        ".reader-search-result"
-                    );
+                    readerSearchResults
+                        ? readerSearchResults.querySelector(
+                            ".reader-search-result"
+                        )
+                        : null;
 
 
                 if (firstResult) {
@@ -3780,59 +3588,95 @@ if (retryButton) {
         }
     );
 
+}
 
-    /* =====================================================
-       CLOSE WHEN CLICKING OUTSIDE
-    ===================================================== */
 
-    document.addEventListener(
+/* =========================================================
+   SEARCH CLEAR
+========================================================= */
+
+if (readerSearchClear) {
+
+    readerSearchClear.addEventListener(
         "click",
-        function (event) {
+        function () {
 
-            const searchContainer =
-                document.querySelector(
-                    ".reader-search"
-                );
+            if (readerSearchInput) {
+
+                readerSearchInput.value =
+                    "";
+
+                readerSearchInput.focus();
+
+            }
 
 
-            if (
-                searchContainer &&
-                !searchContainer.contains(
-                    event.target
-                )
-            ) {
+            closeSearch();
 
-                searchResults.classList.remove(
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH OUTSIDE CLICK
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const container =
+            event.target.closest(
+                ".reader-search"
+            );
+
+
+        if (!container) {
+
+            if (readerSearchResults) {
+
+                readerSearchResults.classList.remove(
                     "show"
                 );
 
             }
 
         }
+
+    }
+);
+
+
+/* =========================================================
+   RETRY
+========================================================= */
+
+if (retryButton) {
+
+    retryButton.addEventListener(
+        "click",
+        function () {
+
+            loadPDF();
+
+        }
     );
 
+}
 
-    /* =====================================================
-       INITIAL STATE
-    ===================================================== */
-
-    searchResults.classList.remove(
-        "show"
-    );
-
-
-    console.log(
-        "✓ Chishti Reader Search System Loaded"
-    );
-
-
-})();
 
 /* =========================================================
    LOAD PDF
 ========================================================= */
 
 async function loadPDF() {
+
+    if (loadingPDF) {
+        return;
+    }
+
 
     hideError();
 
@@ -3843,17 +3687,34 @@ async function loadPDF() {
             "No PDF selected. Please open the reader from a book."
         );
 
+
         return;
 
     }
 
 
+    loadingPDF =
+        true;
+
+
+    pageTransitionBusy =
+        false;
+
+
     cancelCurrentRender();
+
+
+    renderVersion++;
 
 
     try {
 
         setBookTitle();
+
+
+        announce(
+            "Loading PDF..."
+        );
 
 
         console.log(
@@ -3866,7 +3727,18 @@ async function loadPDF() {
             pdfjsLib.getDocument({
 
                 url:
-                    PDF_URL
+                    PDF_URL,
+
+                /*
+                 * Helps prevent unnecessary
+                 * network/cache conflicts.
+                 */
+
+                disableAutoFetch:
+                    false,
+
+                disableStream:
+                    false
 
             });
 
@@ -3877,6 +3749,15 @@ async function loadPDF() {
 
         pageCount =
             pdfDocument.numPages;
+
+
+        if (!pageCount) {
+
+            throw new Error(
+                "PDF contains no pages."
+            );
+
+        }
 
 
         const urlPage =
@@ -3907,10 +3788,6 @@ async function loadPDF() {
             DEFAULT_ZOOM;
 
 
-        pageTransitionBusy =
-            false;
-
-
         updateUI();
 
 
@@ -3919,10 +3796,14 @@ async function loadPDF() {
         );
 
 
-        console.log(
-            `✅ PDF loaded: ${pageCount} pages`
+        announce(
+            `Page ${currentPage} of ${pageCount}`
         );
 
+
+        console.log(
+            `✅ PDF loaded successfully: ${pageCount} pages`
+        );
 
     } catch (error) {
 
@@ -3964,12 +3845,7 @@ ${PDF_URL}
 Check the exact PDF filename and path.`
             );
 
-            return;
-
-        }
-
-
-        if (
+        } else if (
             error?.name ===
             "InvalidPDFException"
         ) {
@@ -3978,14 +3854,27 @@ Check the exact PDF filename and path.`
                 "The selected file is not a valid PDF."
             );
 
-            return;
+        } else if (
+            error?.name ===
+            "UnexpectedResponseException"
+        ) {
+
+            showError(
+                "The PDF server rejected the request. Check the PDF path and hosting settings."
+            );
+
+        } else {
+
+            showError(
+                "PDF could not be loaded. Check the PDF URL, filename and GitHub Pages path."
+            );
 
         }
 
+    } finally {
 
-        showError(
-            "PDF could not be loaded. Check the PDF URL and filename."
-        );
+        loadingPDF =
+            false;
 
     }
 
@@ -4011,7 +3900,51 @@ if (pdfCanvas) {
 
 
 /* =========================================================
-   START
+   GLOBAL API
+   Useful if another script needs these.
+========================================================= */
+
+window.chishtiReader = {
+
+    nextPage,
+
+    previousPage,
+
+    goToPage,
+
+    zoomIn,
+
+    zoomOut,
+
+    resetZoom,
+
+    toggleFullscreen,
+
+    loadPDF,
+
+    get currentPage() {
+
+        return currentPage;
+
+    },
+
+    get pageCount() {
+
+        return pageCount;
+
+    },
+
+    get zoom() {
+
+        return zoom;
+
+    }
+
+};
+
+
+/* =========================================================
+   START READER
 ========================================================= */
 
 loadTheme();
@@ -4020,11 +3953,13 @@ setBookTitle();
 
 updateUI();
 
+loadReaderBooks();
+
 loadPDF();
 
 
 /* =========================================================
-   READY
+   READY LOG
 ========================================================= */
 
 console.log(
@@ -4036,51 +3971,79 @@ console.log(
 );
 
 console.log(
-    "✅ PDF.js Ready"
+    "======================================"
 );
 
 console.log(
-    "✅ Next / Previous Fixed"
+    "✅ PDF.js 4.10.38"
 );
 
 console.log(
-    "✅ Premium Page Flip Fixed"
+    "✅ PDF Worker"
 );
 
 console.log(
-    "✅ Page Swap Animation Fixed"
+    "✅ PDF Loader"
 );
 
 console.log(
-    "✅ Mobile Swipe Fixed"
+    "✅ Next / Previous"
 );
 
 console.log(
-    "✅ Keyboard Navigation Ready"
+    "✅ Premium Page Flip"
 );
 
 console.log(
-    "✅ Zoom Ready"
+    "✅ Page Swap"
 );
 
 console.log(
-    "✅ Bookmark Ready"
+    "✅ Mobile Swipe"
 );
 
 console.log(
-    "✅ Share Ready"
+    "✅ Keyboard Navigation"
 );
 
 console.log(
-    "✅ Theme Ready"
+    "✅ Page Counter"
 );
 
 console.log(
-    "✅ Fullscreen Ready"
+    "✅ Page Input"
 );
 
 console.log(
-    "✅ Watermarked Download Ready"
+    "✅ Zoom"
+);
+
+console.log(
+    "✅ Themes"
+);
+
+console.log(
+    "✅ Fullscreen"
+);
+
+console.log(
+    "✅ Bookmark"
+);
+
+console.log(
+    "✅ Share"
+);
+
+console.log(
+    "✅ Watermarked Download"
+);
+
+console.log(
+    "✅ Watermarked Print"
+);
+
+console.log(
+    "✅ Single Reader Search System"
 );
 
 console.log(
