@@ -4,563 +4,824 @@
 =========================================================
 CHISHTI LIBRARY
 FIREBASE.JS
-=========================================================
-
-Firebase Authentication
-Firestore Database
-Firebase Storage
-
-USED FOR:
-
-• Admin Login
-• Book Data
-• PDF Upload
-• Cover Upload
-• Visitors
-• Views
-• Likes
-• Shares
-• Downloads
-• Comments
-• Latest Books
+FINAL ADMIN + WEBSITE FIREBASE SYSTEM
 =========================================================
 */
 
+(function () {
 
-/*=========================================================
- FIREBASE CONFIG
-=========================================================*/
+    /*=====================================================
+      FIREBASE CONFIG
+    =====================================================*/
 
-const firebaseConfig = {
+    const firebaseConfig = {
 
-    apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
+        apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
 
-    authDomain:
-        "chishti-library.firebaseapp.com",
+        authDomain:
+            "chishti-library.firebaseapp.com",
 
-    projectId:
-        "chishti-library",
+        projectId:
+            "chishti-library",
 
-    storageBucket:
-        "chishti-library.firebasestorage.app",
+        storageBucket:
+            "chishti-library.firebasestorage.app",
 
-    messagingSenderId:
-        "103447043162",
+        messagingSenderId:
+            "103447043162",
 
-    appId:
-        "1:103447043162:web:f242cd2670aaa9786e8c63",
+        appId:
+            "1:103447043162:web:f242cd2670aaa9786e8c63",
 
-    measurementId:
-        "G-833P7N3LNT"
+        measurementId:
+            "G-833P7N3LNT"
 
-};
+    };
 
 
-/*=========================================================
- FIREBASE INITIALIZE
-=========================================================*/
+    /*=====================================================
+      CHECK FIREBASE
+    =====================================================*/
 
-if (
-    typeof firebase === "undefined"
-) {
+    if (typeof firebase === "undefined") {
 
-    console.error(
-        "❌ Firebase SDK is not loaded."
-    );
+        console.error(
+            "❌ Firebase SDK is not loaded."
+        );
 
-    window.firebaseReady = false;
+        return;
 
-}
+    }
 
-else {
+
+    /*=====================================================
+      INITIALIZE ONLY ONCE
+    =====================================================*/
 
     if (!firebase.apps.length) {
 
-        firebase.initializeApp(
-            firebaseConfig
+        firebase.initializeApp(firebaseConfig);
+
+        console.log(
+            "🔥 Firebase initialized"
+        );
+
+    } else {
+
+        console.log(
+            "ℹ️ Firebase already initialized"
         );
 
     }
 
 
     /*=====================================================
-     FIREBASE SERVICES
+      SERVICES
     =====================================================*/
 
-    window.db =
+    const db =
         firebase.firestore();
 
-    window.auth =
+    const auth =
         firebase.auth();
 
-    window.storage =
+    const storage =
         firebase.storage();
+
+
+    window.db = db;
+    window.auth = auth;
+    window.storage = storage;
 
 
     window.firebaseReady = true;
 
 
     /*=====================================================
-     FIREBASE HELPERS
+      HELPERS
     =====================================================*/
 
     window.firebaseServerTimestamp =
-        firebase.firestore
-            .FieldValue
-            .serverTimestamp;
-
+        firebase.firestore.FieldValue.serverTimestamp;
 
     window.firebaseIncrement =
-        firebase.firestore
-            .FieldValue
-            .increment;
+        firebase.firestore.FieldValue.increment;
 
 
     /*=====================================================
-     CURRENT USER
+      CURRENT USER
     =====================================================*/
 
     window.currentFirebaseUser = null;
 
 
-    /*=====================================================
-     AUTH STATE
-    =====================================================*/
+    auth.onAuthStateChanged(function (user) {
 
-    auth.onAuthStateChanged(
-        function (user) {
+        window.currentFirebaseUser =
+            user || null;
 
-            window.currentFirebaseUser =
-                user || null;
-
-
-            window.dispatchEvent(
-                new CustomEvent(
-                    "firebaseAuthChanged",
-                    {
-                        detail: {
-                            user:
-                                user || null
-                        }
+        window.dispatchEvent(
+            new CustomEvent(
+                "firebaseAuthChanged",
+                {
+                    detail: {
+                        user: user || null
                     }
-                )
+                }
+            )
+        );
+
+        if (user) {
+
+            console.log(
+                "✅ Firebase User:",
+                user.email || user.uid
             );
 
+        } else {
 
-            if (user) {
-
-                console.log(
-                    "✅ Firebase User:",
-                    user.email || user.uid
-                );
-
-            }
-
-            else {
-
-                console.log(
-                    "ℹ️ Firebase: No user logged in"
-                );
-
-            }
+            console.log(
+                "ℹ️ No Firebase user logged in"
+            );
 
         }
-    );
+
+    });
 
 
     /*=====================================================
-     ADMIN LOGIN
+      ADMIN LOGIN
     =====================================================*/
 
-    window.adminLogin =
-        async function (
-            email,
-            password
-        ) {
+    window.adminLogin = async function (
+        email,
+        password
+    ) {
 
-            try {
+        if (!email || !password) {
 
-                const result =
-                    await auth
-                        .signInWithEmailAndPassword(
-                            email,
-                            password
-                        );
+            throw new Error(
+                "Email and password are required."
+            );
 
+        }
 
-                console.log(
-                    "✅ Admin login successful"
-                );
+        const result =
+            await auth.signInWithEmailAndPassword(
+                email.trim(),
+                password
+            );
 
+        return result.user;
 
-                return result.user;
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "❌ Admin Login Error:",
-                    error
-                );
-
-                throw error;
-
-            }
-
-        };
+    };
 
 
     /*=====================================================
-     LOGOUT
+      LOGOUT
     =====================================================*/
 
-    window.adminLogout =
-        async function () {
+    window.adminLogout = async function () {
 
-            try {
+        await auth.signOut();
 
-                await auth.signOut();
-
-                console.log(
-                    "✅ Logged out"
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "❌ Logout Error:",
-                    error
-                );
-
-                throw error;
-
-            }
-
-        };
+    };
 
 
     /*=====================================================
-     REQUIRE LOGIN
+      REQUIRE LOGIN
     =====================================================*/
 
-    window.requireLogin =
-        function () {
+    window.requireLogin = function () {
 
-            if (
-                window.currentFirebaseUser
-            ) {
+        if (window.currentFirebaseUser) {
 
-                return true;
+            return true;
 
-            }
+        }
 
+        window.location.href =
+            "admin.html";
 
-            const login =
-                confirm(
-                    "Please login first."
-                );
+        return false;
 
-
-            if (login) {
-
-                window.location.href =
-                    "./login.html";
-
-            }
-
-
-            return false;
-
-        };
+    };
 
 
     /*=====================================================
-     CREATE BOOK ID
+      CREATE BOOK
     =====================================================*/
 
-    window.createBookId =
-        function () {
+    window.createBookId = function () {
 
-            return db
+        return db
+            .collection("books")
+            .doc()
+            .id;
+
+    };
+
+
+    /*=====================================================
+      GET ONE BOOK
+    =====================================================*/
+
+    window.getBook = async function (bookId) {
+
+        const snap =
+            await db
                 .collection("books")
-                .doc()
-                .id;
+                .doc(bookId)
+                .get();
+
+        if (!snap.exists) {
+
+            return null;
+
+        }
+
+        return {
+
+            id: snap.id,
+
+            ...snap.data()
 
         };
 
+    };
+
 
     /*=====================================================
-     GET BOOK
+      GET ALL BOOKS
     =====================================================*/
 
-    window.getBook =
-        async function (
-            bookId
-        ) {
+    window.getAllBooks = async function () {
 
-            const doc =
-                await db
-                    .collection("books")
-                    .doc(bookId)
-                    .get();
+        const snap =
+            await db
+                .collection("books")
+                .orderBy(
+                    "createdAt",
+                    "desc"
+                )
+                .get();
 
+        const books = [];
 
-            if (!doc.exists) {
+        snap.forEach(function (doc) {
 
-                return null;
-
-            }
-
-
-            return {
+            books.push({
 
                 id: doc.id,
 
                 ...doc.data()
 
-            };
+            });
 
-        };
+        });
+
+        return books;
+
+    };
 
 
     /*=====================================================
-     GET ALL BOOKS
+      UPLOAD FIREBASE FILE
     =====================================================*/
 
-    window.getAllBooks =
-        async function () {
+    window.uploadFirebaseFile = async function (
+        file,
+        folder,
+        fileName
+    ) {
 
-            const snapshot =
-                await db
-                    .collection("books")
-                    .orderBy(
-                        "createdAt",
-                        "desc"
-                    )
-                    .get();
+        if (!file) {
 
-
-            const books = [];
-
-
-            snapshot.forEach(
-                function (doc) {
-
-                    books.push({
-
-                        id: doc.id,
-
-                        ...doc.data()
-
-                    });
-
-                }
+            throw new Error(
+                "No file selected."
             );
 
+        }
 
-            return books;
+        const safeName =
+            fileName ||
+            Date.now() +
+            "-" +
+            file.name.replace(
+                /[^a-zA-Z0-9._-]/g,
+                "-"
+            );
+
+        const path =
+            folder +
+            "/" +
+            safeName;
+
+        const ref =
+            storage.ref(path);
+
+        const upload =
+            await ref.put(file);
+
+        const url =
+            await upload.ref.getDownloadURL();
+
+        return {
+
+            url: url,
+
+            path: path
 
         };
 
+    };
+
 
     /*=====================================================
-     UPLOAD FILE
+      COVER UPLOAD
     =====================================================*/
 
-    window.uploadFirebaseFile =
-        async function (
+    window.uploadBookCover = async function (
+        file,
+        bookId
+    ) {
+
+        if (!file) return null;
+
+        if (!file.type.startsWith("image/")) {
+
+            throw new Error(
+                "Please select a valid image."
+            );
+
+        }
+
+        return await uploadFirebaseFile(
+
             file,
-            folder,
-            fileName
-        ) {
 
-            if (!file) {
+            "books/" +
+            bookId +
+            "/cover",
 
-                throw new Error(
-                    "No file selected."
-                );
+            "cover-" +
+            Date.now()
 
-            }
+        );
 
-
-            const extension =
-                file.name
-                    .split(".")
-                    .pop()
-                    .toLowerCase();
-
-
-            const safeName =
-                fileName ||
-                Date.now() +
-                "." +
-                extension;
-
-
-            const path =
-                folder +
-                "/" +
-                safeName;
-
-
-            const reference =
-                storage.ref(path);
-
-
-            const snapshot =
-                await reference.put(file);
-
-
-            const downloadURL =
-                await snapshot.ref
-                    .getDownloadURL();
-
-
-            return {
-
-                url:
-                    downloadURL,
-
-                path:
-                    path
-
-            };
-
-        };
+    };
 
 
     /*=====================================================
-     UPLOAD BOOK COVER
+      PDF UPLOAD
     =====================================================*/
 
-    window.uploadBookCover =
-        async function (
+    window.uploadBookPDF = async function (
+        file,
+        bookId
+    ) {
+
+        if (!file) {
+
+            throw new Error(
+                "Please select a PDF."
+            );
+
+        }
+
+        if (
+            file.type !==
+            "application/pdf"
+        ) {
+
+            throw new Error(
+                "Only PDF files are allowed."
+            );
+
+        }
+
+        return await uploadFirebaseFile(
+
             file,
-            bookId
-        ) {
 
-            if (!file) {
+            "books/" +
+            bookId +
+            "/pdf",
 
-                return null;
+            "book-" +
+            Date.now() +
+            ".pdf"
 
-            }
+        );
 
-
-            return await
-                uploadFirebaseFile(
-
-                    file,
-
-                    "books/" +
-                    bookId +
-                    "/cover",
-
-                    "cover-" +
-                    Date.now()
-
-                );
-
-        };
+    };
 
 
     /*=====================================================
-     UPLOAD BOOK PDF
+      ADD BOOK
     =====================================================*/
 
-    window.uploadBookPDF =
-        async function (
-            file,
-            bookId
-        ) {
+    window.addBook = async function (
+        bookData
+    ) {
 
-            if (!file) {
+        const ref =
+            db
+                .collection("books")
+                .doc();
 
-                throw new Error(
-                    "Please select a PDF."
-                );
+        const data = {
 
-            }
+            title:
+                bookData.title || "",
 
+            author:
+                bookData.author || "",
 
-            if (
-                file.type !==
-                "application/pdf"
-            ) {
+            category:
+                bookData.category || "Other",
 
-                throw new Error(
-                    "Only PDF files are allowed."
-                );
+            language:
+                bookData.language || "Urdu",
 
-            }
+            description:
+                bookData.description || "",
 
+            coverUrl:
+                bookData.coverUrl || "",
 
-            return await
-                uploadFirebaseFile(
+            coverPath:
+                bookData.coverPath || "",
 
-                    file,
+            pdfUrl:
+                bookData.pdfUrl || "",
 
-                    "books/" +
-                    bookId +
-                    "/pdf",
+            pdfPath:
+                bookData.pdfPath || "",
 
-                    "book-" +
-                    Date.now() +
-                    ".pdf"
+            latest:
+                Boolean(
+                    bookData.latest
+                ),
 
-                );
+            views: 0,
+
+            likes: 0,
+
+            shares: 0,
+
+            downloads: 0,
+
+            comments: 0,
+
+            createdAt:
+                firebase.firestore
+                    .FieldValue
+                    .serverTimestamp(),
+
+            updatedAt:
+                firebase.firestore
+                    .FieldValue
+                    .serverTimestamp()
 
         };
 
+        await ref.set(data);
+
+        return ref.id;
+
+    };
+
 
     /*=====================================================
-     ADD BOOK
+      UPDATE BOOK
     =====================================================*/
 
-    window.addBook =
+    window.updateBook = async function (
+        bookId,
+        data
+    ) {
+
+        if (!bookId) {
+
+            throw new Error(
+                "Book ID missing."
+            );
+
+        }
+
+        data.updatedAt =
+            firebase.firestore
+                .FieldValue
+                .serverTimestamp();
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update(data);
+
+    };
+
+
+    /*=====================================================
+      DELETE BOOK
+    =====================================================*/
+
+    window.deleteBook = async function (
+        bookId
+    ) {
+
+        if (!bookId) return;
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .delete();
+
+    };
+
+
+    /*=====================================================
+      BOOK VIEW
+    =====================================================*/
+
+    window.addBookView = async function (
+        bookId
+    ) {
+
+        if (!bookId) return;
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                views:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+    };
+
+
+    /*=====================================================
+      BOOK LIKE
+    =====================================================*/
+
+    window.addBookLike = async function (
+        bookId
+    ) {
+
+        if (!bookId) return;
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                likes:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+    };
+
+
+    /*=====================================================
+      BOOK SHARE
+    =====================================================*/
+
+    window.addBookShare = async function (
+        bookId
+    ) {
+
+        if (!bookId) return;
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                shares:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+    };
+
+
+    /*=====================================================
+      BOOK DOWNLOAD
+    =====================================================*/
+
+    window.addBookDownload = async function (
+        bookId
+    ) {
+
+        if (!bookId) return;
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                downloads:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+    };
+
+
+    /*=====================================================
+      ADD COMMENT
+    =====================================================*/
+
+    window.addBookComment = async function (
+        bookId,
+        commentData
+    ) {
+
+        const bookRef =
+            db
+                .collection("books")
+                .doc(bookId);
+
+        await bookRef
+            .collection("comments")
+            .add({
+
+                name:
+                    commentData.name ||
+                    "Visitor",
+
+                comment:
+                    commentData.comment ||
+                    "",
+
+                createdAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
+
+            });
+
+        await bookRef.update({
+
+            comments:
+                firebase.firestore
+                    .FieldValue
+                    .increment(1)
+
+        });
+
+    };
+
+
+    /*=====================================================
+      GET COMMENTS
+    =====================================================*/
+
+    window.getBookComments = async function (
+        bookId
+    ) {
+
+        const snap =
+            await db
+                .collection("books")
+                .doc(bookId)
+                .collection("comments")
+                .orderBy(
+                    "createdAt",
+                    "desc"
+                )
+                .get();
+
+        const comments = [];
+
+        snap.forEach(function (doc) {
+
+            comments.push({
+
+                id: doc.id,
+
+                bookId: bookId,
+
+                ...doc.data()
+
+            });
+
+        });
+
+        return comments;
+
+    };
+
+
+    /*=====================================================
+      DELETE COMMENT
+    =====================================================*/
+
+    window.deleteBookComment =
         async function (
-            bookData
+            bookId,
+            commentId
         ) {
+
+            await db
+                .collection("books")
+                .doc(bookId)
+                .collection("comments")
+                .doc(commentId)
+                .delete();
 
             const bookRef =
                 db
                     .collection("books")
-                    .doc();
+                    .doc(bookId);
+
+            const book =
+                await bookRef.get();
+
+            const current =
+                Number(
+                    book.data()?.comments || 0
+                );
+
+            await bookRef.update({
+
+                comments:
+                    Math.max(
+                        0,
+                        current - 1
+                    )
+
+            });
+
+        };
 
 
-            const data = {
+    /*=====================================================
+      ADD VISITOR
+    =====================================================*/
 
-                title:
-                    bookData.title || "",
+    window.addVisitor = async function () {
 
-                author:
-                    bookData.author || "",
+        const ref =
+            db
+                .collection("statistics")
+                .doc("main");
 
-                category:
-                    bookData.category ||
-                    "Other",
+        await ref.set(
 
-                description:
-                    bookData.description || "",
+            {
 
-                coverUrl:
-                    bookData.coverUrl || "",
+                visitors:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1),
 
-                coverPath:
-                    bookData.coverPath || "",
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
 
-                pdfUrl:
-                    bookData.pdfUrl || "",
+            },
 
-                pdfPath:
-                    bookData.pdfPath || "",
+            {
+                merge: true
+            }
 
-                latest:
-                    Boolean(
-                        bookData.latest
-                    ),
+        );
+
+    };
+
+
+    /*=====================================================
+      GET STATISTICS
+    =====================================================*/
+
+    window.getStatistics = async function () {
+
+        const snap =
+            await db
+                .collection("statistics")
+                .doc("main")
+                .get();
+
+        if (!snap.exists) {
+
+            return {
+
+                visitors: 0,
 
                 views: 0,
 
@@ -568,406 +829,68 @@ else {
 
                 shares: 0,
 
-                downloads: 0,
-
-                comments: 0,
-
-                createdAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp(),
-
-                updatedAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
+                downloads: 0
 
             };
 
+        }
 
-            await bookRef.set(data);
+        return snap.data();
 
-
-            console.log(
-                "✅ Book added:",
-                bookRef.id
-            );
-
-
-            return bookRef.id;
-
-        };
+    };
 
 
     /*=====================================================
-     UPDATE BOOK
+      SET VISITOR COUNT
     =====================================================*/
 
-    window.updateBook =
-        async function (
-            bookId,
-            data
-        ) {
+    window.setVisitorCount =
+        async function (number) {
 
-            if (!bookId) {
-
-                throw new Error(
-                    "Book ID missing."
+            number =
+                Math.max(
+                    0,
+                    Number(number) || 0
                 );
 
-            }
-
-
-            data.updatedAt =
-                firebase.firestore
-                    .FieldValue
-                    .serverTimestamp();
-
-
             await db
-                .collection("books")
-                .doc(bookId)
-                .update(data);
+                .collection("statistics")
+                .doc("main")
+                .set(
 
+                    {
 
-            console.log(
-                "✅ Book updated:",
-                bookId
-            );
+                        visitors: number,
 
-        };
+                        updatedAt:
+                            firebase.firestore
+                                .FieldValue
+                                .serverTimestamp()
 
+                    },
 
-    /*=====================================================
-     DELETE BOOK
-    =====================================================*/
+                    {
+                        merge: true
+                    }
 
-    window.deleteBook =
-        async function (
-            bookId
-        ) {
-
-            if (!bookId) {
-
-                throw new Error(
-                    "Book ID missing."
                 );
 
-            }
-
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .delete();
-
-
-            console.log(
-                "🗑️ Book deleted:",
-                bookId
-            );
+            return number;
 
         };
 
 
     /*=====================================================
-     BOOK VIEW
-    =====================================================*/
-
-    window.addBookView =
-        async function (
-            bookId
-        ) {
-
-            if (!bookId) return;
-
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .update({
-
-                    views:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(1)
-
-                });
-
-        };
-
-
-    /*=====================================================
-     BOOK LIKE
-    =====================================================*/
-
-    window.addBookLike =
-        async function (
-            bookId
-        ) {
-
-            if (!bookId) return;
-
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .update({
-
-                    likes:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(1)
-
-                });
-
-        };
-
-
-    /*=====================================================
-     BOOK SHARE
-    =====================================================*/
-
-    window.addBookShare =
-        async function (
-            bookId
-        ) {
-
-            if (!bookId) return;
-
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .update({
-
-                    shares:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(1)
-
-                });
-
-        };
-
-
-    /*=====================================================
-     BOOK DOWNLOAD
-    =====================================================*/
-
-    window.addBookDownload =
-        async function (
-            bookId
-        ) {
-
-            if (!bookId) return;
-
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .update({
-
-                    downloads:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(1)
-
-                });
-
-        };
-
-
-    /*=====================================================
-     COMMENTS
-    =====================================================*/
-
-    window.addBookComment =
-        async function (
-            bookId,
-            commentData
-        ) {
-
-            if (!bookId) {
-
-                throw new Error(
-                    "Book ID missing."
-                );
-
-            }
-
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .collection("comments")
-                .add({
-
-                    name:
-                        commentData.name ||
-                        "Visitor",
-
-                    comment:
-                        commentData.comment ||
-                        "",
-
-                    createdAt:
-                        firebase.firestore
-                            .FieldValue
-                            .serverTimestamp()
-
-                });
-
-
-            await db
-                .collection("books")
-                .doc(bookId)
-                .update({
-
-                    comments:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(1)
-
-                });
-
-        };
-
-
-    /*=====================================================
-     GET COMMENTS
-    =====================================================*/
-
-    window.getBookComments =
-        async function (
-            bookId
-        ) {
-
-            const snapshot =
-                await db
-                    .collection("books")
-                    .doc(bookId)
-                    .collection("comments")
-                    .orderBy(
-                        "createdAt",
-                        "desc"
-                    )
-                    .get();
-
-
-            const comments = [];
-
-
-            snapshot.forEach(
-                function (doc) {
-
-                    comments.push({
-
-                        id: doc.id,
-
-                        ...doc.data()
-
-                    });
-
-                }
-            );
-
-
-            return comments;
-
-        };
-
-
-    /*=====================================================
-     VISITOR COUNTER
-    =====================================================*/
-
-    window.addVisitor =
-        async function () {
-
-            const visitorRef =
-                db
-                    .collection("statistics")
-                    .doc("main");
-
-
-            await visitorRef.set(
-
-                {
-
-                    visitors:
-                        firebase.firestore
-                            .FieldValue
-                            .increment(1)
-
-                },
-
-                {
-
-                    merge: true
-
-                }
-
-            );
-
-
-            console.log(
-                "👤 Visitor counted"
-            );
-
-        };
-
-
-    /*=====================================================
-     GET STATISTICS
-    =====================================================*/
-
-    window.getStatistics =
-        async function () {
-
-            const doc =
-                await db
-                    .collection("statistics")
-                    .doc("main")
-                    .get();
-
-
-            if (!doc.exists) {
-
-                return {
-
-                    visitors: 0,
-
-                    views: 0,
-
-                    likes: 0,
-
-                    shares: 0,
-
-                    downloads: 0
-
-                };
-
-            }
-
-
-            return doc.data();
-
-        };
-
-
-    /*=====================================================
-     TOTAL BOOK STATISTICS
+      CALCULATE BOOK STATISTICS
     =====================================================*/
 
     window.calculateBookStatistics =
         async function () {
 
-            const snapshot =
+            const snap =
                 await db
                     .collection("books")
                     .get();
-
 
             let views = 0;
 
@@ -977,56 +900,56 @@ else {
 
             let downloads = 0;
 
+            let comments = 0;
+
             let latest = 0;
 
 
-            snapshot.forEach(
-                function (doc) {
+            snap.forEach(function (doc) {
 
-                    const book =
-                        doc.data();
+                const book =
+                    doc.data();
 
+                views +=
+                    Number(
+                        book.views || 0
+                    );
 
-                    views +=
-                        Number(
-                            book.views || 0
-                        );
+                likes +=
+                    Number(
+                        book.likes || 0
+                    );
 
+                shares +=
+                    Number(
+                        book.shares || 0
+                    );
 
-                    likes +=
-                        Number(
-                            book.likes || 0
-                        );
+                downloads +=
+                    Number(
+                        book.downloads || 0
+                    );
 
+                comments +=
+                    Number(
+                        book.comments || 0
+                    );
 
-                    shares +=
-                        Number(
-                            book.shares || 0
-                        );
+                if (
+                    book.latest === true
+                ) {
 
-
-                    downloads +=
-                        Number(
-                            book.downloads || 0
-                        );
-
-
-                    if (
-                        book.latest === true
-                    ) {
-
-                        latest++;
-
-                    }
+                    latest++;
 
                 }
-            );
+
+            });
 
 
             return {
 
                 totalBooks:
-                    snapshot.size,
+                    snap.size,
 
                 latestBooks:
                     latest,
@@ -1041,7 +964,10 @@ else {
                     shares,
 
                 totalDownloads:
-                    downloads
+                    downloads,
+
+                totalComments:
+                    comments
 
             };
 
@@ -1049,7 +975,7 @@ else {
 
 
     /*=====================================================
-     ERROR LOGGER
+      ERROR LOGGER
     =====================================================*/
 
     window.firebaseError =
@@ -1059,34 +985,24 @@ else {
         ) {
 
             console.error(
-
                 "🔥 Firebase Error:",
-
                 context || "",
-
                 error
-
             );
 
         };
 
 
     /*=====================================================
-     READY EVENT
+      READY
     =====================================================*/
 
     window.dispatchEvent(
-
         new CustomEvent(
             "firebaseReady"
         )
-
     );
 
-
-    /*=====================================================
-     CONSOLE
-    =====================================================*/
 
     console.log(
         "===================================="
@@ -1097,31 +1013,32 @@ else {
     );
 
     console.log(
-        "✅ Firebase initialized"
+        "✅ Firestore"
     );
 
     console.log(
-        "✅ Firestore ready"
+        "✅ Authentication"
     );
 
     console.log(
-        "✅ Authentication ready"
+        "✅ Storage"
     );
 
     console.log(
-        "✅ Storage ready"
+        "✅ Visitor System"
     );
 
     console.log(
-        "✅ Book system ready"
+        "✅ Book Management"
     );
 
     console.log(
-        "✅ Visitor system ready"
+        "✅ Comment System"
     );
 
     console.log(
         "===================================="
+
     );
 
-}
+})();
