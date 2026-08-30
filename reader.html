@@ -177,27 +177,63 @@
         >
 
 
-            <!-- =================================================
-                 PREVIOUS
-            ================================================== -->
+                                                           
+            
+<!-- =========================
+     READER SEARCH
+========================= -->
 
-            <button
-                id="previousPageButton"
-                class="control-button"
-                type="button"
-                title="Previous page"
-                aria-label="Previous page"
-            >
+<div class="reader-search">
 
-                <span aria-hidden="true">
-                    ←
-                </span>
+    <div class="reader-search-box">
 
-                <span class="button-label">
-                    Previous
-                </span>
+        <span class="reader-search-icon">🔎</span>
 
-            </button>
+        <input
+            type="search"
+            id="readerSearchInput"
+            placeholder="Search books, authors, categories..."
+            autocomplete="off"
+        >
+
+        <button
+            type="button"
+            id="readerSearchClear"
+            class="reader-search-clear"
+            aria-label="Clear search">
+            ✕
+        </button>
+
+    </div>
+
+    <div
+        id="readerSearchResults"
+        class="reader-search-results">
+    </div>
+
+</div>
+
+<!-- =================================================
+     PREVIOUS
+================================================== -->
+
+<button
+    id="previousPageButton"
+    class="control-button"
+    type="button"
+    title="Previous page"
+    aria-label="Previous page"
+>
+
+    <span aria-hidden="true">
+        ←
+    </span>
+
+    <span class="button-label">
+        Previous
+    </span>
+
+</button>
 
 
             <!-- =================================================
