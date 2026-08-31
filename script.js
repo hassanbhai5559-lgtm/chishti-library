@@ -1,7 +1,7 @@
 /*=========================================
 CHISHTI LIBRARY
 SCRIPT.JS
-FULL CLEAN VERSION
+FULL PRODUCTION VERSION
 =========================================*/
 
 "use strict";
@@ -36,6 +36,7 @@ window.addEventListener("load", () => {
                 }
 
             }, 800);
+
         }
 
     }, 2500);
@@ -101,18 +102,30 @@ if (scrollBtn) {
 }
 
 
-/*=========================
+/*=========================================
+NO FIREBASE COUNTER HERE
+=========================================
+Firebase visitor counter is handled by
+firebase.js only.
+
+Do NOT add another
+updateVisitorCounter()
+here.
+=========================================*/
+
+
+/*=========================================
 GLOBAL VARIABLES
-=========================*/
+=========================================*/
 
 let allBooks = [];
 
 let filteredBooks = [];
 
 
-/*=========================
+/*=========================================
 LOAD BOOKS.JSON
-=========================*/
+=========================================*/
 
 async function loadBooks() {
 
@@ -166,11 +179,13 @@ async function loadBooks() {
 
             if (total === 0) {
 
-                bookCounter.innerText = "0";
+                bookCounter.innerText =
+                    "0";
 
             } else {
 
                 let count = 0;
+
 
                 const animation =
                     setInterval(() => {
@@ -179,6 +194,7 @@ async function loadBooks() {
 
                         bookCounter.innerText =
                             count;
+
 
                         if (
                             count >= total
@@ -217,9 +233,8 @@ async function loadBooks() {
             "✅ Books Loaded Successfully"
         );
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "❌ Books loading error:",
@@ -290,28 +305,41 @@ function displayBooks(books) {
         `;
 
         return;
+
     }
 
 
     books.forEach(book => {
 
-        const safeTitle =
-            book.title || "Untitled Book";
 
-        const safeAuthor =
-            book.author || "Unknown Author";
+        const title =
+            book.title ||
+            "Untitled Book";
 
-        const safeCategory =
-            book.category || "General";
 
-        const safeDescription =
-            book.description || "";
+        const author =
+            book.author ||
+            "Unknown Author";
 
-        const safeCover =
-            book.cover || "logo.png";
 
-        const safePdf =
-            book.pdf || "#";
+        const category =
+            book.category ||
+            "General";
+
+
+        const description =
+            book.description ||
+            "";
+
+
+        const cover =
+            book.cover ||
+            "logo.png";
+
+
+        const pdf =
+            book.pdf ||
+            "#";
 
 
         container.innerHTML += `
@@ -319,8 +347,8 @@ function displayBooks(books) {
             <div class="book-card">
 
                 <img
-                    src="${safeCover}"
-                    alt="${safeTitle}"
+                    src="${cover}"
+                    alt="${title}"
                     loading="lazy"
                     onerror="this.src='logo.png'"
                 >
@@ -331,28 +359,28 @@ function displayBooks(books) {
 
                     <span class="book-category">
 
-                        ${safeCategory}
+                        ${category}
 
                     </span>
 
 
                     <h2>
 
-                        ${safeTitle}
+                        ${title}
 
                     </h2>
 
 
                     <h3>
 
-                        ${safeAuthor}
+                        ${author}
 
                     </h3>
 
 
                     <p>
 
-                        ${safeDescription}
+                        ${description}
 
                     </p>
 
@@ -391,7 +419,7 @@ function displayBooks(books) {
 
 
                         <a
-                            href="reader.html?book=${encodeURIComponent(safePdf)}"
+                            href="reader.html?book=${encodeURIComponent(pdf)}"
                             class="btn read-book-btn"
                         >
 
@@ -401,7 +429,7 @@ function displayBooks(books) {
 
 
                         <a
-                            href="${safePdf}"
+                            href="${pdf}"
                             download
                             class="btn download-book-btn"
                         >
@@ -449,7 +477,6 @@ function searchBooks() {
     filteredBooks =
         allBooks.filter(book => {
 
-
             return (
 
                 (book.title || "")
@@ -487,7 +514,7 @@ function searchBooks() {
 
 
 /*=========================
-SEARCH INPUT LISTENER
+SEARCH INPUT
 =========================*/
 
 const searchInput =
@@ -541,15 +568,14 @@ function filterBooks(
         filteredBooks =
             [...allBooks];
 
-    }
-
-    else {
+    } else {
 
         filteredBooks =
-            allBooks.filter(
-                book =>
-                    book.category ===
-                    category
+            allBooks.filter(book =>
+
+                book.category ===
+                category
+
             );
 
     }
@@ -611,7 +637,8 @@ function latestBook() {
     if (image) {
 
         image.src =
-            latest.cover || "logo.png";
+            latest.cover ||
+            "logo.png";
 
     }
 
@@ -644,6 +671,7 @@ function latestBook() {
 
         buttons[0].href =
             latest.pdf || "#";
+
 
         buttons[0].target =
             "_blank";
@@ -709,9 +737,8 @@ async function loadKnowledge() {
             "✅ Knowledge Loaded"
         );
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
             "❌ Knowledge loading error:",
@@ -764,7 +791,10 @@ const chatMessages =
 OPEN CHAT
 =========================*/
 
-if (chatBtn && chatWindow) {
+if (
+    chatBtn &&
+    chatWindow
+) {
 
     chatBtn.onclick = () => {
 
@@ -780,7 +810,10 @@ if (chatBtn && chatWindow) {
 CLOSE CHAT
 =========================*/
 
-if (closeChat && chatWindow) {
+if (
+    closeChat &&
+    chatWindow
+) {
 
     closeChat.onclick = () => {
 
@@ -869,16 +902,20 @@ function searchBook(question) {
 
             return `
 
-                📚
-                <b>${book.title}</b>
+                📚 <b>
+                    ${book.title}
+                </b>
+
                 <br><br>
 
                 👤
                 ${book.author || "Unknown"}
+
                 <br>
 
                 📂
                 ${book.category || "General"}
+
                 <br><br>
 
 
@@ -1158,9 +1195,9 @@ if (
 }
 
 
-/*=========================
+/*=========================================
 BOOK CARD HOVER
-=========================*/
+=========================================*/
 
 document.addEventListener(
     "mouseover",
@@ -1211,7 +1248,7 @@ document.addEventListener(
 
 /*=========================================
 DOWNLOAD COUNTER
-LOCAL DEVICE COUNTER
+LOCAL DEVICE
 =========================================*/
 
 document.addEventListener(
@@ -1259,7 +1296,7 @@ document.addEventListener(
 
 /*=========================================
 READ COUNTER
-LOCAL DEVICE COUNTER
+LOCAL DEVICE
 =========================================*/
 
 document.addEventListener(
@@ -1404,9 +1441,7 @@ window.addEventListener(
                 "nav-shadow"
             );
 
-        }
-
-        else {
+        } else {
 
             nav.classList.remove(
                 "nav-shadow"
@@ -1452,14 +1487,18 @@ document
 
 
                 if (
-                    this.src.endsWith(
-                        "logo.png"
-                    )
+                    this.dataset
+                        .fallbackApplied
                 ) {
 
                     return;
 
                 }
+
+
+                this.dataset
+                    .fallbackApplied =
+                    "true";
 
 
                 this.src =
@@ -1581,18 +1620,30 @@ FIREBASE STATUS
 =========================================*/
 
 if (
-    typeof window.firebaseReady ===
-    "function"
+
+    typeof window.db !==
+    "undefined"
+
+    &&
+
+    typeof window.auth !==
+    "undefined"
+
+    &&
+
+    typeof window.storage !==
+    "undefined"
+
 ) {
 
     console.log(
-        "🔥 Firebase available in script.js"
+        "🔥 Firebase connected to script.js"
     );
 
 } else {
 
     console.warn(
-        "⚠️ Firebase helper not found. Check firebase.js loading order."
+        "⚠️ Firebase services not available."
     );
 
 }
@@ -1612,6 +1663,10 @@ console.log(
 
 console.log(
     "Version : 1.0"
+);
+
+console.log(
+    "Developer : Ali Hassan"
 );
 
 console.log(
@@ -1655,7 +1710,7 @@ console.log(
 );
 
 console.log(
-    "🔥 Firebase handled separately"
+    "🔥 Firebase connected"
 );
 
 console.log(
