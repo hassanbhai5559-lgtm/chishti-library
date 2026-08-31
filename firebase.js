@@ -1,26 +1,20 @@
 /* =========================================================
    CHISHTI LIBRARY
    FIREBASE.JS
-   PREMIUM FIREBASE SETUP
+   COMPLETE FIREBASE + VISITOR COUNTER
    FIREBASE v8
    ========================================================= */
 
 "use strict";
 
+
 /* =========================================================
    FIREBASE CONFIG
-   =========================================================
-   Firebase Console
-   → Project Settings
-   → General
-   → Your apps
-   → Web App
-   → SDK setup and configuration
    ========================================================= */
 
 const firebaseConfig = {
 
-    apiKey: "YOUR_REAL_API_KEY",
+    apiKey: "YOUR_API_KEY",
 
     authDomain:
         "YOUR_PROJECT_ID.firebaseapp.com",
@@ -29,7 +23,7 @@ const firebaseConfig = {
         "YOUR_PROJECT_ID",
 
     storageBucket:
-        "YOUR_STORAGE_BUCKET",
+        "YOUR_PROJECT_ID.firebasestorage.app",
 
     messagingSenderId:
         "YOUR_SENDER_ID",
@@ -56,57 +50,59 @@ if (typeof firebase === "undefined") {
 
 
 /* =========================================================
-   INITIALIZE FIREBASE ONLY ONCE
+   INITIALIZE FIREBASE ONCE
    ========================================================= */
 
 let firebaseApp;
 
-if (!firebase.apps.length) {
+try {
 
-    firebaseApp =
-        firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
 
-    console.log(
-        "🔥 Firebase initialized successfully"
+        firebaseApp =
+            firebase.initializeApp(firebaseConfig);
+
+        console.log(
+            "🔥 Firebase initialized successfully"
+        );
+
+    } else {
+
+        firebaseApp =
+            firebase.app();
+
+        console.log(
+            "🔥 Firebase already initialized"
+        );
+    }
+
+} catch (error) {
+
+    console.error(
+        "❌ Firebase initialization failed:",
+        error
     );
 
-} else {
-
-    firebaseApp =
-        firebase.app();
-
-    console.log(
-        "🔥 Firebase app already initialized"
-    );
+    throw error;
 }
 
 
 /* =========================================================
-   FIREBASE AUTHENTICATION
+   FIREBASE SERVICES
    ========================================================= */
 
 const firebaseAuth =
     firebase.auth();
 
-
-/* =========================================================
-   FIRESTORE DATABASE
-   ========================================================= */
-
 const firebaseDB =
     firebase.firestore();
-
-
-/* =========================================================
-   FIREBASE STORAGE
-   ========================================================= */
 
 const firebaseStorage =
     firebase.storage();
 
 
 /* =========================================================
-   GLOBAL FIREBASE ACCESS
+   GLOBAL ACCESS
    ========================================================= */
 
 window.firebaseApp =
@@ -124,14 +120,6 @@ window.firebaseStorage =
 
 /* =========================================================
    COMMON ALIASES
-   =========================================================
-   These allow your other JS files to use:
-
-   auth
-   db
-   storage
-
-   without creating duplicate Firebase variables.
    ========================================================= */
 
 window.auth =
@@ -148,8 +136,8 @@ window.storage =
    FIREBASE FIELD VALUE
    ========================================================= */
 
-window.firebaseIncrement =
-    firebase.firestore.FieldValue.increment;
+window.firebaseFieldValue =
+    firebase.firestore.FieldValue;
 
 
 /* =========================================================
@@ -161,82 +149,376 @@ window.firebaseTimestamp =
 
 
 /* =========================================================
-   FIREBASE SERVER TIMESTAMP
+   VISITOR COUNTER
+   =========================================================
+   
+   Firestore:
+   
+   counter
+      ↓
+   visitors
+      ↓
+   count: 123
+
+   Each browser session is counted once.
    ========================================================= */
 
-window.serverTimestamp =
-    firebase.firestore.FieldValue.serverTimestamp;
+async function updateVisitorCounter() {
+
+    const visitorCounter =
+        document.getElementById(
+            "visitorCounter"
+        );
+
+    if (!visitorCounter) {
+
+        console.warn(
+            "⚠️ #visitorCounter element not found."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const visitorRef =
+            window.db
+                .collection("counter")
+                .doc("visitors");
+
+
+        /* =================================================
+           CHECK CURRENT SESSION
+           ================================================= */
+
+        const alreadyCounted =
+            sessionStorage.getItem(
+                "chishtiVisitorCounted"
+            );
+
+
+        /* =================================================
+           COUNT NEW SESSION
+           ================================================= */
+
+        if (!alreadyCounted) {
+
+            await visitorRef.set(
+
+                {
+
+                    count:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1),
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                },
+
+                {
+
+                    merge: true
+
+                }
+
+            );
+
+
+            sessionStorage.setItem(
+                "chishtiVisitorCounted",
+                "true"
+            );
+
+
+            console.log(
+                "👁️ New visitor counted"
+            );
+
+        } else {
+
+            console.log(
+                "👁️ Visitor already counted in this session"
+            );
+        }
+
+
+        /* =================================================
+           GET CURRENT TOTAL
+           ================================================= */
+
+        const snapshot =
+            await visitorRef.get();
+
+
+        let totalVisitors = 0;
+
+
+        if (snapshot.exists) {
+
+            const data =
+                snapshot.data();
+
+
+            totalVisitors =
+                Number(
+                    data.count
+                ) || 0;
+        }
+
+
+        /* =================================================
+           DISPLAY COUNTER
+           ================================================= */
+
+        animateVisitorCounter(
+            visitorCounter,
+            totalVisitors
+        );
+
+
+        console.log(
+            "👁️ Total Visitors:",
+            totalVisitors
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "❌ Visitor counter error:",
+            error
+        );
+
+
+        /* =============================================
+           USER-FRIENDLY ERROR
+           ============================================= */
+
+        if (
+            error.code ===
+            "unavailable"
+        ) {
+
+            console.error(
+                "🌐 Firestore is offline/unavailable."
+            );
+
+        }
+
+
+        else if (
+            error.code ===
+            "permission-denied"
+        ) {
+
+            console.error(
+                "🔒 Firestore permission denied. Check Firestore Rules."
+            );
+
+        }
+
+
+        else {
+
+            console.error(
+                "🔥 Firebase error:",
+                error.message || error
+            );
+
+        }
+
+
+        visitorCounter.innerText =
+            "0";
+    }
+}
 
 
 /* =========================================================
-   FIREBASE READY CHECK
+   COUNTER ANIMATION
    ========================================================= */
 
-function firebaseReady() {
+function animateVisitorCounter(
+    element,
+    target
+) {
 
-    return (
-        typeof window.firebaseApp !== "undefined" &&
-        typeof window.firebaseAuth !== "undefined" &&
-        typeof window.firebaseDB !== "undefined" &&
-        typeof window.firebaseStorage !== "undefined"
+    if (!element) return;
+
+
+    target =
+        Number(target) || 0;
+
+
+    let current = 0;
+
+
+    /* Small numbers don't need long animation */
+
+    const duration =
+        target > 1000
+            ? 1200
+            : 700;
+
+
+    const startTime =
+        performance.now();
+
+
+    function animate(
+        currentTime
+    ) {
+
+        const progress =
+            Math.min(
+                (currentTime - startTime) /
+                duration,
+                1
+            );
+
+
+        /* Smooth animation */
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+
+        current =
+            Math.floor(
+                eased * target
+            );
+
+
+        element.innerText =
+            current.toLocaleString();
+
+
+        if (progress < 1) {
+
+            requestAnimationFrame(
+                animate
+            );
+
+        } else {
+
+            element.innerText =
+                target.toLocaleString();
+        }
+    }
+
+
+    requestAnimationFrame(
+        animate
     );
 }
 
 
 /* =========================================================
-   FIREBASE CONNECTION TEST
+   MAKE COUNTER GLOBAL
    ========================================================= */
 
-async function testFirebaseConnection() {
+window.updateVisitorCounter =
+    updateVisitorCounter;
+
+window.animateVisitorCounter =
+    animateVisitorCounter;
+
+
+/* =========================================================
+   FIRESTORE CONNECTION TEST
+   ========================================================= */
+
+async function testFirestoreConnection() {
 
     try {
 
-        if (!firebaseReady()) {
-
-            throw new Error(
-                "Firebase services are not available."
-            );
-        }
-
-
         console.log(
-            "✅ Firebase App Connected"
+            "🔄 Testing Firestore connection..."
         );
 
-        console.log(
-            "✅ Firebase Authentication Connected"
-        );
+
+        const testRef =
+            window.db
+                .collection("counter")
+                .doc("visitors");
+
+
+        await testRef.get({
+            source: "server"
+        });
+
 
         console.log(
-            "✅ Firestore Connected"
-        );
-
-        console.log(
-            "✅ Firebase Storage Connected"
+            "✅ Firestore is ONLINE"
         );
 
 
         return true;
 
-    }
 
-    catch (error) {
+    } catch (error) {
 
         console.error(
-            "❌ Firebase connection error:",
+            "❌ Firestore connection failed:",
             error
         );
+
 
         return false;
     }
 }
 
 
+window.testFirestoreConnection =
+    testFirestoreConnection;
+
+
+/* =========================================================
+   AUTH STATE
+   ========================================================= */
+
+firebaseAuth.onAuthStateChanged(
+    function (user) {
+
+        if (user) {
+
+            window.currentFirebaseUser =
+                user;
+
+
+            console.log(
+                "👤 User signed in:",
+                user.email || user.uid
+            );
+
+        } else {
+
+            window.currentFirebaseUser =
+                null;
+
+
+            console.log(
+                "👤 No user signed in"
+            );
+        }
+    }
+);
+
+
 /* =========================================================
    FIREBASE ERROR HANDLER
    ========================================================= */
 
-window.firebaseErrorHandler =
+window.handleFirebaseError =
     function (error) {
 
         console.error(
@@ -250,10 +532,20 @@ window.firebaseErrorHandler =
 
         switch (error.code) {
 
+
+            case "unavailable":
+
+                console.error(
+                    "🌐 Firebase/Firestore is offline or unavailable."
+                );
+
+                break;
+
+
             case "permission-denied":
 
                 console.error(
-                    "❌ Firestore/Storage permission denied."
+                    "🔒 Permission denied. Check Firestore Security Rules."
                 );
 
                 break;
@@ -271,7 +563,7 @@ window.firebaseErrorHandler =
             case "auth/network-request-failed":
 
                 console.error(
-                    "❌ Firebase network request failed."
+                    "🌐 Authentication network error."
                 );
 
                 break;
@@ -280,7 +572,7 @@ window.firebaseErrorHandler =
             case "storage/unauthorized":
 
                 console.error(
-                    "❌ Firebase Storage permission denied."
+                    "🔒 Storage permission denied."
                 );
 
                 break;
@@ -289,7 +581,7 @@ window.firebaseErrorHandler =
             case "storage/object-not-found":
 
                 console.error(
-                    "❌ Firebase Storage file not found."
+                    "❌ Storage file not found."
                 );
 
                 break;
@@ -298,7 +590,7 @@ window.firebaseErrorHandler =
             default:
 
                 console.error(
-                    "❌ Firebase error:",
+                    "🔥 Firebase:",
                     error.message || error
                 );
         }
@@ -306,53 +598,74 @@ window.firebaseErrorHandler =
 
 
 /* =========================================================
-   FIREBASE AUTH STATE
-   ========================================================= */
-
-firebaseAuth.onAuthStateChanged(
-    function (user) {
-
-        if (user) {
-
-            console.log(
-                "👤 Firebase User:",
-                user.email || user.uid
-            );
-
-            window.currentFirebaseUser =
-                user;
-
-        } else {
-
-            console.log(
-                "👤 No Firebase user signed in"
-            );
-
-            window.currentFirebaseUser =
-                null;
-        }
-    }
-);
-
-
-/* =========================================================
    FIREBASE READY EVENT
    ========================================================= */
 
 window.dispatchEvent(
-    new CustomEvent("firebaseReady", {
-        detail: {
-            app: firebaseApp,
-            auth: firebaseAuth,
-            db: firebaseDB,
-            storage: firebaseStorage
+
+    new CustomEvent(
+        "firebaseReady",
+        {
+
+            detail: {
+
+                app:
+                    firebaseApp,
+
+                auth:
+                    firebaseAuth,
+
+                db:
+                    firebaseDB,
+
+                storage:
+                    firebaseStorage
+            }
         }
-    })
+    )
 );
 
 
 /* =========================================================
-   CONSOLE STATUS
+   START VISITOR COUNTER
+   ========================================================= */
+
+function startVisitorCounter() {
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                updateVisitorCounter();
+
+            },
+            {
+                once: true
+            }
+        );
+
+    } else {
+
+        updateVisitorCounter();
+
+    }
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+startVisitorCounter();
+
+
+/* =========================================================
+   FINAL CONSOLE
    ========================================================= */
 
 console.log(
@@ -360,7 +673,11 @@ console.log(
 );
 
 console.log(
-    "🔥 CHISHTI LIBRARY FIREBASE"
+    "🔥 CHISHTI LIBRARY"
+);
+
+console.log(
+    "🔥 FIREBASE SYSTEM"
 );
 
 console.log(
@@ -368,40 +685,41 @@ console.log(
 );
 
 console.log(
-    "✅ Firebase App Ready"
+    "✅ Firebase App"
 );
 
 console.log(
-    "✅ Authentication Ready"
+    "✅ Authentication"
 );
 
 console.log(
-    "✅ Firestore Ready"
+    "✅ Firestore"
 );
 
 console.log(
-    "✅ Storage Ready"
+    "✅ Storage"
 );
 
 console.log(
-    "✅ Global auth Ready"
+    "✅ Visitor Counter"
 );
 
 console.log(
-    "✅ Global db Ready"
+    "✅ Global auth"
 );
 
 console.log(
-    "✅ Global storage Ready"
+    "✅ Global db"
+);
+
+console.log(
+    "✅ Global storage"
+);
+
+console.log(
+    "🚀 Firebase Ready"
 );
 
 console.log(
     "======================================"
 );
-
-
-/* =========================================================
-   RUN CONNECTION CHECK
-   ========================================================= */
-
-testFirebaseConnection();
