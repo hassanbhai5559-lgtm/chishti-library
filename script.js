@@ -1,919 +1,313 @@
-/*=========================================================
-  CHISHTI LIBRARY
-  SCRIPT.JS
-  COMPLETE FIXED VERSION
-  Firebase + Books + Search + Visitor + AI + Premium UI
-=========================================================*/
+/* =========================================================
+   CHISHTI LIBRARY
+   ADMIN.JS
+   FULL FIREBASE ADMIN PANEL
+   =========================================================
+
+   REQUIRED:
+   - firebase.js must initialize Firebase
+   - admin.html loads:
+       firebase-app-compat.js
+       firebase-auth-compat.js
+       firebase-firestore-compat.js
+       firebase-storage-compat.js
+
+   FIREBASE OBJECTS USED:
+       firebase
+       firebase.auth()
+       firebase.firestore()
+       firebase.storage()
+
+   FIRESTORE COLLECTION:
+       books
+       comments
+
+   BOOK DOCUMENT:
+       title
+       author
+       category
+       language
+       description
+       cover
+       pdf
+       latest
+       views
+       likes
+       shares
+       downloads
+       createdAt
+       updatedAt
+========================================================= */
+
+"use strict";
 
 
-/*=========================================================
-  PART 1
-  GLOBAL VARIABLES
-=========================================================*/
+/* =========================================================
+   FIREBASE
+========================================================= */
 
-let allBooks = [];
-let filteredBooks = [];
-let knowledge = [];
-
+let auth = null;
 let db = null;
+let storage = null;
 
-
-/*=========================================================
-  FIREBASE INITIALIZATION
-=========================================================*/
-
-function initializeFirebase() {
+try {
 
     if (
-        typeof firebase === "undefined" ||
-        typeof firebase.firestore !== "function"
+        typeof firebase === "undefined"
     ) {
 
-        console.error(
-            "❌ Firebase / Firestore SDK not loaded."
+        throw new Error(
+            "Firebase is not loaded."
         );
-
-        return false;
-    }
-
-
-    try {
-
-        db = firebase.firestore();
-
-        console.log(
-            "✅ Firebase Firestore Connected"
-        );
-
-        return true;
 
     }
 
-    catch (error) {
+    auth =
+        firebase.auth();
 
-        console.error(
-            "❌ Firebase initialization error:",
-            error
-        );
+    db =
+        firebase.firestore();
 
-        return false;
-    }
+    storage =
+        firebase.storage();
+
+    console.log(
+        "✅ Firebase connected"
+    );
+
+} catch (error) {
+
+    console.error(
+        "❌ Firebase initialization error:",
+        error
+    );
+
+    alert(
+        "Firebase could not be initialized.\n\nCheck firebase.js."
+    );
+
 }
 
 
-/*=========================================================
-  PART 2
-  PREMIUM LOADER
-=========================================================*/
+/* =========================================================
+   COLLECTIONS
+========================================================= */
 
-window.addEventListener("load", () => {
+const BOOKS_COLLECTION =
+    "books";
 
-    const loader =
-        document.getElementById("loader");
-
-
-    setTimeout(() => {
-
-        if (!loader) return;
+const COMMENTS_COLLECTION =
+    "comments";
 
 
-        loader.style.opacity = "0";
+/* =========================================================
+   DOM
+========================================================= */
 
-        loader.style.visibility = "hidden";
-
-
-        setTimeout(() => {
-
-            if (loader) {
-
-                loader.remove();
-
-            }
-
-        }, 800);
-
-    }, 1200);
-
-});
-
-
-/*=========================================================
-  PART 3
-  MOBILE MENU
-=========================================================*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        const menuBtn =
-            document.querySelector(
-                ".mobile-menu"
-            );
-
-
-        const menu =
-            document.querySelector(
-                ".menu"
-            );
-
-
-        if (!menuBtn || !menu) return;
-
-
-        menuBtn.addEventListener(
-            "click",
-            () => {
-
-                menu.classList.toggle(
-                    "show"
-                );
-
-            }
-        );
-
-
-        /* Close menu after clicking link */
-
-        menu.querySelectorAll("a")
-            .forEach(link => {
-
-                link.addEventListener(
-                    "click",
-                    () => {
-
-                        menu.classList.remove(
-                            "show"
-                        );
-
-                    }
-                );
-
-            });
-
-    }
-);
-
-
-/*=========================================================
-  PART 4
-  SCROLL TO TOP
-=========================================================*/
-
-const scrollBtn =
+const loginScreen =
     document.getElementById(
-        "scrollTop"
+        "loginScreen"
+    );
+
+const adminApp =
+    document.getElementById(
+        "adminApp"
+    );
+
+const loginForm =
+    document.getElementById(
+        "loginForm"
+    );
+
+const loginEmail =
+    document.getElementById(
+        "loginEmail"
+    );
+
+const loginPassword =
+    document.getElementById(
+        "loginPassword"
+    );
+
+const loginError =
+    document.getElementById(
+        "loginError"
+    );
+
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
+
+const adminEmail =
+    document.getElementById(
+        "adminEmail"
+    );
+
+const booksTable =
+    document.getElementById(
+        "booksTable"
+    );
+
+const bookForm =
+    document.getElementById(
+        "bookForm"
+    );
+
+const editingBookId =
+    document.getElementById(
+        "editingBookId"
+    );
+
+const bookTitle =
+    document.getElementById(
+        "bookTitle"
+    );
+
+const bookAuthor =
+    document.getElementById(
+        "bookAuthor"
+    );
+
+const bookCategory =
+    document.getElementById(
+        "bookCategory"
+    );
+
+const bookLanguage =
+    document.getElementById(
+        "bookLanguage"
+    );
+
+const bookDescription =
+    document.getElementById(
+        "bookDescription"
+    );
+
+const coverFile =
+    document.getElementById(
+        "coverFile"
+    );
+
+const pdfFile =
+    document.getElementById(
+        "pdfFile"
+    );
+
+const coverStatus =
+    document.getElementById(
+        "coverStatus"
+    );
+
+const pdfStatus =
+    document.getElementById(
+        "pdfStatus"
+    );
+
+const bookLatest =
+    document.getElementById(
+        "bookLatest"
+    );
+
+const saveBookBtn =
+    document.getElementById(
+        "saveBookBtn"
+    );
+
+const cancelEdit =
+    document.getElementById(
+        "cancelEdit"
+    );
+
+const bookMessage =
+    document.getElementById(
+        "bookMessage"
+    );
+
+const bookFormTitle =
+    document.getElementById(
+        "bookFormTitle"
+    );
+
+const commentsContainer =
+    document.getElementById(
+        "commentsContainer"
+    );
+
+const totalBooks =
+    document.getElementById(
+        "totalBooks"
+    );
+
+const totalVisitors =
+    document.getElementById(
+        "totalVisitors"
+    );
+
+const totalViews =
+    document.getElementById(
+        "totalViews"
+    );
+
+const totalLikes =
+    document.getElementById(
+        "totalLikes"
+    );
+
+const totalShares =
+    document.getElementById(
+        "totalShares"
+    );
+
+const totalDownloads =
+    document.getElementById(
+        "totalDownloads"
+    );
+
+const goAddBook =
+    document.getElementById(
+        "goAddBook"
     );
 
 
-window.addEventListener(
-    "scroll",
-    () => {
+/* =========================================================
+   STATE
+========================================================= */
 
-        if (!scrollBtn) return;
+let allBooks = [];
 
+let unsubscribeBooks = null;
 
-        scrollBtn.style.display =
-            window.scrollY > 300
-                ? "block"
-                : "none";
+let unsubscribeComments = null;
 
-    }
-);
+let editingBook = null;
 
 
-if (scrollBtn) {
-
-    scrollBtn.addEventListener(
-        "click",
-        () => {
-
-            window.scrollTo({
-
-                top: 0,
-
-                behavior: "smooth"
-
-            });
-
-        }
-    );
-
-}
-
-
-/*=========================================================
-  PART 5
-  VISITOR COUNTER
-  FIREBASE FIRESTORE
-=========================================================*/
-
-async function updateVisitorCounter() {
-
-    const visitorCounter =
-        document.getElementById(
-            "visitorCounter"
-        );
-
-
-    if (!visitorCounter) return;
-
-
-    if (!db) {
-
-        if (!initializeFirebase()) {
-
-            visitorCounter.innerText = "0";
-
-            return;
-
-        }
-
-    }
-
-
-    try {
-
-        const visitorRef =
-            db
-                .collection("counter")
-                .doc("visitors");
-
-
-        const snapshot =
-            await visitorRef.get();
-
-
-        /*-----------------------------------------
-          CREATE COUNTER
-        -----------------------------------------*/
-
-        if (!snapshot.exists) {
-
-            await visitorRef.set({
-
-                count: 1,
-
-                updatedAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-
-            animateVisitorCount(
-                visitorCounter,
-                1
-            );
-
-
-            return;
-        }
-
-
-        /*-----------------------------------------
-          CHECK SESSION
-        -----------------------------------------*/
-
-        const alreadyCounted =
-            sessionStorage.getItem(
-                "chishtiVisitorCounted"
-            );
-
-
-        /*-----------------------------------------
-          ADD NEW VISITOR
-        -----------------------------------------*/
-
-        if (!alreadyCounted) {
-
-            await visitorRef.update({
-
-                count:
-                    firebase.firestore
-                        .FieldValue
-                        .increment(1),
-
-                updatedAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-        }
-
-
-        /*-----------------------------------------
-          GET FINAL COUNT
-        -----------------------------------------*/
-
-        const latestSnapshot =
-            await visitorRef.get();
-
-
-        const data =
-            latestSnapshot.data() || {};
-
-
-        const total =
-            Number(data.count) || 0;
-
-
-        animateVisitorCount(
-            visitorCounter,
-            total
-        );
-
-
-        console.log(
-            "✅ Visitors:",
-            total
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Visitor Counter Error:",
-            error
-        );
-
-
-        visitorCounter.innerText = "0";
-
-    }
-
-}
-
-
-/*=========================================================
-  VISITOR COUNTER ANIMATION
-=========================================================*/
-
-function animateVisitorCount(
-    element,
-    target
-) {
-
-    if (!element) return;
-
-
-    target =
-        Number(target) || 0;
-
-
-    if (target <= 0) {
-
-        element.innerText = "0";
-
-        return;
-
-    }
-
-
-    const duration = 900;
-
-    const start =
-        performance.now();
-
-
-    function animate(now) {
-
-        const progress =
-            Math.min(
-                (now - start) /
-                duration,
-                1
-            );
-
-
-        const eased =
-            1 -
-            Math.pow(
-                1 - progress,
-                3
-            );
-
-
-        const current =
-            Math.floor(
-                eased * target
-            );
-
-
-        element.innerText =
-            current.toLocaleString();
-
-
-        if (progress < 1) {
-
-            requestAnimationFrame(
-                animate
-            );
-
-        }
-
-        else {
-
-            element.innerText =
-                target.toLocaleString();
-
-        }
-
-    }
-
-
-    requestAnimationFrame(
-        animate
-    );
-
-}
-
-
-/*=========================================================
-  PART 6
-  LOAD BOOKS FROM FIREBASE
-=========================================================*/
-
-async function loadBooks() {
-
-    const container =
-        document.getElementById(
-            "booksContainer"
-        );
-
-
-    try {
-
-        if (!db) {
-
-            if (!initializeFirebase()) {
-
-                console.error(
-                    "❌ Firebase unavailable."
-                );
-
-                return;
-
-            }
-
-        }
-
-
-        console.log(
-            "📚 Loading books..."
-        );
-
-
-        const snapshot =
-            await db
-                .collection("books")
-                .get();
-
-
-        allBooks = [];
-
-
-        snapshot.forEach(
-            doc => {
-
-                const data =
-                    doc.data() || {};
-
-
-                allBooks.push({
-
-                    id: doc.id,
-
-                    title:
-                        data.title || "Untitled Book",
-
-                    author:
-                        data.author || "Unknown Author",
-
-                    category:
-                        data.category || "General",
-
-                    description:
-                        data.description || "",
-
-                    language:
-                        data.language || "",
-
-                    cover:
-                        data.cover || "logo.png",
-
-                    pdf:
-                        data.pdf || "",
-
-                    views:
-                        Number(data.views) || 0,
-
-                    likes:
-                        Number(data.likes) || 0,
-
-                    downloads:
-                        Number(data.downloads) || 0,
-
-                    latest:
-                        data.latest === true,
-
-                    featured:
-                        data.featured === true,
-
-                    published:
-                        data.published !== false,
-
-                    createdAt:
-                        data.createdAt || null
-
-                });
-
-            }
-        );
-
-
-        /*-----------------------------------------
-          ONLY PUBLISHED BOOKS
-        -----------------------------------------*/
-
-        allBooks =
-            allBooks.filter(
-                book =>
-                    book.published !== false
-            );
-
-
-        filteredBooks =
-            [...allBooks];
-
-
-        /*-----------------------------------------
-          DISPLAY
-        -----------------------------------------*/
-
-        displayBooks(
-            filteredBooks
-        );
-
-
-        /*-----------------------------------------
-          LATEST
-        -----------------------------------------*/
-
-        latestBook();
-
-
-        /*-----------------------------------------
-          CAROUSEL
-        -----------------------------------------*/
-
-        if (
-            typeof initBookCarousel ===
-            "function"
-        ) {
-
-            initBookCarousel();
-
-        }
-
-
-        console.log(
-            `✅ ${allBooks.length} books loaded`
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Books Loading Error:",
-            error
-        );
-
-
-        if (container) {
-
-            container.innerHTML = `
-
-                <div class="no-books">
-
-                    <h2>
-                        Books could not be loaded
-                    </h2>
-
-                    <p>
-                        Please try again later.
-                    </p>
-
-                </div>
-
-            `;
-
-        }
-
-    }
-
-}
-
-
-/*=========================================================
-  START FIREBASE + BOOKS
-=========================================================*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initializeFirebase();
-
-        updateVisitorCounter();
-
-        loadBooks();
-
-    }
-);
-
-
-/*=========================================================
-  UTILITY
-=========================================================*/
-
-function byId(id) {
-
-    return document.getElementById(id);
-
-}
-
-
-/*=========================================================
-  PART 7
-  DISPLAY BOOKS
-=========================================================*/
-
-function displayBooks(books) {
-
-    const container =
-        document.getElementById(
-            "booksContainer"
-        );
-
-
-    if (!container) return;
-
-
-    container.innerHTML = "";
-
-
-    if (!Array.isArray(books)) {
-
-        books = [];
-
-    }
-
-
-    /*-----------------------------------------
-      NO BOOKS
-    -----------------------------------------*/
-
-    if (books.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="no-books">
-
-                <h2>No Books Found</h2>
-
-                <p>
-                    Try another search or category.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    /*-----------------------------------------
-      BOOK CARDS
-    -----------------------------------------*/
-
-    books.forEach(book => {
-
-        const safeTitle =
-            escapeHTML(book.title);
-
-
-        const safeAuthor =
-            escapeHTML(book.author);
-
-
-        const safeCategory =
-            escapeHTML(book.category);
-
-
-        const safeDescription =
-            escapeHTML(book.description);
-
-
-        const cover =
-            book.cover || "logo.png";
-
-
-        const pdf =
-            book.pdf || "";
-
-
-        container.innerHTML += `
-
-            <div
-                class="book-card"
-                data-book-id="${book.id || ""}"
-            >
-
-                <img
-                    src="${cover}"
-                    alt="${safeTitle}"
-                    loading="lazy"
-                    onerror="this.src='logo.png'"
-                >
-
-
-                <div class="book-content">
-
-                    <span class="book-category">
-
-                        ${safeCategory}
-
-                    </span>
-
-
-                    <h2>
-
-                        ${safeTitle}
-
-                    </h2>
-
-
-                    <h3>
-
-                        ${safeAuthor}
-
-                    </h3>
-
-
-                    <p>
-
-                        ${safeDescription}
-
-                    </p>
-
-
-                    <div class="book-meta">
-
-                        <span>
-                            👁
-                            ${Number(book.views) || 0}
-                        </span>
-
-
-                        <span>
-                            ❤️
-                            ${Number(book.likes) || 0}
-                        </span>
-
-
-                        <span>
-                            ⬇
-                            ${Number(book.downloads) || 0}
-                        </span>
-
-                    </div>
-
-
-                    <div class="book-buttons">
-
-                        ${
-                            pdf
-                            ?
-                            `
-
-                            <a
-                                href="reader.html?book=${encodeURIComponent(pdf)}"
-                                class="btn read-book"
-                                data-book-id="${book.id || ""}"
-                            >
-                                📖 Read Online
-                            </a>
-
-
-                            <a
-                                href="${pdf}"
-                                download
-                                class="btn download-book"
-                                data-book-id="${book.id || ""}"
-                            >
-                                ⬇ Download
-                            </a>
-
-                            `
-                            :
-                            `
-                            <span class="btn disabled">
-                                PDF Unavailable
-                            </span>
-                            `
-                        }
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `;
-
-    });
-
-
-    /*-----------------------------------------
-      IMAGE FALLBACK
-    -----------------------------------------*/
-
-    container
-        .querySelectorAll("img")
-        .forEach(img => {
-
-            img.addEventListener(
-                "error",
-                () => {
-
-                    img.src = "logo.png";
-
-                },
-                {
-                    once: true
-                }
-            );
-
-        });
-
-}
-
-
-/*=========================================================
-  ESCAPE HTML
-=========================================================*/
+/* =========================================================
+   UTILITIES
+========================================================= */
 
 function escapeHTML(value) {
 
-    if (value === null ||
-        value === undefined) {
-
-        return "";
-
-    }
-
-
-    return String(value)
-
+    return String(
+        value ?? ""
+    )
         .replace(
             /&/g,
             "&amp;"
         )
-
         .replace(
             /</g,
             "&lt;"
         )
-
         .replace(
             />/g,
             "&gt;"
         )
-
         .replace(
             /"/g,
             "&quot;"
         )
-
         .replace(
             /'/g,
             "&#039;"
@@ -922,337 +316,553 @@ function escapeHTML(value) {
 }
 
 
-/*=========================================================
-  PART 8
-  SEARCH BOOKS
-=========================================================*/
+function escapeAttribute(value) {
 
-function searchBooks() {
-
-    const input =
-        document.getElementById(
-            "searchInput"
-        );
-
-
-    if (!input) return;
-
-
-    const value =
-        input.value
-            .toLowerCase()
-            .trim();
-
-
-    filteredBooks =
-        allBooks.filter(book => {
-
-            return (
-
-                (book.title || "")
-                    .toLowerCase()
-                    .includes(value)
-
-                ||
-
-                (book.author || "")
-                    .toLowerCase()
-                    .includes(value)
-
-                ||
-
-                (book.category || "")
-                    .toLowerCase()
-                    .includes(value)
-
-                ||
-
-                (book.language || "")
-                    .toLowerCase()
-                    .includes(value)
-
-                ||
-
-                (book.description || "")
-                    .toLowerCase()
-                    .includes(value)
-
-            );
-
-        });
-
-
-    displayBooks(
-        filteredBooks
+    return escapeHTML(
+        value
     );
 
+}
 
-    if (
-        typeof restartBookCarousel ===
-        "function"
-    ) {
 
-        restartBookCarousel();
+function getNumber(value) {
+
+    const number =
+        Number(value);
+
+    return Number.isFinite(
+        number
+    )
+        ? number
+        : 0;
+
+}
+
+
+function formatNumber(value) {
+
+    return getNumber(value)
+        .toLocaleString();
+
+}
+
+
+function formatDate(timestamp) {
+
+    if (!timestamp) {
+
+        return "—";
+
+    }
+
+    try {
+
+        let date;
+
+        if (
+            timestamp instanceof
+            firebase.firestore.Timestamp
+        ) {
+
+            date =
+                timestamp.toDate();
+
+        } else if (
+            timestamp.toDate
+        ) {
+
+            date =
+                timestamp.toDate();
+
+        } else {
+
+            date =
+                new Date(
+                    timestamp
+                );
+
+        }
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "—";
+
+        }
+
+        return date.toLocaleDateString(
+            undefined,
+            {
+                year: "numeric",
+                month: "short",
+                day: "numeric"
+            }
+        );
+
+    } catch (error) {
+
+        return "—";
 
     }
 
 }
 
 
-/*=========================================================
-  SEARCH INPUT EVENT
-=========================================================*/
+/* =========================================================
+   MESSAGE
+========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        const searchInput =
-            document.getElementById(
-                "searchInput"
-            );
-
-
-        if (!searchInput) return;
-
-
-        searchInput.addEventListener(
-            "input",
-            searchBooks
-        );
-
-    }
-);
-
-
-/*=========================================================
-  PART 9
-  CATEGORY FILTER
-=========================================================*/
-
-function filterBooks(
-    category,
-    button = null
+function showBookMessage(
+    message,
+    type = "success"
 ) {
 
-    document
-        .querySelectorAll(".category")
-        .forEach(btn => {
+    if (!bookMessage) {
+        return;
+    }
 
-            btn.classList.remove(
-                "active"
-            );
+    bookMessage.textContent =
+        message;
 
-        });
+    bookMessage.className =
+        `admin-message ${type}`;
+
+}
 
 
-    if (button) {
+function clearBookMessage() {
 
-        button.classList.add(
-            "active"
+    if (!bookMessage) {
+        return;
+    }
+
+    bookMessage.textContent =
+        "";
+
+    bookMessage.className =
+        "admin-message";
+
+}
+
+
+/* =========================================================
+   LOGIN MESSAGE
+========================================================= */
+
+function showLoginError(
+    message
+) {
+
+    if (!loginError) {
+        return;
+    }
+
+    loginError.textContent =
+        message;
+
+    loginError.className =
+        "login-error";
+
+}
+
+
+function clearLoginError() {
+
+    if (!loginError) {
+        return;
+    }
+
+    loginError.textContent =
+        "";
+
+}
+
+
+/* =========================================================
+   SHOW / HIDE ADMIN
+========================================================= */
+
+function showAdmin() {
+
+    if (loginScreen) {
+
+        loginScreen.classList.add(
+            "hidden"
         );
 
     }
 
+    if (adminApp) {
 
-    if (
-        !category ||
-        category === "All"
-    ) {
-
-        filteredBooks =
-            [...allBooks];
-
-    }
-
-    else {
-
-        filteredBooks =
-            allBooks.filter(
-                book =>
-
-                    String(
-                        book.category
-                    )
-                    .toLowerCase() ===
-                    String(category)
-                    .toLowerCase()
-
-            );
-
-    }
-
-
-    displayBooks(
-        filteredBooks
-    );
-
-
-    if (
-        typeof restartBookCarousel ===
-        "function"
-    ) {
-
-        restartBookCarousel();
+        adminApp.classList.remove(
+            "hidden"
+        );
 
     }
 
 }
 
 
-/*=========================================================
-  PART 10
-  LATEST BOOK
-=========================================================*/
+function showLogin() {
 
-function latestBook() {
+    if (loginScreen) {
 
-    if (!Array.isArray(allBooks)) return;
-
-
-    let latest =
-        allBooks.find(
-            book =>
-                book.latest === true
+        loginScreen.classList.remove(
+            "hidden"
         );
-
-
-    /*-----------------------------------------
-      FALLBACK: MOST RECENT BOOK
-    -----------------------------------------*/
-
-    if (!latest && allBooks.length > 0) {
-
-        latest =
-            allBooks[0];
 
     }
 
+    if (adminApp) {
 
-    if (!latest) return;
+        adminApp.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
 
 
-    const image =
-        document.querySelector(
-            ".book-image img"
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+if (auth) {
+
+    auth.onAuthStateChanged(
+        function (user) {
+
+            if (user) {
+
+                console.log(
+                    "✅ Admin authenticated:",
+                    user.email
+                );
+
+                showAdmin();
+
+                if (adminEmail) {
+
+                    adminEmail.textContent =
+                        user.email ||
+                        "Admin";
+
+                }
+
+                startAdminData();
+
+            } else {
+
+                console.log(
+                    "ℹ️ No admin logged in"
+                );
+
+                stopAdminData();
+
+                showLogin();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            clearLoginError();
+
+            const email =
+                loginEmail
+                    ? loginEmail.value.trim()
+                    : "";
+
+            const password =
+                loginPassword
+                    ? loginPassword.value
+                    : "";
+
+            if (!email || !password) {
+
+                showLoginError(
+                    "Please enter email and password."
+                );
+
+                return;
+
+            }
+
+            const button =
+                loginForm.querySelector(
+                    "button[type='submit']"
+                );
+
+            const oldText =
+                button
+                    ? button.innerHTML
+                    : "";
+
+            try {
+
+                if (button) {
+
+                    button.disabled =
+                        true;
+
+                    button.innerHTML =
+                        "⏳ Logging in...";
+
+                }
+
+                await auth.signInWithEmailAndPassword(
+                    email,
+                    password
+                );
+
+                console.log(
+                    "✅ Login successful"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "❌ Login failed:",
+                    error
+                );
+
+                let message =
+                    "Login failed.";
+
+                switch (
+                    error.code
+                ) {
+
+                    case "auth/invalid-credential":
+
+                        message =
+                            "Email or password is incorrect.";
+
+                        break;
+
+                    case "auth/invalid-email":
+
+                        message =
+                            "Please enter a valid email.";
+
+                        break;
+
+                    case "auth/user-disabled":
+
+                        message =
+                            "This admin account is disabled.";
+
+                        break;
+
+                    case "auth/user-not-found":
+
+                        message =
+                            "Admin account was not found.";
+
+                        break;
+
+                    case "auth/wrong-password":
+
+                        message =
+                            "Incorrect password.";
+
+                        break;
+
+                    case "auth/too-many-requests":
+
+                        message =
+                            "Too many login attempts. Try again later.";
+
+                        break;
+
+                    default:
+
+                        message =
+                            error.message ||
+                            "Unable to login.";
+
+                }
+
+                showLoginError(
+                    message
+                );
+
+            } finally {
+
+                if (button) {
+
+                    button.disabled =
+                        false;
+
+                    button.innerHTML =
+                        oldText ||
+                        "🔐 Login";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener(
+        "click",
+        async function () {
+
+            try {
+
+                await auth.signOut();
+
+                console.log(
+                    "✅ Logged out"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Logout error:",
+                    error
+                );
+
+                alert(
+                    "Logout failed."
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function openSection(
+    sectionId
+) {
+
+    const sections =
+        document.querySelectorAll(
+            ".admin-section"
+        );
+
+    sections.forEach(
+        section => {
+
+            section.classList.remove(
+                "active-section"
+            );
+
+        }
+    );
+
+
+    const target =
+        document.getElementById(
+            sectionId
         );
 
 
-    const title =
-        document.querySelector(
-            ".book-info h2"
+    if (target) {
+
+        target.classList.add(
+            "active-section"
         );
 
-
-    const author =
-        document.querySelector(
-            ".book-info h3"
-        );
-
-
-    const desc =
-        document.querySelector(
-            ".book-info p"
-        );
+    }
 
 
     const buttons =
         document.querySelectorAll(
-            ".book-info .book-buttons a, .book-buttons a"
+            ".nav-btn"
         );
 
 
-    if (image) {
+    buttons.forEach(
+        button => {
 
-        image.src =
-            latest.cover ||
-            "logo.png";
+            button.classList.toggle(
+                "active",
+                button.dataset.section ===
+                sectionId
+            );
 
-    }
-
-
-    if (title) {
-
-        title.innerText =
-            latest.title || "";
-
-    }
+        }
+    );
 
 
-    if (author) {
-
-        author.innerText =
-            latest.author || "";
-
-    }
-
-
-    if (desc) {
-
-        desc.innerText =
-            latest.description || "";
-
-    }
-
-
-    if (buttons.length >= 1) {
-
-        buttons[0].href =
-            `reader.html?book=${encodeURIComponent(
-                latest.pdf || ""
-            )}`;
-
-    }
-
-
-    if (buttons.length >= 2) {
-
-        buttons[1].href =
-            latest.pdf || "";
-
-    }
-
-}
-
-
-/*=========================================================
-  PART 11
-  FIREBASE BOOK VIEWS
-=========================================================*/
-
-async function increaseBookViews(
-    bookId
-) {
-
-    if (!bookId || !db) return;
-
-
-    try {
-
-        await db
-            .collection("books")
-            .doc(bookId)
-            .update({
-
-                views:
-                    firebase.firestore
-                        .FieldValue
-                        .increment(1)
-
-            });
-
-
-        console.log(
-            "👁 Book view +1"
+    const pageTitle =
+        document.getElementById(
+            "pageTitle"
         );
 
+
+    if (pageTitle) {
+
+        const names = {
+
+            dashboard:
+                "Dashboard",
+
+            books:
+                "Books",
+
+            addBook:
+                "Add Book",
+
+            comments:
+                "Comments"
+
+        };
+
+        pageTitle.textContent =
+            names[sectionId] ||
+            "Dashboard";
+
     }
 
-    catch (error) {
 
-        console.error(
-            "❌ View update error:",
-            error
+    const sidebar =
+        document.querySelector(
+            ".sidebar"
+        );
+
+
+    if (sidebar) {
+
+        sidebar.classList.remove(
+            "mobile-open"
         );
 
     }
@@ -1260,68 +870,1844 @@ async function increaseBookViews(
 }
 
 
-/*=========================================================
-  FIREBASE DOWNLOAD COUNTER
-=========================================================*/
+document
+    .querySelectorAll(
+        ".nav-btn"
+    )
+    .forEach(
+        button => {
 
-async function increaseBookDownloads(
-    bookId
-) {
+            button.addEventListener(
+                "click",
+                function () {
 
-    if (!bookId || !db) return;
+                    openSection(
+                        this.dataset.section
+                    );
 
+                }
+            );
 
-    try {
-
-        await db
-            .collection("books")
-            .doc(bookId)
-            .update({
-
-                downloads:
-                    firebase.firestore
-                        .FieldValue
-                        .increment(1)
-
-            });
+        }
+    );
 
 
-        console.log(
-            "⬇ Download +1"
-        );
+if (goAddBook) {
 
-    }
+    goAddBook.addEventListener(
+        "click",
+        function () {
 
-    catch (error) {
+            resetBookForm();
 
-        console.error(
-            "❌ Download update error:",
-            error
-        );
+            openSection(
+                "addBook"
+            );
 
-    }
+        }
+    );
 
 }
 
 
-/*=========================================================
-  FIREBASE LIKE
-=========================================================*/
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
-async function likeBook(
-    bookId
-) {
+const mobileMenu =
+    document.getElementById(
+        "mobileMenu"
+    );
 
-    if (!bookId || !db) return;
+
+if (mobileMenu) {
+
+    mobileMenu.addEventListener(
+        "click",
+        function () {
+
+            const sidebar =
+                document.querySelector(
+                    ".sidebar"
+                );
+
+            if (sidebar) {
+
+                sidebar.classList.toggle(
+                    "mobile-open"
+                );
+
+            }
+
+        }
+    );
+
+}
 
 
-    const key =
-        `chishtiLiked_${bookId}`;
+/* =========================================================
+   START ADMIN DATA
+========================================================= */
+
+function startAdminData() {
+
+    loadBooksRealtime();
+
+    loadCommentsRealtime();
+
+}
+
+
+/* =========================================================
+   STOP ADMIN DATA
+========================================================= */
+
+function stopAdminData() {
+
+    if (
+        typeof unsubscribeBooks ===
+        "function"
+    ) {
+
+        unsubscribeBooks();
+
+        unsubscribeBooks =
+            null;
+
+    }
 
 
     if (
-        localStorage.getItem(key)
+        typeof unsubscribeComments ===
+        "function"
     ) {
+
+        unsubscribeComments();
+
+        unsubscribeComments =
+            null;
+
+    }
+
+
+    allBooks = [];
+
+}
+
+
+/* =========================================================
+   LOAD BOOKS REALTIME
+========================================================= */
+
+function loadBooksRealtime() {
+
+    if (!db) {
+        return;
+    }
+
+
+    if (
+        typeof unsubscribeBooks ===
+        "function"
+    ) {
+
+        unsubscribeBooks();
+
+    }
+
+
+    console.log(
+        "📚 Starting realtime books listener..."
+    );
+
+
+    unsubscribeBooks =
+        db.collection(
+            BOOKS_COLLECTION
+        )
+        .orderBy(
+            "createdAt",
+            "desc"
+        )
+        .onSnapshot(
+            snapshot => {
+
+                allBooks =
+                    snapshot.docs.map(
+                        doc => ({
+
+                            id:
+                                doc.id,
+
+                            ...doc.data()
+
+                        })
+                    );
+
+
+                console.log(
+                    `✅ Books loaded: ${allBooks.length}`
+                );
+
+
+                renderBooksTable();
+
+                updateDashboard();
+
+            },
+            error => {
+
+                console.error(
+                    "❌ Books listener error:",
+                    error
+                );
+
+
+                /*
+                 * If createdAt index/order
+                 * causes a problem, fallback.
+                 */
+
+                if (
+                    error.code ===
+                    "failed-precondition"
+                ) {
+
+                    loadBooksFallback();
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   BOOK FALLBACK
+========================================================= */
+
+function loadBooksFallback() {
+
+    if (!db) {
+        return;
+    }
+
+
+    if (
+        typeof unsubscribeBooks ===
+        "function"
+    ) {
+
+        unsubscribeBooks();
+
+    }
+
+
+    unsubscribeBooks =
+        db.collection(
+            BOOKS_COLLECTION
+        )
+        .onSnapshot(
+            snapshot => {
+
+                allBooks =
+                    snapshot.docs.map(
+                        doc => ({
+
+                            id:
+                                doc.id,
+
+                            ...doc.data()
+
+                        })
+                    );
+
+
+                allBooks.sort(
+                    function (a, b) {
+
+                        const aTime =
+                            a.createdAt?.toMillis
+                                ? a.createdAt.toMillis()
+                                : 0;
+
+                        const bTime =
+                            b.createdAt?.toMillis
+                                ? b.createdAt.toMillis()
+                                : 0;
+
+                        return bTime -
+                            aTime;
+
+                    }
+                );
+
+
+                renderBooksTable();
+
+                updateDashboard();
+
+            },
+            error => {
+
+                console.error(
+                    "Books fallback error:",
+                    error
+                );
+
+                showBooksError(
+                    error.message
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   RENDER BOOKS TABLE
+========================================================= */
+
+function renderBooksTable() {
+
+    if (!booksTable) {
+        return;
+    }
+
+
+    if (!allBooks.length) {
+
+        booksTable.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="text-align:center;padding:40px;"
+                >
+                    📚 No books found.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    booksTable.innerHTML =
+        allBooks
+            .map(
+                book => {
+
+                    const cover =
+                        book.cover ||
+                        book.coverUrl ||
+                        "logo.png";
+
+
+                    const title =
+                        book.title ||
+                        "Untitled";
+
+
+                    const author =
+                        book.author ||
+                        "Unknown";
+
+
+                    const category =
+                        book.category ||
+                        "Other";
+
+
+                    const views =
+                        getNumber(
+                            book.views
+                        );
+
+
+                    const downloads =
+                        getNumber(
+                            book.downloads
+                        );
+
+
+                    return `
+
+                        <tr data-book-id="${escapeAttribute(book.id)}">
+
+                            <td>
+
+                                <img
+                                    src="${escapeAttribute(cover)}"
+                                    alt=""
+                                    style="
+                                        width:60px;
+                                        height:80px;
+                                        object-fit:cover;
+                                        border-radius:6px;
+                                    "
+                                    onerror="this.src='logo.png'"
+                                >
+
+                            </td>
+
+
+                            <td>
+
+                                <strong>
+                                    ${escapeHTML(title)}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(author)}
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(category)}
+                            </td>
+
+
+                            <td>
+                                ${formatNumber(views)}
+                            </td>
+
+
+                            <td>
+                                ${formatNumber(downloads)}
+                            </td>
+
+
+                            <td>
+
+                                ${
+                                    book.latest
+                                        ? `
+                                            <span
+                                                class="latest-badge"
+                                            >
+                                                ⭐ Latest
+                                            </span>
+                                          `
+                                        : "—"
+                                }
+
+                            </td>
+
+
+                            <td>
+
+                                <div
+                                    class="book-actions"
+                                    style="
+                                        display:flex;
+                                        gap:6px;
+                                        flex-wrap:wrap;
+                                    "
+                                >
+
+                                    <button
+                                        type="button"
+                                        class="edit-book-btn"
+                                        data-id="${escapeAttribute(book.id)}"
+                                        title="Edit book"
+                                    >
+                                        ✏️
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="delete-book-btn"
+                                        data-id="${escapeAttribute(book.id)}"
+                                        title="Delete book"
+                                    >
+                                        🗑️
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    /*
+     * Edit buttons
+     */
+
+    document
+        .querySelectorAll(
+            ".edit-book-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        editBook(
+                            this.dataset.id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+     * Delete buttons
+     */
+
+    document
+        .querySelectorAll(
+            ".delete-book-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        deleteBook(
+                            this.dataset.id
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   TABLE ERROR
+========================================================= */
+
+function showBooksError(
+    message
+) {
+
+    if (!booksTable) {
+        return;
+    }
+
+
+    booksTable.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="8"
+                style="
+                    text-align:center;
+                    padding:40px;
+                    color:#b00020;
+                "
+            >
+
+                ❌ Could not load books.
+
+                <br><br>
+
+                ${escapeHTML(message)}
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =========================================================
+   UPDATE DASHBOARD
+========================================================= */
+
+function updateDashboard() {
+
+    const books =
+        allBooks;
+
+
+    let views = 0;
+
+    let likes = 0;
+
+    let shares = 0;
+
+    let downloads = 0;
+
+
+    books.forEach(
+        book => {
+
+            views +=
+                getNumber(
+                    book.views
+                );
+
+            likes +=
+                getNumber(
+                    book.likes
+                );
+
+            shares +=
+                getNumber(
+                    book.shares
+                );
+
+            downloads +=
+                getNumber(
+                    book.downloads
+                );
+
+        }
+    );
+
+
+    if (totalBooks) {
+
+        totalBooks.textContent =
+            formatNumber(
+                books.length
+            );
+
+    }
+
+
+    if (totalViews) {
+
+        totalViews.textContent =
+            formatNumber(
+                views
+            );
+
+    }
+
+
+    if (totalLikes) {
+
+        totalLikes.textContent =
+            formatNumber(
+                likes
+            );
+
+    }
+
+
+    if (totalShares) {
+
+        totalShares.textContent =
+            formatNumber(
+                shares
+            );
+
+    }
+
+
+    if (totalDownloads) {
+
+        totalDownloads.textContent =
+            formatNumber(
+                downloads
+            );
+
+    }
+
+
+    /*
+     * Visitors:
+     *
+     * If your site has a visitors document,
+     * use it.
+     *
+     * Otherwise show total views.
+     */
+
+    if (totalVisitors) {
+
+        totalVisitors.textContent =
+            formatNumber(
+                views
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   EDIT BOOK
+========================================================= */
+
+function editBook(
+    id
+) {
+
+    const book =
+        allBooks.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!book) {
+
+        alert(
+            "Book not found."
+        );
+
+        return;
+
+    }
+
+
+    editingBook =
+        book;
+
+
+    if (editingBookId) {
+
+        editingBookId.value =
+            book.id;
+
+    }
+
+
+    if (bookTitle) {
+
+        bookTitle.value =
+            book.title ||
+            "";
+
+    }
+
+
+    if (bookAuthor) {
+
+        bookAuthor.value =
+            book.author ||
+            "";
+
+    }
+
+
+    if (bookCategory) {
+
+        /*
+         * If old category isn't
+         * in select options, add it.
+         */
+
+        const category =
+            book.category ||
+            "Other";
+
+
+        let option =
+            Array.from(
+                bookCategory.options
+            )
+            .find(
+                item =>
+                    item.value ===
+                    category
+            );
+
+
+        if (!option) {
+
+            option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                category;
+
+            option.textContent =
+                category;
+
+            bookCategory.appendChild(
+                option
+            );
+
+        }
+
+
+        bookCategory.value =
+            category;
+
+    }
+
+
+    if (bookLanguage) {
+
+        const language =
+            book.language ||
+            "Urdu";
+
+
+        let option =
+            Array.from(
+                bookLanguage.options
+            )
+            .find(
+                item =>
+                    item.value ===
+                    language
+            );
+
+
+        if (!option) {
+
+            option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                language;
+
+            option.textContent =
+                language;
+
+            bookLanguage.appendChild(
+                option
+            );
+
+        }
+
+
+        bookLanguage.value =
+            language;
+
+    }
+
+
+    if (bookDescription) {
+
+        bookDescription.value =
+            book.description ||
+            "";
+
+    }
+
+
+    if (bookLatest) {
+
+        bookLatest.checked =
+            Boolean(
+                book.latest
+            );
+
+    }
+
+
+    if (coverStatus) {
+
+        coverStatus.textContent =
+            book.cover
+                ? "✅ Existing cover will be kept unless a new one is selected."
+                : "No cover selected";
+
+    }
+
+
+    if (pdfStatus) {
+
+        pdfStatus.textContent =
+            book.pdf
+                ? "✅ Existing PDF will be kept unless a new one is selected."
+                : "No PDF selected";
+
+    }
+
+
+    if (coverFile) {
+
+        coverFile.value =
+            "";
+
+    }
+
+
+    if (pdfFile) {
+
+        pdfFile.value =
+            "";
+
+    }
+
+
+    if (bookFormTitle) {
+
+        bookFormTitle.textContent =
+            "Edit Book";
+
+    }
+
+
+    if (saveBookBtn) {
+
+        saveBookBtn.innerHTML =
+            "💾 Update Book";
+
+    }
+
+
+    clearBookMessage();
+
+
+    openSection(
+        "addBook"
+    );
+
+
+    window.scrollTo(
+        {
+            top: 0,
+            behavior: "smooth"
+        }
+    );
+
+
+    console.log(
+        "✏️ Editing:",
+        book
+    );
+
+}
+
+
+/* =========================================================
+   RESET FORM
+========================================================= */
+
+function resetBookForm() {
+
+    editingBook =
+        null;
+
+
+    if (bookForm) {
+
+        bookForm.reset();
+
+    }
+
+
+    if (editingBookId) {
+
+        editingBookId.value =
+            "";
+
+    }
+
+
+    if (bookFormTitle) {
+
+        bookFormTitle.textContent =
+            "Add New Book";
+
+    }
+
+
+    if (saveBookBtn) {
+
+        saveBookBtn.innerHTML =
+            "💾 Save Book";
+
+    }
+
+
+    if (coverStatus) {
+
+        coverStatus.textContent =
+            "No cover selected";
+
+    }
+
+
+    if (pdfStatus) {
+
+        pdfStatus.textContent =
+            "No PDF selected";
+
+    }
+
+
+    clearBookMessage();
+
+}
+
+
+/* =========================================================
+   CANCEL EDIT
+========================================================= */
+
+if (cancelEdit) {
+
+    cancelEdit.addEventListener(
+        "click",
+        function () {
+
+            resetBookForm();
+
+            openSection(
+                "books"
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   FILE STATUS
+========================================================= */
+
+if (coverFile) {
+
+    coverFile.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files &&
+                this.files[0];
+
+
+            if (!file) {
+
+                coverStatus.textContent =
+                    editingBook?.cover
+                        ? "Existing cover will be kept."
+                        : "No cover selected";
+
+                return;
+
+            }
+
+
+            if (
+                !file.type.startsWith(
+                    "image/"
+                )
+            ) {
+
+                coverStatus.textContent =
+                    "❌ Please select an image file.";
+
+                this.value =
+                    "";
+
+                return;
+
+            }
+
+
+            coverStatus.textContent =
+                `✅ ${file.name}`;
+
+        }
+    );
+
+}
+
+
+if (pdfFile) {
+
+    pdfFile.addEventListener(
+        "change",
+        function () {
+
+            const file =
+                this.files &&
+                this.files[0];
+
+
+            if (!file) {
+
+                pdfStatus.textContent =
+                    editingBook?.pdf
+                        ? "Existing PDF will be kept."
+                        : "No PDF selected";
+
+                return;
+
+            }
+
+
+            if (
+                file.type !==
+                "application/pdf"
+            ) {
+
+                pdfStatus.textContent =
+                    "❌ Please select a PDF file.";
+
+                this.value =
+                    "";
+
+                return;
+
+            }
+
+
+            const sizeMB =
+                file.size /
+                (1024 * 1024);
+
+
+            pdfStatus.textContent =
+                `✅ ${file.name} — ${sizeMB.toFixed(1)} MB`;
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   STORAGE UPLOAD
+========================================================= */
+
+async function uploadFile(
+    file,
+    folder,
+    oldURL = ""
+) {
+
+    if (!file) {
+
+        return oldURL || "";
+
+    }
+
+
+    if (!storage) {
+
+        throw new Error(
+            "Firebase Storage is not initialized."
+        );
+
+    }
+
+
+    const safeName =
+        file.name
+            .replace(
+                /[^a-zA-Z0-9._-]/g,
+                "_"
+            );
+
+
+    const uniqueName =
+        `${Date.now()}_${Math.random()
+            .toString(36)
+            .substring(2, 9)}_${safeName}`;
+
+
+    const path =
+        `${folder}/${uniqueName}`;
+
+
+    console.log(
+        "⬆️ Uploading:",
+        path
+    );
+
+
+    const reference =
+        storage.ref(
+            path
+        );
+
+
+    const uploadTask =
+        reference.put(
+            file
+        );
+
+
+    return new Promise(
+        function (
+            resolve,
+            reject
+        ) {
+
+            uploadTask.on(
+
+                "state_changed",
+
+                function (
+                    snapshot
+                ) {
+
+                    const percent =
+                        (
+                            snapshot.bytesTransferred /
+                            snapshot.totalBytes
+                        ) *
+                        100;
+
+
+                    console.log(
+                        `${folder}: ${percent.toFixed(0)}%`
+                    );
+
+                },
+
+                function (error) {
+
+                    console.error(
+                        "Upload error:",
+                        error
+                    );
+
+                    reject(
+                        error
+                    );
+
+                },
+
+                async function () {
+
+                    try {
+
+                        const url =
+                            await uploadTask.snapshot
+                                .ref
+                                .getDownloadURL();
+
+
+                        resolve(
+                            url
+                        );
+
+                    } catch (error) {
+
+                        reject(
+                            error
+                        );
+
+                    }
+
+                }
+
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SAVE BOOK
+========================================================= */
+
+if (bookForm) {
+
+    bookForm.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+
+            if (!auth?.currentUser) {
+
+                alert(
+                    "Please login first."
+                );
+
+                return;
+
+            }
+
+
+            if (!db) {
+
+                alert(
+                    "Firestore is not available."
+                );
+
+                return;
+
+            }
+
+
+            clearBookMessage();
+
+
+            const title =
+                bookTitle
+                    ? bookTitle.value.trim()
+                    : "";
+
+
+            const author =
+                bookAuthor
+                    ? bookAuthor.value.trim()
+                    : "";
+
+
+            const category =
+                bookCategory
+                    ? bookCategory.value
+                    : "Other";
+
+
+            const language =
+                bookLanguage
+                    ? bookLanguage.value
+                    : "Urdu";
+
+
+            const description =
+                bookDescription
+                    ? bookDescription.value.trim()
+                    : "";
+
+
+            const latest =
+                bookLatest
+                    ? bookLatest.checked
+                    : false;
+
+
+            const cover =
+                coverFile?.files?.[0] ||
+                null;
+
+
+            const pdf =
+                pdfFile?.files?.[0] ||
+                null;
+
+
+            if (!title) {
+
+                showBookMessage(
+                    "Please enter book title.",
+                    "error"
+                );
+
+                bookTitle?.focus();
+
+                return;
+
+            }
+
+
+            if (!author) {
+
+                showBookMessage(
+                    "Please enter author.",
+                    "error"
+                );
+
+                bookAuthor?.focus();
+
+                return;
+
+            }
+
+
+            const isEditing =
+                Boolean(
+                    editingBookId?.value
+                );
+
+
+            const bookId =
+                editingBookId?.value ||
+                "";
+
+
+            const oldBook =
+                isEditing
+                    ? allBooks.find(
+                        item =>
+                            item.id ===
+                            bookId
+                    )
+                    : null;
+
+
+            /*
+             * New book requires PDF.
+             *
+             * Existing book can keep
+             * old PDF.
+             */
+
+            if (
+                !isEditing &&
+                !pdf
+            ) {
+
+                showBookMessage(
+                    "Please select a PDF.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            const oldButtonText =
+                saveBookBtn
+                    ? saveBookBtn.innerHTML
+                    : "";
+
+
+            try {
+
+                if (saveBookBtn) {
+
+                    saveBookBtn.disabled =
+                        true;
+
+                    saveBookBtn.innerHTML =
+                        isEditing
+                            ? "⏳ Updating..."
+                            : "⏳ Uploading...";
+
+                }
+
+
+                showBookMessage(
+                    isEditing
+                        ? "Updating book..."
+                        : "Uploading book...",
+                    "loading"
+                );
+
+
+                /*
+                 * Upload cover if selected.
+                 */
+
+                let coverURL =
+                    oldBook?.cover ||
+                    oldBook?.coverUrl ||
+                    "";
+
+
+                if (cover) {
+
+                    showBookMessage(
+                        "Uploading cover...",
+                        "loading"
+                    );
+
+
+                    coverURL =
+                        await uploadFile(
+                            cover,
+                            "book-covers",
+                            coverURL
+                        );
+
+                }
+
+
+                /*
+                 * Upload PDF if selected.
+                 */
+
+                let pdfURL =
+                    oldBook?.pdf ||
+                    oldBook?.pdfUrl ||
+                    "";
+
+
+                if (pdf) {
+
+                    showBookMessage(
+                        "Uploading PDF...",
+                        "loading"
+                    );
+
+
+                    pdfURL =
+                        await uploadFile(
+                            pdf,
+                            "book-pdfs",
+                            pdfURL
+                        );
+
+                }
+
+
+                if (
+                    !pdfURL &&
+                    !isEditing
+                ) {
+
+                    throw new Error(
+                        "PDF upload failed."
+                    );
+
+                }
+
+
+                /*
+                 * Build book object.
+                 */
+
+                const bookData = {
+
+                    title:
+                        title,
+
+                    author:
+                        author,
+
+                    category:
+                        category,
+
+                    language:
+                        language,
+
+                    description:
+                        description,
+
+                    cover:
+                        coverURL,
+
+                    pdf:
+                        pdfURL,
+
+                    latest:
+                        latest,
+
+                    views:
+                        getNumber(
+                            oldBook?.views
+                        ),
+
+                    likes:
+                        getNumber(
+                            oldBook?.likes
+                        ),
+
+                    shares:
+                        getNumber(
+                            oldBook?.shares
+                        ),
+
+                    downloads:
+                        getNumber(
+                            oldBook?.downloads
+                        ),
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                };
+
+
+                /*
+                 * Add createdAt only
+                 * for new book.
+                 */
+
+                if (!isEditing) {
+
+                    bookData.createdAt =
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp();
+
+                }
+
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * If Latest is selected,
+                 * make all other books
+                 * latest=false.
+                 */
+
+                if (latest) {
+
+                    showBookMessage(
+                        "Updating latest book...",
+                        "loading"
+                    );
+
+
+                    const latestSnapshot =
+                        await db.collection(
+                            BOOKS_COLLECTION
+                        )
+                        .where(
+                            "latest",
+                            "==",
+                            true
+                        )
+                        .get();
+
+
+                    const batch =
+                        db.batch();
+
+
+                    latestSnapshot.docs
+                        .forEach(
+                            doc => {
+
+                                if (
+                                    doc.id !==
+                                    bookId
+                                ) {
+
+                                    batch.update(
+                                        doc.ref,
+                                        {
+                                            latest:
+                                                false,
+
+                                            updatedAt:
+                                                firebase.firestore
+                                                    .FieldValue
+                                                    .serverTimestamp()
+
+                                        }
+                                    );
+
+                                }
+
+                            }
+                        );
+
+
+                    await batch.commit();
+
+                }
+
+
+                /*
+                 * SAVE
+                 */
+
+                showBookMessage(
+                    "Saving to Firebase...",
+                    "loading"
+                );
+
+
+                if (isEditing) {
+
+                    await db.collection(
+                        BOOKS_COLLECTION
+                    )
+                    .doc(
+                        bookId
+                    )
+                    .update(
+                        bookData
+                    );
+
+
+                    console.log(
+                        "✅ Book updated:",
+                        bookId
+                    );
+
+
+                    showBookMessage(
+                        "✅ Book updated successfully!",
+                        "success"
+                    );
+
+
+                } else {
+
+                    const newRef =
+                        await db.collection(
+                            BOOKS_COLLECTION
+                        )
+                        .add(
+                            bookData
+                        );
+
+
+                    console.log(
+                        "✅ Book added:",
+                        newRef.id
+                    );
+
+
+                    showBookMessage(
+                        "✅ Book added successfully!",
+                        "success"
+                    );
+
+                }
+
+
+                /*
+                 * Reset after successful save.
+                 */
+
+                setTimeout(
+                    function () {
+
+                        resetBookForm();
+
+                        openSection(
+                            "books"
+                        );
+
+                    },
+                    900
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "❌ Save book error:",
+                    error
+                );
+
+
+                let message =
+                    error.message ||
+                    "Could not save book.";
+
+
+                if (
+                    error.code ===
+                    "permission-denied"
+                ) {
+
+                    message =
+                        "Firestore permission denied. Check Firestore Rules.";
+
+                }
+
+
+                if (
+                    error.code ===
+                    "storage/unauthorized"
+                ) {
+
+                    message =
+                        "Storage permission denied. Check Storage Rules.";
+
+                }
+
+
+                showBookMessage(
+                    `❌ ${message}`,
+                    "error"
+                );
+
+
+            } finally {
+
+                if (saveBookBtn) {
+
+                    saveBookBtn.disabled =
+                        false;
+
+                    saveBookBtn.innerHTML =
+                        oldButtonText ||
+                        "💾 Save Book";
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DELETE BOOK
+========================================================= */
+
+async function deleteBook(
+    id
+) {
+
+    if (!auth?.currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+
+    }
+
+
+    const book =
+        allBooks.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!book) {
+
+        alert(
+            "Book not found."
+        );
+
+        return;
+
+    }
+
+
+    const title =
+        book.title ||
+        "this book";
+
+
+    const confirmed =
+        confirm(
+            `Delete "${title}"?\n\nThis will permanently remove the book from Firestore.`
+        );
+
+
+    if (!confirmed) {
 
         return;
 
@@ -1330,131 +2716,43 @@ async function likeBook(
 
     try {
 
-        await db
-            .collection("books")
-            .doc(bookId)
-            .update({
-
-                likes:
-                    firebase.firestore
-                        .FieldValue
-                        .increment(1)
-
-            });
-
-
-        localStorage.setItem(
-            key,
-            "true"
-        );
-
-
         console.log(
-            "❤️ Like added"
+            "🗑️ Deleting book:",
+            id
         );
 
-    }
 
-    catch (error) {
+        await db.collection(
+            BOOKS_COLLECTION
+        )
+        .doc(
+            id
+        )
+        .delete();
+
+
+        /*
+         * Storage files are intentionally
+         * not automatically deleted here
+         * because an existing URL may be
+         * shared elsewhere.
+         */
+
+        alert(
+            "✅ Book deleted successfully."
+        );
+
+
+    } catch (error) {
 
         console.error(
-            "❌ Like error:",
+            "Delete book error:",
             error
         );
 
-    }
 
-}
-
-
-/*=========================================================
-  BOOK ACTION EVENTS
-=========================================================*/
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const readBtn =
-            event.target.closest(
-                ".read-book"
-            );
-
-
-        const downloadBtn =
-            event.target.closest(
-                ".download-book"
-            );
-
-
-        if (readBtn) {
-
-            const bookId =
-                readBtn.dataset.bookId;
-
-
-            increaseBookViews(
-                bookId
-            );
-
-        }
-
-
-        if (downloadBtn) {
-
-            const bookId =
-                downloadBtn.dataset.bookId;
-
-
-            increaseBookDownloads(
-                bookId
-            );
-
-        }
-
-    }
-);
-
-
-/*=========================================================
-  PART 12
-  AI KNOWLEDGE
-=========================================================*/
-
-async function loadKnowledge() {
-
-    try {
-
-        const response =
-            await fetch(
-                "knowledge.json"
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "knowledge.json not found"
-            );
-
-        }
-
-
-        knowledge =
-            await response.json();
-
-
-        console.log(
-            "✅ Knowledge Loaded"
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "❌ Knowledge Error:",
-            error
+        alert(
+            `❌ Delete failed.\n\n${error.message}`
         );
 
     }
@@ -1462,981 +2760,797 @@ async function loadKnowledge() {
 }
 
 
-loadKnowledge();
+/* =========================================================
+   COMMENTS REALTIME
+========================================================= */
 
+function loadCommentsRealtime() {
 
-/*=========================================================
-  CHAT ELEMENTS
-=========================================================*/
+    if (!db || !commentsContainer) {
+        return;
+    }
 
-const chatBtn =
-    document.getElementById(
-        "chatBtn"
-    );
 
+    if (
+        typeof unsubscribeComments ===
+        "function"
+    ) {
 
-const chatWindow =
-    document.getElementById(
-        "chatWindow"
-    );
-
-
-const closeChat =
-    document.getElementById(
-        "closeChat"
-    );
-
-
-const chatInput =
-    document.getElementById(
-        "chatInput"
-    );
-
-
-const chatMessages =
-    document.getElementById(
-        "chatMessages"
-    );
-
-
-/*=========================================================
-  OPEN CHAT
-=========================================================*/
-
-if (chatBtn) {
-
-    chatBtn.addEventListener(
-        "click",
-        () => {
-
-            if (chatWindow) {
-
-                chatWindow.style.display =
-                    "flex";
-
-            }
-
-        }
-    );
-
-}
-
-
-/*=========================================================
-  CLOSE CHAT
-=========================================================*/
-
-if (closeChat) {
-
-    closeChat.addEventListener(
-        "click",
-        () => {
-
-            if (chatWindow) {
-
-                chatWindow.style.display =
-                    "none";
-
-            }
-
-        }
-    );
-
-}
-
-
-/*=========================================================
-  ENTER KEY
-=========================================================*/
-
-if (chatInput) {
-
-    chatInput.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                event.preventDefault();
-
-                sendMessage();
-
-            }
-
-        }
-    );
-
-}
-
-
-/*=========================================================
-  SEARCH BOOK FOR AI
-=========================================================*/
-
-function searchBook(question) {
-
-    const q =
-        String(question)
-            .toLowerCase()
-            .trim();
-
-
-    for (const book of allBooks) {
-
-        const title =
-            (book.title || "")
-                .toLowerCase();
-
-
-        const category =
-            (book.category || "")
-                .toLowerCase();
-
-
-        const author =
-            (book.author || "")
-                .toLowerCase();
-
-
-        if (
-
-            title.includes(q)
-
-            ||
-
-            category.includes(q)
-
-            ||
-
-            author.includes(q)
-
-        ) {
-
-            return `
-
-                📚 <b>
-                ${escapeHTML(book.title)}
-                </b>
-
-                <br>
-
-                👤
-                ${escapeHTML(book.author)}
-
-                <br>
-
-                📂
-                ${escapeHTML(book.category)}
-
-                <br><br>
-
-                <a
-                    href="reader.html?book=${encodeURIComponent(book.pdf || "")}"
-                    class="btn"
-                >
-                    📖 Read Online
-                </a>
-
-                &nbsp;
-
-                <a
-                    href="${book.pdf || "#"}"
-                    download
-                    class="btn"
-                >
-                    ⬇ Download
-                </a>
-
-            `;
-
-        }
+        unsubscribeComments();
 
     }
 
 
-    return null;
+    unsubscribeComments =
+        db.collection(
+            COMMENTS_COLLECTION
+        )
+        .orderBy(
+            "createdAt",
+            "desc"
+        )
+        .onSnapshot(
+            snapshot => {
 
-}
+                renderComments(
+                    snapshot.docs
+                );
 
+            },
+            error => {
 
-/*=========================================================
-  SEARCH KNOWLEDGE
-=========================================================*/
-
-function searchKnowledge(question) {
-
-    const q =
-        String(question)
-            .toLowerCase()
-            .trim();
-
-
-    for (const item of knowledge) {
-
-        const itemQuestion =
-            String(
-                item.question || ""
-            )
-            .toLowerCase();
-
-
-        const keywords =
-            Array.isArray(
-                item.keywords
-            )
-            ?
-            item.keywords
-            :
-            [];
-
-
-        if (
-            itemQuestion.includes(q)
-            ||
-            keywords.some(
-                keyword =>
-                    String(keyword)
-                        .toLowerCase()
-                        .includes(q)
-            )
-        ) {
-
-            return item.answer || null;
-
-        }
-
-    }
-
-
-    return null;
-
-}
-
-
-/*=========================================================
-  BOT MESSAGE
-=========================================================*/
-
-function botReply(text) {
-
-    if (!chatMessages) return;
-
-
-    const message =
-        document.createElement(
-            "div"
-        );
-
-
-    message.className =
-        "bot-message";
-
-
-    message.innerHTML =
-        text;
-
-
-    chatMessages.appendChild(
-        message
-    );
-
-
-    chatMessages.scrollTop =
-        chatMessages.scrollHeight;
-
-}
-
-
-/*=========================================================
-  USER MESSAGE
-=========================================================*/
-
-function userReply(text) {
-
-    if (!chatMessages) return;
-
-
-    const message =
-        document.createElement(
-            "div"
-        );
-
-
-    message.className =
-        "user-message";
-
-
-    message.innerText =
-        text;
-
-
-    chatMessages.appendChild(
-        message
-    );
-
-
-    chatMessages.scrollTop =
-        chatMessages.scrollHeight;
-
-}
-
-
-/*=========================================================
-  SEND MESSAGE
-=========================================================*/
-
-function sendMessage() {
-
-    if (!chatInput) return;
-
-
-    const question =
-        chatInput.value.trim();
-
-
-    if (!question) return;
-
-
-    userReply(
-        question
-    );
-
-
-    chatInput.value = "";
-
-
-    setTimeout(
-        () => {
-
-            let reply =
-                searchBook(
-                    question
+                console.error(
+                    "Comments error:",
+                    error
                 );
 
 
-            if (!reply) {
+                /*
+                 * Fallback if index
+                 * is unavailable.
+                 */
 
-                reply =
-                    searchKnowledge(
-                        question
-                    );
+                loadCommentsFallback();
 
             }
+        );
+
+}
 
 
-            if (!reply) {
+/* =========================================================
+   COMMENTS FALLBACK
+========================================================= */
 
-                reply = `
+function loadCommentsFallback() {
 
-                    🤖 Sorry!
+    if (!db || !commentsContainer) {
+        return;
+    }
 
-                    <br><br>
 
-                    Mujhe iska jawab abhi
-                    database mein nahi mila.
+    if (
+        typeof unsubscribeComments ===
+        "function"
+    ) {
+
+        unsubscribeComments();
+
+    }
+
+
+    unsubscribeComments =
+        db.collection(
+            COMMENTS_COLLECTION
+        )
+        .onSnapshot(
+            snapshot => {
+
+                const docs =
+                    [...snapshot.docs];
+
+
+                docs.sort(
+                    function (a, b) {
+
+                        const aData =
+                            a.data();
+
+                        const bData =
+                            b.data();
+
+
+                        const aTime =
+                            aData.createdAt
+                                ?.toMillis
+                                ? aData.createdAt.toMillis()
+                                : 0;
+
+
+                        const bTime =
+                            bData.createdAt
+                                ?.toMillis
+                                ? bData.createdAt.toMillis()
+                                : 0;
+
+
+                        return bTime -
+                            aTime;
+
+                    }
+                );
+
+
+                renderComments(
+                    docs
+                );
+
+            },
+            error => {
+
+                console.error(
+                    "Comments fallback error:",
+                    error
+                );
+
+
+                commentsContainer.innerHTML = `
+
+                    <p>
+                        ❌ Could not load comments.
+                    </p>
 
                 `;
 
             }
-
-
-            botReply(
-                reply
-            );
-
-        },
-        400
-    );
+        );
 
 }
 
 
-/*=========================================================
-  PART 13
-  SCROLL ANIMATION
-=========================================================*/
+/* =========================================================
+   RENDER COMMENTS
+========================================================= */
 
-const sections =
-    document.querySelectorAll(
-        "section"
-    );
-
-
-if (
-    "IntersectionObserver"
-    in window
+function renderComments(
+    docs
 ) {
 
-    const observer =
-        new IntersectionObserver(
-
-            entries => {
-
-                entries.forEach(
-                    entry => {
-
-                        if (
-                            entry.isIntersecting
-                        ) {
-
-                            entry.target
-                                .classList
-                                .add(
-                                    "show-section"
-                                );
-
-                        }
-
-                    }
-                );
-
-            },
-
-            {
-                threshold: 0.15
-            }
-
-        );
+    if (!commentsContainer) {
+        return;
+    }
 
 
-    sections.forEach(
-        section => {
+    if (!docs.length) {
 
-            observer.observe(
-                section
-            );
+        commentsContainer.innerHTML = `
 
-        }
-    );
+            <div
+                class="empty-comments"
+                style="padding:40px;text-align:center;"
+            >
 
-}
+                💬 No comments yet.
 
+            </div>
 
-/*=========================================================
-  PART 14
-  BOOK CARD HOVER
-=========================================================*/
+        `;
 
-document.addEventListener(
-    "mouseover",
-    event => {
-
-        const card =
-            event.target.closest(
-                ".book-card"
-            );
-
-
-        if (!card) return;
-
-
-        card.style.transform =
-            "translateY(-10px)";
-
-
-        card.style.transition =
-            "transform .35s ease";
+        return;
 
     }
-);
 
 
-document.addEventListener(
-    "mouseout",
-    event => {
+    commentsContainer.innerHTML =
+        docs
+            .map(
+                doc => {
+
+                    const comment =
+                        doc.data();
+
+
+                    const text =
+                        comment.text ||
+                        comment.comment ||
+                        comment.message ||
+                        "";
+
+
+                    const name =
+                        comment.name ||
+                        comment.userName ||
+                        comment.username ||
+                        "Visitor";
+
 
-        const card =
-            event.target.closest(
-                ".book-card"
-            );
+                    const email =
+                        comment.email ||
+                        "";
 
 
-        if (!card) return;
+                    const book =
+                        comment.bookTitle ||
+                        comment.bookName ||
+                        "";
 
 
-        card.style.transform =
-            "translateY(0)";
+                    return `
 
-    }
-);
+                        <div
+                            class="comment-card"
+                            data-comment-id="${escapeAttribute(doc.id)}"
+                            style="
+                                padding:18px;
+                                margin-bottom:12px;
+                                border-radius:10px;
+                                background:#fff;
+                                border:1px solid #ddd;
+                            "
+                        >
 
+                            <div
+                                style="
+                                    display:flex;
+                                    justify-content:space-between;
+                                    gap:15px;
+                                "
+                            >
 
-/*=========================================================
-  PART 15
-  LOCAL DOWNLOAD COUNTER
-=========================================================*/
+                                <div>
 
-document.addEventListener(
-    "click",
-    event => {
+                                    <strong>
+                                        ${escapeHTML(name)}
+                                    </strong>
 
-        const btn =
-            event.target.closest(
-                "a"
-            );
+                                    ${
+                                        email
+                                            ? `
+                                                <small>
+                                                    ${escapeHTML(email)}
+                                                </small>
+                                              `
+                                            : ""
+                                    }
 
+                                </div>
 
-        if (!btn) return;
 
+                                <button
+                                    type="button"
+                                    class="delete-comment-btn"
+                                    data-id="${escapeAttribute(doc.id)}"
+                                    title="Delete comment"
+                                >
+                                    🗑️
+                                </button>
 
-        if (
-            btn.hasAttribute(
-                "download"
-            )
-        ) {
+                            </div>
 
-            let total =
-                Number(
-                    localStorage.getItem(
-                        "downloads"
-                    )
-                ) || 0;
 
+                            ${
+                                book
+                                    ? `
+                                        <div
+                                            style="
+                                                margin-top:8px;
+                                                font-size:13px;
+                                                opacity:.7;
+                                            "
+                                        >
+                                            📚 ${escapeHTML(book)}
+                                        </div>
+                                      `
+                                    : ""
+                            }
 
-            total++;
 
+                            <p
+                                style="
+                                    margin-top:10px;
+                                    line-height:1.6;
+                                "
+                            >
+                                ${escapeHTML(text)}
+                            </p>
 
-            localStorage.setItem(
-                "downloads",
-                total
-            );
 
-        }
+                            <small>
 
-    }
-);
+                                ${formatDate(
+                                    comment.createdAt
+                                )}
 
+                            </small>
 
-/*=========================================================
-  PART 16
-  LOCAL READ COUNTER
-=========================================================*/
+                        </div>
 
-document.addEventListener(
-    "click",
-    event => {
-
-        const btn =
-            event.target.closest(
-                "a"
-            );
-
-
-        if (!btn) return;
-
-
-        const href =
-            btn.getAttribute(
-                "href"
-            ) || "";
-
-
-        if (
-
-            href.includes(
-                "reader.html"
-            )
-
-        ) {
-
-            let total =
-                Number(
-                    localStorage.getItem(
-                        "reads"
-                    )
-                ) || 0;
-
-
-            total++;
-
-
-            localStorage.setItem(
-                "reads",
-                total
-            );
-
-        }
-
-    }
-);
-
-
-/*=========================================================
-  PART 17
-  BUTTON RIPPLE
-=========================================================*/
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const btn =
-            event.target.closest(
-                ".btn"
-            );
-
-
-        if (!btn) return;
-
-
-        const ripple =
-            document.createElement(
-                "span"
-            );
-
-
-        ripple.className =
-            "ripple";
-
-
-        const rect =
-            btn.getBoundingClientRect();
-
-
-        ripple.style.left =
-            `${event.clientX - rect.left}px`;
-
-
-        ripple.style.top =
-            `${event.clientY - rect.top}px`;
-
-
-        btn.appendChild(
-            ripple
-        );
-
-
-        setTimeout(
-            () => {
-
-                if (ripple) {
-
-                    ripple.remove();
+                    `;
 
                 }
-
-            },
-            600
-        );
-
-    }
-);
+            )
+            .join("");
 
 
-/*=========================================================
-  PART 18
-  NAVBAR SHADOW
-=========================================================*/
+    document
+        .querySelectorAll(
+            ".delete-comment-btn"
+        )
+        .forEach(
+            button => {
 
-window.addEventListener(
-    "scroll",
-    () => {
-
-        const nav =
-            document.querySelector(
-                ".navbar"
-            );
-
-
-        if (!nav) return;
-
-
-        if (
-            window.scrollY > 40
-        ) {
-
-            nav.classList.add(
-                "nav-shadow"
-            );
-
-        }
-
-        else {
-
-            nav.classList.remove(
-                "nav-shadow"
-            );
-
-        }
-
-    }
-);
-
-
-/*=========================================================
-  PART 19
-  AUTO YEAR
-=========================================================*/
-
-const year =
-    document.getElementById(
-        "year"
-    );
-
-
-if (year) {
-
-    year.innerText =
-        new Date()
-            .getFullYear();
-
-}
-
-
-/*=========================================================
-  PART 20
-  IMAGE FALLBACK
-=========================================================*/
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        document
-            .querySelectorAll("img")
-            .forEach(img => {
-
-                img.addEventListener(
-                    "error",
+                button.addEventListener(
+                    "click",
                     function () {
 
-                        if (
-                            this.src.includes(
-                                "logo.png"
-                            )
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        this.src =
-                            "logo.png";
+                        deleteComment(
+                            this.dataset.id
+                        );
 
                     }
                 );
-
-            });
-
-    }
-);
-
-
-/*=========================================================
-  PART 21
-  PRELOAD BOOK COVERS
-=========================================================*/
-
-window.addEventListener(
-    "load",
-    () => {
-
-        if (
-            !Array.isArray(
-                allBooks
-            )
-        ) return;
-
-
-        allBooks.forEach(
-            book => {
-
-                if (!book.cover) return;
-
-
-                const image =
-                    new Image();
-
-
-                image.src =
-                    book.cover;
 
             }
         );
 
+}
+
+
+/* =========================================================
+   DELETE COMMENT
+========================================================= */
+
+async function deleteComment(
+    id
+) {
+
+    const confirmed =
+        confirm(
+            "Delete this comment permanently?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
     }
-);
 
 
-/*=========================================================
-  PART 22
-  SMOOTH ANCHOR LINKS
-=========================================================*/
+    try {
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        document
-            .querySelectorAll(
-                'a[href^="#"]'
-            )
-            .forEach(anchor => {
-
-                anchor.addEventListener(
-                    "click",
-                    function (event) {
-
-                        const selector =
-                            this.getAttribute(
-                                "href"
-                            );
+        await db.collection(
+            COMMENTS_COLLECTION
+        )
+        .doc(
+            id
+        )
+        .delete();
 
 
-                        if (
-                            !selector ||
-                            selector === "#"
-                        ) {
-
-                            return;
-
-                        }
+        console.log(
+            "✅ Comment deleted:",
+            id
+        );
 
 
-                        const target =
-                            document.querySelector(
-                                selector
-                            );
+    } catch (error) {
+
+        console.error(
+            "Comment delete error:",
+            error
+        );
 
 
-                        if (!target) return;
+        alert(
+            `❌ Could not delete comment.\n\n${error.message}`
+        );
+
+    }
+
+}
 
 
-                        event.preventDefault();
+/* =========================================================
+   BOOK SEARCH
+========================================================= */
+
+function createAdminSearch() {
+
+    /*
+     * If your admin HTML already has
+     * a search input, this will use it.
+     *
+     * Otherwise it does nothing.
+     */
+
+    const search =
+        document.getElementById(
+            "adminBookSearch"
+        );
 
 
-                        target.scrollIntoView({
+    if (!search) {
+        return;
+    }
 
-                            behavior:
-                                "smooth",
 
-                            block:
-                                "start"
+    search.addEventListener(
+        "input",
+        function () {
 
-                        });
+            const query =
+                this.value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!query) {
+
+                renderBooksTable();
+
+                return;
+
+            }
+
+
+            const original =
+                allBooks;
+
+
+            const filtered =
+                original.filter(
+                    book => {
+
+                        return (
+
+                            String(
+                                book.title ||
+                                ""
+                            )
+                            .toLowerCase()
+                            .includes(query)
+
+                            ||
+
+                            String(
+                                book.author ||
+                                ""
+                            )
+                            .toLowerCase()
+                            .includes(query)
+
+                            ||
+
+                            String(
+                                book.category ||
+                                ""
+                            )
+                            .toLowerCase()
+                            .includes(query)
+
+                        );
 
                     }
                 );
 
-            });
+
+            renderFilteredBooks(
+                filtered
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RENDER FILTERED BOOKS
+========================================================= */
+
+function renderFilteredBooks(
+    books
+) {
+
+    if (!booksTable) {
+        return;
+    }
+
+
+    if (!books.length) {
+
+        booksTable.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    style="text-align:center;padding:30px;"
+                >
+                    🔎 No books found.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    booksTable.innerHTML =
+        books
+            .map(
+                book => {
+
+                    const cover =
+                        book.cover ||
+                        "logo.png";
+
+
+                    return `
+
+                        <tr>
+
+                            <td>
+
+                                <img
+                                    src="${escapeAttribute(cover)}"
+                                    style="
+                                        width:60px;
+                                        height:80px;
+                                        object-fit:cover;
+                                        border-radius:6px;
+                                    "
+                                    onerror="this.src='logo.png'"
+                                >
+
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    book.title ||
+                                    "Untitled"
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    book.author ||
+                                    "Unknown"
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHTML(
+                                    book.category ||
+                                    "Other"
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${formatNumber(
+                                    book.views
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${formatNumber(
+                                    book.downloads
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${
+                                    book.latest
+                                        ? "⭐ Latest"
+                                        : "—"
+                                }
+                            </td>
+
+
+                            <td>
+
+                                <button
+                                    class="edit-book-btn"
+                                    data-id="${escapeAttribute(book.id)}"
+                                >
+                                    ✏️
+                                </button>
+
+                                <button
+                                    class="delete-book-btn"
+                                    data-id="${escapeAttribute(book.id)}"
+                                >
+                                    🗑️
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    document
+        .querySelectorAll(
+            ".edit-book-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => editBook(
+                        button.dataset.id
+                    )
+                );
+
+            }
+        );
+
+
+    document
+        .querySelectorAll(
+            ".delete-book-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => deleteBook(
+                        button.dataset.id
+                    )
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   INITIALIZE SEARCH
+========================================================= */
+
+createAdminSearch();
+
+
+/* =========================================================
+   PREVENT FORM LEAVING WITH FILE UPLOAD
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    function (event) {
+
+        if (
+            saveBookBtn &&
+            saveBookBtn.disabled
+        ) {
+
+            event.preventDefault();
+
+            event.returnValue =
+                "";
+
+        }
 
     }
 );
 
 
-/*=========================================================
-  PART 23
-  GLOBAL FUNCTIONS
-=========================================================*/
+/* =========================================================
+   GLOBAL FUNCTIONS
+   Useful for debugging / HTML buttons
+========================================================= */
 
-window.searchBooks =
-    searchBooks;
+window.ChishtiAdmin = {
+
+    getBooks:
+        () => allBooks,
+
+    editBook:
+        editBook,
+
+    deleteBook:
+        deleteBook,
+
+    deleteComment:
+        deleteComment,
+
+    resetBookForm:
+        resetBookForm,
+
+    refresh:
+        function () {
+
+            if (auth?.currentUser) {
+
+                loadBooksRealtime();
+
+                loadCommentsRealtime();
+
+            }
+
+        }
+
+};
 
 
-window.filterBooks =
-    filterBooks;
-
-
-window.sendMessage =
-    sendMessage;
-
-
-window.likeBook =
-    likeBook;
-
-
-window.loadBooks =
-    loadBooks;
-
-
-/*=========================================================
-  FINAL CONSOLE
-=========================================================*/
+/* =========================================================
+   STARTUP
+========================================================= */
 
 console.log(
-    "===================================="
+    "=========================================="
 );
 
 console.log(
-    "📚 CHISHTI LIBRARY"
+    "📚 CHISHTI LIBRARY ADMIN"
 );
 
 console.log(
-    "Version : 2.0"
+    "✅ Firebase Admin JS Loaded"
 );
 
 console.log(
-    "Firebase : Firestore"
+    "✅ Authentication Ready"
 );
 
 console.log(
-    "===================================="
+    "✅ Firestore Ready"
 );
 
 console.log(
-    "✅ Firebase"
+    "✅ Storage Ready"
 );
 
 console.log(
-    "✅ Loader"
+    "✅ Add Book Ready"
 );
 
 console.log(
-    "✅ Navbar"
+    "✅ Edit Book Ready"
 );
 
 console.log(
-    "✅ Search"
+    "✅ Delete Book Ready"
 );
 
 console.log(
-    "✅ Categories"
+    "✅ Cover Upload Ready"
 );
 
 console.log(
-    "✅ Firebase Books"
+    "✅ PDF Upload Ready"
 );
 
 console.log(
-    "✅ Latest Book"
+    "✅ Latest Book Ready"
 );
 
 console.log(
-    "✅ Visitor Counter"
+    "✅ Dashboard Ready"
 );
 
 console.log(
-    "✅ Book Views"
+    "✅ Comments Ready"
 );
 
 console.log(
-    "✅ Likes"
-);
-
-console.log(
-    "✅ Downloads"
-);
-
-console.log(
-    "✅ AI Knowledge"
-);
-
-console.log(
-    "✅ Chatbot"
-);
-
-console.log(
-    "✅ Reader"
-);
-
-console.log(
-    "✅ Responsive"
-);
-
-console.log(
-    "🚀 Chishti Library Ready"
+    "=========================================="
 );
