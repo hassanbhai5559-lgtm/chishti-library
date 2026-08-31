@@ -1,7 +1,9 @@
+```javascript
 /*=========================================
 CHISHTI LIBRARY
 SCRIPT.JS
-FULL PRODUCTION VERSION
+FULL FIXED VERSION
+Foundation + Books + Search + AI + Effects
 =========================================*/
 
 "use strict";
@@ -9,7 +11,7 @@ FULL PRODUCTION VERSION
 
 /*=========================================
 PART 1
-FOUNDATION
+FOUNDATION + BOOKS LOADER
 =========================================*/
 
 
@@ -31,9 +33,7 @@ window.addEventListener("load", () => {
 
             setTimeout(() => {
 
-                if (loader) {
-                    loader.remove();
-                }
+                loader.remove();
 
             }, 800);
 
@@ -92,7 +92,6 @@ if (scrollBtn) {
         window.scrollTo({
 
             top: 0,
-
             behavior: "smooth"
 
         });
@@ -103,20 +102,33 @@ if (scrollBtn) {
 
 
 /*=========================================
-NO FIREBASE COUNTER HERE
+IMPORTANT FIREBASE NOTE
 =========================================
+
 Firebase visitor counter is handled by
-firebase.js only.
+firebase.js.
 
-Do NOT add another
-updateVisitorCounter()
-here.
+DO NOT put updateVisitorCounter()
+inside this script.
+
+firebase.js provides:
+
+window.auth
+window.db
+window.storage
+
+This prevents:
+
+❌ duplicate Firebase initialization
+❌ duplicate visitor counting
+❌ Firebase helper errors
+❌ db declaration conflicts
 =========================================*/
 
 
-/*=========================================
+/*=========================
 GLOBAL VARIABLES
-=========================================*/
+=========================*/
 
 let allBooks = [];
 
@@ -267,7 +279,7 @@ console.log(
 
 /*=========================================
 PART 2
-DISPLAY BOOKS
+DISPLAY BOOKS + SEARCH + FILTER
 =========================================*/
 
 
@@ -310,7 +322,6 @@ function displayBooks(books) {
 
 
     books.forEach(book => {
-
 
         const title =
             book.title ||
@@ -476,6 +487,7 @@ function searchBooks() {
 
     filteredBooks =
         allBooks.filter(book => {
+
 
             return (
 
@@ -870,32 +882,23 @@ function searchBook(question) {
     ) {
 
 
-        const title =
-            (book.title || "")
-                .toLowerCase();
-
-
-        const category =
-            (book.category || "")
-                .toLowerCase();
-
-
-        const author =
-            (book.author || "")
-                .toLowerCase();
-
-
         if (
 
-            title.includes(q)
+            (book.title || "")
+                .toLowerCase()
+                .includes(q)
 
             ||
 
-            category.includes(q)
+            (book.category || "")
+                .toLowerCase()
+                .includes(q)
 
             ||
 
-            author.includes(q)
+            (book.author || "")
+                .toLowerCase()
+                .includes(q)
 
         ) {
 
@@ -971,16 +974,12 @@ function searchKnowledge(question) {
     ) {
 
 
-        const itemQuestion =
-            (
-                item.question ||
-                ""
-            )
-            .toLowerCase();
-
-
         if (
-            itemQuestion.includes(q)
+
+            (item.question || "")
+                .toLowerCase()
+                .includes(q)
+
         ) {
 
             return (
@@ -1063,7 +1062,7 @@ function sendMessage() {
         chatInput.value.trim();
 
 
-    if (!question) return;
+    if (question === "") return;
 
 
     userReply(
@@ -1128,7 +1127,7 @@ console.log(
 
 /*=========================================
 PART 4
-PREMIUM EFFECTS
+FINAL PREMIUM
 =========================================*/
 
 
@@ -1534,9 +1533,7 @@ window.addEventListener(
             book => {
 
 
-                if (
-                    !book.cover
-                ) {
+                if (!book.cover) {
 
                     return;
 
@@ -1616,7 +1613,7 @@ document
 
 
 /*=========================================
-FIREBASE STATUS
+FIREBASE CONNECTION STATUS
 =========================================*/
 
 if (
@@ -1720,3 +1717,4 @@ console.log(
 console.log(
     "===================================="
 );
+```
