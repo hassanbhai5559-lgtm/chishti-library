@@ -1,102 +1,212 @@
-/*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
-COMPLETE VERSION
-Foundation + Visitor + Books + AI + Premium
-=========================================*/
+/*=========================================================
+  CHISHTI LIBRARY
+  SCRIPT.JS
+  COMPLETE FIXED VERSION
+  Firebase + Books + Search + Visitor + AI + Premium UI
+=========================================================*/
 
 
-/*=========================================
-PART 1
-PREMIUM LOADER
-=========================================*/
+/*=========================================================
+  PART 1
+  GLOBAL VARIABLES
+=========================================================*/
+
+let allBooks = [];
+let filteredBooks = [];
+let knowledge = [];
+
+let db = null;
+
+
+/*=========================================================
+  FIREBASE INITIALIZATION
+=========================================================*/
+
+function initializeFirebase() {
+
+    if (
+        typeof firebase === "undefined" ||
+        typeof firebase.firestore !== "function"
+    ) {
+
+        console.error(
+            "❌ Firebase / Firestore SDK not loaded."
+        );
+
+        return false;
+    }
+
+
+    try {
+
+        db = firebase.firestore();
+
+        console.log(
+            "✅ Firebase Firestore Connected"
+        );
+
+        return true;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Firebase initialization error:",
+            error
+        );
+
+        return false;
+    }
+}
+
+
+/*=========================================================
+  PART 2
+  PREMIUM LOADER
+=========================================================*/
 
 window.addEventListener("load", () => {
 
     const loader =
         document.getElementById("loader");
 
+
     setTimeout(() => {
 
-        if (loader) {
+        if (!loader) return;
 
-            loader.style.opacity = "0";
 
-            loader.style.visibility = "hidden";
+        loader.style.opacity = "0";
 
-            setTimeout(() => {
+        loader.style.visibility = "hidden";
+
+
+        setTimeout(() => {
+
+            if (loader) {
 
                 loader.remove();
 
-            }, 800);
+            }
 
-        }
+        }, 800);
 
-    }, 2500);
+    }, 1200);
 
 });
 
 
-/*=========================================
-MOBILE MENU
-=========================================*/
+/*=========================================================
+  PART 3
+  MOBILE MENU
+=========================================================*/
 
-const menuBtn =
-    document.querySelector(".mobile-menu");
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-const menu =
-    document.querySelector(".menu");
-
-if (menuBtn && menu) {
-
-    menuBtn.addEventListener("click", () => {
-
-        menu.classList.toggle("show");
-
-    });
-
-}
+        const menuBtn =
+            document.querySelector(
+                ".mobile-menu"
+            );
 
 
-/*=========================================
-SCROLL TO TOP
-=========================================*/
+        const menu =
+            document.querySelector(
+                ".menu"
+            );
+
+
+        if (!menuBtn || !menu) return;
+
+
+        menuBtn.addEventListener(
+            "click",
+            () => {
+
+                menu.classList.toggle(
+                    "show"
+                );
+
+            }
+        );
+
+
+        /* Close menu after clicking link */
+
+        menu.querySelectorAll("a")
+            .forEach(link => {
+
+                link.addEventListener(
+                    "click",
+                    () => {
+
+                        menu.classList.remove(
+                            "show"
+                        );
+
+                    }
+                );
+
+            });
+
+    }
+);
+
+
+/*=========================================================
+  PART 4
+  SCROLL TO TOP
+=========================================================*/
 
 const scrollBtn =
-    document.getElementById("scrollTop");
+    document.getElementById(
+        "scrollTop"
+    );
 
-window.addEventListener("scroll", () => {
 
-    if (!scrollBtn) return;
+window.addEventListener(
+    "scroll",
+    () => {
 
-    scrollBtn.style.display =
-        window.scrollY > 300
-            ? "block"
-            : "none";
+        if (!scrollBtn) return;
 
-});
+
+        scrollBtn.style.display =
+            window.scrollY > 300
+                ? "block"
+                : "none";
+
+    }
+);
+
 
 if (scrollBtn) {
 
-    scrollBtn.onclick = () => {
+    scrollBtn.addEventListener(
+        "click",
+        () => {
 
-        window.scrollTo({
+            window.scrollTo({
 
-            top: 0,
+                top: 0,
 
-            behavior: "smooth"
+                behavior: "smooth"
 
-        });
+            });
 
-    };
+        }
+    );
 
 }
 
 
-/*=========================================
-VISITOR COUNTER
-FIREBASE FIRESTORE
-=========================================*/
+/*=========================================================
+  PART 5
+  VISITOR COUNTER
+  FIREBASE FIRESTORE
+=========================================================*/
 
 async function updateVisitorCounter() {
 
@@ -105,42 +215,24 @@ async function updateVisitorCounter() {
             "visitorCounter"
         );
 
+
     if (!visitorCounter) return;
 
 
-    /*=====================================
-    CHECK FIREBASE
-    =====================================*/
+    if (!db) {
 
-    if (
-        typeof firebase === "undefined" ||
-        typeof firebase.firestore !== "function"
-    ) {
+        if (!initializeFirebase()) {
 
-        console.error(
-            "❌ Firebase Firestore is not loaded."
-        );
+            visitorCounter.innerText = "0";
 
-        visitorCounter.innerText = "0";
+            return;
 
-        return;
+        }
 
     }
 
 
     try {
-
-        /*=================================
-        FIRESTORE DATABASE
-        =================================*/
-
-        const db =
-            firebase.firestore();
-
-
-        /*=================================
-        VISITOR DOCUMENT
-        =================================*/
 
         const visitorRef =
             db
@@ -148,23 +240,24 @@ async function updateVisitorCounter() {
                 .doc("visitors");
 
 
-        /*=================================
-        GET CURRENT DOCUMENT
-        =================================*/
-
         const snapshot =
             await visitorRef.get();
 
 
-        /*=================================
-        CREATE DOCUMENT IF MISSING
-        =================================*/
+        /*-----------------------------------------
+          CREATE COUNTER
+        -----------------------------------------*/
 
         if (!snapshot.exists) {
 
             await visitorRef.set({
 
-                count: 1
+                count: 1,
+
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
 
             });
 
@@ -181,19 +274,13 @@ async function updateVisitorCounter() {
             );
 
 
-            console.log(
-                "✅ Visitor counter created: 1"
-            );
-
-
             return;
-
         }
 
 
-        /*=================================
-        CHECK CURRENT SESSION
-        =================================*/
+        /*-----------------------------------------
+          CHECK SESSION
+        -----------------------------------------*/
 
         const alreadyCounted =
             sessionStorage.getItem(
@@ -201,9 +288,9 @@ async function updateVisitorCounter() {
             );
 
 
-        /*=================================
-        NEW VISITOR
-        =================================*/
+        /*-----------------------------------------
+          ADD NEW VISITOR
+        -----------------------------------------*/
 
         if (!alreadyCounted) {
 
@@ -212,7 +299,12 @@ async function updateVisitorCounter() {
                 count:
                     firebase.firestore
                         .FieldValue
-                        .increment(1)
+                        .increment(1),
+
+                updatedAt:
+                    firebase.firestore
+                        .FieldValue
+                        .serverTimestamp()
 
             });
 
@@ -225,37 +317,31 @@ async function updateVisitorCounter() {
         }
 
 
-        /*=================================
-        GET FINAL COUNT
-        =================================*/
+        /*-----------------------------------------
+          GET FINAL COUNT
+        -----------------------------------------*/
 
         const latestSnapshot =
             await visitorRef.get();
 
 
-        const visitorData =
+        const data =
             latestSnapshot.data() || {};
 
 
-        const visitors =
-            Number(
-                visitorData.count
-            ) || 0;
+        const total =
+            Number(data.count) || 0;
 
-
-        /*=================================
-        DISPLAY COUNT
-        =================================*/
 
         animateVisitorCount(
             visitorCounter,
-            visitors
+            total
         );
 
 
         console.log(
-            "✅ Total Visitors:",
-            visitors
+            "✅ Visitors:",
+            total
         );
 
     }
@@ -263,7 +349,7 @@ async function updateVisitorCounter() {
     catch (error) {
 
         console.error(
-            "❌ Visitor counter error:",
+            "❌ Visitor Counter Error:",
             error
         );
 
@@ -275,9 +361,9 @@ async function updateVisitorCounter() {
 }
 
 
-/*=========================================
-VISITOR NUMBER ANIMATION
-=========================================*/
+/*=========================================================
+  VISITOR COUNTER ANIMATION
+=========================================================*/
 
 function animateVisitorCount(
     element,
@@ -291,10 +377,6 @@ function animateVisitorCount(
         Number(target) || 0;
 
 
-    /*=====================================
-    ZERO
-    =====================================*/
-
     if (target <= 0) {
 
         element.innerText = "0";
@@ -306,26 +388,19 @@ function animateVisitorCount(
 
     const duration = 900;
 
-    const startTime =
+    const start =
         performance.now();
 
 
-    function updateCounter(currentTime) {
+    function animate(now) {
 
         const progress =
             Math.min(
-
-                (currentTime - startTime) /
+                (now - start) /
                 duration,
-
                 1
-
             );
 
-
-        /*=============================
-        SMOOTH EASING
-        =============================*/
 
         const eased =
             1 -
@@ -348,7 +423,7 @@ function animateVisitorCount(
         if (progress < 1) {
 
             requestAnimationFrame(
-                updateCounter
+                animate
             );
 
         }
@@ -364,74 +439,220 @@ function animateVisitorCount(
 
 
     requestAnimationFrame(
-        updateCounter
+        animate
     );
 
 }
 
 
-/*=========================================
-START VISITOR COUNTER
-=========================================*/
+/*=========================================================
+  PART 6
+  LOAD BOOKS FROM FIREBASE
+=========================================================*/
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+async function loadBooks() {
 
-        updateVisitorCounter();
-
-    }
-);
-
-
-/*=========================================
-GLOBAL VARIABLES
-=========================================*/
-
-let allBooks = [];
-
-let filteredBooks = [];
+    const container =
+        document.getElementById(
+            "booksContainer"
+        );
 
 
+    try {
 
-        /*=================================
-        LATEST BOOK
-        =================================*/
+        if (!db) {
 
-        if (
-            typeof latestBook ===
-            "function"
-        ) {
+            if (!initializeFirebase()) {
 
-            latestBook();
+                console.error(
+                    "❌ Firebase unavailable."
+                );
+
+                return;
+
+            }
 
         }
 
 
         console.log(
-            "✅ Books Loaded Successfully"
+            "📚 Loading books..."
+        );
+
+
+        const snapshot =
+            await db
+                .collection("books")
+                .get();
+
+
+        allBooks = [];
+
+
+        snapshot.forEach(
+            doc => {
+
+                const data =
+                    doc.data() || {};
+
+
+                allBooks.push({
+
+                    id: doc.id,
+
+                    title:
+                        data.title || "Untitled Book",
+
+                    author:
+                        data.author || "Unknown Author",
+
+                    category:
+                        data.category || "General",
+
+                    description:
+                        data.description || "",
+
+                    language:
+                        data.language || "",
+
+                    cover:
+                        data.cover || "logo.png",
+
+                    pdf:
+                        data.pdf || "",
+
+                    views:
+                        Number(data.views) || 0,
+
+                    likes:
+                        Number(data.likes) || 0,
+
+                    downloads:
+                        Number(data.downloads) || 0,
+
+                    latest:
+                        data.latest === true,
+
+                    featured:
+                        data.featured === true,
+
+                    published:
+                        data.published !== false,
+
+                    createdAt:
+                        data.createdAt || null
+
+                });
+
+            }
+        );
+
+
+        /*-----------------------------------------
+          ONLY PUBLISHED BOOKS
+        -----------------------------------------*/
+
+        allBooks =
+            allBooks.filter(
+                book =>
+                    book.published !== false
+            );
+
+
+        filteredBooks =
+            [...allBooks];
+
+
+        /*-----------------------------------------
+          DISPLAY
+        -----------------------------------------*/
+
+        displayBooks(
+            filteredBooks
+        );
+
+
+        /*-----------------------------------------
+          LATEST
+        -----------------------------------------*/
+
+        latestBook();
+
+
+        /*-----------------------------------------
+          CAROUSEL
+        -----------------------------------------*/
+
+        if (
+            typeof initBookCarousel ===
+            "function"
+        ) {
+
+            initBookCarousel();
+
+        }
+
+
+        console.log(
+            `✅ ${allBooks.length} books loaded`
         );
 
     }
 
-    catch (err) {
+    catch (error) {
 
         console.error(
-            "❌ Books Error:",
-            err
+            "❌ Books Loading Error:",
+            error
         );
+
+
+        if (container) {
+
+            container.innerHTML = `
+
+                <div class="no-books">
+
+                    <h2>
+                        Books could not be loaded
+                    </h2>
+
+                    <p>
+                        Please try again later.
+                    </p>
+
+                </div>
+
+            `;
+
+        }
 
     }
 
 }
 
 
-loadBooks();
+/*=========================================================
+  START FIREBASE + BOOKS
+=========================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initializeFirebase();
+
+        updateVisitorCounter();
+
+        loadBooks();
+
+    }
+);
 
 
-/*=========================================
-UTILITY
-=========================================*/
+/*=========================================================
+  UTILITY
+=========================================================*/
 
 function byId(id) {
 
@@ -440,15 +661,10 @@ function byId(id) {
 }
 
 
-console.log(
-    "✅ Script Part 1 Loaded"
-);
-
-
-/*=========================================
-PART 2
-DISPLAY BOOKS
-=========================================*/
+/*=========================================================
+  PART 7
+  DISPLAY BOOKS
+=========================================================*/
 
 function displayBooks(books) {
 
@@ -464,141 +680,252 @@ function displayBooks(books) {
     container.innerHTML = "";
 
 
-    /*=====================================
-    NO BOOKS
-    =====================================*/
+    if (!Array.isArray(books)) {
+
+        books = [];
+
+    }
+
+
+    /*-----------------------------------------
+      NO BOOKS
+    -----------------------------------------*/
 
     if (books.length === 0) {
 
         container.innerHTML = `
 
-        <div class="no-books">
+            <div class="no-books">
 
-            <h2>No Books Found</h2>
+                <h2>No Books Found</h2>
 
-            <p>
-                Try another search.
-            </p>
+                <p>
+                    Try another search or category.
+                </p>
 
-        </div>
+            </div>
 
         `;
 
         return;
-
     }
 
 
-    /*=====================================
-    BOOK CARDS
-    =====================================*/
+    /*-----------------------------------------
+      BOOK CARDS
+    -----------------------------------------*/
 
     books.forEach(book => {
 
+        const safeTitle =
+            escapeHTML(book.title);
+
+
+        const safeAuthor =
+            escapeHTML(book.author);
+
+
+        const safeCategory =
+            escapeHTML(book.category);
+
+
+        const safeDescription =
+            escapeHTML(book.description);
+
+
+        const cover =
+            book.cover || "logo.png";
+
+
+        const pdf =
+            book.pdf || "";
+
+
         container.innerHTML += `
 
-        <div class="book-card">
-
-            <img
-                src="${book.cover}"
-                alt="${book.title}"
-                loading="lazy"
+            <div
+                class="book-card"
+                data-book-id="${book.id || ""}"
             >
 
-
-            <div class="book-content">
-
-                <span class="book-category">
-
-                    ${book.category}
-
-                </span>
+                <img
+                    src="${cover}"
+                    alt="${safeTitle}"
+                    loading="lazy"
+                    onerror="this.src='logo.png'"
+                >
 
 
-                <h2>
+                <div class="book-content">
 
-                    ${book.title}
+                    <span class="book-category">
 
-                </h2>
-
-
-                <h3>
-
-                    ${book.author}
-
-                </h3>
-
-
-                <p>
-
-                    ${book.description}
-
-                </p>
-
-
-                <div class="book-meta">
-
-                    <span>
-
-                        👁 ${book.views || 0}
+                        ${safeCategory}
 
                     </span>
 
 
-                    <span>
+                    <h2>
 
-                        ❤️ ${book.likes || 0}
+                        ${safeTitle}
 
-                    </span>
-
-
-                    <span>
-
-                        ⬇ ${book.downloads || 0}
-
-                    </span>
-
-                </div>
+                    </h2>
 
 
-                <div class="book-buttons">
+                    <h3>
 
-                    <a
-                        href="reader.html?book=${encodeURIComponent(book.pdf)}"
-                        class="btn"
-                    >
+                        ${safeAuthor}
 
-                        📖 Read Online
-
-                    </a>
+                    </h3>
 
 
-                    <a
-                        href="${book.pdf}"
-                        download
-                        class="btn"
-                    >
+                    <p>
 
-                        ⬇ Download
+                        ${safeDescription}
 
-                    </a>
+                    </p>
+
+
+                    <div class="book-meta">
+
+                        <span>
+                            👁
+                            ${Number(book.views) || 0}
+                        </span>
+
+
+                        <span>
+                            ❤️
+                            ${Number(book.likes) || 0}
+                        </span>
+
+
+                        <span>
+                            ⬇
+                            ${Number(book.downloads) || 0}
+                        </span>
+
+                    </div>
+
+
+                    <div class="book-buttons">
+
+                        ${
+                            pdf
+                            ?
+                            `
+
+                            <a
+                                href="reader.html?book=${encodeURIComponent(pdf)}"
+                                class="btn read-book"
+                                data-book-id="${book.id || ""}"
+                            >
+                                📖 Read Online
+                            </a>
+
+
+                            <a
+                                href="${pdf}"
+                                download
+                                class="btn download-book"
+                                data-book-id="${book.id || ""}"
+                            >
+                                ⬇ Download
+                            </a>
+
+                            `
+                            :
+                            `
+                            <span class="btn disabled">
+                                PDF Unavailable
+                            </span>
+                            `
+                        }
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
-
         `;
 
     });
 
+
+    /*-----------------------------------------
+      IMAGE FALLBACK
+    -----------------------------------------*/
+
+    container
+        .querySelectorAll("img")
+        .forEach(img => {
+
+            img.addEventListener(
+                "error",
+                () => {
+
+                    img.src = "logo.png";
+
+                },
+                {
+                    once: true
+                }
+            );
+
+        });
+
 }
 
 
-/*=========================================
-LIVE SEARCH
-=========================================*/
+/*=========================================================
+  ESCAPE HTML
+=========================================================*/
+
+function escapeHTML(value) {
+
+    if (value === null ||
+        value === undefined) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/*=========================================================
+  PART 8
+  SEARCH BOOKS
+=========================================================*/
 
 function searchBooks() {
 
@@ -618,43 +945,90 @@ function searchBooks() {
 
 
     filteredBooks =
-        allBooks.filter(book =>
+        allBooks.filter(book => {
 
-            (book.title || "")
-                .toLowerCase()
-                .includes(value)
+            return (
 
-            ||
+                (book.title || "")
+                    .toLowerCase()
+                    .includes(value)
 
-            (book.author || "")
-                .toLowerCase()
-                .includes(value)
+                ||
 
-            ||
+                (book.author || "")
+                    .toLowerCase()
+                    .includes(value)
 
-            (book.category || "")
-                .toLowerCase()
-                .includes(value)
+                ||
 
-            ||
+                (book.category || "")
+                    .toLowerCase()
+                    .includes(value)
 
-            (book.language || "")
-                .toLowerCase()
-                .includes(value)
+                ||
 
-        );
+                (book.language || "")
+                    .toLowerCase()
+                    .includes(value)
+
+                ||
+
+                (book.description || "")
+                    .toLowerCase()
+                    .includes(value)
+
+            );
+
+        });
 
 
     displayBooks(
         filteredBooks
     );
 
+
+    if (
+        typeof restartBookCarousel ===
+        "function"
+    ) {
+
+        restartBookCarousel();
+
+    }
+
 }
 
 
-/*=========================================
-CATEGORY FILTER
-=========================================*/
+/*=========================================================
+  SEARCH INPUT EVENT
+=========================================================*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
+
+
+        if (!searchInput) return;
+
+
+        searchInput.addEventListener(
+            "input",
+            searchBooks
+        );
+
+    }
+);
+
+
+/*=========================================================
+  PART 9
+  CATEGORY FILTER
+=========================================================*/
 
 function filterBooks(
     category,
@@ -681,7 +1055,10 @@ function filterBooks(
     }
 
 
-    if (category === "All") {
+    if (
+        !category ||
+        category === "All"
+    ) {
 
         filteredBooks =
             [...allBooks];
@@ -691,10 +1068,15 @@ function filterBooks(
     else {
 
         filteredBooks =
-            allBooks.filter(book =>
+            allBooks.filter(
+                book =>
 
-                book.category ===
-                category
+                    String(
+                        book.category
+                    )
+                    .toLowerCase() ===
+                    String(category)
+                    .toLowerCase()
 
             );
 
@@ -705,20 +1087,46 @@ function filterBooks(
         filteredBooks
     );
 
+
+    if (
+        typeof restartBookCarousel ===
+        "function"
+    ) {
+
+        restartBookCarousel();
+
+    }
+
 }
 
 
-/*=========================================
-LATEST BOOK
-=========================================*/
+/*=========================================================
+  PART 10
+  LATEST BOOK
+=========================================================*/
 
 function latestBook() {
 
-    const latest =
+    if (!Array.isArray(allBooks)) return;
+
+
+    let latest =
         allBooks.find(
             book =>
                 book.latest === true
         );
+
+
+    /*-----------------------------------------
+      FALLBACK: MOST RECENT BOOK
+    -----------------------------------------*/
+
+    if (!latest && allBooks.length > 0) {
+
+        latest =
+            allBooks[0];
+
+    }
 
 
     if (!latest) return;
@@ -750,14 +1158,15 @@ function latestBook() {
 
     const buttons =
         document.querySelectorAll(
-            ".book-buttons a"
+            ".book-info .book-buttons a, .book-buttons a"
         );
 
 
     if (image) {
 
         image.src =
-            latest.cover;
+            latest.cover ||
+            "logo.png";
 
     }
 
@@ -765,7 +1174,7 @@ function latestBook() {
     if (title) {
 
         title.innerText =
-            latest.title;
+            latest.title || "";
 
     }
 
@@ -773,7 +1182,7 @@ function latestBook() {
     if (author) {
 
         author.innerText =
-            latest.author;
+            latest.author || "";
 
     }
 
@@ -781,44 +1190,236 @@ function latestBook() {
     if (desc) {
 
         desc.innerText =
-            latest.description;
+            latest.description || "";
+
+    }
+
+
+    if (buttons.length >= 1) {
+
+        buttons[0].href =
+            `reader.html?book=${encodeURIComponent(
+                latest.pdf || ""
+            )}`;
 
     }
 
 
     if (buttons.length >= 2) {
 
-        buttons[0].href =
-            latest.pdf;
-
-        buttons[0].target =
-            "_blank";
-
-
         buttons[1].href =
-            latest.pdf;
+            latest.pdf || "";
 
     }
 
 }
 
 
-console.log(
-    "✅ Script Part 2 Loaded"
+/*=========================================================
+  PART 11
+  FIREBASE BOOK VIEWS
+=========================================================*/
+
+async function increaseBookViews(
+    bookId
+) {
+
+    if (!bookId || !db) return;
+
+
+    try {
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                views:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+
+        console.log(
+            "👁 Book view +1"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ View update error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+  FIREBASE DOWNLOAD COUNTER
+=========================================================*/
+
+async function increaseBookDownloads(
+    bookId
+) {
+
+    if (!bookId || !db) return;
+
+
+    try {
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                downloads:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+
+        console.log(
+            "⬇ Download +1"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Download update error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+  FIREBASE LIKE
+=========================================================*/
+
+async function likeBook(
+    bookId
+) {
+
+    if (!bookId || !db) return;
+
+
+    const key =
+        `chishtiLiked_${bookId}`;
+
+
+    if (
+        localStorage.getItem(key)
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await db
+            .collection("books")
+            .doc(bookId)
+            .update({
+
+                likes:
+                    firebase.firestore
+                        .FieldValue
+                        .increment(1)
+
+            });
+
+
+        localStorage.setItem(
+            key,
+            "true"
+        );
+
+
+        console.log(
+            "❤️ Like added"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "❌ Like error:",
+            error
+        );
+
+    }
+
+}
+
+
+/*=========================================================
+  BOOK ACTION EVENTS
+=========================================================*/
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const readBtn =
+            event.target.closest(
+                ".read-book"
+            );
+
+
+        const downloadBtn =
+            event.target.closest(
+                ".download-book"
+            );
+
+
+        if (readBtn) {
+
+            const bookId =
+                readBtn.dataset.bookId;
+
+
+            increaseBookViews(
+                bookId
+            );
+
+        }
+
+
+        if (downloadBtn) {
+
+            const bookId =
+                downloadBtn.dataset.bookId;
+
+
+            increaseBookDownloads(
+                bookId
+            );
+
+        }
+
+    }
 );
 
 
-/*=========================================
-PART 3
-AI CHATBOT
-=========================================*/
-
-let knowledge = [];
-
-
-/*=========================================
-LOAD KNOWLEDGE
-=========================================*/
+/*=========================================================
+  PART 12
+  AI KNOWLEDGE
+=========================================================*/
 
 async function loadKnowledge() {
 
@@ -849,11 +1450,11 @@ async function loadKnowledge() {
 
     }
 
-    catch (err) {
+    catch (error) {
 
-        console.log(
+        console.error(
             "❌ Knowledge Error:",
-            err
+            error
         );
 
     }
@@ -864,9 +1465,9 @@ async function loadKnowledge() {
 loadKnowledge();
 
 
-/*=========================================
-CHAT ELEMENTS
-=========================================*/
+/*=========================================================
+  CHAT ELEMENTS
+=========================================================*/
 
 const chatBtn =
     document.getElementById(
@@ -898,57 +1499,68 @@ const chatMessages =
     );
 
 
-/*=========================================
-OPEN CHAT
-=========================================*/
+/*=========================================================
+  OPEN CHAT
+=========================================================*/
 
 if (chatBtn) {
 
-    chatBtn.onclick = () => {
+    chatBtn.addEventListener(
+        "click",
+        () => {
 
-        if (chatWindow) {
+            if (chatWindow) {
 
-            chatWindow.style.display =
-                "flex";
+                chatWindow.style.display =
+                    "flex";
+
+            }
 
         }
-
-    };
+    );
 
 }
 
 
-/*=========================================
-CLOSE CHAT
-=========================================*/
+/*=========================================================
+  CLOSE CHAT
+=========================================================*/
 
 if (closeChat) {
 
-    closeChat.onclick = () => {
+    closeChat.addEventListener(
+        "click",
+        () => {
 
-        if (chatWindow) {
+            if (chatWindow) {
 
-            chatWindow.style.display =
-                "none";
+                chatWindow.style.display =
+                    "none";
+
+            }
 
         }
-
-    };
+    );
 
 }
 
 
-/*=========================================
-ENTER KEY
-=========================================*/
+/*=========================================================
+  ENTER KEY
+=========================================================*/
 
 if (chatInput) {
 
     chatInput.addEventListener(
-        "keypress",
-        (e) => {
+        "keydown",
+        event => {
 
-            if (e.key === "Enter") {
+            if (
+                event.key ===
+                "Enter"
+            ) {
+
+                event.preventDefault();
 
                 sendMessage();
 
@@ -960,73 +1572,85 @@ if (chatInput) {
 }
 
 
-/*=========================================
-SEARCH BOOK
-=========================================*/
+/*=========================================================
+  SEARCH BOOK FOR AI
+=========================================================*/
 
 function searchBook(question) {
 
     const q =
-        question.toLowerCase();
+        String(question)
+            .toLowerCase()
+            .trim();
 
 
     for (const book of allBooks) {
 
+        const title =
+            (book.title || "")
+                .toLowerCase();
+
+
+        const category =
+            (book.category || "")
+                .toLowerCase();
+
+
+        const author =
+            (book.author || "")
+                .toLowerCase();
+
+
         if (
 
-            (book.title || "")
-                .toLowerCase()
-                .includes(q)
+            title.includes(q)
 
             ||
 
-            (book.category || "")
-                .toLowerCase()
-                .includes(q)
+            category.includes(q)
+
+            ||
+
+            author.includes(q)
 
         ) {
 
             return `
 
-📚 <b>
-${book.title}
-</b>
+                📚 <b>
+                ${escapeHTML(book.title)}
+                </b>
 
-<br>
+                <br>
 
-👤 ${book.author}
+                👤
+                ${escapeHTML(book.author)}
 
-<br>
+                <br>
 
-📂 ${book.category}
+                📂
+                ${escapeHTML(book.category)}
 
-<br><br>
+                <br><br>
 
+                <a
+                    href="reader.html?book=${encodeURIComponent(book.pdf || "")}"
+                    class="btn"
+                >
+                    📖 Read Online
+                </a>
 
-<a
-    href="reader.html?book=${encodeURIComponent(book.pdf)}"
-    class="btn"
->
+                &nbsp;
 
-📖 Read Online
+                <a
+                    href="${book.pdf || "#"}"
+                    download
+                    class="btn"
+                >
+                    ⬇ Download
+                </a>
 
-</a>
-
-
-&nbsp;
-
-
-<a
-    href="${book.pdf}"
-    download
-    class="btn"
->
-
-⬇ Download
-
-</a>
-
-`;
+            `;
 
         }
 
@@ -1038,27 +1662,49 @@ ${book.title}
 }
 
 
-/*=========================================
-SEARCH KNOWLEDGE
-=========================================*/
+/*=========================================================
+  SEARCH KNOWLEDGE
+=========================================================*/
 
 function searchKnowledge(question) {
 
     const q =
-        question.toLowerCase();
+        String(question)
+            .toLowerCase()
+            .trim();
 
 
     for (const item of knowledge) {
 
+        const itemQuestion =
+            String(
+                item.question || ""
+            )
+            .toLowerCase();
+
+
+        const keywords =
+            Array.isArray(
+                item.keywords
+            )
+            ?
+            item.keywords
+            :
+            [];
+
+
         if (
-
-            (item.question || "")
-                .toLowerCase()
-                .includes(q)
-
+            itemQuestion.includes(q)
+            ||
+            keywords.some(
+                keyword =>
+                    String(keyword)
+                        .toLowerCase()
+                        .includes(q)
+            )
         ) {
 
-            return item.answer;
+            return item.answer || null;
 
         }
 
@@ -1070,24 +1716,32 @@ function searchKnowledge(question) {
 }
 
 
-/*=========================================
-BOT MESSAGE
-=========================================*/
+/*=========================================================
+  BOT MESSAGE
+=========================================================*/
 
 function botReply(text) {
 
     if (!chatMessages) return;
 
 
-    chatMessages.innerHTML += `
+    const message =
+        document.createElement(
+            "div"
+        );
 
-    <div class="bot-message">
 
-        ${text}
+    message.className =
+        "bot-message";
 
-    </div>
 
-    `;
+    message.innerHTML =
+        text;
+
+
+    chatMessages.appendChild(
+        message
+    );
 
 
     chatMessages.scrollTop =
@@ -1096,24 +1750,32 @@ function botReply(text) {
 }
 
 
-/*=========================================
-USER MESSAGE
-=========================================*/
+/*=========================================================
+  USER MESSAGE
+=========================================================*/
 
 function userReply(text) {
 
     if (!chatMessages) return;
 
 
-    chatMessages.innerHTML += `
+    const message =
+        document.createElement(
+            "div"
+        );
 
-    <div class="user-message">
 
-        ${text}
+    message.className =
+        "user-message";
 
-    </div>
 
-    `;
+    message.innerText =
+        text;
+
+
+    chatMessages.appendChild(
+        message
+    );
 
 
     chatMessages.scrollTop =
@@ -1122,9 +1784,9 @@ function userReply(text) {
 }
 
 
-/*=========================================
-SEND MESSAGE
-=========================================*/
+/*=========================================================
+  SEND MESSAGE
+=========================================================*/
 
 function sendMessage() {
 
@@ -1135,7 +1797,7 @@ function sendMessage() {
         chatInput.value.trim();
 
 
-    if (question === "") return;
+    if (!question) return;
 
 
     userReply(
@@ -1146,63 +1808,56 @@ function sendMessage() {
     chatInput.value = "";
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        let reply =
-            searchBook(
-                question
-            );
-
-
-        if (!reply) {
-
-            reply =
-                searchKnowledge(
+            let reply =
+                searchBook(
                     question
                 );
 
-        }
+
+            if (!reply) {
+
+                reply =
+                    searchKnowledge(
+                        question
+                    );
+
+            }
 
 
-        if (!reply) {
+            if (!reply) {
 
-            reply = `
+                reply = `
 
-            🤖 Sorry!
+                    🤖 Sorry!
 
-            <br><br>
+                    <br><br>
 
-            Mujhe iska jawab abhi
-            database me nahi mila.
+                    Mujhe iska jawab abhi
+                    database mein nahi mila.
 
-            `;
+                `;
 
-        }
+            }
 
 
-        botReply(
-            reply
-        );
+            botReply(
+                reply
+            );
 
-    }, 500);
+        },
+        400
+    );
 
 }
 
 
-console.log(
-    "✅ Script Part 3 Loaded"
-);
-
-
-/*=========================================
-PART 4
-FINAL PREMIUM
-=========================================*/
-
-
-/*=========================================
-SCROLL ANIMATION
-=========================================*/
+/*=========================================================
+  PART 13
+  SCROLL ANIMATION
+=========================================================*/
 
 const sections =
     document.querySelectorAll(
@@ -1217,7 +1872,8 @@ if (
 
     const observer =
         new IntersectionObserver(
-            (entries) => {
+
+            entries => {
 
                 entries.forEach(
                     entry => {
@@ -1238,11 +1894,11 @@ if (
                 );
 
             },
+
             {
-
                 threshold: 0.15
-
             }
+
         );
 
 
@@ -1259,30 +1915,30 @@ if (
 }
 
 
-/*=========================================
-BOOK CARD HOVER
-=========================================*/
+/*=========================================================
+  PART 14
+  BOOK CARD HOVER
+=========================================================*/
 
 document.addEventListener(
     "mouseover",
-    (e) => {
+    event => {
 
         const card =
-            e.target.closest(
+            event.target.closest(
                 ".book-card"
             );
 
 
-        if (card) {
-
-            card.style.transform =
-                "translateY(-10px)";
+        if (!card) return;
 
 
-            card.style.transition =
-                ".35s";
+        card.style.transform =
+            "translateY(-10px)";
 
-        }
+
+        card.style.transition =
+            "transform .35s ease";
 
     }
 );
@@ -1290,36 +1946,37 @@ document.addEventListener(
 
 document.addEventListener(
     "mouseout",
-    (e) => {
+    event => {
 
         const card =
-            e.target.closest(
+            event.target.closest(
                 ".book-card"
             );
 
 
-        if (card) {
+        if (!card) return;
 
-            card.style.transform =
-                "translateY(0px)";
 
-        }
+        card.style.transform =
+            "translateY(0)";
 
     }
 );
 
 
-/*=========================================
-DOWNLOAD COUNTER
-LOCAL
-=========================================*/
+/*=========================================================
+  PART 15
+  LOCAL DOWNLOAD COUNTER
+=========================================================*/
 
 document.addEventListener(
     "click",
-    (e) => {
+    event => {
 
         const btn =
-            e.target.closest("a");
+            event.target.closest(
+                "a"
+            );
 
 
         if (!btn) return;
@@ -1353,30 +2010,34 @@ document.addEventListener(
 );
 
 
-/*=========================================
-READ COUNTER
-LOCAL
-=========================================*/
+/*=========================================================
+  PART 16
+  LOCAL READ COUNTER
+=========================================================*/
 
 document.addEventListener(
     "click",
-    (e) => {
+    event => {
 
         const btn =
-            e.target.closest("a");
+            event.target.closest(
+                "a"
+            );
 
 
         if (!btn) return;
 
 
+        const href =
+            btn.getAttribute(
+                "href"
+            ) || "";
+
+
         if (
 
-            btn.href.includes(".pdf")
-
-            &&
-
-            !btn.hasAttribute(
-                "download"
+            href.includes(
+                "reader.html"
             )
 
         ) {
@@ -1403,16 +2064,17 @@ document.addEventListener(
 );
 
 
-/*=========================================
-BUTTON RIPPLE
-=========================================*/
+/*=========================================================
+  PART 17
+  BUTTON RIPPLE
+=========================================================*/
 
 document.addEventListener(
     "click",
-    (e) => {
+    event => {
 
         const btn =
-            e.target.closest(
+            event.target.closest(
                 ".btn"
             );
 
@@ -1430,12 +2092,16 @@ document.addEventListener(
             "ripple";
 
 
+        const rect =
+            btn.getBoundingClientRect();
+
+
         ripple.style.left =
-            e.offsetX + "px";
+            `${event.clientX - rect.left}px`;
 
 
         ripple.style.top =
-            e.offsetY + "px";
+            `${event.clientY - rect.top}px`;
 
 
         btn.appendChild(
@@ -1443,19 +2109,27 @@ document.addEventListener(
         );
 
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            ripple.remove();
+                if (ripple) {
 
-        }, 600);
+                    ripple.remove();
+
+                }
+
+            },
+            600
+        );
 
     }
 );
 
 
-/*=========================================
-NAVBAR SHADOW
-=========================================*/
+/*=========================================================
+  PART 18
+  NAVBAR SHADOW
+=========================================================*/
 
 window.addEventListener(
     "scroll",
@@ -1492,9 +2166,10 @@ window.addEventListener(
 );
 
 
-/*=========================================
-AUTO YEAR
-=========================================*/
+/*=========================================================
+  PART 19
+  AUTO YEAR
+=========================================================*/
 
 const year =
     document.getElementById(
@@ -1505,33 +2180,56 @@ const year =
 if (year) {
 
     year.innerText =
-        new Date().getFullYear();
+        new Date()
+            .getFullYear();
 
 }
 
 
-/*=========================================
-IMAGE FALLBACK
-=========================================*/
+/*=========================================================
+  PART 20
+  IMAGE FALLBACK
+=========================================================*/
 
-document
-    .querySelectorAll("img")
-    .forEach(img => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-        img.onerror =
-            function () {
+        document
+            .querySelectorAll("img")
+            .forEach(img => {
 
-                this.src =
-                    "logo.png";
+                img.addEventListener(
+                    "error",
+                    function () {
 
-            };
+                        if (
+                            this.src.includes(
+                                "logo.png"
+                            )
+                        ) {
 
-    });
+                            return;
+
+                        }
 
 
-/*=========================================
-PRELOAD BOOK COVERS
-=========================================*/
+                        this.src =
+                            "logo.png";
+
+                    }
+                );
+
+            });
+
+    }
+);
+
+
+/*=========================================================
+  PART 21
+  PRELOAD BOOK COVERS
+=========================================================*/
 
 window.addEventListener(
     "load",
@@ -1547,6 +2245,9 @@ window.addEventListener(
         allBooks.forEach(
             book => {
 
+                if (!book.cover) return;
+
+
                 const image =
                     new Image();
 
@@ -1561,51 +2262,100 @@ window.addEventListener(
 );
 
 
-/*=========================================
-SMOOTH ANCHOR LINKS
-=========================================*/
+/*=========================================================
+  PART 22
+  SMOOTH ANCHOR LINKS
+=========================================================*/
 
-document
-    .querySelectorAll(
-        'a[href^="#"]'
-    )
-    .forEach(anchor => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-        anchor.addEventListener(
-            "click",
-            function (e) {
+        document
+            .querySelectorAll(
+                'a[href^="#"]'
+            )
+            .forEach(anchor => {
 
-                e.preventDefault();
+                anchor.addEventListener(
+                    "click",
+                    function (event) {
 
-
-                const target =
-                    document.querySelector(
-                        this.getAttribute(
-                            "href"
-                        )
-                    );
-
-
-                if (target) {
-
-                    target.scrollIntoView({
-
-                        behavior:
-                            "smooth"
-
-                    });
-
-                }
-
-            }
-        );
-
-    });
+                        const selector =
+                            this.getAttribute(
+                                "href"
+                            );
 
 
-/*=========================================
-FINAL CONSOLE
-=========================================*/
+                        if (
+                            !selector ||
+                            selector === "#"
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const target =
+                            document.querySelector(
+                                selector
+                            );
+
+
+                        if (!target) return;
+
+
+                        event.preventDefault();
+
+
+                        target.scrollIntoView({
+
+                            behavior:
+                                "smooth",
+
+                            block:
+                                "start"
+
+                        });
+
+                    }
+                );
+
+            });
+
+    }
+);
+
+
+/*=========================================================
+  PART 23
+  GLOBAL FUNCTIONS
+=========================================================*/
+
+window.searchBooks =
+    searchBooks;
+
+
+window.filterBooks =
+    filterBooks;
+
+
+window.sendMessage =
+    sendMessage;
+
+
+window.likeBook =
+    likeBook;
+
+
+window.loadBooks =
+    loadBooks;
+
+
+/*=========================================================
+  FINAL CONSOLE
+=========================================================*/
 
 console.log(
     "===================================="
@@ -1616,15 +2366,19 @@ console.log(
 );
 
 console.log(
-    "Version : 1.0"
+    "Version : 2.0"
 );
 
 console.log(
-    "Developer : Ali Hassan"
+    "Firebase : Firestore"
 );
 
 console.log(
     "===================================="
+);
+
+console.log(
+    "✅ Firebase"
 );
 
 console.log(
@@ -1644,19 +2398,11 @@ console.log(
 );
 
 console.log(
-    "✅ Books"
+    "✅ Firebase Books"
 );
 
 console.log(
-    "✅ AI"
-);
-
-console.log(
-    "✅ Reader"
-);
-
-console.log(
-    "✅ Downloads"
+    "✅ Latest Book"
 );
 
 console.log(
@@ -1664,9 +2410,33 @@ console.log(
 );
 
 console.log(
+    "✅ Book Views"
+);
+
+console.log(
+    "✅ Likes"
+);
+
+console.log(
+    "✅ Downloads"
+);
+
+console.log(
+    "✅ AI Knowledge"
+);
+
+console.log(
+    "✅ Chatbot"
+);
+
+console.log(
+    "✅ Reader"
+);
+
+console.log(
     "✅ Responsive"
 );
 
 console.log(
-    "🚀 Production Ready"
+    "🚀 Chishti Library Ready"
 );
