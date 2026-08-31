@@ -1,28 +1,8 @@
 /* =========================================================
    CHISHTI LIBRARY
    FIREBASE.JS
-   FULL FIXED VERSION
-   =========================================================
-
-   FEATURES
-   ✅ Single Firebase initialization
-   ✅ Authentication
-   ✅ Firestore
-   ✅ Storage
-   ✅ Visitor counter
-   ✅ Session-based visitor counting
-   ✅ Book views
-   ✅ Book likes
-   ✅ Book downloads
-   ✅ Firebase helper functions
-   ✅ Online/offline detection
-   ✅ Firestore network reconnect
-   ✅ Global window.db
-   ✅ Global window.auth
-   ✅ Global window.storage
-
-   IMPORTANT:
-   Firebase COMPAT SDK must be loaded BEFORE this file.
+   FULL VERSION
+   Firebase + Auth + Firestore + Storage + Counters
    ========================================================= */
 
 "use strict";
@@ -30,35 +10,29 @@
 
 /* =========================================================
    FIREBASE CONFIG
-   =========================================================
-
-   ⚠️ REPLACE THESE VALUES WITH YOUR REAL FIREBASE CONFIG.
-
-   Firebase Console:
-   Project Settings
-   → Your apps
-   → Web app
-   → SDK setup and configuration
    ========================================================= */
 
 const firebaseConfig = {
 
-    apiKey: "YOUR_API_KEY",
+    apiKey: "AIzaSyD0h4LFzHbInFRMgtjosgSbGgoBxNwFbGU",
 
     authDomain:
-        "YOUR_PROJECT.firebaseapp.com",
+        "chishti-library.firebaseapp.com",
 
     projectId:
-        "YOUR_PROJECT_ID",
+        "chishti-library",
 
     storageBucket:
-        "YOUR_PROJECT.firebasestorage.app",
+        "chishti-library.firebasestorage.app",
 
     messagingSenderId:
-        "YOUR_SENDER_ID",
+        "103447043162",
 
     appId:
-        "YOUR_APP_ID"
+        "1:103447043162:web:f242cd2670aaa9786e8c63",
+
+    measurementId:
+        "G-833P7N3LNT"
 
 };
 
@@ -67,1025 +41,1102 @@ const firebaseConfig = {
    CHECK FIREBASE SDK
    ========================================================= */
 
-if (
-    typeof firebase === "undefined"
-) {
+if (typeof firebase === "undefined") {
 
     console.error(
-        "❌ Firebase SDK not loaded."
-    );
-
-    console.error(
-        "Load Firebase App, Auth, Firestore and Storage SDKs before firebase.js."
+        "❌ Firebase SDK is not loaded."
     );
 
 } else {
 
 
     /* =====================================================
-       FIREBASE INITIALIZATION
+       INITIALIZE FIREBASE ONCE
        ===================================================== */
 
-    try {
+    if (!firebase.apps.length) {
 
-        if (
-            !firebase.apps ||
-            firebase.apps.length === 0
-        ) {
+        firebase.initializeApp(
+            firebaseConfig
+        );
 
-            firebase.initializeApp(
-                firebaseConfig
-            );
+        console.log(
+            "🔥 Firebase initialized successfully"
+        );
+
+    } else {
+
+        console.log(
+            "🔥 Firebase already initialized"
+        );
+
+    }
+
+
+    /* =====================================================
+       SERVICES
+       ===================================================== */
+
+    const auth =
+        firebase.auth();
+
+    const db =
+        firebase.firestore();
+
+    const storage =
+        firebase.storage();
+
+
+    /* =====================================================
+       GLOBAL SERVICES
+       ===================================================== */
+
+    window.auth =
+        auth;
+
+    window.db =
+        db;
+
+    window.storage =
+        storage;
+
+    window.firebaseAuth =
+        auth;
+
+    window.firebaseDB =
+        db;
+
+    window.firebaseStorage =
+        storage;
+
+
+    /* =====================================================
+       FIRESTORE NETWORK
+       ===================================================== */
+
+    db.enableNetwork()
+        .then(() => {
 
             console.log(
-                "🔥 Firebase initialized successfully"
+                "🌐 Firestore network enabled"
             );
 
-        } else {
+        })
+        .catch(error => {
+
+            console.warn(
+                "⚠️ Firestore network error:",
+                error
+            );
+
+        });
+
+
+    /* =====================================================
+       ONLINE / OFFLINE
+       ===================================================== */
+
+    window.addEventListener(
+        "online",
+        () => {
 
             console.log(
-                "🔥 Firebase already initialized"
+                "🌐 Internet connection restored"
+            );
+
+            db.enableNetwork()
+                .then(() => {
+
+                    console.log(
+                        "🔥 Firestore reconnected"
+                    );
+
+                })
+                .catch(error => {
+
+                    console.warn(
+                        "⚠️ Firestore reconnect failed:",
+                        error
+                    );
+
+                });
+
+        }
+    );
+
+
+    window.addEventListener(
+        "offline",
+        () => {
+
+            console.warn(
+                "⚠️ Browser is offline"
             );
 
         }
+    );
 
 
-        /* =================================================
-           FIREBASE SERVICES
-           ================================================= */
+    /* =====================================================
+       AUTH PERSISTENCE
+       ===================================================== */
 
-        const firebaseAuth =
-            firebase.auth();
+    auth.setPersistence(
+        firebase.auth.Auth.Persistence.LOCAL
+    )
+    .then(() => {
 
-        const firebaseDB =
-            firebase.firestore();
+        console.log(
+            "✅ Auth Persistence Enabled"
+        );
 
-        const firebaseStorage =
-            firebase.storage();
+    })
+    .catch(error => {
 
+        console.error(
+            "❌ Auth persistence error:",
+            error
+        );
 
-        /* =================================================
-           GLOBAL SERVICES
-           ================================================= */
-
-        window.firebaseAuth =
-            firebaseAuth;
-
-        window.firebaseDB =
-            firebaseDB;
-
-        window.firebaseStorage =
-            firebaseStorage;
+    });
 
 
-        window.auth =
-            firebaseAuth;
+    /* =====================================================
+       ADMIN LOGIN CHECK
+       ===================================================== */
 
-        window.db =
-            firebaseDB;
+    function checkAdmin() {
 
-        window.storage =
-            firebaseStorage;
+        auth.onAuthStateChanged(
+            user => {
+
+                const adminMenu =
+                    document.getElementById(
+                        "adminMenu"
+                    );
+
+                const dashboardMenu =
+                    document.getElementById(
+                        "dashboardMenu"
+                    );
+
+                const loginMenu =
+                    document.getElementById(
+                        "loginMenu"
+                    );
 
 
-        /* =================================================
-           FIRESTORE NETWORK
-           ================================================= */
+                if (user) {
 
-        /*
-           Try to enable Firestore network.
+                    console.log(
+                        "🔐 Logged In:",
+                        user.email
+                    );
 
-           This is useful when the browser temporarily
-           enters Firestore offline mode.
-        */
 
-        firebaseDB.enableNetwork()
+                    if (adminMenu) {
+
+                        adminMenu.style.display =
+                            "block";
+
+                    }
+
+
+                    if (dashboardMenu) {
+
+                        dashboardMenu.style.display =
+                            "block";
+
+                    }
+
+
+                    if (loginMenu) {
+
+                        loginMenu.style.display =
+                            "none";
+
+                    }
+
+                } else {
+
+                    console.log(
+                        "👤 Guest User"
+                    );
+
+
+                    if (adminMenu) {
+
+                        adminMenu.style.display =
+                            "none";
+
+                    }
+
+
+                    if (dashboardMenu) {
+
+                        dashboardMenu.style.display =
+                            "none";
+
+                    }
+
+
+                    if (loginMenu) {
+
+                        loginMenu.style.display =
+                            "block";
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+
+
+    window.checkAdmin =
+        checkAdmin;
+
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    function logout() {
+
+        auth.signOut()
+
             .then(() => {
 
                 console.log(
-                    "🌐 Firestore network enabled"
+                    "✅ Logout Successful"
                 );
 
+                window.location.href =
+                    "login.html";
+
             })
+
             .catch(error => {
 
-                console.warn(
-                    "⚠️ Firestore network could not be enabled:",
+                console.error(
+                    "❌ Logout error:",
                     error
+                );
+
+                alert(
+                    error.message
                 );
 
             });
 
+    }
 
-        /* =================================================
-           FIREBASE ONLINE / OFFLINE STATUS
-           ================================================= */
 
-        window.addEventListener(
-            "online",
-            () => {
+    window.logout =
+        logout;
 
-                console.log(
-                    "🌐 Internet connection restored"
-                );
 
-                firebaseDB
-                    .enableNetwork()
-                    .then(() => {
+    /* =====================================================
+       NUMBER ANIMATION
+       ===================================================== */
 
-                        console.log(
-                            "🔥 Firestore reconnected"
-                        );
+    function animateNumber(
+        element,
+        target
+    ) {
 
-                    })
-                    .catch(error => {
+        if (!element) return;
 
-                        console.warn(
-                            "Firestore reconnect error:",
-                            error
-                        );
 
-                    });
+        target =
+            Number(target) || 0;
 
-            }
-        );
 
+        let current = 0;
 
-        window.addEventListener(
-            "offline",
-            () => {
 
-                console.warn(
-                    "⚠️ Browser is offline"
-                );
+        if (target === 0) {
 
-            }
-        );
+            element.innerText =
+                "0";
 
-
-        /* =================================================
-           VISITOR COUNTER
-           =================================================
-
-           Firestore:
-
-           counter
-              └── visitors
-                    └── count
-        */
-
-        async function updateVisitorCounter() {
-
-            const counterElement =
-                document.getElementById(
-                    "visitorCounter"
-                );
-
-
-            if (!counterElement) {
-
-                console.warn(
-                    "⚠️ #visitorCounter not found"
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                const visitorRef =
-                    firebaseDB
-                        .collection("counter")
-                        .doc("visitors");
-
-
-                /* =========================================
-                   CHECK SESSION
-                   ========================================= */
-
-                const alreadyCounted =
-                    sessionStorage.getItem(
-                        "chishtiVisitorCounted"
-                    );
-
-
-                /* =========================================
-                   CREATE / UPDATE COUNTER
-                   ========================================= */
-
-                if (!alreadyCounted) {
-
-
-                    /*
-                       Transaction prevents two visitors
-                       updating the same counter incorrectly.
-                    */
-
-                    await firebaseDB.runTransaction(
-                        async transaction => {
-
-                            const snapshot =
-                                await transaction.get(
-                                    visitorRef
-                                );
-
-
-                            if (
-                                !snapshot.exists
-                            ) {
-
-                                transaction.set(
-                                    visitorRef,
-                                    {
-                                        count: 1,
-                                        updatedAt:
-                                            firebase.firestore.FieldValue.serverTimestamp()
-                                    }
-                                );
-
-                            } else {
-
-                                const data =
-                                    snapshot.data() || {};
-
-
-                                const currentCount =
-                                    Number(
-                                        data.count
-                                    ) || 0;
-
-
-                                transaction.update(
-                                    visitorRef,
-                                    {
-                                        count:
-                                            currentCount + 1,
-
-                                        updatedAt:
-                                            firebase.firestore.FieldValue.serverTimestamp()
-                                    }
-                                );
-
-                            }
-
-                        }
-                    );
-
-
-                    sessionStorage.setItem(
-                        "chishtiVisitorCounted",
-                        "true"
-                    );
-
-
-                    console.log(
-                        "👁️ New visitor counted"
-                    );
-
-
-                } else {
-
-                    console.log(
-                        "👁️ Visitor already counted in this session"
-                    );
-
-                }
-
-
-                /* =========================================
-                   GET FINAL COUNT
-                   ========================================= */
-
-                const snapshot =
-                    await visitorRef.get();
-
-
-                if (
-                    !snapshot.exists
-                ) {
-
-                    counterElement.innerText =
-                        "0";
-
-                    return;
-
-                }
-
-
-                const data =
-                    snapshot.data() || {};
-
-
-                const visitors =
-                    Number(
-                        data.count
-                    ) || 0;
-
-
-                /* =========================================
-                   ANIMATE COUNTER
-                   ========================================= */
-
-                animateNumber(
-                    counterElement,
-                    visitors
-                );
-
-
-                console.log(
-                    "👁️ Total visitors:",
-                    visitors
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "❌ Visitor counter error:",
-                    error
-                );
-
-
-                /*
-                   Do NOT display 0 if Firebase is
-                   temporarily unavailable.
-
-                   Keep the previous value instead.
-                */
-
-                if (
-                    counterElement.innerText ===
-                    ""
-                ) {
-
-                    counterElement.innerText =
-                        "—";
-
-                }
-
-            }
+            return;
 
         }
 
 
-        /* =================================================
-           NUMBER ANIMATION
-           ================================================= */
+        const duration =
+            1000;
 
-        function animateNumber(
-            element,
-            target
-        ) {
-
-            if (!element) return;
+        const startTime =
+            performance.now();
 
 
-            target =
-                Number(target) || 0;
+        function update(time) {
+
+            const progress =
+                Math.min(
+                    (time - startTime) /
+                    duration,
+                    1
+                );
 
 
-            const start =
-                Number(
-                    element.innerText
-                ) || 0;
+            current =
+                Math.floor(
+                    target * progress
+                );
 
 
-            if (
-                start >= target
-            ) {
+            element.innerText =
+                current.toLocaleString();
+
+
+            if (progress < 1) {
+
+                requestAnimationFrame(
+                    update
+                );
+
+            } else {
 
                 element.innerText =
                     target.toLocaleString();
 
+            }
+
+        }
+
+
+        requestAnimationFrame(
+            update
+        );
+
+    }
+
+
+    /* =====================================================
+       VISITOR COUNTER
+       =====================================================
+
+       Firestore:
+
+       counter
+          └── visitors
+               └── count
+    */
+
+    async function updateVisitorCounter() {
+
+        const element =
+            document.getElementById(
+                "visitorCounter"
+            );
+
+
+        if (!element) {
+
+            console.warn(
+                "⚠️ #visitorCounter not found"
+            );
+
+            return;
+
+        }
+
+
+        const visitorRef =
+            db
+                .collection("counter")
+                .doc("visitors");
+
+
+        try {
+
+            const alreadyCounted =
+                sessionStorage.getItem(
+                    "chishtiVisitorCounted"
+                );
+
+
+            /* =============================================
+               NEW SESSION
+               ============================================= */
+
+            if (!alreadyCounted) {
+
+                await db.runTransaction(
+                    async transaction => {
+
+                        const snapshot =
+                            await transaction.get(
+                                visitorRef
+                            );
+
+
+                        if (!snapshot.exists) {
+
+                            transaction.set(
+                                visitorRef,
+                                {
+
+                                    count: 1,
+
+                                    updatedAt:
+                                        firebase.firestore
+                                            .FieldValue
+                                            .serverTimestamp()
+
+                                }
+                            );
+
+                        } else {
+
+                            const data =
+                                snapshot.data() || {};
+
+
+                            const current =
+                                Number(
+                                    data.count
+                                ) || 0;
+
+
+                            transaction.update(
+                                visitorRef,
+                                {
+
+                                    count:
+                                        current + 1,
+
+                                    updatedAt:
+                                        firebase.firestore
+                                            .FieldValue
+                                            .serverTimestamp()
+
+                                }
+                            );
+
+                        }
+
+                    }
+                );
+
+
+                sessionStorage.setItem(
+                    "chishtiVisitorCounted",
+                    "true"
+                );
+
+
+                console.log(
+                    "👁️ New visitor counted"
+                );
+
+            } else {
+
+                console.log(
+                    "👁️ Visitor already counted in this session"
+                );
+
+            }
+
+
+            /* =============================================
+               READ CURRENT TOTAL
+               ============================================= */
+
+            const snapshot =
+                await visitorRef.get();
+
+
+            if (!snapshot.exists) {
+
+                element.innerText =
+                    "0";
+
                 return;
 
             }
 
 
-            const duration = 1000;
-
-            const startTime =
-                performance.now();
+            const data =
+                snapshot.data() || {};
 
 
-            function update(currentTime) {
-
-                const elapsed =
-                    currentTime -
-                    startTime;
-
-
-                const progress =
-                    Math.min(
-                        elapsed / duration,
-                        1
-                    );
+            const total =
+                Number(
+                    data.count
+                ) || 0;
 
 
-                const value =
-                    Math.floor(
-                        start +
-                        (
-                            target -
-                            start
-                        ) *
-                        progress
-                    );
-
-
-                element.innerText =
-                    value.toLocaleString();
-
-
-                if (
-                    progress < 1
-                ) {
-
-                    requestAnimationFrame(
-                        update
-                    );
-
-                } else {
-
-                    element.innerText =
-                        target.toLocaleString();
-
-                }
-
-            }
-
-
-            requestAnimationFrame(
-                update
+            animateNumber(
+                element,
+                total
             );
 
-        }
 
+            console.log(
+                "👁️ Total Visitors:",
+                total
+            );
 
-        /* =================================================
-           GLOBAL VISITOR FUNCTION
-           ================================================= */
 
-        window.updateVisitorCounter =
-            updateVisitorCounter;
+        } catch (error) {
 
+            console.error(
+                "❌ Visitor counter error:",
+                error
+            );
 
-        /* =================================================
-           BOOK VIEW COUNTER
-           =================================================
 
-           Usage:
-
-           incrementBookView("book-id");
-
-        */
-
-        async function incrementBookView(
-            bookId
-        ) {
-
-            if (!bookId) return;
-
-
-            try {
-
-                const ref =
-                    firebaseDB
-                        .collection("books")
-                        .doc(String(bookId));
-
-
-                await ref.set(
-
-                    {
-
-                        views:
-                            firebase.firestore.FieldValue.increment(
-                                1
-                            ),
-
-                        updatedAt:
-                            firebase.firestore.FieldValue.serverTimestamp()
-
-                    },
-
-                    {
-                        merge: true
-                    }
-
-                );
-
-
-                console.log(
-                    "👁️ Book view added:",
-                    bookId
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "❌ Book view error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        window.incrementBookView =
-            incrementBookView;
-
-
-        /* =================================================
-           BOOK LIKE COUNTER
-           =================================================
-
-           Usage:
-
-           incrementBookLike("book-id");
-
-        */
-
-        async function incrementBookLike(
-            bookId
-        ) {
-
-            if (!bookId) return;
-
-
-            try {
-
-                const ref =
-                    firebaseDB
-                        .collection("books")
-                        .doc(String(bookId));
-
-
-                await ref.set(
-
-                    {
-
-                        likes:
-                            firebase.firestore.FieldValue.increment(
-                                1
-                            ),
-
-                        updatedAt:
-                            firebase.firestore.FieldValue.serverTimestamp()
-
-                    },
-
-                    {
-                        merge: true
-                    }
-
-                );
-
-
-                console.log(
-                    "❤️ Book like added:",
-                    bookId
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "❌ Book like error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        window.incrementBookLike =
-            incrementBookLike;
-
-
-        /* =================================================
-           BOOK DOWNLOAD COUNTER
-           =================================================
-
-           Usage:
-
-           incrementBookDownload("book-id");
-
-        */
-
-        async function incrementBookDownload(
-            bookId
-        ) {
-
-            if (!bookId) return;
-
-
-            try {
-
-                const ref =
-                    firebaseDB
-                        .collection("books")
-                        .doc(String(bookId));
-
-
-                await ref.set(
-
-                    {
-
-                        downloads:
-                            firebase.firestore.FieldValue.increment(
-                                1
-                            ),
-
-                        updatedAt:
-                            firebase.firestore.FieldValue.serverTimestamp()
-
-                    },
-
-                    {
-                        merge: true
-                    }
-
-                );
-
-
-                console.log(
-                    "⬇️ Book download added:",
-                    bookId
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "❌ Book download error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        window.incrementBookDownload =
-            incrementBookDownload;
-
-
-        /* =================================================
-           GENERIC FIREBASE COUNTER
-           =================================================
-
-           Usage:
-
-           incrementCounter(
-               "counter",
-               "visitors",
-               "count"
-           );
-
-        */
-
-        async function incrementCounter(
-            collectionName,
-            documentId,
-            fieldName = "count"
-        ) {
+            /*
+               Do NOT reset the counter to 0
+               when Firebase is temporarily offline.
+            */
 
             if (
-                !collectionName ||
-                !documentId ||
-                !fieldName
+                !element.innerText ||
+                element.innerText === "0"
             ) {
 
-                return null;
-
-            }
-
-
-            try {
-
-                const ref =
-                    firebaseDB
-                        .collection(
-                            collectionName
-                        )
-                        .doc(
-                            String(documentId)
-                        );
-
-
-                await ref.set(
-
-                    {
-
-                        [fieldName]:
-                            firebase.firestore.FieldValue.increment(
-                                1
-                            ),
-
-                        updatedAt:
-                            firebase.firestore.FieldValue.serverTimestamp()
-
-                    },
-
-                    {
-                        merge: true
-                    }
-
-                );
-
-
-                const snapshot =
-                    await ref.get();
-
-
-                if (
-                    !snapshot.exists
-                ) {
-
-                    return 0;
-
-                }
-
-
-                return Number(
-                    snapshot.data()[fieldName]
-                ) || 0;
-
-
-            } catch (error) {
-
-                console.error(
-                    "❌ Firebase counter error:",
-                    error
-                );
-
-                return null;
+                element.innerText =
+                    "—";
 
             }
 
         }
 
-
-        window.incrementCounter =
-            incrementCounter;
+    }
 
 
-        /* =================================================
-           GET COUNTER
-           ================================================= */
+    window.updateVisitorCounter =
+        updateVisitorCounter;
 
-        async function getCounter(
-            collectionName,
-            documentId,
-            fieldName = "count"
+
+    /* =====================================================
+       GENERIC COUNTER
+       ===================================================== */
+
+    async function incrementCounter(
+        collectionName,
+        documentId,
+        fieldName = "count"
+    ) {
+
+        if (
+            !collectionName ||
+            !documentId
         ) {
 
-            try {
+            return null;
 
-                const ref =
-                    firebaseDB
-                        .collection(
-                            collectionName
-                        )
-                        .doc(
-                            String(documentId)
-                        );
+        }
 
 
-                const snapshot =
-                    await ref.get();
+        try {
+
+            const ref =
+                db
+                    .collection(
+                        collectionName
+                    )
+                    .doc(
+                        String(documentId)
+                    );
 
 
-                if (
-                    !snapshot.exists
-                ) {
+            await ref.set(
 
-                    return 0;
+                {
 
+                    [fieldName]:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1),
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                },
+
+                {
+                    merge: true
                 }
 
-
-                return Number(
-                    snapshot.data()[fieldName]
-                ) || 0;
+            );
 
 
-            } catch (error) {
+            const snapshot =
+                await ref.get();
 
-                console.error(
-                    "❌ Get counter error:",
-                    error
-                );
+
+            if (!snapshot.exists) {
 
                 return 0;
 
             }
 
+
+            return Number(
+                snapshot.data()[fieldName]
+            ) || 0;
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Counter error:",
+                error
+            );
+
+            return null;
+
         }
 
-
-        window.getCounter =
-            getCounter;
+    }
 
 
-        /* =================================================
-           AUTH HELPERS
-           ================================================= */
-
-        async function getCurrentUser() {
-
-            return firebaseAuth.currentUser ||
-                null;
-
-        }
+    window.incrementCounter =
+        incrementCounter;
 
 
-        window.getCurrentUser =
-            getCurrentUser;
+    /* =====================================================
+       GET COUNTER
+       ===================================================== */
+
+    async function getCounter(
+        collectionName,
+        documentId,
+        fieldName = "count"
+    ) {
+
+        try {
+
+            const ref =
+                db
+                    .collection(
+                        collectionName
+                    )
+                    .doc(
+                        String(documentId)
+                    );
 
 
-        /* =================================================
-           FIREBASE CONNECTION TEST
-           ================================================= */
-
-        async function testFirebaseConnection() {
-
-            try {
-
-                const testRef =
-                    firebaseDB
-                        .collection("counter")
-                        .doc("visitors");
+            const snapshot =
+                await ref.get();
 
 
-                const snapshot =
-                    await testRef.get();
+            if (!snapshot.exists) {
 
-
-                console.log(
-                    "======================================"
-                );
-
-                console.log(
-                    "🔥 FIREBASE CONNECTION TEST"
-                );
-
-                console.log(
-                    "✅ Firestore is reachable"
-                );
-
-                console.log(
-                    "📄 Visitor document exists:",
-                    snapshot.exists
-                );
-
-                console.log(
-                    "======================================"
-                );
-
-
-                return true;
-
-
-            } catch (error) {
-
-                console.error(
-                    "❌ Firebase connection test failed:",
-                    error
-                );
-
-
-                return false;
+                return 0;
 
             }
 
-        }
+
+            return Number(
+                snapshot.data()[fieldName]
+            ) || 0;
 
 
-        window.testFirebaseConnection =
-            testFirebaseConnection;
+        } catch (error) {
 
-
-        /* =================================================
-           START VISITOR COUNTER
-           ================================================= */
-
-        /*
-           Wait until DOM is ready.
-        */
-
-        if (
-            document.readyState ===
-            "loading"
-        ) {
-
-            document.addEventListener(
-                "DOMContentLoaded",
-                () => {
-
-                    updateVisitorCounter();
-
-                }
+            console.error(
+                "❌ Get counter error:",
+                error
             );
 
-        } else {
-
-            updateVisitorCounter();
+            return 0;
 
         }
 
-
-        /* =================================================
-           FIREBASE READY LOG
-           ================================================= */
-
-        console.log(
-            "======================================"
-        );
-
-        console.log(
-            "🔥 CHISHTI LIBRARY"
-        );
-
-        console.log(
-            "🔥 FIREBASE SYSTEM"
-        );
-
-        console.log(
-            "======================================"
-        );
-
-        console.log(
-            "✅ Firebase App"
-        );
-
-        console.log(
-            "✅ Authentication"
-        );
-
-        console.log(
-            "✅ Firestore"
-        );
-
-        console.log(
-            "✅ Storage"
-        );
-
-        console.log(
-            "✅ Visitor Counter"
-        );
-
-        console.log(
-            "✅ Book Views"
-        );
-
-        console.log(
-            "✅ Book Likes"
-        );
-
-        console.log(
-            "✅ Book Downloads"
-        );
-
-        console.log(
-            "✅ Firebase Helpers"
-        );
-
-        console.log(
-            "✅ Global auth"
-        );
-
-        console.log(
-            "✅ Global db"
-        );
-
-        console.log(
-            "✅ Global storage"
-        );
-
-        console.log(
-            "🚀 Firebase Ready"
-        );
-
-        console.log(
-            "======================================"
-        );
+    }
 
 
-    } catch (error) {
+    window.getCounter =
+        getCounter;
 
-        console.error(
-            "❌ Firebase initialization failed:",
-            error
-        );
+
+    /* =====================================================
+       BOOK VIEW
+       ===================================================== */
+
+    async function incrementBookView(
+        bookId
+    ) {
+
+        if (!bookId) return null;
+
+
+        try {
+
+            const ref =
+                db
+                    .collection("books")
+                    .doc(
+                        String(bookId)
+                    );
+
+
+            await ref.set(
+
+                {
+
+                    views:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1),
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                },
+
+                {
+                    merge: true
+                }
+
+            );
+
+
+            console.log(
+                "👁️ Book view:",
+                bookId
+            );
+
+
+            return true;
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Book view error:",
+                error
+            );
+
+            return false;
+
+        }
 
     }
+
+
+    window.incrementBookView =
+        incrementBookView;
+
+
+    /* =====================================================
+       BOOK LIKE
+       ===================================================== */
+
+    async function incrementBookLike(
+        bookId
+    ) {
+
+        if (!bookId) return null;
+
+
+        try {
+
+            const ref =
+                db
+                    .collection("books")
+                    .doc(
+                        String(bookId)
+                    );
+
+
+            await ref.set(
+
+                {
+
+                    likes:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1),
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                },
+
+                {
+                    merge: true
+                }
+
+            );
+
+
+            console.log(
+                "❤️ Book like:",
+                bookId
+            );
+
+
+            return true;
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Book like error:",
+                error
+            );
+
+            return false;
+
+        }
+
+    }
+
+
+    window.incrementBookLike =
+        incrementBookLike;
+
+
+    /* =====================================================
+       BOOK DOWNLOAD
+       ===================================================== */
+
+    async function incrementBookDownload(
+        bookId
+    ) {
+
+        if (!bookId) return null;
+
+
+        try {
+
+            const ref =
+                db
+                    .collection("books")
+                    .doc(
+                        String(bookId)
+                    );
+
+
+            await ref.set(
+
+                {
+
+                    downloads:
+                        firebase.firestore
+                            .FieldValue
+                            .increment(1),
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                },
+
+                {
+                    merge: true
+                }
+
+            );
+
+
+            console.log(
+                "⬇️ Book download:",
+                bookId
+            );
+
+
+            return true;
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Book download error:",
+                error
+            );
+
+            return false;
+
+        }
+
+    }
+
+
+    window.incrementBookDownload =
+        incrementBookDownload;
+
+
+    /* =====================================================
+       CURRENT USER
+       ===================================================== */
+
+    function getCurrentUser() {
+
+        return auth.currentUser ||
+            null;
+
+    }
+
+
+    window.getCurrentUser =
+        getCurrentUser;
+
+
+    /* =====================================================
+       FIREBASE CONNECTION TEST
+       ===================================================== */
+
+    async function testFirebaseConnection() {
+
+        try {
+
+            await db
+                .collection("counter")
+                .doc("visitors")
+                .get();
+
+
+            console.log(
+                "🔥 Firestore connection OK"
+            );
+
+
+            return true;
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ Firestore connection failed:",
+                error
+            );
+
+
+            return false;
+
+        }
+
+    }
+
+
+    window.testFirebaseConnection =
+        testFirebaseConnection;
+
+
+    /* =====================================================
+       START VISITOR COUNTER
+       ===================================================== */
+
+    function startFirebase() {
+
+        updateVisitorCounter();
+
+    }
+
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            startFirebase
+        );
+
+    } else {
+
+        startFirebase();
+
+    }
+
+
+    /* =====================================================
+       ADMIN AUTH
+       ===================================================== */
+
+    checkAdmin();
+
+
+    /* =====================================================
+       FIREBASE READY
+       ===================================================== */
+
+    console.log(
+        "======================================"
+    );
+
+    console.log(
+        "🔥 CHISHTI LIBRARY"
+    );
+
+    console.log(
+        "🔥 FIREBASE SYSTEM"
+    );
+
+    console.log(
+        "======================================"
+    );
+
+    console.log(
+        "✅ Firebase App"
+    );
+
+    console.log(
+        "✅ Authentication"
+    );
+
+    console.log(
+        "✅ Firestore"
+    );
+
+    console.log(
+        "✅ Storage"
+    );
+
+    console.log(
+        "✅ Visitor Counter"
+    );
+
+    console.log(
+        "✅ Book Views"
+    );
+
+    console.log(
+        "✅ Book Likes"
+    );
+
+    console.log(
+        "✅ Book Downloads"
+    );
+
+    console.log(
+        "✅ Global auth"
+    );
+
+    console.log(
+        "✅ Global db"
+    );
+
+    console.log(
+        "✅ Global storage"
+    );
+
+    console.log(
+        "🚀 Firebase Ready"
+    );
+
+    console.log(
+        "======================================"
+    );
 
 }
 
