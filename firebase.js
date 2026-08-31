@@ -1,90 +1,118 @@
 /* =========================================================
    CHISHTI LIBRARY
    FIREBASE.JS
-   FIREBASE COMPAT VERSION
+   Firebase Auth + Firestore + Storage
 ========================================================= */
 
-(function () {
+"use strict";
 
-    "use strict";
+/* =========================================================
+   FIREBASE CONFIG
+   IMPORTANT:
+   Replace ONLY the values below with the config from
+   Firebase Console → Project settings → Your apps → Web app
+========================================================= */
 
-    /* =====================================================
-       FIREBASE CONFIG
-    ===================================================== */
-
-    const firebaseConfig = {
-
-        apiKey: "YOUR_API_KEY",
-
-        authDomain:
-            "chishti-library.firebaseapp.com",
-
-        projectId:
-            "chishti-library",
-
-        storageBucket:
-            "chishti-library.firebasestorage.app",
-
-        messagingSenderId:
-            "103447043162",
-
-        appId:
-            "YOUR_APP_ID",
-
-        measurementId:
-            "G-833P7N3LNT"
-
-    };
+const firebaseConfig = {
+    apiKey: "PASTE_YOUR_REAL_API_KEY_HERE",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
 
-    /* =====================================================
-       PREVENT DUPLICATE INITIALIZATION
-    ===================================================== */
+/* =========================================================
+   INITIALIZE FIREBASE
+========================================================= */
 
-    if (!firebase.apps.length) {
+if (!firebase.apps.length) {
 
-        firebase.initializeApp(
-            firebaseConfig
+    firebase.initializeApp(firebaseConfig);
+
+} else {
+
+    console.log("🔥 Firebase already initialized.");
+
+}
+
+
+/* =========================================================
+   SERVICES
+========================================================= */
+
+const auth = firebase.auth();
+
+const db = firebase.firestore();
+
+const storage = firebase.storage();
+
+
+/* =========================================================
+   GLOBAL ACCESS
+   admin.js can use these directly
+========================================================= */
+
+window.firebaseApp = firebase.app();
+
+window.auth = auth;
+
+window.db = db;
+
+window.storage = storage;
+
+
+/* =========================================================
+   FIREBASE STATUS
+========================================================= */
+
+console.log("======================================");
+console.log("📚 CHISHTI LIBRARY FIREBASE");
+console.log("======================================");
+
+console.log(
+    "✅ Chishti Firebase initialized"
+);
+
+console.log(
+    "🔥 Firestore:",
+    !!db
+);
+
+console.log(
+    "🔥 Storage:",
+    !!storage
+);
+
+console.log(
+    "🔥 Auth:",
+    !!auth
+);
+
+console.log("======================================");
+
+
+/* =========================================================
+   AUTH STATE
+========================================================= */
+
+auth.onAuthStateChanged(function (user) {
+
+    if (user) {
+
+        console.log(
+            "👤 Admin authenticated:",
+            user.email
+        );
+
+    } else {
+
+        console.log(
+            "👤 No admin currently logged in."
         );
 
     }
 
+});
 
-    /* =====================================================
-       SERVICES
-    ===================================================== */
-
-    window.auth =
-        firebase.auth();
-
-    window.db =
-        firebase.firestore();
-
-    window.storage =
-        firebase.storage();
-
-
-    /* =====================================================
-       FIREBASE READY
-    ===================================================== */
-
-    console.log(
-        "✅ Chishti Firebase initialized"
-    );
-
-    console.log(
-        "🔥 Firestore:",
-        !!window.db
-    );
-
-    console.log(
-        "🔥 Storage:",
-        !!window.storage
-    );
-
-    console.log(
-        "🔥 Auth:",
-        !!window.auth
-    );
-
-})();
