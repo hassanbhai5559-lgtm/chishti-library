@@ -1,9 +1,17 @@
 /*=========================================
 CHISHTI LIBRARY
 SCRIPT.JS
-PART 1
-Foundation + Books Loader
+FULL CLEAN VERSION
 =========================================*/
+
+"use strict";
+
+
+/*=========================================
+PART 1
+FOUNDATION
+=========================================*/
+
 
 /*=========================
 PREMIUM LOADER
@@ -11,7 +19,8 @@ PREMIUM LOADER
 
 window.addEventListener("load", () => {
 
-    const loader = document.getElementById("loader");
+    const loader =
+        document.getElementById("loader");
 
     setTimeout(() => {
 
@@ -22,22 +31,27 @@ window.addEventListener("load", () => {
 
             setTimeout(() => {
 
-                loader.remove();
+                if (loader) {
+                    loader.remove();
+                }
 
             }, 800);
-
         }
 
     }, 2500);
 
 });
 
+
 /*=========================
 MOBILE MENU
 =========================*/
 
-const menuBtn = document.querySelector(".mobile-menu");
-const menu = document.querySelector(".menu");
+const menuBtn =
+    document.querySelector(".mobile-menu");
+
+const menu =
+    document.querySelector(".menu");
 
 if (menuBtn && menu) {
 
@@ -49,20 +63,26 @@ if (menuBtn && menu) {
 
 }
 
+
 /*=========================
 SCROLL TO TOP
 =========================*/
 
-const scrollBtn = document.getElementById("scrollTop");
+const scrollBtn =
+    document.getElementById("scrollTop");
+
 
 window.addEventListener("scroll", () => {
 
     if (!scrollBtn) return;
 
     scrollBtn.style.display =
-        window.scrollY > 300 ? "block" : "none";
+        window.scrollY > 300
+            ? "block"
+            : "none";
 
 });
+
 
 if (scrollBtn) {
 
@@ -71,6 +91,7 @@ if (scrollBtn) {
         window.scrollTo({
 
             top: 0,
+
             behavior: "smooth"
 
         });
@@ -79,146 +100,15 @@ if (scrollBtn) {
 
 }
 
-/*=========================
-  VISITOR COUNTER
-=========================*/
-
-async function updateVisitorCounter() {
-
-    const visitorCounter =
-        document.getElementById("visitorCounter");
-
-    if (!visitorCounter) return;
-
-    try {
-
-        const visitorRef =
-            db.collection("counter").doc("visitors");
-
-
-        /* =========================
-           GET CURRENT DOCUMENT
-        ========================= */
-
-        const snapshot =
-            await visitorRef.get();
-
-
-        /* =========================
-           CREATE DOCUMENT IF MISSING
-        ========================= */
-
-        if (!snapshot.exists) {
-
-            await visitorRef.set({
-                count: 1
-            });
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-            visitorCounter.innerText = "1";
-
-            return;
-        }
-
-
-        /* =========================
-           CHECK THIS SESSION
-        ========================= */
-
-        const alreadyCounted =
-            sessionStorage.getItem(
-                "chishtiVisitorCounted"
-            );
-
-
-        /* =========================
-           NEW VISITOR
-        ========================= */
-
-        if (!alreadyCounted) {
-
-            await visitorRef.update({
-
-                count:
-                    firebase.firestore.FieldValue.increment(1)
-
-            });
-
-            sessionStorage.setItem(
-                "chishtiVisitorCounted",
-                "true"
-            );
-
-        }
-
-
-        /* =========================
-           GET UPDATED COUNT
-        ========================= */
-
-        const latestSnapshot =
-            await visitorRef.get();
-
-
-        const visitors =
-            Number(
-                latestSnapshot.data().count
-            ) || 0;
-
-
-        /* =========================
-           ANIMATION
-        ========================= */
-
-        let current = 0;
-
-        const animation =
-            setInterval(function () {
-
-                current++;
-
-                visitorCounter.innerText =
-                    current;
-
-                if (current >= visitors) {
-
-                    clearInterval(animation);
-
-                }
-
-            }, 25);
-
-
-    } catch (error) {
-
-        console.error(
-            "Visitor counter error:",
-            error
-        );
-
-        visitorCounter.innerText = "0";
-
-    }
-
-}
-
-
-/* =========================
-   START COUNTER
-========================= */
-
-updateVisitorCounter();
 
 /*=========================
 GLOBAL VARIABLES
 =========================*/
 
 let allBooks = [];
+
 let filteredBooks = [];
+
 
 /*=========================
 LOAD BOOKS.JSON
@@ -228,69 +118,121 @@ async function loadBooks() {
 
     try {
 
-        const response = await fetch("books.json");
+        const response =
+            await fetch("books.json");
+
 
         if (!response.ok) {
 
-            throw new Error("books.json not found");
+            throw new Error(
+                "books.json not found"
+            );
 
         }
 
-        allBooks = await response.json();
 
-        filteredBooks = [...allBooks];
+        allBooks =
+            await response.json();
 
-        /* Book Counter */
 
-        const bookCounter = document.getElementById("bookCounter");
+        if (!Array.isArray(allBooks)) {
+
+            throw new Error(
+                "books.json must contain an array"
+            );
+
+        }
+
+
+        filteredBooks =
+            [...allBooks];
+
+
+        /*=========================
+        BOOK COUNTER
+        =========================*/
+
+        const bookCounter =
+            document.getElementById(
+                "bookCounter"
+            );
+
 
         if (bookCounter) {
 
-            let count = 0;
+            const total =
+                allBooks.length;
 
-            const total = allBooks.length;
 
-            const animation = setInterval(() => {
+            if (total === 0) {
 
-                count++;
+                bookCounter.innerText = "0";
 
-                bookCounter.innerText = count;
+            } else {
 
-                if (count >= total) {
+                let count = 0;
 
-                    clearInterval(animation);
+                const animation =
+                    setInterval(() => {
 
-                }
+                        count++;
 
-            }, 120);
+                        bookCounter.innerText =
+                            count;
+
+                        if (
+                            count >= total
+                        ) {
+
+                            clearInterval(
+                                animation
+                            );
+
+                        }
+
+                    }, 120);
+
+            }
 
         }
 
-        if (typeof displayBooks === "function") {
 
-            displayBooks(filteredBooks);
+        /*=========================
+        DISPLAY BOOKS
+        =========================*/
 
-        }
+        displayBooks(
+            filteredBooks
+        );
 
-        if (typeof latestBook === "function") {
 
-            latestBook();
+        /*=========================
+        LATEST BOOK
+        =========================*/
 
-        }
+        latestBook();
 
-        console.log("✅ Books Loaded Successfully");
+
+        console.log(
+            "✅ Books Loaded Successfully"
+        );
 
     }
 
-    catch (err) {
+    catch (error) {
 
-        console.error(err);
+        console.error(
+            "❌ Books loading error:",
+            error
+        );
 
     }
 
 }
 
+
 loadBooks();
+
 
 /*=========================
 UTILITY
@@ -302,198 +244,432 @@ function byId(id) {
 
 }
 
-console.log("✅ Script Part 1 Loaded");
+
+console.log(
+    "✅ Script Part 1 Loaded"
+);
+
 
 /*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
 PART 2
-DISPLAY BOOKS + SEARCH + FILTER
+DISPLAY BOOKS
 =========================================*/
+
 
 function displayBooks(books) {
 
-    const container = document.getElementById("booksContainer");
+    const container =
+        document.getElementById(
+            "booksContainer"
+        );
+
 
     if (!container) return;
 
+
     container.innerHTML = "";
 
-    if (books.length === 0) {
+
+    if (
+        !Array.isArray(books) ||
+        books.length === 0
+    ) {
 
         container.innerHTML = `
-        <div class="no-books">
-            <h2>No Books Found</h2>
-            <p>Try another search.</p>
-        </div>
+
+            <div class="no-books">
+
+                <h2>No Books Found</h2>
+
+                <p>
+                    Try another search.
+                </p>
+
+            </div>
+
         `;
 
         return;
     }
 
+
     books.forEach(book => {
+
+        const safeTitle =
+            book.title || "Untitled Book";
+
+        const safeAuthor =
+            book.author || "Unknown Author";
+
+        const safeCategory =
+            book.category || "General";
+
+        const safeDescription =
+            book.description || "";
+
+        const safeCover =
+            book.cover || "logo.png";
+
+        const safePdf =
+            book.pdf || "#";
+
 
         container.innerHTML += `
 
-        <div class="book-card">
+            <div class="book-card">
 
-            <img src="${book.cover}"
-                 alt="${book.title}"
-                 loading="lazy">
+                <img
+                    src="${safeCover}"
+                    alt="${safeTitle}"
+                    loading="lazy"
+                    onerror="this.src='logo.png'"
+                >
 
-            <div class="book-content">
 
-                <span class="book-category">
-                    ${book.category}
-                </span>
+                <div class="book-content">
 
-                <h2>${book.title}</h2>
 
-                <h3>${book.author}</h3>
+                    <span class="book-category">
 
-                <p>${book.description}</p>
+                        ${safeCategory}
 
-                <div class="book-meta">
+                    </span>
 
-                    <span>👁 ${book.views || 0}</span>
 
-                    <span>❤️ ${book.likes || 0}</span>
+                    <h2>
 
-                    <span>⬇ ${book.downloads || 0}</span>
+                        ${safeTitle}
 
-                </div>
+                    </h2>
 
-                <div class="book-buttons">
 
-                    <a href="reader.html?book=${encodeURIComponent(book.pdf)}"
-                       class="btn">
-                        📖 Read Online
-                    </a>
+                    <h3>
 
-                    <a href="${book.pdf}"
-                       download
-                       class="btn">
-                        ⬇ Download
-                    </a>
+                        ${safeAuthor}
+
+                    </h3>
+
+
+                    <p>
+
+                        ${safeDescription}
+
+                    </p>
+
+
+                    <div class="book-meta">
+
+
+                        <span>
+
+                            👁
+                            ${book.views || 0}
+
+                        </span>
+
+
+                        <span>
+
+                            ❤️
+                            ${book.likes || 0}
+
+                        </span>
+
+
+                        <span>
+
+                            ⬇
+                            ${book.downloads || 0}
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="book-buttons">
+
+
+                        <a
+                            href="reader.html?book=${encodeURIComponent(safePdf)}"
+                            class="btn read-book-btn"
+                        >
+
+                            📖 Read Online
+
+                        </a>
+
+
+                        <a
+                            href="${safePdf}"
+                            download
+                            class="btn download-book-btn"
+                        >
+
+                            ⬇ Download
+
+                        </a>
+
+
+                    </div>
+
 
                 </div>
 
             </div>
-
-        </div>
 
         `;
 
     });
 
 }
-/*=========================
+
+
+/*=========================================
 LIVE SEARCH
-=========================*/
+=========================================*/
 
 function searchBooks() {
 
-    const input = document.getElementById("searchInput");
+    const input =
+        document.getElementById(
+            "searchInput"
+        );
+
 
     if (!input) return;
 
-    const value = input.value.toLowerCase().trim();
 
-    filteredBooks = allBooks.filter(book =>
+    const value =
+        input.value
+            .toLowerCase()
+            .trim();
 
-        (book.title || "").toLowerCase().includes(value) ||
 
-        (book.author || "").toLowerCase().includes(value) ||
+    filteredBooks =
+        allBooks.filter(book => {
 
-        (book.category || "").toLowerCase().includes(value) ||
 
-        (book.language || "").toLowerCase().includes(value)
+            return (
 
+                (book.title || "")
+                    .toLowerCase()
+                    .includes(value)
+
+                ||
+
+                (book.author || "")
+                    .toLowerCase()
+                    .includes(value)
+
+                ||
+
+                (book.category || "")
+                    .toLowerCase()
+                    .includes(value)
+
+                ||
+
+                (book.language || "")
+                    .toLowerCase()
+                    .includes(value)
+
+            );
+
+        });
+
+
+    displayBooks(
+        filteredBooks
     );
-
-    displayBooks(filteredBooks);
 
 }
 
+
 /*=========================
-CATEGORY FILTER
+SEARCH INPUT LISTENER
 =========================*/
 
-function filterBooks(category, button = null) {
+const searchInput =
+    document.getElementById(
+        "searchInput"
+    );
 
-    document.querySelectorAll(".category").forEach(btn => {
 
-        btn.classList.remove("active");
+if (searchInput) {
 
-    });
+    searchInput.addEventListener(
+        "input",
+        searchBooks
+    );
+
+}
+
+
+/*=========================================
+CATEGORY FILTER
+=========================================*/
+
+function filterBooks(
+    category,
+    button = null
+) {
+
+
+    document
+        .querySelectorAll(".category")
+        .forEach(btn => {
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
 
     if (button) {
 
-        button.classList.add("active");
-
-    }
-
-    if (category === "All") {
-
-        filteredBooks = [...allBooks];
-
-    } else {
-
-        filteredBooks = allBooks.filter(book =>
-
-            book.category === category
-
+        button.classList.add(
+            "active"
         );
 
     }
 
-    displayBooks(filteredBooks);
+
+    if (category === "All") {
+
+        filteredBooks =
+            [...allBooks];
+
+    }
+
+    else {
+
+        filteredBooks =
+            allBooks.filter(
+                book =>
+                    book.category ===
+                    category
+            );
+
+    }
+
+
+    displayBooks(
+        filteredBooks
+    );
 
 }
 
-/*=========================
+
+/*=========================================
 LATEST BOOK
-=========================*/
+=========================================*/
 
 function latestBook() {
 
-    const latest = allBooks.find(book => book.latest === true);
+    const latest =
+        allBooks.find(
+            book =>
+                book.latest === true
+        );
+
 
     if (!latest) return;
 
-    const image = document.querySelector(".book-image img");
-    const title = document.querySelector(".book-info h2");
-    const author = document.querySelector(".book-info h3");
-    const desc = document.querySelector(".book-info p");
 
-    const buttons = document.querySelectorAll(".book-buttons a");
+    const image =
+        document.querySelector(
+            ".book-image img"
+        );
 
-    if (image) image.src = latest.cover;
-    if (title) title.innerText = latest.title;
-    if (author) author.innerText = latest.author;
-    if (desc) desc.innerText = latest.description;
+
+    const title =
+        document.querySelector(
+            ".book-info h2"
+        );
+
+
+    const author =
+        document.querySelector(
+            ".book-info h3"
+        );
+
+
+    const desc =
+        document.querySelector(
+            ".book-info p"
+        );
+
+
+    const buttons =
+        document.querySelectorAll(
+            ".book-buttons a"
+        );
+
+
+    if (image) {
+
+        image.src =
+            latest.cover || "logo.png";
+
+    }
+
+
+    if (title) {
+
+        title.innerText =
+            latest.title || "";
+
+    }
+
+
+    if (author) {
+
+        author.innerText =
+            latest.author || "";
+
+    }
+
+
+    if (desc) {
+
+        desc.innerText =
+            latest.description || "";
+
+    }
+
 
     if (buttons.length >= 2) {
 
-        buttons[0].href = latest.pdf;
-        buttons[0].target = "_blank";
+        buttons[0].href =
+            latest.pdf || "#";
 
-        buttons[1].href = latest.pdf;
+        buttons[0].target =
+            "_blank";
+
+
+        buttons[1].href =
+            latest.pdf || "#";
 
     }
 
 }
 
-console.log("✅ Script Part 2 Loaded");
+
+console.log(
+    "✅ Script Part 2 Loaded"
+);
+
 
 /*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
 PART 3
 AI CHATBOT
 =========================================*/
 
+
 let knowledge = [];
+
 
 /*=========================
 LOAD KNOWLEDGE
@@ -503,67 +679,118 @@ async function loadKnowledge() {
 
     try {
 
-        const response = await fetch("knowledge.json");
+        const response =
+            await fetch(
+                "knowledge.json"
+            );
+
 
         if (!response.ok) {
 
-            throw new Error("knowledge.json not found");
+            throw new Error(
+                "knowledge.json not found"
+            );
 
         }
 
-        knowledge = await response.json();
 
-        console.log("✅ Knowledge Loaded");
+        knowledge =
+            await response.json();
+
+
+        if (!Array.isArray(knowledge)) {
+
+            knowledge = [];
+
+        }
+
+
+        console.log(
+            "✅ Knowledge Loaded"
+        );
 
     }
 
-    catch (err) {
+    catch (error) {
 
-        console.log(err);
+        console.error(
+            "❌ Knowledge loading error:",
+            error
+        );
 
     }
 
 }
 
+
 loadKnowledge();
+
 
 /*=========================
 CHAT ELEMENTS
 =========================*/
 
-const chatBtn = document.getElementById("chatBtn");
-const chatWindow = document.getElementById("chatWindow");
-const closeChat = document.getElementById("closeChat");
-const chatInput = document.getElementById("chatInput");
-const chatMessages = document.getElementById("chatMessages");
+const chatBtn =
+    document.getElementById(
+        "chatBtn"
+    );
+
+
+const chatWindow =
+    document.getElementById(
+        "chatWindow"
+    );
+
+
+const closeChat =
+    document.getElementById(
+        "closeChat"
+    );
+
+
+const chatInput =
+    document.getElementById(
+        "chatInput"
+    );
+
+
+const chatMessages =
+    document.getElementById(
+        "chatMessages"
+    );
+
 
 /*=========================
 OPEN CHAT
 =========================*/
 
-if (chatBtn) {
+if (chatBtn && chatWindow) {
 
     chatBtn.onclick = () => {
 
-        chatWindow.style.display = "flex";
+        chatWindow.style.display =
+            "flex";
 
     };
 
 }
+
 
 /*=========================
 CLOSE CHAT
 =========================*/
 
-if (closeChat) {
+if (closeChat && chatWindow) {
 
     closeChat.onclick = () => {
 
-        chatWindow.style.display = "none";
+        chatWindow.style.display =
+            "none";
 
     };
 
 }
+
 
 /*=========================
 ENTER KEY
@@ -571,438 +798,870 @@ ENTER KEY
 
 if (chatInput) {
 
-    chatInput.addEventListener("keypress", (e) => {
+    chatInput.addEventListener(
+        "keypress",
+        event => {
 
-        if (e.key === "Enter") {
+            if (
+                event.key ===
+                "Enter"
+            ) {
 
-            sendMessage();
+                sendMessage();
+
+            }
 
         }
-
-    });
+    );
 
 }
 
-/*=========================
+
+/*=========================================
 SEARCH BOOK
-=========================*/
+=========================================*/
 
 function searchBook(question) {
 
-    const q = question.toLowerCase();
+    const q =
+        question
+            .toLowerCase()
+            .trim();
 
-    for (const book of allBooks) {
+
+    if (!q) return null;
+
+
+    for (
+        const book of allBooks
+    ) {
+
+
+        const title =
+            (book.title || "")
+                .toLowerCase();
+
+
+        const category =
+            (book.category || "")
+                .toLowerCase();
+
+
+        const author =
+            (book.author || "")
+                .toLowerCase();
+
 
         if (
-            (book.title || "").toLowerCase().includes(q) ||
-            (book.category || "").toLowerCase().includes(q)
+
+            title.includes(q)
+
+            ||
+
+            category.includes(q)
+
+            ||
+
+            author.includes(q)
+
         ) {
+
 
             return `
 
-📚 <b>${book.title}</b><br>
+                📚
+                <b>${book.title}</b>
+                <br><br>
 
-👤 ${book.author}<br>
+                👤
+                ${book.author || "Unknown"}
+                <br>
 
-📂 ${book.category}<br><br>
+                📂
+                ${book.category || "General"}
+                <br><br>
 
-<a href="reader.html?book=${encodeURIComponent(book.pdf)}" class="btn">
-📖 Read Online
-</a>
 
-&nbsp;
+                <a
+                    href="reader.html?book=${encodeURIComponent(book.pdf || "")}"
+                    class="btn"
+                >
 
-<a href="${book.pdf}" download class="btn">
-⬇ Download
-</a>
+                    📖 Read Online
 
-`;
+                </a>
+
+
+                &nbsp;
+
+
+                <a
+                    href="${book.pdf || "#"}"
+                    download
+                    class="btn"
+                >
+
+                    ⬇ Download
+
+                </a>
+
+            `;
 
         }
 
     }
 
+
     return null;
+
 }
 
-/*=========================
+
+/*=========================================
 SEARCH KNOWLEDGE
-=========================*/
+=========================================*/
 
 function searchKnowledge(question) {
 
-    const q = question.toLowerCase();
+    const q =
+        question
+            .toLowerCase()
+            .trim();
 
-    for (const item of knowledge) {
+
+    for (
+        const item of knowledge
+    ) {
+
+
+        const itemQuestion =
+            (
+                item.question ||
+                ""
+            )
+            .toLowerCase();
+
 
         if (
-
-            (item.question || "").toLowerCase().includes(q)
-
+            itemQuestion.includes(q)
         ) {
 
-            return item.answer;
+            return (
+                item.answer ||
+                null
+            );
 
         }
 
     }
 
+
     return null;
 
 }
 
-/*=========================
+
+/*=========================================
 BOT MESSAGE
-=========================*/
+=========================================*/
 
 function botReply(text) {
 
+    if (!chatMessages) return;
+
+
     chatMessages.innerHTML += `
 
-<div class="bot-message">
+        <div class="bot-message">
 
-${text}
+            ${text}
 
-</div>
+        </div>
 
-`;
+    `;
 
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
 
 }
 
-/*=========================
+
+/*=========================================
 USER MESSAGE
-=========================*/
+=========================================*/
 
 function userReply(text) {
 
+    if (!chatMessages) return;
+
+
     chatMessages.innerHTML += `
 
-<div class="user-message">
+        <div class="user-message">
 
-${text}
+            ${text}
 
-</div>
+        </div>
 
-`;
+    `;
 
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
 
 }
 
-/*=========================
+
+/*=========================================
 SEND MESSAGE
-=========================*/
+=========================================*/
 
 function sendMessage() {
 
-    const question = chatInput.value.trim();
+    if (!chatInput) return;
 
-    if (question === "") return;
 
-    userReply(question);
+    const question =
+        chatInput.value.trim();
 
-    chatInput.value = "";
+
+    if (!question) return;
+
+
+    userReply(
+        question
+    );
+
+
+    chatInput.value =
+        "";
+
 
     setTimeout(() => {
 
-        let reply = searchBook(question);
+
+        let reply =
+            searchBook(
+                question
+            );
+
 
         if (!reply) {
 
-            reply = searchKnowledge(question);
+            reply =
+                searchKnowledge(
+                    question
+                );
 
         }
+
 
         if (!reply) {
 
             reply = `
 
-🤖 Sorry!
+                🤖 Sorry!
 
-Mujhe iska jawab abhi database me nahi mila.
+                <br><br>
 
-`;
+                Mujhe iska jawab
+                abhi database mein
+                nahi mila.
+
+            `;
 
         }
 
-        botReply(reply);
+
+        botReply(
+            reply
+        );
+
 
     }, 500);
 
 }
 
-console.log("✅ Script Part 3 Loaded");
+
+console.log(
+    "✅ Script Part 3 Loaded"
+);
+
 
 /*=========================================
-CHISHTI LIBRARY
-SCRIPT.JS
 PART 4
-FINAL PREMIUM
+PREMIUM EFFECTS
 =========================================*/
+
 
 /*=========================
 SCROLL ANIMATION
 =========================*/
 
-const sections = document.querySelectorAll("section");
+const sections =
+    document.querySelectorAll(
+        "section"
+    );
 
-const observer = new IntersectionObserver((entries) => {
 
-    entries.forEach(entry => {
+if (
+    "IntersectionObserver"
+    in window
+) {
 
-        if (entry.isIntersecting) {
 
-            entry.target.classList.add("show-section");
+    const observer =
+        new IntersectionObserver(
+            entries => {
+
+
+                entries.forEach(
+                    entry => {
+
+
+                        if (
+                            entry.isIntersecting
+                        ) {
+
+
+                            entry.target
+                                .classList
+                                .add(
+                                    "show-section"
+                                );
+
+                        }
+
+                    }
+                );
+
+            },
+            {
+
+                threshold: 0.15
+
+            }
+        );
+
+
+    sections.forEach(
+        section => {
+
+            observer.observe(
+                section
+            );
 
         }
+    );
 
-    });
+}
 
-}, {
-
-    threshold: 0.15
-
-});
-
-sections.forEach(section => {
-
-    observer.observe(section);
-
-});
 
 /*=========================
 BOOK CARD HOVER
 =========================*/
 
-document.addEventListener("mouseover", (e) => {
+document.addEventListener(
+    "mouseover",
+    event => {
 
-    const card = e.target.closest(".book-card");
 
-    if (card) {
+        const card =
+            event.target.closest(
+                ".book-card"
+            );
 
-        card.style.transform = "translateY(-10px)";
-        card.style.transition = ".35s";
 
-    }
+        if (card) {
 
-});
+            card.style.transform =
+                "translateY(-10px)";
 
-document.addEventListener("mouseout", (e) => {
-
-    const card = e.target.closest(".book-card");
-
-    if (card) {
-
-        card.style.transform = "translateY(0px)";
-
-    }
-
-});
-
-/*=========================
-DOWNLOAD COUNTER
-=========================*/
-
-document.addEventListener("click", (e) => {
-
-    const btn = e.target.closest("a");
-
-    if (!btn) return;
-
-    if (btn.hasAttribute("download")) {
-
-        let total = Number(localStorage.getItem("downloads")) || 0;
-
-        total++;
-
-        localStorage.setItem("downloads", total);
-
-    }
-
-});
-
-/*=========================
-READ COUNTER
-=========================*/
-
-document.addEventListener("click", (e) => {
-
-    const btn = e.target.closest("a");
-
-    if (!btn) return;
-
-    if (
-
-        btn.href.includes(".pdf") &&
-
-        !btn.hasAttribute("download")
-
-    ) {
-
-        let total = Number(localStorage.getItem("reads")) || 0;
-
-        total++;
-
-        localStorage.setItem("reads", total);
-
-    }
-
-});
-
-/*=========================
-BUTTON RIPPLE
-=========================*/
-
-document.addEventListener("click", (e) => {
-
-    const btn = e.target.closest(".btn");
-
-    if (!btn) return;
-
-    const ripple = document.createElement("span");
-
-    ripple.className = "ripple";
-
-    ripple.style.left = e.offsetX + "px";
-
-    ripple.style.top = e.offsetY + "px";
-
-    btn.appendChild(ripple);
-
-    setTimeout(() => {
-
-        ripple.remove();
-
-    }, 600);
-
-});
-
-/*=========================
-NAVBAR SHADOW
-=========================*/
-
-window.addEventListener("scroll", () => {
-
-    const nav = document.querySelector(".navbar");
-
-    if (!nav) return;
-
-    if (window.scrollY > 40) {
-
-        nav.classList.add("nav-shadow");
-
-    }
-
-    else {
-
-        nav.classList.remove("nav-shadow");
-
-    }
-
-});
-
-/*=========================
-AUTO YEAR
-=========================*/
-
-const year = document.getElementById("year");
-
-if (year) {
-
-    year.innerText = new Date().getFullYear();
-
-}
-
-/*=========================
-IMAGE FALLBACK
-=========================*/
-
-document.querySelectorAll("img").forEach(img => {
-
-    img.onerror = function () {
-
-        this.src = "logo.png";
-
-    };
-
-});
-
-/*=========================
-PRELOAD BOOK COVERS
-=========================*/
-
-window.addEventListener("load", () => {
-
-    if (!Array.isArray(allBooks)) return;
-
-    allBooks.forEach(book => {
-
-        const image = new Image();
-
-        image.src = book.cover;
-
-    });
-
-});
-
-/*=========================
-SMOOTH ANCHOR LINKS
-=========================*/
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-
-    anchor.addEventListener("click", function (e) {
-
-        e.preventDefault();
-
-        const target = document.querySelector(this.getAttribute("href"));
-
-        if (target) {
-
-            target.scrollIntoView({
-
-                behavior: "smooth"
-
-            });
+            card.style.transition =
+                ".35s";
 
         }
 
+    }
+);
+
+
+document.addEventListener(
+    "mouseout",
+    event => {
+
+
+        const card =
+            event.target.closest(
+                ".book-card"
+            );
+
+
+        if (card) {
+
+            card.style.transform =
+                "translateY(0px)";
+
+        }
+
+    }
+);
+
+
+/*=========================================
+DOWNLOAD COUNTER
+LOCAL DEVICE COUNTER
+=========================================*/
+
+document.addEventListener(
+    "click",
+    event => {
+
+
+        const btn =
+            event.target.closest(
+                "a"
+            );
+
+
+        if (!btn) return;
+
+
+        if (
+            btn.hasAttribute(
+                "download"
+            )
+        ) {
+
+
+            let total =
+                Number(
+                    localStorage.getItem(
+                        "downloads"
+                    )
+                ) || 0;
+
+
+            total++;
+
+
+            localStorage.setItem(
+                "downloads",
+                total
+            );
+
+        }
+
+    }
+);
+
+
+/*=========================================
+READ COUNTER
+LOCAL DEVICE COUNTER
+=========================================*/
+
+document.addEventListener(
+    "click",
+    event => {
+
+
+        const btn =
+            event.target.closest(
+                "a"
+            );
+
+
+        if (!btn) return;
+
+
+        if (
+
+            btn.href.includes(
+                ".pdf"
+            )
+
+            &&
+
+            !btn.hasAttribute(
+                "download"
+            )
+
+        ) {
+
+
+            let total =
+                Number(
+                    localStorage.getItem(
+                        "reads"
+                    )
+                ) || 0;
+
+
+            total++;
+
+
+            localStorage.setItem(
+                "reads",
+                total
+            );
+
+        }
+
+    }
+);
+
+
+/*=========================================
+BUTTON RIPPLE
+=========================================*/
+
+document.addEventListener(
+    "click",
+    event => {
+
+
+        const btn =
+            event.target.closest(
+                ".btn"
+            );
+
+
+        if (!btn) return;
+
+
+        const ripple =
+            document.createElement(
+                "span"
+            );
+
+
+        ripple.className =
+            "ripple";
+
+
+        const rect =
+            btn.getBoundingClientRect();
+
+
+        ripple.style.left =
+            (
+                event.clientX -
+                rect.left
+            ) + "px";
+
+
+        ripple.style.top =
+            (
+                event.clientY -
+                rect.top
+            ) + "px";
+
+
+        btn.appendChild(
+            ripple
+        );
+
+
+        setTimeout(() => {
+
+            if (ripple) {
+
+                ripple.remove();
+
+            }
+
+        }, 600);
+
+    }
+);
+
+
+/*=========================================
+NAVBAR SHADOW
+=========================================*/
+
+window.addEventListener(
+    "scroll",
+    () => {
+
+
+        const nav =
+            document.querySelector(
+                ".navbar"
+            );
+
+
+        if (!nav) return;
+
+
+        if (
+            window.scrollY > 40
+        ) {
+
+            nav.classList.add(
+                "nav-shadow"
+            );
+
+        }
+
+        else {
+
+            nav.classList.remove(
+                "nav-shadow"
+            );
+
+        }
+
+    }
+);
+
+
+/*=========================================
+AUTO YEAR
+=========================================*/
+
+const year =
+    document.getElementById(
+        "year"
+    );
+
+
+if (year) {
+
+    year.innerText =
+        new Date()
+            .getFullYear();
+
+}
+
+
+/*=========================================
+IMAGE FALLBACK
+=========================================*/
+
+document
+    .querySelectorAll("img")
+    .forEach(img => {
+
+
+        img.addEventListener(
+            "error",
+            function () {
+
+
+                if (
+                    this.src.endsWith(
+                        "logo.png"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+                this.src =
+                    "logo.png";
+
+            }
+        );
+
     });
 
-});
 
-/*=========================
-CONSOLE
-=========================*/
+/*=========================================
+PRELOAD BOOK COVERS
+=========================================*/
 
-console.log("====================================");
+window.addEventListener(
+    "load",
+    () => {
 
-console.log("📚 CHISHTI LIBRARY");
 
-console.log("Version : 1.0");
+        if (
+            !Array.isArray(
+                allBooks
+            )
+        ) {
 
-console.log("Developer : Ali Hassan");
+            return;
 
-console.log("====================================");
+        }
 
-console.log("✅ Loader");
 
-console.log("✅ Navbar");
+        allBooks.forEach(
+            book => {
 
-console.log("✅ Search");
 
-console.log("✅ Categories");
+                if (
+                    !book.cover
+                ) {
 
-console.log("✅ Books");
+                    return;
 
-console.log("✅ AI");
+                }
 
-console.log("✅ Reader");
 
-console.log("✅ Downloads");
+                const image =
+                    new Image();
 
-console.log("✅ Responsive");
 
-console.log("🚀 Production Ready");
+                image.src =
+                    book.cover;
+
+            }
+        );
+
+    }
+);
+
+
+/*=========================================
+SMOOTH ANCHOR LINKS
+=========================================*/
+
+document
+    .querySelectorAll(
+        'a[href^="#"]'
+    )
+    .forEach(anchor => {
+
+
+        anchor.addEventListener(
+            "click",
+            function (event) {
+
+
+                event.preventDefault();
+
+
+                const selector =
+                    this.getAttribute(
+                        "href"
+                    );
+
+
+                if (
+                    !selector ||
+                    selector === "#"
+                ) {
+
+                    return;
+
+                }
+
+
+                const target =
+                    document.querySelector(
+                        selector
+                    );
+
+
+                if (target) {
+
+                    target.scrollIntoView({
+
+                        behavior:
+                            "smooth"
+
+                    });
+
+                }
+
+            }
+        );
+
+    });
+
+
+/*=========================================
+FIREBASE STATUS
+=========================================*/
+
+if (
+    typeof window.firebaseReady ===
+    "function"
+) {
+
+    console.log(
+        "🔥 Firebase available in script.js"
+    );
+
+} else {
+
+    console.warn(
+        "⚠️ Firebase helper not found. Check firebase.js loading order."
+    );
+
+}
+
+
+/*=========================================
+FINAL CONSOLE
+=========================================*/
+
+console.log(
+    "===================================="
+);
+
+console.log(
+    "📚 CHISHTI LIBRARY"
+);
+
+console.log(
+    "Version : 1.0"
+);
+
+console.log(
+    "===================================="
+);
+
+console.log(
+    "✅ Loader"
+);
+
+console.log(
+    "✅ Navbar"
+);
+
+console.log(
+    "✅ Search"
+);
+
+console.log(
+    "✅ Categories"
+);
+
+console.log(
+    "✅ Books"
+);
+
+console.log(
+    "✅ AI"
+);
+
+console.log(
+    "✅ Reader"
+);
+
+console.log(
+    "✅ Downloads"
+);
+
+console.log(
+    "✅ Responsive"
+);
+
+console.log(
+    "🔥 Firebase handled separately"
+);
+
+console.log(
+    "🚀 Production Ready"
+);
+
+console.log(
+    "===================================="
+);
