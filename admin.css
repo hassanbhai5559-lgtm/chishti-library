@@ -1,3 +1,8 @@
+/* =========================================================
+   CHISHTI LIBRARY
+   PREMIUM ADMIN CSS
+========================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,526 +10,1256 @@
 }
 
 :root {
-    --black: #090909;
-    --dark: #111111;
-    --dark2: #181818;
-    --gold: #d4af37;
-    --gold2: #f0d878;
-    --red: #780000;
+    --maroon: #4b0000;
+    --deep-maroon: #280000;
+    --gold: #d4a500;
     --white: #ffffff;
-    --gray: #999999;
-    --border: rgba(212,175,55,.2);
+    --black: #090909;
+    --gray: #777777;
+    --light: #f5f5f5;
+    --danger: #b00020;
+    --success: #16803c;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: var(--black);
-    color: var(--white);
-}
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
-
-/* ================= LOGIN ================= */
-
-.login-screen {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background:
-        radial-gradient(circle at center,
-        #300000 0%,
-        #100000 35%,
-        #050505 75%);
-}
+        #f5f5f5;
 
-.login-box {
-    width: 420px;
-    max-width: 92%;
-    padding: 45px 35px;
-    background: rgba(20,20,20,.95);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 20px 80px rgba(0,0,0,.7);
-}
+    color:
+        #222;
 
-.logo {
-    font-size: 55px;
-    margin-bottom: 10px;
-}
-
-.login-box h1 {
-    color: var(--gold);
-    margin-bottom: 5px;
-}
-
-.login-box p {
-    color: var(--gray);
-    margin-bottom: 30px;
-}
-
-.login-box input {
-    width: 100%;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    border: 1px solid #333;
-    background: #090909;
-    color: white;
-    outline: none;
-}
-
-.login-box input:focus {
-    border-color: var(--gold);
-}
-
-.login-box button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(135deg,var(--gold),var(--gold2));
-    color: #111;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-#loginError {
-    color: #ff7070;
-    margin-top: 15px;
+    min-height:
+        100vh;
 }
 
 
-/* ================= APP ================= */
+/* =========================================================
+   HIDDEN
+========================================================= */
 
 .hidden {
     display: none !important;
 }
 
-.admin-app {
-    display: flex;
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-screen {
     min-height: 100vh;
-}
 
-
-/* ================= SIDEBAR ================= */
-
-.sidebar {
-    width: 260px;
-    background: #0d0d0d;
-    border-right: 1px solid var(--border);
-    padding: 25px 15px;
     display: flex;
-    flex-direction: column;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    z-index: 1000;
-}
 
-.brand {
-    display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px;
-    margin-bottom: 35px;
-}
 
-.brand-icon {
-    font-size: 35px;
-}
+    justify-content: center;
 
-.brand h2 {
-    color: var(--gold);
-}
+    padding: 20px;
 
-.brand span {
-    color: var(--gray);
-    font-size: 12px;
-}
-
-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.nav-btn {
-    width: 100%;
-    padding: 14px;
-    text-align: left;
-    border: 1px solid transparent;
-    border-radius: 10px;
-    background: transparent;
-    color: #ccc;
-    cursor: pointer;
-    font-size: 15px;
-}
-
-.nav-btn:hover,
-.nav-btn.active {
-    color: var(--gold);
-    background: rgba(212,175,55,.08);
-    border-color: var(--border);
-}
-
-.logout-btn {
-    margin-top: auto;
-    padding: 14px;
-    border-radius: 10px;
-    border: 1px solid #500000;
-    background: #210000;
-    color: #ff7777;
-    cursor: pointer;
-}
-
-
-/* ================= MAIN ================= */
-
-.main-content {
-    margin-left: 260px;
-    width: calc(100% - 260px);
-    padding: 25px;
-}
-
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #222;
-    padding-bottom: 20px;
-    margin-bottom: 30px;
-}
-
-.topbar h1 {
-    color: var(--gold);
-}
-
-.admin-user {
-    color: var(--gray);
-}
-
-.mobile-menu {
-    display: none;
-}
-
-
-/* ================= SECTIONS ================= */
-
-.admin-section {
-    display: none;
-}
-
-.active-section {
-    display: block;
-}
-
-.welcome {
-    padding: 30px;
-    border-radius: 15px;
     background:
         linear-gradient(
             135deg,
-            #230000,
-            #111
+            #180000,
+            #4b0000,
+            #180000
         );
-    border: 1px solid var(--border);
-    margin-bottom: 25px;
 }
+
+
+.login-box {
+    width: 100%;
+
+    max-width: 430px;
+
+    padding: 42px 35px;
+
+    background:
+        #fff;
+
+    border-radius:
+        18px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0,0,0,.35);
+
+    text-align:
+        center;
+}
+
+
+.logo {
+    width: 75px;
+
+    height: 75px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        var(--maroon);
+
+    font-size:
+        34px;
+
+    border:
+        3px solid var(--gold);
+}
+
+
+.login-box h1 {
+    color:
+        var(--maroon);
+
+    margin-bottom:
+        5px;
+}
+
+
+.login-box > p {
+    color:
+        var(--gray);
+
+    margin-bottom:
+        25px;
+}
+
+
+#loginForm {
+    display:
+        grid;
+
+    gap:
+        14px;
+}
+
+
+#loginForm input {
+    width: 100%;
+
+    padding:
+        14px 15px;
+
+    border:
+        1px solid #ddd;
+
+    border-radius:
+        10px;
+
+    outline:
+        none;
+
+    font-size:
+        15px;
+}
+
+
+#loginForm input:focus {
+    border-color:
+        var(--gold);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(212,165,0,.12);
+}
+
+
+#loginForm button {
+    border:
+        none;
+
+    border-radius:
+        10px;
+
+    padding:
+        14px;
+
+    cursor:
+        pointer;
+
+    background:
+        var(--maroon);
+
+    color:
+        white;
+
+    font-weight:
+        700;
+
+    font-size:
+        15px;
+}
+
+
+#loginForm button:hover {
+    background:
+        #650000;
+}
+
+
+#loginError {
+    margin-top:
+        15px;
+
+    color:
+        var(--danger);
+
+    font-size:
+        14px;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+.admin-app {
+    min-height:
+        100vh;
+
+    display:
+        flex;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+    width:
+        250px;
+
+    min-height:
+        100vh;
+
+    background:
+        linear-gradient(
+            180deg,
+            #4b0000,
+            #250000
+        );
+
+    color:
+        white;
+
+    padding:
+        25px 15px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    position:
+        fixed;
+
+    left:
+        0;
+
+    top:
+        0;
+
+    bottom:
+        0;
+
+    z-index:
+        100;
+}
+
+
+.brand {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    padding:
+        8px 10px 28px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.12);
+
+    margin-bottom:
+        20px;
+}
+
+
+.brand-icon {
+    font-size:
+        32px;
+}
+
+
+.brand h2 {
+    color:
+        var(--gold);
+
+    font-size:
+        22px;
+}
+
+
+.brand span {
+    font-size:
+        12px;
+
+    opacity:
+        .75;
+}
+
+
+.sidebar nav {
+    display:
+        grid;
+
+    gap:
+        7px;
+}
+
+
+.nav-btn,
+.logout-btn {
+    border:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        rgba(255,255,255,.85);
+
+    padding:
+        13px 15px;
+
+    border-radius:
+        9px;
+
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+    font-size:
+        14px;
+}
+
+
+.nav-btn:hover,
+.nav-btn.active {
+    background:
+        rgba(212,165,0,.16);
+
+    color:
+        var(--gold);
+}
+
+
+.logout-btn {
+    margin-top:
+        auto;
+
+    background:
+        rgba(255,255,255,.08);
+}
+
+
+.logout-btn:hover {
+    background:
+        rgba(255,255,255,.15);
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main-content {
+    margin-left:
+        250px;
+
+    width:
+        calc(100% - 250px);
+
+    min-height:
+        100vh;
+
+    padding:
+        25px;
+}
+
+
+.topbar {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    background:
+        white;
+
+    padding:
+        18px 22px;
+
+    border-radius:
+        14px;
+
+    margin-bottom:
+        25px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.05);
+}
+
+
+.topbar h1 {
+    color:
+        var(--maroon);
+
+    font-size:
+        24px;
+}
+
+
+.admin-user {
+    color:
+        var(--gray);
+
+    font-size:
+        14px;
+}
+
+
+.mobile-menu {
+    display:
+        none;
+}
+
+
+/* =========================================================
+   SECTIONS
+========================================================= */
+
+.admin-section {
+    display:
+        none;
+}
+
+
+.active-section {
+    display:
+        block;
+}
+
+
+/* =========================================================
+   WELCOME
+========================================================= */
+
+.welcome {
+    background:
+        linear-gradient(
+            135deg,
+            #4b0000,
+            #720000
+        );
+
+    color:
+        white;
+
+    padding:
+        30px;
+
+    border-radius:
+        16px;
+
+    margin-bottom:
+        25px;
+}
+
 
 .welcome h2 {
-    color: var(--gold);
-    margin-bottom: 8px;
+    color:
+        var(--gold);
+
+    margin-bottom:
+        8px;
 }
 
-.welcome p {
-    color: var(--gray);
-}
 
-
-/* ================= STATS ================= */
+/* =========================================================
+   STATS
+========================================================= */
 
 .stats-grid {
-    display: grid;
+    display:
+        grid;
+
     grid-template-columns:
         repeat(3, 1fr);
-    gap: 20px;
+
+    gap:
+        18px;
 }
+
 
 .stat-card {
-    padding: 25px;
-    background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 15px;
-    transition: .3s;
+    background:
+        white;
+
+    padding:
+        24px;
+
+    border-radius:
+        14px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.06);
+
+    border-left:
+        4px solid
+        var(--gold);
 }
 
-.stat-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--gold);
-}
 
 .stat-card span {
-    font-size: 30px;
+    font-size:
+        25px;
 }
+
 
 .stat-card h3 {
-    color: var(--gray);
-    margin: 10px 0;
+    margin:
+        10px 0 7px;
+
+    color:
+        #555;
+
+    font-size:
+        14px;
 }
+
 
 .stat-card strong {
-    font-size: 32px;
-    color: var(--gold);
+    font-size:
+        28px;
+
+    color:
+        var(--maroon);
 }
 
 
-/* ================= HEAD ================= */
+/* =========================================================
+   SECTION HEAD
+========================================================= */
 
 .section-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        20px;
 }
+
 
 .section-head h2 {
-    color: var(--gold);
+    color:
+        var(--maroon);
 }
+
 
 .section-head p {
-    color: var(--gray);
-    margin-top: 5px;
+    color:
+        var(--gray);
+
+    margin-top:
+        5px;
 }
 
 
-/* ================= BUTTONS ================= */
+/* =========================================================
+   BUTTONS
+========================================================= */
 
 .gold-btn {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 9px;
-    background: linear-gradient(
-        135deg,
-        var(--gold),
-        var(--gold2)
-    );
-    color: #111;
-    font-weight: bold;
-    cursor: pointer;
+    border:
+        none;
+
+    background:
+        var(--maroon);
+
+    color:
+        white;
+
+    padding:
+        12px 18px;
+
+    border-radius:
+        9px;
+
+    cursor:
+        pointer;
+
+    font-weight:
+        700;
 }
+
+
+.gold-btn:hover {
+    background:
+        #680000;
+}
+
 
 .cancel-btn {
-    padding: 12px 20px;
-    border: 1px solid #444;
-    border-radius: 9px;
-    background: #181818;
-    color: white;
-    cursor: pointer;
+    border:
+        1px solid #ccc;
+
+    background:
+        white;
+
+    padding:
+        12px 18px;
+
+    border-radius:
+        9px;
+
+    cursor:
+        pointer;
 }
 
 
-/* ================= TABLE ================= */
+/* =========================================================
+   TABLE
+========================================================= */
 
 .table-wrapper {
-    overflow-x: auto;
-    background: var(--dark);
-    border: 1px solid var(--border);
-    border-radius: 15px;
+    background:
+        white;
+
+    border-radius:
+        14px;
+
+    overflow-x:
+        auto;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.06);
 }
+
 
 table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 900px;
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+    min-width:
+        850px;
 }
 
-th,
-td {
-    padding: 15px;
-    border-bottom: 1px solid #292929;
-    text-align: left;
-}
 
 th {
-    color: var(--gold);
-    background: #151515;
+    background:
+        var(--maroon);
+
+    color:
+        white;
+
+    padding:
+        14px;
+
+    text-align:
+        left;
+
+    font-size:
+        13px;
 }
+
 
 td {
-    color: #ddd;
+    padding:
+        13px;
+
+    border-bottom:
+        1px solid #eee;
+
+    font-size:
+        13px;
 }
 
-.book-cover {
-    width: 55px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 5px;
+
+tr:hover td {
+    background:
+        #fffaf0;
 }
 
-.action-btn {
-    border: none;
-    padding: 8px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin: 2px;
+
+.admin-cover {
+    width:
+        55px;
+
+    height:
+        75px;
+
+    object-fit:
+        cover;
+
+    border-radius:
+        6px;
+
+    box-shadow:
+        0 3px 8px
+        rgba(0,0,0,.15);
 }
+
+
+.table-actions {
+    display:
+        flex;
+
+    gap:
+        7px;
+}
+
+
+.edit-btn,
+.delete-btn {
+    border:
+        none;
+
+    padding:
+        8px 11px;
+
+    border-radius:
+        7px;
+
+    cursor:
+        pointer;
+
+    font-size:
+        12px;
+}
+
 
 .edit-btn {
-    background: #2d2500;
-    color: var(--gold);
+    background:
+        #fff2c7;
+
+    color:
+        #795c00;
 }
+
 
 .delete-btn {
-    background: #350000;
-    color: #ff7777;
+    background:
+        #ffe1e1;
+
+    color:
+        var(--danger);
 }
 
 
-/* ================= FORM ================= */
+.latest-badge {
+    display:
+        inline-block;
+
+    padding:
+        5px 8px;
+
+    border-radius:
+        20px;
+
+    background:
+        #fff2c7;
+
+    color:
+        #765900;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .book-form {
-    background: var(--dark);
-    padding: 30px;
-    border-radius: 15px;
-    border: 1px solid var(--border);
+    background:
+        white;
+
+    padding:
+        25px;
+
+    border-radius:
+        14px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.06);
 }
+
 
 .form-grid {
-    display: grid;
+    display:
+        grid;
+
     grid-template-columns:
         repeat(2, 1fr);
-    gap: 20px;
+
+    gap:
+        18px;
 }
 
+
 .field {
-    margin-bottom: 20px;
+    display:
+        grid;
+
+    gap:
+        7px;
+
+    margin-bottom:
+        18px;
 }
+
 
 .field label,
 .upload-box label {
-    display: block;
-    color: var(--gold);
-    margin-bottom: 8px;
-    font-weight: bold;
+    font-weight:
+        700;
+
+    font-size:
+        13px;
+
+    color:
+        #444;
 }
+
 
 .field input,
 .field select,
 .field textarea {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    border: 1px solid #333;
-    background: #090909;
-    color: white;
-    outline: none;
+    width:
+        100%;
+
+    border:
+        1px solid #ddd;
+
+    border-radius:
+        9px;
+
+    padding:
+        12px;
+
+    outline:
+        none;
+
+    font-family:
+        inherit;
 }
 
-.field textarea {
-    resize: vertical;
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color:
+        var(--gold);
 }
+
 
 .upload-grid {
-    display: grid;
+    display:
+        grid;
+
     grid-template-columns:
         repeat(2, 1fr);
-    gap: 20px;
+
+    gap:
+        18px;
+
+    margin:
+        10px 0 20px;
 }
+
 
 .upload-box {
-    padding: 20px;
-    border: 1px dashed #555;
-    border-radius: 10px;
-    background: #0b0b0b;
+    border:
+        2px dashed #ddd;
+
+    border-radius:
+        12px;
+
+    padding:
+        20px;
 }
+
 
 .upload-box input {
-    width: 100%;
-    margin: 10px 0;
+    display:
+        block;
+
+    width:
+        100%;
+
+    margin-top:
+        12px;
 }
 
-.upload-box div {
-    color: var(--gray);
-    font-size: 13px;
+
+#coverStatus,
+#pdfStatus {
+    color:
+        var(--gray);
+
+    margin-top:
+        10px;
+
+    font-size:
+        12px;
 }
+
 
 .latest-check {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    color: var(--gold);
-    margin: 15px 0 25px;
+    display:
+        flex;
+
+    gap:
+        8px;
+
+    align-items:
+        center;
+
+    margin:
+        10px 0 20px;
+
+    font-weight:
+        700;
 }
+
 
 .form-actions {
-    display: flex;
-    gap: 10px;
+    display:
+        flex;
+
+    gap:
+        10px;
 }
 
-#bookMessage {
-    margin-top: 15px;
-    color: var(--gold);
+
+.book-message {
+    margin-top:
+        15px;
+
+    padding:
+        10px;
+
+    border-radius:
+        8px;
+
+    font-size:
+        13px;
 }
 
 
-/* ================= COMMENTS ================= */
+.book-message.success {
+    background:
+        #e9f8ee;
+
+    color:
+        var(--success);
+}
+
+
+.book-message.error {
+    background:
+        #ffe8e8;
+
+    color:
+        var(--danger);
+}
+
+
+.book-message.loading {
+    background:
+        #fff7d9;
+
+    color:
+        #775900;
+}
+
+
+/* =========================================================
+   COMMENTS
+========================================================= */
 
 .comments-container {
-    display: grid;
-    gap: 15px;
-}
+    display:
+        grid;
 
-.comment-card {
-    background: var(--dark);
-    border: 1px solid var(--border);
-    padding: 20px;
-    border-radius: 12px;
-}
-
-.comment-card h3 {
-    color: var(--gold);
-}
-
-.comment-card p {
-    margin: 10px 0;
-    color: #ccc;
-}
-
-.comment-book {
-    color: var(--gray);
-    font-size: 13px;
+    gap:
+        12px;
 }
 
 
-/* ================= RESPONSIVE ================= */
+.comment-admin-card {
+    background:
+        white;
 
-@media(max-width: 900px) {
+    border-radius:
+        12px;
+
+    padding:
+        18px;
+
+    box-shadow:
+        0 5px 18px
+        rgba(0,0,0,.05);
+}
+
+
+.comment-admin-card > div {
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        10px;
+}
+
+
+.comment-admin-card span {
+    color:
+        var(--maroon);
+
+    font-size:
+        12px;
+}
+
+
+.comment-admin-card p {
+    color:
+        #444;
+
+    line-height:
+        1.6;
+
+    margin-bottom:
+        12px;
+}
+
+
+.delete-comment {
+    border:
+        none;
+
+    background:
+        #ffe1e1;
+
+    color:
+        var(--danger);
+
+    padding:
+        8px 12px;
+
+    border-radius:
+        7px;
+
+    cursor:
+        pointer;
+}
+
+
+.empty-comments {
+    background:
+        white;
+
+    padding:
+        40px;
+
+    text-align:
+        center;
+
+    border-radius:
+        12px;
+
+    color:
+        var(--gray);
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.admin-toast {
+    position:
+        fixed;
+
+    right:
+        25px;
+
+    bottom:
+        25px;
+
+    z-index:
+        9999;
+
+    background:
+        #222;
+
+    color:
+        white;
+
+    padding:
+        14px 18px;
+
+    border-radius:
+        10px;
+
+    opacity:
+        0;
+
+    transform:
+        translateY(15px);
+
+    pointer-events:
+        none;
+
+    transition:
+        .25s ease;
+}
+
+
+.admin-toast.show {
+    opacity:
+        1;
+
+    transform:
+        translateY(0);
+}
+
+
+.admin-toast.error {
+    background:
+        var(--danger);
+}
+
+
+.admin-toast.success {
+    background:
+        var(--success);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
 
     .sidebar {
-        transform: translateX(-100%);
-        transition: .3s;
+        transform:
+            translateX(-100%);
+
+        transition:
+            .25s ease;
     }
 
-    .sidebar.show {
-        transform: translateX(0);
+
+    .sidebar.mobile-open {
+        transform:
+            translateX(0);
     }
+
 
     .main-content {
-        margin-left: 0;
-        width: 100%;
+        margin-left:
+            0;
+
+        width:
+            100%;
+
+        padding:
+            15px;
     }
 
+
     .mobile-menu {
-        display: inline-block;
-        margin-right: 10px;
-        background: transparent;
-        border: none;
-        color: var(--gold);
-        font-size: 25px;
-        cursor: pointer;
+        display:
+            inline-block;
+
+        border:
+            none;
+
+        background:
+            transparent;
+
+        font-size:
+            24px;
+
+        color:
+            var(--maroon);
+
+        cursor:
+            pointer;
+
+        margin-right:
+            10px;
     }
+
+
+    .topbar > div:first-child {
+        display:
+            flex;
+
+        align-items:
+            center;
+    }
+
 
     .stats-grid {
         grid-template-columns:
@@ -533,261 +1268,49 @@ td {
 
 }
 
-@media(max-width: 600px) {
 
-    .main-content {
-        padding: 15px;
+@media (max-width: 650px) {
+
+    .stats-grid {
+        grid-template-columns:
+            1fr;
     }
 
-    .stats-grid,
+
     .form-grid,
     .upload-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            1fr;
     }
+
 
     .section-head {
-        align-items: flex-start;
-        gap: 15px;
-        flex-direction: column;
+        align-items:
+            flex-start;
+
+        gap:
+            15px;
+
+        flex-direction:
+            column;
     }
 
-    .admin-user {
-        display: none;
-    }
-
-}
-
-/* =========================
-   SMALL BOOK COVERS
-========================= */
-
-.admin-cover {
-    width: 55px !important;
-    height: 75px !important;
-    object-fit: cover;
-    border-radius: 5px;
-    display: block;
-}
-
-#booksTable td:first-child {
-    width: 80px;
-    padding: 8px;
-}
-
-#booksTable tr {
-    height: 90px;
-}
-
-/* =========================================
-   CHISHTI LIBRARY ADMIN
-   BOOK COVER + MOBILE FIX
-   PASTE AT END OF admin.css
-========================================= */
-
-/* BOOK COVER SIZE */
-#booksTable td:first-child img,
-.book-cover,
-.book-cover-img {
-    width: 55px !important;
-    height: 75px !important;
-    max-width: 55px !important;
-    max-height: 75px !important;
-    object-fit: cover !important;
-    border-radius: 6px !important;
-    display: block;
-}
-
-/* TABLE ROW */
-#booksTable tr {
-    height: 85px;
-}
-
-#booksTable td {
-    vertical-align: middle;
-}
-
-/* =========================================
-   MOBILE ADMIN
-========================================= */
-
-@media (max-width: 768px) {
-
-    .admin-app {
-        width: 100%;
-        overflow-x: hidden;
-    }
-
-    .sidebar {
-        width: 250px;
-        position: fixed;
-        left: -250px;
-        top: 0;
-        height: 100vh;
-        z-index: 9999;
-        transition: .3s ease;
-    }
-
-    .sidebar.show {
-        left: 0;
-    }
-
-    .main-content {
-        width: 100%;
-        margin-left: 0 !important;
-        padding: 12px !important;
-    }
 
     .topbar {
-        width: 100%;
-        padding: 12px !important;
+        padding:
+            15px;
     }
 
-    .mobile-menu {
-        display: inline-flex !important;
+
+    .admin-user {
+        display:
+            none;
     }
 
-    /* DASHBOARD CARDS */
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
-    }
-
-    .stat-card {
-        padding: 15px !important;
-    }
-
-    .stat-card strong {
-        font-size: 24px;
-    }
-
-    /* FORM */
-    .form-grid {
-        grid-template-columns: 1fr !important;
-        gap: 12px !important;
-    }
-
-    .upload-grid {
-        grid-template-columns: 1fr !important;
-        gap: 12px !important;
-    }
 
     .book-form {
-        width: 100%;
+        padding:
+            18px;
     }
 
-    input,
-    select,
-    textarea {
-        width: 100% !important;
-        max-width: 100%;
-    }
-
-    /* BOOK TABLE */
-    .table-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    table {
-        min-width: 850px;
-    }
-
-    #booksTable td:first-child img,
-    .book-cover,
-    .book-cover-img {
-        width: 45px !important;
-        height: 62px !important;
-        max-width: 45px !important;
-        max-height: 62px !important;
-    }
-
-    #booksTable tr {
-        height: 72px;
-    }
-
-    /* SECTION HEAD */
-    .section-head {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-
-    .section-head button {
-        width: 100%;
-    }
-
-    /* FORM BUTTONS */
-    .form-actions {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .form-actions button {
-        width: 100%;
-    }
-
-}
-
-/* =========================================
-   SMALL MOBILE
-========================================= */
-
-@media (max-width: 480px) {
-
-    .main-content {
-        padding: 9px !important;
-    }
-
-    .stats-grid {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8px !important;
-    }
-
-    .stat-card {
-        padding: 11px !important;
-    }
-
-    .stat-card span {
-        font-size: 20px;
-    }
-
-    .stat-card h3 {
-        font-size: 12px;
-    }
-
-    .stat-card strong {
-        font-size: 21px;
-    }
-
-    .topbar h1 {
-        font-size: 20px;
-    }
-
-    #booksTable td:first-child img,
-    .book-cover,
-    .book-cover-img {
-        width: 40px !important;
-        height: 55px !important;
-        max-width: 40px !important;
-        max-height: 55px !important;
-    }
-
-}
-
-/* =========================================
-   PREVENT HUGE IMAGES EVERYWHERE
-========================================= */
-
-#booksTable img {
-    object-fit: cover !important;
-}
-
-/* MOBILE MENU BUTTON */
-.mobile-menu {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    cursor: pointer;
 }
