@@ -486,8 +486,20 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+
+},
+  {
+    "id":40,
+    "title": "Sale Ala Muhammad",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "Sale Ala Muhammad-cover.png",
+    "pdf": "Sale Ala Muhammad.pdf",
+    "description": "Sale Ala Muhammad",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
-
-
 
