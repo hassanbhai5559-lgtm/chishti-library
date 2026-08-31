@@ -1,118 +1,121 @@
 /* =========================================================
    CHISHTI LIBRARY
    FIREBASE.JS
-   Firebase Auth + Firestore + Storage
-========================================================= */
+   SINGLE FIREBASE INITIALIZATION
+   ========================================================= */
 
 "use strict";
 
 /* =========================================================
    FIREBASE CONFIG
-   IMPORTANT:
-   Replace ONLY the values below with the config from
-   Firebase Console → Project settings → Your apps → Web app
-========================================================= */
+   ========================================================= */
 
 const firebaseConfig = {
-    apiKey: "PASTE_YOUR_REAL_API_KEY_HERE",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
     projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+    storageBucket: "YOUR_PROJECT.firebasestorage.app",
     messagingSenderId: "YOUR_SENDER_ID",
     appId: "YOUR_APP_ID"
 };
 
 
 /* =========================================================
-   INITIALIZE FIREBASE
-========================================================= */
+   PREVENT DOUBLE INITIALIZATION
+   ========================================================= */
 
 if (!firebase.apps.length) {
 
     firebase.initializeApp(firebaseConfig);
 
+    console.log("✅ Firebase initialized");
+
 } else {
 
-    console.log("🔥 Firebase already initialized.");
+    console.log("✅ Firebase already initialized");
 
 }
 
 
 /* =========================================================
-   SERVICES
-========================================================= */
+   FIREBASE SERVICES
+   ========================================================= */
 
-const auth = firebase.auth();
+const firebaseAuth =
+    firebase.auth();
 
-const db = firebase.firestore();
+const firebaseDB =
+    firebase.firestore();
 
-const storage = firebase.storage();
+const firebaseStorage =
+    firebase.storage();
 
 
 /* =========================================================
    GLOBAL ACCESS
-   admin.js can use these directly
-========================================================= */
+   =========================================================
+   IMPORTANT:
+   Do NOT write:
+       const auth = firebase.auth();
 
-window.firebaseApp = firebase.app();
+   again inside script.js/admin.js.
+   ========================================================= */
 
-window.auth = auth;
+window.firebaseAuth =
+    firebaseAuth;
 
-window.db = db;
+window.firebaseDB =
+    firebaseDB;
 
-window.storage = storage;
-
-
-/* =========================================================
-   FIREBASE STATUS
-========================================================= */
-
-console.log("======================================");
-console.log("📚 CHISHTI LIBRARY FIREBASE");
-console.log("======================================");
-
-console.log(
-    "✅ Chishti Firebase initialized"
-);
-
-console.log(
-    "🔥 Firestore:",
-    !!db
-);
-
-console.log(
-    "🔥 Storage:",
-    !!storage
-);
-
-console.log(
-    "🔥 Auth:",
-    !!auth
-);
-
-console.log("======================================");
+window.firebaseStorage =
+    firebaseStorage;
 
 
 /* =========================================================
-   AUTH STATE
-========================================================= */
+   OPTIONAL COMMON ALIASES
+   =========================================================
+   These are attached to window instead of using const,
+   preventing "already been declared" errors.
+   ========================================================= */
 
-auth.onAuthStateChanged(function (user) {
+window.auth =
+    firebaseAuth;
 
-    if (user) {
+window.db =
+    firebaseDB;
 
-        console.log(
-            "👤 Admin authenticated:",
-            user.email
-        );
+window.storage =
+    firebaseStorage;
 
-    } else {
 
-        console.log(
-            "👤 No admin currently logged in."
-        );
+/* =========================================================
+   FIREBASE READY
+   ========================================================= */
 
-    }
+console.log(
+    "======================================"
+);
 
-});
+console.log(
+    "🔥 CHISHTI LIBRARY FIREBASE"
+);
 
+console.log(
+    "✅ Firebase App Ready"
+);
+
+console.log(
+    "✅ Authentication Ready"
+);
+
+console.log(
+    "✅ Firestore Ready"
+);
+
+console.log(
+    "✅ Storage Ready"
+);
+
+console.log(
+    "======================================"
+);
