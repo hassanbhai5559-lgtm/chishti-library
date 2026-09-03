@@ -12,6 +12,9 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
+    <meta http-equiv="X-UA-Compatible"
+          content="IE=edge">
+
 
     <!-- =========================
          SEO
@@ -29,10 +32,10 @@
           content="Chishti Library">
 
     <meta name="robots"
-          content="index, follow, max-image-preview:large">
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
     <meta name="googlebot"
-          content="index, follow, max-image-preview:large">
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
 
     <!-- =========================
@@ -57,17 +60,50 @@
 
     <link rel="icon"
           type="image/png"
+          sizes="16x16"
+          href="./logo.png">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="./logo.png">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="48x48"
+          href="./logo.png">
+
+    <link rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="./logo.png">
+
+    <link rel="icon"
+          type="image/png"
           sizes="512x512"
           href="./logo.png">
 
     <link rel="apple-touch-icon"
-          sizes="512x512"
+          sizes="180x180"
           href="./logo.png">
 
 
     <!-- =========================
+         WEB APP / BRAND
+    ========================== -->
+
+    <meta name="application-name"
+          content="Chishti Library">
+
+    <meta name="apple-mobile-web-app-title"
+          content="Chishti Library">
+
+    <meta name="theme-color"
+          content="#7b1e2b">
+
+
+    <!-- =========================
          OPEN GRAPH
-         Social + search preview
     ========================== -->
 
     <meta property="og:type"
@@ -85,14 +121,26 @@
     <meta property="og:site_name"
           content="Chishti Library">
 
+    <meta property="og:locale"
+          content="en_US">
+
     <meta property="og:image"
           content="https://hassanbhai5559-lgtm.github.io/chishti-library/logo.png">
 
-    <meta property="og:image:alt"
-          content="Chishti Library Logo">
+    <meta property="og:image:secure_url"
+          content="https://hassanbhai5559-lgtm.github.io/chishti-library/logo.png">
 
     <meta property="og:image:type"
           content="image/png">
+
+    <meta property="og:image:width"
+          content="512">
+
+    <meta property="og:image:height"
+          content="512">
+
+    <meta property="og:image:alt"
+          content="Chishti Library Logo">
 
 
     <!-- =========================
@@ -111,24 +159,12 @@
     <meta name="twitter:image"
           content="https://hassanbhai5559-lgtm.github.io/chishti-library/logo.png">
 
-
-    <!-- =========================
-         THEME / BRAND
-    ========================== -->
-
-    <meta name="theme-color"
-          content="#7b1e2b">
-
-    <meta name="application-name"
-          content="Chishti Library">
-
-    <meta name="apple-mobile-web-app-title"
-          content="Chishti Library">
+    <meta name="twitter:image:alt"
+          content="Chishti Library Logo">
 
 
     <!-- =========================
-         STRUCTURED DATA
-         ORGANIZATION
+         ORGANIZATION SCHEMA
     ========================== -->
 
     <script type="application/ld+json">
@@ -137,7 +173,12 @@
       "@type": "Organization",
       "name": "Chishti Library",
       "url": "https://hassanbhai5559-lgtm.github.io/chishti-library/",
-      "logo": "https://hassanbhai5559-lgtm.github.io/chishti-library/logo.png",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://hassanbhai5559-lgtm.github.io/chishti-library/logo.png",
+        "width": 512,
+        "height": 512
+      },
       "image": "https://hassanbhai5559-lgtm.github.io/chishti-library/logo.png",
       "description": "Chishti Library is a Digital Islamic Library featuring Islamic Books, Naat, Manqabat, Hamd, Maqala, Kulliyat and Research Articles."
     }
@@ -145,8 +186,7 @@
 
 
     <!-- =========================
-         STRUCTURED DATA
-         WEBSITE
+         WEBSITE SCHEMA
     ========================== -->
 
     <script type="application/ld+json">
@@ -155,7 +195,15 @@
       "@type": "WebSite",
       "name": "Chishti Library",
       "url": "https://hassanbhai5559-lgtm.github.io/chishti-library/",
-      "description": "Digital Islamic Library"
+      "description": "Digital Islamic Library",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Chishti Library",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://hassanbhai5559-lgtm.github.io/chishti-library/logo.png"
+        }
+      }
     }
     </script>
 
