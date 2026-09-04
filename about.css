@@ -1,0 +1,801 @@
+/* =========================================
+
+   CHISHTI LIBRARY - TAARUF SECTION
+
+========================================= */
+
+
+
+.intro-section {
+
+    padding: 90px 20px;
+
+    background:
+
+        linear-gradient(
+
+            135deg,
+
+            #fffaf3,
+
+            #f8f1e5
+
+        );
+
+    direction: rtl;
+
+}
+
+
+
+.intro-container {
+
+    max-width: 1150px;
+
+    margin: auto;
+
+}
+
+
+
+
+
+/* HEADING */
+
+
+
+.intro-heading {
+
+    text-align: center;
+
+    margin-bottom: 55px;
+
+}
+
+
+
+.intro-badge {
+
+    display: inline-block;
+
+    padding: 8px 25px;
+
+    margin-bottom: 18px;
+
+
+
+    background: #7b1e2b;
+
+    color: #fff;
+
+
+
+    border-radius: 30px;
+
+
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+
+
+.intro-heading h1 {
+
+    margin: 0 auto 12px;
+
+
+
+    max-width: 900px;
+
+
+
+    color: #4b1620;
+
+
+
+    font-size: 32px;
+
+    line-height: 1.8;
+
+}
+
+
+
+.intro-heading h2 {
+
+    margin: 0;
+
+
+
+    color: #b18a3c;
+
+
+
+    font-size: 27px;
+
+    line-height: 1.8;
+
+}
+
+
+
+.heading-line {
+
+    width: 90px;
+
+    height: 3px;
+
+
+
+    margin: 20px auto 0;
+
+
+
+    background: #b18a3c;
+
+
+
+    border-radius: 10px;
+
+}
+
+
+
+
+
+/* PROFILE */
+
+
+
+.intro-profile {
+
+    display: grid;
+
+    grid-template-columns: 350px 1fr;
+
+
+
+    gap: 55px;
+
+
+
+    align-items: center;
+
+
+
+    margin-bottom: 65px;
+
+
+
+    direction: ltr;
+
+}
+
+
+
+.scholar-image {
+
+    text-align: center;
+
+}
+
+
+
+.image-frame {
+
+    padding: 10px;
+
+
+
+    background: #fff;
+
+
+
+    border: 2px solid #c5a35a;
+
+
+
+    border-radius: 20px;
+
+
+
+    box-shadow:
+
+        0 15px 40px rgba(0,0,0,0.12);
+
+}
+
+
+
+.image-frame img {
+
+    display: block;
+
+
+
+    width: 100%;
+
+    height: 390px;
+
+
+
+    object-fit: cover;
+
+
+
+    border-radius: 14px;
+
+}
+
+
+
+
+
+/* SUMMARY */
+
+
+
+.scholar-summary {
+
+    direction: rtl;
+
+}
+
+
+
+.scholar-summary h2 {
+
+    margin-bottom: 12px;
+
+
+
+    color: #5d1722;
+
+
+
+    font-size: 30px;
+
+}
+
+
+
+.scholar-summary p {
+
+    color: #555;
+
+
+
+    font-size: 18px;
+
+
+
+    line-height: 2;
+
+}
+
+
+
+
+
+/* INFO GRID */
+
+
+
+.info-grid {
+
+    display: grid;
+
+
+
+    grid-template-columns: repeat(2, 1fr);
+
+
+
+    gap: 15px;
+
+
+
+    margin-top: 25px;
+
+}
+
+
+
+.info-box {
+
+    padding: 18px;
+
+
+
+    background: #fff;
+
+
+
+    border-right: 4px solid #b18a3c;
+
+
+
+    border-radius: 10px;
+
+
+
+    box-shadow: 0 5px 18px rgba(0,0,0,0.06);
+
+}
+
+
+
+.info-box span {
+
+    display: block;
+
+
+
+    color: #888;
+
+
+
+    font-size: 14px;
+
+
+
+    margin-bottom: 5px;
+
+}
+
+
+
+.info-box strong {
+
+    color: #4b1620;
+
+
+
+    font-size: 17px;
+
+}
+
+
+
+
+
+/* BIOGRAPHY */
+
+
+
+.biography-content {
+
+    background: #fff;
+
+
+
+    padding: 45px;
+
+
+
+    border-radius: 20px;
+
+
+
+    box-shadow:
+
+        0 10px 35px rgba(0,0,0,0.07);
+
+}
+
+
+
+.content-title {
+
+    position: relative;
+
+
+
+    margin-top: 40px;
+
+    margin-bottom: 20px;
+
+
+
+    padding-right: 18px;
+
+
+
+    color: #641925;
+
+
+
+    font-size: 27px;
+
+}
+
+
+
+.content-title:first-child {
+
+    margin-top: 0;
+
+}
+
+
+
+.content-title::before {
+
+    content: "";
+
+
+
+    position: absolute;
+
+
+
+    right: 0;
+
+    top: 8px;
+
+
+
+    width: 5px;
+
+    height: 30px;
+
+
+
+    background: #b18a3c;
+
+
+
+    border-radius: 10px;
+
+}
+
+
+
+.biography-content p {
+
+    margin-bottom: 20px;
+
+
+
+    color: #444;
+
+
+
+    font-size: 18px;
+
+
+
+    line-height: 2.2;
+
+
+
+    text-align: justify;
+
+}
+
+
+
+
+
+/* STATISTICS */
+
+
+
+.stats-box {
+
+    display: grid;
+
+
+
+    grid-template-columns:
+
+        repeat(4, 1fr);
+
+
+
+    gap: 15px;
+
+
+
+    margin: 40px 0;
+
+
+
+    direction: rtl;
+
+}
+
+
+
+.stat {
+
+    padding: 25px 15px;
+
+
+
+    text-align: center;
+
+
+
+    background:
+
+        linear-gradient(
+
+            145deg,
+
+            #7b1e2b,
+
+            #4e111a
+
+        );
+
+
+
+    border-radius: 15px;
+
+
+
+    color: #fff;
+
+}
+
+
+
+.stat strong {
+
+    display: block;
+
+
+
+    color: #e1bd66;
+
+
+
+    font-size: 34px;
+
+
+
+    margin-bottom: 7px;
+
+}
+
+
+
+.stat span {
+
+    font-size: 15px;
+
+}
+
+
+
+
+
+/* DUA */
+
+
+
+.dua {
+
+    margin-top: 35px;
+
+
+
+    padding: 25px;
+
+
+
+    text-align: center;
+
+
+
+    color: #7b1e2b;
+
+
+
+    background: #fff8e9;
+
+
+
+    border: 1px solid #d8bd79;
+
+
+
+    border-radius: 12px;
+
+
+
+    font-size: 23px;
+
+
+
+    font-family: serif;
+
+
+
+    line-height: 2;
+
+}
+
+
+
+
+
+/* =========================================
+
+   RESPONSIVE
+
+========================================= */
+
+
+
+@media (max-width: 850px) {
+
+
+
+    .intro-profile {
+
+        grid-template-columns: 1fr;
+
+
+
+        gap: 30px;
+
+    }
+
+
+
+    .scholar-image {
+
+        max-width: 350px;
+
+
+
+        margin: auto;
+
+    }
+
+
+
+    .image-frame img {
+
+        height: 350px;
+
+    }
+
+
+
+    .scholar-summary {
+
+        text-align: center;
+
+    }
+
+
+
+    .stats-box {
+
+        grid-template-columns:
+
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+
+
+
+@media (max-width: 600px) {
+
+
+
+    .intro-section {
+
+        padding: 55px 15px;
+
+    }
+
+
+
+    .intro-heading h1 {
+
+        font-size: 23px;
+
+    }
+
+
+
+    .intro-heading h2 {
+
+        font-size: 21px;
+
+    }
+
+
+
+    .biography-content {
+
+        padding: 25px 18px;
+
+    }
+
+
+
+    .content-title {
+
+        font-size: 23px;
+
+    }
+
+
+
+    .biography-content p {
+
+        font-size: 16px;
+
+
+
+        line-height: 2;
+
+    }
+
+
+
+    .info-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+
+    .stats-box {
+
+        grid-template-columns: 1fr 1fr;
+
+    }
+
+
+
+    .stat strong {
+
+        font-size: 27px;
+
+    }
+
+
+
+    .stat span {
+
+        font-size: 13px;
+
+    }
+
+
+
+    .dua {
+
+        font-size: 19px;
+
+    }
+
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(35px);
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+}
