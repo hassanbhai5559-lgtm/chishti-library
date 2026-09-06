@@ -500,6 +500,20 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+
+},
+  {
+    "id":40,
+    "title": "kitab un nafas warooh",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "kitab un nafas warooh-cover.jpeg",
+    "pdf": "kitab un nafas warooh.pdf",
+    "description": "kitab un nafas warooh",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
 
