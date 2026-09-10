@@ -217,6 +217,26 @@ const readerSearchResults =
     document.getElementById("readerSearchResults");
 
 
+const readerSearchButton =
+    document.getElementById("readerSearchButton");
+
+
+const listenButton =
+    document.getElementById("listenButton");
+
+
+const pauseListenButton =
+    document.getElementById("pauseListenButton");
+
+
+const stopListenButton =
+    document.getElementById("stopListenButton");
+
+
+const listenSpeed =
+    document.getElementById("listenSpeed");
+
+
 /* =========================================================
    CANVAS
 ========================================================= */
@@ -257,6 +277,24 @@ let renderVersion = 0;
 let touchStartX = 0;
 
 let touchStartY = 0;
+
+
+/* =========================================================
+   TEXT SEARCH + READ ALOUD STATE
+========================================================= */
+
+const pageTextCache = new Map();
+let textSearchResults = [];
+let textSearchToken = 0;
+
+let speechMode = "stopped";
+let speechToken = 0;
+let speechQueue = [];
+let speechQueueIndex = 0;
+let speechCurrentPage = 0;
+let speechPreferredVoice = null;
+
+const MAX_TTS_CHUNK = 260;
 
 
 /* =========================================================
@@ -969,6 +1007,7 @@ function updateUI() {
 
 
     updateBookmarkButton();
+    updateListenUI();
 
 }
 
@@ -1724,6 +1763,12 @@ function goToPage(
 function nextPage() {
 
     if (
+        speechMode !== "stopped" && !pageTransitionBusy
+    ) {
+        stopSpeechForManualNavigation();
+    }
+
+    if (
         !pdfDocument ||
         pageTransitionBusy ||
         currentPage >= pageCount
@@ -1747,6 +1792,12 @@ function nextPage() {
 ========================================================= */
 
 function previousPage() {
+
+    if (
+        speechMode !== "stopped" && !pageTransitionBusy
+    ) {
+        stopSpeechForManualNavigation();
+    }
 
     if (
         !pdfDocument ||
@@ -2940,718 +2991,663 @@ if (printButton) {
 
 
 /* =========================================================
-   READER SEARCH
-   ONLY ONE SEARCH SYSTEM
+   READER SEARCH — FIXED
+
+   One search box now supports BOTH:
+   1) Searching the current PDF text and jumping to pages.
+   2) Searching the library books by title/author/category/language.
 ========================================================= */
 
 let readerBooks = [];
-
 let searchLoaded = false;
 
 
-/* =========================================================
-   SEARCH ESCAPE
-========================================================= */
-
 function escapeHTML(value) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
-/* =========================================================
-   SEARCH BOOK FIELD HELPERS
-========================================================= */
+/* Arabic/Urdu-friendly normalization. */
+function normalizeSearchText(value) {
+    return String(value ?? "")
+        .normalize("NFKC")
+        .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g, "")
+        .replace(/ـ/g, "")
+        .replace(/[\u200B-\u200D\uFEFF]/g, "")
+        .replace(/[إأٱآ]/g, "ا")
+        .replace(/ى/g, "ی")
+        .replace(/ئ/g, "ی")
+        .replace(/ؤ/g, "و")
+        .replace(/ة/g, "ه")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLocaleLowerCase();
+}
+
 
 function getBookTitleFromData(book) {
-
-    return String(
-        book?.title ||
-        book?.name ||
-        book?.bookTitle ||
-        book?.bookName ||
-        ""
-    );
-
+    return String(book?.title || book?.name || book?.bookTitle || book?.bookName || "");
 }
-
 
 function getBookAuthorFromData(book) {
-
-    return String(
-        book?.author ||
-        book?.authorName ||
-        book?.writer ||
-        book?.writerName ||
-        ""
-    );
-
+    return String(book?.author || book?.authorName || book?.writer || book?.writerName || "");
 }
-
 
 function getBookCategoryFromData(book) {
-
-    return String(
-        book?.category ||
-        book?.categoryName ||
-        book?.subject ||
-        book?.genre ||
-        ""
-    );
-
+    return String(book?.category || book?.categoryName || book?.subject || book?.genre || "");
 }
-
 
 function getBookLanguageFromData(book) {
-
-    return String(
-        book?.language ||
-        book?.lang ||
-        ""
-    );
-
+    return String(book?.language || book?.lang || "");
 }
-
 
 function getBookImageFromData(book) {
-
-    return String(
-        book?.image ||
-        book?.cover ||
-        book?.coverImage ||
-        book?.thumbnail ||
-        book?.imageUrl ||
-        ""
-    );
-
+    return String(book?.image || book?.cover || book?.coverImage || book?.thumbnail || book?.imageUrl || "");
 }
-
 
 function getBookPDFFromData(book) {
-
-    return (
-        book?.pdf ||
-        book?.pdfUrl ||
-        book?.file ||
-        book?.fileUrl ||
-        book?.url ||
-        book?.path ||
-        book?.downloadUrl ||
-        ""
-    );
-
+    return book?.pdf || book?.pdfUrl || book?.file || book?.fileUrl || book?.url || book?.path || book?.downloadUrl || "";
 }
 
-
-/* =========================================================
-   LOAD BOOKS.JSON
-========================================================= */
 
 async function loadReaderBooks() {
-
-    if (searchLoaded) {
-        return;
-    }
-
-
-    searchLoaded =
-        true;
-
+    if (searchLoaded) return;
+    searchLoaded = true;
 
     try {
+        const response = await fetch("books.json", { cache: "no-cache" });
+        if (!response.ok) throw new Error(`books.json HTTP ${response.status}`);
 
-        const response =
-            await fetch(
-                "books.json",
-                {
-                    cache: "no-cache"
-                }
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `books.json HTTP ${response.status}`
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if (Array.isArray(data)) {
-
-            readerBooks =
-                data;
-
-        } else if (
-            Array.isArray(data.books)
-        ) {
-
-            readerBooks =
-                data.books;
-
-        } else {
-
-            readerBooks =
-                [];
-
-        }
-
-
-        console.log(
-            `✅ Reader search loaded ${readerBooks.length} books.`
-        );
-
+        const data = await response.json();
+        readerBooks = Array.isArray(data) ? data : (Array.isArray(data.books) ? data.books : []);
+        console.log(`✅ Reader search loaded ${readerBooks.length} books.`);
     } catch (error) {
-
-        console.warn(
-            "Reader search books.json error:",
-            error
-        );
-
-
-        /*
-         * Fallback to common global arrays.
-         */
-
-        if (Array.isArray(window.books)) {
-
-            readerBooks =
-                window.books;
-
-        } else if (
-            Array.isArray(window.bookData)
-        ) {
-
-            readerBooks =
-                window.bookData;
-
-        } else if (
-            Array.isArray(window.libraryBooks)
-        ) {
-
-            readerBooks =
-                window.libraryBooks;
-
-        } else if (
-            Array.isArray(window.allBooks)
-        ) {
-
-            readerBooks =
-                window.allBooks;
-
-        } else {
-
-            readerBooks =
-                [];
-
-        }
-
+        console.warn("Reader search books.json error:", error);
+        readerBooks = Array.isArray(window.books) ? window.books
+            : Array.isArray(window.bookData) ? window.bookData
+            : Array.isArray(window.libraryBooks) ? window.libraryBooks
+            : Array.isArray(window.allBooks) ? window.allBooks
+            : [];
     }
-
 }
 
-
-/* =========================================================
-   CLOSE SEARCH
-========================================================= */
 
 function closeSearch() {
-
-    if (!readerSearchResults) {
-        return;
-    }
-
-
-    readerSearchResults.innerHTML =
-        "";
-
-
-    readerSearchResults.classList.remove(
-        "show"
-    );
-
-
-    if (readerSearchClear) {
-
-        readerSearchClear.classList.remove(
-            "active"
-        );
-
-    }
-
+    if (!readerSearchResults) return;
+    readerSearchResults.innerHTML = "";
+    readerSearchResults.classList.remove("show");
+    if (readerSearchClear) readerSearchClear.classList.remove("active");
 }
 
 
-/* =========================================================
-   OPEN SEARCH BOOK
-========================================================= */
-
-function openSearchBook(book) {
-
-    const pdfUrl =
-        getBookPDFFromData(book);
+function showSearchMessage(message) {
+    if (!readerSearchResults) return;
+    readerSearchResults.innerHTML = `<div class="reader-search-empty">${message}</div>`;
+    readerSearchResults.classList.add("show");
+}
 
 
-    if (!pdfUrl) {
+function makeSearchResult({ type, title, meta, snippet, page, image, onClick }) {
+    const result = document.createElement("div");
+    result.className = `reader-search-result ${type === "page" ? "reader-search-page" : ""}`;
+    result.setAttribute("role", "option");
+    result.tabIndex = 0;
 
-        console.warn(
-            "Reader Search: PDF URL not found.",
-            book
-        );
+    const imageHTML = image
+        ? `<img src="${escapeHTML(image)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+        : `<span>📖</span>`;
+
+    result.innerHTML = `
+        <div class="reader-search-result-image">${imageHTML}</div>
+        <div class="reader-search-result-info">
+            <div class="reader-search-result-title">${escapeHTML(title)}</div>
+            ${meta ? `<div class="reader-search-result-author">${escapeHTML(meta)}</div>` : ""}
+            ${page ? `<div class="reader-search-page-number">Page ${page}</div>` : ""}
+            ${snippet ? `<div class="reader-search-snippet">${escapeHTML(snippet)}</div>` : ""}
+            <span class="reader-search-result-type">${type === "page" ? "This book" : "Library book"}</span>
+        </div>
+    `;
+
+    result.addEventListener("click", onClick);
+    result.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            onClick();
+        }
+    });
+
+    return result;
+}
 
 
-        return;
-
-    }
-
-
-    /*
-     * Keep the reader page instead of
-     * opening the raw PDF.
-     */
+async function getPageText(pageNumber) {
+    if (!pdfDocument) return "";
+    if (pageTextCache.has(pageNumber)) return pageTextCache.get(pageNumber);
 
     try {
+        const page = await pdfDocument.getPage(pageNumber);
+        const textContent = await page.getTextContent({
+            normalizeWhitespace: true,
+            disableCombineTextItems: false
+        });
 
-        const readerURL =
-            new URL(
-                "reader.html",
-                window.location.href
-            );
+        const text = textContent.items
+            .map(item => item?.str || "")
+            .join(" ")
+            .replace(/\s+/g, " ")
+            .trim();
 
-
-        readerURL.searchParams.set(
-            "book",
-            pdfUrl
-        );
-
-
-        window.location.href =
-            readerURL.href;
-
+        pageTextCache.set(pageNumber, text);
+        return text;
     } catch (error) {
-
-        console.error(
-            "Unable to open book:",
-            error
-        );
-
+        console.warn(`Could not extract text from page ${pageNumber}:`, error);
+        pageTextCache.set(pageNumber, "");
+        return "";
     }
-
 }
 
 
-/* =========================================================
-   SEARCH BOOKS
-========================================================= */
+function makeSnippet(text, query) {
+    const source = String(text || "");
+    const normalizedSource = normalizeSearchText(source);
+    const normalizedQuery = normalizeSearchText(query);
+    if (!normalizedSource || !normalizedQuery) return source.slice(0, 150);
+
+    const index = normalizedSource.indexOf(normalizedQuery);
+    if (index < 0) return source.slice(0, 170);
+
+    /* Character positions are close enough for a readable snippet even
+       when Arabic normalization changes the exact source index. */
+    const start = Math.max(0, index - 70);
+    return `${source.slice(start, start + 190)}${source.length > start + 190 ? "…" : ""}`;
+}
+
+
+async function searchCurrentPDF(query, token) {
+    if (!pdfDocument || !query) return [];
+
+    const normalizedQuery = normalizeSearchText(query);
+    if (!normalizedQuery) return [];
+
+    const matches = [];
+
+    for (let pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+        if (token !== textSearchToken) return [];
+
+        const text = await getPageText(pageNumber);
+        if (!text) continue;
+
+        if (normalizeSearchText(text).includes(normalizedQuery)) {
+            matches.push({
+                page: pageNumber,
+                text,
+                snippet: makeSnippet(text, query)
+            });
+        }
+
+        /* Keep the UI responsive on large books. */
+        if (pageNumber % 4 === 0) {
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
+    }
+
+    return matches;
+}
+
+
+function openSearchBook(book) {
+    const pdfUrl = getBookPDFFromData(book);
+    if (!pdfUrl) {
+        announce("This library entry does not have a PDF URL.");
+        return;
+    }
+
+    try {
+        const readerURL = new URL("reader.html", window.location.href);
+        readerURL.searchParams.set("book", pdfUrl);
+        window.location.href = readerURL.href;
+    } catch (error) {
+        console.error("Unable to open book:", error);
+    }
+}
+
 
 async function searchBooks(query) {
+    if (!readerSearchResults) return;
 
-    if (!readerSearchResults) {
-        return;
-    }
-
-
-    const cleanQuery =
-        String(query ?? "")
-            .trim()
-            .toLowerCase();
-
-
-    if (!cleanQuery) {
-
+    const rawQuery = String(query ?? "").trim();
+    if (!rawQuery) {
+        textSearchToken++;
         closeSearch();
-
         return;
-
     }
 
+    if (readerSearchClear) readerSearchClear.classList.add("active");
 
-    if (readerSearchClear) {
+    const token = ++textSearchToken;
+    readerSearchResults.innerHTML = `<div class="reader-search-count">Searching…</div>`;
+    readerSearchResults.classList.add("show");
 
-        readerSearchClear.classList.add(
-            "active"
-        );
+    const [pdfMatches] = await Promise.all([
+        searchCurrentPDF(rawQuery, token),
+        loadReaderBooks()
+    ]);
 
+    if (token !== textSearchToken) return;
+
+    const cleanQuery = normalizeSearchText(rawQuery);
+    const bookMatches = readerBooks.filter(book => {
+        const combined = [
+            getBookTitleFromData(book),
+            getBookAuthorFromData(book),
+            getBookCategoryFromData(book),
+            getBookLanguageFromData(book)
+        ].map(normalizeSearchText).join(" ");
+        return combined.includes(cleanQuery);
+    }).slice(0, 12);
+
+    readerSearchResults.innerHTML = "";
+
+    if (pdfMatches.length) {
+        const header = document.createElement("div");
+        header.className = "reader-search-count";
+        header.textContent = `${pdfMatches.length} page${pdfMatches.length === 1 ? "" : "s"} found in this book`;
+        readerSearchResults.appendChild(header);
+
+        pdfMatches.slice(0, 20).forEach(match => {
+            const item = makeSearchResult({
+                type: "page",
+                title: `Match on page ${match.page}`,
+                meta: `Jump directly to page ${match.page}`,
+                snippet: match.snippet,
+                page: match.page,
+                onClick: () => {
+                    closeSearch();
+                    goToPage(match.page, true);
+                }
+            });
+            readerSearchResults.appendChild(item);
+        });
     }
 
+    if (bookMatches.length) {
+        const header = document.createElement("div");
+        header.className = "reader-search-count";
+        header.textContent = `Library books${pdfMatches.length ? " — more results" : ""}`;
+        readerSearchResults.appendChild(header);
 
-    await loadReaderBooks();
+        bookMatches.forEach(book => {
+            const title = getBookTitleFromData(book) || "Untitled Book";
+            const author = getBookAuthorFromData(book);
+            const category = getBookCategoryFromData(book);
+            const image = getBookImageFromData(book);
 
+            readerSearchResults.appendChild(makeSearchResult({
+                type: "book",
+                title,
+                meta: author || category,
+                image,
+                onClick: () => openSearchBook(book)
+            }));
+        });
+    }
 
-    readerSearchResults.innerHTML =
-        "";
-
-
-    if (!readerBooks.length) {
-
-        readerSearchResults.innerHTML = `
-
-            <div class="reader-search-empty">
-                🔎 No books available for search.
-            </div>
-
-        `;
-
-
-        readerSearchResults.classList.add(
-            "show"
-        );
-
-
+    if (!pdfMatches.length && !bookMatches.length) {
+        showSearchMessage(`🔎 No result found for <strong>${escapeHTML(rawQuery)}</strong>`);
         return;
-
     }
 
-
-    const matches =
-        readerBooks.filter(
-            book => {
-
-                const title =
-                    getBookTitleFromData(
-                        book
-                    ).toLowerCase();
-
-
-                const author =
-                    getBookAuthorFromData(
-                        book
-                    ).toLowerCase();
-
-
-                const category =
-                    getBookCategoryFromData(
-                        book
-                    ).toLowerCase();
-
-
-                const language =
-                    getBookLanguageFromData(
-                        book
-                    ).toLowerCase();
-
-
-                return (
-                    title.includes(cleanQuery) ||
-                    author.includes(cleanQuery) ||
-                    category.includes(cleanQuery) ||
-                    language.includes(cleanQuery)
-                );
-
-            }
-        );
-
-
-    if (!matches.length) {
-
-        readerSearchResults.innerHTML = `
-
-            <div class="reader-search-empty">
-                🔎 No books found for
-                "<strong>${escapeHTML(query)}</strong>"
-            </div>
-
-        `;
-
-
-        readerSearchResults.classList.add(
-            "show"
-        );
-
-
-        return;
-
-    }
-
-
-    matches
-        .slice(0, 12)
-        .forEach(
-            (book, index) => {
-
-                const title =
-                    getBookTitleFromData(
-                        book
-                    ) ||
-                    "Untitled Book";
-
-
-                const author =
-                    getBookAuthorFromData(
-                        book
-                    );
-
-
-                const category =
-                    getBookCategoryFromData(
-                        book
-                    );
-
-
-                const image =
-                    getBookImageFromData(
-                        book
-                    );
-
-
-                const result =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                result.className =
-                    "reader-search-result";
-
-
-                result.setAttribute(
-                    "role",
-                    "option"
-                );
-
-
-                result.dataset.index =
-                    String(index);
-
-
-                const imageHTML =
-                    image
-                        ? `
-                            <img
-                                src="${escapeHTML(image)}"
-                                alt=""
-                                loading="lazy"
-                                onerror="this.style.display='none'"
-                            >
-                          `
-                        : `
-                            <span>📖</span>
-                          `;
-
-
-                result.innerHTML = `
-
-                    <div class="reader-search-result-image">
-
-                        ${imageHTML}
-
-                    </div>
-
-
-                    <div class="reader-search-result-info">
-
-                        <div class="reader-search-result-title">
-                            ${escapeHTML(title)}
-                        </div>
-
-
-                        ${
-                            author
-                                ? `
-                                    <div class="reader-search-result-author">
-                                        ${escapeHTML(author)}
-                                    </div>
-                                  `
-                                : ""
-                        }
-
-
-                        ${
-                            category
-                                ? `
-                                    <div class="reader-search-result-category">
-                                        ${escapeHTML(category)}
-                                    </div>
-                                  `
-                                : ""
-                        }
-
-                    </div>
-
-                `;
-
-
-                result.addEventListener(
-                    "click",
-                    function () {
-
-                        openSearchBook(
-                            book
-                        );
-
-                    }
-                );
-
-
-                readerSearchResults.appendChild(
-                    result
-                );
-
-            }
-        );
-
-
-    readerSearchResults.classList.add(
-        "show"
-    );
-
+    readerSearchResults.classList.add("show");
 }
 
 
-/* =========================================================
-   SEARCH INPUT
-========================================================= */
+let searchDebounce = null;
+function scheduleSearch(value) {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(() => searchBooks(value), 220);
+}
+
 
 if (readerSearchInput) {
+    readerSearchInput.addEventListener("input", function () {
+        scheduleSearch(this.value);
+    });
 
-    readerSearchInput.addEventListener(
-        "input",
-        function () {
-
-            searchBooks(
-                this.value
-            );
-
+    readerSearchInput.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            this.value = "";
+            closeSearch();
+            return;
         }
-    );
 
-
-    readerSearchInput.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key ===
-                "Escape"
-            ) {
-
-                this.value =
-                    "";
-
-
-                closeSearch();
-
-                return;
-
-            }
-
-
-            if (
-                event.key ===
-                "Enter"
-            ) {
-
-                const firstResult =
-                    readerSearchResults
-                        ? readerSearchResults.querySelector(
-                            ".reader-search-result"
-                        )
-                        : null;
-
-
-                if (firstResult) {
-
-                    firstResult.click();
-
-                }
-
-            }
-
+        if (event.key === "Enter") {
+            event.preventDefault();
+            searchBooks(this.value);
         }
-    );
-
+    });
 }
 
 
-/* =========================================================
-   SEARCH CLEAR
-========================================================= */
+if (readerSearchButton) {
+    readerSearchButton.addEventListener("click", function () {
+        searchBooks(readerSearchInput ? readerSearchInput.value : "");
+    });
+}
+
 
 if (readerSearchClear) {
-
-    readerSearchClear.addEventListener(
-        "click",
-        function () {
-
-            if (readerSearchInput) {
-
-                readerSearchInput.value =
-                    "";
-
-                readerSearchInput.focus();
-
-            }
-
-
-            closeSearch();
-
+    readerSearchClear.addEventListener("click", function () {
+        textSearchToken++;
+        if (readerSearchInput) {
+            readerSearchInput.value = "";
+            readerSearchInput.focus();
         }
-    );
-
+        closeSearch();
+    });
 }
 
 
+document.addEventListener("click", function (event) {
+    const container = event.target.closest(".reader-search");
+    if (!container && readerSearchResults) {
+        readerSearchResults.classList.remove("show");
+    }
+});
+
+
 /* =========================================================
-   SEARCH OUTSIDE CLICK
+   READ ALOUD — PAGE BY PAGE
+
+   Uses the browser's Speech Synthesis voices. If an Urdu voice is
+   installed on the device/browser it is preferred automatically.
 ========================================================= */
 
-document.addEventListener(
-    "click",
-    function (event) {
-
-        const container =
-            event.target.closest(
-                ".reader-search"
-            );
+function getSpeechVoices() {
+    if (!("speechSynthesis" in window)) return [];
+    return window.speechSynthesis.getVoices() || [];
+}
 
 
-        if (!container) {
+function chooseSpeechVoice() {
+    const voices = getSpeechVoices();
+    if (!voices.length) return null;
 
-            if (readerSearchResults) {
+    const preferred = voices.find(voice => {
+        const lang = String(voice.lang || "").toLowerCase();
+        const name = String(voice.name || "").toLowerCase();
+        return lang === "ur-pk" || lang.startsWith("ur") || name.includes("urdu");
+    });
 
-                readerSearchResults.classList.remove(
-                    "show"
-                );
+    speechPreferredVoice = preferred || voices.find(voice => {
+        const lang = String(voice.lang || "").toLowerCase();
+        return lang.startsWith("ur") || lang.startsWith("hi");
+    }) || voices.find(voice => {
+        const lang = String(voice.lang || "").toLowerCase();
+        return lang.startsWith("en");
+    }) || voices[0];
 
-            }
+    return speechPreferredVoice;
+}
 
+
+if ("speechSynthesis" in window) {
+    window.speechSynthesis.addEventListener("voiceschanged", chooseSpeechVoice);
+    chooseSpeechVoice();
+}
+
+
+function splitSpeechText(text) {
+    const cleaned = String(text || "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    if (!cleaned) return [];
+
+    const chunks = [];
+    let remaining = cleaned;
+
+    while (remaining.length > MAX_TTS_CHUNK) {
+        let cut = remaining.lastIndexOf(" ", MAX_TTS_CHUNK);
+        if (cut < 100) cut = MAX_TTS_CHUNK;
+        chunks.push(remaining.slice(0, cut).trim());
+        remaining = remaining.slice(cut).trim();
+    }
+
+    if (remaining) chunks.push(remaining);
+    return chunks;
+}
+
+
+function updateListenUI() {
+    const active = speechMode !== "stopped";
+    const speaking = speechMode === "playing";
+
+    if (listenButton) {
+        listenButton.disabled = !pdfDocument;
+        listenButton.classList.toggle("speaking", speaking);
+        listenButton.innerHTML = speaking
+            ? '<i class="fas fa-volume-high" aria-hidden="true"></i><span class="button-label">Listening</span>'
+            : '<i class="fas fa-volume-high" aria-hidden="true"></i><span class="button-label">Listen</span>';
+    }
+
+    if (pauseListenButton) {
+        pauseListenButton.disabled = !active;
+        pauseListenButton.innerHTML = speechMode === "paused"
+            ? '<i class="fas fa-play" aria-hidden="true"></i>'
+            : '<i class="fas fa-pause" aria-hidden="true"></i>';
+        pauseListenButton.title = speechMode === "paused" ? "Resume reading" : "Pause reading";
+    }
+
+    if (stopListenButton) {
+        stopListenButton.disabled = !active;
+    }
+}
+
+
+function stopSpeaking(announceStop = false) {
+    speechToken++;
+    speechQueue = [];
+    speechQueueIndex = 0;
+    speechCurrentPage = 0;
+    speechMode = "stopped";
+
+    if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+    }
+
+    updateListenUI();
+    if (announceStop) announce("Read aloud stopped.");
+}
+
+
+async function speakCurrentPage({ continueAcrossPages = true } = {}) {
+    if (!pdfDocument) return;
+
+    if (!("speechSynthesis" in window)) {
+        announce("Read aloud is not supported by this browser.");
+        return;
+    }
+
+    const token = ++speechToken;
+    const page = currentPage;
+    const text = await getPageText(page);
+
+    if (token !== speechToken) return;
+
+    if (!text) {
+        announce(`No selectable text was found on page ${page}. This page may be scanned as an image.`);
+        if (continueAcrossPages && page < pageCount && speechMode === "playing") {
+            goToPage(page + 1, true);
+        }
+        return;
+    }
+
+    const chunks = splitSpeechText(text);
+    if (!chunks.length) return;
+
+    speechQueue = chunks;
+    speechQueueIndex = 0;
+    speechCurrentPage = page;
+    speechMode = "playing";
+    updateListenUI();
+    announce(`Reading page ${page} of ${pageCount}...`);
+
+    await speakNextChunk(token, continueAcrossPages);
+}
+
+
+function speakNextChunk(token, continueAcrossPages) {
+    return new Promise(resolve => {
+        if (token !== speechToken || speechMode === "stopped") {
+            resolve();
+            return;
         }
 
-    }
-);
+        if (speechMode === "paused") {
+            resolve();
+            return;
+        }
+
+        if (speechQueueIndex >= speechQueue.length) {
+            if (continueAcrossPages && speechCurrentPage < pageCount && token === speechToken) {
+                const next = speechCurrentPage + 1;
+                speechCurrentPage = next;
+                goToPage(next, true);
+
+                /* The flip animation takes time; wait for the new page render. */
+                const waitStarted = Date.now();
+                const waitForPage = () => {
+                    if (token !== speechToken || speechMode !== "playing") {
+                        resolve();
+                        return;
+                    }
+                    if (currentPage === next || Date.now() - waitStarted > 2500) {
+                        speakCurrentPage({ continueAcrossPages: true }).then(resolve);
+                        return;
+                    }
+                    setTimeout(waitForPage, 80);
+                };
+                setTimeout(waitForPage, 80);
+                return;
+            }
+
+            speechMode = "stopped";
+            updateListenUI();
+            announce("Read aloud finished.");
+            resolve();
+            return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(speechQueue[speechQueueIndex]);
+        speechPreferredVoice = speechPreferredVoice || chooseSpeechVoice();
+
+        if (speechPreferredVoice) {
+            utterance.voice = speechPreferredVoice;
+            utterance.lang = speechPreferredVoice.lang || "ur-PK";
+        } else {
+            utterance.lang = "ur-PK";
+        }
+
+        utterance.rate = Number(listenSpeed?.value || 1);
+        utterance.pitch = 1;
+        utterance.volume = 1;
+
+        utterance.onend = () => {
+            if (token !== speechToken || speechMode === "stopped") {
+                resolve();
+                return;
+            }
+            speechQueueIndex++;
+            speakNextChunk(token, continueAcrossPages).then(resolve);
+        };
+
+        utterance.onerror = event => {
+            if (event?.error === "canceled" || event?.error === "interrupted") {
+                resolve();
+                return;
+            }
+            console.warn("Speech synthesis error:", event?.error);
+            speechMode = "stopped";
+            updateListenUI();
+            announce("Read aloud could not continue on this device.");
+            resolve();
+        };
+
+        window.speechSynthesis.speak(utterance);
+    });
+}
+
+
+if (listenButton) {
+    listenButton.addEventListener("click", function () {
+        if (speechMode === "paused") {
+            speechMode = "playing";
+            updateListenUI();
+            window.speechSynthesis.resume();
+            return;
+        }
+
+        stopSpeaking(false);
+        speechMode = "playing";
+        updateListenUI();
+        speakCurrentPage({ continueAcrossPages: true });
+    });
+}
+
+
+if (pauseListenButton) {
+    pauseListenButton.addEventListener("click", function () {
+        if (!("speechSynthesis" in window)) return;
+
+        if (speechMode === "playing") {
+            speechMode = "paused";
+            window.speechSynthesis.pause();
+            updateListenUI();
+            announce("Read aloud paused.");
+        } else if (speechMode === "paused") {
+            speechMode = "playing";
+            window.speechSynthesis.resume();
+            updateListenUI();
+            announce("Read aloud resumed.");
+        }
+    });
+}
+
+
+if (stopListenButton) {
+    stopListenButton.addEventListener("click", () => stopSpeaking(true));
+}
+
+
+if (listenSpeed) {
+    listenSpeed.addEventListener("change", function () {
+        if (speechMode === "playing" && "speechSynthesis" in window) {
+            /* SpeechSynthesisUtterance.rate is not reliably changeable mid-speech,
+               so restart the current page at the new speed. */
+            stopSpeaking(false);
+            speechMode = "playing";
+            updateListenUI();
+            speakCurrentPage({ continueAcrossPages: true });
+        }
+    });
+}
+
+
+/* Stop speech whenever the user manually navigates. */
+function stopSpeechForManualNavigation() {
+    if (speechMode !== "stopped") stopSpeaking(false);
+}
 
 
 /* =========================================================
    RETRY
 ========================================================= */
+
 
 if (retryButton) {
 
@@ -3750,6 +3746,10 @@ async function loadPDF() {
         pageCount =
             pdfDocument.numPages;
 
+        pageTextCache.clear();
+        textSearchResults = [];
+        textSearchToken++;
+
 
         if (!pageCount) {
 
@@ -3789,6 +3789,7 @@ async function loadPDF() {
 
 
         updateUI();
+        updateListenUI();
 
 
         await renderPage(
@@ -3920,6 +3921,8 @@ window.chishtiReader = {
 
     toggleFullscreen,
 
+    stopSpeaking,
+
     loadPDF,
 
     get currentPage() {
@@ -4043,7 +4046,11 @@ console.log(
 );
 
 console.log(
-    "✅ Single Reader Search System"
+    "✅ PDF Text Search + Library Search"
+);
+
+console.log(
+    "✅ Read Aloud / Pause / Stop / Speed"
 );
 
 console.log(
