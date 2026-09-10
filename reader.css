@@ -2761,3 +2761,156 @@ body {
     }
 
 }
+
+/* =========================================================
+   CHISHTI READER — FIX PACK
+   Search + Read Aloud + Flip selector corrections
+========================================================= */
+
+/* The page-flip selectors in the older CSS were missing a
+   descendant space. These rules intentionally override them. */
+.chishti-flip-next .chishti-page-flip-sheet {
+    transform-origin: left center;
+}
+
+.chishti-flip-next.chishti-flip-running .chishti-page-flip-sheet {
+    animation: chishtiFlipNext 650ms cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+.chishti-flip-prev .chishti-page-flip-sheet {
+    transform-origin: right center;
+}
+
+.chishti-flip-prev.chishti-flip-running .chishti-page-flip-sheet {
+    animation: chishtiFlipPrev 650ms cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+/* Search button was present in HTML but had no matching styling. */
+.reader-search-button {
+    flex: 0 0 auto;
+    height: 100%;
+    padding: 0 15px;
+    border: 0;
+    border-left: 1px solid rgba(212,165,0,.20);
+    background: rgba(212,165,0,.10);
+    color: #D4A500;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.reader-search-button:hover {
+    background: #D4A500;
+    color: #350000;
+}
+
+.reader-search-button:focus-visible,
+.reader-search-clear:focus-visible,
+.listen-speed select:focus-visible {
+    outline: 2px solid #D4A500;
+    outline-offset: -2px;
+}
+
+.reader-search-results {
+    z-index: 100000;
+}
+
+.reader-search-result {
+    user-select: none;
+}
+
+.reader-search-result-type {
+    display: inline-block;
+    margin-top: 4px;
+    color: rgba(255,255,255,.55);
+    font-size: 11px;
+}
+
+.reader-search-page {
+    border-left: 3px solid #D4A500;
+}
+
+.reader-search-page-number {
+    color: #D4A500;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.reader-search-snippet {
+    margin-top: 4px;
+    color: rgba(255,255,255,.62);
+    font-size: 11px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.reader-search-count {
+    padding: 9px 14px;
+    color: rgba(255,255,255,.55);
+    font-size: 11px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+/* Read-aloud controls */
+.listen-button {
+    min-width: 82px !important;
+}
+
+.listen-button.speaking {
+    background: #D4A500 !important;
+    border-color: #D4A500 !important;
+    color: #350000 !important;
+}
+
+.listen-speed {
+    flex: 0 0 auto;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.listen-speed select {
+    height: 38px;
+    min-width: 66px;
+    padding: 0 8px;
+    border: 1px solid rgba(212,165,0,.30);
+    border-radius: 7px;
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.listen-speed option {
+    background: #350000;
+    color: #fff;
+}
+
+#pauseListenButton:disabled,
+#stopListenButton:disabled {
+    opacity: .30;
+}
+
+@media (max-width: 600px) {
+    .reader-search-button {
+        padding: 0 12px;
+    }
+
+    .reader-search-button span {
+        display: none;
+    }
+
+    .listen-button {
+        min-width: 74px !important;
+    }
+
+    .listen-speed select {
+        min-width: 62px;
+        padding: 0 5px;
+    }
+}
