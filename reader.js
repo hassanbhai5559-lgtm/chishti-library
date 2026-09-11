@@ -1,53 +1,73 @@
 /* =========================================================
    CHISHTI LIBRARY
-   PREMIUM PDF READER
-   FAST + SEARCH + READ ALOUD
+   READER.JS
    PDF.JS 4.10.38
+   FAST PDF + SEARCH + READ ALOUD
 ========================================================= */
 
 import * as pdfjsLib from
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
+
+
+/* =========================================================
+   PDF.JS WORKER
+========================================================= */
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
 "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
 
 
 /* =========================================================
-   URL
+   URL PARAMETERS
 ========================================================= */
 
-const params = new URLSearchParams(location.search);
+const params =
+    new URLSearchParams(window.location.search);
 
 const rawBook =
     params.get("book") ||
     params.get("pdf") ||
     "";
 
+
+/* =========================================================
+   PDF URL
+========================================================= */
+
 function getPDFURL() {
 
-    if (!rawBook) return "";
+    if (!rawBook) {
+        return "";
+    }
 
     try {
 
-        const decoded = decodeURIComponent(rawBook)
-            .replace(/^\/+/, "")
-            .trim();
+        const decoded =
+            decodeURIComponent(rawBook)
+                .replace(/^\/+/, "")
+                .trim();
 
         return new URL(
             decoded,
-            location.href
+            window.location.href
         ).href;
 
     } catch (error) {
 
-        console.error("PDF URL error:", error);
+        console.error(
+            "PDF URL error:",
+            error
+        );
+
         return "";
 
     }
 
 }
 
-const PDF_URL = getPDFURL();
+
+const PDF_URL =
+    getPDFURL();
 
 
 /* =========================================================
@@ -61,14 +81,20 @@ const DEFAULT_ZOOM = 1;
 
 const FLIP_TIME = 450;
 
-const RANGE_CHUNK_SIZE = 1024 * 1024;
+const RANGE_CHUNK_SIZE =
+    1024 * 1024;
 
-const MAX_CANVAS_PIXELS = 4500000;
+const MAX_CANVAS_PIXELS =
+    4500000;
 
-const DESKTOP_DPR = 1.75;
-const MOBILE_DPR = 1.35;
+const DESKTOP_DPR =
+    1.75;
 
-const PAGE_CACHE_LIMIT = 3;
+const MOBILE_DPR =
+    1.35;
+
+const PAGE_CACHE_LIMIT =
+    3;
 
 
 /* =========================================================
@@ -76,108 +102,183 @@ const PAGE_CACHE_LIMIT = 3;
 ========================================================= */
 
 const bookTitle =
-    document.getElementById("bookTitle");
+    document.getElementById(
+        "bookTitle"
+    );
 
 const bookViewport =
-    document.getElementById("bookViewport");
+    document.getElementById(
+        "bookViewport"
+    );
 
 const pageWrapper =
-    document.getElementById("pageWrapper");
+    document.getElementById(
+        "pageWrapper"
+    );
 
 const pdfCanvas =
-    document.getElementById("pdfCanvas");
+    document.getElementById(
+        "pdfCanvas"
+    );
 
 const previousPageButton =
-    document.getElementById("previousPageButton");
+    document.getElementById(
+        "previousPageButton"
+    );
 
 const nextPageButton =
-    document.getElementById("nextPageButton");
+    document.getElementById(
+        "nextPageButton"
+    );
 
 const pageNumberInput =
-    document.getElementById("pageNumberInput");
+    document.getElementById(
+        "pageNumberInput"
+    );
 
 const totalPages =
-    document.getElementById("totalPages");
+    document.getElementById(
+        "totalPages"
+    );
 
 const zoomOutButton =
-    document.getElementById("zoomOutButton");
+    document.getElementById(
+        "zoomOutButton"
+    );
 
 const resetZoomButton =
-    document.getElementById("resetZoomButton");
+    document.getElementById(
+        "resetZoomButton"
+    );
 
 const zoomInButton =
-    document.getElementById("zoomInButton");
+    document.getElementById(
+        "zoomInButton"
+    );
 
 const zoomLevel =
-    document.getElementById("zoomLevel");
+    document.getElementById(
+        "zoomLevel"
+    );
 
 const errorScreen =
-    document.getElementById("errorScreen");
+    document.getElementById(
+        "errorScreen"
+    );
 
 const errorMessage =
-    document.getElementById("errorMessage");
+    document.getElementById(
+        "errorMessage"
+    );
 
 const retryButton =
-    document.getElementById("retryButton");
+    document.getElementById(
+        "retryButton"
+    );
 
 const readerStatus =
-    document.getElementById("readerStatus");
+    document.getElementById(
+        "readerStatus"
+    );
 
 const downloadButton =
-    document.getElementById("downloadButton");
+    document.getElementById(
+        "downloadButton"
+    );
 
 const printButton =
-    document.getElementById("printButton");
+    document.getElementById(
+        "printButton"
+    );
 
 const fullscreenButton =
-    document.getElementById("fullscreenButton");
+    document.getElementById(
+        "fullscreenButton"
+    );
 
 const themeButton =
-    document.getElementById("themeButton");
+    document.getElementById(
+        "themeButton"
+    );
 
 const cleanDownloadButton =
-    document.getElementById("cleanDownloadButton");
+    document.getElementById(
+        "cleanDownloadButton"
+    );
 
 const bookmarkButton =
-    document.getElementById("bookmarkBtn");
+    document.getElementById(
+        "bookmarkBtn"
+    );
 
 const shareButton =
-    document.getElementById("shareBtn");
+    document.getElementById(
+        "shareBtn"
+    );
 
 
-/* SEARCH */
+/* =========================================================
+   SEARCH
+========================================================= */
 
 const readerSearchInput =
-    document.getElementById("readerSearchInput");
+    document.getElementById(
+        "readerSearchInput"
+    );
 
 const readerSearchClear =
-    document.getElementById("readerSearchClear");
+    document.getElementById(
+        "readerSearchClear"
+    );
 
 const readerSearchResults =
-    document.getElementById("readerSearchResults");
+    document.getElementById(
+        "readerSearchResults"
+    );
 
 const readerSearchButton =
-    document.getElementById("readerSearchButton");
+    document.getElementById(
+        "readerSearchButton"
+    );
 
 
-/* READ ALOUD */
+/* =========================================================
+   READ ALOUD
+========================================================= */
 
 const listenButton =
-    document.getElementById("listenButton");
+    document.getElementById(
+        "listenButton"
+    );
 
 const pauseListenButton =
-    document.getElementById("pauseListenButton");
+    document.getElementById(
+        "pauseListenButton"
+    );
 
 const stopListenButton =
-    document.getElementById("stopListenButton");
+    document.getElementById(
+        "stopListenButton"
+    );
 
 const listenSpeed =
-    document.getElementById("listenSpeed");
+    document.getElementById(
+        "listenSpeed"
+    );
 
+
+/* =========================================================
+   CANVAS
+========================================================= */
 
 const context =
     pdfCanvas
-        ? pdfCanvas.getContext("2d", { alpha: false })
+        ? pdfCanvas.getContext(
+            "2d",
+            {
+                alpha: false
+            }
+        )
         : null;
 
 
@@ -204,23 +305,34 @@ let pageTransitionBusy = false;
 let activeLoadingTask = null;
 
 
-/* Page proxy cache */
+/* =========================================================
+   PAGE CACHE
+========================================================= */
 
-const pageCache = new Map();
+const pageCache =
+    new Map();
 
 
-/* Text cache */
+/* =========================================================
+   TEXT SEARCH CACHE
+========================================================= */
 
-const pageTextCache = new Map();
+const pageTextCache =
+    new Map();
 
 let searchToken = 0;
 
-let searchRunning = false;
+let currentSearchResults = [];
+
+let currentSearchIndex = -1;
 
 
-/* Speech */
+/* =========================================================
+   SPEECH STATE
+========================================================= */
 
-let speechMode = "stopped";
+let speechMode =
+    "stopped";
 
 let speechToken = 0;
 
@@ -232,10 +344,13 @@ let speechPage = 0;
 
 let preferredVoice = null;
 
-const MAX_TTS_CHUNK = 240;
+const MAX_TTS_CHUNK =
+    240;
 
 
-/* Touch */
+/* =========================================================
+   TOUCH
+========================================================= */
 
 let touchStartX = 0;
 let touchStartY = 0;
@@ -248,7 +363,10 @@ let touchStartY = 0;
 function announce(message) {
 
     if (readerStatus) {
-        readerStatus.textContent = message;
+
+        readerStatus.textContent =
+            message;
+
     }
 
 }
@@ -260,14 +378,23 @@ function announce(message) {
 
 function showError(message) {
 
-    console.error("Chishti Reader:", message);
+    console.error(
+        "Chishti Reader:",
+        message
+    );
 
     if (errorMessage) {
-        errorMessage.textContent = message;
+
+        errorMessage.textContent =
+            message;
+
     }
 
     if (errorScreen) {
-        errorScreen.hidden = false;
+
+        errorScreen.hidden =
+            false;
+
     }
 
 }
@@ -276,7 +403,10 @@ function showError(message) {
 function hideError() {
 
     if (errorScreen) {
-        errorScreen.hidden = true;
+
+        errorScreen.hidden =
+            true;
+
     }
 
 }
@@ -289,20 +419,30 @@ function hideError() {
 function getBookName() {
 
     if (!rawBook) {
+
         return "Chishti Library";
+
     }
 
     try {
 
-        const name =
+        const filename =
             rawBook
                 .split("?")[0]
                 .split("/")
                 .pop() || "";
 
-        return decodeURIComponent(name)
-            .replace(/\.pdf$/i, "")
-            .replace(/[-_]+/g, " ")
+        return decodeURIComponent(
+            filename
+        )
+            .replace(
+                /\.pdf$/i,
+                ""
+            )
+            .replace(
+                /[-_]+/g,
+                " "
+            )
             .trim() ||
             "Chishti Library";
 
@@ -318,14 +458,17 @@ function getBookName() {
 function setBookTitle() {
 
     if (bookTitle) {
-        bookTitle.textContent = getBookName();
+
+        bookTitle.textContent =
+            getBookName();
+
     }
 
 }
 
 
 /* =========================================================
-   THEME
+   THEMES
 ========================================================= */
 
 const themes = [
@@ -362,12 +505,17 @@ let currentTheme = 0;
 function applyTheme(index) {
 
     currentTheme =
-        (index + themes.length) %
+        (
+            index +
+            themes.length
+        ) %
         themes.length;
 
-    const theme = themes[currentTheme];
+    const theme =
+        themes[currentTheme];
 
-    const root = document.documentElement;
+    const root =
+        document.documentElement;
 
     root.style.setProperty(
         "--library-maroon",
@@ -412,7 +560,10 @@ function applyTheme(index) {
     document.body.dataset.theme =
         theme.name
             .toLowerCase()
-            .replace(/\s+/g, "-");
+            .replace(
+                /\s+/g,
+                "-"
+            );
 
     if (themeButton) {
 
@@ -439,11 +590,12 @@ function loadTheme() {
 
     try {
 
-        saved = Number(
-            localStorage.getItem(
-                "chishtiReaderTheme"
-            )
-        );
+        saved =
+            Number(
+                localStorage.getItem(
+                    "chishtiReaderTheme"
+                )
+            );
 
     } catch {}
 
@@ -452,10 +604,15 @@ function loadTheme() {
         saved >= 0 &&
         saved < themes.length
     ) {
-        currentTheme = saved;
+
+        currentTheme =
+            saved;
+
     }
 
-    applyTheme(currentTheme);
+    applyTheme(
+        currentTheme
+    );
 
 }
 
@@ -466,7 +623,9 @@ if (themeButton) {
         "click",
         () => {
 
-            applyTheme(currentTheme + 1);
+            applyTheme(
+                currentTheme + 1
+            );
 
             announce(
                 `Theme: ${themes[currentTheme].name}`
@@ -485,7 +644,8 @@ if (themeButton) {
 const bookmarkKey =
     "chishti_bookmark_" +
     encodeURIComponent(
-        rawBook || "current-book"
+        rawBook ||
+        "current-book"
     );
 
 
@@ -494,7 +654,9 @@ function getBookmark() {
     try {
 
         return Number(
-            localStorage.getItem(bookmarkKey)
+            localStorage.getItem(
+                bookmarkKey
+            )
         ) || 0;
 
     } catch {
@@ -508,27 +670,26 @@ function getBookmark() {
 
 function updateBookmark() {
 
-    if (!bookmarkButton) return;
+    if (!bookmarkButton) {
+        return;
+    }
 
-    const saved = getBookmark();
+    const saved =
+        getBookmark();
 
     const active =
-        saved === currentPage &&
-        saved > 0;
+        saved > 0 &&
+        saved === currentPage;
 
     bookmarkButton.classList.toggle(
         "active",
         active
     );
 
-    bookmarkButton.innerHTML = active
-        ? '<i class="fas fa-bookmark"></i>'
-        : '<i class="far fa-bookmark"></i>';
-
-    bookmarkButton.title =
+    bookmarkButton.innerHTML =
         active
-            ? `Remove bookmark from page ${currentPage}`
-            : `Bookmark page ${currentPage}`;
+            ? '<i class="fas fa-bookmark"></i>'
+            : '<i class="far fa-bookmark"></i>';
 
 }
 
@@ -541,14 +702,17 @@ if (bookmarkButton) {
 
             try {
 
-                if (getBookmark() === currentPage) {
+                if (
+                    getBookmark() ===
+                    currentPage
+                ) {
 
                     localStorage.removeItem(
                         bookmarkKey
                     );
 
                     announce(
-                        `Bookmark removed from page ${currentPage}.`
+                        "Bookmark removed."
                     );
 
                 } else {
@@ -566,7 +730,10 @@ if (bookmarkButton) {
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Bookmark:",
+                    error
+                );
 
             }
 
@@ -579,22 +746,30 @@ if (bookmarkButton) {
 
 
 /* =========================================================
-   UPDATE UI
+   UI
 ========================================================= */
 
 function updateUI() {
 
     if (pageNumberInput) {
-        pageNumberInput.value = currentPage;
+
+        pageNumberInput.value =
+            currentPage;
+
     }
 
     if (totalPages) {
-        totalPages.textContent = pageCount;
+
+        totalPages.textContent =
+            pageCount;
+
     }
 
     if (zoomLevel) {
+
         zoomLevel.textContent =
             `${Math.round(zoom * 100)}%`;
+
     }
 
     if (previousPageButton) {
@@ -616,10 +791,14 @@ function updateUI() {
     }
 
     if (cleanDownloadButton) {
-        cleanDownloadButton.disabled = true;
+
+        cleanDownloadButton.disabled =
+            true;
+
     }
 
     updateBookmark();
+
     updateSpeechUI();
 
 }
@@ -632,15 +811,27 @@ function updateUI() {
 async function getPage(pageNumber) {
 
     if (!pdfDocument) {
+
         return null;
+
     }
 
-    if (pageCache.has(pageNumber)) {
-        return pageCache.get(pageNumber);
+    if (
+        pageCache.has(
+            pageNumber
+        )
+    ) {
+
+        return pageCache.get(
+            pageNumber
+        );
+
     }
 
     const page =
-        await pdfDocument.getPage(pageNumber);
+        await pdfDocument.getPage(
+            pageNumber
+        );
 
     pageCache.set(
         pageNumber,
@@ -662,31 +853,50 @@ function trimPageCache() {
     ) {
 
         let farthest = null;
-        let farthestDistance = -1;
 
-        for (const number of pageCache.keys()) {
+        let distance =
+            -1;
 
-            const distance =
-                Math.abs(number - currentPage);
+        for (
+            const number of
+            pageCache.keys()
+        ) {
 
-            if (distance > farthestDistance) {
+            const d =
+                Math.abs(
+                    number -
+                    currentPage
+                );
 
-                farthestDistance = distance;
+            if (d > distance) {
+
+                distance = d;
+
                 farthest = number;
 
             }
 
         }
 
-        if (farthest === null) break;
+        if (
+            farthest === null
+        ) {
+            break;
+        }
 
         const page =
-            pageCache.get(farthest);
+            pageCache.get(
+                farthest
+            );
 
-        pageCache.delete(farthest);
+        pageCache.delete(
+            farthest
+        );
 
         try {
+
             page?.cleanup?.();
+
         } catch {}
 
     }
@@ -705,7 +915,9 @@ function cancelRender() {
     }
 
     try {
+
         currentRenderTask.cancel();
+
     } catch {}
 
     currentRenderTask = null;
@@ -720,7 +932,9 @@ function cancelRender() {
 function calculateScale(page) {
 
     if (!bookViewport) {
+
         return zoom;
+
     }
 
     const base =
@@ -728,24 +942,26 @@ function calculateScale(page) {
             scale: 1
         });
 
-    const availableWidth =
+    const width =
         Math.max(
             200,
-            bookViewport.clientWidth - 40
+            bookViewport.clientWidth -
+            40
         );
 
-    const availableHeight =
+    const height =
         Math.max(
             200,
-            bookViewport.clientHeight - 40
+            bookViewport.clientHeight -
+            40
         );
 
     const widthScale =
-        availableWidth /
+        width /
         base.width;
 
     const heightScale =
-        availableHeight /
+        height /
         base.height;
 
     const fit =
@@ -766,25 +982,28 @@ function calculateScale(page) {
    PIXEL RATIO
 ========================================================= */
 
-function getPixelRatio(viewport) {
+function getPixelRatio(
+    viewport
+) {
 
     const mobile =
         window.matchMedia?.(
             "(max-width: 768px)"
         )?.matches;
 
-    const maxDPR =
+    const max =
         mobile
             ? MOBILE_DPR
             : DESKTOP_DPR;
 
     const device =
-        window.devicePixelRatio || 1;
+        window.devicePixelRatio ||
+        1;
 
     let ratio =
         Math.min(
             device,
-            maxDPR
+            max
         );
 
     const pixels =
@@ -830,7 +1049,9 @@ async function renderPage(
         !pdfCanvas ||
         !context
     ) {
+
         return false;
+
     }
 
     const version =
@@ -853,17 +1074,23 @@ async function renderPage(
     try {
 
         const page =
-            await getPage(pageNumber);
+            await getPage(
+                pageNumber
+            );
 
         if (
             version !== renderVersion ||
             !pdfDocument
         ) {
+
             return false;
+
         }
 
         const scale =
-            calculateScale(page);
+            calculateScale(
+                page
+            );
 
         const viewport =
             page.getViewport({
@@ -871,9 +1098,11 @@ async function renderPage(
             });
 
         const ratio =
-            getPixelRatio(viewport);
+            getPixelRatio(
+                viewport
+            );
 
-        const width =
+        const canvasWidth =
             Math.max(
                 1,
                 Math.floor(
@@ -882,7 +1111,7 @@ async function renderPage(
                 )
             );
 
-        const height =
+        const canvasHeight =
             Math.max(
                 1,
                 Math.floor(
@@ -891,8 +1120,11 @@ async function renderPage(
                 )
             );
 
-        pdfCanvas.width = width;
-        pdfCanvas.height = height;
+        pdfCanvas.width =
+            canvasWidth;
+
+        pdfCanvas.height =
+            canvasHeight;
 
         pdfCanvas.style.width =
             `${viewport.width}px`;
@@ -931,8 +1163,13 @@ async function renderPage(
 
         const renderTask =
             page.render({
-                canvasContext: context,
-                viewport
+
+                canvasContext:
+                    context,
+
+                viewport:
+                    viewport
+
             });
 
         currentRenderTask =
@@ -944,14 +1181,19 @@ async function renderPage(
             version !== renderVersion ||
             !pdfDocument
         ) {
+
             return false;
+
         }
 
         if (
             currentRenderTask ===
             renderTask
         ) {
-            currentRenderTask = null;
+
+            currentRenderTask =
+                null;
+
         }
 
         currentPage =
@@ -979,16 +1221,19 @@ async function renderPage(
             error?.name ===
             "AbortException"
         ) {
+
             return false;
+
         }
 
         console.error(
-            "Render error:",
+            "Page render error:",
             error
         );
 
         if (
-            version === renderVersion
+            version ===
+            renderVersion
         ) {
 
             showError(
@@ -998,25 +1243,6 @@ async function renderPage(
         }
 
         return false;
-
-    } finally {
-
-        /*
-         * Do not accidentally clear a newer render task.
-         */
-
-        if (
-            currentRenderTask &&
-            currentRenderTask ===
-            currentRenderTask
-        ) {
-
-            /*
-             * Intentionally left guarded by
-             * render completion/cancellation.
-             */
-
-        }
 
     }
 
@@ -1036,7 +1262,9 @@ async function flipTo(
         !pdfDocument ||
         pageTransitionBusy
     ) {
+
         return;
+
     }
 
     if (
@@ -1044,14 +1272,20 @@ async function flipTo(
         targetPage > pageCount ||
         targetPage === currentPage
     ) {
+
         return;
+
     }
 
-    pageTransitionBusy = true;
+    pageTransitionBusy =
+        true;
+
     updateUI();
 
     const oldCanvas =
-        document.createElement("canvas");
+        document.createElement(
+            "canvas"
+        );
 
     oldCanvas.width =
         pdfCanvas.width;
@@ -1060,7 +1294,9 @@ async function flipTo(
         pdfCanvas.height;
 
     const oldContext =
-        oldCanvas.getContext("2d");
+        oldCanvas.getContext(
+            "2d"
+        );
 
     if (oldContext) {
 
@@ -1073,17 +1309,23 @@ async function flipTo(
     }
 
     const width =
-        pageWrapper?.getBoundingClientRect().width ||
+        pageWrapper
+            ?.getBoundingClientRect()
+            .width ||
         pdfCanvas.clientWidth ||
         300;
 
     const height =
-        pageWrapper?.getBoundingClientRect().height ||
+        pageWrapper
+            ?.getBoundingClientRect()
+            .height ||
         pdfCanvas.clientHeight ||
         400;
 
     const stage =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     stage.className =
         "chishti-page-flip-stage";
@@ -1095,19 +1337,25 @@ async function flipTo(
         `${height}px`;
 
     const sheet =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     sheet.className =
         "chishti-page-flip-sheet";
 
     const front =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     front.className =
         "chishti-page-flip-face chishti-page-flip-front";
 
     const frontCanvas =
-        document.createElement("canvas");
+        document.createElement(
+            "canvas"
+        );
 
     frontCanvas.width =
         oldCanvas.width;
@@ -1122,7 +1370,9 @@ async function flipTo(
         `${height}px`;
 
     const frontContext =
-        frontCanvas.getContext("2d");
+        frontCanvas.getContext(
+            "2d"
+        );
 
     if (frontContext) {
 
@@ -1139,7 +1389,9 @@ async function flipTo(
     );
 
     const back =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     back.className =
         "chishti-page-flip-face chishti-page-flip-back";
@@ -1148,7 +1400,9 @@ async function flipTo(
         `<div class="chishti-flip-paper"></div>`;
 
     sheet.appendChild(front);
+
     sheet.appendChild(back);
+
     stage.appendChild(sheet);
 
     stage.classList.add(
@@ -1157,22 +1411,19 @@ async function flipTo(
             : "chishti-flip-prev"
     );
 
-    bookViewport?.appendChild(stage);
+    if (bookViewport) {
+
+        bookViewport.appendChild(
+            stage
+        );
+
+    }
 
     void stage.offsetWidth;
 
     stage.classList.add(
         "chishti-flip-running"
     );
-
-    announce(
-        `Opening page ${targetPage}...`
-    );
-
-    /*
-     * Render target immediately.
-     * Animation runs independently.
-     */
 
     const renderPromise =
         renderPage(
@@ -1184,10 +1435,7 @@ async function flipTo(
         resolve =>
             setTimeout(
                 resolve,
-                Math.min(
-                    180,
-                    FLIP_TIME
-                )
+                120
             )
     );
 
@@ -1199,14 +1447,15 @@ async function flipTo(
                 resolve,
                 Math.max(
                     0,
-                    FLIP_TIME - 180
+                    FLIP_TIME - 120
                 )
             )
     );
 
     stage.remove();
 
-    pageTransitionBusy = false;
+    pageTransitionBusy =
+        false;
 
     updateUI();
 
@@ -1230,7 +1479,9 @@ function goToPage(
         !pdfDocument ||
         pageTransitionBusy
     ) {
+
         return;
+
     }
 
     let target =
@@ -1239,8 +1490,13 @@ function goToPage(
             10
         );
 
-    if (!Number.isFinite(target)) {
-        target = currentPage;
+    if (
+        !Number.isFinite(target)
+    ) {
+
+        target =
+            currentPage;
+
     }
 
     target =
@@ -1253,10 +1509,14 @@ function goToPage(
         );
 
     if (
-        target === currentPage
+        target ===
+        currentPage
     ) {
+
         updateUI();
+
         return;
+
     }
 
     if (!animated) {
@@ -1271,7 +1531,8 @@ function goToPage(
 
     flipTo(
         target,
-        target > currentPage
+        target >
+        currentPage
             ? "next"
             : "prev"
     );
@@ -1343,7 +1604,9 @@ if (previousPageButton) {
 
 function setZoom(value) {
 
-    if (pageTransitionBusy) return;
+    if (pageTransitionBusy) {
+        return;
+    }
 
     zoom =
         Math.max(
@@ -1406,24 +1669,30 @@ function resetZoom() {
 
 
 if (zoomInButton) {
+
     zoomInButton.addEventListener(
         "click",
         zoomIn
     );
+
 }
 
 if (zoomOutButton) {
+
     zoomOutButton.addEventListener(
         "click",
         zoomOut
     );
+
 }
 
 if (resetZoomButton) {
+
     resetZoomButton.addEventListener(
         "click",
         resetZoom
     );
+
 }
 
 
@@ -1449,7 +1718,10 @@ if (pageNumberInput) {
         "keydown",
         event => {
 
-            if (event.key === "Enter") {
+            if (
+                event.key ===
+                "Enter"
+            ) {
 
                 event.preventDefault();
 
@@ -1469,7 +1741,7 @@ if (pageNumberInput) {
 
 
 /* =========================================================
-   KEYBOARD
+   CTRL + F / KEYBOARD
 ========================================================= */
 
 document.addEventListener(
@@ -1482,18 +1754,23 @@ document.addEventListener(
         const typing =
             active &&
             (
-                active.tagName === "INPUT" ||
-                active.tagName === "TEXTAREA" ||
+                active.tagName ===
+                    "INPUT" ||
+                active.tagName ===
+                    "TEXTAREA" ||
                 active.isContentEditable
             );
 
-        /*
-         * Ctrl+F / F3 / Shift+F3
-         */
+
+        /* Ctrl + F */
 
         if (
-            event.ctrlKey &&
-            event.key.toLowerCase() === "f"
+            (
+                event.ctrlKey ||
+                event.metaKey
+            ) &&
+            event.key.toLowerCase() ===
+                "f"
         ) {
 
             event.preventDefault();
@@ -1501,6 +1778,7 @@ document.addEventListener(
             if (readerSearchInput) {
 
                 readerSearchInput.focus();
+
                 readerSearchInput.select();
 
             }
@@ -1509,9 +1787,11 @@ document.addEventListener(
 
         }
 
+
+        /* F3 */
+
         if (
-            event.key === "F3" &&
-            !typing
+            event.key === "F3"
         ) {
 
             event.preventDefault();
@@ -1524,7 +1804,11 @@ document.addEventListener(
 
         }
 
-        if (typing) return;
+
+        if (typing) {
+            return;
+        }
+
 
         switch (event.key) {
 
@@ -1532,67 +1816,83 @@ document.addEventListener(
             case "PageDown":
 
                 event.preventDefault();
+
                 nextPage();
 
                 break;
+
 
             case "ArrowLeft":
             case "PageUp":
 
                 event.preventDefault();
+
                 previousPage();
 
                 break;
+
 
             case "+":
             case "=":
 
                 event.preventDefault();
+
                 zoomIn();
 
                 break;
 
+
             case "-":
 
                 event.preventDefault();
+
                 zoomOut();
 
                 break;
 
+
             case "0":
 
                 event.preventDefault();
+
                 resetZoom();
 
                 break;
+
 
             case "Home":
 
                 event.preventDefault();
 
-                if (!pageTransitionBusy) {
-                    goToPage(1, true);
-                }
+                goToPage(
+                    1,
+                    true
+                );
 
                 break;
+
 
             case "End":
 
                 event.preventDefault();
 
-                if (!pageTransitionBusy) {
-                    goToPage(pageCount, true);
-                }
+                goToPage(
+                    pageCount,
+                    true
+                );
 
                 break;
+
 
             case "f":
             case "F":
 
                 event.preventDefault();
+
                 toggleFullscreen();
 
                 break;
+
 
             case "t":
             case "T":
@@ -1622,17 +1922,20 @@ if (bookViewport) {
         event => {
 
             if (
-                !event.touches ||
-                !event.touches.length
+                !event.touches?.length
             ) {
+
                 return;
+
             }
 
             touchStartX =
-                event.touches[0].clientX;
+                event.touches[0]
+                    .clientX;
 
             touchStartY =
-                event.touches[0].clientY;
+                event.touches[0]
+                    .clientY;
 
         },
         {
@@ -1649,7 +1952,9 @@ if (bookViewport) {
                 pageTransitionBusy ||
                 !event.changedTouches?.length
             ) {
+
                 return;
+
             }
 
             const touch =
@@ -1665,15 +1970,22 @@ if (bookViewport) {
 
             if (
                 Math.abs(dx) < 60 ||
-                Math.abs(dx) <= Math.abs(dy)
+                Math.abs(dx) <=
+                    Math.abs(dy)
             ) {
+
                 return;
+
             }
 
             if (dx < 0) {
+
                 nextPage();
+
             } else {
+
                 previousPage();
+
             }
 
         },
@@ -1695,7 +2007,9 @@ window.addEventListener(
     "resize",
     () => {
 
-        clearTimeout(resizeTimer);
+        clearTimeout(
+            resizeTimer
+        );
 
         resizeTimer =
             setTimeout(
@@ -1732,11 +2046,15 @@ async function toggleFullscreen() {
             "readerApp"
         );
 
-    if (!reader) return;
+    if (!reader) {
+        return;
+    }
 
     try {
 
-        if (!document.fullscreenElement) {
+        if (
+            !document.fullscreenElement
+        ) {
 
             await reader.requestFullscreen();
 
@@ -1805,7 +2123,7 @@ async function shareCurrentPage() {
 
         const url =
             new URL(
-                location.href
+                window.location.href
             );
 
         url.searchParams.set(
@@ -1813,7 +2131,7 @@ async function shareCurrentPage() {
             String(currentPage)
         );
 
-        const data = {
+        const shareData = {
 
             title:
                 `${getBookName()} — Chishti Library`,
@@ -1826,11 +2144,14 @@ async function shareCurrentPage() {
 
         };
 
+
         if (navigator.share) {
 
             try {
 
-                await navigator.share(data);
+                await navigator.share(
+                    shareData
+                );
 
                 announce(
                     "Book shared successfully."
@@ -1844,12 +2165,15 @@ async function shareCurrentPage() {
                     error?.name ===
                     "AbortError"
                 ) {
+
                     return;
+
                 }
 
             }
 
         }
+
 
         if (
             navigator.clipboard &&
@@ -1868,6 +2192,7 @@ async function shareCurrentPage() {
 
         }
 
+
         prompt(
             "Copy reader link:",
             url.href
@@ -1876,7 +2201,7 @@ async function shareCurrentPage() {
     } catch (error) {
 
         console.error(
-            "Share error:",
+            "Share:",
             error
         );
 
@@ -1916,8 +2241,12 @@ function getDownloadFileName() {
         "book.pdf";
 
     try {
+
         filename =
-            decodeURIComponent(filename);
+            decodeURIComponent(
+                filename
+            );
+
     } catch {}
 
     filename =
@@ -1941,7 +2270,7 @@ async function createWatermarkedPDF() {
     ) {
 
         throw new Error(
-            "PDFLib not loaded."
+            "PDFLib is not loaded."
         );
 
     }
@@ -1950,7 +2279,8 @@ async function createWatermarkedPDF() {
         await fetch(
             PDF_URL,
             {
-                cache: "no-store"
+                cache:
+                    "no-store"
             }
         );
 
@@ -1972,17 +2302,20 @@ async function createWatermarkedPDF() {
 
     const font =
         await doc.embedFont(
-            PDFLib.StandardFonts.HelveticaBold
+            PDFLib.StandardFonts
+                .HelveticaBold
         );
 
     for (
-        const page of doc.getPages()
+        const page of
+        doc.getPages()
     ) {
 
         const {
             width,
             height
-        } = page.getSize();
+        } =
+            page.getSize();
 
         const size =
             Math.max(
@@ -2007,10 +2340,16 @@ async function createWatermarkedPDF() {
             {
 
                 x:
-                    (width - textWidth) / 2,
+                    (
+                        width -
+                        textWidth
+                    ) / 2,
 
                 y:
-                    (height - size) / 2,
+                    (
+                        height -
+                        size
+                    ) / 2,
 
                 size,
 
@@ -2027,10 +2366,13 @@ async function createWatermarkedPDF() {
                     0.22,
 
                 rotate:
-                    PDFLib.degrees(-32)
+                    PDFLib.degrees(
+                        -32
+                    )
 
             }
         );
+
 
         const subSize =
             Math.max(
@@ -2049,13 +2391,20 @@ async function createWatermarkedPDF() {
             {
 
                 x:
-                    (width - subWidth) / 2,
+                    (
+                        width -
+                        subWidth
+                    ) / 2,
 
                 y:
-                    (height - size) / 2 -
+                    (
+                        height -
+                        size
+                    ) / 2 -
                     size * 0.85,
 
-                size: subSize,
+                size:
+                    subSize,
 
                 font,
 
@@ -2070,7 +2419,9 @@ async function createWatermarkedPDF() {
                     0.20,
 
                 rotate:
-                    PDFLib.degrees(-32)
+                    PDFLib.degrees(
+                        -32
+                    )
 
             }
         );
@@ -2089,19 +2440,24 @@ async function createWatermarkedPDF() {
 async function downloadWatermarkedPDF() {
 
     if (!PDF_URL) {
-        alert("No PDF selected.");
-        return;
-    }
 
-    const old =
-        downloadButton?.innerHTML || "";
+        alert(
+            "No PDF selected."
+        );
+
+        return;
+
+    }
 
     try {
 
         if (downloadButton) {
 
-            downloadButton.disabled = true;
-            downloadButton.innerHTML = "⏳";
+            downloadButton.disabled =
+                true;
+
+            downloadButton.innerHTML =
+                "⏳";
 
         }
 
@@ -2122,23 +2478,34 @@ async function downloadWatermarkedPDF() {
             );
 
         const url =
-            URL.createObjectURL(blob);
+            URL.createObjectURL(
+                blob
+            );
 
         const link =
-            document.createElement("a");
+            document.createElement(
+                "a"
+            );
 
         link.href = url;
+
         link.download =
             getDownloadFileName();
 
-        document.body.appendChild(link);
+        document.body.appendChild(
+            link
+        );
 
         link.click();
 
         link.remove();
 
         setTimeout(
-            () => URL.revokeObjectURL(url),
+            () => {
+                URL.revokeObjectURL(
+                    url
+                );
+            },
             5000
         );
 
@@ -2161,10 +2528,8 @@ async function downloadWatermarkedPDF() {
 
         if (downloadButton) {
 
-            downloadButton.disabled = false;
-
-            downloadButton.innerHTML =
-                old || "↓";
+            downloadButton.disabled =
+                false;
 
         }
 
@@ -2190,8 +2555,13 @@ if (downloadButton) {
 async function printCurrentBook() {
 
     if (!PDF_URL) {
-        alert("No PDF selected.");
+
+        alert(
+            "No PDF selected."
+        );
+
         return;
+
     }
 
     try {
@@ -2213,7 +2583,9 @@ async function printCurrentBook() {
             );
 
         const url =
-            URL.createObjectURL(blob);
+            URL.createObjectURL(
+                blob
+            );
 
         const win =
             window.open(
@@ -2223,7 +2595,9 @@ async function printCurrentBook() {
 
         if (!win) {
 
-            URL.revokeObjectURL(url);
+            URL.revokeObjectURL(
+                url
+            );
 
             alert(
                 "Please allow popups to print."
@@ -2241,7 +2615,9 @@ async function printCurrentBook() {
                     () => {
 
                         try {
+
                             win.print();
+
                         } catch {}
 
                     },
@@ -2278,12 +2654,16 @@ if (printButton) {
 
 
 /* =========================================================
-   PDF TEXT
+   PDF TEXT EXTRACTION
 ========================================================= */
 
-async function getPageText(pageNumber) {
+async function getPageText(
+    pageNumber
+) {
 
-    if (!pdfDocument) return "";
+    if (!pdfDocument) {
+        return "";
+    }
 
     if (
         pageTextCache.has(
@@ -2306,8 +2686,13 @@ async function getPageText(pageNumber) {
 
         const content =
             await page.getTextContent({
-                normalizeWhitespace: true,
-                disableCombineTextItems: false
+
+                normalizeWhitespace:
+                    true,
+
+                disableCombineTextItems:
+                    false
+
             });
 
         const text =
@@ -2353,12 +2738,16 @@ async function getPageText(pageNumber) {
    SEARCH NORMALIZATION
 ========================================================= */
 
-function normalizeSearchText(value) {
+function normalizeSearchText(
+    value
+) {
 
-    return String(value || "")
-        .normalize("NFKC")
-
-        /* Arabic/Urdu diacritics */
+    return String(
+        value || ""
+    )
+        .normalize(
+            "NFKC"
+        )
 
         .replace(
             /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g,
@@ -2374,8 +2763,6 @@ function normalizeSearchText(value) {
             /[\u200B-\u200D\uFEFF]/g,
             ""
         )
-
-        /* Arabic variants */
 
         .replace(
             /[إأٱآ]/g,
@@ -2414,6 +2801,41 @@ function normalizeSearchText(value) {
 
 
 /* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
    SEARCH SNIPPET
 ========================================================= */
 
@@ -2423,35 +2845,40 @@ function createSnippet(
 ) {
 
     const source =
-        String(text || "");
-
-    const normalized =
-        normalizeSearchText(source);
-
-    const q =
-        normalizeSearchText(query);
-
-    if (!source || !q) {
-        return source.slice(
-            0,
-            180
+        String(
+            text || ""
         );
-    }
+
+    const normalizedSource =
+        normalizeSearchText(
+            source
+        );
+
+    const normalizedQuery =
+        normalizeSearchText(
+            query
+        );
 
     const index =
-        normalized.indexOf(q);
+        normalizedSource.indexOf(
+            normalizedQuery
+        );
 
-    if (index < 0) {
+    if (
+        index < 0
+    ) {
+
         return source.slice(
             0,
             180
         );
+
     }
 
     const start =
         Math.max(
             0,
-            index - 65
+            index - 60
         );
 
     return (
@@ -2471,19 +2898,17 @@ function createSnippet(
 
 
 /* =========================================================
-   SEARCH RESULTS
+   SHOW SEARCH RESULTS
 ========================================================= */
-
-let currentSearchResults = [];
-
-let currentSearchIndex = -1;
-
 
 function closeSearch() {
 
-    if (readerSearchResults) {
+    if (
+        readerSearchResults
+    ) {
 
-        readerSearchResults.innerHTML = "";
+        readerSearchResults.innerHTML =
+            "";
 
         readerSearchResults.classList.remove(
             "show"
@@ -2498,7 +2923,11 @@ function showSearchMessage(
     message
 ) {
 
-    if (!readerSearchResults) return;
+    if (
+        !readerSearchResults
+    ) {
+        return;
+    }
 
     readerSearchResults.innerHTML =
         `<div class="reader-search-empty">
@@ -2517,7 +2946,11 @@ function showSearchResults(
     query
 ) {
 
-    if (!readerSearchResults) return;
+    if (
+        !readerSearchResults
+    ) {
+        return;
+    }
 
     currentSearchResults =
         results;
@@ -2525,23 +2958,32 @@ function showSearchResults(
     currentSearchIndex =
         results.findIndex(
             item =>
-                item.page === currentPage
+                item.page ===
+                currentPage
         );
 
-    readerSearchResults.innerHTML = "";
+    readerSearchResults.innerHTML =
+        "";
 
     const header =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     header.className =
         "reader-search-count";
 
     header.textContent =
-        `${results.length} match${results.length === 1 ? "" : "es"} found`;
+        `${results.length} match${
+            results.length === 1
+                ? ""
+                : "es"
+        } found`;
 
     readerSearchResults.appendChild(
         header
     );
+
 
     results
         .slice(0, 50)
@@ -2549,15 +2991,15 @@ function showSearchResults(
             (item, index) => {
 
                 const result =
-                    document.createElement("button");
+                    document.createElement(
+                        "button"
+                    );
 
-                result.type = "button";
+                result.type =
+                    "button";
 
                 result.className =
                     "reader-search-result reader-search-page";
-
-                result.dataset.page =
-                    item.page;
 
                 result.innerHTML = `
 
@@ -2610,25 +3052,6 @@ function showSearchResults(
             }
         );
 
-    if (
-        results.length >
-        50
-    ) {
-
-        const more =
-            document.createElement("div");
-
-        more.className =
-            "reader-search-more";
-
-        more.textContent =
-            "Showing first 50 results.";
-
-        readerSearchResults.appendChild(
-            more
-        );
-
-    }
 
     readerSearchResults.classList.add(
         "show"
@@ -2642,33 +3065,43 @@ function showSearchResults(
 
 
 /* =========================================================
-   PDF SEARCH ENGINE
+   PDF SEARCH
 ========================================================= */
 
 async function searchPDF(
     query
 ) {
 
+    query =
+        String(
+            query || ""
+        ).trim();
+
     if (
         !pdfDocument ||
-        !query.trim()
+        !query
     ) {
+
         return;
+
     }
 
     const token =
         ++searchToken;
 
-    searchRunning = true;
+    currentSearchResults =
+        [];
 
-    currentSearchResults = [];
-    currentSearchIndex = -1;
+    currentSearchIndex =
+        -1;
 
-    if (readerSearchResults) {
+    if (
+        readerSearchResults
+    ) {
 
         readerSearchResults.innerHTML =
             `<div class="reader-search-count">
-                🔎 Searching book…
+                🔎 Searching book...
             </div>`;
 
         readerSearchResults.classList.add(
@@ -2678,13 +3111,19 @@ async function searchPDF(
     }
 
     const normalizedQuery =
-        normalizeSearchText(query);
+        normalizeSearchText(
+            query
+        );
 
     const results = [];
 
+
     /*
-     * Scan all pages, but yield to browser
-     * regularly so the reader stays responsive.
+     * Search every page.
+     *
+     * Only a few pages are processed
+     * between browser yields, so UI
+     * remains responsive.
      */
 
     for (
@@ -2693,23 +3132,30 @@ async function searchPDF(
         page++
     ) {
 
-        if (token !== searchToken) {
+        if (
+            token !== searchToken
+        ) {
+
             return;
+
         }
 
         const text =
-            await getPageText(page);
+            await getPageText(
+                page
+            );
 
         if (
-            normalizeSearchText(text)
-                .includes(normalizedQuery)
+            normalizeSearchText(
+                text
+            ).includes(
+                normalizedQuery
+            )
         ) {
 
             results.push({
 
                 page,
-
-                text,
 
                 snippet:
                     createSnippet(
@@ -2721,12 +3167,13 @@ async function searchPDF(
 
         }
 
+
         if (
             page % 3 === 0
         ) {
 
             announce(
-                `Searching book… ${page}/${pageCount}`
+                `Searching book... ${page}/${pageCount}`
             );
 
             await new Promise(
@@ -2741,13 +3188,18 @@ async function searchPDF(
 
     }
 
-    if (token !== searchToken) {
+
+    if (
+        token !== searchToken
+    ) {
+
         return;
+
     }
 
-    searchRunning = false;
-
-    if (!results.length) {
+    if (
+        !results.length
+    ) {
 
         showSearchMessage(
             `🔎 No result found for <strong>${escapeHTML(query)}</strong>`
@@ -2770,35 +3222,8 @@ async function searchPDF(
 
 
 /* =========================================================
-   SEARCH HELPERS
+   NEXT SEARCH RESULT
 ========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
 
 function focusNextSearchResult(
     backwards = false
@@ -2840,7 +3265,8 @@ function focusNextSearchResult(
             currentSearchResults.length
         ) {
 
-            currentSearchIndex = 0;
+            currentSearchIndex =
+                0;
 
         }
 
@@ -2851,7 +3277,9 @@ function focusNextSearchResult(
             currentSearchIndex
         ];
 
-    if (!result) return;
+    if (!result) {
+        return;
+    }
 
     goToPage(
         result.page,
@@ -2859,25 +3287,39 @@ function focusNextSearchResult(
     );
 
     announce(
-        `Search result ${currentSearchIndex + 1} of ${currentSearchResults.length} — page ${result.page}`
+        `Search result ${
+            currentSearchIndex + 1
+        } of ${
+            currentSearchResults.length
+        } — page ${
+            result.page
+        }`
     );
 
 }
 
 
-/* Search input */
+/* =========================================================
+   SEARCH EVENTS
+========================================================= */
 
-if (readerSearchInput) {
+if (
+    readerSearchInput
+) {
 
     readerSearchInput.addEventListener(
         "keydown",
         event => {
 
-            if (event.key === "Escape") {
+            if (
+                event.key ===
+                "Escape"
+            ) {
 
                 event.preventDefault();
 
-                readerSearchInput.value = "";
+                readerSearchInput.value =
+                    "";
 
                 ++searchToken;
 
@@ -2887,8 +3329,10 @@ if (readerSearchInput) {
 
             }
 
+
             if (
-                event.key === "Enter"
+                event.key ===
+                "Enter"
             ) {
 
                 event.preventDefault();
@@ -2901,6 +3345,7 @@ if (readerSearchInput) {
 
         }
     );
+
 
     readerSearchInput.addEventListener(
         "input",
@@ -2922,7 +3367,9 @@ if (readerSearchInput) {
 }
 
 
-if (readerSearchButton) {
+if (
+    readerSearchButton
+) {
 
     readerSearchButton.addEventListener(
         "click",
@@ -2940,7 +3387,9 @@ if (readerSearchButton) {
 }
 
 
-if (readerSearchClear) {
+if (
+    readerSearchClear
+) {
 
     readerSearchClear.addEventListener(
         "click",
@@ -2948,9 +3397,12 @@ if (readerSearchClear) {
 
             ++searchToken;
 
-            if (readerSearchInput) {
+            if (
+                readerSearchInput
+            ) {
 
-                readerSearchInput.value = "";
+                readerSearchInput.value =
+                    "";
 
                 readerSearchInput.focus();
 
@@ -2964,42 +3416,18 @@ if (readerSearchClear) {
 }
 
 
-/* Ctrl+F should focus reader search */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const container =
-            event.target.closest(
-                ".reader-search"
-            );
-
-        if (
-            !container &&
-            readerSearchResults
-        ) {
-
-            readerSearchResults.classList.remove(
-                "show"
-            );
-
-        }
-
-    }
-);
-
-
 /* =========================================================
    READ ALOUD
 ========================================================= */
 
-function getVoices() {
+function getSpeechVoices() {
 
     if (
         !("speechSynthesis" in window)
     ) {
+
         return [];
+
     }
 
     return (
@@ -3010,28 +3438,32 @@ function getVoices() {
 }
 
 
-function chooseVoice() {
+function chooseSpeechVoice() {
 
     const voices =
-        getVoices();
+        getSpeechVoices();
 
     if (!voices.length) {
+
         return null;
+
     }
 
-    const urdu =
+    preferredVoice =
         voices.find(
             voice => {
 
                 const lang =
                     String(
                         voice.lang || ""
-                    ).toLowerCase();
+                    )
+                        .toLowerCase();
 
                 const name =
                     String(
                         voice.name || ""
-                    ).toLowerCase();
+                    )
+                        .toLowerCase();
 
                 return (
                     lang === "ur-pk" ||
@@ -3040,10 +3472,8 @@ function chooseVoice() {
                 );
 
             }
-        );
+        ) ||
 
-    preferredVoice =
-        urdu ||
         voices.find(
             voice =>
                 String(
@@ -3052,6 +3482,7 @@ function chooseVoice() {
                     .toLowerCase()
                     .startsWith("ur")
         ) ||
+
         voices.find(
             voice =>
                 String(
@@ -3060,6 +3491,7 @@ function chooseVoice() {
                     .toLowerCase()
                     .startsWith("hi")
         ) ||
+
         voices.find(
             voice =>
                 String(
@@ -3068,6 +3500,7 @@ function chooseVoice() {
                     .toLowerCase()
                     .startsWith("en")
         ) ||
+
         voices[0];
 
     return preferredVoice;
@@ -3081,27 +3514,35 @@ if (
 
     window.speechSynthesis.addEventListener(
         "voiceschanged",
-        chooseVoice
+        chooseSpeechVoice
     );
 
-    chooseVoice();
+    chooseSpeechVoice();
 
 }
 
+
+/* =========================================================
+   SPEECH CHUNKS
+========================================================= */
 
 function splitSpeechText(
     text
 ) {
 
     const cleaned =
-        String(text || "")
+        String(
+            text || ""
+        )
             .replace(
                 /\s+/g,
                 " "
             )
             .trim();
 
-    if (!cleaned) return [];
+    if (!cleaned) {
+        return [];
+    }
 
     const chunks = [];
 
@@ -3119,13 +3560,21 @@ function splitSpeechText(
                 MAX_TTS_CHUNK
             );
 
-        if (cut < 80) {
-            cut = MAX_TTS_CHUNK;
+        if (
+            cut < 80
+        ) {
+
+            cut =
+                MAX_TTS_CHUNK;
+
         }
 
         chunks.push(
             remaining
-                .slice(0, cut)
+                .slice(
+                    0,
+                    cut
+                )
                 .trim()
         );
 
@@ -3137,7 +3586,11 @@ function splitSpeechText(
     }
 
     if (remaining) {
-        chunks.push(remaining);
+
+        chunks.push(
+            remaining
+        );
+
     }
 
     return chunks;
@@ -3145,16 +3598,23 @@ function splitSpeechText(
 }
 
 
+/* =========================================================
+   SPEECH UI
+========================================================= */
+
 function updateSpeechUI() {
 
     const supported =
         "speechSynthesis" in window;
 
     const active =
-        speechMode !== "stopped";
+        speechMode !==
+        "stopped";
 
     const speaking =
-        speechMode === "playing";
+        speechMode ===
+        "playing";
+
 
     if (listenButton) {
 
@@ -3169,10 +3629,13 @@ function updateSpeechUI() {
 
         listenButton.innerHTML =
             speaking
+
                 ? '<i class="fas fa-volume-high"></i><span class="button-label">Listening</span>'
+
                 : '<i class="fas fa-volume-high"></i><span class="button-label">Listen</span>';
 
     }
+
 
     if (pauseListenButton) {
 
@@ -3180,11 +3643,15 @@ function updateSpeechUI() {
             !active;
 
         pauseListenButton.innerHTML =
-            speechMode === "paused"
+            speechMode ===
+            "paused"
+
                 ? '<i class="fas fa-play"></i>'
+
                 : '<i class="fas fa-pause"></i>';
 
     }
+
 
     if (stopListenButton) {
 
@@ -3196,19 +3663,27 @@ function updateSpeechUI() {
 }
 
 
+/* =========================================================
+   STOP SPEECH
+========================================================= */
+
 function stopSpeaking(
     announceStop = false
 ) {
 
     ++speechToken;
 
-    speechChunks = [];
+    speechChunks =
+        [];
 
-    speechChunkIndex = 0;
+    speechChunkIndex =
+        0;
 
-    speechPage = 0;
+    speechPage =
+        0;
 
-    speechMode = "stopped";
+    speechMode =
+        "stopped";
 
     if (
         "speechSynthesis" in window
@@ -3231,6 +3706,10 @@ function stopSpeaking(
 }
 
 
+/* =========================================================
+   START SPEECH PAGE
+========================================================= */
+
 async function startSpeechPage(
     page,
     token
@@ -3240,18 +3719,30 @@ async function startSpeechPage(
         token !== speechToken ||
         speechMode !== "playing"
     ) {
+
         return;
+
     }
 
     const text =
-        await getPageText(page);
+        await getPageText(
+            page
+        );
 
     if (
         token !== speechToken ||
         speechMode !== "playing"
     ) {
+
         return;
+
     }
+
+
+    /*
+     * Scanned/image page:
+     * automatically move to next page.
+     */
 
     if (!text) {
 
@@ -3266,11 +3757,8 @@ async function startSpeechPage(
             const next =
                 page + 1;
 
-            speechPage = next;
-
-            /*
-             * Do not block on a full flip.
-             */
+            speechPage =
+                next;
 
             await renderPage(
                 next,
@@ -3303,13 +3791,17 @@ async function startSpeechPage(
 
     }
 
+
     speechPage =
         page;
 
     speechChunks =
-        splitSpeechText(text);
+        splitSpeechText(
+            text
+        );
 
-    speechChunkIndex = 0;
+    speechChunkIndex =
+        0;
 
     announce(
         `Reading page ${page} of ${pageCount}...`
@@ -3322,6 +3814,10 @@ async function startSpeechPage(
 }
 
 
+/* =========================================================
+   SPEAK NEXT CHUNK
+========================================================= */
+
 function speakNextChunk(
     token
 ) {
@@ -3330,8 +3826,11 @@ function speakNextChunk(
         token !== speechToken ||
         speechMode !== "playing"
     ) {
+
         return;
+
     }
+
 
     if (
         speechChunkIndex >=
@@ -3349,35 +3848,32 @@ function speakNextChunk(
             speechPage =
                 next;
 
-            /*
-             * Render next page without waiting
-             * for flip animation.
-             */
-
             renderPage(
                 next,
                 false
-            ).then(
-                () => {
+            )
+                .then(
+                    () => {
 
-                    if (
-                        token === speechToken &&
-                        speechMode === "playing"
-                    ) {
+                        if (
+                            token === speechToken &&
+                            speechMode === "playing"
+                        ) {
 
-                        startSpeechPage(
-                            next,
-                            token
-                        );
+                            startSpeechPage(
+                                next,
+                                token
+                            );
+
+                        }
 
                     }
-
-                }
-            );
+                );
 
             return;
 
         }
+
 
         stopSpeaking(false);
 
@@ -3389,6 +3885,7 @@ function speakNextChunk(
 
     }
 
+
     const utterance =
         new SpeechSynthesisUtterance(
             speechChunks[
@@ -3396,9 +3893,11 @@ function speakNextChunk(
             ]
         );
 
+
     const voice =
         preferredVoice ||
-        chooseVoice();
+        chooseSpeechVoice();
+
 
     if (voice) {
 
@@ -3416,15 +3915,19 @@ function speakNextChunk(
 
     }
 
+
     utterance.rate =
         Number(
             listenSpeed?.value ||
             1
         );
 
-    utterance.pitch = 1;
+    utterance.pitch =
+        1;
 
-    utterance.volume = 1;
+    utterance.volume =
+        1;
+
 
     utterance.onend =
         () => {
@@ -3433,7 +3936,9 @@ function speakNextChunk(
                 token !== speechToken ||
                 speechMode !== "playing"
             ) {
+
                 return;
+
             }
 
             speechChunkIndex++;
@@ -3444,16 +3949,19 @@ function speakNextChunk(
 
         };
 
+
     utterance.onerror =
         event => {
 
             if (
                 event?.error ===
-                "canceled" ||
+                    "canceled" ||
                 event?.error ===
-                "interrupted"
+                    "interrupted"
             ) {
+
                 return;
+
             }
 
             console.warn(
@@ -3469,12 +3977,17 @@ function speakNextChunk(
 
         };
 
+
     window.speechSynthesis.speak(
         utterance
     );
 
 }
 
+
+/* =========================================================
+   LISTEN BUTTON
+========================================================= */
 
 if (listenButton) {
 
@@ -3486,11 +3999,15 @@ if (listenButton) {
                 !pdfDocument ||
                 !("speechSynthesis" in window)
             ) {
+
                 return;
+
             }
 
+
             if (
-                speechMode === "paused"
+                speechMode ===
+                "paused"
             ) {
 
                 speechMode =
@@ -3507,6 +4024,7 @@ if (listenButton) {
                 return;
 
             }
+
 
             stopSpeaking(false);
 
@@ -3529,7 +4047,13 @@ if (listenButton) {
 }
 
 
-if (pauseListenButton) {
+/* =========================================================
+   PAUSE
+========================================================= */
+
+if (
+    pauseListenButton
+) {
 
     pauseListenButton.addEventListener(
         "click",
@@ -3538,11 +4062,15 @@ if (pauseListenButton) {
             if (
                 !("speechSynthesis" in window)
             ) {
+
                 return;
+
             }
 
+
             if (
-                speechMode === "playing"
+                speechMode ===
+                "playing"
             ) {
 
                 speechMode =
@@ -3556,8 +4084,11 @@ if (pauseListenButton) {
                     "Read aloud paused."
                 );
 
-            } else if (
-                speechMode === "paused"
+            }
+
+            else if (
+                speechMode ===
+                "paused"
             ) {
 
                 speechMode =
@@ -3579,7 +4110,13 @@ if (pauseListenButton) {
 }
 
 
-if (stopListenButton) {
+/* =========================================================
+   STOP
+========================================================= */
+
+if (
+    stopListenButton
+) {
 
     stopListenButton.addEventListener(
         "click",
@@ -3590,6 +4127,10 @@ if (stopListenButton) {
 }
 
 
+/* =========================================================
+   SPEECH SPEED
+========================================================= */
+
 if (listenSpeed) {
 
     listenSpeed.addEventListener(
@@ -3597,33 +4138,39 @@ if (listenSpeed) {
         () => {
 
             if (
-                speechMode ===
+                speechMode !==
                 "playing"
             ) {
 
-                const page =
-                    speechPage ||
-                    currentPage;
-
-                stopSpeaking(false);
-
-                speechMode =
-                    "playing";
-
-                updateSpeechUI();
-
-                startSpeechPage(
-                    page,
-                    speechToken
-                );
+                return;
 
             }
+
+            const page =
+                speechPage ||
+                currentPage;
+
+            stopSpeaking(false);
+
+            speechMode =
+                "playing";
+
+            updateSpeechUI();
+
+            startSpeechPage(
+                page,
+                speechToken
+            );
 
         }
     );
 
 }
 
+
+/* =========================================================
+   MANUAL NAVIGATION STOPS SPEECH
+========================================================= */
 
 function stopSpeechForManualNavigation() {
 
@@ -3675,7 +4222,9 @@ async function loadPDF() {
 
     }
 
-    loadingPDF = true;
+
+    loadingPDF =
+        true;
 
     cancelRender();
 
@@ -3683,23 +4232,15 @@ async function loadPDF() {
 
     stopSpeaking(false);
 
-    if (activeLoadingTask) {
-
-        try {
-            activeLoadingTask.destroy();
-        } catch {}
-
-        activeLoadingTask = null;
-
-    }
-
     pageCache.clear();
 
     pageTextCache.clear();
 
-    currentPage = 1;
+    currentPage =
+        1;
 
-    pageCount = 0;
+    pageCount =
+        0;
 
     updateUI();
 
@@ -3709,18 +4250,18 @@ async function loadPDF() {
         "Loading PDF..."
     );
 
+
     console.log(
         "📖 Loading PDF:",
         PDF_URL
     );
 
+
     try {
 
         /*
-         * Fast startup:
-         * - range requests
-         * - no automatic prefetch
-         * - first page only
+         * IMPORTANT:
+         * This is the fast-loading configuration.
          */
 
         const loadingTask =
@@ -3749,8 +4290,10 @@ async function loadPDF() {
 
             });
 
+
         activeLoadingTask =
             loadingTask;
+
 
         loadingTask.onProgress =
             progress => {
@@ -3764,7 +4307,8 @@ async function loadPDF() {
                             (
                                 progress.loaded /
                                 progress.total
-                            ) * 100
+                            ) *
+                            100
                         );
 
                     announce(
@@ -3774,15 +4318,18 @@ async function loadPDF() {
                 } else {
 
                     announce(
-                        "Loading PDF…"
+                        "Loading PDF..."
+
                     );
 
                 }
 
             };
 
+
         const document =
             await loadingTask.promise;
+
 
         if (
             activeLoadingTask !==
@@ -3790,12 +4337,15 @@ async function loadPDF() {
         ) {
 
             try {
+
                 await document.destroy();
+
             } catch {}
 
             return;
 
         }
+
 
         pdfDocument =
             document;
@@ -3806,6 +4356,7 @@ async function loadPDF() {
         pageCount =
             pdfDocument.numPages;
 
+
         if (!pageCount) {
 
             throw new Error(
@@ -3814,34 +4365,41 @@ async function loadPDF() {
 
         }
 
-        const requested =
+
+        const requestedPage =
             parseInt(
                 params.get("page"),
                 10
             );
 
+
         currentPage =
             (
-                Number.isFinite(requested) &&
-                requested >= 1 &&
-                requested <= pageCount
+                Number.isFinite(
+                    requestedPage
+                ) &&
+                requestedPage >= 1 &&
+                requestedPage <= pageCount
             )
-                ? requested
+                ? requestedPage
                 : 1;
+
 
         updateUI();
 
+
         /*
-         * Only requested page is rendered.
+         * Render FIRST page immediately.
          */
 
-        const success =
+        const rendered =
             await renderPage(
                 currentPage,
                 true
             );
 
-        if (!success) {
+
+        if (!rendered) {
 
             throw new Error(
                 "First page render failed."
@@ -3849,13 +4407,16 @@ async function loadPDF() {
 
         }
 
+
         announce(
             `Page ${currentPage} of ${pageCount}`
         );
 
+
         console.log(
-            `✅ PDF loaded: ${pageCount} pages`
+            `✅ PDF loaded successfully: ${pageCount} pages`
         );
+
 
     } catch (error) {
 
@@ -3864,15 +4425,21 @@ async function loadPDF() {
             error
         );
 
-        pdfDocument = null;
 
-        pageCount = 0;
+        pdfDocument =
+            null;
 
-        currentPage = 1;
+        pageCount =
+            0;
+
+        currentPage =
+            1;
 
         pageCache.clear();
 
+
         updateUI();
+
 
         if (
             error?.name ===
@@ -3883,7 +4450,9 @@ async function loadPDF() {
                 "PDF not found. Check the exact PDF filename and path."
             );
 
-        } else if (
+        }
+
+        else if (
             error?.name ===
             "InvalidPDFException"
         ) {
@@ -3892,19 +4461,51 @@ async function loadPDF() {
                 "The selected file is not a valid PDF."
             );
 
-        } else {
+        }
+
+        else if (
+            error?.name ===
+            "UnexpectedResponseException"
+        ) {
 
             showError(
-                "PDF could not be loaded. Check the PDF URL, hosting and file."
+                "The PDF server rejected the request. Check the PDF path and hosting."
+            );
+
+        }
+
+        else {
+
+            showError(
+                "PDF could not be loaded. Check the PDF URL, filename, hosting and file."
             );
 
         }
 
     } finally {
 
-        loadingPDF = false;
+        loadingPDF =
+            false;
 
     }
+
+}
+
+
+/* =========================================================
+   CANVAS
+========================================================= */
+
+if (pdfCanvas) {
+
+    pdfCanvas.addEventListener(
+        "dragstart",
+        event => {
+
+            event.preventDefault();
+
+        }
+    );
 
 }
 
@@ -3936,15 +4537,21 @@ window.chishtiReader = {
     searchPDF,
 
     get currentPage() {
+
         return currentPage;
+
     },
 
     get pageCount() {
+
         return pageCount;
+
     },
 
     get zoom() {
+
         return zoom;
+
     }
 
 };
@@ -3980,39 +4587,51 @@ console.log(
 );
 
 console.log(
-    "✅ FAST PDF LOADING"
+    "✅ PDF Worker"
 );
 
 console.log(
-    "✅ CTRL+F PDF SEARCH"
+    "✅ Fast PDF Loading"
 );
 
 console.log(
-    "✅ URDU / ARABIC SEARCH"
+    "✅ Ctrl+F Search"
 );
 
 console.log(
-    "✅ READ ALOUD"
+    "✅ PDF Text Search"
 );
 
 console.log(
-    "✅ PAGE FLIP"
+    "✅ Urdu / Arabic Search"
 );
 
 console.log(
-    "✅ MOBILE SWIPE"
+    "✅ Read Aloud"
 );
 
 console.log(
-    "✅ ZOOM"
+    "✅ Pause / Resume / Stop"
 );
 
 console.log(
-    "✅ BOOKMARK"
+    "✅ Page Flip"
 );
 
 console.log(
-    "✅ SHARE"
+    "✅ Mobile Swipe"
+);
+
+console.log(
+    "✅ Zoom"
+);
+
+console.log(
+    "✅ Bookmark"
+);
+
+console.log(
+    "✅ Share"
 );
 
 console.log(
