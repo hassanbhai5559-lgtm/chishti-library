@@ -1371,3 +1371,377 @@ async function downloadWatermarkedPDF() {
         return;
 
     }
+        true;
+
+    pageTransitionBusy =
+        false;
+
+    cancelCurrentRender();
+
+    renderVersion++;
+
+    try {
+
+        setBookTitle();
+
+        announce(
+            "Loading PDF..."
+        );
+
+        console.log(
+            "📖 Loading PDF:",
+            PDF_URL
+        );
+
+        if (preloadTimer) {
+            clearTimeout(preloadTimer);
+            preloadTimer = null;
+        }
+
+        /*
+         * FAST PDF LOADING
+         *
+         * Do not let PDF.js automatically fetch the whole document.
+         * Only the data needed for the first/current page is requested.
+         * This is especially important for large 100+ page books.
+         */
+        const loadingTask =
+            pdfjsLib.getDocument({
+
+                url:
+                    PDF_URL,
+
+                disableAutoFetch:
+                    true,
+
+                disableStream:
+                    false,
+
+                /* Smaller chunks improve perceived startup on slow connections. */
+                rangeChunkSize:
+                    262144,
+
+                /* Keep worker rendering enabled. */
+                useWorkerFetch:
+                    true
+
+            });
+
+
+        pdfDocument =
+            await loadingTask.promise;
+
+
+        pageCount =
+            pdfDocument.numPages;
+
+        pageTextCache.clear();
+        textSearchResults = [];
+        textSearchToken++;
+
+
+        if (!pageCount) {
+
+            throw new Error(
+                "PDF contains no pages."
+            );
+
+        }
+
+
+        const urlPage =
+            parseInt(
+                params.get("page"),
+                10
+            );
+
+
+        if (
+            Number.isFinite(urlPage) &&
+            urlPage >= 1 &&
+            urlPage <= pageCount
+        ) {
+
+            currentPage =
+                urlPage;
+
+        } else {
+
+            currentPage =
+                1;
+
+        }
+
+
+        zoom =
+            DEFAULT_ZOOM;
+
+        updateUI();
+        updateListenUI();
+
+
+        await renderPage(
+            currentPage
+        );
+
+
+        announce(
+            `Page ${currentPage} of ${pageCount}`
+        );
+
+
+        console.log(
+            `✅ PDF loaded successfully: ${pageCount} pages`
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "PDF loading error:",
+            error
+        );
+
+
+        pdfDocument =
+            null;
+
+
+        pageCount =
+            0;
+
+
+        currentPage =
+            1;
+
+
+        updateUI();
+
+
+        if (
+            error?.name ===
+            "MissingPDFException"
+        ) {
+
+            showError(
+                `PDF not found.
+
+Requested:
+${rawBook}
+
+URL:
+${PDF_URL}
+
+Check the exact PDF filename and path.`
+            );
+
+        } else if (
+            error?.name ===
+            "InvalidPDFException"
+        ) {
+
+            showError(
+                "The selected file is not a valid PDF."
+            );
+
+        } else if (
+            error?.name ===
+            "UnexpectedResponseException"
+        ) {
+
+            showError(
+                "The PDF server rejected the request. Check the PDF path and hosting settings."
+            );
+
+        } else {
+
+            showError(
+                "PDF could not be loaded. Check the PDF URL, filename and GitHub Pages path."
+            );
+
+        }
+
+    } finally {
+
+        loadingPDF =
+            false;
+
+    }
+
+}
+
+
+/* =========================================================
+   PREVENT CANVAS DRAG
+========================================================= */
+
+if (pdfCanvas) {
+
+    pdfCanvas.addEventListener(
+        "dragstart",
+        function (event) {
+
+            event.preventDefault();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   GLOBAL API
+   Useful if another script needs these.
+========================================================= */
+
+window.chishtiReader = {
+
+    nextPage,
+
+    previousPage,
+
+    goToPage,
+
+    zoomIn,
+
+    zoomOut,
+
+    resetZoom,
+
+    toggleFullscreen,
+
+    stopSpeaking,
+
+    loadPDF,
+
+    get currentPage() {
+
+        return currentPage;
+
+    },
+
+    get pageCount() {
+
+        return pageCount;
+
+    },
+
+    get zoom() {
+
+        return zoom;
+
+    }
+
+};
+
+
+/* =========================================================
+   START READER
+========================================================= */
+
+loadTheme();
+
+setBookTitle();
+
+updateUI();
+
+loadReaderBooks();
+
+loadPDF();
+
+
+/* =========================================================
+   READY LOG
+========================================================= */
+
+console.log(
+    "======================================"
+);
+
+console.log(
+    "📚 CHISHTI LIBRARY READER"
+);
+
+console.log(
+    "======================================"
+);
+
+console.log(
+    "✅ PDF.js 4.10.38"
+);
+
+console.log(
+    "✅ PDF Worker"
+);
+
+console.log(
+    "✅ PDF Loader"
+);
+
+console.log(
+    "✅ Next / Previous"
+);
+
+console.log(
+    "✅ Premium Page Flip"
+);
+
+console.log(
+    "✅ Page Swap"
+);
+
+console.log(
+    "✅ Mobile Swipe"
+);
+
+console.log(
+    "✅ Keyboard Navigation"
+);
+
+console.log(
+    "✅ Page Counter"
+);
+
+console.log(
+    "✅ Page Input"
+);
+
+console.log(
+    "✅ Zoom"
+);
+
+console.log(
+    "✅ Themes"
+);
+
+console.log(
+    "✅ Fullscreen"
+);
+
+console.log(
+    "✅ Bookmark"
+);
+
+console.log(
+    "✅ Share"
+);
+
+console.log(
+    "✅ Watermarked Download"
+);
+
+console.log(
+    "✅ Watermarked Print"
+);
+
+console.log(
+    "✅ PDF Text Search + Library Search"
+);
+
+console.log(
+    "✅ Read Aloud / Pause / Stop / Speed"
+);
+
+console.log(
+    "======================================"
+);
