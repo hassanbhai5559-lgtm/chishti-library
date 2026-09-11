@@ -3719,92 +3719,93 @@ async function loadPDF() {
         );
 
 
-        const loadingTask =
-            pdfjsLib.getDocument({
+      const loadingTask =
+    pdfjsLib.getDocument({
+        url: PDF_URL,
 
-                url:
-                    PDF_URL,
+        // Load PDF in smaller chunks instead of trying
+        // to fetch the whole file at once.
+        disableAutoFetch: true,
+        disableStream: false,
 
-                /*
-                 * Helps prevent unnecessary
-                 * network/cache conflicts.
-                 */
+        // Smaller network chunks = faster first-page loading
+        rangeChunkSize: 65536,
 
-                disableAutoFetch:
-                    false,
+        // Use the PDF.js worker for rendering
+        useWorkerFetch: true,
 
-                disableStream:
-                    false
-
-            });
-
-
-        pdfDocument =
-            await loadingTask.promise;
+        // Keep compatibility with normal PDF files
+        useSystemFonts: true,
+        isEvalSupported: true
+    });
 
 
-        pageCount =
-            pdfDocument.numPages;
-
-        pageTextCache.clear();
-        textSearchResults = [];
-        textSearchToken++;
+pdfDocument =
+    await loadingTask.promise;
 
 
-        if (!pageCount) {
+pageCount =
+    pdfDocument.numPages;
 
-            throw new Error(
-                "PDF contains no pages."
-            );
-
-        }
-
-
-        const urlPage =
-            parseInt(
-                params.get("page"),
-                10
-            );
+pageTextCache.clear();
+textSearchResults = [];
+textSearchToken++;
 
 
-        if (
-            Number.isFinite(urlPage) &&
-            urlPage >= 1 &&
-            urlPage <= pageCount
-        ) {
+if (!pageCount) {
 
-            currentPage =
-                urlPage;
+    throw new Error(
+        "PDF contains no pages."
+    );
 
-        } else {
-
-            currentPage =
-                1;
-
-        }
+}
 
 
-        zoom =
-            DEFAULT_ZOOM;
+const urlPage =
+    parseInt(
+        params.get("page"),
+        10
+    );
 
 
-        updateUI();
-        updateListenUI();
+if (
+    Number.isFinite(urlPage) &&
+    urlPage >= 1 &&
+    urlPage <= pageCount
+) {
+
+    currentPage =
+        urlPage;
+
+} else {
+
+    currentPage =
+        1;
+
+}
 
 
-        await renderPage(
-            currentPage
-        );
+zoom =
+    DEFAULT_ZOOM;
 
 
-        announce(
-            `Page ${currentPage} of ${pageCount}`
-        );
+updateUI();
+updateListenUI();
 
 
-        console.log(
-            `✅ PDF loaded successfully: ${pageCount} pages`
-        );
+await renderPage(
+    currentPage
+);
+
+
+announce(
+    `Page ${currentPage} of ${pageCount}`
+);
+
+
+console.log(
+    `✅ PDF loaded successfully: ${pageCount} pages`
+);
 
     } catch (error) {
 
