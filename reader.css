@@ -1,16 +1,11 @@
 /* =========================================================
    CHISHTI LIBRARY
-   reader.css
-   PREMIUM LIBRARY MAROON + GOLD READER
-   CLEANED / CONFLICT-FIXED VERSION
-========================================================= */
-
-
-/* =========================================================
-   LIBRARY COLORS
+   PREMIUM READER.CSS
+   CLEAN / FIXED / NO DUPLICATE FLIP SYSTEMS
 ========================================================= */
 
 :root {
+
     --library-maroon: #4B0000;
     --library-deep-maroon: #350000;
     --library-gold: #D4A500;
@@ -20,6 +15,7 @@
     --reader-surface: #350000;
     --reader-accent: #D4A500;
     --reader-text: #FFFFFF;
+
 }
 
 
@@ -27,49 +23,64 @@
    RESET
 ========================================================= */
 
-* {
+*,
+*::before,
+*::after {
+
     box-sizing: border-box;
+
     margin: 0;
+
     padding: 0;
+
 }
+
 
 html,
 body {
+
     width: 100%;
     height: 100%;
+
     margin: 0;
     padding: 0;
+
 }
 
+
 body {
+
     overflow: hidden;
 
-    background: var(--reader-background);
-    color: var(--reader-text);
+    background:
+        var(--reader-background);
+
+    color:
+        var(--reader-text);
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
 
-    transition:
-        background 0.3s ease,
-        color 0.3s ease;
 }
 
 
 /* =========================================================
-   MAIN READER
+   MAIN APP
 ========================================================= */
 
 .reader-app {
+
     position: fixed;
+
     inset: 0;
 
     width: 100%;
     height: 100dvh;
 
     display: flex;
+
     flex-direction: column;
 
     overflow: hidden;
@@ -80,6 +91,7 @@ body {
             var(--library-deep-maroon),
             var(--library-maroon)
         );
+
 }
 
 
@@ -88,29 +100,38 @@ body {
 ========================================================= */
 
 .reader-header {
+
     position: relative;
+
+    z-index: 100;
+
+    flex: 0 0 58px;
 
     width: 100%;
     height: 58px;
-    flex: 0 0 58px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    padding: 0 22px;
+    gap: 16px;
 
-    background: var(--library-deep-maroon);
+    padding:
+        0 22px;
+
+    background:
+        var(--library-deep-maroon);
 
     border-bottom:
         1px solid
-        rgba(212, 165, 0, 0.45);
+        rgba(212,165,0,.45);
 
     box-shadow:
         0 3px 18px
-        rgba(0, 0, 0, 0.35);
+        rgba(0,0,0,.35);
 
-    z-index: 100;
 }
 
 
@@ -119,33 +140,45 @@ body {
 ========================================================= */
 
 .reader-brand {
+
     min-width: 0;
 
     display: flex;
+
     flex-direction: column;
+
     gap: 2px;
+
 }
+
 
 .reader-brand-name {
-    color: var(--library-gold);
+
+    color:
+        var(--library-gold);
 
     font-size: 14px;
+
     font-weight: 800;
 
-    letter-spacing: 0.03em;
+    letter-spacing: .03em;
+
     white-space: nowrap;
 
-    text-shadow:
-        0 1px 5px
-        rgba(0, 0, 0, 0.35);
 }
 
-.reader-brand-title {
-    color: rgba(255, 255, 255, 0.68);
 
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
+.reader-brand-title {
+
+    color:
+        rgba(255,255,255,.65);
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: .16em;
+
 }
 
 
@@ -154,18 +187,26 @@ body {
 ========================================================= */
 
 .book-title {
-    max-width: 55%;
+
+    min-width: 0;
+
+    max-width: 58%;
 
     overflow: hidden;
+
     text-overflow: ellipsis;
+
     white-space: nowrap;
 
-    color: var(--library-white);
+    color:
+        var(--library-white);
 
     font-size: 14px;
+
     font-weight: 600;
 
     text-align: right;
+
 }
 
 
@@ -174,9 +215,11 @@ body {
 ========================================================= */
 
 .reader-area {
+
     position: relative;
 
     flex: 1 1 auto;
+
     min-height: 0;
 
     width: 100%;
@@ -184,24 +227,23 @@ body {
     overflow: hidden;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    background: var(--reader-background);
+    background:
+        var(--reader-background);
 
-    transition:
-        background 0.3s ease;
 }
 
 
 /* =========================================================
-   BOOK VIEWPORT
-   IMPORTANT:
-   Keep overflow AUTO so zoomed PDF pages remain accessible.
+   PDF VIEWPORT
 ========================================================= */
 
-.book-viewport,
-#bookViewport {
+.book-viewport {
+
     position: relative;
 
     width: 100%;
@@ -211,12 +253,14 @@ body {
     min-height: 0;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     overflow: auto;
 
-    padding: 24px;
+    padding: 20px;
 
     scrollbar-width: thin;
 
@@ -224,72 +268,79 @@ body {
         var(--library-gold)
         var(--library-deep-maroon);
 
-    perspective: 1800px;
-    perspective-origin: center center;
+    overscroll-behavior:
+        contain;
 
-    touch-action: pan-y;
+    -webkit-overflow-scrolling:
+        touch;
 
-    isolation: isolate;
 }
 
 
-/* =========================================================
-   SCROLLBAR
-========================================================= */
+/*
+   IMPORTANT:
+   Do NOT add another #bookViewport rule.
+*/
 
-.book-viewport::-webkit-scrollbar,
-#bookViewport::-webkit-scrollbar {
+
+.book-viewport::-webkit-scrollbar {
+
     width: 8px;
     height: 8px;
+
 }
 
-.book-viewport::-webkit-scrollbar-track,
-#bookViewport::-webkit-scrollbar-track {
-    background: var(--library-deep-maroon);
+
+.book-viewport::-webkit-scrollbar-track {
+
+    background:
+        var(--library-deep-maroon);
+
 }
 
-.book-viewport::-webkit-scrollbar-thumb,
-#bookViewport::-webkit-scrollbar-thumb {
-    background: var(--library-gold);
-    border-radius: 20px;
-}
 
-.book-viewport::-webkit-scrollbar-thumb:hover,
-#bookViewport::-webkit-scrollbar-thumb:hover {
-    background: #E6B800;
+.book-viewport::-webkit-scrollbar-thumb {
+
+    background:
+        var(--library-gold);
+
+    border-radius:
+        20px;
+
 }
 
 
 /* =========================================================
-   PDF PAGE
+   PAGE
 ========================================================= */
 
 .page-wrapper {
+
     position: relative;
 
-    flex: 0 0 auto;
+    flex:
+        0 0 auto;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: var(--library-white);
+    display: block;
 
     overflow: hidden;
 
-    border:
-        3px solid
-        rgba(212, 165, 0, 0.65);
+    background:
+        #FFFFFF;
 
     box-shadow:
-        0 18px 50px
-        rgba(0, 0, 0, 0.65),
+        0 12px 40px
+        rgba(0,0,0,.55);
 
-        0 0 0 1px
-        rgba(255, 255, 255, 0.08);
+    border-radius:
+        2px;
 
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
+    user-select:
+        none;
+
+    -webkit-user-select:
+        none;
+
 }
 
 
@@ -298,230 +349,219 @@ body {
 ========================================================= */
 
 #pdfCanvas {
+
     display: block;
 
+    width: auto;
+
+    height: auto;
+
     max-width: none;
-    max-height: none;
 
-    background: var(--library-white);
+    background:
+        #FFFFFF;
 
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
+    user-select:
+        none;
 
-    backface-visibility: hidden;
+    -webkit-user-select:
+        none;
+
+    -webkit-user-drag:
+        none;
+
 }
 
 
 /* =========================================================
-   LARGE WATERMARK
+   PAGE WATERMARK
 ========================================================= */
 
 .page-watermark {
+
     position: absolute;
 
     left: 50%;
     top: 50%;
 
-    z-index: 5;
-
     transform:
-        translate(-50%, -50%)
-        rotate(-30deg);
+        translate(-50%,-50%)
+        rotate(-32deg);
 
-    pointer-events: none;
-    user-select: none;
-
-    white-space: nowrap;
+    pointer-events:
+        none;
 
     color:
-        rgba(75, 0, 0, 0.18);
-
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+        rgba(75,0,0,.12);
 
     font-size:
-        clamp(32px, 5vw, 70px);
+        clamp(
+            20px,
+            4vw,
+            48px
+        );
 
-    font-weight: 800;
+    font-weight:
+        800;
 
-    letter-spacing: 0.09em;
+    white-space:
+        nowrap;
 
-    text-shadow:
-        0 1px 0
-        rgba(212, 165, 0, 0.10);
 }
 
 
 /* =========================================================
-   BOTTOM CONTROL BAR
+   CONTROLS
 ========================================================= */
 
 .reader-controls {
-    position: fixed;
 
-    left: 50%;
-    bottom: 14px;
+    position: relative;
 
-    transform: translateX(-50%);
+    z-index: 100;
 
-    z-index: 99999;
+    flex:
+        0 0 auto;
 
-    width: max-content;
-    max-width: calc(100vw - 24px);
-
-    min-height: 58px;
+    width: 100%;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    flex-wrap: nowrap;
-    gap: 7px;
+    flex-wrap: wrap;
 
-    padding: 8px 10px;
+    gap: 8px;
+
+    padding:
+        10px 14px;
 
     background:
-        linear-gradient(
-            135deg,
-            rgba(75, 0, 0, 0.98),
-            rgba(53, 0, 0, 0.98)
-        );
+        var(--library-deep-maroon);
 
-    border:
+    border-top:
         1px solid
-        rgba(212, 165, 0, 0.45);
-
-    border-radius: 15px;
+        rgba(212,165,0,.35);
 
     box-shadow:
-        0 12px 40px
-        rgba(0, 0, 0, 0.55),
+        0 -5px 20px
+        rgba(0,0,0,.25);
 
-        0 0 25px
-        rgba(75, 0, 0, 0.25);
-
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
-    overflow-x: auto;
-    overflow-y: hidden;
-
-    scrollbar-width: none;
-}
-
-.reader-controls::-webkit-scrollbar {
-    display: none;
 }
 
 
 /* =========================================================
-   BUTTONS
+   BUTTON
 ========================================================= */
 
-.reader-controls button {
-    flex: 0 0 auto;
+.control-button {
 
-    min-width: 42px;
-    height: 38px;
+    min-height: 38px;
 
     display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
 
-    gap: 6px;
+    gap: 7px;
 
-    padding: 0 11px;
+    padding:
+        8px 13px;
 
     border:
         1px solid
-        rgba(212, 165, 0, 0.28);
+        rgba(212,165,0,.45);
 
-    border-radius: 7px;
+    border-radius:
+        8px;
 
     background:
-        rgba(255, 255, 255, 0.08);
+        var(--reader-surface);
 
-    color: var(--library-white);
+    color:
+        var(--library-white);
 
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 700;
+    font-size:
+        13px;
 
-    white-space: nowrap;
+    font-weight:
+        700;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
     transition:
-        background 0.18s ease,
-        border-color 0.18s ease,
-        transform 0.18s ease,
-        color 0.18s ease,
-        box-shadow 0.18s ease;
+        transform .15s ease,
+        background .15s ease,
+        border-color .15s ease;
+
 }
 
 
-/* =========================================================
-   HOVER
-========================================================= */
+.control-button:hover:not(:disabled) {
 
-.reader-controls button:hover:not(:disabled) {
-    background: var(--library-gold);
+    transform:
+        translateY(-1px);
 
-    border-color: var(--library-gold);
+    background:
+        var(--library-maroon);
 
-    color: var(--library-deep-maroon);
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 4px 14px
-        rgba(212, 165, 0, 0.28);
-}
-
-
-/* =========================================================
-   ACTIVE
-========================================================= */
-
-.reader-controls button:active:not(:disabled) {
-    transform: scale(0.96);
-}
-
-
-/* =========================================================
-   FOCUS
-========================================================= */
-
-.reader-controls button:focus-visible {
-    outline:
-        2px solid
+    border-color:
         var(--library-gold);
 
-    outline-offset: 2px;
+}
+
+
+.control-button:active:not(:disabled) {
+
+    transform:
+        scale(.97);
+
+}
+
+
+.control-button:disabled {
+
+    opacity:
+        .45;
+
+    cursor:
+        not-allowed;
+
 }
 
 
 /* =========================================================
-   DISABLED
+   ICON BUTTON
 ========================================================= */
 
-.reader-controls button:disabled {
-    opacity: 0.35;
-    cursor: not-allowed;
-    transform: none;
+.icon-button {
+
+    width: 40px;
+
+    min-width: 40px;
+
+    padding:
+        8px;
+
 }
 
 
 /* =========================================================
-   PREVIOUS / NEXT
+   ACTIVE BOOKMARK
 ========================================================= */
 
-#previousPageButton,
-#nextPageButton {
-    min-width: 88px;
+#bookmarkBtn.active {
+
+    color:
+        var(--library-gold);
+
+    border-color:
+        var(--library-gold);
+
 }
 
 
@@ -530,101 +570,69 @@ body {
 ========================================================= */
 
 .page-counter {
-    flex: 0 0 auto;
 
-    height: 38px;
+    min-height: 38px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     gap: 6px;
 
-    padding: 0 2px;
+    padding:
+        4px 8px;
 
     color:
-        rgba(255, 255, 255, 0.75);
+        var(--library-white);
 
-    font-size: 12px;
+    font-weight:
+        700;
 
-    white-space: nowrap;
 }
 
 
-/* =========================================================
-   PAGE INPUT
-========================================================= */
-
 .page-number-input {
-    width: 46px;
-    height: 38px;
 
-    flex: 0 0 46px;
+    width: 58px;
+
+    height: 32px;
 
     border:
         1px solid
-        rgba(212, 165, 0, 0.38);
+        rgba(212,165,0,.55);
 
-    border-radius: 7px;
+    border-radius:
+        6px;
 
-    outline: none;
+    background:
+        #240000;
 
-    background: var(--library-deep-maroon);
+    color:
+        #FFFFFF;
 
-    color: var(--library-white);
+    text-align:
+        center;
 
-    text-align: center;
+    font-weight:
+        700;
 
-    font-family: inherit;
-    font-size: 12px;
-    font-weight: 700;
+    outline:
+        none;
 
-    appearance: textfield;
 }
 
+
 .page-number-input:focus {
-    border-color: var(--library-gold);
+
+    border-color:
+        var(--library-gold);
 
     box-shadow:
         0 0 0 2px
-        rgba(212, 165, 0, 0.18);
-}
+        rgba(212,165,0,.15);
 
-.page-number-input::-webkit-inner-spin-button,
-.page-number-input::-webkit-outer-spin-button {
-    margin: 0;
-    -webkit-appearance: none;
-}
-
-
-/* =========================================================
-   TOTAL PAGES
-========================================================= */
-
-.total-pages {
-    min-width: 24px;
-
-    color:
-        rgba(255, 255, 255, 0.78);
-
-    text-align: center;
-}
-
-
-/* =========================================================
-   DIVIDER
-========================================================= */
-
-.control-divider {
-    flex: 0 0 1px;
-
-    width: 1px;
-    height: 25px;
-
-    margin: 0 3px;
-
-    background:
-        rgba(212, 165, 0, 0.35);
 }
 
 
@@ -632,618 +640,53 @@ body {
    ZOOM
 ========================================================= */
 
-.zoom-button {
-    width: 38px;
+.zoom-controls {
 
-    min-width: 38px !important;
+    display: flex;
 
-    padding: 0 !important;
+    align-items: center;
 
-    font-size: 18px !important;
-    font-weight: 400 !important;
-}
+    gap: 5px;
 
-.zoom-level {
-    min-width: 58px !important;
-
-    padding: 0 9px !important;
-
-    color: var(--library-gold) !important;
 }
 
 
-/* =========================================================
-   DOWNLOAD
-========================================================= */
+#zoomLevel {
 
-#downloadButton {
-    background:
-        rgba(0, 105, 55, 0.35);
-}
+    min-width:
+        52px;
 
-#downloadButton:hover:not(:disabled) {
-    background: var(--library-gold);
-}
-
-
-/* =========================================================
-   CLEAN DOWNLOAD
-========================================================= */
-
-#cleanDownloadButton {
-    background:
-        rgba(100, 100, 100, 0.20);
+    text-align:
+        center;
 
     color:
-        rgba(255, 255, 255, 0.45);
-}
+        var(--library-gold);
 
-#cleanDownloadButton:disabled {
-    opacity: 0.25;
-    cursor: not-allowed;
+    font-weight:
+        800;
+
 }
 
 
 /* =========================================================
-   PRINT
+   DOWNLOAD / PRINT
 ========================================================= */
 
+#downloadButton,
 #printButton {
-    background:
-        rgba(255, 255, 255, 0.08);
-}
-
-
-/* =========================================================
-   FULLSCREEN
-========================================================= */
-
-#fullscreenButton {
-    background:
-        rgba(212, 165, 0, 0.12);
-
-    color: var(--library-gold);
-}
-
-
-/* =========================================================
-   THEME BUTTON
-========================================================= */
-
-#themeButton {
-    background: var(--library-gold);
-
-    color: var(--library-deep-maroon);
-
-    border-color: var(--library-gold);
-
-    font-size: 17px;
-}
-
-
-/* =========================================================
-   BOOKMARK
-========================================================= */
-
-#bookmarkBtn.active {
-    background: #D4AF37 !important;
-    color: #3B0000 !important;
-}
-
-#bookmarkBtn.active i {
-    color: #3B0000 !important;
-}
-
-#shareBtn:hover,
-#bookmarkBtn:hover {
-    transform: translateY(-2px);
-}
-
-
-/* =========================================================
-   ERROR SCREEN
-========================================================= */
-
-.error-screen {
-    position: absolute;
-    inset: 0;
-
-    z-index: 500;
-
-    display: flex;
-    flex-direction: column;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 12px;
-
-    padding: 30px;
-
-    background: var(--library-deep-maroon);
-
-    text-align: center;
-}
-
-.error-screen[hidden] {
-    display: none;
-}
-
-.error-screen h2 {
-    color: var(--library-white);
-    font-size: 20px;
-}
-
-.error-screen p {
-    max-width: 450px;
 
     color:
-        rgba(255, 255, 255, 0.65);
+        #FFFFFF;
 
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-.error-retry-button {
-    padding: 10px 18px;
-
-    border: none;
-    border-radius: 7px;
-
-    background: var(--library-gold);
-
-    color: var(--library-deep-maroon);
-
-    font-weight: 700;
-
-    cursor: pointer;
 }
 
 
-/* =========================================================
-   SCREEN READER ONLY
-========================================================= */
+#downloadButton:hover:not(:disabled),
+#printButton:hover:not(:disabled) {
 
-.sr-only {
-    position: absolute;
+    border-color:
+        var(--library-gold);
 
-    width: 1px;
-    height: 1px;
-
-    padding: 0;
-    margin: -1px;
-
-    overflow: hidden;
-
-    clip: rect(0, 0, 0, 0);
-
-    white-space: nowrap;
-
-    border: 0;
-}
-
-
-/* =========================================================
-   READER MODE
-========================================================= */
-
-.reader-mode {
-    position: fixed;
-    inset: 0;
-
-    z-index: 99998;
-
-    display: none;
-
-    background: var(--library-deep-maroon);
-
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.reader-mode.active {
-    display: block;
-}
-
-
-/* =========================================================
-   READER CONTENT
-========================================================= */
-
-.reader-content {
-    width: 100%;
-    max-width: 850px;
-
-    min-height: 100%;
-
-    margin: 0 auto;
-
-    padding:
-        80px
-        25px
-        120px;
-
-    color: #222;
-
-    background: var(--library-white);
-
-    font-size: 18px;
-    line-height: 1.9;
-}
-
-.reader-content.dark {
-    background: var(--library-deep-maroon);
-    color: var(--library-white);
-}
-
-.reader-content.sepia {
-    background: #F4ECD8;
-    color: #3D3528;
-}
-
-
-/* =========================================================
-   PREMIUM PAGE FLIP
-   SINGLE CLEAN SYSTEM
-========================================================= */
-
-.chishti-page-flip-stage {
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: var(--flip-width, auto);
-    height: var(--flip-height, auto);
-
-    transform:
-        translate(-50%, -50%);
-
-    transform-style: preserve-3d;
-
-    z-index: 9999;
-
-    pointer-events: none;
-
-    background: transparent;
-
-    perspective: 1800px;
-
-    overflow: visible;
-}
-
-
-.chishti-page-flip-sheet {
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    transform-style: preserve-3d;
-
-    transform-origin: left center;
-
-    will-change: transform;
-}
-
-
-.chishti-page-flip-face {
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: #FFFFFF;
-
-    overflow: hidden;
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-
-    box-shadow:
-        0 12px 40px
-        rgba(0, 0, 0, 0.35);
-}
-
-
-.chishti-page-flip-face canvas {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    max-width: none;
-    max-height: none;
-}
-
-
-.chishti-page-flip-back {
-    transform: rotateY(180deg);
-
-    background:
-        linear-gradient(
-            90deg,
-            #EEEEEE 0%,
-            #FFFFFF 8%,
-            #FFFFFF 92%,
-            #EEEEEE 100%
-        );
-}
-
-
-.chishti-flip-paper {
-    position: absolute;
-
-    inset: 0;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.16),
-            transparent 12%,
-            transparent 88%,
-            rgba(0,0,0,.08)
-        );
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   NEXT FLIP
-========================================================= */
-
-.chishti-flip-next
-.chishti-page-flip-sheet {
-    transform-origin: left center;
-}
-
-.chishti-flip-next.chishti-flip-running
-.chishti-page-flip-sheet {
-    animation:
-        chishtiFlipNext
-        650ms
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-
-/* =========================================================
-   PREVIOUS FLIP
-========================================================= */
-
-.chishti-flip-prev
-.chishti-page-flip-sheet {
-    transform-origin: right center;
-}
-
-.chishti-flip-prev.chishti-flip-running
-.chishti-page-flip-sheet {
-    animation:
-        chishtiFlipPrev
-        650ms
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-
-/* =========================================================
-   NEXT KEYFRAME
-========================================================= */
-
-@keyframes chishtiFlipNext {
-
-    0% {
-        transform:
-            rotateY(0deg)
-            translateZ(0);
-
-        filter: brightness(1);
-    }
-
-    35% {
-        transform:
-            rotateY(-65deg)
-            translateZ(35px);
-
-        filter: brightness(.82);
-    }
-
-    70% {
-        transform:
-            rotateY(-125deg)
-            translateZ(25px);
-
-        filter: brightness(.92);
-    }
-
-    100% {
-        transform:
-            rotateY(-180deg)
-            translateZ(0);
-
-        filter: brightness(1);
-    }
-}
-
-
-/* =========================================================
-   PREVIOUS KEYFRAME
-========================================================= */
-
-@keyframes chishtiFlipPrev {
-
-    0% {
-        transform:
-            rotateY(0deg)
-            translateZ(0);
-
-        filter: brightness(1);
-    }
-
-    35% {
-        transform:
-            rotateY(65deg)
-            translateZ(35px);
-
-        filter: brightness(.82);
-    }
-
-    70% {
-        transform:
-            rotateY(125deg)
-            translateZ(25px);
-
-        filter: brightness(.92);
-    }
-
-    100% {
-        transform:
-            rotateY(180deg)
-            translateZ(0);
-
-        filter: brightness(1);
-    }
-}
-
-
-/* =========================================================
-   OLD FLIP STAGE COMPATIBILITY
-   Kept because reader.js may create this class.
-========================================================= */
-
-.chishti-flip-stage {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 9998;
-
-    pointer-events: none;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    perspective: 1800px;
-
-    overflow: hidden;
-}
-
-
-.chishti-flip-sheet {
-    position: relative;
-
-    transform-style: preserve-3d;
-
-    transform-origin: left center;
-
-    backface-visibility: hidden;
-
-    background: #FFFFFF;
-
-    will-change: transform;
-}
-
-
-.chishti-flip-face {
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    overflow: hidden;
-
-    background: #FFFFFF;
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
-
-
-.chishti-flip-face canvas {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-}
-
-
-.chishti-flip-back {
-    transform: rotateY(180deg);
-}
-
-
-.chishti-flip-sheet::after {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    pointer-events: none;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,0.20),
-            transparent 25%,
-            transparent 75%,
-            rgba(0,0,0,0.12)
-        );
-
-    opacity: 0.5;
-}
-
-
-/* =========================================================
-   FLIP EDGE
-========================================================= */
-
-.chishti-page-edge {
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-
-    width: 8px;
-
-    pointer-events: none;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.18),
-            rgba(255,255,255,.55),
-            rgba(0,0,0,.12)
-        );
-
-    opacity: .75;
-}
-
-.chishti-page-edge-right {
-    right: -4px;
-}
-
-.chishti-page-edge-left {
-    left: -4px;
-}
-
-
-/* =========================================================
-   FLIP STATE
-========================================================= */
-
-.chishti-is-flipping {
-    user-select: none !important;
-    -webkit-user-select: none !important;
 }
 
 
@@ -1252,172 +695,178 @@ body {
 ========================================================= */
 
 .reader-search {
-    width: min(700px, 94%);
-
-    margin: 15px auto;
 
     position: relative;
 
-    z-index: 1000;
+    flex:
+        1 1 280px;
+
+    min-width:
+        240px;
+
+    max-width:
+        500px;
+
 }
 
 
 .reader-search-box {
-    height: 52px;
+
+    width: 100%;
+
+    min-height:
+        40px;
 
     display: flex;
+
     align-items: center;
 
+    gap: 6px;
+
+    padding:
+        4px 6px 4px 11px;
+
     background:
-        rgba(15, 15, 15, 0.96);
+        #240000;
 
     border:
         1px solid
-        rgba(212, 175, 55, 0.45);
+        rgba(212,165,0,.45);
 
-    border-radius: 14px;
+    border-radius:
+        9px;
 
-    box-shadow:
-        0 8px 30px
-        rgba(0, 0, 0, 0.35),
-
-        inset 0 0 15px
-        rgba(212, 175, 55, 0.03);
-
-    transition: 0.3s ease;
-
-    overflow: hidden;
 }
 
 
 .reader-search-box:focus-within {
-    border-color: #D4AF37;
+
+    border-color:
+        var(--library-gold);
 
     box-shadow:
-        0 0 0 3px
-        rgba(212, 175, 55, 0.10),
+        0 0 0 2px
+        rgba(212,165,0,.13);
 
-        0 10px 35px
-        rgba(0, 0, 0, 0.45);
-
-    transform: translateY(-1px);
 }
 
 
 .reader-search-icon {
-    font-size: 20px;
 
-    margin-left: 16px;
-    margin-right: 10px;
+    flex:
+        0 0 auto;
 
-    opacity: 0.9;
+    font-size:
+        15px;
+
 }
 
 
 #readerSearchInput {
-    flex: 1;
 
-    height: 100%;
+    flex:
+        1 1 auto;
 
-    border: none;
-    outline: none;
+    min-width:
+        0;
 
-    background: transparent;
+    height:
+        30px;
 
-    color: #FFFFFF;
+    border:
+        0;
 
-    font-size: 15px;
+    outline:
+        0;
 
-    font-family: inherit;
+    background:
+        transparent;
+
+    color:
+        #FFFFFF;
+
+    font-size:
+        13px;
+
 }
 
 
 #readerSearchInput::placeholder {
+
     color:
-        rgba(255, 255, 255, 0.48);
+        rgba(255,255,255,.55);
+
+}
+
+
+.reader-search-button,
+.reader-search-clear {
+
+    flex:
+        0 0 auto;
+
+    border:
+        0;
+
+    border-radius:
+        7px;
+
+    cursor:
+        pointer;
+
 }
 
 
 .reader-search-button {
-    flex: 0 0 auto;
 
-    height: 100%;
+    min-height:
+        32px;
 
-    padding: 0 15px;
-
-    border: 0;
-
-    border-left:
-        1px solid
-        rgba(212, 165, 0, 0.20);
+    padding:
+        0 10px;
 
     background:
-        rgba(212, 165, 0, 0.10);
+        var(--library-gold);
 
-    color: #D4A500;
+    color:
+        #240000;
 
-    font: inherit;
-    font-weight: 800;
+    font-weight:
+        800;
 
-    cursor: pointer;
-}
-
-
-.reader-search-button:hover {
-    background: #D4A500;
-    color: #350000;
-}
-
-
-.reader-search-button:focus-visible {
-    outline:
-        2px solid
-        #D4A500;
-
-    outline-offset: -2px;
 }
 
 
 .reader-search-clear {
-    width: 45px;
-    height: 100%;
 
-    border: none;
+    width:
+        30px;
 
-    background: transparent;
+    height:
+        30px;
 
-    color: #D4AF37;
+    background:
+        transparent;
 
-    font-size: 17px;
+    color:
+        rgba(255,255,255,.6);
 
-    cursor: pointer;
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition: 0.25s ease;
-}
-
-
-.reader-search-clear.active {
-    opacity: 1;
-    pointer-events: auto;
 }
 
 
 .reader-search-clear:hover {
-    color: #FFFFFF;
-    transform: scale(1.15);
+
+    color:
+        #FFFFFF;
+
 }
 
 
-.reader-search-clear:focus-visible {
-    outline:
-        2px solid
-        #D4A500;
+.reader-search-clear.active {
 
-    outline-offset: -2px;
+    color:
+        var(--library-gold);
+
 }
 
 
@@ -1426,212 +875,293 @@ body {
 ========================================================= */
 
 .reader-search-results {
-    position: absolute;
 
-    top: 60px;
+    position:
+        absolute;
 
-    left: 0;
-    right: 0;
+    left:
+        0;
 
-    max-height: 420px;
+    right:
+        0;
 
-    overflow-y: auto;
+    bottom:
+        calc(100% + 8px);
 
-    display: none;
+    max-height:
+        min(65vh, 520px);
 
-    z-index: 100000;
+    overflow-y:
+        auto;
+
+    display:
+        none;
+
+    padding:
+        6px;
 
     background:
-        rgba(12, 12, 12, 0.98);
+        #210000;
 
     border:
         1px solid
-        rgba(212, 175, 55, 0.35);
+        rgba(212,165,0,.45);
 
-    border-radius: 14px;
+    border-radius:
+        10px;
 
     box-shadow:
-        0 15px 45px
-        rgba(0, 0, 0, 0.55);
+        0 12px 30px
+        rgba(0,0,0,.5);
 
-    backdrop-filter: blur(15px);
+    z-index:
+        500;
+
 }
 
 
 .reader-search-results.show {
-    display: block;
 
-    animation:
-        readerSearchDrop
-        0.2s ease;
-}
+    display:
+        block;
 
-
-@keyframes readerSearchDrop {
-
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =========================================================
-   SEARCH RESULT ITEM
-========================================================= */
-
-.reader-search-result {
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-
-    padding: 12px 15px;
-
-    cursor: pointer;
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,0.06);
-
-    transition: 0.25s ease;
-
-    user-select: none;
-}
-
-
-.reader-search-result:last-child {
-    border-bottom: none;
-}
-
-
-.reader-search-result:hover {
-    background:
-        rgba(212, 175, 55, 0.10);
-}
-
-
-.reader-search-result img {
-    width: 45px;
-    height: 58px;
-
-    object-fit: cover;
-
-    border-radius: 5px;
-
-    border:
-        1px solid
-        rgba(212, 175, 55, 0.3);
-}
-
-
-.reader-search-result-info {
-    min-width: 0;
-    flex: 1;
-}
-
-
-.reader-search-result-info h4 {
-    margin: 0 0 4px;
-
-    color: #FFFFFF;
-
-    font-size: 14px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-
-.reader-search-result-info p {
-    margin: 0;
-
-    color: #D4AF37;
-
-    font-size: 12px;
-}
-
-
-.reader-search-result-type {
-    display: inline-block;
-
-    margin-top: 4px;
-
-    color:
-        rgba(255,255,255,.55);
-
-    font-size: 11px;
-}
-
-
-.reader-search-page {
-    border-left:
-        3px solid
-        #D4A500;
-}
-
-
-.reader-search-page-number {
-    color: #D4A500;
-
-    font-size: 12px;
-
-    font-weight: 800;
-}
-
-
-.reader-search-snippet {
-    margin-top: 4px;
-
-    color:
-        rgba(255,255,255,.62);
-
-    font-size: 11px;
-
-    line-height: 1.4;
-
-    display: -webkit-box;
-
-    -webkit-line-clamp: 2;
-
-    -webkit-box-orient: vertical;
-
-    overflow: hidden;
 }
 
 
 .reader-search-count {
-    padding: 9px 14px;
+
+    padding:
+        9px 10px;
 
     color:
-        rgba(255,255,255,.55);
+        var(--library-gold);
 
-    font-size: 11px;
+    font-size:
+        12px;
 
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.07);
+    font-weight:
+        800;
+
 }
 
 
-.reader-search-empty {
-    padding: 25px;
+.reader-search-result {
 
-    text-align: center;
+    width:
+        100%;
+
+    min-height:
+        58px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin:
+        3px 0;
+
+    padding:
+        8px;
+
+    border:
+        1px solid
+        rgba(212,165,0,.12);
+
+    border-radius:
+        8px;
+
+    background:
+        rgba(255,255,255,.04);
 
     color:
-        rgba(255,255,255,0.6);
+        #FFFFFF;
 
-    font-size: 14px;
+    text-align:
+        left;
+
+    cursor:
+        pointer;
+
+}
+
+
+.reader-search-result:hover,
+.reader-search-result:focus {
+
+    outline:
+        none;
+
+    background:
+        rgba(212,165,0,.13);
+
+    border-color:
+        rgba(212,165,0,.45);
+
+}
+
+
+.reader-search-result-image {
+
+    width:
+        38px;
+
+    height:
+        48px;
+
+    flex:
+        0 0 38px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        5px;
+
+    background:
+        var(--library-maroon);
+
+}
+
+
+.reader-search-result-image img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+}
+
+
+.reader-search-result-info {
+
+    min-width:
+        0;
+
+    flex:
+        1;
+
+}
+
+
+.reader-search-result-title {
+
+    color:
+        #FFFFFF;
+
+    font-size:
+        13px;
+
+    font-weight:
+        800;
+
+}
+
+
+.reader-search-result-author {
+
+    margin-top:
+        2px;
+
+    color:
+        rgba(255,255,255,.6);
+
+    font-size:
+        11px;
+
+}
+
+
+.reader-search-page-number {
+
+    margin-top:
+        3px;
+
+    color:
+        var(--library-gold);
+
+    font-size:
+        11px;
+
+    font-weight:
+        800;
+
+}
+
+
+.reader-search-snippet {
+
+    margin-top:
+        5px;
+
+    color:
+        rgba(255,255,255,.72);
+
+    font-size:
+        11px;
+
+    line-height:
+        1.45;
+
+}
+
+
+.reader-search-result-type {
+
+    display:
+        inline-block;
+
+    margin-top:
+        4px;
+
+    color:
+        var(--library-gold);
+
+    font-size:
+        9px;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.reader-search-empty,
+.reader-search-more {
+
+    padding:
+        14px 10px;
+
+    color:
+        rgba(255,255,255,.75);
+
+    font-size:
+        12px;
+
+    line-height:
+        1.5;
+
 }
 
 
@@ -1639,476 +1169,465 @@ body {
    READ ALOUD
 ========================================================= */
 
-.listen-button {
-    min-width: 82px !important;
+#listenButton {
+
+    border-color:
+        rgba(212,165,0,.65);
+
 }
 
 
-.listen-button.speaking {
-    background: #D4A500 !important;
+#listenButton.speaking {
 
-    border-color: #D4A500 !important;
+    background:
+        var(--library-gold);
 
-    color: #350000 !important;
+    color:
+        #240000;
+
+    border-color:
+        var(--library-gold);
+
 }
 
 
-.listen-speed {
-    flex: 0 0 auto;
+#pauseListenButton,
+#stopListenButton {
 
-    height: 38px;
+    width:
+        40px;
 
-    display: inline-flex;
+    min-width:
+        40px;
 
-    align-items: center;
+    padding:
+        8px;
+
 }
 
 
-.listen-speed select {
-    height: 38px;
+#listenSpeed {
 
-    min-width: 66px;
+    height:
+        38px;
 
-    padding: 0 8px;
+    min-width:
+        70px;
+
+    padding:
+        0 8px;
 
     border:
         1px solid
-        rgba(212,165,0,.30);
+        rgba(212,165,0,.45);
 
-    border-radius: 7px;
+    border-radius:
+        8px;
 
     background:
-        rgba(255,255,255,.08);
+        #240000;
 
-    color: #FFFFFF;
+    color:
+        #FFFFFF;
 
-    font: inherit;
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-
-.listen-speed select:focus-visible {
     outline:
-        2px solid
-        #D4A500;
+        none;
 
-    outline-offset: -2px;
 }
 
 
-.listen-speed option {
-    background: #350000;
-    color: #FFFFFF;
-}
+#listenSpeed:focus {
 
+    border-color:
+        var(--library-gold);
 
-#pauseListenButton:disabled,
-#stopListenButton:disabled {
-    opacity: .30;
 }
 
 
 /* =========================================================
-   TABLET
+   STATUS
 ========================================================= */
 
-@media (max-width: 800px) {
+#readerStatus {
 
-    .reader-header {
-        height: 54px;
-        flex-basis: 54px;
+    position:
+        absolute;
 
-        padding: 0 15px;
-    }
+    left:
+        12px;
 
-    .reader-brand-name {
-        font-size: 12px;
-    }
+    bottom:
+        8px;
 
-    .reader-brand-title {
-        font-size: 9px;
-    }
+    z-index:
+        20;
 
-    .book-title {
-        max-width: 50%;
-        font-size: 12px;
-    }
+    max-width:
+        calc(100% - 24px);
 
-    .book-viewport,
-    #bookViewport {
-        padding: 12px;
-    }
+    padding:
+        5px 9px;
 
-    .reader-controls {
-        bottom: 10px;
+    border-radius:
+        5px;
 
-        gap: 5px;
-        padding: 7px;
-    }
+    background:
+        rgba(0,0,0,.45);
 
-    .reader-controls button {
-        height: 38px;
+    color:
+        rgba(255,255,255,.72);
 
-        min-width: 40px;
+    font-size:
+        10px;
 
-        padding: 0 9px;
-    }
+    pointer-events:
+        none;
 
-    #previousPageButton,
-    #nextPageButton {
-        min-width: 78px;
-    }
-
-    .page-number-input {
-        height: 38px;
-    }
-
-    .page-watermark {
-        font-size:
-            clamp(
-                28px,
-                7vw,
-                55px
-            );
-    }
 }
 
 
 /* =========================================================
-   MOBILE
+   ERROR
 ========================================================= */
 
-@media (max-width: 700px) {
+.error-screen {
 
-    .reader-header {
-        height: 50px;
-        flex-basis: 50px;
+    position:
+        absolute;
 
-        padding: 0 10px;
-    }
+    inset:
+        0;
 
-    .reader-brand-name {
-        font-size: 11px;
-    }
+    z-index:
+        300;
 
-    .reader-brand-title {
-        display: none;
-    }
+    display:
+        flex;
 
-    .book-title {
-        max-width: 52%;
-        font-size: 11px;
-    }
+    flex-direction:
+        column;
 
-    .book-viewport,
-    #bookViewport {
-        padding: 5px;
+    align-items:
+        center;
 
-        perspective: 1200px;
+    justify-content:
+        center;
 
-        overflow: auto;
+    gap:
+        12px;
 
-        touch-action: pan-y;
-    }
+    padding:
+        30px;
 
-    .chishti-flip-stage {
-        perspective: 1200px;
-    }
+    text-align:
+        center;
 
-    .chishti-page-flip-stage {
-        perspective: 1200px;
-    }
+    background:
+        var(--reader-background);
 
-    .reader-controls {
-        left: 50%;
-        right: auto;
+}
 
-        bottom: 8px;
 
-        width:
-            calc(100vw - 14px);
+.error-screen[hidden] {
 
-        max-width:
-            calc(100vw - 14px);
+    display:
+        none;
 
-        min-height: 50px;
+}
 
-        justify-content: flex-start;
 
-        gap: 4px;
+.error-icon {
 
-        padding: 5px;
+    font-size:
+        42px;
 
-        border-radius: 12px;
+    color:
+        var(--library-gold);
 
-        overflow-x: auto;
-        overflow-y: hidden;
+}
 
-        flex-wrap: nowrap;
+
+.error-screen h2 {
+
+    color:
+        #FFFFFF;
+
+    font-size:
+        20px;
+
+}
+
+
+.error-screen p {
+
+    max-width:
+        600px;
+
+    color:
+        rgba(255,255,255,.72);
+
+    white-space:
+        pre-wrap;
+
+    line-height:
+        1.5;
+
+}
+
+
+.error-retry-button {
+
+    padding:
+        10px 18px;
+
+    border:
+        1px solid
+        var(--library-gold);
+
+    border-radius:
+        8px;
+
+    background:
+        var(--library-gold);
+
+    color:
+        #240000;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+}
+
+
+/* =========================================================
+   PREMIUM PAGE FLIP
+   ONLY SYSTEM USED BY CURRENT JS
+========================================================= */
+
+.chishti-page-flip-stage {
+
+    position:
+        absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    z-index:
+        50;
+
+    transform:
+        translate(-50%,-50%);
+
+    pointer-events:
+        none;
+
+    perspective:
+        1800px;
+
+}
+
+
+.chishti-page-flip-sheet {
+
+    position:
+        relative;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    transform-style:
+        preserve-3d;
+
+    transform-origin:
+        center center;
+
+}
+
+
+.chishti-page-flip-face {
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    overflow:
+        hidden;
+
+    backface-visibility:
+        hidden;
+
+    -webkit-backface-visibility:
+        hidden;
+
+    background:
+        #FFFFFF;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.42);
+
+}
+
+
+.chishti-page-flip-face canvas {
+
+    display:
+        block;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        fill;
+
+}
+
+
+.chishti-page-flip-front {
+
+    transform:
+        rotateY(0deg);
+
+}
+
+
+.chishti-page-flip-back {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    transform:
+        rotateY(180deg);
+
+}
+
+
+.chishti-flip-paper {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.04),
+            rgba(255,255,255,.95) 45%,
+            rgba(0,0,0,.08)
+        );
+
+}
+
+
+/* NEXT */
+
+.chishti-flip-next
+.chishti-page-flip-sheet {
+
+    transform:
+        rotateY(0deg);
+
+}
+
+
+.chishti-flip-next.chishti-flip-running
+.chishti-page-flip-sheet {
+
+    animation:
+        chishtiFlipNext
+        450ms
+        cubic-bezier(.2,.7,.2,1)
+        forwards;
+
+}
+
+
+/* PREVIOUS */
+
+.chishti-flip-prev
+.chishti-page-flip-sheet {
+
+    transform:
+        rotateY(0deg);
+
+}
+
+
+.chishti-flip-prev.chishti-flip-running
+.chishti-page-flip-sheet {
+
+    animation:
+        chishtiFlipPrev
+        450ms
+        cubic-bezier(.2,.7,.2,1)
+        forwards;
+
+}
+
+
+@keyframes chishtiFlipNext {
+
+    0% {
 
         transform:
-            translateX(-50%);
+            rotateY(0deg);
+
     }
 
-    .reader-controls button {
-        height: 38px;
-        min-height: 38px;
+    100% {
 
-        min-width: 38px;
+        transform:
+            rotateY(-180deg);
 
-        padding: 0 7px;
-
-        font-size: 11px;
     }
 
-    #previousPageButton,
-    #nextPageButton {
-        min-width: 65px;
-
-        padding: 0 7px;
-    }
-
-    .page-counter {
-        height: 38px;
-
-        gap: 4px;
-
-        padding: 0;
-    }
-
-    .page-number-input {
-        width: 40px;
-
-        min-width: 40px;
-
-        flex-basis: 40px;
-
-        height: 38px;
-
-        font-size: 11px;
-    }
-
-    .total-pages {
-        min-width: 20px;
-
-        font-size: 11px;
-    }
-
-    .control-divider {
-        display: none;
-    }
-
-    .zoom-button {
-        width: 36px;
-
-        min-width: 36px !important;
-
-        font-size: 17px !important;
-    }
-
-    .zoom-level {
-        min-width: 50px !important;
-
-        width: 50px;
-
-        padding: 0 5px !important;
-
-        font-size: 10px !important;
-    }
-
-    .page-watermark {
-        font-size:
-            clamp(
-                22px,
-                8vw,
-                42px
-            );
-
-        letter-spacing: 0.045em;
-    }
-
-    .reader-content {
-        padding:
-            60px
-            16px
-            100px;
-
-        font-size: 17px;
-
-        line-height: 1.8;
-    }
-
-    .reader-search {
-        width: 94%;
-
-        margin: 10px auto;
-    }
-
-    .reader-search-box {
-        height: 48px;
-
-        border-radius: 12px;
-    }
-
-    #readerSearchInput {
-        font-size: 14px;
-    }
-
-    .reader-search-button {
-        padding: 0 12px;
-    }
-
-    .reader-search-button span {
-        display: none;
-    }
-
-    .reader-search-results {
-        top: 56px;
-
-        max-height: 350px;
-    }
-
-    .reader-search-result img {
-        width: 40px;
-        height: 52px;
-    }
-
-    .listen-button {
-        min-width: 74px !important;
-    }
-
-    .listen-speed select {
-        min-width: 62px;
-
-        padding: 0 5px;
-    }
-
-    .chishti-page-flip-face {
-        box-shadow:
-            0 8px 25px
-            rgba(0,0,0,.28);
-    }
 }
 
 
-/* =========================================================
-   VERY SMALL MOBILE
-========================================================= */
+@keyframes chishtiFlipPrev {
 
-@media (max-width: 380px) {
+    0% {
 
-    .reader-controls {
-        width:
-            calc(100vw - 8px);
+        transform:
+            rotateY(0deg);
 
-        max-width:
-            calc(100vw - 8px);
-
-        bottom: 5px;
-
-        gap: 3px;
-
-        padding: 4px;
-
-        border-radius: 10px;
     }
 
-    .reader-controls button {
-        height: 36px;
+    100% {
 
-        min-height: 36px;
+        transform:
+            rotateY(180deg);
 
-        min-width: 36px;
-
-        padding: 0 5px;
-
-        font-size: 10px;
     }
 
-    #previousPageButton,
-    #nextPageButton {
-        min-width: 58px;
-
-        padding: 0 5px;
-    }
-
-    .page-number-input {
-        width: 36px;
-
-        min-width: 36px;
-
-        flex-basis: 36px;
-
-        height: 36px;
-    }
-
-    .zoom-button {
-        width: 34px;
-
-        min-width: 34px !important;
-    }
-
-    .zoom-level {
-        width: 46px;
-
-        min-width: 46px !important;
-    }
-}
-
-
-/* =========================================================
-   LANDSCAPE
-========================================================= */
-
-@media (max-width: 900px) and (orientation: landscape) {
-
-    .reader-header {
-        height: 44px;
-
-        flex-basis: 44px;
-    }
-
-    .reader-controls {
-        bottom: 5px;
-
-        min-height: 46px;
-
-        padding: 4px;
-    }
-
-    .reader-controls button {
-        height: 34px;
-
-        min-height: 34px;
-    }
-
-    .page-number-input {
-        height: 34px;
-    }
-}
-
-
-/* =========================================================
-   TOUCH
-========================================================= */
-
-@media (pointer: coarse) {
-
-    .reader-controls button {
-        -webkit-tap-highlight-color: transparent;
-
-        touch-action: manipulation;
-    }
-
-    .book-viewport,
-    #bookViewport {
-        touch-action: pan-y;
-    }
 }
 
 
@@ -2116,14 +1635,321 @@ body {
    FULLSCREEN
 ========================================================= */
 
-:fullscreen .reader-app {
-    width: 100vw;
-    height: 100dvh;
+.reader-app:fullscreen {
+
+    width:
+        100vw;
+
+    height:
+        100vh;
+
 }
 
-:-webkit-full-screen .reader-app {
-    width: 100vw;
-    height: 100dvh;
+
+.reader-app:fullscreen .reader-header {
+
+    flex-basis:
+        54px;
+
+    height:
+        54px;
+
+}
+
+
+/* =========================================================
+   SCREEN READER
+========================================================= */
+
+.sr-only {
+
+    position:
+        absolute;
+
+    width:
+        1px;
+
+    height:
+        1px;
+
+    padding:
+        0;
+
+    margin:
+        -1px;
+
+    overflow:
+        hidden;
+
+    clip:
+        rect(0,0,0,0);
+
+    white-space:
+        nowrap;
+
+    border:
+        0;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (
+    max-width: 768px
+) {
+
+    .reader-header {
+
+        height:
+            52px;
+
+        flex-basis:
+            52px;
+
+        padding:
+            0 12px;
+
+        gap:
+            8px;
+
+    }
+
+
+    .reader-brand-name {
+
+        font-size:
+            12px;
+
+    }
+
+
+    .reader-brand-title {
+
+        font-size:
+            8px;
+
+    }
+
+
+    .book-title {
+
+        max-width:
+            50%;
+
+        font-size:
+            11px;
+
+    }
+
+
+    .book-viewport {
+
+        padding:
+            8px;
+
+        align-items:
+            center;
+
+        justify-content:
+            center;
+
+    }
+
+
+    .reader-controls {
+
+        gap:
+            5px;
+
+        padding:
+            7px;
+
+    }
+
+
+    .reader-search {
+
+        flex:
+            1 1 100%;
+
+        max-width:
+            none;
+
+        order:
+            -10;
+
+    }
+
+
+    .control-button {
+
+        min-height:
+            34px;
+
+        padding:
+            7px 9px;
+
+        font-size:
+            11px;
+
+    }
+
+
+    .button-label {
+
+        display:
+            inline;
+
+    }
+
+
+    .page-counter {
+
+        min-height:
+            34px;
+
+    }
+
+
+    .page-number-input {
+
+        width:
+            48px;
+
+        height:
+            29px;
+
+    }
+
+
+    #listenSpeed {
+
+        min-width:
+            60px;
+
+        height:
+            34px;
+
+        font-size:
+            11px;
+
+    }
+
+
+    #pauseListenButton,
+    #stopListenButton {
+
+        width:
+            34px;
+
+        min-width:
+            34px;
+
+        height:
+            34px;
+
+        padding:
+            6px;
+
+    }
+
+
+    .reader-search-results {
+
+        bottom:
+            calc(100% + 6px);
+
+        max-height:
+            55vh;
+
+    }
+
+
+    .page-watermark {
+
+        font-size:
+            18px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (
+    max-width: 430px
+) {
+
+    .reader-brand-title {
+
+        display:
+            none;
+
+    }
+
+
+    .book-title {
+
+        max-width:
+            55%;
+
+    }
+
+
+    .reader-controls {
+
+        overflow-x:
+            auto;
+
+        justify-content:
+            flex-start;
+
+        flex-wrap:
+            nowrap;
+
+        scrollbar-width:
+            none;
+
+    }
+
+
+    .reader-controls::-webkit-scrollbar {
+
+        display:
+            none;
+
+    }
+
+
+    .reader-search {
+
+        flex:
+            0 0 100%;
+
+    }
+
+
+    .button-label {
+
+        display:
+            none;
+
+    }
+
+
+    .control-button {
+
+        flex:
+            0 0 auto;
+
+    }
+
 }
 
 
@@ -2131,21 +1957,74 @@ body {
    REDUCED MOTION
 ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@media (
+    prefers-reduced-motion: reduce
+) {
 
     *,
     *::before,
     *::after {
-        transition: none !important;
 
-        animation: none !important;
+        scroll-behavior:
+            auto !important;
 
-        scroll-behavior: auto !important;
+        transition:
+            none !important;
+
+        animation-duration:
+            1ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
     }
 
-    .chishti-flip-forward,
-    .chishti-flip-backward,
-    .chishti-page-flip-sheet {
-        animation-duration: 1ms !important;
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+@media print {
+
+    .reader-header,
+    .reader-controls,
+    #readerStatus,
+    .page-watermark {
+
+        display:
+            none !important;
+
     }
+
+
+    .reader-area,
+    .book-viewport {
+
+        position:
+            static;
+
+        width:
+            100%;
+
+        height:
+            auto;
+
+        overflow:
+            visible;
+
+        background:
+            #FFFFFF;
+
+    }
+
+
+    .page-wrapper {
+
+        box-shadow:
+            none;
+
+    }
+
 }
