@@ -1,7 +1,8 @@
 /* =========================================================
    CHISHTI LIBRARY
    reader.css
-   LIBRARY MAROON + GOLD THEME
+   PREMIUM LIBRARY MAROON + GOLD READER
+   CLEANED / CONFLICT-FIXED VERSION
 ========================================================= */
 
 
@@ -10,21 +11,14 @@
 ========================================================= */
 
 :root {
-
     --library-maroon: #4B0000;
-
     --library-deep-maroon: #350000;
-
     --library-gold: #D4A500;
-
     --library-white: #FFFFFF;
 
     --reader-background: #4B0000;
-
     --reader-surface: #350000;
-
     --reader-accent: #D4A500;
-
     --reader-text: #FFFFFF;
 }
 
@@ -39,27 +33,19 @@
     padding: 0;
 }
 
-
 html,
 body {
-
     width: 100%;
     height: 100%;
-
     margin: 0;
     padding: 0;
 }
 
-
 body {
-
     overflow: hidden;
 
-    background:
-        var(--reader-background);
-
-    color:
-        var(--reader-text);
+    background: var(--reader-background);
+    color: var(--reader-text);
 
     font-family:
         Arial,
@@ -77,16 +63,13 @@ body {
 ========================================================= */
 
 .reader-app {
-
     position: fixed;
-
     inset: 0;
 
     width: 100%;
     height: 100dvh;
 
     display: flex;
-
     flex-direction: column;
 
     overflow: hidden;
@@ -105,25 +88,19 @@ body {
 ========================================================= */
 
 .reader-header {
-
     position: relative;
 
     width: 100%;
-
     height: 58px;
-
     flex: 0 0 58px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
 
     padding: 0 22px;
 
-    background:
-        var(--library-deep-maroon);
+    background: var(--library-deep-maroon);
 
     border-bottom:
         1px solid
@@ -142,28 +119,20 @@ body {
 ========================================================= */
 
 .reader-brand {
-
     min-width: 0;
 
     display: flex;
-
     flex-direction: column;
-
     gap: 2px;
 }
 
-
 .reader-brand-name {
-
-    color:
-        var(--library-gold);
+    color: var(--library-gold);
 
     font-size: 14px;
-
     font-weight: 800;
 
     letter-spacing: 0.03em;
-
     white-space: nowrap;
 
     text-shadow:
@@ -171,16 +140,11 @@ body {
         rgba(0, 0, 0, 0.35);
 }
 
-
 .reader-brand-title {
-
-    color:
-        rgba(255, 255, 255, 0.68);
+    color: rgba(255, 255, 255, 0.68);
 
     font-size: 10px;
-
     text-transform: uppercase;
-
     letter-spacing: 0.15em;
 }
 
@@ -190,20 +154,15 @@ body {
 ========================================================= */
 
 .book-title {
-
     max-width: 55%;
 
     overflow: hidden;
-
     text-overflow: ellipsis;
-
     white-space: nowrap;
 
-    color:
-        var(--library-white);
+    color: var(--library-white);
 
     font-size: 14px;
-
     font-weight: 600;
 
     text-align: right;
@@ -215,11 +174,9 @@ body {
 ========================================================= */
 
 .reader-area {
-
     position: relative;
 
     flex: 1 1 auto;
-
     min-height: 0;
 
     width: 100%;
@@ -227,13 +184,10 @@ body {
     overflow: hidden;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    background:
-        var(--reader-background);
+    background: var(--reader-background);
 
     transition:
         background 0.3s ease;
@@ -242,10 +196,12 @@ body {
 
 /* =========================================================
    BOOK VIEWPORT
+   IMPORTANT:
+   Keep overflow AUTO so zoomed PDF pages remain accessible.
 ========================================================= */
 
-.book-viewport {
-
+.book-viewport,
+#bookViewport {
     position: relative;
 
     width: 100%;
@@ -255,9 +211,7 @@ body {
     min-height: 0;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     overflow: auto;
@@ -269,6 +223,13 @@ body {
     scrollbar-color:
         var(--library-gold)
         var(--library-deep-maroon);
+
+    perspective: 1800px;
+    perspective-origin: center center;
+
+    touch-action: pan-y;
+
+    isolation: isolate;
 }
 
 
@@ -276,33 +237,26 @@ body {
    SCROLLBAR
 ========================================================= */
 
-.book-viewport::-webkit-scrollbar {
-
+.book-viewport::-webkit-scrollbar,
+#bookViewport::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
 
-
-.book-viewport::-webkit-scrollbar-track {
-
-    background:
-        var(--library-deep-maroon);
+.book-viewport::-webkit-scrollbar-track,
+#bookViewport::-webkit-scrollbar-track {
+    background: var(--library-deep-maroon);
 }
 
-
-.book-viewport::-webkit-scrollbar-thumb {
-
-    background:
-        var(--library-gold);
-
+.book-viewport::-webkit-scrollbar-thumb,
+#bookViewport::-webkit-scrollbar-thumb {
+    background: var(--library-gold);
     border-radius: 20px;
 }
 
-
-.book-viewport::-webkit-scrollbar-thumb:hover {
-
-    background:
-        #E6B800;
+.book-viewport::-webkit-scrollbar-thumb:hover,
+#bookViewport::-webkit-scrollbar-thumb:hover {
+    background: #E6B800;
 }
 
 
@@ -311,19 +265,15 @@ body {
 ========================================================= */
 
 .page-wrapper {
-
     position: relative;
 
     flex: 0 0 auto;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    background:
-        var(--library-white);
+    background: var(--library-white);
 
     overflow: hidden;
 
@@ -337,6 +287,9 @@ body {
 
         0 0 0 1px
         rgba(255, 255, 255, 0.08);
+
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
 }
 
 
@@ -345,19 +298,18 @@ body {
 ========================================================= */
 
 #pdfCanvas {
-
     display: block;
 
     max-width: none;
+    max-height: none;
 
-    background:
-        var(--library-white);
+    background: var(--library-white);
 
     user-select: none;
-
     -webkit-user-select: none;
-
     -webkit-touch-callout: none;
+
+    backface-visibility: hidden;
 }
 
 
@@ -366,7 +318,6 @@ body {
 ========================================================= */
 
 .page-watermark {
-
     position: absolute;
 
     left: 50%;
@@ -379,7 +330,6 @@ body {
         rotate(-30deg);
 
     pointer-events: none;
-
     user-select: none;
 
     white-space: nowrap;
@@ -410,32 +360,25 @@ body {
 ========================================================= */
 
 .reader-controls {
-
     position: fixed;
 
     left: 50%;
     bottom: 14px;
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     z-index: 99999;
 
     width: max-content;
-
-    max-width:
-        calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
 
     min-height: 58px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     flex-wrap: nowrap;
-
     gap: 7px;
 
     padding: 8px 10px;
@@ -460,18 +403,14 @@ body {
         0 0 25px
         rgba(75, 0, 0, 0.25);
 
-    backdrop-filter:
-        blur(12px);
-
-    -webkit-backdrop-filter:
-        blur(12px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
     overflow-x: auto;
     overflow-y: hidden;
 
     scrollbar-width: none;
 }
-
 
 .reader-controls::-webkit-scrollbar {
     display: none;
@@ -483,14 +422,12 @@ body {
 ========================================================= */
 
 .reader-controls button {
-
     flex: 0 0 auto;
 
     min-width: 42px;
     height: 38px;
 
     display: inline-flex;
-
     align-items: center;
     justify-content: center;
 
@@ -507,13 +444,10 @@ body {
     background:
         rgba(255, 255, 255, 0.08);
 
-    color:
-        var(--library-white);
+    color: var(--library-white);
 
     font-family: inherit;
-
     font-size: 12px;
-
     font-weight: 700;
 
     white-space: nowrap;
@@ -534,18 +468,13 @@ body {
 ========================================================= */
 
 .reader-controls button:hover:not(:disabled) {
+    background: var(--library-gold);
 
-    background:
-        var(--library-gold);
+    border-color: var(--library-gold);
 
-    border-color:
-        var(--library-gold);
+    color: var(--library-deep-maroon);
 
-    color:
-        var(--library-deep-maroon);
-
-    transform:
-        translateY(-2px);
+    transform: translateY(-2px);
 
     box-shadow:
         0 4px 14px
@@ -558,9 +487,7 @@ body {
 ========================================================= */
 
 .reader-controls button:active:not(:disabled) {
-
-    transform:
-        scale(0.96);
+    transform: scale(0.96);
 }
 
 
@@ -569,7 +496,6 @@ body {
 ========================================================= */
 
 .reader-controls button:focus-visible {
-
     outline:
         2px solid
         var(--library-gold);
@@ -583,11 +509,8 @@ body {
 ========================================================= */
 
 .reader-controls button:disabled {
-
     opacity: 0.35;
-
     cursor: not-allowed;
-
     transform: none;
 }
 
@@ -598,7 +521,6 @@ body {
 
 #previousPageButton,
 #nextPageButton {
-
     min-width: 88px;
 }
 
@@ -608,13 +530,11 @@ body {
 ========================================================= */
 
 .page-counter {
-
     flex: 0 0 auto;
 
     height: 38px;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
@@ -636,7 +556,6 @@ body {
 ========================================================= */
 
 .page-number-input {
-
     width: 46px;
     height: 38px;
 
@@ -650,45 +569,31 @@ body {
 
     outline: none;
 
-    background:
-        var(--library-deep-maroon);
+    background: var(--library-deep-maroon);
 
-    color:
-        var(--library-white);
+    color: var(--library-white);
 
     text-align: center;
 
     font-family: inherit;
-
     font-size: 12px;
-
     font-weight: 700;
+
+    appearance: textfield;
 }
 
-
 .page-number-input:focus {
-
-    border-color:
-        var(--library-gold);
+    border-color: var(--library-gold);
 
     box-shadow:
         0 0 0 2px
         rgba(212, 165, 0, 0.18);
 }
 
-
 .page-number-input::-webkit-inner-spin-button,
 .page-number-input::-webkit-outer-spin-button {
-
     margin: 0;
-
     -webkit-appearance: none;
-}
-
-
-.page-number-input {
-
-    appearance: textfield;
 }
 
 
@@ -697,7 +602,6 @@ body {
 ========================================================= */
 
 .total-pages {
-
     min-width: 24px;
 
     color:
@@ -712,11 +616,9 @@ body {
 ========================================================= */
 
 .control-divider {
-
     flex: 0 0 1px;
 
     width: 1px;
-
     height: 25px;
 
     margin: 0 3px;
@@ -731,33 +633,22 @@ body {
 ========================================================= */
 
 .zoom-button {
-
     width: 38px;
 
-    min-width:
-        38px !important;
+    min-width: 38px !important;
 
-    padding:
-        0 !important;
+    padding: 0 !important;
 
-    font-size:
-        18px !important;
-
-    font-weight:
-        400 !important;
+    font-size: 18px !important;
+    font-weight: 400 !important;
 }
 
-
 .zoom-level {
+    min-width: 58px !important;
 
-    min-width:
-        58px !important;
+    padding: 0 9px !important;
 
-    padding:
-        0 9px !important;
-
-    color:
-        var(--library-gold) !important;
+    color: var(--library-gold) !important;
 }
 
 
@@ -766,16 +657,12 @@ body {
 ========================================================= */
 
 #downloadButton {
-
     background:
         rgba(0, 105, 55, 0.35);
 }
 
-
 #downloadButton:hover:not(:disabled) {
-
-    background:
-        var(--library-gold);
+    background: var(--library-gold);
 }
 
 
@@ -784,7 +671,6 @@ body {
 ========================================================= */
 
 #cleanDownloadButton {
-
     background:
         rgba(100, 100, 100, 0.20);
 
@@ -792,11 +678,8 @@ body {
         rgba(255, 255, 255, 0.45);
 }
 
-
 #cleanDownloadButton:disabled {
-
     opacity: 0.25;
-
     cursor: not-allowed;
 }
 
@@ -806,7 +689,6 @@ body {
 ========================================================= */
 
 #printButton {
-
     background:
         rgba(255, 255, 255, 0.08);
 }
@@ -817,12 +699,10 @@ body {
 ========================================================= */
 
 #fullscreenButton {
-
     background:
         rgba(212, 165, 0, 0.12);
 
-    color:
-        var(--library-gold);
+    color: var(--library-gold);
 }
 
 
@@ -831,17 +711,32 @@ body {
 ========================================================= */
 
 #themeButton {
+    background: var(--library-gold);
 
-    background:
-        var(--library-gold);
+    color: var(--library-deep-maroon);
 
-    color:
-        var(--library-deep-maroon);
-
-    border-color:
-        var(--library-gold);
+    border-color: var(--library-gold);
 
     font-size: 17px;
+}
+
+
+/* =========================================================
+   BOOKMARK
+========================================================= */
+
+#bookmarkBtn.active {
+    background: #D4AF37 !important;
+    color: #3B0000 !important;
+}
+
+#bookmarkBtn.active i {
+    color: #3B0000 !important;
+}
+
+#shareBtn:hover,
+#bookmarkBtn:hover {
+    transform: translateY(-2px);
 }
 
 
@@ -850,72 +745,54 @@ body {
 ========================================================= */
 
 .error-screen {
-
     position: absolute;
-
     inset: 0;
 
     z-index: 500;
 
     display: flex;
-
     flex-direction: column;
 
     align-items: center;
-
     justify-content: center;
 
     gap: 12px;
 
     padding: 30px;
 
-    background:
-        var(--library-deep-maroon);
+    background: var(--library-deep-maroon);
 
     text-align: center;
 }
-
 
 .error-screen[hidden] {
     display: none;
 }
 
-
 .error-screen h2 {
-
-    color:
-        var(--library-white);
-
+    color: var(--library-white);
     font-size: 20px;
 }
 
-
 .error-screen p {
-
     max-width: 450px;
 
     color:
         rgba(255, 255, 255, 0.65);
 
     font-size: 13px;
-
     line-height: 1.6;
 }
 
-
 .error-retry-button {
-
     padding: 10px 18px;
 
     border: none;
-
     border-radius: 7px;
 
-    background:
-        var(--library-gold);
+    background: var(--library-gold);
 
-    color:
-        var(--library-deep-maroon);
+    color: var(--library-deep-maroon);
 
     font-weight: 700;
 
@@ -928,7 +805,6 @@ body {
 ========================================================= */
 
 .sr-only {
-
     position: absolute;
 
     width: 1px;
@@ -952,23 +828,18 @@ body {
 ========================================================= */
 
 .reader-mode {
-
     position: fixed;
-
     inset: 0;
 
     z-index: 99998;
 
     display: none;
 
-    background:
-        var(--library-deep-maroon);
+    background: var(--library-deep-maroon);
 
     overflow-y: auto;
-
     overflow-x: hidden;
 }
-
 
 .reader-mode.active {
     display: block;
@@ -980,9 +851,7 @@ body {
 ========================================================= */
 
 .reader-content {
-
     width: 100%;
-
     max-width: 850px;
 
     min-height: 100%;
@@ -994,35 +863,853 @@ body {
         25px
         120px;
 
-    color:
-        #222;
+    color: #222;
 
-    background:
-        var(--library-white);
+    background: var(--library-white);
 
     font-size: 18px;
-
     line-height: 1.9;
 }
 
-
 .reader-content.dark {
+    background: var(--library-deep-maroon);
+    color: var(--library-white);
+}
 
-    background:
-        var(--library-deep-maroon);
-
-    color:
-        var(--library-white);
+.reader-content.sepia {
+    background: #F4ECD8;
+    color: #3D3528;
 }
 
 
-.reader-content.sepia {
+/* =========================================================
+   PREMIUM PAGE FLIP
+   SINGLE CLEAN SYSTEM
+========================================================= */
+
+.chishti-page-flip-stage {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: var(--flip-width, auto);
+    height: var(--flip-height, auto);
+
+    transform:
+        translate(-50%, -50%);
+
+    transform-style: preserve-3d;
+
+    z-index: 9999;
+
+    pointer-events: none;
+
+    background: transparent;
+
+    perspective: 1800px;
+
+    overflow: visible;
+}
+
+
+.chishti-page-flip-sheet {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    transform-style: preserve-3d;
+
+    transform-origin: left center;
+
+    will-change: transform;
+}
+
+
+.chishti-page-flip-face {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: #FFFFFF;
+
+    overflow: hidden;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
+    box-shadow:
+        0 12px 40px
+        rgba(0, 0, 0, 0.35);
+}
+
+
+.chishti-page-flip-face canvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    max-width: none;
+    max-height: none;
+}
+
+
+.chishti-page-flip-back {
+    transform: rotateY(180deg);
 
     background:
-        #F4ECD8;
+        linear-gradient(
+            90deg,
+            #EEEEEE 0%,
+            #FFFFFF 8%,
+            #FFFFFF 92%,
+            #EEEEEE 100%
+        );
+}
+
+
+.chishti-flip-paper {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.16),
+            transparent 12%,
+            transparent 88%,
+            rgba(0,0,0,.08)
+        );
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   NEXT FLIP
+========================================================= */
+
+.chishti-flip-next
+.chishti-page-flip-sheet {
+    transform-origin: left center;
+}
+
+.chishti-flip-next.chishti-flip-running
+.chishti-page-flip-sheet {
+    animation:
+        chishtiFlipNext
+        650ms
+        cubic-bezier(.22,.61,.36,1)
+        forwards;
+}
+
+
+/* =========================================================
+   PREVIOUS FLIP
+========================================================= */
+
+.chishti-flip-prev
+.chishti-page-flip-sheet {
+    transform-origin: right center;
+}
+
+.chishti-flip-prev.chishti-flip-running
+.chishti-page-flip-sheet {
+    animation:
+        chishtiFlipPrev
+        650ms
+        cubic-bezier(.22,.61,.36,1)
+        forwards;
+}
+
+
+/* =========================================================
+   NEXT KEYFRAME
+========================================================= */
+
+@keyframes chishtiFlipNext {
+
+    0% {
+        transform:
+            rotateY(0deg)
+            translateZ(0);
+
+        filter: brightness(1);
+    }
+
+    35% {
+        transform:
+            rotateY(-65deg)
+            translateZ(35px);
+
+        filter: brightness(.82);
+    }
+
+    70% {
+        transform:
+            rotateY(-125deg)
+            translateZ(25px);
+
+        filter: brightness(.92);
+    }
+
+    100% {
+        transform:
+            rotateY(-180deg)
+            translateZ(0);
+
+        filter: brightness(1);
+    }
+}
+
+
+/* =========================================================
+   PREVIOUS KEYFRAME
+========================================================= */
+
+@keyframes chishtiFlipPrev {
+
+    0% {
+        transform:
+            rotateY(0deg)
+            translateZ(0);
+
+        filter: brightness(1);
+    }
+
+    35% {
+        transform:
+            rotateY(65deg)
+            translateZ(35px);
+
+        filter: brightness(.82);
+    }
+
+    70% {
+        transform:
+            rotateY(125deg)
+            translateZ(25px);
+
+        filter: brightness(.92);
+    }
+
+    100% {
+        transform:
+            rotateY(180deg)
+            translateZ(0);
+
+        filter: brightness(1);
+    }
+}
+
+
+/* =========================================================
+   OLD FLIP STAGE COMPATIBILITY
+   Kept because reader.js may create this class.
+========================================================= */
+
+.chishti-flip-stage {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 9998;
+
+    pointer-events: none;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    perspective: 1800px;
+
+    overflow: hidden;
+}
+
+
+.chishti-flip-sheet {
+    position: relative;
+
+    transform-style: preserve-3d;
+
+    transform-origin: left center;
+
+    backface-visibility: hidden;
+
+    background: #FFFFFF;
+
+    will-change: transform;
+}
+
+
+.chishti-flip-face {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #FFFFFF;
+
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+
+.chishti-flip-face canvas {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+.chishti-flip-back {
+    transform: rotateY(180deg);
+}
+
+
+.chishti-flip-sheet::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,0.20),
+            transparent 25%,
+            transparent 75%,
+            rgba(0,0,0,0.12)
+        );
+
+    opacity: 0.5;
+}
+
+
+/* =========================================================
+   FLIP EDGE
+========================================================= */
+
+.chishti-page-edge {
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+
+    width: 8px;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.18),
+            rgba(255,255,255,.55),
+            rgba(0,0,0,.12)
+        );
+
+    opacity: .75;
+}
+
+.chishti-page-edge-right {
+    right: -4px;
+}
+
+.chishti-page-edge-left {
+    left: -4px;
+}
+
+
+/* =========================================================
+   FLIP STATE
+========================================================= */
+
+.chishti-is-flipping {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.reader-search {
+    width: min(700px, 94%);
+
+    margin: 15px auto;
+
+    position: relative;
+
+    z-index: 1000;
+}
+
+
+.reader-search-box {
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        rgba(15, 15, 15, 0.96);
+
+    border:
+        1px solid
+        rgba(212, 175, 55, 0.45);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.35),
+
+        inset 0 0 15px
+        rgba(212, 175, 55, 0.03);
+
+    transition: 0.3s ease;
+
+    overflow: hidden;
+}
+
+
+.reader-search-box:focus-within {
+    border-color: #D4AF37;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(212, 175, 55, 0.10),
+
+        0 10px 35px
+        rgba(0, 0, 0, 0.45);
+
+    transform: translateY(-1px);
+}
+
+
+.reader-search-icon {
+    font-size: 20px;
+
+    margin-left: 16px;
+    margin-right: 10px;
+
+    opacity: 0.9;
+}
+
+
+#readerSearchInput {
+    flex: 1;
+
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #FFFFFF;
+
+    font-size: 15px;
+
+    font-family: inherit;
+}
+
+
+#readerSearchInput::placeholder {
+    color:
+        rgba(255, 255, 255, 0.48);
+}
+
+
+.reader-search-button {
+    flex: 0 0 auto;
+
+    height: 100%;
+
+    padding: 0 15px;
+
+    border: 0;
+
+    border-left:
+        1px solid
+        rgba(212, 165, 0, 0.20);
+
+    background:
+        rgba(212, 165, 0, 0.10);
+
+    color: #D4A500;
+
+    font: inherit;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+
+.reader-search-button:hover {
+    background: #D4A500;
+    color: #350000;
+}
+
+
+.reader-search-button:focus-visible {
+    outline:
+        2px solid
+        #D4A500;
+
+    outline-offset: -2px;
+}
+
+
+.reader-search-clear {
+    width: 45px;
+    height: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    color: #D4AF37;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition: 0.25s ease;
+}
+
+
+.reader-search-clear.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+.reader-search-clear:hover {
+    color: #FFFFFF;
+    transform: scale(1.15);
+}
+
+
+.reader-search-clear:focus-visible {
+    outline:
+        2px solid
+        #D4A500;
+
+    outline-offset: -2px;
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+========================================================= */
+
+.reader-search-results {
+    position: absolute;
+
+    top: 60px;
+
+    left: 0;
+    right: 0;
+
+    max-height: 420px;
+
+    overflow-y: auto;
+
+    display: none;
+
+    z-index: 100000;
+
+    background:
+        rgba(12, 12, 12, 0.98);
+
+    border:
+        1px solid
+        rgba(212, 175, 55, 0.35);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 15px 45px
+        rgba(0, 0, 0, 0.55);
+
+    backdrop-filter: blur(15px);
+}
+
+
+.reader-search-results.show {
+    display: block;
+
+    animation:
+        readerSearchDrop
+        0.2s ease;
+}
+
+
+@keyframes readerSearchDrop {
+
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   SEARCH RESULT ITEM
+========================================================= */
+
+.reader-search-result {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 12px 15px;
+
+    cursor: pointer;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,0.06);
+
+    transition: 0.25s ease;
+
+    user-select: none;
+}
+
+
+.reader-search-result:last-child {
+    border-bottom: none;
+}
+
+
+.reader-search-result:hover {
+    background:
+        rgba(212, 175, 55, 0.10);
+}
+
+
+.reader-search-result img {
+    width: 45px;
+    height: 58px;
+
+    object-fit: cover;
+
+    border-radius: 5px;
+
+    border:
+        1px solid
+        rgba(212, 175, 55, 0.3);
+}
+
+
+.reader-search-result-info {
+    min-width: 0;
+    flex: 1;
+}
+
+
+.reader-search-result-info h4 {
+    margin: 0 0 4px;
+
+    color: #FFFFFF;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.reader-search-result-info p {
+    margin: 0;
+
+    color: #D4AF37;
+
+    font-size: 12px;
+}
+
+
+.reader-search-result-type {
+    display: inline-block;
+
+    margin-top: 4px;
 
     color:
-        #3D3528;
+        rgba(255,255,255,.55);
+
+    font-size: 11px;
+}
+
+
+.reader-search-page {
+    border-left:
+        3px solid
+        #D4A500;
+}
+
+
+.reader-search-page-number {
+    color: #D4A500;
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.reader-search-snippet {
+    margin-top: 4px;
+
+    color:
+        rgba(255,255,255,.62);
+
+    font-size: 11px;
+
+    line-height: 1.4;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+.reader-search-count {
+    padding: 9px 14px;
+
+    color:
+        rgba(255,255,255,.55);
+
+    font-size: 11px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+}
+
+
+.reader-search-empty {
+    padding: 25px;
+
+    text-align: center;
+
+    color:
+        rgba(255,255,255,0.6);
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   READ ALOUD
+========================================================= */
+
+.listen-button {
+    min-width: 82px !important;
+}
+
+
+.listen-button.speaking {
+    background: #D4A500 !important;
+
+    border-color: #D4A500 !important;
+
+    color: #350000 !important;
+}
+
+
+.listen-speed {
+    flex: 0 0 auto;
+
+    height: 38px;
+
+    display: inline-flex;
+
+    align-items: center;
+}
+
+
+.listen-speed select {
+    height: 38px;
+
+    min-width: 66px;
+
+    padding: 0 8px;
+
+    border:
+        1px solid
+        rgba(212,165,0,.30);
+
+    border-radius: 7px;
+
+    background:
+        rgba(255,255,255,.08);
+
+    color: #FFFFFF;
+
+    font: inherit;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.listen-speed select:focus-visible {
+    outline:
+        2px solid
+        #D4A500;
+
+    outline-offset: -2px;
+}
+
+
+.listen-speed option {
+    background: #350000;
+    color: #FFFFFF;
+}
+
+
+#pauseListenButton:disabled,
+#stopListenButton:disabled {
+    opacity: .30;
 }
 
 
@@ -1033,50 +1720,38 @@ body {
 @media (max-width: 800px) {
 
     .reader-header {
-
         height: 54px;
-
         flex-basis: 54px;
 
         padding: 0 15px;
     }
 
-
     .reader-brand-name {
         font-size: 12px;
     }
-
 
     .reader-brand-title {
         font-size: 9px;
     }
 
-
     .book-title {
-
         max-width: 50%;
-
         font-size: 12px;
     }
 
-
-    .book-viewport {
+    .book-viewport,
+    #bookViewport {
         padding: 12px;
     }
 
-
     .reader-controls {
-
         bottom: 10px;
 
         gap: 5px;
-
         padding: 7px;
     }
 
-
     .reader-controls button {
-
         height: 38px;
 
         min-width: 40px;
@@ -1084,21 +1759,16 @@ body {
         padding: 0 9px;
     }
 
-
     #previousPageButton,
     #nextPageButton {
-
         min-width: 78px;
     }
-
 
     .page-number-input {
         height: 38px;
     }
 
-
     .page-watermark {
-
         font-size:
             clamp(
                 28px,
@@ -1113,45 +1783,49 @@ body {
    MOBILE
 ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 
     .reader-header {
-
         height: 50px;
-
         flex-basis: 50px;
 
         padding: 0 10px;
     }
 
-
     .reader-brand-name {
         font-size: 11px;
     }
-
 
     .reader-brand-title {
         display: none;
     }
 
-
     .book-title {
-
         max-width: 52%;
-
         font-size: 11px;
     }
 
-
-    .book-viewport {
+    .book-viewport,
+    #bookViewport {
         padding: 5px;
+
+        perspective: 1200px;
+
+        overflow: auto;
+
+        touch-action: pan-y;
     }
 
+    .chishti-flip-stage {
+        perspective: 1200px;
+    }
+
+    .chishti-page-flip-stage {
+        perspective: 1200px;
+    }
 
     .reader-controls {
-
         left: 50%;
-
         right: auto;
 
         bottom: 8px;
@@ -1173,7 +1847,6 @@ body {
         border-radius: 12px;
 
         overflow-x: auto;
-
         overflow-y: hidden;
 
         flex-wrap: nowrap;
@@ -1182,11 +1855,8 @@ body {
             translateX(-50%);
     }
 
-
     .reader-controls button {
-
         height: 38px;
-
         min-height: 38px;
 
         min-width: 38px;
@@ -1196,18 +1866,14 @@ body {
         font-size: 11px;
     }
 
-
     #previousPageButton,
     #nextPageButton {
-
         min-width: 65px;
 
         padding: 0 7px;
     }
 
-
     .page-counter {
-
         height: 38px;
 
         gap: 4px;
@@ -1215,9 +1881,7 @@ body {
         padding: 0;
     }
 
-
     .page-number-input {
-
         width: 40px;
 
         min-width: 40px;
@@ -1229,49 +1893,35 @@ body {
         font-size: 11px;
     }
 
-
     .total-pages {
-
         min-width: 20px;
 
         font-size: 11px;
     }
 
-
     .control-divider {
         display: none;
     }
 
-
     .zoom-button {
-
         width: 36px;
 
-        min-width:
-            36px !important;
+        min-width: 36px !important;
 
-        font-size:
-            17px !important;
+        font-size: 17px !important;
     }
 
-
     .zoom-level {
-
-        min-width:
-            50px !important;
+        min-width: 50px !important;
 
         width: 50px;
 
-        padding:
-            0 5px !important;
+        padding: 0 5px !important;
 
-        font-size:
-            10px !important;
+        font-size: 10px !important;
     }
 
-
     .page-watermark {
-
         font-size:
             clamp(
                 22px,
@@ -1279,13 +1929,10 @@ body {
                 42px
             );
 
-        letter-spacing:
-            0.045em;
+        letter-spacing: 0.045em;
     }
 
-
     .reader-content {
-
         padding:
             60px
             16px
@@ -1294,6 +1941,57 @@ body {
         font-size: 17px;
 
         line-height: 1.8;
+    }
+
+    .reader-search {
+        width: 94%;
+
+        margin: 10px auto;
+    }
+
+    .reader-search-box {
+        height: 48px;
+
+        border-radius: 12px;
+    }
+
+    #readerSearchInput {
+        font-size: 14px;
+    }
+
+    .reader-search-button {
+        padding: 0 12px;
+    }
+
+    .reader-search-button span {
+        display: none;
+    }
+
+    .reader-search-results {
+        top: 56px;
+
+        max-height: 350px;
+    }
+
+    .reader-search-result img {
+        width: 40px;
+        height: 52px;
+    }
+
+    .listen-button {
+        min-width: 74px !important;
+    }
+
+    .listen-speed select {
+        min-width: 62px;
+
+        padding: 0 5px;
+    }
+
+    .chishti-page-flip-face {
+        box-shadow:
+            0 8px 25px
+            rgba(0,0,0,.28);
     }
 }
 
@@ -1305,7 +2003,6 @@ body {
 @media (max-width: 380px) {
 
     .reader-controls {
-
         width:
             calc(100vw - 8px);
 
@@ -1321,9 +2018,7 @@ body {
         border-radius: 10px;
     }
 
-
     .reader-controls button {
-
         height: 36px;
 
         min-height: 36px;
@@ -1335,18 +2030,14 @@ body {
         font-size: 10px;
     }
 
-
     #previousPageButton,
     #nextPageButton {
-
         min-width: 58px;
 
         padding: 0 5px;
     }
 
-
     .page-number-input {
-
         width: 36px;
 
         min-width: 36px;
@@ -1356,22 +2047,16 @@ body {
         height: 36px;
     }
 
-
     .zoom-button {
-
         width: 34px;
 
-        min-width:
-            34px !important;
+        min-width: 34px !important;
     }
 
-
     .zoom-level {
-
         width: 46px;
 
-        min-width:
-            46px !important;
+        min-width: 46px !important;
     }
 }
 
@@ -1383,15 +2068,12 @@ body {
 @media (max-width: 900px) and (orientation: landscape) {
 
     .reader-header {
-
         height: 44px;
 
         flex-basis: 44px;
     }
 
-
     .reader-controls {
-
         bottom: 5px;
 
         min-height: 46px;
@@ -1399,14 +2081,11 @@ body {
         padding: 4px;
     }
 
-
     .reader-controls button {
-
         height: 34px;
 
         min-height: 34px;
     }
-
 
     .page-number-input {
         height: 34px;
@@ -1421,19 +2100,14 @@ body {
 @media (pointer: coarse) {
 
     .reader-controls button {
+        -webkit-tap-highlight-color: transparent;
 
-        -webkit-tap-highlight-color:
-            transparent;
-
-        touch-action:
-            manipulation;
+        touch-action: manipulation;
     }
 
-
-    .book-viewport {
-
-        touch-action:
-            pan-x pan-y;
+    .book-viewport,
+    #bookViewport {
+        touch-action: pan-y;
     }
 }
 
@@ -1443,14 +2117,11 @@ body {
 ========================================================= */
 
 :fullscreen .reader-app {
-
     width: 100vw;
     height: 100dvh;
 }
 
-
 :-webkit-full-screen .reader-app {
-
     width: 100vw;
     height: 100dvh;
 }
@@ -1465,1452 +2136,16 @@ body {
     *,
     *::before,
     *::after {
-
         transition: none !important;
 
         animation: none !important;
 
         scroll-behavior: auto !important;
     }
-}
-/* =========================================================
-   CHISHTI LIBRARY — REAL PAGE FLIP ADD-ON
-   Paste at END of reader.css
-========================================================= */
-
-#bookViewport {
-    perspective: 1800px;
-    perspective-origin: center center;
-    overflow: hidden;
-}
-
-#pageWrapper {
-    transform-style: preserve-3d;
-    transform-origin: center center;
-    backface-visibility: hidden;
-    will-change: transform;
-}
-
-/* Flip stage created by reader.js */
-.chishti-flip-stage {
-    position: absolute;
-    inset: 0;
-    z-index: 50;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1800px;
-    overflow: hidden;
-}
-
-.chishti-flip-sheet {
-    position: relative;
-    transform-style: preserve-3d;
-    transform-origin: left center;
-    backface-visibility: hidden;
-    box-shadow:
-        0 12px 35px rgba(0, 0, 0, 0.35),
-        0 3px 12px rgba(0, 0, 0, 0.2);
-    background: #fff;
-    will-change: transform;
-}
-
-.chishti-flip-face {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: #fff;
-    backface-visibility: hidden;
-}
-
-.chishti-flip-face canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-.chishti-flip-back {
-    transform: rotateY(180deg);
-}
-
-/* Page shadow during flip */
-.chishti-flip-sheet::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,0.20),
-            transparent 25%,
-            transparent 75%,
-            rgba(0,0,0,0.12)
-        );
-    opacity: 0.5;
-}
-
-/* Forward */
-.chishti-flip-forward {
-    animation:
-        chishtiPageFlipForward
-        650ms
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-/* Backward */
-.chishti-flip-backward {
-    transform-origin: right center;
-    animation:
-        chishtiPageFlipBackward
-        650ms
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-@keyframes chishtiPageFlipForward {
-
-    0% {
-        transform:
-            rotateY(0deg)
-            translateZ(0);
-    }
-
-    45% {
-        transform:
-            rotateY(-88deg)
-            translateZ(35px);
-    }
-
-    100% {
-        transform:
-            rotateY(-180deg)
-            translateZ(0);
-    }
-}
-
-@keyframes chishtiPageFlipBackward {
-
-    0% {
-        transform:
-            rotateY(0deg)
-            translateZ(0);
-    }
-
-    45% {
-        transform:
-            rotateY(88deg)
-            translateZ(35px);
-    }
-
-    100% {
-        transform:
-            rotateY(180deg)
-            translateZ(0);
-    }
-}
-
-/* Small page edge */
-.chishti-page-edge {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 8px;
-    pointer-events: none;
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.18),
-            rgba(255,255,255,.55),
-            rgba(0,0,0,.12)
-        );
-    opacity: .75;
-}
-
-.chishti-page-edge-right {
-    right: -4px;
-}
-
-.chishti-page-edge-left {
-    left: -4px;
-}
-
-/* During flip don't allow accidental selection */
-.chishti-is-flipping {
-    user-select: none !important;
-    -webkit-user-select: none !important;
-}
-
-/* Mobile */
-@media (max-width: 700px) {
-
-    #bookViewport {
-        perspective: 1200px;
-    }
-
-    .chishti-flip-stage {
-        perspective: 1200px;
-    }
-
-    .chishti-flip-sheet {
-        max-width: 96vw;
-        max-height: 88vh;
-    }
-}
-
-/* Reduced motion accessibility */
-@media (prefers-reduced-motion: reduce) {
 
     .chishti-flip-forward,
-    .chishti-flip-backward {
+    .chishti-flip-backward,
+    .chishti-page-flip-sheet {
         animation-duration: 1ms !important;
-    }
-}
-/* =========================================================
-   CHISHTI LIBRARY
-   REAL 3D PAGE CURL
-========================================================= */
-
-#bookViewport {
-    perspective: 1800px;
-    perspective-origin: center center;
-    overflow: hidden;
-    position: relative;
-    touch-action: pan-y;
-}
-
-
-/* =========================================================
-   BOOK
-========================================================= */
-
-.real-flip-book {
-    position: relative;
-    margin: auto;
-
-    transform-style: preserve-3d;
-
-    perspective: 1800px;
-
-    isolation: isolate;
-
-    overflow: visible;
-}
-
-
-/* =========================================================
-   STATIC PAGE
-========================================================= */
-
-.flip-static-page {
-    position: absolute;
-
-    inset: 0;
-
-    z-index: 1;
-
-    background-color: #fff;
-
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-
-    box-shadow:
-        0 18px 45px rgba(0,0,0,.38),
-        0 4px 12px rgba(0,0,0,.24);
-
-    border-radius: 2px;
-
-    overflow: hidden;
-}
-
-
-/* =========================================================
-   FLIP CANVAS
-========================================================= */
-
-.flip-page {
-    position: absolute;
-
-    top: 0;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: fill;
-
-    background: #fff;
-
-    transform-style: preserve-3d;
-
-    backface-visibility: hidden;
-
-    -webkit-backface-visibility: hidden;
-
-    transform-origin: center left;
-
-    z-index: 5;
-
-    pointer-events: none;
-
-    box-shadow:
-        0 14px 35px rgba(0,0,0,.35);
-}
-
-
-/* =========================================================
-   FRONT
-========================================================= */
-
-.flip-front {
-    left: 0;
-
-    transform-origin: left center;
-
-    z-index: 7;
-}
-
-
-/* =========================================================
-   BACK
-========================================================= */
-
-.flip-back {
-    left: 0;
-
-    transform-origin: right center;
-
-    transform: rotateY(180deg);
-
-    z-index: 6;
-}
-
-
-/* =========================================================
-   PAGE EDGE
-========================================================= */
-
-.flip-front::after,
-.flip-back::after {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-
-    width: 5px;
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   SHADOW
-========================================================= */
-
-.flip-shadow {
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-
-    left: 0;
-
-    width: 100%;
-
-    z-index: 20;
-
-    pointer-events: none;
-
-    opacity: 0;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.38),
-            rgba(0,0,0,.18) 22%,
-            transparent 48%,
-            rgba(0,0,0,.16) 78%,
-            rgba(0,0,0,.32)
-        );
-
-    filter: blur(8px);
-
-    transform:
-        translateZ(20px)
-        scaleX(.98);
-
-    transition:
-        opacity .25s ease;
-}
-
-
-/* =========================================================
-   NEXT PAGE
-   1 -> 2
-   2 -> 3
-========================================================= */
-
-.real-flip-book.flip-next
-.flip-front {
-
-    animation:
-        realPageCurlNext
-        2s
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-
-.real-flip-book.flip-next
-.flip-back {
-
-    animation:
-        realPageBackNext
-        2s
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-
-.real-flip-book.flip-next
-.flip-shadow {
-
-    animation:
-        flipShadowNext
-        2s
-        ease-in-out
-        forwards;
-}
-
-
-/* =========================================================
-   PREVIOUS PAGE
-   3 -> 2
-   2 -> 1
-========================================================= */
-
-.real-flip-book.flip-prev
-.flip-front {
-
-    animation:
-        realPageCurlPrev
-        2s
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-
-.real-flip-book.flip-prev
-.flip-back {
-
-    animation:
-        realPageBackPrev
-        2s
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-}
-
-
-.real-flip-book.flip-prev
-.flip-shadow {
-
-    animation:
-        flipShadowPrev
-        2s
-        ease-in-out
-        forwards;
-}
-
-
-/* =========================================================
-   NEXT CURL
-========================================================= */
-
-@keyframes realPageCurlNext {
-
-    0% {
-        transform:
-            rotateY(0deg)
-            translateZ(0)
-            scaleX(1);
-
-        box-shadow:
-            0 18px 40px rgba(0,0,0,.34);
-    }
-
-    20% {
-        transform:
-            rotateY(-28deg)
-            translateZ(45px)
-            scaleX(.98);
-
-        box-shadow:
-            18px 12px 30px rgba(0,0,0,.30);
-    }
-
-    50% {
-        transform:
-            rotateY(-90deg)
-            translateZ(75px)
-            scaleX(.92);
-
-        box-shadow:
-            35px 12px 40px rgba(0,0,0,.28);
-    }
-
-    75% {
-        transform:
-            rotateY(-145deg)
-            translateZ(50px)
-            scaleX(.96);
-
-        box-shadow:
-            20px 10px 28px rgba(0,0,0,.24);
-    }
-
-    100% {
-        transform:
-            rotateY(-180deg)
-            translateZ(0)
-            scaleX(1);
-
-        box-shadow:
-            none;
-    }
-}
-
-
-/* =========================================================
-   NEXT BACK
-========================================================= */
-
-@keyframes realPageBackNext {
-
-    0% {
-        transform:
-            rotateY(180deg);
-    }
-
-    50% {
-        transform:
-            rotateY(90deg);
-    }
-
-    100% {
-        transform:
-            rotateY(0deg);
-    }
-}
-
-
-/* =========================================================
-   PREVIOUS CURL
-========================================================= */
-
-@keyframes realPageCurlPrev {
-
-    0% {
-        transform:
-            rotateY(0deg)
-            translateZ(0)
-            scaleX(1);
-    }
-
-    20% {
-        transform:
-            rotateY(28deg)
-            translateZ(45px)
-            scaleX(.98);
-    }
-
-    50% {
-        transform:
-            rotateY(90deg)
-            translateZ(75px)
-            scaleX(.92);
-    }
-
-    75% {
-        transform:
-            rotateY(145deg)
-            translateZ(50px)
-            scaleX(.96);
-    }
-
-    100% {
-        transform:
-            rotateY(180deg)
-            translateZ(0)
-            scaleX(1);
-    }
-}
-
-
-/* =========================================================
-   PREVIOUS BACK
-========================================================= */
-
-@keyframes realPageBackPrev {
-
-    0% {
-        transform:
-            rotateY(-180deg);
-    }
-
-    50% {
-        transform:
-            rotateY(-90deg);
-    }
-
-    100% {
-        transform:
-            rotateY(0deg);
-    }
-}
-
-
-/* =========================================================
-   NEXT SHADOW
-========================================================= */
-
-@keyframes flipShadowNext {
-
-    0% {
-        opacity: 0;
-        transform:
-            translateX(0)
-            scaleX(.75);
-    }
-
-    25% {
-        opacity: .32;
-        transform:
-            translateX(8%)
-            scaleX(.95);
-    }
-
-    50% {
-        opacity: .62;
-        transform:
-            translateX(20%)
-            scaleX(1.05);
-    }
-
-    75% {
-        opacity: .30;
-        transform:
-            translateX(35%)
-            scaleX(.92);
-    }
-
-    100% {
-        opacity: 0;
-        transform:
-            translateX(50%)
-            scaleX(.7);
-    }
-}
-
-
-/* =========================================================
-   PREVIOUS SHADOW
-========================================================= */
-
-@keyframes flipShadowPrev {
-
-    0% {
-        opacity: 0;
-        transform:
-            translateX(0)
-            scaleX(.75);
-    }
-
-    25% {
-        opacity: .32;
-        transform:
-            translateX(-8%)
-            scaleX(.95);
-    }
-
-    50% {
-        opacity: .62;
-        transform:
-            translateX(-20%)
-            scaleX(1.05);
-    }
-
-    75% {
-        opacity: .30;
-        transform:
-            translateX(-35%)
-            scaleX(.92);
-    }
-
-    100% {
-        opacity: 0;
-        transform:
-            translateX(-50%)
-            scaleX(.7);
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 700px) {
-
-    #bookViewport {
-        perspective:
-            1100px;
-    }
-
-    .real-flip-book {
-        perspective:
-            1100px;
-    }
-
-    .flip-shadow {
-        filter:
-            blur(5px);
-    }
-}
-
-
-/* =========================================================
-   REDUCE MOTION
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    .real-flip-book.flip-next
-    .flip-front,
-    .real-flip-book.flip-next
-    .flip-back,
-    .real-flip-book.flip-next
-    .flip-shadow,
-    .real-flip-book.flip-prev
-    .flip-front,
-    .real-flip-book.flip-prev
-    .flip-back,
-    .real-flip-book.flip-prev
-    .flip-shadow {
-
-        animation-duration:
-            .35s !important;
-    }
-}
-#bookmarkBtn.active {
-    background: #d4af37 !important;
-    color: #3b0000 !important;
-}
-
-#bookmarkBtn.active i {
-    color: #3b0000 !important;
-}
-
-#shareBtn:hover,
-#bookmarkBtn:hover {
-    transform: translateY(-2px);
-}
-
-/*=========================================================
-   CHISHTI READER
-   PREMIUM BOOK SEARCH
-=========================================================*/
-
-.reader-search {
-    width: min(700px, 94%);
-    margin: 15px auto;
-    position: relative;
-    z-index: 1000;
-}
-
-.reader-search-box {
-    height: 52px;
-    display: flex;
-    align-items: center;
-
-    background: rgba(15, 15, 15, 0.96);
-
-    border: 1px solid rgba(212, 175, 55, 0.45);
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.35),
-        inset 0 0 15px rgba(212, 175, 55, 0.03);
-
-    transition: 0.3s ease;
-
-    overflow: hidden;
-}
-
-.reader-search-box:focus-within {
-
-    border-color: #d4af37;
-
-    box-shadow:
-        0 0 0 3px rgba(212, 175, 55, 0.10),
-        0 10px 35px rgba(0, 0, 0, 0.45);
-
-    transform: translateY(-1px);
-}
-
-.reader-search-icon {
-
-    font-size: 20px;
-
-    margin-left: 16px;
-    margin-right: 10px;
-
-    opacity: 0.9;
-}
-
-#readerSearchInput {
-
-    flex: 1;
-
-    height: 100%;
-
-    border: none;
-    outline: none;
-
-    background: transparent;
-
-    color: #fff;
-
-    font-size: 15px;
-
-    font-family: inherit;
-}
-
-#readerSearchInput::placeholder {
-
-    color: rgba(255, 255, 255, 0.48);
-
-}
-
-.reader-search-clear {
-
-    width: 45px;
-    height: 100%;
-
-    border: none;
-
-    background: transparent;
-
-    color: #d4af37;
-
-    font-size: 17px;
-
-    cursor: pointer;
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition: 0.25s ease;
-}
-
-.reader-search-clear.active {
-
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.reader-search-clear:hover {
-
-    color: #fff;
-
-    transform: scale(1.15);
-
-}
-
-
-/*=========================================================
-   SEARCH RESULTS
-=========================================================*/
-
-.reader-search-results {
-
-    position: absolute;
-
-    top: 60px;
-
-    left: 0;
-    right: 0;
-
-    max-height: 420px;
-
-    overflow-y: auto;
-
-    display: none;
-
-    background: rgba(12, 12, 12, 0.98);
-
-    border: 1px solid rgba(212, 175, 55, 0.35);
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 15px 45px rgba(0, 0, 0, 0.55);
-
-    backdrop-filter: blur(15px);
-}
-
-.reader-search-results.show {
-
-    display: block;
-
-    animation: readerSearchDrop 0.2s ease;
-}
-
-@keyframes readerSearchDrop {
-
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-}
-
-
-/*=========================================================
-   RESULT ITEM
-=========================================================*/
-
-.reader-search-result {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-
-    padding: 12px 15px;
-
-    cursor: pointer;
-
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-
-    transition: 0.25s ease;
-}
-
-.reader-search-result:last-child {
-
-    border-bottom: none;
-
-}
-
-.reader-search-result:hover {
-
-    background: rgba(212, 175, 55, 0.10);
-
-}
-
-.reader-search-result img {
-
-    width: 45px;
-    height: 58px;
-
-    object-fit: cover;
-
-    border-radius: 5px;
-
-    border: 1px solid rgba(212, 175, 55, 0.3);
-}
-
-.reader-search-result-info {
-
-    min-width: 0;
-    flex: 1;
-}
-
-.reader-search-result-info h4 {
-
-    margin: 0 0 4px;
-
-    color: #fff;
-
-    font-size: 14px;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-}
-
-.reader-search-result-info p {
-
-    margin: 0;
-
-    color: #d4af37;
-
-    font-size: 12px;
-
-}
-
-.reader-search-empty {
-
-    padding: 25px;
-
-    text-align: center;
-
-    color: rgba(255,255,255,0.6);
-
-    font-size: 14px;
-}
-
-
-/*=========================================================
-   MOBILE
-=========================================================*/
-
-@media (max-width: 600px) {
-
-    .reader-search {
-
-        width: 94%;
-
-        margin: 10px auto;
-    }
-
-    .reader-search-box {
-
-        height: 48px;
-
-        border-radius: 12px;
-    }
-
-    #readerSearchInput {
-
-        font-size: 14px;
-    }
-
-    .reader-search-results {
-
-        top: 56px;
-
-        max-height: 350px;
-    }
-
-    .reader-search-result img {
-
-        width: 40px;
-        height: 52px;
-    }
-
-}
-
-/* =========================================================
-   CHISHTI PREMIUM PAGE FLIP
-========================================================= */
-
-#bookViewport {
-    position: relative;
-    perspective: 1800px;
-    overflow: hidden;
-}
-
-.chishti-page-flip-stage {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform:
-        translate(-50%, -50%)
-        rotateY(0deg);
-
-    transform-style: preserve-3d;
-    z-index: 9999;
-    pointer-events: none;
-
-    background: #fff;
-}
-
-.chishti-page-flip-sheet {
-    position: relative;
-    width: 100%;
-    height: 100%;
-
-    transform-style: preserve-3d;
-    transform-origin: center center;
-}
-
-.chishti-page-flip-face {
-    position: absolute;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: #fff;
-
-    overflow: hidden;
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-
-    box-shadow:
-        0 12px 40px rgba(0,0,0,.35);
-}
-
-.chishti-page-flip-face canvas {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-}
-
-.chishti-page-flip-back {
-    transform: rotateY(180deg);
-
-    background:
-        linear-gradient(
-            90deg,
-            #eeeeee 0%,
-            #ffffff 8%,
-            #ffffff 92%,
-            #eeeeee 100%
-        );
-}
-
-.chishti-flip-paper {
-    position: absolute;
-    inset: 0;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.16),
-            transparent 12%,
-            transparent 88%,
-            rgba(0,0,0,.08)
-        );
-}
-
-
-/* =========================
-   NEXT
-========================= */
-
-.chishti-flip-next
-.chishti-page-flip-sheet {
-
-    transform-origin: left center;
-
-}
-
-
-.chishti-flip-next.chishti-flip-running
-.chishti-page-flip-sheet {
-
-    animation:
-        chishtiFlipNext
-        650ms
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-
-}
-
-
-/* =========================
-   PREVIOUS
-========================= */
-
-.chishti-flip-prev
-.chishti-page-flip-sheet {
-
-    transform-origin: right center;
-
-}
-
-
-.chishti-flip-prev.chishti-flip-running
-.chishti-page-flip-sheet {
-
-    animation:
-        chishtiFlipPrev
-        650ms
-        cubic-bezier(.22,.61,.36,1)
-        forwards;
-
-}
-
-
-/* =========================
-   NEXT KEYFRAME
-========================= */
-
-@keyframes chishtiFlipNext {
-
-    0% {
-
-        transform:
-            rotateY(0deg);
-
-        filter:
-            brightness(1);
-
-    }
-
-    35% {
-
-        filter:
-            brightness(.82);
-
-    }
-
-    70% {
-
-        filter:
-            brightness(.92);
-
-    }
-
-    100% {
-
-        transform:
-            rotateY(-180deg);
-
-        filter:
-            brightness(1);
-
-    }
-
-}
-
-
-/* =========================
-   PREVIOUS KEYFRAME
-========================= */
-
-@keyframes chishtiFlipPrev {
-
-    0% {
-
-        transform:
-            rotateY(0deg);
-
-        filter:
-            brightness(1);
-
-    }
-
-    35% {
-
-        filter:
-            brightness(.82);
-
-    }
-
-    70% {
-
-        filter:
-            brightness(.92);
-
-    }
-
-    100% {
-
-        transform:
-            rotateY(180deg);
-
-        filter:
-            brightness(1);
-
-    }
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 768px) {
-
-    #bookViewport {
-
-        perspective:
-            1200px;
-
-    }
-
-    .chishti-page-flip-face {
-
-        box-shadow:
-            0 8px 25px rgba(0,0,0,.28);
-
-    }
-
-}
-
-/* =========================================================
-   CHISHTI READER — FIX PACK
-   Search + Read Aloud + Flip selector corrections
-========================================================= */
-
-/* The page-flip selectors in the older CSS were missing a
-   descendant space. These rules intentionally override them. */
-.chishti-flip-next .chishti-page-flip-sheet {
-    transform-origin: left center;
-}
-
-.chishti-flip-next.chishti-flip-running .chishti-page-flip-sheet {
-    animation: chishtiFlipNext 650ms cubic-bezier(.22,.61,.36,1) forwards;
-}
-
-.chishti-flip-prev .chishti-page-flip-sheet {
-    transform-origin: right center;
-}
-
-.chishti-flip-prev.chishti-flip-running .chishti-page-flip-sheet {
-    animation: chishtiFlipPrev 650ms cubic-bezier(.22,.61,.36,1) forwards;
-}
-
-/* Search button was present in HTML but had no matching styling. */
-.reader-search-button {
-    flex: 0 0 auto;
-    height: 100%;
-    padding: 0 15px;
-    border: 0;
-    border-left: 1px solid rgba(212,165,0,.20);
-    background: rgba(212,165,0,.10);
-    color: #D4A500;
-    font: inherit;
-    font-weight: 800;
-    cursor: pointer;
-}
-
-.reader-search-button:hover {
-    background: #D4A500;
-    color: #350000;
-}
-
-.reader-search-button:focus-visible,
-.reader-search-clear:focus-visible,
-.listen-speed select:focus-visible {
-    outline: 2px solid #D4A500;
-    outline-offset: -2px;
-}
-
-.reader-search-results {
-    z-index: 100000;
-}
-
-.reader-search-result {
-    user-select: none;
-}
-
-.reader-search-result-type {
-    display: inline-block;
-    margin-top: 4px;
-    color: rgba(255,255,255,.55);
-    font-size: 11px;
-}
-
-.reader-search-page {
-    border-left: 3px solid #D4A500;
-}
-
-.reader-search-page-number {
-    color: #D4A500;
-    font-size: 12px;
-    font-weight: 800;
-}
-
-.reader-search-snippet {
-    margin-top: 4px;
-    color: rgba(255,255,255,.62);
-    font-size: 11px;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.reader-search-count {
-    padding: 9px 14px;
-    color: rgba(255,255,255,.55);
-    font-size: 11px;
-    border-bottom: 1px solid rgba(255,255,255,.07);
-}
-
-/* Read-aloud controls */
-.listen-button {
-    min-width: 82px !important;
-}
-
-.listen-button.speaking {
-    background: #D4A500 !important;
-    border-color: #D4A500 !important;
-    color: #350000 !important;
-}
-
-.listen-speed {
-    flex: 0 0 auto;
-    height: 38px;
-    display: inline-flex;
-    align-items: center;
-}
-
-.listen-speed select {
-    height: 38px;
-    min-width: 66px;
-    padding: 0 8px;
-    border: 1px solid rgba(212,165,0,.30);
-    border-radius: 7px;
-    background: rgba(255,255,255,.08);
-    color: #fff;
-    font: inherit;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.listen-speed option {
-    background: #350000;
-    color: #fff;
-}
-
-#pauseListenButton:disabled,
-#stopListenButton:disabled {
-    opacity: .30;
-}
-
-@media (max-width: 600px) {
-    .reader-search-button {
-        padding: 0 12px;
-    }
-
-    .reader-search-button span {
-        display: none;
-    }
-
-    .listen-button {
-        min-width: 74px !important;
-    }
-
-    .listen-speed select {
-        min-width: 62px;
-        padding: 0 5px;
     }
 }
