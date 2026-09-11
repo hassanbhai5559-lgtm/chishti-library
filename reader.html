@@ -12,20 +12,20 @@
 
     <meta
         name="description"
-        content="ChishtiLibrary.com Premium Digital Book Reader"
+        content="Chishti Library Premium Digital Book Reader"
     >
 
     <meta
         name="theme-color"
-        content="#000000"
+        content="#350000"
     >
 
-    <title>Chishti Reader — ChishtiLibrary.com</title>
+    <title>
+        Chishti Reader
+    </title>
 
 
-    <!-- =====================================================
-         FONT AWESOME
-    ====================================================== -->
+    <!-- Font Awesome -->
 
     <link
         rel="stylesheet"
@@ -33,1093 +33,569 @@
     >
 
 
-    <!-- =====================================================
-         READER CSS
-    ====================================================== -->
+    <!-- Reader CSS -->
 
     <link
         rel="stylesheet"
         href="./reader.css"
     >
 
-</head>
 
-
-<body>
-
-    <!-- =====================================================
-         MAIN READER
-    ====================================================== -->
-
-    <main
-        id="readerApp"
-        class="reader-app"
-        aria-label="ChishtiLibrary digital book reader"
-    >
-
-
-        <!-- =================================================
-             HEADER
-        ================================================== -->
-
-        <header
-            id="readerHeader"
-            class="reader-header"
-        >
-
-            <div class="reader-brand">
-
-                <div class="reader-brand-name">
-                    ChishtiLibrary.com
-                </div>
-
-                <div class="reader-brand-title">
-                    CHISHTI READER
-                </div>
-
-            </div>
-
-
-            <h1
-                id="bookTitle"
-                class="book-title"
-            >
-                Digital Book
-            </h1>
-
-        </header>
-
-
-        <!-- =================================================
-             READER AREA
-        ================================================== -->
-
-        <section
-            id="readerArea"
-            class="reader-area"
-            aria-label="Book page"
-        >
-
-            <div
-                id="bookViewport"
-                class="book-viewport"
-            >
-
-                <div
-                    id="pageWrapper"
-                    class="page-wrapper"
-                >
-
-                    <canvas
-                        id="pdfCanvas"
-                        aria-label="Current book page"
-                    ></canvas>
-
-
-                    <!-- Watermark shown while reading -->
-
-                    <div
-                        id="pageWatermark"
-                        class="page-watermark"
-                        aria-hidden="true"
-                    >
-                        ChishtiLibrary.com
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 ERROR SCREEN
-            ================================================== -->
-
-            <div
-                id="errorScreen"
-                class="error-screen"
-                hidden
-            >
-
-                <div class="error-icon">
-                    ⚠
-                </div>
-
-                <h2>
-                    Unable to open book
-                </h2>
-
-                <p id="errorMessage">
-                    The selected PDF could not be loaded.
-                </p>
-
-                <button
-                    id="retryButton"
-                    class="error-retry-button"
-                    type="button"
-                >
-                    Try Again
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             READER CONTROLS
-        ================================================== -->
-
-        <nav
-            id="readerControls"
-            class="reader-controls"
-            aria-label="Book controls"
-        >
-
-
-         <!-- =========================
-     READER SEARCH
-========================= -->
-
-<div class="reader-search">
-
-    <div class="reader-search-box">
-
-        <span
-            class="reader-search-icon"
-            aria-hidden="true"
-        >
-            🔎
-        </span>
-
-        <input
-            type="search"
-            id="readerSearchInput"
-            placeholder="Search this book or library..."
-            autocomplete="off"
-            aria-label="Search this book or library"
-        >
-
-        <button
-            type="button"
-            id="readerSearchClear"
-            class="reader-search-clear"
-            aria-label="Clear search"
-            title="Clear search"
-        >
-            ✕
-        </button>
-
-        <!-- SEARCH BUTTON -->
-        <button
-            type="button"
-            id="readerSearchButton"
-            class="reader-search-button"
-            aria-label="Search"
-            title="Search"
-        >
-            <i
-                class="fas fa-search"
-                aria-hidden="true"
-            ></i>
-
-            <span>
-                Search
-            </span>
-        </button>
-
-    </div>
-
-    <div
-        id="readerSearchResults"
-        class="reader-search-results"
-        role="listbox"
-        aria-label="Search results"
-    ></div>
-
-</div>
-            <!-- =================================================
-                 PREVIOUS
-            ================================================== -->
-
-            <button
-                id="previousPageButton"
-                class="control-button"
-                type="button"
-                title="Previous page"
-                aria-label="Previous page"
-            >
-
-                <span aria-hidden="true">
-                    ←
-                </span>
-
-                <span class="button-label">
-                    Previous
-                </span>
-
-            </button>
-
-
-            <!-- =================================================
-                 PAGE COUNTER
-            ================================================== -->
-
-            <div
-                class="page-counter"
-                aria-label="Page counter"
-            >
-
-                <label
-                    for="pageNumberInput"
-                    class="sr-only"
-                >
-                    Current page
-                </label>
-
-                <input
-                    id="pageNumberInput"
-                    class="page-number-input"
-                    type="number"
-                    min="1"
-                    value="1"
-                    inputmode="numeric"
-                    aria-label="Current page"
-                >
-
-                <span aria-hidden="true">
-                    /
-                </span>
-
-                <span
-                    id="totalPages"
-                    class="total-pages"
-                >
-                    0
-                </span>
-
-            </div>
-
-
-            <!-- =================================================
-                 NEXT
-            ================================================== -->
-
-            <button
-                id="nextPageButton"
-                class="control-button"
-                type="button"
-                title="Next page"
-                aria-label="Next page"
-            >
-
-                <span class="button-label">
-                    Next
-                </span>
-
-                <span aria-hidden="true">
-                    →
-                </span>
-
-            </button>
-
-
-            <!-- =================================================
-                 BOOKMARK
-            ================================================== -->
-
-            <button
-                id="bookmarkBtn"
-                class="control-button icon-button"
-                type="button"
-                title="Bookmark current page"
-                aria-label="Bookmark current page"
-            >
-
-                <i
-                    class="far fa-bookmark"
-                    aria-hidden="true"
-                ></i>
-
-            </button>
-
-
-            <!-- =================================================
-                 SHARE
-            ================================================== -->
-
-            <button
-                id="shareBtn"
-                class="control-button icon-button"
-                type="button"
-                title="Share this page"
-                aria-label="Share this page"
-            >
-
-                <i
-                    class="fas fa-share-nodes"
-                    aria-hidden="true"
-                ></i>
-
-            </button>
-
-
-            <!-- =================================================
-                 DIVIDER
-            ================================================== -->
-
-            <span
-                class="control-divider"
-                aria-hidden="true"
-            ></span>
-
-
-            <!-- =================================================
-                 ZOOM OUT
-            ================================================== -->
-
-            <button
-                id="zoomOutButton"
-                class="control-button zoom-button"
-                type="button"
-                title="Zoom out"
-                aria-label="Zoom out"
-            >
-                −
-            </button>
-
-
-            <!-- =================================================
-                 ZOOM LEVEL
-            ================================================== -->
-
-            <button
-                id="resetZoomButton"
-                class="control-button zoom-level"
-                type="button"
-                title="Reset zoom"
-                aria-label="Reset zoom"
-            >
-
-                <span id="zoomLevel">
-                    100%
-                </span>
-
-            </button>
-
-
-            <!-- =================================================
-                 ZOOM IN
-            ================================================== -->
-
-            <button
-                id="zoomInButton"
-                class="control-button zoom-button"
-                type="button"
-                title="Zoom in"
-                aria-label="Zoom in"
-            >
-                +
-            </button>
-
-
-            <!-- =================================================
-                 DIVIDER
-            ================================================== -->
-
-            <span
-                class="control-divider"
-                aria-hidden="true"
-            ></span>
-
-
-            <!-- =================================================
-                 READ ALOUD
-            ================================================== -->
-
-            <button id="listenButton" class="control-button listen-button" type="button" title="Read current page aloud" aria-label="Read current page aloud">
-                <i class="fas fa-volume-high" aria-hidden="true"></i>
-                <span class="button-label">Listen</span>
-            </button>
-
-            <button id="pauseListenButton" class="control-button icon-button" type="button" title="Pause or resume reading" aria-label="Pause or resume reading" disabled>
-                <i class="fas fa-pause" aria-hidden="true"></i>
-            </button>
-
-            <button id="stopListenButton" class="control-button icon-button" type="button" title="Stop reading" aria-label="Stop reading" disabled>
-                <i class="fas fa-stop" aria-hidden="true"></i>
-            </button>
-
-            <label class="listen-speed" title="Reading speed">
-                <span class="sr-only">Reading speed</span>
-                <select id="listenSpeed" aria-label="Reading speed">
-                    <option value="0.75">0.75×</option>
-                    <option value="1" selected>1×</option>
-                    <option value="1.25">1.25×</option>
-                    <option value="1.5">1.5×</option>
-                    <option value="1.75">1.75×</option>
-                </select>
-            </label>
-
-            <!-- =================================================
-                 DIVIDER
-            ================================================== -->
-
-            <span class="control-divider" aria-hidden="true"></span>
-
-
-                        <!-- =================================================
-                 THEME
-            ================================================== -->
-
-            <button
-                id="themeButton"
-                class="control-button"
-                type="button"
-                title="Change theme"
-                aria-label="Change reader theme"
-            >
-                ◐
-            </button>
-
-
-            <!-- =================================================
-                 FULLSCREEN
-            ================================================== -->
-
-            <button
-                id="fullscreenButton"
-                class="control-button"
-                type="button"
-                title="Fullscreen"
-                aria-label="Fullscreen"
-            >
-                ⛶
-            </button>
-
-
-            <!-- =================================================
-                 PRINT
-            ================================================== -->
-
-            <button
-                id="printButton"
-                class="control-button"
-                type="button"
-                title="Print book"
-                aria-label="Print book"
-            >
-                🖨
-            </button>
-
-
-            <!-- =================================================
-                 WATERMARKED DOWNLOAD
-            ================================================== -->
-
-            <button
-                id="downloadButton"
-                class="control-button"
-                type="button"
-                title="Download with watermark"
-                aria-label="Download with watermark"
-            >
-                ↓
-            </button>
-
-
-            <!-- =================================================
-                 SUBSCRIBER DOWNLOAD
-            ================================================== -->
-
-            <button
-                id="cleanDownloadButton"
-                class="control-button premium-button"
-                type="button"
-                title="Subscriber clean download"
-                aria-label="Subscriber clean download"
-            >
-                ★
-            </button>
-
-        </nav>
-
-
-        <!-- =================================================
-             STATUS
-        ================================================== -->
-
-        <div
-            id="readerStatus"
-            class="sr-only"
-            role="status"
-            aria-live="polite"
-        ></div>
-
-    </main>
-
-
-    <!-- =====================================================
-         PDF.JS
-    ====================================================== -->
-
-    <!-- PDF.js is imported by reader.js. Do not load it twice. -->
-
-
-    <!-- =====================================================
-         PDF-LIB
-         Used for watermark PDF generation
-    ====================================================== -->
+    <!-- PDF-LIB -->
 
     <script
-        src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"
+        src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"
+        defer
     ></script>
-
-
-    <!-- =====================================================
-         CHISHTI READER JS
-    ====================================================== -->
-
-    <script
-        type="module"
-        src="./reader.js"
-    ></script>
-
-
-</body>
-
-</html>
-    <!-- =====================================================
-         FONT AWESOME
-    ====================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
-
-
-    <!-- =====================================================
-         READER CSS
-    ====================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="./reader.css"
-    >
 
 </head>
 
 
 <body>
 
+
+<main
+    id="readerApp"
+    class="reader-app"
+>
+
+
     <!-- =====================================================
-         MAIN READER
+         HEADER
     ====================================================== -->
 
-    <main
-        id="readerApp"
-        class="reader-app"
-        aria-label="ChishtiLibrary digital book reader"
+    <header
+        id="readerHeader"
+        class="reader-header"
+    >
+
+        <div class="reader-brand">
+
+            <div class="reader-brand-name">
+                ChishtiLibrary.com
+            </div>
+
+            <div class="reader-brand-title">
+                CHISHTI READER
+            </div>
+
+        </div>
+
+
+        <h1
+            id="bookTitle"
+            class="book-title"
+        >
+            Digital Book
+        </h1>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         READER AREA
+    ====================================================== -->
+
+    <section
+        id="readerArea"
+        class="reader-area"
     >
 
 
-        <!-- =================================================
-             HEADER
-        ================================================== -->
-
-        <header
-            id="readerHeader"
-            class="reader-header"
+        <div
+            id="bookViewport"
+            class="book-viewport"
         >
 
-            <div class="reader-brand">
 
-                <div class="reader-brand-name">
+            <div
+                id="pageWrapper"
+                class="page-wrapper"
+            >
+
+                <canvas
+                    id="pdfCanvas"
+                    aria-label="Current PDF page"
+                ></canvas>
+
+
+                <div
+                    id="pageWatermark"
+                    class="page-watermark"
+                    aria-hidden="true"
+                >
                     ChishtiLibrary.com
                 </div>
 
-                <div class="reader-brand-title">
-                    CHISHTI READER
-                </div>
-
             </div>
 
 
-            <h1
-                id="bookTitle"
-                class="book-title"
-            >
-                Digital Book
-            </h1>
+        </div>
 
-        </header>
 
 
         <!-- =================================================
-             READER AREA
+             LOADING
         ================================================== -->
 
-        <section
-            id="readerArea"
-            class="reader-area"
-            aria-label="Book page"
+        <div
+            id="loadingScreen"
+            class="loading-screen"
+        >
+
+            <div class="loading-spinner"></div>
+
+            <div
+                id="loadingText"
+                class="loading-text"
+            >
+                Loading PDF...
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ERROR
+        ================================================== -->
+
+        <div
+            id="errorScreen"
+            class="error-screen"
+            hidden
+        >
+
+            <div class="error-icon">
+                <i class="fas fa-triangle-exclamation"></i>
+            </div>
+
+            <h2>
+                Unable to open book
+            </h2>
+
+            <p id="errorMessage">
+                The selected PDF could not be loaded.
+            </p>
+
+            <button
+                id="retryButton"
+                class="control-button"
+                type="button"
+            >
+                <i class="fas fa-rotate-right"></i>
+                Try Again
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CONTROLS
+    ====================================================== -->
+
+    <nav
+        id="readerControls"
+        class="reader-controls"
+    >
+
+
+        <!-- SEARCH -->
+
+        <div
+            class="reader-search"
         >
 
             <div
-                id="bookViewport"
-                class="book-viewport"
+                class="reader-search-box"
             >
 
-                <div
-                    id="pageWrapper"
-                    class="page-wrapper"
+                <span
+                    class="reader-search-icon"
+                >
+                    <i class="fas fa-search"></i>
+                </span>
+
+
+                <input
+                    id="readerSearchInput"
+                    type="search"
+                    placeholder="Search inside this book..."
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-label="Search inside this book"
                 >
 
-                    <canvas
-                        id="pdfCanvas"
-                        aria-label="Current book page"
-                    ></canvas>
-
-
-                    <!-- Watermark shown while reading -->
-
-                    <div
-                        id="pageWatermark"
-                        class="page-watermark"
-                        aria-hidden="true"
-                    >
-                        ChishtiLibrary.com
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 ERROR SCREEN
-            ================================================== -->
-
-            <div
-                id="errorScreen"
-                class="error-screen"
-                hidden
-            >
-
-                <div class="error-icon">
-                    ⚠
-                </div>
-
-                <h2>
-                    Unable to open book
-                </h2>
-
-                <p id="errorMessage">
-                    The selected PDF could not be loaded.
-                </p>
 
                 <button
-                    id="retryButton"
-                    class="error-retry-button"
+                    id="readerSearchClear"
+                    class="reader-search-clear"
                     type="button"
+                    title="Clear search"
+                    aria-label="Clear search"
                 >
-                    Try Again
+                    <i class="fas fa-xmark"></i>
+                </button>
+
+
+                <button
+                    id="readerSearchButton"
+                    class="reader-search-button"
+                    type="button"
+                    title="Search book"
+                >
+                    <i class="fas fa-search"></i>
+                    <span>Search</span>
                 </button>
 
             </div>
 
-        </section>
-
-
-        <!-- =================================================
-             READER CONTROLS
-        ================================================== -->
-
-        <nav
-            id="readerControls"
-            class="reader-controls"
-            aria-label="Book controls"
-        >
-
-
-         <!-- =========================
-     READER SEARCH
-========================= -->
-
-<div class="reader-search">
-
-    <div class="reader-search-box">
-
-        <span
-            class="reader-search-icon"
-            aria-hidden="true"
-        >
-            🔎
-        </span>
-
-        <input
-            type="search"
-            id="readerSearchInput"
-            placeholder="Search books, authors, categories..."
-            autocomplete="off"
-            aria-label="Search books, authors, and categories"
-        >
-
-        <button
-            type="button"
-            id="readerSearchClear"
-            class="reader-search-clear"
-            aria-label="Clear search"
-            title="Clear search"
-        >
-            ✕
-        </button>
-
-        <!-- SEARCH BUTTON -->
-        <button
-            type="button"
-            id="readerSearchButton"
-            class="reader-search-button"
-            aria-label="Search"
-            title="Search"
-        >
-            <i
-                class="fas fa-search"
-                aria-hidden="true"
-            ></i>
-
-            <span>
-                Search
-            </span>
-        </button>
-
-    </div>
-
-    <div
-        id="readerSearchResults"
-        class="reader-search-results"
-        role="listbox"
-        aria-label="Search results"
-    ></div>
-
-</div>
-            <!-- =================================================
-                 PREVIOUS
-            ================================================== -->
-
-            <button
-                id="previousPageButton"
-                class="control-button"
-                type="button"
-                title="Previous page"
-                aria-label="Previous page"
-            >
-
-                <span aria-hidden="true">
-                    ←
-                </span>
-
-                <span class="button-label">
-                    Previous
-                </span>
-
-            </button>
-
-
-            <!-- =================================================
-                 PAGE COUNTER
-            ================================================== -->
 
             <div
-                class="page-counter"
-                aria-label="Page counter"
-            >
+                id="readerSearchResults"
+                class="reader-search-results"
+            ></div>
 
-                <label
-                    for="pageNumberInput"
-                    class="sr-only"
-                >
-                    Current page
-                </label>
-
-                <input
-                    id="pageNumberInput"
-                    class="page-number-input"
-                    type="number"
-                    min="1"
-                    value="1"
-                    inputmode="numeric"
-                    aria-label="Current page"
-                >
-
-                <span aria-hidden="true">
-                    /
-                </span>
-
-                <span
-                    id="totalPages"
-                    class="total-pages"
-                >
-                    0
-                </span>
-
-            </div>
+        </div>
 
 
-            <!-- =================================================
-                 NEXT
-            ================================================== -->
 
-            <button
-                id="nextPageButton"
-                class="control-button"
-                type="button"
-                title="Next page"
-                aria-label="Next page"
-            >
+        <!-- PREVIOUS -->
 
-                <span class="button-label">
-                    Next
-                </span>
+        <button
+            id="previousPageButton"
+            class="control-button"
+            type="button"
+            title="Previous page"
+        >
 
-                <span aria-hidden="true">
-                    →
-                </span>
+            <i class="fas fa-chevron-left"></i>
 
-            </button>
+            <span class="button-label">
+                Previous
+            </span>
+
+        </button>
 
 
-            <!-- =================================================
-                 BOOKMARK
-            ================================================== -->
 
-            <button
-                id="bookmarkBtn"
-                class="control-button icon-button"
-                type="button"
-                title="Bookmark current page"
-                aria-label="Bookmark current page"
-            >
-
-                <i
-                    class="far fa-bookmark"
-                    aria-hidden="true"
-                ></i>
-
-            </button>
-
-
-            <!-- =================================================
-                 SHARE
-            ================================================== -->
-
-            <button
-                id="shareBtn"
-                class="control-button icon-button"
-                type="button"
-                title="Share this page"
-                aria-label="Share this page"
-            >
-
-                <i
-                    class="fas fa-share-nodes"
-                    aria-hidden="true"
-                ></i>
-
-            </button>
-
-
-            <!-- =================================================
-                 DIVIDER
-            ================================================== -->
-
-            <span
-                class="control-divider"
-                aria-hidden="true"
-            ></span>
-
-
-            <!-- =================================================
-                 ZOOM OUT
-            ================================================== -->
-
-            <button
-                id="zoomOutButton"
-                class="control-button zoom-button"
-                type="button"
-                title="Zoom out"
-                aria-label="Zoom out"
-            >
-                −
-            </button>
-
-
-            <!-- =================================================
-                 ZOOM LEVEL
-            ================================================== -->
-
-            <button
-                id="resetZoomButton"
-                class="control-button zoom-level"
-                type="button"
-                title="Reset zoom"
-                aria-label="Reset zoom"
-            >
-
-                <span id="zoomLevel">
-                    100%
-                </span>
-
-            </button>
-
-
-            <!-- =================================================
-                 ZOOM IN
-            ================================================== -->
-
-            <button
-                id="zoomInButton"
-                class="control-button zoom-button"
-                type="button"
-                title="Zoom in"
-                aria-label="Zoom in"
-            >
-                +
-            </button>
-
-
-            <!-- =================================================
-                 DIVIDER
-            ================================================== -->
-
-            <span
-                class="control-divider"
-                aria-hidden="true"
-            ></span>
-
-
-            <!-- =================================================
-                 THEME
-            ================================================== -->
-
-            <button
-                id="themeButton"
-                class="control-button"
-                type="button"
-                title="Change theme"
-                aria-label="Change reader theme"
-            >
-                ◐
-            </button>
-
-
-            <!-- =================================================
-                 FULLSCREEN
-            ================================================== -->
-
-            <button
-                id="fullscreenButton"
-                class="control-button"
-                type="button"
-                title="Fullscreen"
-                aria-label="Fullscreen"
-            >
-                ⛶
-            </button>
-
-
-            <!-- =================================================
-                 PRINT
-            ================================================== -->
-
-            <button
-                id="printButton"
-                class="control-button"
-                type="button"
-                title="Print book"
-                aria-label="Print book"
-            >
-                🖨
-            </button>
-
-
-            <!-- =================================================
-                 WATERMARKED DOWNLOAD
-            ================================================== -->
-
-            <button
-                id="downloadButton"
-                class="control-button"
-                type="button"
-                title="Download with watermark"
-                aria-label="Download with watermark"
-            >
-                ↓
-            </button>
-
-
-            <!-- =================================================
-                 SUBSCRIBER DOWNLOAD
-            ================================================== -->
-
-            <button
-                id="cleanDownloadButton"
-                class="control-button premium-button"
-                type="button"
-                title="Subscriber clean download"
-                aria-label="Subscriber clean download"
-            >
-                ★
-            </button>
-
-        </nav>
-
-
-        <!-- =================================================
-             STATUS
-        ================================================== -->
+        <!-- PAGE -->
 
         <div
-            id="readerStatus"
-            class="sr-only"
-            role="status"
-            aria-live="polite"
-        ></div>
+            class="page-counter"
+        >
 
-    </main>
+            <input
+                id="pageNumberInput"
+                class="page-number-input"
+                type="number"
+                min="1"
+                value="1"
+                inputmode="numeric"
+                aria-label="Current page"
+            >
+
+            <span>
+                /
+            </span>
+
+            <span
+                id="totalPages"
+                class="total-pages"
+            >
+                0
+            </span>
+
+        </div>
+
+
+
+        <!-- NEXT -->
+
+        <button
+            id="nextPageButton"
+            class="control-button"
+            type="button"
+            title="Next page"
+        >
+
+            <span class="button-label">
+                Next
+            </span>
+
+            <i class="fas fa-chevron-right"></i>
+
+        </button>
+
+
+
+        <!-- ZOOM OUT -->
+
+        <button
+            id="zoomOutButton"
+            class="control-button icon-button"
+            type="button"
+            title="Zoom out"
+        >
+
+            <i class="fas fa-minus"></i>
+
+        </button>
+
+
+
+        <!-- ZOOM -->
+
+        <button
+            id="resetZoomButton"
+            class="control-button zoom-display"
+            type="button"
+            title="Reset zoom"
+        >
+
+            <span id="zoomLevel">
+                100%
+            </span>
+
+        </button>
+
+
+
+        <!-- ZOOM IN -->
+
+        <button
+            id="zoomInButton"
+            class="control-button icon-button"
+            type="button"
+            title="Zoom in"
+        >
+
+            <i class="fas fa-plus"></i>
+
+        </button>
+
+
+
+        <!-- BOOKMARK -->
+
+        <button
+            id="bookmarkBtn"
+            class="control-button icon-button"
+            type="button"
+            title="Bookmark page"
+            aria-label="Bookmark page"
+        >
+
+            <i class="far fa-bookmark"></i>
+
+        </button>
+
+
+
+        <!-- SHARE -->
+
+        <button
+            id="shareBtn"
+            class="control-button icon-button"
+            type="button"
+            title="Share"
+            aria-label="Share"
+        >
+
+            <i class="fas fa-share-nodes"></i>
+
+        </button>
+
+
+
+        <!-- THEME -->
+
+        <button
+            id="themeButton"
+            class="control-button icon-button"
+            type="button"
+            title="Change theme"
+            aria-label="Change theme"
+        >
+
+            <i class="fas fa-palette"></i>
+
+        </button>
+
+
+
+        <!-- READ -->
+
+        <button
+            id="listenButton"
+            class="control-button"
+            type="button"
+            title="Read aloud"
+        >
+
+            <i class="fas fa-volume-high"></i>
+
+            <span class="button-label">
+                Listen
+            </span>
+
+        </button>
+
+
+
+        <!-- PAUSE -->
+
+        <button
+            id="pauseListenButton"
+            class="control-button icon-button"
+            type="button"
+            title="Pause"
+            disabled
+        >
+
+            <i class="fas fa-pause"></i>
+
+        </button>
+
+
+
+        <!-- STOP -->
+
+        <button
+            id="stopListenButton"
+            class="control-button icon-button"
+            type="button"
+            title="Stop"
+            disabled
+        >
+
+            <i class="fas fa-stop"></i>
+
+        </button>
+
+
+
+        <!-- SPEED -->
+
+        <select
+            id="listenSpeed"
+            title="Reading speed"
+            aria-label="Reading speed"
+        >
+
+            <option value="0.7">
+                0.7×
+            </option>
+
+            <option value="0.85">
+                0.85×
+            </option>
+
+            <option
+                value="1"
+                selected
+            >
+                1×
+            </option>
+
+            <option value="1.15">
+                1.15×
+            </option>
+
+            <option value="1.3">
+                1.3×
+            </option>
+
+            <option value="1.5">
+                1.5×
+            </option>
+
+        </select>
+
+
+
+        <!-- DOWNLOAD -->
+
+        <button
+            id="downloadButton"
+            class="control-button"
+            type="button"
+            title="Download watermarked PDF"
+        >
+
+            <i class="fas fa-download"></i>
+
+            <span class="button-label">
+                Download
+            </span>
+
+        </button>
+
+
+
+        <!-- PRINT -->
+
+        <button
+            id="printButton"
+            class="control-button icon-button"
+            type="button"
+            title="Print"
+        >
+
+            <i class="fas fa-print"></i>
+
+        </button>
+
+
+
+        <!-- FULLSCREEN -->
+
+        <button
+            id="fullscreenButton"
+            class="control-button icon-button"
+            type="button"
+            title="Fullscreen"
+        >
+
+            <i class="fas fa-expand"></i>
+
+        </button>
+
+
+    </nav>
+
 
 
     <!-- =====================================================
-         PDF.JS
+         STATUS
     ====================================================== -->
 
-    <script
-        type="module"
-        src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs"
-    ></script>
+    <div
+        id="readerStatus"
+        class="reader-status"
+        aria-live="polite"
+    >
+        Ready
+    </div>
 
 
-    <!-- =====================================================
-         PDF-LIB
-         Used for watermark PDF generation
-    ====================================================== -->
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"
-    ></script>
+</main>
 
 
-    <!-- =====================================================
-         CHISHTI READER JS
-    ====================================================== -->
+<!-- =========================================================
+     READER JS
+========================================================== -->
 
-    <script
-        type="module"
-        src="./reader.js"
-    ></script>
+<script
+    type="module"
+    src="./reader.js"
+></script>
 
 
 </body>
-
 </html>
