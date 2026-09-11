@@ -1,23 +1,25 @@
 /* =========================================================
-   CHISHTI LIBRARY
-   PREMIUM READER.CSS
-   CLEAN / FIXED / NO DUPLICATE FLIP SYSTEMS
+   CHISHTI LIBRARY — READER.CSS
+   FULL CLEAN / FIXED / MAROON + GOLD
+   Works with the current reader.js
 ========================================================= */
 
 :root {
+  --library-maroon: #4B0000;
+  --library-deep-maroon: #350000;
+  --library-gold: #D4A500;
+  --library-white: #FFFFFF;
 
-    --library-maroon: #4B0000;
-    --library-deep-maroon: #350000;
-    --library-gold: #D4A500;
-    --library-white: #FFFFFF;
+  --reader-background: #4B0000;
+  --reader-surface: #350000;
+  --reader-accent: #D4A500;
+  --reader-text: #FFFFFF;
 
-    --reader-background: #4B0000;
-    --reader-surface: #350000;
-    --reader-accent: #D4A500;
-    --reader-text: #FFFFFF;
-
+  --reader-border: rgba(212, 165, 0, .42);
+  --reader-muted: rgba(255, 255, 255, .68);
+  --reader-shadow: 0 12px 35px rgba(0, 0, 0, .38);
+  --reader-radius: 14px;
 }
-
 
 /* =========================================================
    RESET
@@ -26,2005 +28,887 @@
 *,
 *::before,
 *::after {
-
-    box-sizing: border-box;
-
-    margin: 0;
-
-    padding: 0;
-
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-
 
 html,
 body {
-
-    width: 100%;
-    height: 100%;
-
-    margin: 0;
-    padding: 0;
-
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
 }
 
+html {
+  background: var(--reader-background);
+}
 
 body {
-
-    overflow: hidden;
-
-    background:
-        var(--reader-background);
-
-    color:
-        var(--reader-text);
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
-
+  overflow: hidden;
+  background: var(--reader-background);
+  color: var(--reader-text);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
 
 /* =========================================================
-   MAIN APP
+   MAIN READER
 ========================================================= */
 
 .reader-app {
-
-    position: fixed;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100dvh;
-
-    display: flex;
-
-    flex-direction: column;
-
-    overflow: hidden;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--library-deep-maroon),
-            var(--library-maroon)
-        );
-
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(135deg, var(--library-deep-maroon), var(--library-maroon));
 }
-
 
 /* =========================================================
    HEADER
 ========================================================= */
 
 .reader-header {
-
-    position: relative;
-
-    z-index: 100;
-
-    flex: 0 0 58px;
-
-    width: 100%;
-    height: 58px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 16px;
-
-    padding:
-        0 22px;
-
-    background:
-        var(--library-deep-maroon);
-
-    border-bottom:
-        1px solid
-        rgba(212,165,0,.45);
-
-    box-shadow:
-        0 3px 18px
-        rgba(0,0,0,.35);
-
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  min-height: 58px;
+  height: 58px;
+  flex: 0 0 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 22px;
+  background: var(--library-deep-maroon);
+  border-bottom: 1px solid var(--reader-border);
+  box-shadow: 0 3px 18px rgba(0, 0, 0, .35);
 }
-
-
-/* =========================================================
-   BRAND
-========================================================= */
 
 .reader-brand {
-
-    min-width: 0;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 2px;
-
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-
 
 .reader-brand-name {
-
-    color:
-        var(--library-gold);
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-    letter-spacing: .03em;
-
-    white-space: nowrap;
-
+  color: var(--library-gold);
+  font-size: 14px;
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: .03em;
+  white-space: nowrap;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, .35);
 }
-
 
 .reader-brand-title {
-
-    color:
-        rgba(255,255,255,.65);
-
-    font-size: 9px;
-
-    font-weight: 700;
-
-    letter-spacing: .16em;
-
+  color: rgba(255, 255, 255, .68);
+  font-size: 10px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: .15em;
 }
-
-
-/* =========================================================
-   BOOK TITLE
-========================================================= */
 
 .book-title {
-
-    min-width: 0;
-
-    max-width: 58%;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-    color:
-        var(--library-white);
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    text-align: right;
-
+  min-width: 0;
+  max-width: 58%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--library-white);
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 600;
+  text-align: right;
 }
-
 
 /* =========================================================
    READER AREA
 ========================================================= */
 
 .reader-area {
-
-    position: relative;
-
-    flex: 1 1 auto;
-
-    min-height: 0;
-
-    width: 100%;
-
-    overflow: hidden;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    background:
-        var(--reader-background);
-
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  background: var(--reader-background);
 }
-
 
 /* =========================================================
    PDF VIEWPORT
+
+   IMPORTANT:
+   Do not use an ID rule with overflow:hidden here.
+   The viewport must remain scrollable when zoom > 100%.
 ========================================================= */
 
-.book-viewport {
-
-    position: relative;
-
-    width: 100%;
-    height: 100%;
-
-    min-width: 0;
-    min-height: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    overflow: auto;
-
-    padding: 20px;
-
-    scrollbar-width: thin;
-
-    scrollbar-color:
-        var(--library-gold)
-        var(--library-deep-maroon);
-
-    overscroll-behavior:
-        contain;
-
-    -webkit-overflow-scrolling:
-        touch;
-
+.book-viewport,
+#bookViewport {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--library-gold) var(--library-deep-maroon);
+  touch-action: pan-x pan-y;
 }
-
-
-/*
-   IMPORTANT:
-   Do NOT add another #bookViewport rule.
-*/
-
 
 .book-viewport::-webkit-scrollbar {
-
-    width: 8px;
-    height: 8px;
-
+  width: 8px;
+  height: 8px;
 }
-
 
 .book-viewport::-webkit-scrollbar-track {
-
-    background:
-        var(--library-deep-maroon);
-
+  background: var(--library-deep-maroon);
 }
-
 
 .book-viewport::-webkit-scrollbar-thumb {
-
-    background:
-        var(--library-gold);
-
-    border-radius:
-        20px;
-
+  background: var(--library-gold);
+  border-radius: 20px;
 }
 
+.book-viewport::-webkit-scrollbar-thumb:hover {
+  background: #E6B800;
+}
 
 /* =========================================================
-   PAGE
+   PDF PAGE
 ========================================================= */
 
 .page-wrapper {
-
-    position: relative;
-
-    flex:
-        0 0 auto;
-
-    display: block;
-
-    overflow: hidden;
-
-    background:
-        #FFFFFF;
-
-    box-shadow:
-        0 12px 40px
-        rgba(0,0,0,.55);
-
-    border-radius:
-        2px;
-
-    user-select:
-        none;
-
-    -webkit-user-select:
-        none;
-
+  position: relative;
+  flex: 0 0 auto;
+  width: max-content;
+  height: max-content;
+  min-width: 1px;
+  min-height: 1px;
+  display: block;
+  background: #FFFFFF;
+  box-shadow: var(--reader-shadow);
+  border-radius: 2px;
+  overflow: hidden;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
-
-
-/* =========================================================
-   PDF CANVAS
-========================================================= */
 
 #pdfCanvas {
-
-    display: block;
-
-    width: auto;
-
-    height: auto;
-
-    max-width: none;
-
-    background:
-        #FFFFFF;
-
-    user-select:
-        none;
-
-    -webkit-user-select:
-        none;
-
-    -webkit-user-drag:
-        none;
-
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  background: #FFFFFF;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
-
-/* =========================================================
-   PAGE WATERMARK
-========================================================= */
-
+#pageWatermark,
 .page-watermark {
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%,-50%)
-        rotate(-32deg);
-
-    pointer-events:
-        none;
-
-    color:
-        rgba(75,0,0,.12);
-
-    font-size:
-        clamp(
-            20px,
-            4vw,
-            48px
-        );
-
-    font-weight:
-        800;
-
-    white-space:
-        nowrap;
-
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  pointer-events: none;
+  user-select: none;
+  color: rgba(75, 0, 0, .13);
+  font-size: clamp(16px, 2.2vw, 30px);
+  font-weight: 800;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  transform: translate(-50%, -50%) rotate(-28deg);
+  opacity: .45;
 }
-
 
 /* =========================================================
    CONTROLS
 ========================================================= */
 
 .reader-controls {
-
-    position: relative;
-
-    z-index: 100;
-
-    flex:
-        0 0 auto;
-
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    padding:
-        10px 14px;
-
-    background:
-        var(--library-deep-maroon);
-
-    border-top:
-        1px solid
-        rgba(212,165,0,.35);
-
-    box-shadow:
-        0 -5px 20px
-        rgba(0,0,0,.25);
-
+  position: relative;
+  z-index: 100;
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--library-deep-maroon);
+  border-top: 1px solid var(--reader-border);
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, .25);
 }
 
-
-/* =========================================================
-   BUTTON
-========================================================= */
-
-.control-button {
-
-    min-height: 38px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 7px;
-
-    padding:
-        8px 13px;
-
-    border:
-        1px solid
-        rgba(212,165,0,.45);
-
-    border-radius:
-        8px;
-
-    background:
-        var(--reader-surface);
-
-    color:
-        var(--library-white);
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    transition:
-        transform .15s ease,
-        background .15s ease,
-        border-color .15s ease;
-
+.control-button,
+.reader-controls button {
+  min-height: 40px;
+  border: 1px solid rgba(212, 165, 0, .38);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: rgba(75, 0, 0, .92);
+  color: var(--library-white);
+  cursor: pointer;
+  user-select: none;
+  transition: transform .16s ease, background .16s ease, border-color .16s ease, opacity .16s ease;
 }
 
-
-.control-button:hover:not(:disabled) {
-
-    transform:
-        translateY(-1px);
-
-    background:
-        var(--library-maroon);
-
-    border-color:
-        var(--library-gold);
-
+.control-button:hover,
+.reader-controls button:hover:not(:disabled) {
+  background: var(--library-maroon);
+  border-color: var(--library-gold);
+  transform: translateY(-1px);
 }
 
-
-.control-button:active:not(:disabled) {
-
-    transform:
-        scale(.97);
-
+.control-button:active,
+.reader-controls button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
-
-.control-button:disabled {
-
-    opacity:
-        .45;
-
-    cursor:
-        not-allowed;
-
+.control-button:focus-visible,
+.reader-controls button:focus-visible,
+.reader-search input:focus-visible,
+.page-number-input:focus-visible,
+.listen-speed:focus-visible {
+  outline: 2px solid var(--library-gold);
+  outline-offset: 2px;
 }
 
-
-/* =========================================================
-   ICON BUTTON
-========================================================= */
+.control-button:disabled,
+.reader-controls button:disabled {
+  opacity: .42;
+  cursor: not-allowed;
+  transform: none;
+}
 
 .icon-button {
-
-    width: 40px;
-
-    min-width: 40px;
-
-    padding:
-        8px;
-
+  width: 42px;
+  padding: 8px;
 }
 
-
-/* =========================================================
-   ACTIVE BOOKMARK
-========================================================= */
-
+.icon-button.active,
 #bookmarkBtn.active {
-
-    color:
-        var(--library-gold);
-
-    border-color:
-        var(--library-gold);
-
+  color: var(--library-gold);
+  border-color: var(--library-gold);
+  box-shadow: 0 0 12px rgba(212, 165, 0, .16);
 }
 
+.button-label {
+  white-space: nowrap;
+}
 
 /* =========================================================
    PAGE COUNTER
 ========================================================= */
 
 .page-counter {
-
-    min-height: 38px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 6px;
-
-    padding:
-        4px 8px;
-
-    color:
-        var(--library-white);
-
-    font-weight:
-        700;
-
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 4px;
+  color: var(--library-white);
+  font-weight: 700;
 }
-
 
 .page-number-input {
-
-    width: 58px;
-
-    height: 32px;
-
-    border:
-        1px solid
-        rgba(212,165,0,.55);
-
-    border-radius:
-        6px;
-
-    background:
-        #240000;
-
-    color:
-        #FFFFFF;
-
-    text-align:
-        center;
-
-    font-weight:
-        700;
-
-    outline:
-        none;
-
+  width: 58px;
+  height: 40px;
+  border: 1px solid rgba(212, 165, 0, .42);
+  border-radius: 9px;
+  background: #240000;
+  color: #FFFFFF;
+  text-align: center;
+  outline: none;
 }
 
-
-.page-number-input:focus {
-
-    border-color:
-        var(--library-gold);
-
-    box-shadow:
-        0 0 0 2px
-        rgba(212,165,0,.15);
-
+.page-number-input::-webkit-inner-spin-button,
+.page-number-input::-webkit-outer-spin-button {
+  opacity: 1;
 }
 
+.total-pages {
+  min-width: 25px;
+  text-align: left;
+}
 
 /* =========================================================
-   ZOOM
+   ZOOM / TOOL BUTTONS
 ========================================================= */
-
-.zoom-controls {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 5px;
-
-}
-
 
 #zoomLevel {
-
-    min-width:
-        52px;
-
-    text-align:
-        center;
-
-    color:
-        var(--library-gold);
-
-    font-weight:
-        800;
-
+  min-width: 54px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--library-gold);
+  font-weight: 800;
 }
-
-
-/* =========================================================
-   DOWNLOAD / PRINT
-========================================================= */
 
 #downloadButton,
-#printButton {
-
-    color:
-        #FFFFFF;
-
+#cleanDownloadButton,
+#printButton,
+#fullscreenButton,
+#themeButton,
+#bookmarkBtn,
+#shareBtn,
+#listenButton,
+#pauseListenButton,
+#stopListenButton {
+  white-space: nowrap;
 }
 
-
-#downloadButton:hover:not(:disabled),
-#printButton:hover:not(:disabled) {
-
-    border-color:
-        var(--library-gold);
-
+#listenButton.speaking {
+  color: var(--library-gold);
+  border-color: var(--library-gold);
 }
 
+#listenSpeed,
+.listen-speed {
+  min-height: 40px;
+  border: 1px solid rgba(212, 165, 0, .42);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: #240000;
+  color: #FFFFFF;
+  cursor: pointer;
+}
 
 /* =========================================================
    SEARCH
 ========================================================= */
 
 .reader-search {
-
-    position: relative;
-
-    flex:
-        1 1 280px;
-
-    min-width:
-        240px;
-
-    max-width:
-        500px;
-
+  position: relative;
+  z-index: 200;
+  flex: 1 1 300px;
+  min-width: 220px;
+  max-width: 560px;
 }
-
 
 .reader-search-box {
-
-    width: 100%;
-
-    min-height:
-        40px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 6px;
-
-    padding:
-        4px 6px 4px 11px;
-
-    background:
-        #240000;
-
-    border:
-        1px solid
-        rgba(212,165,0,.45);
-
-    border-radius:
-        9px;
-
+  width: 100%;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 5px 4px 11px;
+  background: #240000;
+  border: 1px solid rgba(212, 165, 0, .42);
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .12);
 }
-
-
-.reader-search-box:focus-within {
-
-    border-color:
-        var(--library-gold);
-
-    box-shadow:
-        0 0 0 2px
-        rgba(212,165,0,.13);
-
-}
-
 
 .reader-search-icon {
-
-    flex:
-        0 0 auto;
-
-    font-size:
-        15px;
-
+  flex: 0 0 auto;
+  font-size: 15px;
 }
 
-
-#readerSearchInput {
-
-    flex:
-        1 1 auto;
-
-    min-width:
-        0;
-
-    height:
-        30px;
-
-    border:
-        0;
-
-    outline:
-        0;
-
-    background:
-        transparent;
-
-    color:
-        #FFFFFF;
-
-    font-size:
-        13px;
-
+#readerSearchInput,
+.reader-search-box input[type="search"] {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  height: 32px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #FFFFFF;
+  font-size: 14px;
 }
-
 
 #readerSearchInput::placeholder {
-
-    color:
-        rgba(255,255,255,.55);
-
+  color: rgba(255, 255, 255, .55);
 }
 
-
-.reader-search-button,
-.reader-search-clear {
-
-    flex:
-        0 0 auto;
-
-    border:
-        0;
-
-    border-radius:
-        7px;
-
-    cursor:
-        pointer;
-
-}
-
-
+.reader-search-clear,
 .reader-search-button {
-
-    min-height:
-        32px;
-
-    padding:
-        0 10px;
-
-    background:
-        var(--library-gold);
-
-    color:
-        #240000;
-
-    font-weight:
-        800;
-
+  flex: 0 0 auto;
+  min-height: 32px !important;
+  height: 32px;
+  border-radius: 8px !important;
+  padding: 5px 9px !important;
 }
-
 
 .reader-search-clear {
-
-    width:
-        30px;
-
-    height:
-        30px;
-
-    background:
-        transparent;
-
-    color:
-        rgba(255,255,255,.6);
-
+  display: none !important;
 }
-
-
-.reader-search-clear:hover {
-
-    color:
-        #FFFFFF;
-
-}
-
 
 .reader-search-clear.active {
-
-    color:
-        var(--library-gold);
-
+  display: inline-flex !important;
 }
-
-
-/* =========================================================
-   SEARCH RESULTS
-========================================================= */
 
 .reader-search-results {
-
-    position:
-        absolute;
-
-    left:
-        0;
-
-    right:
-        0;
-
-    bottom:
-        calc(100% + 8px);
-
-    max-height:
-        min(65vh, 520px);
-
-    overflow-y:
-        auto;
-
-    display:
-        none;
-
-    padding:
-        6px;
-
-    background:
-        #210000;
-
-    border:
-        1px solid
-        rgba(212,165,0,.45);
-
-    border-radius:
-        10px;
-
-    box-shadow:
-        0 12px 30px
-        rgba(0,0,0,.5);
-
-    z-index:
-        500;
-
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 9px);
+  max-height: min(58vh, 520px);
+  overflow: auto;
+  display: none;
+  padding: 7px;
+  border: 1px solid var(--reader-border);
+  border-radius: 13px;
+  background: rgba(53, 0, 0, .98);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, .48);
+  backdrop-filter: blur(10px);
 }
-
 
 .reader-search-results.show {
-
-    display:
-        block;
-
+  display: block;
 }
 
-
-.reader-search-count {
-
-    padding:
-        9px 10px;
-
-    color:
-        var(--library-gold);
-
-    font-size:
-        12px;
-
-    font-weight:
-        800;
-
+.reader-search-count,
+.reader-search-empty {
+  padding: 8px 10px;
+  color: rgba(255, 255, 255, .72);
+  font-size: 12px;
 }
 
+.reader-search-empty {
+  text-align: center;
+}
 
 .reader-search-result {
-
-    width:
-        100%;
-
-    min-height:
-        58px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    margin:
-        3px 0;
-
-    padding:
-        8px;
-
-    border:
-        1px solid
-        rgba(212,165,0,.12);
-
-    border-radius:
-        8px;
-
-    background:
-        rgba(255,255,255,.04);
-
-    color:
-        #FFFFFF;
-
-    text-align:
-        left;
-
-    cursor:
-        pointer;
-
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #FFFFFF;
 }
-
 
 .reader-search-result:hover,
-.reader-search-result:focus {
-
-    outline:
-        none;
-
-    background:
-        rgba(212,165,0,.13);
-
-    border-color:
-        rgba(212,165,0,.45);
-
+.reader-search-result:focus-visible {
+  background: rgba(212, 165, 0, .12);
+  outline: none;
 }
-
 
 .reader-search-result-image {
-
-    width:
-        38px;
-
-    height:
-        48px;
-
-    flex:
-        0 0 38px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    overflow:
-        hidden;
-
-    border-radius:
-        5px;
-
-    background:
-        var(--library-maroon);
-
+  width: 42px;
+  height: 54px;
+  flex: 0 0 42px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(212, 165, 0, .3);
+  border-radius: 6px;
+  background: #240000;
 }
-
 
 .reader-search-result-image img {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    object-fit:
-        cover;
-
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
-
 
 .reader-search-result-info {
-
-    min-width:
-        0;
-
-    flex:
-        1;
-
+  min-width: 0;
+  flex: 1 1 auto;
 }
-
 
 .reader-search-result-title {
-
-    color:
-        #FFFFFF;
-
-    font-size:
-        13px;
-
-    font-weight:
-        800;
-
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 800;
 }
 
-
-.reader-search-result-author {
-
-    margin-top:
-        2px;
-
-    color:
-        rgba(255,255,255,.6);
-
-    font-size:
-        11px;
-
+.reader-search-result-author,
+.reader-search-snippet {
+  margin-top: 3px;
+  color: rgba(255, 255, 255, .65);
+  font-size: 11px;
+  line-height: 1.35;
 }
-
-
-.reader-search-page-number {
-
-    margin-top:
-        3px;
-
-    color:
-        var(--library-gold);
-
-    font-size:
-        11px;
-
-    font-weight:
-        800;
-
-}
-
 
 .reader-search-snippet {
-
-    margin-top:
-        5px;
-
-    color:
-        rgba(255,255,255,.72);
-
-    font-size:
-        11px;
-
-    line-height:
-        1.45;
-
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
-
+.reader-search-page-number,
 .reader-search-result-type {
-
-    display:
-        inline-block;
-
-    margin-top:
-        4px;
-
-    color:
-        var(--library-gold);
-
-    font-size:
-        9px;
-
-    font-weight:
-        800;
-
-    text-transform:
-        uppercase;
-
+  margin-top: 4px;
+  color: var(--library-gold);
+  font-size: 10px;
+  font-weight: 800;
 }
-
-
-.reader-search-empty,
-.reader-search-more {
-
-    padding:
-        14px 10px;
-
-    color:
-        rgba(255,255,255,.75);
-
-    font-size:
-        12px;
-
-    line-height:
-        1.5;
-
-}
-
 
 /* =========================================================
-   READ ALOUD
-========================================================= */
-
-#listenButton {
-
-    border-color:
-        rgba(212,165,0,.65);
-
-}
-
-
-#listenButton.speaking {
-
-    background:
-        var(--library-gold);
-
-    color:
-        #240000;
-
-    border-color:
-        var(--library-gold);
-
-}
-
-
-#pauseListenButton,
-#stopListenButton {
-
-    width:
-        40px;
-
-    min-width:
-        40px;
-
-    padding:
-        8px;
-
-}
-
-
-#listenSpeed {
-
-    height:
-        38px;
-
-    min-width:
-        70px;
-
-    padding:
-        0 8px;
-
-    border:
-        1px solid
-        rgba(212,165,0,.45);
-
-    border-radius:
-        8px;
-
-    background:
-        #240000;
-
-    color:
-        #FFFFFF;
-
-    outline:
-        none;
-
-}
-
-
-#listenSpeed:focus {
-
-    border-color:
-        var(--library-gold);
-
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-#readerStatus {
-
-    position:
-        absolute;
-
-    left:
-        12px;
-
-    bottom:
-        8px;
-
-    z-index:
-        20;
-
-    max-width:
-        calc(100% - 24px);
-
-    padding:
-        5px 9px;
-
-    border-radius:
-        5px;
-
-    background:
-        rgba(0,0,0,.45);
-
-    color:
-        rgba(255,255,255,.72);
-
-    font-size:
-        10px;
-
-    pointer-events:
-        none;
-
-}
-
-
-/* =========================================================
-   ERROR
+   ERROR SCREEN
 ========================================================= */
 
 .error-screen {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    z-index:
-        300;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        12px;
-
-    padding:
-        30px;
-
-    text-align:
-        center;
-
-    background:
-        var(--reader-background);
-
+  position: absolute;
+  inset: 20px;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 30px;
+  text-align: center;
+  border: 1px solid var(--reader-border);
+  border-radius: var(--reader-radius);
+  background: rgba(53, 0, 0, .96);
+  box-shadow: var(--reader-shadow);
 }
-
 
 .error-screen[hidden] {
-
-    display:
-        none;
-
+  display: none !important;
 }
-
 
 .error-icon {
-
-    font-size:
-        42px;
-
-    color:
-        var(--library-gold);
-
+  font-size: 40px;
+  color: var(--library-gold);
 }
-
 
 .error-screen h2 {
-
-    color:
-        #FFFFFF;
-
-    font-size:
-        20px;
-
+  color: #FFFFFF;
+  font-size: 20px;
 }
-
 
 .error-screen p {
-
-    max-width:
-        600px;
-
-    color:
-        rgba(255,255,255,.72);
-
-    white-space:
-        pre-wrap;
-
-    line-height:
-        1.5;
-
+  max-width: 700px;
+  white-space: pre-wrap;
+  color: rgba(255, 255, 255, .72);
+  line-height: 1.55;
 }
-
 
 .error-retry-button {
-
-    padding:
-        10px 18px;
-
-    border:
-        1px solid
-        var(--library-gold);
-
-    border-radius:
-        8px;
-
-    background:
-        var(--library-gold);
-
-    color:
-        #240000;
-
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
+  border: 1px solid var(--library-gold);
+  border-radius: 10px;
+  padding: 9px 15px;
+  background: var(--library-maroon);
+  color: #FFFFFF;
+  cursor: pointer;
 }
 
-
 /* =========================================================
-   PREMIUM PAGE FLIP
-   ONLY SYSTEM USED BY CURRENT JS
+   PREMIUM PAGE FLIP — MATCHES reader.js EXACTLY
 ========================================================= */
 
 .chishti-page-flip-stage {
-
-    position:
-        absolute;
-
-    left:
-        50%;
-
-    top:
-        50%;
-
-    z-index:
-        50;
-
-    transform:
-        translate(-50%,-50%);
-
-    pointer-events:
-        none;
-
-    perspective:
-        1800px;
-
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 500;
+  pointer-events: none;
+  perspective: 1800px;
+  transform-style: preserve-3d;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
 }
-
 
 .chishti-page-flip-sheet {
-
-    position:
-        relative;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    transform-style:
-        preserve-3d;
-
-    transform-origin:
-        center center;
-
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  background: #FFFFFF;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .4);
+  will-change: transform;
 }
-
 
 .chishti-page-flip-face {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    overflow:
-        hidden;
-
-    backface-visibility:
-        hidden;
-
-    -webkit-backface-visibility:
-        hidden;
-
-    background:
-        #FFFFFF;
-
-    box-shadow:
-        0 8px 30px
-        rgba(0,0,0,.42);
-
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #FFFFFF;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-
-.chishti-page-flip-face canvas {
-
-    display:
-        block;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    object-fit:
-        fill;
-
+.chishti-page-flip-front canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
-
-
-.chishti-page-flip-front {
-
-    transform:
-        rotateY(0deg);
-
-}
-
 
 .chishti-page-flip-back {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    transform:
-        rotateY(180deg);
-
+  transform: rotateY(180deg);
 }
-
 
 .chishti-flip-paper {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(0,0,0,.04),
-            rgba(255,255,255,.95) 45%,
-            rgba(0,0,0,.08)
-        );
-
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0,0,0,.08), rgba(255,255,255,.96) 18%, #FFFFFF 55%, rgba(0,0,0,.06));
 }
 
-
-/* NEXT */
-
-.chishti-flip-next
-.chishti-page-flip-sheet {
-
-    transform:
-        rotateY(0deg);
-
+.chishti-flip-next .chishti-page-flip-sheet {
+  transform: rotateY(0deg);
 }
 
-
-.chishti-flip-next.chishti-flip-running
-.chishti-page-flip-sheet {
-
-    animation:
-        chishtiFlipNext
-        450ms
-        cubic-bezier(.2,.7,.2,1)
-        forwards;
-
+.chishti-flip-prev .chishti-page-flip-sheet {
+  transform: rotateY(0deg);
 }
 
-
-/* PREVIOUS */
-
-.chishti-flip-prev
-.chishti-page-flip-sheet {
-
-    transform:
-        rotateY(0deg);
-
+.chishti-flip-next.chishti-flip-running .chishti-page-flip-sheet {
+  animation: chishtiFlipNext 650ms cubic-bezier(.22,.72,.18,1) forwards;
 }
 
-
-.chishti-flip-prev.chishti-flip-running
-.chishti-page-flip-sheet {
-
-    animation:
-        chishtiFlipPrev
-        450ms
-        cubic-bezier(.2,.7,.2,1)
-        forwards;
-
+.chishti-flip-prev.chishti-flip-running .chishti-page-flip-sheet {
+  animation: chishtiFlipPrev 650ms cubic-bezier(.22,.72,.18,1) forwards;
 }
-
 
 @keyframes chishtiFlipNext {
-
-    0% {
-
-        transform:
-            rotateY(0deg);
-
-    }
-
-    100% {
-
-        transform:
-            rotateY(-180deg);
-
-    }
-
+  0% {
+    transform: rotateY(0deg);
+    box-shadow: 0 12px 30px rgba(0,0,0,.32);
+  }
+  45% {
+    transform: rotateY(-88deg);
+    box-shadow: 18px 15px 38px rgba(0,0,0,.28);
+  }
+  100% {
+    transform: rotateY(-180deg);
+    box-shadow: 0 8px 20px rgba(0,0,0,.18);
+  }
 }
-
 
 @keyframes chishtiFlipPrev {
-
-    0% {
-
-        transform:
-            rotateY(0deg);
-
-    }
-
-    100% {
-
-        transform:
-            rotateY(180deg);
-
-    }
-
+  0% {
+    transform: rotateY(0deg);
+    box-shadow: 0 12px 30px rgba(0,0,0,.32);
+  }
+  45% {
+    transform: rotateY(88deg);
+    box-shadow: -18px 15px 38px rgba(0,0,0,.28);
+  }
+  100% {
+    transform: rotateY(180deg);
+    box-shadow: 0 8px 20px rgba(0,0,0,.18);
+  }
 }
-
 
 /* =========================================================
    FULLSCREEN
 ========================================================= */
 
-.reader-app:fullscreen {
-
-    width:
-        100vw;
-
-    height:
-        100vh;
-
+#readerApp:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  background: var(--reader-background);
 }
 
-
-.reader-app:fullscreen .reader-header {
-
-    flex-basis:
-        54px;
-
-    height:
-        54px;
-
+#readerApp:fullscreen .reader-header {
+  height: 54px;
+  min-height: 54px;
+  flex-basis: 54px;
 }
 
+#readerApp:fullscreen .reader-controls {
+  min-height: 62px;
+}
 
 /* =========================================================
-   SCREEN READER
+   UTILITY
 ========================================================= */
 
 .sr-only {
-
-    position:
-        absolute;
-
-    width:
-        1px;
-
-    height:
-        1px;
-
-    padding:
-        0;
-
-    margin:
-        -1px;
-
-    overflow:
-        hidden;
-
-    clip:
-        rect(0,0,0,0);
-
-    white-space:
-        nowrap;
-
-    border:
-        0;
-
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
+[hidden] {
+  display: none !important;
+}
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (
-    max-width: 768px
-) {
-
-    .reader-header {
-
-        height:
-            52px;
-
-        flex-basis:
-            52px;
-
-        padding:
-            0 12px;
-
-        gap:
-            8px;
-
-    }
-
-
-    .reader-brand-name {
-
-        font-size:
-            12px;
-
-    }
-
-
-    .reader-brand-title {
-
-        font-size:
-            8px;
-
-    }
-
-
-    .book-title {
-
-        max-width:
-            50%;
-
-        font-size:
-            11px;
-
-    }
-
-
-    .book-viewport {
-
-        padding:
-            8px;
-
-        align-items:
-            center;
-
-        justify-content:
-            center;
-
-    }
-
-
-    .reader-controls {
-
-        gap:
-            5px;
-
-        padding:
-            7px;
-
-    }
-
-
-    .reader-search {
-
-        flex:
-            1 1 100%;
-
-        max-width:
-            none;
-
-        order:
-            -10;
-
-    }
-
-
-    .control-button {
-
-        min-height:
-            34px;
-
-        padding:
-            7px 9px;
-
-        font-size:
-            11px;
-
-    }
-
-
-    .button-label {
-
-        display:
-            inline;
-
-    }
-
-
-    .page-counter {
-
-        min-height:
-            34px;
-
-    }
-
-
-    .page-number-input {
-
-        width:
-            48px;
-
-        height:
-            29px;
-
-    }
-
-
-    #listenSpeed {
-
-        min-width:
-            60px;
-
-        height:
-            34px;
-
-        font-size:
-            11px;
-
-    }
-
-
-    #pauseListenButton,
-    #stopListenButton {
-
-        width:
-            34px;
-
-        min-width:
-            34px;
-
-        height:
-            34px;
-
-        padding:
-            6px;
-
-    }
-
-
-    .reader-search-results {
-
-        bottom:
-            calc(100% + 6px);
-
-        max-height:
-            55vh;
-
-    }
-
-
-    .page-watermark {
-
-        font-size:
-            18px;
-
-    }
-
+@media (max-width: 900px) {
+  .reader-header {
+    padding: 0 14px;
+    gap: 10px;
+  }
+
+  .book-title {
+    max-width: 52%;
+    font-size: 13px;
+  }
+
+  .book-viewport,
+  #bookViewport {
+    padding: 12px;
+  }
+
+  .reader-controls {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .reader-search {
+    flex: 1 1 100%;
+    max-width: none;
+    order: -1;
+  }
+
+  .reader-search-results {
+    bottom: calc(100% + 7px);
+    max-height: 48vh;
+  }
+
+  .control-button,
+  .reader-controls button,
+  #listenSpeed,
+  .listen-speed {
+    min-height: 38px;
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+
+  .page-number-input {
+    width: 50px;
+    height: 38px;
+  }
 }
 
+@media (max-width: 600px) {
+  .reader-header {
+    height: 52px;
+    min-height: 52px;
+    flex-basis: 52px;
+  }
 
-/* =========================================================
-   VERY SMALL MOBILE
-========================================================= */
+  .reader-brand-name {
+    font-size: 12px;
+  }
 
-@media (
-    max-width: 430px
-) {
+  .reader-brand-title {
+    font-size: 8px;
+  }
 
-    .reader-brand-title {
+  .book-title {
+    max-width: 48%;
+    font-size: 12px;
+  }
 
-        display:
-            none;
+  .book-viewport,
+  #bookViewport {
+    padding: 8px;
+  }
 
-    }
+  .reader-controls {
+    max-height: 36dvh;
+    overflow-y: auto;
+  }
 
+  .reader-search-box {
+    min-height: 40px;
+  }
 
-    .book-title {
+  .reader-search-button span {
+    display: none;
+  }
 
-        max-width:
-            55%;
+  .button-label {
+    display: none;
+  }
 
-    }
+  .control-button {
+    width: 40px;
+    padding: 7px;
+  }
 
+  .page-counter {
+    gap: 4px;
+  }
 
-    .reader-controls {
+  #zoomLevel {
+    min-width: 46px;
+    font-size: 11px;
+  }
 
-        overflow-x:
-            auto;
+  #listenSpeed,
+  .listen-speed {
+    max-width: 68px;
+  }
 
-        justify-content:
-            flex-start;
+  .error-screen {
+    inset: 8px;
+    padding: 18px;
+  }
 
-        flex-wrap:
-            nowrap;
+  .error-screen h2 {
+    font-size: 17px;
+  }
 
-        scrollbar-width:
-            none;
-
-    }
-
-
-    .reader-controls::-webkit-scrollbar {
-
-        display:
-            none;
-
-    }
-
-
-    .reader-search {
-
-        flex:
-            0 0 100%;
-
-    }
-
-
-    .button-label {
-
-        display:
-            none;
-
-    }
-
-
-    .control-button {
-
-        flex:
-            0 0 auto;
-
-    }
-
+  .error-screen p {
+    font-size: 12px;
+  }
 }
-
 
 /* =========================================================
    REDUCED MOTION
 ========================================================= */
 
-@media (
-    prefers-reduced-motion: reduce
-) {
-
-    *,
-    *::before,
-    *::after {
-
-        scroll-behavior:
-            auto !important;
-
-        transition:
-            none !important;
-
-        animation-duration:
-            1ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-    }
-
-}
-
-
-/* =========================================================
-   PRINT
-========================================================= */
-
-@media print {
-
-    .reader-header,
-    .reader-controls,
-    #readerStatus,
-    .page-watermark {
-
-        display:
-            none !important;
-
-    }
-
-
-    .reader-area,
-    .book-viewport {
-
-        position:
-            static;
-
-        width:
-            100%;
-
-        height:
-            auto;
-
-        overflow:
-            visible;
-
-        background:
-            #FFFFFF;
-
-    }
-
-
-    .page-wrapper {
-
-        box-shadow:
-            none;
-
-    }
-
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
