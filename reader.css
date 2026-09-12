@@ -1,15 +1,11 @@
 /* =========================================================
    CHISHTI LIBRARY
-   CLEAN PREMIUM READER CSS
-========================================================= */
-
-
-/* =========================================================
-   VARIABLES
+   READER.CSS
+   CLEAN + FIXED PDF READER
+   MAROON + GOLD THEME
 ========================================================= */
 
 :root {
-
     --library-maroon: #4B0000;
     --library-deep-maroon: #350000;
     --library-gold: #D4A500;
@@ -20,6 +16,12 @@
     --reader-accent: #D4A500;
     --reader-text: #FFFFFF;
 
+    --reader-border: rgba(212,165,0,.35);
+    --reader-shadow: rgba(0,0,0,.45);
+
+    --reader-header-height: 68px;
+    --reader-controls-height: 74px;
+    --reader-status-height: 28px;
 }
 
 
@@ -30,72 +32,69 @@
 *,
 *::before,
 *::after {
-
     box-sizing: border-box;
-
-    margin: 0;
-
-    padding: 0;
-
 }
-
 
 html,
 body {
-
     width: 100%;
     height: 100%;
-
     margin: 0;
     padding: 0;
-
 }
 
+html {
+    background: var(--reader-background);
+}
 
 body {
-
     overflow: hidden;
-
-    background:
-        var(--reader-background);
-
-    color:
-        var(--reader-text);
+    background: var(--reader-background);
+    color: var(--reader-text);
 
     font-family:
         Arial,
         Helvetica,
         sans-serif;
 
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: .45;
 }
 
 
 /* =========================================================
-   APP
+   MAIN READER APP
 ========================================================= */
 
 .reader-app {
-
     position: fixed;
-
     inset: 0;
 
     width: 100%;
     height: 100dvh;
 
     display: flex;
-
     flex-direction: column;
 
     overflow: hidden;
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--library-deep-maroon),
-            var(--library-maroon)
-        );
-
+    background: var(--reader-background);
+    color: var(--reader-text);
 }
 
 
@@ -104,45 +103,34 @@ body {
 ========================================================= */
 
 .reader-header {
+    position: relative;
 
-    flex:
-        0 0 58px;
+    flex: 0 0 auto;
 
-    height:
-        58px;
+    width: 100%;
+    min-height: var(--reader-header-height);
 
-    width:
-        100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        space-between;
-
-    gap:
-        15px;
-
-    padding:
-        0 22px;
+    gap: 16px;
+    padding: 10px 18px;
 
     background:
-        var(--library-deep-maroon);
+        linear-gradient(
+            180deg,
+            #350000 0%,
+            #4B0000 100%
+        );
 
     border-bottom:
-        1px solid
-        rgba(212,165,0,.45);
+        1px solid var(--reader-border);
 
     box-shadow:
-        0 3px 18px
-        rgba(0,0,0,.35);
+        0 4px 18px rgba(0,0,0,.28);
 
-    z-index:
-        100;
-
+    z-index: 100;
 }
 
 
@@ -151,53 +139,29 @@ body {
 ========================================================= */
 
 .reader-brand {
-
-    min-width:
-        0;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        2px;
-
+    flex: 0 0 auto;
+    min-width: 150px;
 }
-
 
 .reader-brand-name {
+    color: var(--reader-accent);
 
-    color:
-        var(--library-gold);
+    font-size: 17px;
+    font-weight: 800;
 
-    font-size:
-        14px;
-
-    font-weight:
-        800;
-
-    white-space:
-        nowrap;
-
+    line-height: 1.1;
+    letter-spacing: .3px;
 }
 
-
 .reader-brand-title {
+    margin-top: 3px;
 
-    color:
-        rgba(255,255,255,.65);
+    color: rgba(255,255,255,.78);
 
-    font-size:
-        9px;
+    font-size: 10px;
+    font-weight: 700;
 
-    font-weight:
-        700;
-
-    letter-spacing:
-        .15em;
-
+    letter-spacing: 2px;
 }
 
 
@@ -206,34 +170,23 @@ body {
 ========================================================= */
 
 .book-title {
+    flex: 1 1 auto;
 
-    max-width:
-        58%;
+    min-width: 0;
 
-    min-width:
-        0;
+    margin: 0;
+    padding: 0 8px;
 
-    overflow:
-        hidden;
+    color: var(--reader-white);
 
-    text-overflow:
-        ellipsis;
+    font-size: 18px;
+    font-weight: 700;
 
-    white-space:
-        nowrap;
+    text-align: center;
 
-    color:
-        #FFFFFF;
-
-    font-size:
-        14px;
-
-    font-weight:
-        700;
-
-    text-align:
-        right;
-
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
@@ -242,86 +195,53 @@ body {
 ========================================================= */
 
 .reader-area {
+    position: relative;
 
-    position:
-        relative;
+    flex: 1 1 auto;
 
-    flex:
-        1 1 auto;
+    min-width: 0;
+    min-height: 0;
 
-    min-height:
-        0;
+    width: 100%;
 
-    width:
-        100%;
+    overflow: hidden;
 
-    overflow:
-        hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    background:
-        var(--reader-background);
-
+    background: var(--reader-background);
 }
 
 
 /* =========================================================
-   VIEWPORT
+   BOOK VIEWPORT
 ========================================================= */
 
 .book-viewport {
+    position: relative;
 
-    position:
-        relative;
+    width: 100%;
+    height: 100%;
 
-    width:
-        100%;
+    min-width: 0;
+    min-height: 0;
 
-    height:
-        100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    min-width:
-        0;
+    overflow: auto;
 
-    min-height:
-        0;
+    padding: 20px;
 
-    display:
-        flex;
+    background: var(--reader-background);
 
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    overflow:
-        auto;
-
-    padding:
-        20px;
-
-    overscroll-behavior:
-        contain;
-
-    -webkit-overflow-scrolling:
-        touch;
-
-    scrollbar-width:
-        thin;
+    scrollbar-width: thin;
 
     scrollbar-color:
-        var(--library-gold)
-        var(--library-deep-maroon);
-
+        var(--reader-gold)
+        var(--reader-deep-maroon);
 }
 
 
@@ -330,386 +250,351 @@ body {
 ========================================================= */
 
 .book-viewport::-webkit-scrollbar {
-
-    width:
-        8px;
-
-    height:
-        8px;
-
+    width: 10px;
+    height: 10px;
 }
-
 
 .book-viewport::-webkit-scrollbar-track {
-
-    background:
-        var(--library-deep-maroon);
-
+    background: var(--reader-deep-maroon);
 }
 
-
 .book-viewport::-webkit-scrollbar-thumb {
+    background: var(--reader-gold);
+    border-radius: 10px;
+}
 
-    background:
-        var(--library-gold);
-
-    border-radius:
-        20px;
-
+.book-viewport::-webkit-scrollbar-thumb:hover {
+    background: #E8C12A;
 }
 
 
 /* =========================================================
-   PAGE
+   PAGE WRAPPER
 ========================================================= */
 
 .page-wrapper {
+    position: relative;
 
-    position:
-        relative;
+    flex: 0 0 auto;
 
-    flex:
-        0 0 auto;
+    display: block;
 
-    display:
-        block;
+    width: max-content;
+    height: max-content;
 
-    overflow:
-        hidden;
+    min-width: 1px;
+    min-height: 1px;
 
-    background:
-        #FFFFFF;
+    overflow: hidden;
+
+    background: #FFFFFF;
 
     box-shadow:
-        0 12px 45px
-        rgba(0,0,0,.55);
+        0 12px 45px rgba(0,0,0,.55);
 
-    border-radius:
-        2px;
+    border-radius: 2px;
 
-    user-select:
-        none;
-
+    user-select: none;
 }
 
 
 /* =========================================================
-   CANVAS
+   PDF CANVAS
 ========================================================= */
 
 #pdfCanvas {
+    display: block !important;
 
-    display:
-        block;
+    visibility: visible !important;
+    opacity: 1 !important;
 
-    max-width:
-        none;
+    max-width: none !important;
+    max-height: none !important;
 
-    width:
-        auto;
+    width: auto;
+    height: auto;
 
-    height:
-        auto;
+    background: #FFFFFF;
 
-    background:
-        #FFFFFF;
+    user-select: none;
 
-    user-select:
-        none;
-
-    -webkit-user-select:
-        none;
-
-    -webkit-user-drag:
-        none;
-
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
 }
 
 
 /* =========================================================
-   WATERMARK
+   PAGE WATERMARK
 ========================================================= */
 
 .page-watermark {
+    position: absolute;
 
-    position:
-        absolute;
-
-    left:
-        50%;
-
-    top:
-        50%;
+    left: 50%;
+    top: 50%;
 
     transform:
-        translate(-50%,-50%)
+        translate(-50%, -50%)
         rotate(-32deg);
 
-    pointer-events:
-        none;
+    z-index: 5;
 
-    color:
-        rgba(75,0,0,.10);
+    pointer-events: none;
 
-    font-size:
-        clamp(
-            18px,
-            4vw,
-            50px
-        );
+    color: rgba(75,0,0,.16);
 
-    font-weight:
-        800;
+    font-size: clamp(20px, 4vw, 46px);
 
-    white-space:
-        nowrap;
+    font-weight: 800;
 
+    white-space: nowrap;
+
+    user-select: none;
 }
 
 
 /* =========================================================
-   LOADING
+   LOADING SCREEN
+   IMPORTANT FIX
 ========================================================= */
 
 .loading-screen {
+    position: absolute;
 
-    position:
-        absolute;
+    inset: 0;
 
-    inset:
-        0;
+    z-index: 200;
 
-    z-index:
-        200;
+    display: flex;
 
-    display:
-        flex;
+    flex-direction: column;
 
-    flex-direction:
-        column;
+    align-items: center;
+    justify-content: center;
 
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        14px;
+    gap: 14px;
 
     background:
         rgba(53,0,0,.96);
-
 }
 
 
-.loading-screen.hidden {
+/*
+   IMPORTANT:
+   JavaScript uses:
 
-    display:
-        none;
+   loadingScreen.hidden = true;
 
+   So [hidden] must override display:flex.
+*/
+
+.loading-screen.hidden,
+.loading-screen[hidden] {
+    display: none !important;
 }
 
+
+/* =========================================================
+   LOADING SPINNER
+========================================================= */
 
 .loading-spinner {
-
-    width:
-        42px;
-
-    height:
-        42px;
+    width: 46px;
+    height: 46px;
 
     border:
         4px solid
-        rgba(212,165,0,.25);
+        rgba(255,255,255,.18);
 
     border-top-color:
-        var(--library-gold);
+        var(--reader-gold);
 
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     animation:
-        readerSpin
-        .8s
-        linear
-        infinite;
-
+        readerSpin .8s linear infinite;
 }
-
-
-.loading-text {
-
-    color:
-        #FFFFFF;
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-
-}
-
 
 @keyframes readerSpin {
-
-    to {
-
-        transform:
-            rotate(360deg);
-
+    from {
+        transform: rotate(0deg);
     }
 
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 
 /* =========================================================
-   CONTROLS
+   LOADING TEXT
+========================================================= */
+
+.loading-text {
+    color: #FFFFFF;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ERROR SCREEN
+========================================================= */
+
+.error-screen {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 210;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    padding: 24px;
+
+    text-align: center;
+
+    background:
+        rgba(53,0,0,.97);
+}
+
+.error-screen[hidden] {
+    display: none !important;
+}
+
+.error-screen i {
+    color: var(--reader-gold);
+    font-size: 42px;
+}
+
+.error-screen h2 {
+    margin: 0;
+
+    color: #FFFFFF;
+
+    font-size: 22px;
+}
+
+.error-screen p {
+    max-width: 600px;
+
+    margin: 0;
+
+    color: rgba(255,255,255,.78);
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   READER CONTROLS
 ========================================================= */
 
 .reader-controls {
+    position: relative;
 
-    position:
-        relative;
+    flex: 0 0 auto;
 
-    z-index:
-        100;
+    width: 100%;
 
-    flex:
-        0 0 auto;
+    min-height:
+        var(--reader-controls-height);
 
-    width:
-        100%;
+    display: flex;
 
-    display:
-        flex;
+    align-items: center;
+    justify-content: center;
 
-    align-items:
-        center;
+    gap: 7px;
 
-    justify-content:
-        center;
-
-    flex-wrap:
-        wrap;
-
-    gap:
-        7px;
-
-    padding:
-        9px 12px;
+    padding: 9px 12px;
 
     background:
-        var(--library-deep-maroon);
+        linear-gradient(
+            180deg,
+            #350000 0%,
+            #290000 100%
+        );
 
     border-top:
-        1px solid
-        rgba(212,165,0,.35);
+        1px solid var(--reader-border);
 
     box-shadow:
-        0 -5px 20px
-        rgba(0,0,0,.25);
+        0 -4px 18px rgba(0,0,0,.25);
 
+    z-index: 100;
 }
 
 
 /* =========================================================
-   BUTTON
+   CONTROL BUTTON
 ========================================================= */
 
 .control-button {
+    flex: 0 0 auto;
 
-    min-height:
-        38px;
+    min-width: 42px;
+    height: 42px;
 
-    display:
-        inline-flex;
+    display: inline-flex;
 
-    align-items:
-        center;
+    align-items: center;
+    justify-content: center;
 
-    justify-content:
-        center;
+    gap: 6px;
 
-    gap:
-        7px;
-
-    padding:
-        8px 12px;
+    padding: 0 11px;
 
     border:
-        1px solid
-        rgba(212,165,0,.45);
+        1px solid rgba(212,165,0,.38);
 
-    border-radius:
-        8px;
+    border-radius: 8px;
 
     background:
-        var(--reader-surface);
+        rgba(75,0,0,.85);
 
-    color:
-        #FFFFFF;
-
-    font-size:
-        12px;
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
+    color: #FFFFFF;
 
     transition:
-        .15s ease;
-
+        transform .15s ease,
+        background .15s ease,
+        border-color .15s ease;
 }
 
-
 .control-button:hover:not(:disabled) {
-
     background:
-        var(--library-maroon);
+        rgba(212,165,0,.18);
 
     border-color:
-        var(--library-gold);
+        var(--reader-gold);
 
     transform:
         translateY(-1px);
-
 }
-
 
 .control-button:active:not(:disabled) {
-
-    transform:
-        scale(.97);
-
+    transform: translateY(0);
 }
 
+.control-button.active {
+    background:
+        rgba(212,165,0,.22);
 
-.control-button:disabled {
+    border-color:
+        var(--reader-gold);
 
-    opacity:
-        .42;
-
-    cursor:
-        not-allowed;
-
-}
-
-
-.icon-button {
-
-    width:
-        40px;
-
-    min-width:
-        40px;
-
-    padding:
-        8px;
-
+    color:
+        var(--reader-gold);
 }
 
 
@@ -718,100 +603,63 @@ body {
 ========================================================= */
 
 .page-counter {
+    flex: 0 0 auto;
 
-    height:
-        38px;
+    display: flex;
 
-    display:
-        flex;
+    align-items: center;
 
-    align-items:
-        center;
+    gap: 6px;
 
-    gap:
-        6px;
+    color: rgba(255,255,255,.82);
 
-    color:
-        #FFFFFF;
-
-    font-weight:
-        700;
-
+    font-weight: 700;
 }
-
 
 .page-number-input {
+    width: 58px;
+    height: 40px;
 
-    width:
-        56px;
-
-    height:
-        32px;
+    padding: 0 7px;
 
     border:
-        1px solid
-        rgba(212,165,0,.5);
+        1px solid rgba(212,165,0,.4);
 
-    border-radius:
-        6px;
+    border-radius: 7px;
+
+    outline: none;
 
     background:
-        #240000;
+        rgba(0,0,0,.25);
 
-    color:
-        #FFFFFF;
+    color: #FFFFFF;
 
-    text-align:
-        center;
+    text-align: center;
 
-    outline:
-        none;
-
-    font-weight:
-        700;
-
+    font-weight: 700;
 }
 
-
 .page-number-input:focus {
-
     border-color:
-        var(--library-gold);
+        var(--reader-gold);
 
     box-shadow:
         0 0 0 2px
-        rgba(212,165,0,.15);
+        rgba(212,165,0,.12);
+}
 
+.total-pages {
+    min-width: 30px;
 }
 
 
 /* =========================================================
-   ZOOM
+   ZOOM LEVEL
 ========================================================= */
 
-.zoom-display {
-
-    min-width:
-        62px;
-
-    color:
-        var(--library-gold);
-
-}
-
-
-/* =========================================================
-   BOOKMARK
-========================================================= */
-
-#bookmarkBtn.active {
-
-    color:
-        var(--library-gold);
-
-    border-color:
-        var(--library-gold);
-
+#zoomLevel {
+    min-width: 46px;
+    text-align: center;
 }
 
 
@@ -820,178 +668,104 @@ body {
 ========================================================= */
 
 .reader-search {
-
-    position:
-        relative;
+    position: relative;
 
     flex:
         1 1 280px;
 
-    min-width:
-        250px;
-
-    max-width:
-        450px;
-
+    max-width: 340px;
+    min-width: 180px;
 }
-
 
 .reader-search-box {
+    position: relative;
 
-    min-height:
-        40px;
+    width: 100%;
+    height: 42px;
 
-    width:
-        100%;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        6px;
-
-    padding:
-        4px 5px 4px 10px;
+    display: flex;
+    align-items: center;
 
     background:
-        #240000;
+        rgba(0,0,0,.24);
 
     border:
-        1px solid
-        rgba(212,165,0,.45);
+        1px solid rgba(212,165,0,.35);
 
-    border-radius:
-        8px;
+    border-radius: 9px;
 
+    overflow: hidden;
 }
 
-
 .reader-search-box:focus-within {
-
     border-color:
-        var(--library-gold);
+        var(--reader-gold);
 
     box-shadow:
         0 0 0 2px
-        rgba(212,165,0,.12);
-
+        rgba(212,165,0,.10);
 }
-
 
 .reader-search-icon {
+    flex: 0 0 auto;
+
+    width: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
 
     color:
-        var(--library-gold);
-
+        var(--reader-gold);
 }
 
+.reader-search-box input {
+    flex: 1 1 auto;
 
-#readerSearchInput {
+    min-width: 0;
 
-    flex:
-        1;
+    height: 100%;
 
-    min-width:
-        0;
+    padding: 0 5px;
 
-    height:
-        30px;
+    border: 0;
+    outline: 0;
 
-    border:
-        0;
+    background: transparent;
 
-    outline:
-        0;
+    color: #FFFFFF;
+}
 
-    background:
-        transparent;
-
+.reader-search-box input::placeholder {
     color:
-        #FFFFFF;
-
-    font-size:
-        12px;
-
+        rgba(255,255,255,.52);
 }
 
-
-#readerSearchInput::placeholder {
-
-    color:
-        rgba(255,255,255,.5);
-
-}
-
-
-.reader-search-clear {
-
-    width:
-        30px;
-
-    height:
-        30px;
-
-    border:
-        0;
-
-    background:
-        transparent;
-
-    color:
-        rgba(255,255,255,.55);
-
-    cursor:
-        pointer;
-
-}
-
-
-.reader-search-clear:hover {
-
-    color:
-        #FFFFFF;
-
-}
-
-
+.reader-search-clear,
 .reader-search-button {
+    flex: 0 0 auto;
 
-    height:
-        32px;
+    width: 38px;
+    height: 100%;
 
-    display:
-        inline-flex;
+    display: flex;
 
-    align-items:
-        center;
+    align-items: center;
+    justify-content: center;
 
-    gap:
-        5px;
+    border: 0;
 
-    padding:
-        0 10px;
-
-    border:
-        0;
-
-    border-radius:
-        6px;
-
-    background:
-        var(--library-gold);
+    background: transparent;
 
     color:
-        #260000;
+        rgba(255,255,255,.75);
+}
 
-    font-weight:
-        800;
-
-    cursor:
-        pointer;
-
+.reader-search-clear:hover,
+.reader-search-button:hover {
+    color:
+        var(--reader-gold);
 }
 
 
@@ -1000,611 +774,247 @@ body {
 ========================================================= */
 
 .reader-search-results {
+    position: absolute;
 
-    position:
-        absolute;
-
-    left:
-        0;
-
-    right:
-        0;
+    left: 0;
+    right: 0;
 
     bottom:
         calc(100% + 8px);
 
-    max-height:
-        55vh;
+    z-index: 500;
 
-    overflow-y:
-        auto;
+    display: none;
 
-    display:
-        none;
+    max-height: 320px;
 
-    padding:
-        6px;
+    overflow-y: auto;
 
-    background:
-        #210000;
+    padding: 6px;
 
     border:
-        1px solid
-        rgba(212,165,0,.5);
+        1px solid rgba(212,165,0,.35);
 
-    border-radius:
-        9px;
+    border-radius: 9px;
+
+    background:
+        #350000;
 
     box-shadow:
-        0 15px 35px
-        rgba(0,0,0,.55);
-
-    z-index:
-        1000;
-
+        0 12px 35px rgba(0,0,0,.45);
 }
 
-
-.reader-search-results.show {
-
-    display:
-        block;
-
+.reader-search-results.show,
+.reader-search-results.active {
+    display: block;
 }
 
+.search-result-item {
+    width: 100%;
 
-.reader-search-count {
+    display: block;
 
-    padding:
-        9px;
-
-    color:
-        var(--library-gold);
-
-    font-size:
-        11px;
-
-    font-weight:
-        800;
-
-}
-
-
-.reader-search-result {
-
-    width:
-        100%;
-
-    display:
-        flex;
-
-    align-items:
-        flex-start;
-
-    gap:
-        9px;
-
-    padding:
-        9px;
-
-    margin:
-        3px 0;
+    padding: 9px 10px;
+    margin: 0 0 4px;
 
     border:
-        1px solid
-        rgba(212,165,0,.12);
+        1px solid transparent;
 
-    border-radius:
-        7px;
+    border-radius: 7px;
 
     background:
-        rgba(255,255,255,.035);
+        rgba(255,255,255,.045);
 
-    color:
-        #FFFFFF;
+    color: #FFFFFF;
 
-    text-align:
-        left;
-
-    cursor:
-        pointer;
-
+    text-align: left;
 }
 
-
-.reader-search-result:hover {
-
+.search-result-item:hover {
     background:
-        rgba(212,165,0,.12);
+        rgba(212,165,0,.13);
 
     border-color:
-        rgba(212,165,0,.4);
-
+        rgba(212,165,0,.3);
 }
 
+.search-result-page {
+    display: block;
 
-.reader-search-result-image {
-
-    width:
-        35px;
-
-    height:
-        45px;
-
-    flex:
-        0 0 35px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    background:
-        var(--library-maroon);
-
-    border-radius:
-        5px;
-
-}
-
-
-.reader-search-result-info {
-
-    min-width:
-        0;
-
-}
-
-
-.reader-search-result-title {
+    margin-bottom: 4px;
 
     color:
-        #FFFFFF;
+        var(--reader-gold);
 
-    font-size:
-        12px;
+    font-size: 12px;
 
-    font-weight:
-        800;
-
+    font-weight: 800;
 }
 
-
-.reader-search-result-author {
-
-    margin-top:
-        2px;
+.search-result-text {
+    display: block;
 
     color:
-        rgba(255,255,255,.55);
+        rgba(255,255,255,.82);
 
-    font-size:
-        10px;
+    font-size: 12px;
 
+    line-height: 1.45;
 }
 
-
-.reader-search-snippet {
-
-    margin-top:
-        5px;
+.search-no-results {
+    padding: 12px;
 
     color:
-        rgba(255,255,255,.7);
+        rgba(255,255,255,.72);
 
-    font-size:
-        10px;
+    text-align: center;
 
-    line-height:
-        1.45;
-
-}
-
-
-.reader-search-result-type {
-
-    display:
-        inline-block;
-
-    margin-top:
-        4px;
-
-    color:
-        var(--library-gold);
-
-    font-size:
-        9px;
-
-    font-weight:
-        800;
-
-}
-
-
-.reader-search-empty {
-
-    padding:
-        15px 10px;
-
-    color:
-        rgba(255,255,255,.7);
-
-    font-size:
-        12px;
-
+    font-size: 13px;
 }
 
 
 /* =========================================================
-   READ ALOUD
-========================================================= */
-
-#listenButton.speaking {
-
-    background:
-        var(--library-gold);
-
-    color:
-        #240000;
-
-    border-color:
-        var(--library-gold);
-
-}
-
-
-#listenSpeed {
-
-    height:
-        38px;
-
-    min-width:
-        64px;
-
-    border:
-        1px solid
-        rgba(212,165,0,.45);
-
-    border-radius:
-        7px;
-
-    background:
-        #240000;
-
-    color:
-        #FFFFFF;
-
-    padding:
-        0 7px;
-
-    outline:
-        none;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* =========================================================
-   STATUS
+   STATUS BAR
 ========================================================= */
 
 .reader-status {
+    position: relative;
 
-    position:
-        absolute;
+    flex: 0 0 auto;
 
-    left:
-        10px;
+    width: 100%;
 
-    bottom:
-        75px;
+    min-height:
+        var(--reader-status-height);
 
-    z-index:
-        150;
+    display: flex;
 
-    max-width:
-        calc(100% - 20px);
+    align-items: center;
+    justify-content: center;
 
-    padding:
-        5px 9px;
-
-    border-radius:
-        5px;
+    padding: 4px 10px;
 
     background:
-        rgba(0,0,0,.45);
+        #290000;
 
     color:
-        rgba(255,255,255,.75);
+        rgba(255,255,255,.68);
 
-    font-size:
-        10px;
+    border-top:
+        1px solid rgba(212,165,0,.16);
 
-    pointer-events:
-        none;
+    font-size: 11px;
 
+    line-height: 1.2;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
 }
 
 
 /* =========================================================
-   ERROR
+   PAGE CHANGING
 ========================================================= */
 
-.error-screen {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    z-index:
-        500;
-
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        12px;
-
-    padding:
-        30px;
-
-    text-align:
-        center;
-
-    background:
-        var(--reader-background);
-
+.book-viewport.page-changing {
+    cursor: wait;
 }
 
-
-.error-screen[hidden] {
-
-    display:
-        none;
-
-}
-
-
-.error-icon {
-
-    font-size:
-        42px;
-
-    color:
-        var(--library-gold);
-
-}
-
-
-.error-screen h2 {
-
-    color:
-        #FFFFFF;
-
-    font-size:
-        20px;
-
-}
-
-
-.error-screen p {
-
-    max-width:
-        600px;
-
-    color:
-        rgba(255,255,255,.7);
-
-    line-height:
-        1.5;
-
-    white-space:
-        pre-wrap;
-
+.book-viewport.page-changing .page-wrapper {
+    opacity: .92;
 }
 
 
 /* =========================================================
-   PAGE FLIP
+   GOLD THEME
 ========================================================= */
 
-.chishti-page-flip-stage {
-
-    position:
-        absolute;
-
-    left:
-        50%;
-
-    top:
-        50%;
-
-    z-index:
-        80;
-
-    transform:
-        translate(-50%,-50%);
-
-    pointer-events:
-        none;
-
-    perspective:
-        1600px;
-
+html[data-reader-theme="gold"] {
+    --reader-background: #171300;
+    --reader-surface: #241D00;
+    --reader-accent: #D4A500;
+    --reader-text: #FFFFFF;
 }
 
-
-.chishti-page-flip-sheet {
-
-    position:
-        relative;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    transform-style:
-        preserve-3d;
-
-}
-
-
-.chishti-page-flip-face {
-
-    position:
-        absolute;
-
-    inset:
-        0;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    overflow:
-        hidden;
-
-    background:
-        #FFFFFF;
-
-    backface-visibility:
-        hidden;
-
-    -webkit-backface-visibility:
-        hidden;
-
-}
-
-
-.chishti-page-flip-front {
-
-    transform:
-        rotateY(0deg);
-
-}
-
-
-.chishti-page-flip-back {
-
-    transform:
-        rotateY(180deg);
-
-}
-
-
-.chishti-page-flip-face canvas {
-
-    display:
-        block;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-}
-
-
-.chishti-flip-paper {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
+html[data-reader-theme="gold"] .reader-header {
     background:
         linear-gradient(
-            90deg,
-            rgba(0,0,0,.04),
-            #FFFFFF 45%,
-            rgba(0,0,0,.08)
+            180deg,
+            #241D00,
+            #171300
         );
+}
 
+html[data-reader-theme="gold"] .reader-controls {
+    background:
+        linear-gradient(
+            180deg,
+            #241D00,
+            #171300
+        );
+}
+
+html[data-reader-theme="gold"] .reader-status {
+    background:
+        #120F00;
 }
 
 
-.chishti-flip-next.chishti-flip-running
-.chishti-page-flip-sheet {
+/* =========================================================
+   DEEP MAROON THEME
+========================================================= */
 
-    animation:
-        chishtiNextFlip
-        .45s
-        ease-in-out
-        forwards;
+html[data-reader-theme="deep-maroon"] {
+    --reader-background: #280000;
+    --reader-surface: #1C0000;
+    --reader-accent: #D4A500;
+    --reader-text: #FFFFFF;
+}
 
+html[data-reader-theme="deep-maroon"] .reader-header {
+    background:
+        linear-gradient(
+            180deg,
+            #1C0000,
+            #280000
+        );
+}
+
+html[data-reader-theme="deep-maroon"] .reader-controls {
+    background:
+        linear-gradient(
+            180deg,
+            #1C0000,
+            #160000
+        );
 }
 
 
-.chishti-flip-prev.chishti-flip-running
-.chishti-page-flip-sheet {
+/* =========================================================
+   FULLSCREEN
+========================================================= */
 
-    animation:
-        chishtiPrevFlip
-        .45s
-        ease-in-out
-        forwards;
-
+.reader-app:fullscreen {
+    width: 100vw;
+    height: 100vh;
 }
 
 
-@keyframes chishtiNextFlip {
+/* =========================================================
+   SELECTION
+========================================================= */
 
-    from {
+.reader-app ::selection {
+    background:
+        rgba(212,165,0,.35);
 
-        transform:
-            rotateY(0deg);
-
-    }
-
-    to {
-
-        transform:
-            rotateY(-180deg);
-
-    }
-
-}
-
-
-@keyframes chishtiPrevFlip {
-
-    from {
-
-        transform:
-            rotateY(0deg);
-
-    }
-
-    to {
-
-        transform:
-            rotateY(180deg);
-
-    }
-
+    color: #FFFFFF;
 }
 
 
@@ -1612,149 +1022,81 @@ body {
    MOBILE
 ========================================================= */
 
-@media (
-    max-width: 768px
-) {
+@media (max-width: 900px) {
+
+    :root {
+        --reader-header-height: 58px;
+        --reader-controls-height: auto;
+    }
 
     .reader-header {
+        min-height: 58px;
 
-        height:
-            52px;
+        padding: 8px 10px;
 
-        flex-basis:
-            52px;
-
-        padding:
-            0 11px;
-
+        gap: 8px;
     }
 
+    .reader-brand {
+        min-width: 105px;
+    }
 
     .reader-brand-name {
-
-        font-size:
-            12px;
-
+        font-size: 13px;
     }
-
 
     .reader-brand-title {
-
-        font-size:
-            7px;
-
+        font-size: 8px;
+        letter-spacing: 1.2px;
     }
-
 
     .book-title {
-
-        max-width:
-            55%;
-
-        font-size:
-            11px;
-
+        font-size: 14px;
     }
-
 
     .book-viewport {
-
-        padding:
-            7px;
-
+        padding: 10px;
     }
-
 
     .reader-controls {
+        flex-wrap: wrap;
 
-        justify-content:
-            flex-start;
+        justify-content: center;
 
-        gap:
-            5px;
+        gap: 6px;
 
-        padding:
-            6px;
+        padding: 7px;
 
+        max-height: 145px;
+
+        overflow-y: auto;
     }
 
-
     .reader-search {
+        order: -1;
 
         flex:
             1 1 100%;
 
-        max-width:
-            none;
-
-        order:
-            -10;
-
+        max-width: none;
     }
-
 
     .control-button {
+        min-width: 40px;
+        height: 40px;
 
-        min-height:
-            34px;
-
-        padding:
-            7px 9px;
-
-        font-size:
-            11px;
-
+        padding: 0 9px;
     }
-
-
-    .icon-button {
-
-        width:
-            34px;
-
-        min-width:
-            34px;
-
-    }
-
-
-    .page-counter {
-
-        height:
-            34px;
-
-    }
-
 
     .page-number-input {
-
-        width:
-            48px;
-
-        height:
-            29px;
-
+        width: 52px;
+        height: 38px;
     }
-
-
-    #listenSpeed {
-
-        height:
-            34px;
-
-        min-width:
-            58px;
-
-    }
-
 
     .reader-status {
-
-        bottom:
-            65px;
-
+        min-height: 25px;
+        font-size: 10px;
     }
-
 }
 
 
@@ -1762,66 +1104,96 @@ body {
    SMALL MOBILE
 ========================================================= */
 
-@media (
-    max-width: 430px
-) {
+@media (max-width: 560px) {
+
+    .reader-header {
+        min-height: 54px;
+    }
+
+    .reader-brand {
+        min-width: 92px;
+    }
+
+    .reader-brand-name {
+        font-size: 12px;
+    }
 
     .reader-brand-title {
-
-        display:
-            none;
-
+        display: none;
     }
 
+    .book-title {
+        font-size: 12px;
+    }
+
+    .book-viewport {
+        padding: 6px;
+
+        align-items: center;
+        justify-content: center;
+    }
 
     .reader-controls {
-
-        flex-wrap:
-            nowrap;
-
-        overflow-x:
-            auto;
-
-        justify-content:
-            flex-start;
-
-        scrollbar-width:
-            none;
-
+        max-height: 160px;
     }
 
+    .control-button {
+        min-width: 38px;
+        height: 38px;
 
-    .reader-controls::-webkit-scrollbar {
+        padding: 0 8px;
 
-        display:
-            none;
-
+        border-radius: 7px;
     }
 
-
-    .reader-search {
-
-        flex:
-            0 0 100%;
-
+    .control-button span {
+        font-size: 11px;
     }
 
-
-    .button-label {
-
-        display:
-            none;
-
+    .reader-search-box {
+        height: 40px;
     }
 
-
-    .reader-search-button span {
-
-        display:
-            none;
-
+    .page-counter {
+        font-size: 12px;
     }
 
+    .page-number-input {
+        width: 48px;
+        height: 36px;
+    }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .reader-brand {
+        display: none;
+    }
+
+    .book-title {
+        text-align: left;
+        padding: 0;
+    }
+
+    .reader-controls {
+        gap: 5px;
+    }
+
+    .control-button {
+        min-width: 36px;
+        height: 36px;
+
+        padding: 0 7px;
+    }
+
+    .page-number-input {
+        width: 44px;
+    }
 }
 
 
@@ -1829,57 +1201,17 @@ body {
    REDUCED MOTION
 ========================================================= */
 
-@media (
-    prefers-reduced-motion: reduce
-) {
+@media (prefers-reduced-motion: reduce) {
 
     *,
     *::before,
     *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
 
-        animation-duration:
-            1ms !important;
+        transition-duration: .01ms !important;
 
-        transition:
-            none !important;
-
-    }
-
-}
-
-
-/* =========================================================
-   PRINT
-========================================================= */
-
-@media print {
-
-    .reader-header,
-    .reader-controls,
-    .reader-status,
-    .page-watermark {
-
-        display:
-            none !important;
-
-    }
-
-
-    .reader-area,
-    .book-viewport {
-
-        width:
-            100%;
-
-        height:
-            auto;
-
-        overflow:
-            visible;
-
-        background:
-            #FFFFFF;
-
+        scroll-behavior: auto !important;
     }
 
 }
