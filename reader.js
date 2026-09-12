@@ -2627,70 +2627,252 @@ document.addEventListener(
     }
 );
 
+/* =========================================================
+   READ ALOUD — FULL FIXED VERSION
+   Chishti Library Reader
+========================================================= */
+
+let speechMode = "stopped";
+let speechToken = 0;
+let speechChunks = [];
+let speechChunkIndex = 0;
+let speechPage = 0;
+let speechVoice = null;
+let speechVoicesReady = false;
+
 
 /* =========================================================
-   READ ALOUD
+   SPEECH SUPPORT
+========================================================= */
+
+function speechSupported() {
+
+    return (
+        "speechSynthesis" in window &&
+        "SpeechSynthesisUtterance" in window
+    );
+
+}
+
+
+/* =========================================================
+   GET VOICES
+========================================================= */
+
+function getSpeechVoices() {
+
+    if (!speechSupported()) {
+        return [];
+    }
+
+    try {
+
+        return window.speechSynthesis
+            .getVoices()
+            .filter(Boolean);
+
+    } catch (error) {
+
+        console.warn(
+            "Could not load speech voices:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================================================
+   CHOOSE BEST VOICE
 ========================================================= */
 
 function chooseVoice() {
 
-    if (
-        !("speechSynthesis" in window)
-    ) {
+    if (!speechSupported()) {
+
+        speechVoice = null;
+        return null;
+
+    }
+
+
+    const voices =
+        getSpeechVoices();
+
+
+    if (!voices.length) {
+
+        speechVoicesReady = false;
+        speechVoice = null;
 
         return null;
 
     }
 
-    const voices =
-        window.speechSynthesis
-            .getVoices();
 
-    if (!voices.length) {
-        return null;
+    speechVoicesReady = true;
+
+
+    /*
+     * Priority:
+     *
+     * 1. Urdu Pakistan
+     * 2. Other Urdu
+     * 3. Urdu/Hindi compatible voices
+     * 4. Hindi
+     * 5. English
+     * 6. Any available voice
+     */
+
+
+    const normalized =
+        voices.map(
+            voice => ({
+                voice,
+                lang: String(
+                    voice.lang || ""
+                ).toLowerCase(),
+                name: String(
+                    voice.name || ""
+                ).toLowerCase()
+            })
+        );
+
+
+    let selected = null;
+
+
+    /* -----------------------------------------------------
+       URDU — PAKISTAN
+    ----------------------------------------------------- */
+
+    selected =
+        normalized.find(
+            item =>
+                item.lang === "ur-pk"
+        );
+
+
+    /* -----------------------------------------------------
+       URDU — ANY REGION
+    ----------------------------------------------------- */
+
+    if (!selected) {
+
+        selected =
+            normalized.find(
+                item =>
+                    item.lang === "ur" ||
+                    item.lang.startsWith("ur-")
+            );
+
+    }
+
+
+    /* -----------------------------------------------------
+       VOICE NAME CONTAINS URDU
+    ----------------------------------------------------- */
+
+    if (!selected) {
+
+        selected =
+            normalized.find(
+                item =>
+                    item.name.includes("urdu")
+            );
+
+    }
+
+
+    /* -----------------------------------------------------
+       HINDI
+    ----------------------------------------------------- */
+
+    if (!selected) {
+
+        selected =
+            normalized.find(
+                item =>
+                    item.lang === "hi-in"
+            );
+
+    }
+
+
+    if (!selected) {
+
+        selected =
+            normalized.find(
+                item =>
+                    item.lang === "hi" ||
+                    item.lang.startsWith("hi-")
+            );
+
+    }
+
+
+    /* -----------------------------------------------------
+       ENGLISH FALLBACK
+    ----------------------------------------------------- */
+
+    if (!selected) {
+
+        selected =
+            normalized.find(
+                item =>
+                    item.lang === "en-pk"
+            );
+
+    }
+
+
+    if (!selected) {
+
+        selected =
+            normalized.find(
+                item =>
+                    item.lang === "en-in"
+            );
+
+    }
+
+
+    if (!selected) {
+
+        selected =
+            normalized.find(
+                item =>
+                    item.lang.startsWith("en")
+            );
+
+    }
+
+
+    /* -----------------------------------------------------
+       LAST FALLBACK
+    ----------------------------------------------------- */
+
+    if (!selected) {
+
+        selected =
+            normalized[0];
+
     }
 
 
     speechVoice =
-        voices.find(
-            voice => {
+        selected?.voice || null;
 
-                const lang =
-                    String(
-                        voice.lang ||
-                        ""
-                    )
-                    .toLowerCase();
 
-                return (
-                    lang === "ur-pk" ||
-                    lang.startsWith("ur")
-                );
-
-            }
-        ) ||
-
-        voices.find(
-            voice =>
-                String(
-                    voice.lang ||
-                    ""
-                )
-                .toLowerCase()
-                .startsWith("hi")
-        ) ||
-
-        voices.find(
-            voice =>
-                String(
-                    voice.lang ||
-                    ""
-                )
-                .toLowerCase()
-                .startsWith("en")
-        ) ||
-
-        voices[0];
+    console.log(
+        "🔊 Selected speech voice:",
+        speechVoice
+            ? `${speechVoice.name} | ${speechVoice.lang}`
+            : "NONE"
+    );
 
 
     return speechVoice;
@@ -2698,22 +2880,179 @@ function chooseVoice() {
 }
 
 
-if (
-    "speechSynthesis" in window
+/* =========================================================
+   WAIT FOR BROWSER VOICES
+========================================================= */
+
+function waitForSpeechVoices(
+    timeout = 3000
 ) {
 
-    window.speechSynthesis.addEventListener(
-        "voiceschanged",
-        chooseVoice
-    );
+    return new Promise(
+        resolve => {
 
-    chooseVoice();
+            if (!speechSupported()) {
+
+                resolve(null);
+                return;
+
+            }
+
+
+            const existing =
+                chooseVoice();
+
+
+            if (existing) {
+
+                resolve(existing);
+                return;
+
+            }
+
+
+            let finished = false;
+
+
+            const finish = () => {
+
+                if (finished) {
+                    return;
+                }
+
+                finished = true;
+
+
+                clearTimeout(
+                    timer
+                );
+
+
+                window.speechSynthesis
+                    .removeEventListener(
+                        "voiceschanged",
+                        handleVoicesChanged
+                    );
+
+
+                resolve(
+                    chooseVoice()
+                );
+
+            };
+
+
+            const handleVoicesChanged =
+                () => {
+
+                    const voice =
+                        chooseVoice();
+
+                    if (voice) {
+                        finish();
+                    }
+
+                };
+
+
+            window.speechSynthesis
+                .addEventListener(
+                    "voiceschanged",
+                    handleVoicesChanged
+                );
+
+
+            const timer =
+                setTimeout(
+                    finish,
+                    timeout
+                );
+
+
+            /*
+             * Chrome sometimes populates voices
+             * shortly after page load.
+             */
+
+            setTimeout(
+                () => {
+
+                    const voice =
+                        chooseVoice();
+
+                    if (voice) {
+                        finish();
+                    }
+
+                },
+                100
+            );
+
+
+            setTimeout(
+                () => {
+
+                    const voice =
+                        chooseVoice();
+
+                    if (voice) {
+                        finish();
+                    }
+
+                },
+                1000
+            );
+
+        }
+    );
 
 }
 
 
 /* =========================================================
-   SPEECH CHUNKS
+   INITIAL VOICE LOADING
+========================================================= */
+
+if (speechSupported()) {
+
+    window.speechSynthesis
+        .addEventListener(
+            "voiceschanged",
+            () => {
+
+                console.log(
+                    "🔊 Speech voices changed."
+                );
+
+                chooseVoice();
+
+            }
+        );
+
+
+    chooseVoice();
+
+
+    /*
+     * Extra delayed checks for Chrome/Edge.
+     */
+
+    setTimeout(
+        chooseVoice,
+        100
+    );
+
+
+    setTimeout(
+        chooseVoice,
+        1000
+    );
+
+}
+
+
+/* =========================================================
+   SPLIT TEXT INTO SAFE SPEECH CHUNKS
 ========================================================= */
 
 function splitSpeechText(
@@ -2730,17 +3069,25 @@ function splitSpeechText(
         )
         .trim();
 
+
     if (!clean) {
         return [];
     }
+
 
     const chunks = [];
 
     let remaining =
         clean;
 
+
+    /*
+     * Smaller chunks are more reliable
+     * with browser SpeechSynthesis.
+     */
+
     const max =
-        240;
+        180;
 
 
     while (
@@ -2754,22 +3101,52 @@ function splitSpeechText(
                 max
             );
 
+
+        /*
+         * Avoid extremely tiny chunks.
+         */
+
         if (
-            cut < 80
+            cut < 70
         ) {
 
-            cut = max;
+            cut =
+                remaining.indexOf(
+                    " ",
+                    max
+                );
 
         }
 
-        chunks.push(
+
+        if (
+            cut <= 0 ||
+            cut > max
+        ) {
+
+            cut =
+                max;
+
+        }
+
+
+        const chunk =
             remaining
                 .slice(
                     0,
                     cut
                 )
-                .trim()
-        );
+                .trim();
+
+
+        if (chunk) {
+
+            chunks.push(
+                chunk
+            );
+
+        }
+
 
         remaining =
             remaining
@@ -2802,11 +3179,13 @@ function splitSpeechText(
 function updateSpeechUI() {
 
     const supported =
-        "speechSynthesis" in window;
+        speechSupported();
+
 
     const active =
         speechMode !==
         "stopped";
+
 
     const speaking =
         speechMode ===
@@ -2819,10 +3198,12 @@ function updateSpeechUI() {
             !pdfDocument ||
             !supported;
 
+
         listenButton.classList.toggle(
             "speaking",
             speaking
         );
+
 
         listenButton.innerHTML =
             speaking
@@ -2849,13 +3230,18 @@ function updateSpeechUI() {
         pauseListenButton.disabled =
             !active;
 
+
         pauseListenButton.innerHTML =
             speechMode ===
             "paused"
 
-                ? '<i class="fas fa-play"></i>'
+                ? `
+                    <i class="fas fa-play"></i>
+                  `
 
-                : '<i class="fas fa-pause"></i>';
+                : `
+                    <i class="fas fa-pause"></i>
+                  `;
 
     }
 
@@ -2878,23 +3264,38 @@ function stopSpeech(
     announceStop = false
 ) {
 
-    ++speechToken;
+    speechToken++;
+
 
     speechChunks = [];
 
-    speechChunkIndex = 0;
 
-    speechPage = 0;
+    speechChunkIndex =
+        0;
+
+
+    speechPage =
+        0;
+
 
     speechMode =
         "stopped";
 
 
-    if (
-        "speechSynthesis" in window
-    ) {
+    if (speechSupported()) {
 
-        window.speechSynthesis.cancel();
+        try {
+
+            window.speechSynthesis.cancel();
+
+        } catch (error) {
+
+            console.warn(
+                "Speech cancel error:",
+                error
+            );
+
+        }
 
     }
 
@@ -2914,7 +3315,7 @@ function stopSpeech(
 
 
 /* =========================================================
-   START PAGE SPEECH
+   START SPEECH FOR PAGE
 ========================================================= */
 
 async function startSpeechPage(
@@ -2934,10 +3335,27 @@ async function startSpeechPage(
     }
 
 
-    const text =
-        await getPageText(
-            page
+    if (
+        !speechSupported()
+    ) {
+
+        stopSpeech();
+
+        announce(
+            "Read aloud is not supported in this browser."
         );
+
+        return;
+
+    }
+
+
+    /*
+     * Make sure browser has a voice.
+     */
+
+    const voice =
+        await waitForSpeechVoices();
 
 
     if (
@@ -2952,12 +3370,78 @@ async function startSpeechPage(
     }
 
 
+    if (!voice) {
+
+        console.error(
+            "❌ No speech voice is available."
+        );
+
+
+        stopSpeech();
+
+
+        announce(
+            "No voice is available on this device."
+        );
+
+
+        return;
+
+    }
+
+
+    console.log(
+        "🔊 Using voice:",
+        voice.name,
+        voice.lang
+    );
+
+
+    let text;
+
+
+    try {
+
+        text =
+            await getPageText(
+                page
+            );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Could not extract page text:",
+            error
+        );
+
+
+        text = "";
+
+    }
+
+
+    if (
+        token !==
+        speechToken ||
+        speechMode !==
+        "playing"
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Image-only / scanned PDF page.
+     */
+
     if (!text) {
 
-        /*
-         * Image-only/scanned page.
-         * Automatically continue.
-         */
+        console.log(
+            `📄 Page ${page} has no selectable text.`
+        );
+
 
         if (
             page <
@@ -2967,13 +3451,26 @@ async function startSpeechPage(
             const next =
                 page + 1;
 
+
             speechPage =
                 next;
 
-            await renderPage(
-                next,
-                false
-            );
+
+            try {
+
+                await renderPage(
+                    next,
+                    false
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "Page render error:",
+                    error
+                );
+
+            }
 
 
             if (
@@ -2994,11 +3491,13 @@ async function startSpeechPage(
 
             stopSpeech();
 
+
             announce(
                 "Read aloud finished."
             );
 
         }
+
 
         return;
 
@@ -3014,12 +3513,46 @@ async function startSpeechPage(
             text
         );
 
+
     speechChunkIndex =
         0;
 
 
+    if (!speechChunks.length) {
+
+        if (
+            page <
+            pageCount
+        ) {
+
+            startSpeechPage(
+                page + 1,
+                token
+            );
+
+        } else {
+
+            stopSpeech();
+
+            announce(
+                "Read aloud finished."
+            );
+
+        }
+
+
+        return;
+
+    }
+
+
     announce(
-        `Reading page ${page} of ${pageCount}...`
+        `Reading page ${page} of ${pageCount}.`
+    );
+
+
+    console.log(
+        `🔊 Reading page ${page}/${pageCount}`
     );
 
 
@@ -3031,7 +3564,7 @@ async function startSpeechPage(
 
 
 /* =========================================================
-   SPEAK CHUNK
+   SPEAK NEXT CHUNK
 ========================================================= */
 
 function speakNextChunk(
@@ -3055,6 +3588,10 @@ function speakNextChunk(
         speechChunks.length
     ) {
 
+        /*
+         * Move to next page.
+         */
+
         if (
             speechPage <
             pageCount
@@ -3062,6 +3599,7 @@ function speakNextChunk(
 
             const next =
                 speechPage + 1;
+
 
             speechPage =
                 next;
@@ -3089,7 +3627,26 @@ function speakNextChunk(
                     }
 
                 }
+            )
+            .catch(
+                error => {
+
+                    console.error(
+                        "❌ Next page render failed:",
+                        error
+                    );
+
+
+                    stopSpeech();
+
+
+                    announce(
+                        "Read aloud could not continue."
+                    );
+
+                }
             );
+
 
             return;
 
@@ -3098,9 +3655,53 @@ function speakNextChunk(
 
         stopSpeech();
 
+
         announce(
             "Read aloud finished."
         );
+
+
+        return;
+
+    }
+
+
+    /*
+     * Cancel any old queued speech.
+     *
+     * This prevents Chrome from stacking
+     * multiple utterances.
+     */
+
+    try {
+
+        window.speechSynthesis.cancel();
+
+    } catch (error) {
+
+        console.warn(
+            "Speech cancel error:",
+            error
+        );
+
+    }
+
+
+    const text =
+        speechChunks[
+            speechChunkIndex
+        ];
+
+
+    if (!text) {
+
+        speechChunkIndex++;
+
+
+        speakNextChunk(
+            token
+        );
+
 
         return;
 
@@ -3109,11 +3710,13 @@ function speakNextChunk(
 
     const utterance =
         new SpeechSynthesisUtterance(
-            speechChunks[
-                speechChunkIndex
-            ]
+            text
         );
 
+
+    /*
+     * Always refresh voice before speaking.
+     */
 
     const voice =
         speechVoice ||
@@ -3125,11 +3728,23 @@ function speakNextChunk(
         utterance.voice =
             voice;
 
+
+        /*
+         * IMPORTANT:
+         * Use actual voice language.
+         * Do NOT force ur-PK when the
+         * browser selected another voice.
+         */
+
         utterance.lang =
             voice.lang ||
             "ur-PK";
 
     } else {
+
+        /*
+         * Last browser fallback.
+         */
 
         utterance.lang =
             "ur-PK";
@@ -3137,17 +3752,55 @@ function speakNextChunk(
     }
 
 
-    utterance.rate =
+    const speed =
         Number(
-            listenSpeed?.value ||
-            1
+            listenSpeed?.value
         );
+
+
+    utterance.rate =
+        Number.isFinite(speed) &&
+        speed > 0
+
+            ? Math.min(
+                Math.max(
+                    speed,
+                    0.5
+                ),
+                2
+              )
+
+            : 1;
+
 
     utterance.pitch =
         1;
 
+
     utterance.volume =
         1;
+
+
+    let started =
+        false;
+
+
+    utterance.onstart =
+        () => {
+
+            started =
+                true;
+
+
+            console.log(
+                "🔊 Speech started:",
+                text.slice(
+                    0,
+                    70
+                ) + "..."
+            );
+
+        };
 
 
     utterance.onend =
@@ -3164,10 +3817,24 @@ function speakNextChunk(
 
             }
 
+
             speechChunkIndex++;
 
-            speakNextChunk(
-                token
+
+            /*
+             * Tiny delay helps Chrome
+             * continue long documents.
+             */
+
+            setTimeout(
+                () => {
+
+                    speakNextChunk(
+                        token
+                    );
+
+                },
+                40
             );
 
         };
@@ -3176,10 +3843,21 @@ function speakNextChunk(
     utterance.onerror =
         event => {
 
+            const error =
+                event?.error ||
+                "unknown";
+
+
+            console.warn(
+                "⚠️ Speech error:",
+                error
+            );
+
+
             if (
-                event?.error ===
+                error ===
                 "canceled" ||
-                event?.error ===
+                error ===
                 "interrupted"
             ) {
 
@@ -3187,46 +3865,166 @@ function speakNextChunk(
 
             }
 
-            console.warn(
-                "Speech error:",
-                event?.error
-            );
 
-            stopSpeech();
+            /*
+             * If Chrome reports an error before
+             * speech actually starts, retry once
+             * with a freshly selected voice.
+             */
 
-            announce(
-                "Read aloud could not continue."
+            if (!started) {
+
+                speechVoice =
+                    chooseVoice();
+
+
+                setTimeout(
+                    () => {
+
+                        if (
+                            token ===
+                            speechToken &&
+                            speechMode ===
+                            "playing"
+                        ) {
+
+                            speakNextChunk(
+                                token
+                            );
+
+                        }
+
+                    },
+                    150
+                );
+
+
+                return;
+
+            }
+
+
+            /*
+             * If one chunk fails after starting,
+             * skip it and continue.
+             */
+
+            speechChunkIndex++;
+
+
+            setTimeout(
+                () => {
+
+                    if (
+                        token ===
+                        speechToken &&
+                        speechMode ===
+                        "playing"
+                    ) {
+
+                        speakNextChunk(
+                            token
+                        );
+
+                    }
+
+                },
+                100
             );
 
         };
 
 
-    window.speechSynthesis.speak(
-        utterance
+    console.log(
+        "🔊 Speaking:",
+        {
+            voice:
+                voice?.name ||
+                "default",
+
+            language:
+                utterance.lang,
+
+            rate:
+                utterance.rate,
+
+            chunk:
+                `${speechChunkIndex + 1}/${speechChunks.length}`
+
+        }
     );
+
+
+    try {
+
+        window.speechSynthesis.speak(
+            utterance
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ Speech start failed:",
+            error
+        );
+
+
+        speechChunkIndex++;
+
+
+        setTimeout(
+            () => {
+
+                if (
+                    token ===
+                    speechToken &&
+                    speechMode ===
+                    "playing"
+                ) {
+
+                    speakNextChunk(
+                        token
+                    );
+
+                }
+
+            },
+            100
+        );
+
+    }
 
 }
 
 
 /* =========================================================
-   SPEECH BUTTONS
+   LISTEN BUTTON
 ========================================================= */
 
 if (listenButton) {
 
     listenButton.addEventListener(
         "click",
-        () => {
+        async () => {
 
             if (
                 !pdfDocument ||
-                !("speechSynthesis" in window)
+                !speechSupported()
             ) {
+
+                announce(
+                    "Read aloud is not supported."
+                );
+
 
                 return;
 
             }
 
+
+            /*
+             * RESUME
+             */
 
             if (
                 speechMode ===
@@ -3236,25 +4034,81 @@ if (listenButton) {
                 speechMode =
                     "playing";
 
+
                 updateSpeechUI();
 
-                window.speechSynthesis.resume();
+
+                try {
+
+                    window.speechSynthesis.resume();
+
+                } catch (error) {
+
+                    console.warn(
+                        "Speech resume error:",
+                        error
+                    );
+
+                }
+
 
                 announce(
                     "Read aloud resumed."
                 );
+
 
                 return;
 
             }
 
 
+            /*
+             * START NEW READING
+             */
+
             stopSpeech();
+
 
             speechMode =
                 "playing";
 
+
             updateSpeechUI();
+
+
+            announce(
+                "Preparing voice..."
+            );
+
+
+            const voice =
+                await waitForSpeechVoices();
+
+
+            if (
+                !voice ||
+                speechMode !==
+                "playing"
+            ) {
+
+                stopSpeech();
+
+
+                announce(
+                    "No compatible voice was found on this device."
+                );
+
+
+                return;
+
+            }
+
+
+            console.log(
+                "🎙️ Read Aloud ready:",
+                voice.name,
+                voice.lang
+            );
 
 
             const token =
@@ -3272,6 +4126,10 @@ if (listenButton) {
 }
 
 
+/* =========================================================
+   PAUSE / RESUME BUTTON
+========================================================= */
+
 if (pauseListenButton) {
 
     pauseListenButton.addEventListener(
@@ -3279,9 +4137,11 @@ if (pauseListenButton) {
         () => {
 
             if (
-                !("speechSynthesis" in window)
+                !speechSupported()
             ) {
+
                 return;
+
             }
 
 
@@ -3293,15 +4153,35 @@ if (pauseListenButton) {
                 speechMode =
                     "paused";
 
-                window.speechSynthesis.pause();
+
+                try {
+
+                    window.speechSynthesis.pause();
+
+                } catch (error) {
+
+                    console.warn(
+                        "Speech pause error:",
+                        error
+                    );
+
+                }
+
 
                 updateSpeechUI();
+
 
                 announce(
                     "Read aloud paused."
                 );
 
-            } else if (
+
+                return;
+
+            }
+
+
+            if (
                 speechMode ===
                 "paused"
             ) {
@@ -3309,9 +4189,23 @@ if (pauseListenButton) {
                 speechMode =
                     "playing";
 
-                window.speechSynthesis.resume();
+
+                try {
+
+                    window.speechSynthesis.resume();
+
+                } catch (error) {
+
+                    console.warn(
+                        "Speech resume error:",
+                        error
+                    );
+
+                }
+
 
                 updateSpeechUI();
+
 
                 announce(
                     "Read aloud resumed."
@@ -3325,19 +4219,28 @@ if (pauseListenButton) {
 }
 
 
+/* =========================================================
+   STOP BUTTON
+========================================================= */
+
 if (stopListenButton) {
 
     stopListenButton.addEventListener(
         "click",
-        () =>
-            stopSpeech(true)
+        () => {
+
+            stopSpeech(
+                true
+            );
+
+        }
     );
 
 }
 
 
 /* =========================================================
-   SPEED
+   SPEED CONTROL
 ========================================================= */
 
 if (listenSpeed) {
@@ -3355,20 +4258,34 @@ if (listenSpeed) {
 
             }
 
+
             const page =
                 speechPage ||
                 currentPage;
 
+
+            /*
+             * Restart from current page
+             * using the new speed.
+             */
+
             stopSpeech();
+
 
             speechMode =
                 "playing";
 
+
             updateSpeechUI();
+
+
+            const token =
+                speechToken;
+
 
             startSpeechPage(
                 page,
-                speechToken
+                token
             );
 
         }
@@ -3378,9 +4295,50 @@ if (listenSpeed) {
 
 
 /* =========================================================
-   FULLSCREEN
+   INITIAL SPEECH UI
 ========================================================= */
 
+updateSpeechUI();
+
+
+console.log(
+    "🔊 Read Aloud system loaded."
+);
+
+
+if (speechSupported()) {
+
+    const voices =
+        getSpeechVoices();
+
+
+    console.log(
+        `🔊 Available voices: ${voices.length}`
+    );
+
+
+    voices.forEach(
+        (voice, index) => {
+
+            console.log(
+                `${index + 1}. ${voice.name} | ${voice.lang}`
+            );
+
+        }
+    );
+
+} else {
+
+    console.warn(
+        "⚠️ SpeechSynthesis is not supported in this browser."
+    );
+
+}
+
+
+/* =========================================================
+   FULLSCREEN
+========================================================= */
 async function toggleFullscreen() {
 
     const reader =
