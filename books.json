@@ -528,5 +528,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+},
+  {
+    "id":42,
+    "title": "taha te yaseen",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "Naat",
+    "cover": "taha te yaseen-cover.png",
+    "pdf": "taha_te_yaseen_compressed.pdf",
+    "description": "jan e Bahar-compressed.pdf",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
