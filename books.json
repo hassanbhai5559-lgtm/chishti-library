@@ -554,5 +554,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+  },
+  {
+    "id":44,
+    "title": "shayr e azam hai saim",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "naat",
+    "cover": "saim chishti research .png",
+    "pdf": "180710068-SHAYR-E-AZAM-HAI-SAIM-Allama-Hamid-alwarsi-SAIM-CHISHTI-RESEARCH-CENTER-03006674752-pdf.pdf",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
