@@ -1,0 +1,69 @@
+<!-- CHISHTI AI -->
+
+<button id="chishtiAIButton" class="chishti-ai-floating">
+    ✦
+</button>
+
+<div id="chishtiAI" class="chishti-ai-panel">
+
+    <div class="chishti-ai-header">
+
+        <div>
+            <strong>✦ Chishti AI</strong>
+            <small>AI Librarian</small>
+        </div>
+
+        <button id="chishtiAIClose">
+            ×
+        </button>
+
+    </div>
+
+    <div
+        id="chishtiAIMessages"
+        class="chishti-ai-messages"
+    >
+
+        <div class="ai-message">
+            <strong>Chishti AI</strong>
+            <p>
+                Assalam-o-Alaikum! 👋
+                Main Chishti Library ka AI Librarian hoon.
+                Aap mujhse books, authors, library ya general
+                questions pooch sakte hain.
+            </p>
+        </div>
+
+    </div>
+
+    <div class="chishti-ai-suggestions">
+
+        <button data-question="Show me books by Saim Chishti">
+            📚 Saim Chishti Books
+        </button>
+
+        <button data-question="What is Chishti Library?">
+            ℹ️ Library
+        </button>
+
+        <button data-question="Search the library for Naat books">
+            🔎 Search Books
+        </button>
+
+    </div>
+
+    <div class="chishti-ai-input">
+
+        <textarea
+            id="chishtiAIInput"
+            placeholder="Ask Chishti AI..."
+            rows="1"
+        ></textarea>
+
+        <button id="chishtiAISend">
+            ➤
+        </button>
+
+    </div>
+
+</div>
