@@ -567,5 +567,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+  },
+  {
+    "id":45,
+    "title": "kacha gahra",
+    "author": "Hazrat Allama Saim Chishti",
+    "category": "naat",
+    "cover": "kacha gahra.png",
+    "pdf": "Saim-Chishit-Books-Sohni-Mahinwall-Kacha-Ghra-publish-Saim-Chishti-Research-Center.pdf",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
