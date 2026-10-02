@@ -593,5 +593,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+  },
+  {
+    "id":47,
+    "title": "Bara-Mah-Saim",
+    "author": "Hazrat allama saim chishti",
+    "category": "punjabi kisa",
+    "cover": "barah mah saim.png  ",
+    "pdf": "321130348-Bara-Mah-Saim-Chishti.pdf",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
