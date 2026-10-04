@@ -619,5 +619,18 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+ },
+  {
+    "id":49,
+    "title": "baba e shehr e naat",
+    "author": "Hazrat allama saim chishti",
+    "category": "punjabi kisa",
+    "cover": "baba e shehr e naat.png  ",
+    "pdf": "179838098-Baba-e-Shehr-e-Naat-Saim-Chishti-by-Ilyas-Mirza.pdf ",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
