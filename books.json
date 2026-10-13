@@ -688,7 +688,7 @@
   {
     "id":54,
     "title": "ZAINAB-ROKDI-KHARI",
-    "author": "Hazrat allama sam chishti",
+    "author": "Hazrat allama saim chishti",
     "category": "punjabi kisa",
     "cover": " rokdi kahri.png",
     "pdf": "321697483-ZAINAB-ROKDI-KHARI-WRITTEN-BY-ALLAMA-SAIM-CHISHTI.pdf",
@@ -701,7 +701,7 @@
   {
     "id":55,
     "title": "Bu-Ali-Qalander",
-    "author": "Hazrat allama sam chishti",
+    "author": "Hazrat allama saim chishti",
     "category": "punjabi kisa",
     "cover": " ali qalandar.png",
     "pdf": "184370332-Saim-Chishti-Books-Bu-Ali-Qalander-Saim-Chishti-Rearsch-Center-03006674752.pdf",
@@ -714,10 +714,23 @@
   {
     "id":56,
     "title": "Ghairat",
-    "author": "Hazrat allama sam chishti",
+    "author": "Hazrat allama saim chishti",
     "category": "punjabi kisa",
     "cover": " gaarat .png",
     "pdf": "321132965-Tarhi-Nazam-Ghairat-Saim-Chishti-Rearsch-Centerinp.pdf ",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
+    },
+  {
+    "id":57,
+    "title": "-Be-Waris-Nain-Waris-Hundy-",
+    "author": "Hazrat allama saim chishti",
+    "category": "punjabi kisa",
+    "cover": "be waris nhi.png",
+    "pdf": "185155542-Saim-Chishti-Books-Be-Waris-Nain-Waris-Hundy-Saim-Chishti-Rearsch-Center.pdf",
     "description": "allama saim chishti ki images",
     "views": 0,
     "likes": 0,
