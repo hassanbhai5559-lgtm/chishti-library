@@ -762,8 +762,22 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+  },
+  {
+    "id":60,
+    "title": "maqala",
+    "author": "Hazrat allama saim chishti",
+    "category": "punjabi kisa",
+    "cover": "maqala.png",
+    "pdf": " Allama Saim chishti ki Naat ka Mozoati Mutalia. Mahboob Ahmad Hazar University Publish by Saim Chishti Research Center Faisalabad.pdf",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
+
 
 
 
