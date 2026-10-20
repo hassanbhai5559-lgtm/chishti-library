@@ -1,12 +1,25 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <url>
-    <loc>https://hassanbhai5559-lgtm.github.io/chishti-libray/</loc>
-  </url>
+    <url>
+        <loc>https://hassanbhai5559-lgtm.github.io/chishti-library/</loc>
+    </url>
 
-  <url>
-    <loc>https://hassanbhai5559-lgtm.github.io/chishti-libray/shahdaye-karbala-4.html</loc>
-  </url>
+    <url>
+        <loc>https://hassanbhai5559-lgtm.github.io/chishti-library/books.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hassanbhai5559-lgtm.github.io/chishti-library/authors.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hassanbhai5559-lgtm.github.io/chishti-library/about.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hassanbhai5559-lgtm.github.io/chishti-library/contact.html</loc>
+    </url>
 
 </urlset>
