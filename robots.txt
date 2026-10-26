@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hassanbhai5559-lgtm.github.io/chishti-library/sitemap.xml
