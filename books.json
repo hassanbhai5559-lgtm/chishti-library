@@ -807,8 +807,21 @@
     "title": "indaz e naqabat",
     "author": "Hazrat allama saim chishti",
     "category": "punjabi kisa",
-    "cover": "WQB.pdf",
-    "pdf": "indax.png",
+    "cover":"indax.png",
+    "pdf": "WQB.pdf",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
+   },
+  {
+    "id":64,
+    "title": "kahtun e janat",
+    "author": "Hazrat allama saim chishti",
+    "category": "punjabi kisa",
+    "cover": "khtun e janat.png",
+    "pdf": "WQB (1).pdf",
     "description": "allama saim chishti ki images",
     "views": 0,
     "likes": 0,
@@ -816,7 +829,6 @@
     "latest": true
   }
 ]
-
 
 
 
