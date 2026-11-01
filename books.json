@@ -827,8 +827,22 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+    },
+  {
+    "id":65,
+    "title": "hadiya tul mahdi",
+    "author": "Hazrat allama saim chishti",
+    "category": "punjabi kisa",
+    "cover": "default.jpg",
+    "pdf": "WQ_20MB_readable.pdf",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
+
 
 
 
