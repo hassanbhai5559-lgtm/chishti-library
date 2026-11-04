@@ -853,6 +853,19 @@
     "likes": 0,
     "downloads": 0,
     "latest": true
+   },
+  {
+    "id":67,
+    "title": "sharf e sadat",
+    "author": "Hazrat allama saim chishti",
+    "category": "punjabi kisa",
+    "cover": "cover .png",
+    "pdf": "SHARF_E_SADAT_compressed.pdf",
+    "description": "allama saim chishti ki images",
+    "views": 0,
+    "likes": 0,
+    "downloads": 0,
+    "latest": true
   }
 ]
 
